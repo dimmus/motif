@@ -26,8 +26,8 @@
 #include <Xm/Ext.h>
 
 /************************************************************
-*	TYPEDEFS AND DEFINES
-*************************************************************/
+ *	TYPEDEFS AND DEFINES
+ *************************************************************/
 #if defined(__cplusplus)
 extern "C" {
 #endif
@@ -36,13 +36,13 @@ typedef int (*XmIntFunc)(void);
 typedef unsigned int (*XmUnsignedIntFunc)(void);
 extern String xm_std_filter[], xm_std_constraint_filter[];
 /************************************************************
-*	MACROS
-*************************************************************/
+ *	MACROS
+ *************************************************************/
 #define streq(a, b) (((a) != NULL) && ((b) != NULL) && (strcmp((a), (b)) == 0))
-#define ForAllChildren(w, childP)                                          \
-  for ( (childP) = (w)->composite.children ;                               \
-        (childP) < (w)->composite.children + (w)->composite.num_children ; \
-        (childP)++ )
+#define ForAllChildren(w, childP) \
+  for ((childP) = (w)->composite.children; \
+       (childP) < (w)->composite.children + (w)->composite.num_children; \
+       (childP)++)
 /*
  * Math Stuff
  *
@@ -55,32 +55,33 @@ extern String xm_std_filter[], xm_std_constraint_filter[];
 #define XM_EXT_18_LIST_CLASS_NAME ("XmExtended18List")
 #define XM_I18LIST_CLASS_NAME ("XmI18List")
 /************************************************************
-*	GLOBAL DECLARATIONS
-*************************************************************/
-void             XmResolveAllPartOffsets64(WidgetClass, XmOffsetPtr *, XmOffsetPtr *);
-void             _XmMoveWidget(Widget, Position, Position);
-void             _XmResizeWidget(Widget, Dimension, Dimension, Dimension);
-void             _XmConfigureWidget(Widget, Position, Position, Dimension, Dimension, Dimension);
-XtGeometryResult _XmRequestNewSize(Widget, Boolean, Dimension, Dimension, Dimension *, Dimension *);
+ *	GLOBAL DECLARATIONS
+ *************************************************************/
+void XmResolveAllPartOffsets64(WidgetClass, XmOffsetPtr *, XmOffsetPtr *);
+void _XmMoveWidget(Widget, Position, Position);
+void _XmResizeWidget(Widget, Dimension, Dimension, Dimension);
+void _XmConfigureWidget(Widget, Position, Position, Dimension, Dimension, Dimension);
+XtGeometryResult _XmRequestNewSize(
+    Widget, Boolean, Dimension, Dimension, Dimension *, Dimension *);
 XtGeometryResult _XmHWQuery(Widget, XtWidgetGeometry *, XtWidgetGeometry *);
-void             _XmGetFocus(Widget, XEvent *, String *, Cardinal *);
-void             _XmFilterArgs(ArgList, Cardinal, String *, ArgList *, Cardinal *);
-void             _XmSetValuesOnChildren(Widget, ArgList, Cardinal);
-Boolean          _XmGadgetWarning(Widget);
-String           _XmGetMBStringFromXmString(XmString);
+void _XmGetFocus(Widget, XEvent *, String *, Cardinal *);
+void _XmFilterArgs(ArgList, Cardinal, String *, ArgList *, Cardinal *);
+void _XmSetValuesOnChildren(Widget, ArgList, Cardinal);
+Boolean _XmGadgetWarning(Widget);
+String _XmGetMBStringFromXmString(XmString);
 /*
  * Context Managment Routines.
  */
-void    _XmSetContextData(Widget, XContext, XtPointer);
-void    _XmDeleteContextData(Widget, XContext);
+void _XmSetContextData(Widget, XContext, XtPointer);
+void _XmDeleteContextData(Widget, XContext);
 Boolean _XmGetContextData(Widget, XContext, XtPointer *);
 Boolean _XmUtilIsSubclassByNameQ(Widget, XrmQuark);
-void    _XmInitialIzeConverters(Widget);
-void    _XmExtHighlightBorder(Widget);
-void    _XmExtUnhighlightBorder(Widget);
+void _XmInitialIzeConverters(Widget);
+void _XmExtHighlightBorder(Widget);
+void _XmExtUnhighlightBorder(Widget);
 /************************************************************
-*	EXTERNAL DECLARATIONS
-*************************************************************/
+ *	EXTERNAL DECLARATIONS
+ *************************************************************/
 #if defined(__cplusplus)
 }
 #endif

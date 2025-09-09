@@ -23,89 +23,86 @@
  */
 #ifndef _XmTabBoxP_h_
 #define _XmTabBoxP_h_
-#include <Xm/XmP.h>
-#include <Xm/ManagerP.h>
 #include <Xm/ExtP.h>
+#include <Xm/ManagerP.h>
 #include <Xm/TabBox.h>
 #include <Xm/TabList.h>
+#include <Xm/XmP.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
-typedef struct _XmTabBoxClassPart
-{
-   XtPointer extension;
+typedef struct _XmTabBoxClassPart {
+  XtPointer extension;
 } XmTabBoxClassPart;
 
-typedef struct _XmTabBoxClassRec
-{
-   CoreClassPart       core_class;
-   CompositeClassPart  composite_class;
-   ConstraintClassPart constraint_class;
-   XmManagerClassPart  manager_class;
-   XmTabBoxClassPart   tab_box_class;
+typedef struct _XmTabBoxClassRec {
+  CoreClassPart core_class;
+  CompositeClassPart composite_class;
+  ConstraintClassPart constraint_class;
+  XmManagerClassPart manager_class;
+  XmTabBoxClassPart tab_box_class;
 } XmTabBoxClassRec;
 
 externalref XmTabBoxClassRec xmTabBoxClassRec;
 
-typedef struct _XmTabBoxPart
-{
-   XmFontList          font_list;
-   XmTabStyle          tab_style;
-   XmTabMode           tab_mode;
-   XmTabbedStackList   tab_list;
-   XmTabOrientation    tab_orientation;
-   XmTabEdge           tab_edge;
-   XmTabArrowPlacement arrow_placement;
-   unsigned char       orientation;
-   Dimension           tab_margin_width;
-   Dimension           tab_margin_height;
-   Dimension           tab_label_spacing;
-   Dimension           highlight_thickness;
-   int                 tab_corner_percent;
-   Dimension           tab_offset;
-   Boolean             uniform_tab_size;
-   Boolean             tab_auto_select;
-   Boolean             use_image_cache;
-   Pixel               select_color;
-   Pixmap              select_pixmap;
-   int                 num_stacks;
-   int                 selected_index;
-   int                 traversal_index;
-   Boolean             stacked_effect;
-   XtCallbackList      select_callback;
-   XtCallbackList      unselect_callback;
-   /* Private */
-   GC                 _tab_GC;
-   GC                 _text_GC;
-   Pixmap             _gray_stipple;
-   XRectangle        *_wanted;
-   int                _num_wanted;
-   struct _XmTabRect *_actual;
-   int                _num_actual;
-   int                _selected;
-   int                _keyboard;
-   int                _armed_tab;
-   int                _scroll_x;
-   XRectangle         _scroll_rect;
-   int                _corner_size;
-   int                _num_columns;
-   int                _num_rows;
-   /*
-     * The following data memebers are used for the rotation of
-     * the pixmap and the text.
-     */
-   int              _bitmap_width;
-   int              _bitmap_height;
-   Pixmap           _bitmap;
-   GC               _zero_GC;
-   GC               _one_GC;
-   Widget           _canvas;
-   Widget           _left_arrow;
-   Widget           _right_arrow;
-   Boolean          _inited;
-   struct _XmCache *_cache;
-   int              _cache_size;
-   Boolean          check_set_render_table;
+typedef struct _XmTabBoxPart {
+  XmFontList font_list;
+  XmTabStyle tab_style;
+  XmTabMode tab_mode;
+  XmTabbedStackList tab_list;
+  XmTabOrientation tab_orientation;
+  XmTabEdge tab_edge;
+  XmTabArrowPlacement arrow_placement;
+  unsigned char orientation;
+  Dimension tab_margin_width;
+  Dimension tab_margin_height;
+  Dimension tab_label_spacing;
+  Dimension highlight_thickness;
+  int tab_corner_percent;
+  Dimension tab_offset;
+  Boolean uniform_tab_size;
+  Boolean tab_auto_select;
+  Boolean use_image_cache;
+  Pixel select_color;
+  Pixmap select_pixmap;
+  int num_stacks;
+  int selected_index;
+  int traversal_index;
+  Boolean stacked_effect;
+  XtCallbackList select_callback;
+  XtCallbackList unselect_callback;
+  /* Private */
+  GC _tab_GC;
+  GC _text_GC;
+  Pixmap _gray_stipple;
+  XRectangle *_wanted;
+  int _num_wanted;
+  struct _XmTabRect *_actual;
+  int _num_actual;
+  int _selected;
+  int _keyboard;
+  int _armed_tab;
+  int _scroll_x;
+  XRectangle _scroll_rect;
+  int _corner_size;
+  int _num_columns;
+  int _num_rows;
+  /*
+   * The following data memebers are used for the rotation of
+   * the pixmap and the text.
+   */
+  int _bitmap_width;
+  int _bitmap_height;
+  Pixmap _bitmap;
+  GC _zero_GC;
+  GC _one_GC;
+  Widget _canvas;
+  Widget _left_arrow;
+  Widget _right_arrow;
+  Boolean _inited;
+  struct _XmCache *_cache;
+  int _cache_size;
+  Boolean check_set_render_table;
 } XmTabBoxPart;
 
 /*
@@ -163,13 +160,12 @@ typedef struct _XmTabBoxPart
 #define XmTabBox__cache(w) (((XmTabBoxWidget)(w))->tab_box._cache)
 #define XmTabBox__cache_size(w) (((XmTabBoxWidget)(w))->tab_box._cache_size)
 
-typedef struct _XmTabBoxRec
-{
-   CorePart       core;
-   CompositePart  composite;
-   ConstraintPart constraint;
-   XmManagerPart  manager;
-   XmTabBoxPart   tab_box;
+typedef struct _XmTabBoxRec {
+  CorePart core;
+  CompositePart composite;
+  ConstraintPart constraint;
+  XmManagerPart manager;
+  XmTabBoxPart tab_box;
 } XmTabBoxRec;
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration */

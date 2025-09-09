@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/
+ */
 #ifndef _XmFSelect_h
 #define _XmFSelect_h
 #include <Xm/Xm.h>
@@ -30,38 +30,23 @@ extern "C" {
 typedef void (*XmQualifyProc)(Widget, XtPointer, XtPointer);
 typedef void (*XmSearchProc)(Widget, XtPointer);
 /* Class record constants */
-externalref WidgetClass                     xmFileSelectionBoxWidgetClass;
+externalref WidgetClass xmFileSelectionBoxWidgetClass;
 typedef struct _XmFileSelectionBoxClassRec *XmFileSelectionBoxWidgetClass;
-typedef struct _XmFileSelectionBoxRec      *XmFileSelectionBoxWidget;
+typedef struct _XmFileSelectionBoxRec *XmFileSelectionBoxWidget;
 #ifndef XmIsFileSelectionBox
-#   define XmIsFileSelectionBox(w) (XtIsSubclass((w),xmFileSelectionBoxWidgetClass))
+#  define XmIsFileSelectionBox(w) (XtIsSubclass((w), xmFileSelectionBoxWidgetClass))
 #endif
 /********    Public Function Declarations    ********/
 XM_ALTERNATIVE(Use XtNameToWidget instead)
-extern Widget XmFileSelectionBoxGetChild(
-   Widget        fs,
-   unsigned char which);
-extern void XmFileSelectionDoSearch(
-   Widget   fs,
-   XmString dirmask);
-extern Widget XmCreateFileSelectionBox(
-   Widget   p,
-   String   name,
-   ArgList  args,
-   Cardinal n);
-extern Widget XmCreateFileSelectionDialog(
-   Widget   ds_p,
-   String   name,
-   ArgList  fsb_args,
-   Cardinal fsb_n);
-extern Widget XmVaCreateFileSelectionBox(
-   Widget parent,
-   char  *name,
-   ...);
-extern Widget XmVaCreateManagedFileSelectionBox(
-   Widget parent,
-   char  *name,
-   ...);
+extern Widget XmFileSelectionBoxGetChild(Widget fs, unsigned char which);
+extern void XmFileSelectionDoSearch(Widget fs, XmString dirmask);
+extern Widget XmCreateFileSelectionBox(Widget p, String name, ArgList args, Cardinal n);
+extern Widget XmCreateFileSelectionDialog(Widget ds_p,
+                                          String name,
+                                          ArgList fsb_args,
+                                          Cardinal fsb_n);
+extern Widget XmVaCreateFileSelectionBox(Widget parent, char *name, ...);
+extern Widget XmVaCreateManagedFileSelectionBox(Widget parent, char *name, ...);
 /********    End Public Function Declarations    ********/
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

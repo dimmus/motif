@@ -26,18 +26,18 @@
  */
 /* $XConsortium: ExtObjectI.h /main/6 1995/07/14 10:32:34 drk $ */
 #ifndef _XmExtObjectI_h
-#   define _XmExtObjectI_h
-#   include <Xm/ExtObjectP.h>
-#   ifdef __cplusplus
+#  define _XmExtObjectI_h
+#  include <Xm/ExtObjectP.h>
+#  ifdef __cplusplus
 extern "C" {
-#   endif
+#  endif
 /********    Private Function Declarations    ********/
 extern char *_XmExtObjAlloc(int size);
-extern void  _XmExtObjFree(XtPointer element);
-extern void  _XmBuildExtResources(WidgetClass c);
+extern void _XmExtObjFree(XtPointer element);
+extern void _XmBuildExtResources(WidgetClass c);
 /********    End Private Function Declarations    ********/
-#   ifdef __cplusplus
+#  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */
-#   endif
+#  endif
 #endif /* _XmExtObjectI_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

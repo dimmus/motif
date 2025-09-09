@@ -33,14 +33,10 @@ extern "C" {
 #endif
 /* used in visual resources declaration and in _XmDefaultVisualResources.
    Cannot use 0 which is None = CopyFromParent, the Xt default */
-#define INVALID_VISUAL ((Visual*)-1)
+#define INVALID_VISUAL ((Visual *)-1)
 /********    Private Function Declarations    ********/
-extern void _XmAddGrab(
-   Widget  wid,
-   Boolean exclusive,
-   Boolean spring_loaded);
-extern void _XmRemoveGrab(
-   Widget wid);
+extern void _XmAddGrab(Widget wid, Boolean exclusive, Boolean spring_loaded);
+extern void _XmRemoveGrab(Widget wid);
 extern void _XmDefaultVisualResources(Widget widget);
 /********    End Private Function Declarations    ********/
 #ifdef __cplusplus

@@ -26,20 +26,20 @@
  */
 /* $XConsortium: DragIconI.h /main/6 1995/07/14 10:25:29 drk $ */
 #ifndef _XmDragIconI_h
-#   define _XmDragIconI_h
-#   include <Xm/DragIconP.h>
-#   ifdef __cplusplus
+#  define _XmDragIconI_h
+#  include <Xm/DragIconP.h>
+#  ifdef __cplusplus
 extern "C" {
-#   endif
+#  endif
 /********    Private Function Declarations    ********/
-extern void    _XmDestroyDefaultDragIcon(XmDragIconObject icon);
+extern void _XmDestroyDefaultDragIcon(XmDragIconObject icon);
 extern Boolean _XmDragIconIsDirty(XmDragIconObject icon);
-extern void    _XmDragIconClean(XmDragIconObject icon1,
-                                XmDragIconObject icon2,
-                                XmDragIconObject icon3);
+extern void _XmDragIconClean(XmDragIconObject icon1,
+                             XmDragIconObject icon2,
+                             XmDragIconObject icon3);
 /********    End Private Function Declarations    ********/
-#   ifdef __cplusplus
+#  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */
-#   endif
+#  endif
 #endif /* _XmDragIconI_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

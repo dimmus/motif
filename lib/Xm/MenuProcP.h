@@ -26,18 +26,17 @@
  * HISTORY
  */
 #ifndef _XmMenuProcP_h
-#   define _XmMenuProcP_h
-#   include <X11/Intrinsic.h>
-#   ifdef __cplusplus
+#  define _XmMenuProcP_h
+#  include <X11/Intrinsic.h>
+#  ifdef __cplusplus
 extern "C" {
-#   endif
-struct _XmTranslRec
-{
-   XtTranslations       translations;
-   struct _XmTranslRec *next;
+#  endif
+struct _XmTranslRec {
+  XtTranslations translations;
+  struct _XmTranslRec *next;
 };
-#   ifdef __cplusplus
+#  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */
-#   endif
+#  endif
 #endif /* _XmMenuProcP_h */
 /* DON'T ADD STUFF AFTER THIS #endif */

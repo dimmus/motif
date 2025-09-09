@@ -19,7 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/
+ */
+
+#ifndef _WML_H_
+#define _WML_H_
 
 /*
  * This file contains the structure and literal definitions required
@@ -710,3 +713,5 @@ extern void wmlOutputDatFiles (void);
  * Define in wmloutp1 or wmloutp2
  */
 extern void wmlOutput (void);
+
+#endif /* _WML_H_ */

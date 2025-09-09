@@ -141,7 +141,7 @@ GetClientInfo (WmScreenData *pSD, Window clientWindow, long manageFlags)
     if (!(pCD = (ClientData *)XtMalloc (sizeof (ClientData))))
     {
 	/* unable to allocate space */
-	Warning (((char *)GETMESSAGE(70, 1, "Insufficient memory for client data")));
+	XtWarning (((char *)GETMESSAGE(70, 1, "Insufficient memory for client data")));
 	return (NULL);
     }
 
@@ -590,7 +590,7 @@ int i;
     if ((pCD->pWsList = (WsClientData *)
 	    XtMalloc(pCD->pSD->numWorkspaces * sizeof(WsClientData))) == NULL)
     {
-	Warning (((char *)GETMESSAGE(70, 2, "Insufficient memory for client data")));
+	XtWarning (((char *)GETMESSAGE(70, 2, "Insufficient memory for client data")));
 	return (NULL);
     }
     pCD->sizeWsList = pCD->pSD->numWorkspaces;
@@ -740,7 +740,7 @@ int i;
              *  May want a more verbose message here
              */
 
-            Warning (((char *)GETMESSAGE(70, 3, "Couldn't make icon box")));
+            XtWarning (((char *)GETMESSAGE(70, 3, "Couldn't make icon box")));
 	    return (NULL);
         }
 #ifdef WSM
@@ -2233,7 +2233,7 @@ WmICCCMToXmString (XTextProperty *wmNameProp)
 	  sprintf(msg, GETMESSAGE (70,5,
 		    "Window manager cannot convert property %.100s as clientTitle/iconTitle: XmbTextPropertyToTextList"),
 		  XGetAtomName (DISPLAY,wmNameProp->encoding));
-	  Warning(msg);
+	  XtWarning(msg);
 #endif /* MOTIF_ONE_DOT_ONE */
 	  break;
 
@@ -2241,7 +2241,7 @@ WmICCCMToXmString (XTextProperty *wmNameProp)
 	  sprintf(msg, GETMESSAGE (70, 6,
 		    "insufficient memory to convert property %.100s as clientTitle/iconTitle: XmbTextPropertyToTextList"),
 		  XGetAtomName(DISPLAY,wmNameProp->encoding));
-	  Warning(msg);
+	  XtWarning(msg);
 	  break;
 
       case XLocaleNotSupported:
@@ -2257,7 +2257,7 @@ WmICCCMToXmString (XTextProperty *wmNameProp)
 			"Window manager received unknown property as clientTitle/iconTitle: %.100s. Property ignored."),
 		      XGetAtomName(DISPLAY, wmNameProp->encoding));
 	  }
-	  Warning(msg);
+	  XtWarning(msg);
 	  break;
       }
 
@@ -2693,7 +2693,7 @@ MakeSystemMenu (ClientData *pCD)
         /*
 	 * As the lookup has failed, let's try just one more time.
          */
-	Warning("Retrying - using builtin window menu\n");
+	XtWarning("Retrying - using builtin window menu\n");
 
 	pCD->systemMenuSpec =
 	  MAKE_MENU(PSD_FOR_CLIENT(pCD), pCD, builtinSystemMenuName,

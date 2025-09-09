@@ -19,38 +19,34 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/
+ */
 #ifdef HAVE_CONFIG_H
-#   include <config.h>
+#  include <config.h>
 #endif
 #ifdef REV_INFO
-#   ifndef lint
+#  ifndef lint
 static char rcsid[] = "$XConsortium: ReadImage.c /main/15 1996/10/21 11:40:15 cde-osf $"
-#   endif
+#  endif
 #endif
-#include "XmI.h" /* for _XmCreateImage() */
 #include "ReadImageI.h"
+#include "XmI.h" /* for _XmCreateImage() */
                       /************************************************************************
- *
- *  _XmReadImageAndHotSpotFromFile
- *	Given a filename, extract and create an image from the file data.
- *      This one takes a Display.
- ************************************************************************/
-                      XImage
-                    * _XmReadImageAndHotSpotFromFile(
-                         Display * display,
-                         char *filename,
-                         int  *hot_x,
-                         int  *hot_y)
+                       *
+                       *  _XmReadImageAndHotSpotFromFile
+                       *	Given a filename, extract and create an image from the file data.
+                       *      This one takes a Display.
+                       ************************************************************************/
+                      XImage *
+                      _XmReadImageAndHotSpotFromFile(
+                          Display * display, char *filename, int *hot_x, int *hot_y)
 {
-   unsigned int   width;
-   unsigned int   height;
-   unsigned char *data;
-   if (BitmapSuccess == XReadBitmapFileData(filename, &width, &height, &data, hot_x, hot_y))
-   {
-      XImage *image;
-      _XmCreateImage(image, display, (char *)data, width, height, LSBFirst);
-      return (image);
-   }
-   return (NULL);
+  unsigned int width;
+  unsigned int height;
+  unsigned char *data;
+  if (BitmapSuccess == XReadBitmapFileData(filename, &width, &height, &data, hot_x, hot_y)) {
+    XImage *image;
+    _XmCreateImage(image, display, (char *)data, width, height, LSBFirst);
+    return (image);
+  }
+  return (NULL);
 }

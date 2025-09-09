@@ -26,25 +26,17 @@
  */
 /* $XConsortium: CommandI.h /main/6 1995/07/14 10:16:31 drk $ */
 #ifndef _XmCommandI_h
-#   define _XmCommandI_h
-#   include <Xm/CommandP.h>
-#   ifdef __cplusplus
+#  define _XmCommandI_h
+#  include <Xm/CommandP.h>
+#  ifdef __cplusplus
 extern "C" {
-#   endif
+#  endif
 /********    Private Function Declarations    ********/
-extern void _XmCommandReturn(
-   Widget    wid,
-   XEvent   *event,
-   String   *params,
-   Cardinal *numParams);
-extern void _XmCommandUpOrDown(
-   Widget    wid,
-   XEvent   *event,
-   String   *argv,
-   Cardinal *argc);
+extern void _XmCommandReturn(Widget wid, XEvent *event, String *params, Cardinal *numParams);
+extern void _XmCommandUpOrDown(Widget wid, XEvent *event, String *argv, Cardinal *argc);
 /********    End Private Function Declarations    ********/
-#   ifdef __cplusplus
+#  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */
-#   endif
+#  endif
 #endif /* _XmCommandI_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

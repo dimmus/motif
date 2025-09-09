@@ -485,7 +485,7 @@ void db_read_ints_and_string(_db_header_ptr header)
 	     * Add one for the null character on the string
 	     */
 	    /* Validate tainted data from file to prevent exploitation */
-	    if (table[i].b_length < 0 || table[i].b_length > SIZE_MAX / 4) {
+	    if (table[i].b_length < 0 || table[i].b_length > 255) {
 		diag_issue_internal_error("Invalid b_length in db_read_ints_and_string");
 		return;
 	    }
@@ -517,7 +517,7 @@ void db_read_ints_and_string(_db_header_ptr header)
 	for ( i=0 ; i<header->num_items; i++)
 	    {
 	    /* Validate tainted data from file to prevent exploitation */
-	    if (table[i].b_length < 0 || table[i].b_length > SIZE_MAX / 4) {
+	    if (table[i].b_length < 0 || table[i].b_length > 255) {
 		diag_issue_internal_error("Invalid b_length in db_read_ints_and_string");
 		return;
 	    }

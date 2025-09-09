@@ -19,27 +19,27 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/
+ */
 #ifdef HAVE_CONFIG_H
-#   include <config.h>
+#  include <config.h>
 #endif
 #ifdef REV_INFO
-#   ifndef lint
+#  ifndef lint
 static char rcsid[] = "$TOG: Messages.c /main/23 1997/03/19 11:49:58 dbl $"
-#   endif
+#  endif
 #endif
 /* Define _XmConst before including MessagesI.h, so that the
  * declarations will be in agreement with the definitions.
  */
 #ifndef _XmConst
-#   if defined(__STDC__) || !defined(NO_CONST)
-#      define _XmConst const
-#   else
-#      define _XmConst
-#   endif /* __STDC__ */
-#endif    /* _XmConst */
-#include <Xm/XmP.h>
+#  if defined(__STDC__) || !defined(NO_CONST)
+#    define _XmConst const
+#  else
+#    define _XmConst
+#  endif /* __STDC__ */
+#endif   /* _XmConst */
 #include "MessagesI.h"
+#include <Xm/XmP.h>
 #if 0 /* Comments below contain nested comments. */
 /*===========================================================================*/
 /* IMPORTANT NOTICE!! Please READ before editing this file!		     */
@@ -75,29 +75,29 @@ static char rcsid[] = "$TOG: Messages.c /main/23 1997/03/19 11:49:58 dbl $"
 /*									     */
 /*===========================================================================*/
 #endif
-   /*
- * Text for message catalog header
- */
-   /***+$ This message catalog contains messages issued by Motif toolkit library.*/
-   /***+$ Consult X-Window systems, OSF/MOTIF Programmer's Guide and OSF/MOTIF*/
-   /***+$ Programmer's Reference Manual for technical terms if you have any*/
-   /***+$ doubts about their meanings.*/
-   /***+$ Do not translate variables such as %s, %d %s ... etc.*/
-   /***+$ Do not translate Motif resource name, such as XmNlabelType.*/
-   /***+$ Special terms with capital letter(s) should not be translated.*/
-   /***+$ "False" and "True" are keywords. Do not translate.*/
-   /***+ */
-   /***+ */
-   /**************** ArrowButton.c ****************/
-   /* Needed for message catalog BC. Do not remove */
-   /***+MSG_ArrowButton_1000 The arrow direction is not correct.*/
-   /***+$ MSG_ArrowButton_1000 message is obsolete - DO NOT localize this message.*/
-   /**************** BulletinB.c ****************/
-   /* Needed for message catalog BC. Do not remove */
-   /***+MSG_BulletinB_1000 Incorrect resize policy.*/
-   /***+$ MSG_BulletinB_1000 message is obsolete - DO NOT localize this message.*/
-   externaldef(messages) _XmConst char *_XmMsgBulletinB_0001
-   = "Dialog style must be XmDIALOG_MODELESS.";
+    /*
+     * Text for message catalog header
+     */
+    /***+$ This message catalog contains messages issued by Motif toolkit library.*/
+    /***+$ Consult X-Window systems, OSF/MOTIF Programmer's Guide and OSF/MOTIF*/
+    /***+$ Programmer's Reference Manual for technical terms if you have any*/
+    /***+$ doubts about their meanings.*/
+    /***+$ Do not translate variables such as %s, %d %s ... etc.*/
+    /***+$ Do not translate Motif resource name, such as XmNlabelType.*/
+    /***+$ Special terms with capital letter(s) should not be translated.*/
+    /***+$ "False" and "True" are keywords. Do not translate.*/
+    /***+ */
+    /***+ */
+    /**************** ArrowButton.c ****************/
+    /* Needed for message catalog BC. Do not remove */
+    /***+MSG_ArrowButton_1000 The arrow direction is not correct.*/
+    /***+$ MSG_ArrowButton_1000 message is obsolete - DO NOT localize this message.*/
+    /**************** BulletinB.c ****************/
+    /* Needed for message catalog BC. Do not remove */
+    /***+MSG_BulletinB_1000 Incorrect resize policy.*/
+    /***+$ MSG_BulletinB_1000 message is obsolete - DO NOT localize this message.*/
+    externaldef(messages)
+        _XmConst char *_XmMsgBulletinB_0001 = "Dialog style must be XmDIALOG_MODELESS.";
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_BulletinB_1001 Incorrect shadow type.*/
 /***+$ MSG_BulletinB_1001 message is obsolete - DO NOT localize this message.*/
@@ -109,38 +109,52 @@ static char rcsid[] = "$TOG: Messages.c /main/23 1997/03/19 11:49:58 dbl $"
 /***+MSG_CascadeB_1000 XmCascadeButton must have correct type of \n\*/
 /***+XmRowColumnWidgetClass parent.*/
 /***+$ MSG_CascadeB_1000 message is obsolete - DO NOT localize this message.*/
-externaldef(messages) _XmConst char *_XmMsgCascadeB_0001 = "Only XmRowColumn widgets of type XmMENU_PULLDOWN can be submenus.";
+externaldef(messages) _XmConst char *_XmMsgCascadeB_0001 =
+    "Only XmRowColumn widgets of type XmMENU_PULLDOWN can be submenus.";
 /***+$ please do not translate submenus. */
-externaldef(messages) _XmConst char *_XmMsgCascadeB_0002   = "XmNmappingDelay must be greater than or equal to 0.";
-externaldef(messages) _XmConst char *_XmMsgCascadeB_0000   = "XmCascadeButton[Gadget] must have XmRowColumn parent with \n\
+externaldef(messages) _XmConst
+    char *_XmMsgCascadeB_0002 = "XmNmappingDelay must be greater than or equal to 0.";
+externaldef(messages) _XmConst char *_XmMsgCascadeB_0000 =
+    "XmCascadeButton[Gadget] must have XmRowColumn parent with \n\
 XmNrowColumnType XmMENU_PULLDOWN, XmMENU_POPUP, XmMENU_BAR or XmMENU_OPTION.";
-externaldef(messages) _XmConst char *_XmMsgCascadeB_0003   = "XtGrabPointer failed.";
+externaldef(messages) _XmConst char *_XmMsgCascadeB_0003 = "XtGrabPointer failed.";
 externaldef(messages) _XmConst char *_XmMsgRowColText_0024 = "XtGrabKeyboard failed.";
 /**************** Command.c ****************/
-externaldef(messages) _XmConst char *_XmMsgCommand_0000 = "The dialog type must be XmDIALOG_COMMAND.";
-externaldef(messages) _XmConst char *_XmMsgCommand_0001 = "Invalid child type; Command widget does not have this child.";
+externaldef(messages) _XmConst
+    char *_XmMsgCommand_0000 = "The dialog type must be XmDIALOG_COMMAND.";
+externaldef(messages) _XmConst
+    char *_XmMsgCommand_0001 = "Invalid child type; Command widget does not have this child.";
 /***+$ please do not translate Command.*/
 externaldef(messages) _XmConst char *_XmMsgCommand_0002 = "NULL or empty XmString.";
-externaldef(messages) _XmConst char *_XmMsgCommand_0003 = "NULL or empty XmString passed to XmCommandAppendValue.";
-externaldef(messages) _XmConst char *_XmMsgCommand_0004 = "XmNmustMatch is always False for a Command widget.";
+externaldef(messages) _XmConst
+    char *_XmMsgCommand_0003 = "NULL or empty XmString passed to XmCommandAppendValue.";
+externaldef(messages) _XmConst
+    char *_XmMsgCommand_0004 = "XmNmustMatch is always False for a Command widget.";
 /***+$ please do not translate False or Command. */
-externaldef(messages) _XmConst char *_XmMsgCommand_0005 = "XmNhistoryMaxItems must be a positive integer greater than zero.";
+externaldef(messages) _XmConst
+    char *_XmMsgCommand_0005 = "XmNhistoryMaxItems must be a positive integer greater than zero.";
 /**************** CutPaste.c ****************/
-externaldef(messages) _XmConst char *_XmMsgCutPaste_0000 = "Must call XmClipboardStartCopy() before XmClipboardCopy()";
-externaldef(messages) _XmConst char *_XmMsgCutPaste_0001 = "Must call XmClipboardStartCopy() before XmClipboardEndCopy()";
+externaldef(messages) _XmConst
+    char *_XmMsgCutPaste_0000 = "Must call XmClipboardStartCopy() before XmClipboardCopy()";
+externaldef(messages) _XmConst
+    char *_XmMsgCutPaste_0001 = "Must call XmClipboardStartCopy() before XmClipboardEndCopy()";
 externaldef(messages) _XmConst char *_XmMsgCutPaste_0002 = "Too many formats in XmClipboardCopy()";
 externaldef(messages) _XmConst char *_XmMsgCutPaste_0003 = "ClipboardBadDataType";
 /***+$ please do not translate ClipboardBadDataType.*/
 externaldef(messages) _XmConst char *_XmMsgCutPaste_0004 = "incorrect data type";
 externaldef(messages) _XmConst char *_XmMsgCutPaste_0005 = "ClipboardCorrupt";
 /***+$ please do not translate ClipboardCorrupt.*/
-externaldef(messages) _XmConst char *_XmMsgCutPaste_0006 = "internal error - corrupt data structure";
+externaldef(messages) _XmConst
+    char *_XmMsgCutPaste_0006 = "internal error - corrupt data structure";
 externaldef(messages) _XmConst char *_XmMsgCutPaste_0007 = "ClipboardBadFormat";
 /***+$ please do not translate ClipboardBadFormat.*/
-externaldef(messages) _XmConst char *_XmMsgCutPaste_0008 = "Registered format length must be 8, 16, or 32";
-externaldef(messages) _XmConst char *_XmMsgCutPaste_0009 = "Registered format name must not be null";
+externaldef(messages) _XmConst
+    char *_XmMsgCutPaste_0008 = "Registered format length must be 8, 16, or 32";
+externaldef(messages) _XmConst
+    char *_XmMsgCutPaste_0009 = "Registered format name must not be null";
 /**************** DialogS.c ****************/
-externaldef(messages) _XmConst char *_XmMsgDialogS_0000 = "DialogShell widget supports only one RectObj child";
+externaldef(messages) _XmConst
+    char *_XmMsgDialogS_0000 = "DialogShell widget supports only one RectObj child";
 /***+$ please do not translate DialogShell and RectObj.*/
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_DialogS_1000 gadgets aren't allowed in Shell*/
@@ -164,13 +178,15 @@ externaldef(messages) _XmConst char *_XmMsgForm_0000 = "Fraction base cannot be 
 /***+MSG_Form_1002 Attachment widget must not be null.*/
 /***+$ MSG_Form_1002 message is obsolete - DO NOT localize this message.*/
 /***+$ please do not translate Attachment.*/
-externaldef(messages) _XmConst char *_XmMsgForm_0002 = "Circular dependency in the children of the Form widget.\n\
+externaldef(messages) _XmConst char *_XmMsgForm_0002 =
+    "Circular dependency in the children of the Form widget.\n\
 Check for circular attachments between the children.";
 /***+$ please do not translate Form.*/
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_Form_1006 Edge attached to a widget but no widget specified.*/
 /***+$ MSG_Form_1006 message is obsolete - DO NOT localize this message.*/
-externaldef(messages) _XmConst char *_XmMsgForm_0003 = "Abandoned edge synchronization after 10000 iterations.\n\
+externaldef(messages) _XmConst char *_XmMsgForm_0003 =
+    "Abandoned edge synchronization after 10000 iterations.\n\
 Check for contradictory constraints on the children of this Form widget.";
 /***+$ please do not translate Form.*/
 /* Needed for message catalog BC. Do not remove */
@@ -201,7 +217,8 @@ Check for contradictory constraints on the children of this Form widget.";
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_Gadget_1003 Cannot set pixmap resource to unspecified.*/
 /***+$ MSG_Gadget_1003 message is obsolete - DO NOT localize this message.*/
-externaldef(messages) _XmConst char *_XmMsgGadget_0000 = "Cannot change XmNlayoutDirection after initialization.";
+externaldef(messages) _XmConst
+    char *_XmMsgGadget_0000 = "Cannot change XmNlayoutDirection after initialization.";
 /**************** Label.c / LabelG.c ****************/
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_Label_1001 Invalid XmNlabelType*/
@@ -212,12 +229,15 @@ externaldef(messages) _XmConst char *_XmMsgGadget_0000 = "Cannot change XmNlayou
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_Label_1003 Invalid value in XmNstringDirection*/
 /***+$ MSG_Label_1003 message is obsolete - DO NOT localize this message.*/
-externaldef(messages) _XmConst char *_XmMsgLabel_0003 = "XmNlabelString must be a Compound String.";
+externaldef(messages) _XmConst
+    char *_XmMsgLabel_0003 = "XmNlabelString must be a Compound String.";
 /***+$ please do not translate Compound String.*/
-externaldef(messages) _XmConst char *_XmMsgLabel_0004 = "XmNacceleratorText must be a Compound String.";
+externaldef(messages) _XmConst
+    char *_XmMsgLabel_0004 = "XmNacceleratorText must be a Compound String.";
 /***+$ please do not translate Compound String.*/
 /**************** List.c ****************/
-externaldef(messages) _XmConst char *_XmMsgList_0000 = "When changed, XmNvisibleItemCount must be at least 1.";
+externaldef(messages) _XmConst
+    char *_XmMsgList_0000 = "When changed, XmNvisibleItemCount must be at least 1.";
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_List_1001 Invalid Selection Policy.*/
 /***+$ MSG_List_1001 message is obsolete - DO NOT localize this message.*/
@@ -230,14 +250,17 @@ externaldef(messages) _XmConst char *_XmMsgList_0000 = "When changed, XmNvisible
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_List_1004 Invalid String Direction.*/
 /***+$ MSG_List_1004 message is obsolete - DO NOT localize this message.*/
-externaldef(messages) _XmConst char *_XmMsgList_0005 = "Cannot change XmNlistSizePolicy after initialization.";
-externaldef(messages) _XmConst char *_XmMsgList_0006 = "When changed, XmNitemCount must be non-negative.";
+externaldef(messages) _XmConst
+    char *_XmMsgList_0005 = "Cannot change XmNlistSizePolicy after initialization.";
+externaldef(messages) _XmConst
+    char *_XmMsgList_0006 = "When changed, XmNitemCount must be non-negative.";
 /***+$ non-negative means zero or positive.*/
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_List_1007 NULL font in SetValues ignored.*/
 /***+$ MSG_List_1007 message is obsolete - DO NOT localize this message.*/
 /***+$ please do not translate SetValues*/
-externaldef(messages) _XmConst char *_XmMsgList_0007 = "Item(s) to be deleted are not present in the list.";
+externaldef(messages) _XmConst
+    char *_XmMsgList_0007 = "Item(s) to be deleted are not present in the list.";
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_List_1009 No Horizontal Scrollbar to set.*/
 /***+$ MSG_List_1009 message is obsolete - DO NOT localize this message.*/
@@ -245,42 +268,58 @@ externaldef(messages) _XmConst char *_XmMsgList_0007 = "Item(s) to be deleted ar
 /***+MSG_List_1010 Invalid Margin setting.*/
 /***+$ MSG_List_1010 message is obsolete - DO NOT localize this message.*/
 externaldef(messages) _XmConst char *_XmMsgList_0008 = "XmNlistSpacing must be non-negative.";
-externaldef(messages) _XmConst char *_XmMsgList_0009 = "Cannot set XmNitems to NULL when XmNitemCount is positive.";
-externaldef(messages) _XmConst char *_XmMsgList_0010 = "XmNselectedItemCount must not be negative.";
-externaldef(messages) _XmConst char *_XmMsgList_0011 = "Cannot set XmNselectedItems to NULL when XmNselectedItemCount \
+externaldef(messages) _XmConst
+    char *_XmMsgList_0009 = "Cannot set XmNitems to NULL when XmNitemCount is positive.";
+externaldef(messages) _XmConst
+    char *_XmMsgList_0010 = "XmNselectedItemCount must not be negative.";
+externaldef(messages) _XmConst char *_XmMsgList_0011 =
+    "Cannot set XmNselectedItems to NULL when XmNselectedItemCount \
 is positive.";
 externaldef(messages) _XmConst char *_XmMsgList_0012 = "XmNtopItemPosition must be non-negative.";
 externaldef(messages) _XmConst char *_XmMsgList_0013 = "XmNitems and XmNitemCount mismatch!";
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_List_1017 Cannot leave add mode in multiple selection.*/
 /***+$ MSG_List_1017 message is obsolete - DO NOT localize this message.*/
-externaldef(messages) _XmConst char *_XmMsgList_0014 = "XmNselectedPositionCount must not be negative.";
-externaldef(messages) _XmConst char *_XmMsgList_0015 = "Cannot set XmNselectedPositions to NULL when XmNselectedPositionCount \
+externaldef(messages) _XmConst
+    char *_XmMsgList_0014 = "XmNselectedPositionCount must not be negative.";
+externaldef(messages) _XmConst char *_XmMsgList_0015 =
+    "Cannot set XmNselectedPositions to NULL when XmNselectedPositionCount \
 is positive.";
 /**************** MainW.c ****************/
 externaldef(messages) _XmConst char *_XmMsgMainW_0000 = "The MenuBar cannot be changed to NULL.";
 /***+$ please do not translate MenuBar.*/
-externaldef(messages) _XmConst char *_XmMsgMainW_0001 = "The CommandWindow cannot be changed to NULL.";
+externaldef(messages) _XmConst
+    char *_XmMsgMainW_0001 = "The CommandWindow cannot be changed to NULL.";
 /***+$ please do not translate CommandWindow.*/
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_MainW_1003 Negative margin value ignored.*/
 /***+$ MSG_MainW_1003 message is obsolete - DO NOT localize this message.*/
 /**************** MenuShell.c ****************/
-externaldef(messages) _XmConst char *_XmMsgMenuShell_0000 = "MenuShell widgets accept only XmRowColumn children.";
+externaldef(messages) _XmConst
+    char *_XmMsgMenuShell_0000 = "MenuShell widgets accept only XmRowColumn children.";
 /***+$ please do not translate MenuShell.*/
-externaldef(messages) _XmConst char *_XmMsgMenuShell_0001 = "Attempting to manage a pulldown menu that is not attached \n\
+externaldef(messages) _XmConst char *_XmMsgMenuShell_0001 =
+    "Attempting to manage a pulldown menu that is not attached \n\
 to a Cascade button.";
-externaldef(messages) _XmConst char *_XmMsgMenuShell_0002 = "XmPopup requires a subclass of shellWidgetClass.";
+externaldef(messages) _XmConst
+    char *_XmMsgMenuShell_0002 = "XmPopup requires a subclass of shellWidgetClass.";
 /***+$ please do not translate shellWidgetClass.*/
-externaldef(messages) _XmConst char *_XmMsgMenuShell_0003 = "XmPopdown requires a subclass of shellWidgetClass.";
+externaldef(messages) _XmConst
+    char *_XmMsgMenuShell_0003 = "XmPopdown requires a subclass of shellWidgetClass.";
 /***+$ please do not translate shellWidgetClass.*/
-externaldef(messages) _XmConst char *_XmMsgMenuShell_0004 = "XtMenuPopup requires exactly one argument.";
-externaldef(messages) _XmConst char *_XmMsgMenuShell_0005 = "XtMenuPopup only supports ButtonPress, KeyPress or EnterNotify events.";
+externaldef(messages) _XmConst
+    char *_XmMsgMenuShell_0004 = "XtMenuPopup requires exactly one argument.";
+externaldef(messages) _XmConst char *_XmMsgMenuShell_0005 =
+    "XtMenuPopup only supports ButtonPress, KeyPress or EnterNotify events.";
 /***+$ please do not translate ButtonPress, KeyPress or EnterNotify.*/
-externaldef(messages) _XmConst char *_XmMsgMenuShell_0006 = "Cannot find popup widget \"%s\" in XtMenuPopup.";
-externaldef(messages) _XmConst char *_XmMsgMenuShell_0007 = "Cannot find popup widget \"%s\" in XtMenuPopdown.";
-externaldef(messages) _XmConst char *_XmMsgMenuShell_0008 = "XtMenuPopdown called with more than one argument.";
-externaldef(messages) _XmConst char *_XmMsgMenuShell_0009 = "Cannot change XmNlayoutDirection after initialization.";
+externaldef(messages) _XmConst
+    char *_XmMsgMenuShell_0006 = "Cannot find popup widget \"%s\" in XtMenuPopup.";
+externaldef(messages) _XmConst
+    char *_XmMsgMenuShell_0007 = "Cannot find popup widget \"%s\" in XtMenuPopdown.";
+externaldef(messages) _XmConst
+    char *_XmMsgMenuShell_0008 = "XtMenuPopdown called with more than one argument.";
+externaldef(messages) _XmConst
+    char *_XmMsgMenuShell_0009 = "Cannot change XmNlayoutDirection after initialization.";
 /**************** MessageB.c ****************/
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_MessageB_1001 Invalid Dialog Type.*/
@@ -291,7 +330,8 @@ externaldef(messages) _XmConst char *_XmMsgMenuShell_0009 = "Cannot change XmNla
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_MessageB_1003 Invalid Alignment Type.*/
 /***+$ MSG_MessageB_1003 message is obsolete - DO NOT localize this message.*/
-externaldef(messages) _XmConst char *_XmMsgMessageB_0003 = "Invalid child type; widget does not have this child";
+externaldef(messages) _XmConst
+    char *_XmMsgMessageB_0003 = "Invalid child type; widget does not have this child";
 externaldef(messages) _XmConst char *_XmMsgMessageB_0004 = "Cancel button cannot be changed.";
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_MessageB_1006 Use XmNdefaultButtonType to set MessageBox default button.*/
@@ -299,12 +339,14 @@ externaldef(messages) _XmConst char *_XmMsgMessageB_0004 = "Cancel button cannot
 /**************** PanedW.c ****************/
 externaldef(messages) _XmConst char *_XmMsgPanedW_0000 = "Minimum value must be greater than 0.";
 externaldef(messages) _XmConst char *_XmMsgPanedW_0001 = "Maximum value must be greater than 0.";
-externaldef(messages) _XmConst char *_XmMsgPanedW_0002 = "Minimum value must be less than maximum value.";
+externaldef(messages) _XmConst
+    char *_XmMsgPanedW_0002 = "Minimum value must be less than maximum value.";
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_PanedW_0003 Constraints do not allow appropriate sizing.*/
 /***+$ MSG_PanedW_0003 message is obsolete - DO NOT localize this message.*/
 externaldef(messages) _XmConst char *_XmMsgPanedW_0004 = "Too few parameters in sash callback.";
-externaldef(messages) _XmConst char *_XmMsgPanedW_0005 = "Invalid first parameter in sash callback.";
+externaldef(messages) _XmConst
+    char *_XmMsgPanedW_0005 = "Invalid first parameter in sash callback.";
 /**************** PWidget.c ****************/
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_PWI_1001 fontList is not defined*/
@@ -314,7 +356,8 @@ externaldef(messages) _XmConst char *_XmMsgPanedW_0005 = "Invalid first paramete
 externaldef(messages) _XmConst char *_XmMsgProtocols_0000 = "Widget must be a VendorShell.";
 /***+$ please do not translate VendorShell.*/
 externaldef(messages) _XmConst char *_XmMsgProtocols_0001 = "Protocol manager already exists.";
-externaldef(messages) _XmConst char *_XmMsgProtocols_0002 = "There are more protocols than widget can handle; 32 is the limit.";
+externaldef(messages) _XmConst char *_XmMsgProtocols_0002 =
+    "There are more protocols than widget can handle; 32 is the limit.";
 /**************** PushB.c ****************/
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_PushB_1001 Not enough memory*/
@@ -330,18 +373,25 @@ externaldef(messages) _XmConst char *_XmMsgRowColumn_0000 = "Attempt to set widt
 /***+MSG_RowColumn_1003 Attempt to set height to zero.\n\*/
 /***+Set to default value 16.*/
 /***+$ MSG_RowColumn_1003 message is obsolete - DO NOT localize this message.*/
-externaldef(messages) _XmConst char *_XmMsgRowColumn_0001 = "Attempt to set height to zero ignored";
-externaldef(messages) _XmConst char *_XmMsgRowColumn_0002 = "XmNhelpWidget forced to NULL since it is not used by popup menus.";
-externaldef(messages) _XmConst char *_XmMsgRowColumn_0003 = "XmNhelpWidget forced to NULL since it is not used by pulldown menus.";
-externaldef(messages) _XmConst char *_XmMsgRowColumn_0004 = "XmNhelpWidget forced to NULL since it is not used by option menus.";
-externaldef(messages) _XmConst char *_XmMsgRowColumn_0005 = "XmNhelpWidget forced to NULL since it is not used by Work Areas.";
+externaldef(messages) _XmConst
+    char *_XmMsgRowColumn_0001 = "Attempt to set height to zero ignored";
+externaldef(messages) _XmConst char *_XmMsgRowColumn_0002 =
+    "XmNhelpWidget forced to NULL since it is not used by popup menus.";
+externaldef(messages) _XmConst char *_XmMsgRowColumn_0003 =
+    "XmNhelpWidget forced to NULL since it is not used by pulldown menus.";
+externaldef(messages) _XmConst char *_XmMsgRowColumn_0004 =
+    "XmNhelpWidget forced to NULL since it is not used by option menus.";
+externaldef(messages) _XmConst char *_XmMsgRowColumn_0005 =
+    "XmNhelpWidget forced to NULL since it is not used by Work Areas.";
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_RowColumn_1009 Unknown value of XmNrowColumnType.\n\*/
 /***+It is set to WorkArea.*/
 /***+$ MSG_RowColumn_1009 message is obsolete - DO NOT localize this message.*/
-externaldef(messages) _XmConst char *_XmMsgRowColumn_0007 = "Widget hierarchy not appropriate for this XmNrowColumnType:\n\
+externaldef(messages) _XmConst char *_XmMsgRowColumn_0007 =
+    "Widget hierarchy not appropriate for this XmNrowColumnType:\n\
 defaulting to XmWORK_AREA.";
-externaldef(messages) _XmConst char *_XmMsgRowColumn_0008 = "Attempt to change XmNrowColumnType after initialization ignored";
+externaldef(messages) _XmConst
+    char *_XmMsgRowColumn_0008 = "Attempt to change XmNrowColumnType after initialization ignored";
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_RowColumn_1012 Unknown value of XmNorientation.\n\*/
 /***+The default value is used.*/
@@ -366,20 +416,26 @@ externaldef(messages) _XmConst char *_XmMsgRowColumn_0008 = "Attempt to change X
 /***+MSG_RowColumn_1017 Attempt to set XmNentryAlignment to unknown value.\n\*/
 /***+The value is ignored.*/
 /***+$ MSG_RowColumn_1017 message is obsolete - DO NOT localize this message.*/
-externaldef(messages) _XmConst char *_XmMsgRowColumn_0015 = "Attempt to set XmNisHomogenous to FALSE for a RowColumn widget of type \
+externaldef(messages) _XmConst char *_XmMsgRowColumn_0015 =
+    "Attempt to set XmNisHomogenous to FALSE for a RowColumn widget of type \
 XmMENU_BAR ignored.";
 /***+$ please do not translate FALSE and RowColumn.*/
-externaldef(messages) _XmConst char *_XmMsgRowColumn_0016 = "Attempt to change XmNentryClass for a RowColumn widget of type \
+externaldef(messages) _XmConst char *_XmMsgRowColumn_0016 =
+    "Attempt to change XmNentryClass for a RowColumn widget of type \
 XmMENU_BAR ignored.";
 /***+$ please do not translate RowColumn.*/
-externaldef(messages) _XmConst char *_XmMsgRowColumn_0017 = "Attempt to change XmNwhichButton via XtSetValues for a RowColumn widget \
+externaldef(messages) _XmConst char *_XmMsgRowColumn_0017 =
+    "Attempt to change XmNwhichButton via XtSetValues for a RowColumn widget \
 of type XmMENU_PULLDOWN ignored.";
 /***+$ please do not translate RowColumn.*/
-externaldef(messages) _XmConst char *_XmMsgRowColumn_0018 = "Attempt to change XmNmenuPost via XtSetValues for a RowColumn widget \
+externaldef(messages) _XmConst char *_XmMsgRowColumn_0018 =
+    "Attempt to change XmNmenuPost via XtSetValues for a RowColumn widget \
 of type XmMENU_PULLDOWN ignored.";
 /***+$ please do not translate RowColumn.*/
-externaldef(messages) _XmConst char *_XmMsgRowColumn_0019 = "Attempt to set XmNmenuPost to an illegal value ignored.";
-externaldef(messages) _XmConst char *_XmMsgRowColumn_0020 = "Attempt to change XmNshadowThickness for a RowColumn widget not of type \
+externaldef(messages) _XmConst
+    char *_XmMsgRowColumn_0019 = "Attempt to set XmNmenuPost to an illegal value ignored.";
+externaldef(messages) _XmConst char *_XmMsgRowColumn_0020 =
+    "Attempt to change XmNshadowThickness for a RowColumn widget not of type \
 XmMENU_PULLDOWN or XmMENU_POPUP ignored.";
 /***+$ please do not translate RowColumn.*/
 /* Needed for message catalog BC. Do not remove */
@@ -387,21 +443,29 @@ XmMENU_PULLDOWN or XmMENU_POPUP ignored.";
 /***+widget of type XmMENU_OPTION.\n\*/
 /***+The value is ignored.*/
 /***+$ MSG_RowColumn_1024 message is obsolete - DO NOT localize this message.*/
-externaldef(messages) _XmConst char *_XmMsgRowColumn_0022 = "Attempt to add wrong child type to a menu (that is, XmRowColumn) widget";
+externaldef(messages) _XmConst char *_XmMsgRowColumn_0022 =
+    "Attempt to add wrong child type to a menu (that is, XmRowColumn) widget";
 /***+$ please do not translate RowColumn.*/
-externaldef(messages) _XmConst char *_XmMsgRowColumn_0023 = "Attempt to add wrong child type to a homogeneous RowColumn widget";
+externaldef(messages) _XmConst char *_XmMsgRowColumn_0023 =
+    "Attempt to add wrong child type to a homogeneous RowColumn widget";
 /***+$ please do not translate RowColumn.*/
-externaldef(messages) _XmConst char *_XmMsgRowColumn_0025 = "Attempt to change XmNisHomogeneous for a RowColumn widget of type \
+externaldef(messages) _XmConst char *_XmMsgRowColumn_0025 =
+    "Attempt to change XmNisHomogeneous for a RowColumn widget of type \
 XmMENU_OPTION ignored";
 /***+$ please do not translate RowColumn.*/
-externaldef(messages) _XmConst char *_XmMsgRowColumn_0026 = "Enabling tear off on a shared menupane is not recommended";
-externaldef(messages) _XmConst char *_XmMsgRowColumn_0027 = "Illegal mnemonic character;  Could not convert X KEYSYM to a keycode";
+externaldef(messages) _XmConst
+    char *_XmMsgRowColumn_0026 = "Enabling tear off on a shared menupane is not recommended";
+externaldef(messages) _XmConst char *_XmMsgRowColumn_0027 =
+    "Illegal mnemonic character;  Could not convert X KEYSYM to a keycode";
 /***+$ please do not translate X KEYSYM.*/
 /**************** Scale.c ****************/
-externaldef(messages) _XmConst char *_XmMsgScale_0000 = "The minumum scale value is greater than or equal to the maximum scale \
+externaldef(messages) _XmConst char *_XmMsgScale_0000 =
+    "The minumum scale value is greater than or equal to the maximum scale \
 value.";
-externaldef(messages) _XmConst char *_XmMsgScale_0001 = "The specified scale value is less than the minimum scale value.";
-externaldef(messages) _XmConst char *_XmMsgScale_0002 = "The specified scale value is greater than the maximum scale value.";
+externaldef(messages) _XmConst
+    char *_XmMsgScale_0001 = "The specified scale value is less than the minimum scale value.";
+externaldef(messages) _XmConst
+    char *_XmMsgScale_0002 = "The specified scale value is greater than the maximum scale value.";
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_Scale_1004 Incorrect orientation.*/
 /***+$ MSG_Scale_1004 message is obsolete - DO NOT localize this message.*/
@@ -409,18 +473,24 @@ externaldef(messages) _XmConst char *_XmMsgScaleScrBar_0004 = "Incorrect process
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_Scale_0005 = Invalid highlight thickness.*/
 /***+$ MSG_Scale_0005 message is obsolete - DO NOT localize this message.*/
-externaldef(messages) _XmConst char *_XmMsgScale_0006 = "Invalid XmNscaleMultiple; greater than (max - min)";
+externaldef(messages) _XmConst
+    char *_XmMsgScale_0006 = "Invalid XmNscaleMultiple; greater than (max - min)";
 externaldef(messages) _XmConst char *_XmMsgScale_0007 = "Invalid XmNscaleMultiple; less than zero";
-externaldef(messages) _XmConst char *_XmMsgScale_0008 = "(Maximum - minimum) cannot be greater than INT_MAX / 2;\n\
+externaldef(messages) _XmConst char *_XmMsgScale_0008 =
+    "(Maximum - minimum) cannot be greater than INT_MAX / 2;\n\
 minimum has been set to zero, maximum may have been set to (INT_MAX/2).";
 externaldef(messages) _XmConst char *_XmMsgScale_0009 = "XmNshowValue has an incorrect value";
 /**************** ScrollBar.c ****************/
-externaldef(messages) _XmConst char *_XmMsgScrollBar_0000 = "The minimum scrollbar value is greater than or equal to\n\
+externaldef(messages) _XmConst char *_XmMsgScrollBar_0000 =
+    "The minimum scrollbar value is greater than or equal to\n\
 the maximum scrollbar value.";
-externaldef(messages) _XmConst char *_XmMsgScrollBar_0001 = "The specified slider size is less than 1.";
-externaldef(messages) _XmConst char *_XmMsgScrollBar_0002 = "The specified scrollbar value is less than the minimum\n\
+externaldef(messages) _XmConst
+    char *_XmMsgScrollBar_0001 = "The specified slider size is less than 1.";
+externaldef(messages) _XmConst char *_XmMsgScrollBar_0002 =
+    "The specified scrollbar value is less than the minimum\n\
 scrollbar value.";
-externaldef(messages) _XmConst char *_XmMsgScrollBar_0003 = "The specified scrollbar value is greater than the maximum\n\
+externaldef(messages) _XmConst char *_XmMsgScrollBar_0003 =
+    "The specified scrollbar value is greater than the maximum\n\
 scrollbar value minus the scrollbar slider size.";
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_ScrollBar_1005 Incorrect orientation.*/
@@ -428,10 +498,14 @@ scrollbar value minus the scrollbar slider size.";
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_ScrollBar_1006 Incorrect processing direction.*/
 /***+$ MSG_ScrollBar_1006 message is obsolete - DO NOT localize this message.*/
-externaldef(messages) _XmConst char *_XmMsgScrollBar_0004 = "The scrollbar increment is less than 1.";
-externaldef(messages) _XmConst char *_XmMsgScrollBar_0005 = "The scrollbar page increment is less than 1.";
-externaldef(messages) _XmConst char *_XmMsgScrollBar_0006 = "The scrollbar initial delay is less than 1.";
-externaldef(messages) _XmConst char *_XmMsgScrollBar_0007 = "The scrollbar repeat delay is less than 1.";
+externaldef(messages) _XmConst
+    char *_XmMsgScrollBar_0004 = "The scrollbar increment is less than 1.";
+externaldef(messages) _XmConst
+    char *_XmMsgScrollBar_0005 = "The scrollbar page increment is less than 1.";
+externaldef(messages) _XmConst
+    char *_XmMsgScrollBar_0006 = "The scrollbar initial delay is less than 1.";
+externaldef(messages) _XmConst
+    char *_XmMsgScrollBar_0007 = "The scrollbar repeat delay is less than 1.";
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_ScrollBar_1011 Error in context manager; scrollbar backgrounds\n\*/
 /***+cannot be set correctly*/
@@ -440,7 +514,8 @@ externaldef(messages) _XmConst char *_XmMsgScrollBar_0007 = "The scrollbar repea
 /***+MSG_ScrollBar_1012 Error in context manager; scrollbar foregrounds\n\*/
 /***+cannot be set correctly*/
 /***+$ MSG_ScrollBar_1012 message is obsolete - DO NOT localize this message.*/
-externaldef(messages) _XmConst char *_XmMsgScrollBar_0008 = "Specified slider size is greater than the maximum scrollbar\n\
+externaldef(messages) _XmConst char *_XmMsgScrollBar_0008 =
+    "Specified slider size is greater than the maximum scrollbar\n\
 value minus the minimum scrollbar value.";
 /**************** ScrolledW.c ****************/
 /* Needed for message catalog BC. Do not remove */
@@ -455,17 +530,23 @@ value minus the minimum scrollbar value.";
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_ScrolledW_1004 Invalid placement policy.*/
 /***+$ MSG_ScrolledW_1004 message is obsolete - DO NOT localize this message.*/
-externaldef(messages) _XmConst char *_XmMsgScrolledW_0004 = "Cannot change scrolling policy after initialization.";
-externaldef(messages) _XmConst char *_XmMsgScrolledW_0005 = "Cannot change visual policy after initialization.";
-externaldef(messages) _XmConst char *_XmMsgScrolledW_0006 = "Cannot set AS_NEEDED scrollbar policy with a\n\
+externaldef(messages) _XmConst
+    char *_XmMsgScrolledW_0004 = "Cannot change scrolling policy after initialization.";
+externaldef(messages) _XmConst
+    char *_XmMsgScrolledW_0005 = "Cannot change visual policy after initialization.";
+externaldef(messages) _XmConst char *_XmMsgScrolledW_0006 =
+    "Cannot set AS_NEEDED scrollbar policy with a\n\
 visual policy of VARIABLE.";
 /***+$ please do not translate AS_NEEDED or VARIABLE.*/
-externaldef(messages) _XmConst char *_XmMsgScrolledW_0007 = "Cannot change scrollbar widget in AUTOMATIC mode.";
+externaldef(messages) _XmConst
+    char *_XmMsgScrolledW_0007 = "Cannot change scrollbar widget in AUTOMATIC mode.";
 /***+$ please do not translate AUTOMATIC.*/
 externaldef(messages) _XmConst char *_XmMsgScrolledW_0008 = "Cannot change clip window";
-externaldef(messages) _XmConst char *_XmMsgScrolledW_0009 = "Cannot set visual policy of CONSTANT in APPLICATION_DEFINED mode.";
+externaldef(messages) _XmConst char *_XmMsgScrolledW_0009 =
+    "Cannot set visual policy of CONSTANT in APPLICATION_DEFINED mode.";
 /***+$ please do not translate CONSTANT or APPLICATION_DEFINED.*/
-externaldef(messages) _XmConst char *_XmMsgScrollVis_0000 = "Wrong parameters passed to the XmScrollVisible function.";
+externaldef(messages) _XmConst
+    char *_XmMsgScrollVis_0000 = "Wrong parameters passed to the XmScrollVisible function.";
 /**************** SelectioB.c ****************/
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_SelectioB_1001 Incorrect dialog type.*/
@@ -475,7 +556,8 @@ externaldef(messages) _XmConst char *_XmMsgSelectioB_0001 = "Dialog type cannot 
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_SelectioB_1003 Only one work area child allowed.*/
 /***+$ MSG_SelectioB_1003 message is obsolete - DO NOT localize this message.*/
-externaldef(messages) _XmConst char *_XmMsgSelectioB_0002 = "Widget does not support this child type.";
+externaldef(messages) _XmConst
+    char *_XmMsgSelectioB_0002 = "Widget does not support this child type.";
 /**************** Separator.c ****************/
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_Separator_1001 Invalid separator type.*/
@@ -492,25 +574,31 @@ externaldef(messages) _XmConst char *_XmMsgText_0000 = "Incorrect source text is
 /***+MSG_Text_0002 Text widget is editable; XmNtraversalOn must be True.*/
 /***+$ MSG_Text_0002 message is obsolete - DO NOT localize this message.*/
 /***+$ please do not translate XmNtraversalOn and True.*/
-externaldef(messages) _XmConst char *_XmMsgTextIn_0000  = "Cannot find position while attempting to move to previous line.";
+externaldef(messages) _XmConst
+    char *_XmMsgTextIn_0000 = "Cannot find position while attempting to move to previous line.";
 externaldef(messages) _XmConst char *_XmMsgTextOut_0000 = "Number of rows must be greater than 0.";
-externaldef(messages) _XmConst char *_XmMsgTextF_0002   = "XmFontListInitFontContext failed.";
+externaldef(messages) _XmConst char *_XmMsgTextF_0002 = "XmFontListInitFontContext failed.";
 /***+$ please do not translate XmFontListInitFontContext.*/
 externaldef(messages) _XmConst char *_XmMsgTextF_0003 = "XmFontListGetNextFont failed.";
 /***+$ please do not translate XmFontListGetNextFont.*/
-externaldef(messages) _XmConst char *_XmMsgTextF_0004    = "Character '%s' not supported in font.  Discarded.";
-externaldef(messages) _XmConst char *_XmMsgTextFWcs_0000 = "Character '%s' not supported in font.  Discarded.";
+externaldef(messages) _XmConst
+    char *_XmMsgTextF_0004 = "Character '%s' not supported in font.  Discarded.";
+externaldef(messages) _XmConst
+    char *_XmMsgTextFWcs_0000 = "Character '%s' not supported in font.  Discarded.";
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_TextFWcs_0001 Cannot use multibyte locale without a fontset.  Value discarded.*/
 /***+$ MSG_TextFWcs_0001 message is obsolete - DO NOT localize this message.*/
 /**************** TextF.c ****************/
-externaldef(messages) _XmConst char *_XmMsgTextF_0000 = "Cursor position must be greater than or equal to 0.";
-externaldef(messages) _XmConst char *_XmMsgTextF_0001 = "Number of columns must be greater than 0.";
+externaldef(messages) _XmConst
+    char *_XmMsgTextF_0000 = "Cursor position must be greater than or equal to 0.";
+externaldef(messages) _XmConst
+    char *_XmMsgTextF_0001 = "Number of columns must be greater than 0.";
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_TextF_0005 XmNtraversalOn must always be True.*/
 /***+$ please do not translate XmNtraversalOn and True.*/
 /***+$ MSG_TextF_0005 message is obsolete - DO NOT localize this message.*/
-externaldef(messages) _XmConst char *_XmMsgTextF_0006 = "Number of columns must be greater than or equal to 0.";
+externaldef(messages) _XmConst
+    char *_XmMsgTextF_0006 = "Number of columns must be greater than or equal to 0.";
 /**************** ToggleB.c ****************/
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_ToggleB_1001 Indicator type should be either XmONE_OF_MANY or XmN_OF_MANY*/
@@ -542,7 +630,8 @@ externaldef(messages) _XmConst char *_XmMsgVendor_0000 = "Invalid value for XmNd
 /***+$ MSG_Vendor_1002 message is obsolete - DO NOT localize this message.*/
 externaldef(messages) _XmConst char *_XmMsgVendor_0001 = "Invalid value for XmNinputPolicy";
 externaldef(messages) _XmConst char *_XmMsgVendor_0002 = "XmNlayoutDirection cannot be changed.";
-externaldef(messages) _XmConst char *_XmMsgVendor_0003 = "Fatal Error: \n\
+externaldef(messages) _XmConst char *_XmMsgVendor_0003 =
+    "Fatal Error: \n\
 _XmGetDefaultDisplay cannot be used prior to VendorS.Initialize, returns NULL";
 /***+$ please do not translate VendorS.Initialize.*/
 /**************** VendorE.c ****************/
@@ -561,11 +650,15 @@ _XmGetDefaultDisplay cannot be used prior to VendorS.Initialize, returns NULL";
 /***+MSG_VirtKey_1001 Virtual bindings Initialize hasn't been called*/
 /***+$ MSG_VirtKey_1001 message is obsolete - DO NOT localize this message.*/
 /**************** Visual.c ****************/
-externaldef(messages) _XmConst char *_XmMsgVisual_0000 = "Invalid color requested from _XmAccessColorData.";
-externaldef(messages) _XmConst char *_XmMsgVisual_0001 = "Cannot allocate colormap entry for default background.";
-externaldef(messages) _XmConst char *_XmMsgVisual_0002 = "Cannot parse default background color specification.";
+externaldef(messages) _XmConst
+    char *_XmMsgVisual_0000 = "Invalid color requested from _XmAccessColorData.";
+externaldef(messages) _XmConst
+    char *_XmMsgVisual_0001 = "Cannot allocate colormap entry for default background.";
+externaldef(messages) _XmConst
+    char *_XmMsgVisual_0002 = "Cannot parse default background color specification.";
 /**************** XmIm.c *******************/
-externaldef(messages) _XmConst char *_XmMsgXmIm_0000 = "Cannot open input method - using XLookupString.";
+externaldef(messages) _XmConst
+    char *_XmMsgXmIm_0000 = "Cannot open input method - using XLookupString.";
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_XmIm_1002 Cannot create the Input Method Object*/
 /***+$ MSG_XmIm_1002 message is obsolete - DO NOT localize this message.*/
@@ -611,7 +704,8 @@ externaldef(messages) _XmConst char *_XmMsgResource_0013 = "Find";
  *===========================================================================*/
 /**************** BaseClass.c ****************/
 externaldef(messages) _XmConst char *_XmMsgBaseClass_0000 = "No context found for extension";
-externaldef(messages) _XmConst char *_XmMsgBaseClass_0001 = "_XmPopWidgetExtData; no extension found with XFindContext";
+externaldef(messages) _XmConst
+    char *_XmMsgBaseClass_0001 = "_XmPopWidgetExtData; no extension found with XFindContext";
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_BaseClass_0002 XmFreeWidgetExtData is an unsupported routine*/
 /***+$ MSG_BaseClass_0002 message is obsolete - DO NOT localize this message.*/
@@ -620,39 +714,50 @@ externaldef(messages) _XmConst char *_XmMsgBaseClass_0001 = "_XmPopWidgetExtData
 /***+$ please do not translate getLabelSecResData.*/
 /***+$ MSG_GetSecRes_0000 message is obsolete - DO NOT localize this message.*/
 /*************** Display.c ***************/
-externaldef(messages) _XmConst char *_XmMsgDisplay_0001 = "Creating multiple XmDisplays for the same X display.  Only the\n\
+externaldef(messages) _XmConst char *_XmMsgDisplay_0001 =
+    "Creating multiple XmDisplays for the same X display.  Only the\n\
 first XmDisplay created for a particular X display can be referenced\n\
 by calls to XmGetXmDisplay";
 /***+$ please do not translate XmDisplay or XmGetXmDisplay*/
-externaldef(messages) _XmConst char *_XmMsgDisplay_0002 = "Received TOP_LEVEL_LEAVE with no active DragContext";
+externaldef(messages) _XmConst
+    char *_XmMsgDisplay_0002 = "Received TOP_LEVEL_LEAVE with no active DragContext";
 /***+$ please do not translate TOP_LEVEL_LEAVE or DragContext*/
-externaldef(messages) _XmConst char *_XmMsgDisplay_0003 = "Cannot set XmDisplay class to a non-subclass of XmDisplay";
+externaldef(messages) _XmConst
+    char *_XmMsgDisplay_0003 = "Cannot set XmDisplay class to a non-subclass of XmDisplay";
 /***+$ please do not translate XmDisplay*/
 /**************** DragBS.c ****************/
-externaldef(messages) _XmConst char *_XmMsgDragBS_0000 = "_MOTIF_DRAG_WINDOW property has been destroyed";
+externaldef(messages) _XmConst
+    char *_XmMsgDragBS_0000 = "_MOTIF_DRAG_WINDOW property has been destroyed";
 /***+$ please do not translate _MOTIF_DRAG_WINDOW*/
-externaldef(messages) _XmConst char *_XmMsgDragBS_0001 = "The protocol version levels do not match.";
+externaldef(messages) _XmConst
+    char *_XmMsgDragBS_0001 = "The protocol version levels do not match.";
 externaldef(messages) _XmConst char *_XmMsgDragBS_0002 = "Unable to open display.";
 externaldef(messages) _XmConst char *_XmMsgDragBS_0003 = "The atom table is empty.";
 externaldef(messages) _XmConst char *_XmMsgDragBS_0004 = "The target table is empty.";
-externaldef(messages) _XmConst char *_XmMsgDragBS_0005 = "The target table has an inconsistent property.";
+externaldef(messages) _XmConst
+    char *_XmMsgDragBS_0005 = "The target table has an inconsistent property.";
 externaldef(messages) _XmConst char *_XmMsgDragBS_0006 = "Invalid target table index.";
 /*************** DragC.c *******************/
-externaldef(messages) _XmConst char *_XmMsgDragC_0001 = "GenerateCallback does not expect XmCR_DROP_SITE_ENTER as a reason.";
+externaldef(messages) _XmConst
+    char *_XmMsgDragC_0001 = "GenerateCallback does not expect XmCR_DROP_SITE_ENTER as a reason.";
 /***+$ please do not translate GenerateCallback or XmCR_DROP_SITE_ENTER*/
 externaldef(messages) _XmConst char *_XmMsgDragC_0002 = "Invalid selection in DropConvertCallback";
 /***+$ please do not translate DropConvertCallback*/
 externaldef(messages) _XmConst char *_XmMsgDragC_0003 = "The drop selection was lost.";
 externaldef(messages) _XmConst char *_XmMsgDragC_0004 = "XGrabPointer failed.";
-externaldef(messages) _XmConst char *_XmMsgDragC_0005 = "ExternalNotifyHandler: the callback reason is not acceptable.";
+externaldef(messages) _XmConst
+    char *_XmMsgDragC_0005 = "ExternalNotifyHandler: the callback reason is not acceptable.";
 /***+$ please do not translate ExternalNotifyHandler*/
-externaldef(messages) _XmConst char *_XmMsgDragC_0006 = "XmDragStart must be called as a result of a button press or motion event.";
+externaldef(messages) _XmConst char *_XmMsgDragC_0006 =
+    "XmDragStart must be called as a result of a button press or motion event.";
 /***+$ please do not translate XmDragStart*/
 /**************** DragICC.c ****************/
 externaldef(messages) _XmConst char *_XmMsgDragICC_0000 = "Unknown drag and drop message type.";
-externaldef(messages) _XmConst char *_XmMsgDragICC_0001 = "The protocol version levels do not match.";
+externaldef(messages) _XmConst
+    char *_XmMsgDragICC_0001 = "The protocol version levels do not match.";
 /**************** DragIcon.c ****************/
-externaldef(messages) _XmConst char *_XmMsgDragIcon_0000 = "No geometry specified for dragIcon pixmap";
+externaldef(messages) _XmConst
+    char *_XmMsgDragIcon_0000 = "No geometry specified for dragIcon pixmap";
 /***+$ please do not translate dragIcon*/
 externaldef(messages) _XmConst char *_XmMsgDragIcon_0001 = "A dragIcon created with no pixmap";
 /***+$ please do not translate dragIcon*/
@@ -666,25 +771,38 @@ externaldef(messages) _XmConst char *_XmMsgDragOverS_0002 = "Unknown drag state.
 externaldef(messages) _XmConst char *_XmMsgDragOverS_0003 = "Unknown XmNblendModel.";
 /***+$ please do not translate XmNblendModel */
 /**************** DragUnder.c ****************/
-externaldef(messages) _XmConst char *_XmMsgDragUnder_0000 = "Unable to get drop site window geometry.";
+externaldef(messages) _XmConst
+    char *_XmMsgDragUnder_0000 = "Unable to get drop site window geometry.";
 externaldef(messages) _XmConst char *_XmMsgDragUnder_0001 = "Invalid animationPixmapDepth.";
 /***+$ please do not translate animationPixmapDepth*/
 /*************** DropSMgr.c *******************/
-externaldef(messages) _XmConst char *_XmMsgDropSMgr_0001 = "Cannot create drop sites that are children of a simple drop site.";
-externaldef(messages) _XmConst char *_XmMsgDropSMgr_0002 = "Receiving motion events without an active drag context";
-externaldef(messages) _XmConst char *_XmMsgDropSMgr_0003 = "Receiving operation changed without an active drag context.";
-externaldef(messages) _XmConst char *_XmMsgDropSMgr_0004 = "Creating an active drop site with no drop procedure.";
-externaldef(messages) _XmConst char *_XmMsgDropSMgr_0005 = "Cannot set rectangles or number of rectangles of composite drop sites.";
-externaldef(messages) _XmConst char *_XmMsgDropSMgr_0006 = "Registering a widget as a drop site out of sequence.\n\
+externaldef(messages) _XmConst char *_XmMsgDropSMgr_0001 =
+    "Cannot create drop sites that are children of a simple drop site.";
+externaldef(messages) _XmConst
+    char *_XmMsgDropSMgr_0002 = "Receiving motion events without an active drag context";
+externaldef(messages) _XmConst
+    char *_XmMsgDropSMgr_0003 = "Receiving operation changed without an active drag context.";
+externaldef(messages) _XmConst
+    char *_XmMsgDropSMgr_0004 = "Creating an active drop site with no drop procedure.";
+externaldef(messages) _XmConst char *_XmMsgDropSMgr_0005 =
+    "Cannot set rectangles or number of rectangles of composite drop sites.";
+externaldef(messages) _XmConst char *_XmMsgDropSMgr_0006 =
+    "Registering a widget as a drop site out of sequence.\n\
 Ancestors must be registered before any of their \n\
 descendants are registered.";
-externaldef(messages) _XmConst char *_XmMsgDropSMgr_0007 = "Cannot register widget as a drop site more than once.";
-externaldef(messages) _XmConst char *_XmMsgDropSMgr_0008 = "Drop site type may only be set at creation time.";
+externaldef(messages) _XmConst
+    char *_XmMsgDropSMgr_0007 = "Cannot register widget as a drop site more than once.";
+externaldef(messages) _XmConst
+    char *_XmMsgDropSMgr_0008 = "Drop site type may only be set at creation time.";
 /***+$ please do not translate DropSite*/
-externaldef(messages) _XmConst char *_XmMsgDropSMgr_0009  = "Cannot change rectangles of non-simple drop site.";
-externaldef(messages) _XmConst char *_XmMsgDropSMgr_0010  = "Cannot register a Shell as a drop site.";
-externaldef(messages) _XmConst char *_XmMsgDropSMgrI_0001 = "Cannot register a drop site that is a descendent of a simple drop site";
-externaldef(messages) _XmConst char *_XmMsgDropSMgrI_0002 = "Cannot create a discontiguous child list for a composite drop site.";
+externaldef(messages) _XmConst
+    char *_XmMsgDropSMgr_0009 = "Cannot change rectangles of non-simple drop site.";
+externaldef(messages) _XmConst
+    char *_XmMsgDropSMgr_0010 = "Cannot register a Shell as a drop site.";
+externaldef(messages) _XmConst char *_XmMsgDropSMgrI_0001 =
+    "Cannot register a drop site that is a descendent of a simple drop site";
+externaldef(messages) _XmConst char *_XmMsgDropSMgrI_0002 =
+    "Cannot create a discontiguous child list for a composite drop site.";
 externaldef(messages) _XmConst char *_XmMsgDropSMgrI_0003 = "%s is not a drop site child of %s";
 /*************** GeoUtils.c *******************/
 /* Needed for message catalog BC. Do not remove */
@@ -709,22 +827,34 @@ externaldef(messages) _XmConst char *_XmMsgRepType_0000 = "Reverse Conversion of
 /***+MSG_ResConvert_0000 FetchUnitType: bad widget class.*/
 /***+$ please do not translate FetchUnitType.*/
 /***+$ MSG_ResConvert_0000 message is obsolete - DO NOT localize this message.*/
-externaldef(messages) _XmConst char *_XmMsgResConvert_0001 = "Improperly defined default list! Exiting...";
-externaldef(messages) _XmConst char *_XmMsgResConvert_0002 = "Missing colon in font string \"%s\"; any remaining fonts in list unparsed";
-externaldef(messages) _XmConst char *_XmMsgResConvert_0003 = "Invalid delimiter in tag \"%s\"; any remaining fonts in list unparsed";
+externaldef(messages) _XmConst
+    char *_XmMsgResConvert_0001 = "Improperly defined default list! Exiting...";
+externaldef(messages) _XmConst char *_XmMsgResConvert_0002 =
+    "Missing colon in font string \"%s\"; any remaining fonts in list unparsed";
+externaldef(messages) _XmConst char *_XmMsgResConvert_0003 =
+    "Invalid delimiter in tag \"%s\"; any remaining fonts in list unparsed";
 /* Needed for message catalog BC. Do not remove */
-/***+MSG_ResConvert_0004 Unmatched quotation marks in string \"%s\"; any remaining fonts in list unparsed"*/
+/***+MSG_ResConvert_0004 Unmatched quotation marks in string \"%s\"; any remaining fonts in list
+ * unparsed"*/
 /***+$ MSG_ResConvert_0004 message is obsolete - DO NOT localize this message.*/
-externaldef(messages) _XmConst char *_XmMsgResConvert_0005 = "Unmatched quotation marks in tag \"%s\"; any remaining fonts in list unparsed";
-externaldef(messages) _XmConst char *_XmMsgResConvert_0006 = "Null tag found when converting to type %s; any remaining fonts in list unparsed";
-externaldef(messages) _XmConst char *_XmMsgResConvert_0007 = "Cannot convert XmString to Compound Text";
-externaldef(messages) _XmConst char *_XmMsgResConvert_0008 = "Insufficient memory for XmbTextListToTextProperty";
-externaldef(messages) _XmConst char *_XmMsgResConvert_0009 = "Locale not supported for XmbTextListToTextProperty";
+externaldef(messages) _XmConst char *_XmMsgResConvert_0005 =
+    "Unmatched quotation marks in tag \"%s\"; any remaining fonts in list unparsed";
+externaldef(messages) _XmConst char *_XmMsgResConvert_0006 =
+    "Null tag found when converting to type %s; any remaining fonts in list unparsed";
+externaldef(messages) _XmConst
+    char *_XmMsgResConvert_0007 = "Cannot convert XmString to Compound Text";
+externaldef(messages) _XmConst
+    char *_XmMsgResConvert_0008 = "Insufficient memory for XmbTextListToTextProperty";
+externaldef(messages) _XmConst
+    char *_XmMsgResConvert_0009 = "Locale not supported for XmbTextListToTextProperty";
 externaldef(messages) _XmConst char *_XmMsgResConvert_0010 = "XmbTextListToTextProperty failed";
-externaldef(messages) _XmConst char *_XmMsgResConvert_0011 = "Cannot convert widget name to Widget.";
+externaldef(messages) _XmConst
+    char *_XmMsgResConvert_0011 = "Cannot convert widget name to Widget.";
 /***+$ please do not translate Widget.*/
-externaldef(messages) _XmConst char *_XmMsgResConvert_0012 = "Cannot convert compound text to XmString";
-externaldef(messages) _XmConst char *_XmMsgResConvert_0013 = "Cannot convert XmString to compound text";
+externaldef(messages) _XmConst
+    char *_XmMsgResConvert_0012 = "Cannot convert compound text to XmString";
+externaldef(messages) _XmConst
+    char *_XmMsgResConvert_0013 = "Cannot convert XmString to compound text";
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_ResConvert_0014 FetchUnitType called without a widget to reference.*/
 /***+$ please do not translate FetchUnitType.*/
@@ -739,15 +869,18 @@ externaldef(messages) _XmConst char *_XmMsgResConvert_0013 = "Cannot convert XmS
 /***+$ MSG_ResConvert_0016 message is obsolete - DO NOT localize this message.*/
 /**************** Screen.c ****************/
 externaldef(messages) _XmConst char *_XmMsgScreen_0000 = "Icon screen mismatch";
-externaldef(messages) _XmConst char *_XmMsgScreen_0001 = "Cannot get XmScreen because XmDisplay was not found.";
+externaldef(messages) _XmConst
+    char *_XmMsgScreen_0001 = "Cannot get XmScreen because XmDisplay was not found.";
 /*===========================================================================
  * New for CDE
  *===========================================================================*/
 /**************** ColObj.c ****************/
 /* This is really for ColorObj.c, but CDE 1.0 established the message */
 /* set name.  We use their set name for backward compatibility. */
-externaldef(messages) _XmConst char *_XmMsgColObj_0001 = "Could not allocate memory for color object data.";
-externaldef(messages) _XmConst char *_XmMsgColObj_0002 = "Bad screen number from color server selection.";
+externaldef(messages) _XmConst
+    char *_XmMsgColObj_0001 = "Could not allocate memory for color object data.";
+externaldef(messages) _XmConst
+    char *_XmMsgColObj_0002 = "Bad screen number from color server selection.";
 /***+ */
 /***+$set MS_IG*/
 /***+ */
@@ -767,29 +900,44 @@ externaldef(messages) _XmConst char *_XmMsgColObj_0002 = "Bad screen number from
  * New for 2.0
  *===========================================================================*/
 /**************** ComboBox.c ****************/
-externaldef(messages) _XmConst char *_XmMsgComboBox_0000 = "Applications cannot add children to XmComboBox widgets.";
-externaldef(messages) _XmConst char *_XmMsgComboBox_0001 = "XmNcomboBoxType resource cannot be changed by XtSetValues.";
+externaldef(messages) _XmConst
+    char *_XmMsgComboBox_0000 = "Applications cannot add children to XmComboBox widgets.";
+externaldef(messages) _XmConst
+    char *_XmMsgComboBox_0001 = "XmNcomboBoxType resource cannot be changed by XtSetValues.";
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_ComboBox_0002 XmFontListGetNextFont failed.*/
 /***+$ MSG_ComboBox_0002 message is obsolete - DO NOT localize this message.*/
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_ComboBox_0003 XmFontListInitFontContext failed.*/
 /***+$ MSG_ComboBox_0003 message is obsolete - DO NOT localize this message.*/
-externaldef(messages) _XmConst char *_XmMsgComboBox_0004 = "Internal widget has been destroyed.  Behavior is undefined.";
-externaldef(messages) _XmConst char *_XmMsgComboBox_0005 = "Internal widget has been unmanaged.  Behavior is undefined.";
-externaldef(messages) _XmConst char *_XmMsgComboBox_0006 = "XmQUICK_NAVIGATE is only valid for ComboBoxes of XmNcomboBoxType XmDROP_DOWN_LIST";
-externaldef(messages) _XmConst char *_XmMsgComboBox_0007 = "Action invoked with the wrong number of parameters.";
-externaldef(messages) _XmConst char *_XmMsgComboBox_0008 = "Action routine called from a widget that is not a descendant of ComboBox";
-externaldef(messages) _XmConst char *_XmMsgComboBox_0009 = "XmComboBoxSelectItem called with an item not present in the ComboBox.";
-externaldef(messages) _XmConst char *_XmMsgComboBox_0010 = "XmComboBoxSetItem called with an item not present in the ComboBox.";
-externaldef(messages) _XmConst char *_XmMsgComboBox_0011 = "XmComboBoxDeletePos called with an invalid position.";
-externaldef(messages) _XmConst char *_XmMsgComboBox_0012 = "XmComboBox utility routine called with an invalid widget.";
-externaldef(messages) _XmConst char *_XmMsgComboBox_0013 = "Applications may not set the automatic XmComboBox widget children.";
-externaldef(messages) _XmConst char *_XmMsgComboBox_0014 = "XmComboBox positionMode cannot be changed after creation.";
+externaldef(messages) _XmConst
+    char *_XmMsgComboBox_0004 = "Internal widget has been destroyed.  Behavior is undefined.";
+externaldef(messages) _XmConst
+    char *_XmMsgComboBox_0005 = "Internal widget has been unmanaged.  Behavior is undefined.";
+externaldef(messages) _XmConst char *_XmMsgComboBox_0006 =
+    "XmQUICK_NAVIGATE is only valid for ComboBoxes of XmNcomboBoxType XmDROP_DOWN_LIST";
+externaldef(messages) _XmConst
+    char *_XmMsgComboBox_0007 = "Action invoked with the wrong number of parameters.";
+externaldef(messages) _XmConst char *_XmMsgComboBox_0008 =
+    "Action routine called from a widget that is not a descendant of ComboBox";
+externaldef(messages) _XmConst char *_XmMsgComboBox_0009 =
+    "XmComboBoxSelectItem called with an item not present in the ComboBox.";
+externaldef(messages) _XmConst char *_XmMsgComboBox_0010 =
+    "XmComboBoxSetItem called with an item not present in the ComboBox.";
+externaldef(messages) _XmConst
+    char *_XmMsgComboBox_0011 = "XmComboBoxDeletePos called with an invalid position.";
+externaldef(messages) _XmConst
+    char *_XmMsgComboBox_0012 = "XmComboBox utility routine called with an invalid widget.";
+externaldef(messages) _XmConst char *_XmMsgComboBox_0013 =
+    "Applications may not set the automatic XmComboBox widget children.";
+externaldef(messages) _XmConst
+    char *_XmMsgComboBox_0014 = "XmComboBox positionMode cannot be changed after creation.";
 /***+$ please do not translate positionMode. */
 /**************** Container.c ****************/
-externaldef(messages) _XmConst char *_XmMsgContainer_0000 = "Action invoked with the wrong number of parameters.";
-externaldef(messages) _XmConst char *_XmMsgContainer_0001 = "XmNdetailColumnHeading and XmNdetailColumnHeadingCount do not match!";
+externaldef(messages) _XmConst
+    char *_XmMsgContainer_0000 = "Action invoked with the wrong number of parameters.";
+externaldef(messages) _XmConst char *_XmMsgContainer_0001 =
+    "XmNdetailColumnHeading and XmNdetailColumnHeadingCount do not match!";
 /**************** CSText.c ***************/
 /***+MSG_CSText_0000 Invalid margin height; must be greater than or equal to 0.*/
 /***+$ MSG_CSText_0000 message is obsolete - DO NOT localize this message.*/
@@ -813,24 +961,31 @@ externaldef(messages) _XmConst char *_XmMsgContainer_0001 = "XmNdetailColumnHead
 /***+$ please do not translate shellWidgetClass.*/
 /***+$ MSG_GrabS_0000 message is obsolete - DO NOT localize this message.*/
 /**************** Manager.c ****************/
-externaldef(messages) _XmConst char *_XmMsgManager_0000 = "Widget class %s has invalid CompositeClassExtension record.";
+externaldef(messages) _XmConst
+    char *_XmMsgManager_0000 = "Widget class %s has invalid CompositeClassExtension record.";
 /***+$ please do not translate CompositeClassExtension.*/
-externaldef(messages) _XmConst char *_XmMsgManager_0001 = "Cannot change XmNlayoutDirection or XmNstringDirection after initialization.";
+externaldef(messages) _XmConst char *_XmMsgManager_0001 =
+    "Cannot change XmNlayoutDirection or XmNstringDirection after initialization.";
 /**************** NavigMap.c ****************/
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_NavigMap_0000 _XmNavigate called with invalid direction.*/
 /***+$ MSG_NavigMap_0000 message is obsolete - DO NOT localize this message.*/
 /**************** Notebook.c ****************/
-externaldef(messages) _XmConst char *_XmMsgNotebook_0000 = "XmNnotebookChildType resource cannot be set by XtSetValues.";
+externaldef(messages) _XmConst
+    char *_XmMsgNotebook_0000 = "XmNnotebookChildType resource cannot be set by XtSetValues.";
 /**************** PixConv.c ****************/
-externaldef(messages) _XmConst char *_XmMsgPixConv_0000 = "Wrong number of parameters for CvtStringToPixmap";
+externaldef(messages) _XmConst
+    char *_XmMsgPixConv_0000 = "Wrong number of parameters for CvtStringToPixmap";
 /***+$ please do not translate CvtStringToPixmap.*/
 /**************** Primitive.c ****************/
-externaldef(messages) _XmConst char *_XmMsgPrimitive_0000 = "Cannot change XmNlayoutDirection after initialization.";
+externaldef(messages) _XmConst
+    char *_XmMsgPrimitive_0000 = "Cannot change XmNlayoutDirection after initialization.";
 /**************** ScrollFrameT.c ****************/
-externaldef(messages) _XmConst char *_XmMsgScrollFrameT_0000 = "AssocNavigator requires a navigator trait";
+externaldef(messages) _XmConst
+    char *_XmMsgScrollFrameT_0000 = "AssocNavigator requires a navigator trait";
 /***+$ please do not translate AssocNavigator.*/
-externaldef(messages) _XmConst char *_XmMsgScrollFrameT_0001 = "DeAssocNavigator requires a navigator trait";
+externaldef(messages) _XmConst
+    char *_XmMsgScrollFrameT_0001 = "DeAssocNavigator requires a navigator trait";
 /***+$ please do not translate DeAssocNavigator.*/
 /**************** SpinB.c ****************/
 /* Needed for message catalog BC. Do not remove */
@@ -840,45 +995,63 @@ externaldef(messages) _XmConst char *_XmMsgScrollFrameT_0001 = "DeAssocNavigator
 /***+MSG_SpinB_0002 XmNminimumValue equals XmNmaximumValue.*/
 /***+$ MSG_SpinB_0002 message is obsolete - DO NOT localize this message.*/
 externaldef(messages) _XmConst char *_XmMsgSpinB_0003 = "No items supplied for XmSTRING child.";
-externaldef(messages) _XmConst char *_XmMsgSpinB_0004 = "XmNincrementValue cannot be 0. A value of 1 will be used.";
-externaldef(messages) _XmConst char *_XmMsgSpinB_0005 = "Spin direction specified by XmNincrementValue\n\
+externaldef(messages) _XmConst
+    char *_XmMsgSpinB_0004 = "XmNincrementValue cannot be 0. A value of 1 will be used.";
+externaldef(messages) _XmConst char *_XmMsgSpinB_0005 =
+    "Spin direction specified by XmNincrementValue\n\
 has been reversed to match the specified\n\
 XmNminimumValue and XmNmaximumValue.";
-externaldef(messages) _XmConst char *_XmMsgSpinB_0006 = "XmNposition out of range; minimum XmNposition used.";
-externaldef(messages) _XmConst char *_XmMsgSpinB_0007 = "XmNposition out of range; maximum XmNposition used.";
-externaldef(messages) _XmConst char *_XmMsgSpinB_0008 = "Invalid value for XmNpositionType.  Using default value.";
+externaldef(messages) _XmConst
+    char *_XmMsgSpinB_0006 = "XmNposition out of range; minimum XmNposition used.";
+externaldef(messages) _XmConst
+    char *_XmMsgSpinB_0007 = "XmNposition out of range; maximum XmNposition used.";
+externaldef(messages) _XmConst
+    char *_XmMsgSpinB_0008 = "Invalid value for XmNpositionType.  Using default value.";
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_SpinB_0009 XmNpositionType resource can only be set at creation time.*/
 /***+$ MSG_SpinB_0009 message is obsolete - DO NOT localize this message.*/
 /**************** Transfer.c ****************/
-externaldef(messages) _XmConst char *_XmMsgTransfer_0000 = "Calling SelectionCallbackWrapper when transfers should be finished";
+externaldef(messages) _XmConst char *_XmMsgTransfer_0000 =
+    "Calling SelectionCallbackWrapper when transfers should be finished";
 /***+$ please do not translate SelectionCallbackWrapper.*/
 /* Needed for message catalog BC. Do not remove */
 /***+MSG_Transfer_0001 Cannot lock the clipboard; aborting transfer.*/
 /***+$ MSG_Transfer_0001 message is obsolete - DO NOT localize this message.*/
-externaldef(messages) _XmConst char *_XmMsgTransfer_0002 = "The format and type of the callback supplied data does not match the data being merged.";
-externaldef(messages) _XmConst char *_XmMsgTransfer_0003 = "The status in the XmConvertCallbackStruct is not XmCONVERT_MERGE.";
+externaldef(messages) _XmConst char *_XmMsgTransfer_0002 =
+    "The format and type of the callback supplied data does not match the data being merged.";
+externaldef(messages) _XmConst char *_XmMsgTransfer_0003 =
+    "The status in the XmConvertCallbackStruct is not XmCONVERT_MERGE.";
 externaldef(messages) _XmConst char *_XmMsgTransfer_0004 = "CONVERT_MORE is not yet supported.";
 /***+$ please do not translate CONVERT_MORE.*/
 externaldef(messages) _XmConst char *_XmMsgTransfer_0005 = "Bad atom value found.";
-externaldef(messages) _XmConst char *_XmMsgTransfer_0006 = "Warning: Attempt to start a MULTIPLE transfer when one is in progress.";
+externaldef(messages) _XmConst char *_XmMsgTransfer_0006 =
+    "Warning: Attempt to start a MULTIPLE transfer when one is in progress.";
 /***+$ please do not translate MULTIPLE.*/
-externaldef(messages) _XmConst char *_XmMsgTransfer_0007 = "Warning: Attempt to send a MULTIPLE transfer when one is not in progress.";
+externaldef(messages) _XmConst char *_XmMsgTransfer_0007 =
+    "Warning: Attempt to send a MULTIPLE transfer when one is not in progress.";
 /***+$ please do not translate MULTIPLE.*/
 /**************** VaSimple.c ****************/
-externaldef(messages) _XmConst char *_XmMsgVaSimple_0000 = "XtVaTypedArg conversion needs non-null widget handle.";
-externaldef(messages) _XmConst char *_XmMsgVaSimple_0001 = "Unable to find type of resource for conversion.";
+externaldef(messages) _XmConst
+    char *_XmMsgVaSimple_0000 = "XtVaTypedArg conversion needs non-null widget handle.";
+externaldef(messages) _XmConst
+    char *_XmMsgVaSimple_0001 = "Unable to find type of resource for conversion.";
 externaldef(messages) _XmConst char *_XmMsgVaSimple_0002 = "Type conversion failed.";
 /*************** Xm.c *******************/
 externaldef(messages) _XmConst char *_XmMsgMotif_0000 = "\nName: %s\nClass: %s\n";
-externaldef(messages) _XmConst char *_XmMsgMotif_0001 = "Action invoked with the wrong number of parameters.";
+externaldef(messages) _XmConst
+    char *_XmMsgMotif_0001 = "Action invoked with the wrong number of parameters.";
 /*************** XmRenderT.c ************/
-externaldef(messages) _XmConst char *_XmMsgXmRenderT_0000 = "XmNtag cannot be NULL.  Setting to empty string.";
+externaldef(messages) _XmConst
+    char *_XmMsgXmRenderT_0000 = "XmNtag cannot be NULL.  Setting to empty string.";
 externaldef(messages) _XmConst char *_XmMsgXmRenderT_0001 = "Display is NULL.  Cannot load font.";
-externaldef(messages) _XmConst char *_XmMsgXmRenderT_0002 = "XmNfontType invalid.  Cannot load font.";
-externaldef(messages) _XmConst char *_XmMsgXmRenderT_0003 = "Conversion failed.  Cannot load font.";
-externaldef(messages) _XmConst char *_XmMsgXmRenderT_0004 = "XmNfontType set to XmAS_IS.  Cannot load font.";
-externaldef(messages) _XmConst char *_XmMsgXmRenderT_0005 = "XmNloadModel is XmLOAD_IMMEDIATE but XmNfont and XmNfontName not specified.\n\
+externaldef(messages) _XmConst
+    char *_XmMsgXmRenderT_0002 = "XmNfontType invalid.  Cannot load font.";
+externaldef(messages) _XmConst
+    char *_XmMsgXmRenderT_0003 = "Conversion failed.  Cannot load font.";
+externaldef(messages) _XmConst
+    char *_XmMsgXmRenderT_0004 = "XmNfontType set to XmAS_IS.  Cannot load font.";
+externaldef(messages) _XmConst char *_XmMsgXmRenderT_0005 =
+    "XmNloadModel is XmLOAD_IMMEDIATE but XmNfont and XmNfontName not specified.\n\
 Cannot load font.";
 /**************** XmSelect.c ****************/
 /* Needed for message catalog BC. Do not remove */
@@ -887,7 +1060,8 @@ Cannot load font.";
 /***+MSG_XmSelect_0001 Selection owner returned type INCR property with format != 32.*/
 /***+$ please do not translate INCR.*/
 /***+$ MSG_XmSelect_0001 message is obsolete - DO NOT localize this message.*/
-/***+MSG_XmSelect_0002 XtGetSelectionRequest called for widget \"%s\" outside of ConvertSelection proc.*/
+/***+MSG_XmSelect_0002 XtGetSelectionRequest called for widget \"%s\" outside of ConvertSelection
+ * proc.*/
 /***+$ please do not translate ConvertSelection.*/
 /***+$ MSG_XmSelect_0002 message is obsolete - DO NOT localize this message.*/
 /*************** XmString.c ************/
@@ -896,18 +1070,23 @@ externaldef(messages) _XmConst char *_XmMsgXmString_0000 = "No font found.";
 externaldef(messages) _XmConst char *_XmMsgXmTabList_0000 = "Tab value cannot be negative.";
 /**************** SSpinB.c ****************/
 externaldef(messages) _XmConst char *_XmMsgSSpinB_0001 = "XmNtextField resource cannot be set.";
-externaldef(messages) _XmConst char *_XmMsgSSpinB_0002 = "XmNpositionType resource can only be set at creation time.";
-externaldef(messages) _XmConst char *_XmMsgSSpinB_0003 = "Item does not exist.  XmNposition is unchanged.";
+externaldef(messages) _XmConst
+    char *_XmMsgSSpinB_0002 = "XmNpositionType resource can only be set at creation time.";
+externaldef(messages) _XmConst
+    char *_XmMsgSSpinB_0003 = "Item does not exist.  XmNposition is unchanged.";
 /**************** DataF.c ****************/
-externaldef(messages) _XmConst char *_XmMsgDataF_0000    = "Invalid cursor position, must be >= 0.";
-externaldef(messages) _XmConst char *_XmMsgDataF_0001    = "Invalid columns, must be > 0.";
-externaldef(messages) _XmConst char *_XmMsgDataF_0002    = "XmFontListInitFontContext Failed.";
-externaldef(messages) _XmConst char *_XmMsgDataF_0003    = "XmFontListGetNextFont Failed.";
-externaldef(messages) _XmConst char *_XmMsgDataF_0004    = "Character '%c', not supported in font.  Discarded.";
-externaldef(messages) _XmConst char *_XmMsgDataF_0005    = "Traversal_on must always be true.";
-externaldef(messages) _XmConst char *_XmMsgDataF_0006    = "Invalid columns, must be >= 0.";
-externaldef(messages) _XmConst char *_XmMsgDataFWcs_0000 = "Character '%s', not supported in font.  Discarded.";
-externaldef(messages) _XmConst char *_XmMsgDataFWcs_0001 = "Cannot use multibyte locale without a fontset.  Value discarded.";
+externaldef(messages) _XmConst char *_XmMsgDataF_0000 = "Invalid cursor position, must be >= 0.";
+externaldef(messages) _XmConst char *_XmMsgDataF_0001 = "Invalid columns, must be > 0.";
+externaldef(messages) _XmConst char *_XmMsgDataF_0002 = "XmFontListInitFontContext Failed.";
+externaldef(messages) _XmConst char *_XmMsgDataF_0003 = "XmFontListGetNextFont Failed.";
+externaldef(messages) _XmConst
+    char *_XmMsgDataF_0004 = "Character '%c', not supported in font.  Discarded.";
+externaldef(messages) _XmConst char *_XmMsgDataF_0005 = "Traversal_on must always be true.";
+externaldef(messages) _XmConst char *_XmMsgDataF_0006 = "Invalid columns, must be >= 0.";
+externaldef(messages) _XmConst
+    char *_XmMsgDataFWcs_0000 = "Character '%s', not supported in font.  Discarded.";
+externaldef(messages) _XmConst
+    char *_XmMsgDataFWcs_0001 = "Cannot use multibyte locale without a fontset.  Value discarded.";
 /*
  * This one is not part of the message catalog
  */

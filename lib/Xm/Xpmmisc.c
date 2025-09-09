@@ -31,7 +31,7 @@
 *  Developed by Arnaud Le Hors                                                *
 \*****************************************************************************/
 #ifdef HAVE_CONFIG_H
-#   include <config.h>
+#  include <config.h>
 #endif
 /* we don't want the XpmFree macro since we define the XpmFree function here */
 #define NO_XPMFREE_MACRO
@@ -41,79 +41,68 @@
  * in case strdup is not provided by the system here is one
  * which does the trick
  */
-char *
-xpmstrdup(char *s1)
+char *xpmstrdup(char *s1)
 {
-   char  *s2;
-   size_t l = strlen(s1) + 1;
-   if (s2 = (char *)XpmMalloc(l))
-   {
-      strncpy(s2, s1, l - 1);
-      s2[l - 1] = '\0';
-   }
-   return s2;
+  char *s2;
+  size_t l = strlen(s1) + 1;
+  if (s2 = (char *)XpmMalloc(l)) {
+    strncpy(s2, s1, l - 1);
+    s2[l - 1] = '\0';
+  }
+  return s2;
 }
 #endif
-unsigned int
-xpmatoui(
-   register char *p,
-   unsigned int   l,
-   unsigned int  *ui_return)
+unsigned int xpmatoui(register char *p, unsigned int l, unsigned int *ui_return)
 {
-   register unsigned int n, i;
-   n = 0;
-   for (i = 0; i < l; i++)
-      if (*p >= '0' && *p <= '9')
-         n = n * 10 + *p++ - '0';
-      else
-         break;
-   if (i != 0 && i == l)
-   {
-      *ui_return = n;
-      return 1;
-   }
-   else
-      return 0;
+  register unsigned int n, i;
+  n = 0;
+  for (i = 0; i < l; i++)
+    if (*p >= '0' && *p <= '9')
+      n = n * 10 + *p++ - '0';
+    else
+      break;
+  if (i != 0 && i == l) {
+    *ui_return = n;
+    return 1;
+  }
+  else
+    return 0;
 }
 
 /*
  * Function returning a character string related to an error code.
  */
-char *
-XpmGetErrorString(int errcode)
+char *XpmGetErrorString(int errcode)
 {
-   switch (errcode)
-   {
-      case XpmColorError:
-         return ("XpmColorError");
-      case XpmSuccess:
-         return ("XpmSuccess");
-      case XpmOpenFailed:
-         return ("XpmOpenFailed");
-      case XpmFileInvalid:
-         return ("XpmFileInvalid");
-      case XpmNoMemory:
-         return ("XpmNoMemory");
-      case XpmColorFailed:
-         return ("XpmColorFailed");
-      default:
-         return ("Invalid XpmError");
-   }
+  switch (errcode) {
+    case XpmColorError:
+      return ("XpmColorError");
+    case XpmSuccess:
+      return ("XpmSuccess");
+    case XpmOpenFailed:
+      return ("XpmOpenFailed");
+    case XpmFileInvalid:
+      return ("XpmFileInvalid");
+    case XpmNoMemory:
+      return ("XpmNoMemory");
+    case XpmColorFailed:
+      return ("XpmColorFailed");
+    default:
+      return ("Invalid XpmError");
+  }
 }
 
 /*
  * The following function provides a way to figure out if the linked library is
  * newer or older than the one with which a program has been first compiled.
  */
-int
-XpmLibraryVersion(void)
+int XpmLibraryVersion(void)
 {
-   return XpmIncludeVersion;
+  return XpmIncludeVersion;
 }
 
 /* The following should help people wanting to use their own functions */
-void
-XpmFree(void *ptr)
+void XpmFree(void *ptr)
 {
-   free(ptr);
+  free(ptr);
 }

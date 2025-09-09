@@ -19,34 +19,31 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/
+ */
 #ifndef _XmVirtKeysP_h
 #define _XmVirtKeysP_h
-#include <Xm/XmP.h>
 #include <Xm/VirtKeys.h>
+#include <Xm/XmP.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
 #define XmKEYCODE_TAG_SIZE 32
 
-typedef struct _XmDefaultBindingStringRec
-{
-   String vendorName;
-   String defaults;
+typedef struct _XmDefaultBindingStringRec {
+  String vendorName;
+  String defaults;
 } XmDefaultBindingStringRec, *XmDefaultBindingString;
 
-typedef struct _XmVirtualKeysymRec
-{
-   String name;
-   KeySym keysym;
+typedef struct _XmVirtualKeysymRec {
+  String name;
+  KeySym keysym;
 } XmVirtualKeysymRec, *XmVirtualKeysym;
 
 /* For converting a Virtual keysym to a real keysym. */
-typedef struct _XmVKeyBindingRec
-{
-   KeySym    keysym;
-   Modifiers modifiers;
-   KeySym    virtkey;
+typedef struct _XmVKeyBindingRec {
+  KeySym keysym;
+  Modifiers modifiers;
+  KeySym virtkey;
 } XmVKeyBindingRec, *XmVKeyBinding;
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

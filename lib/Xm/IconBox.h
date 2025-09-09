@@ -25,29 +25,28 @@
 #define _XmIconBox_h
 #include <Xm/Ext.h>
 /************************************************************
-*	INCLUDE FILES
-*************************************************************/
+ *	INCLUDE FILES
+ *************************************************************/
 /************************************************************
-*	TYPEDEFS AND DEFINES
-*************************************************************/
+ *	TYPEDEFS AND DEFINES
+ *************************************************************/
 #if defined(__cplusplus)
 extern "C" {
 #endif
 #define XmIconBoxAnyCell (-5)
 typedef struct _XmIconBoxClassRec *XmIconBoxWidgetClass;
-typedef struct _XmIconBoxRec      *XmIconBoxWidget;
+typedef struct _XmIconBoxRec *XmIconBoxWidget;
 
-typedef struct _XmIconBoxDropData
-{
-   Position cell_x, cell_y; /* drop location in cell coordinates. */
+typedef struct _XmIconBoxDropData {
+  Position cell_x, cell_y; /* drop location in cell coordinates. */
 } XmIconBoxDropData;
 
 /************************************************************
-*	MACROS
-*************************************************************/
+ *	MACROS
+ *************************************************************/
 /************************************************************
-*	GLOBAL DECLARATIONS
-*************************************************************/
+ *	GLOBAL DECLARATIONS
+ *************************************************************/
 /*	Function Name: XmIconBoxIsCellEmpty
  *	Description:   Returns true if this cell is unused.
  *	Arguments:     w - the icon box.
@@ -65,8 +64,8 @@ Boolean XmIconBoxIsCellEmpty(Widget, Position, Position, Widget);
  */
 Widget XmCreateIconBox(Widget, String, ArgList, Cardinal);
 /************************************************************
-*	EXTERNAL DECLARATIONS
-*************************************************************/
+ *	EXTERNAL DECLARATIONS
+ *************************************************************/
 extern WidgetClass xmIconBoxWidgetClass;
 #if defined(__cplusplus)
 }

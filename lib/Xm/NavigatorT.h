@@ -35,62 +35,56 @@ externalref XrmQuark XmQTnavigator;
 /* Trait structures and typedefs, place typedefs first */
 /* this structure is equivalent to an XPoint but in int,
    not in Position, which are short */
-typedef struct _TwoDInt
-{
-   int x;
-   int y;
+typedef struct _TwoDInt {
+  int x;
+  int y;
 } TwoDIntRec, *TwoDInt;
 
 /* this one can be expanded in the future */
-typedef struct _XmNavigatorDataRec
-{
-   Mask       valueMask;
-   Mask       dimMask;
-   TwoDIntRec value;
-   TwoDIntRec minimum;
-   TwoDIntRec maximum;
-   TwoDIntRec slider_size;
-   TwoDIntRec increment;
-   TwoDIntRec page_increment;
+typedef struct _XmNavigatorDataRec {
+  Mask valueMask;
+  Mask dimMask;
+  TwoDIntRec value;
+  TwoDIntRec minimum;
+  TwoDIntRec maximum;
+  TwoDIntRec slider_size;
+  TwoDIntRec increment;
+  TwoDIntRec page_increment;
 } XmNavigatorDataRec, *XmNavigatorData;
 
-#define NavAllValid             (OxFFFF)
-#define NavDimMask		(1L<<0)
-#define NavValue  		(1L<<1)
-#define NavMinimum              (1L<<2)
-#define NavMaximum		(1L<<3)
-#define NavSliderSize		(1L<<4)
-#define NavIncrement            (1L<<5)
-#define NavPageIncrement	(1L<<6)
-typedef void (*XmNavigatorMoveCBProc)(Widget         nav,
+#define NavAllValid (OxFFFF)
+#define NavDimMask (1L << 0)
+#define NavValue (1L << 1)
+#define NavMinimum (1L << 2)
+#define NavMaximum (1L << 3)
+#define NavSliderSize (1L << 4)
+#define NavIncrement (1L << 5)
+#define NavPageIncrement (1L << 6)
+typedef void (*XmNavigatorMoveCBProc)(Widget nav,
                                       XtCallbackProc moveCB,
-                                      XtPointer      closure,
-                                      Boolean        setunset);
-typedef void (*XmNavigatorSetValueProc)(Widget          nav,
-                                        XmNavigatorData nav_data,
-                                        Boolean         notify);
-typedef void (*XmNavigatorGetValueProc)(Widget          nav,
-                                        XmNavigatorData nav_data);
+                                      XtPointer closure,
+                                      Boolean setunset);
+typedef void (*XmNavigatorSetValueProc)(Widget nav, XmNavigatorData nav_data, Boolean notify);
+typedef void (*XmNavigatorGetValueProc)(Widget nav, XmNavigatorData nav_data);
 
 /* Version 0: initial release. */
-typedef struct _XmNavigatorTraitRec
-{
-   int                     version; /* 0 */
-   XmNavigatorMoveCBProc   changeMoveCB;
-   XmNavigatorSetValueProc setValue;
-   XmNavigatorGetValueProc getValue;
+typedef struct _XmNavigatorTraitRec {
+  int version; /* 0 */
+  XmNavigatorMoveCBProc changeMoveCB;
+  XmNavigatorSetValueProc setValue;
+  XmNavigatorGetValueProc getValue;
 } XmNavigatorTraitRec, *XmNavigatorTrait;
 
-#define NavigDimensionX			(1L<<0)
-#define NavigDimensionY			(1L<<1)
+#define NavigDimensionX (1L << 0)
+#define NavigDimensionY (1L << 1)
 /* convenience Macros */
-#define ACCESS_DIM(mask, field) ((mask & NavigDimensionX)?(field.x):(field.y))
-#define ASSIGN_DIM(mask, field, val)	\
-  {					\
-    if (mask & NavigDimensionX)		\
-      (field.x)=(val);			\
-    else				\
-      (field.y)=(val);			\
+#define ACCESS_DIM(mask, field) ((mask & NavigDimensionX) ? (field.x) : (field.y))
+#define ASSIGN_DIM(mask, field, val) \
+  { \
+    if (mask & NavigDimensionX) \
+      (field.x) = (val); \
+    else \
+      (field.y) = (val); \
   }
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

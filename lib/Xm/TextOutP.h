@@ -19,30 +19,30 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/
+ */
 #ifndef _XmTextOutP_h
-#   define _XmTextOutP_h
-#   include <Xm/XmP.h>
-#   include <Xm/Text.h>
-#   ifdef __cplusplus
+#  define _XmTextOutP_h
+#  include <Xm/Text.h>
+#  include <Xm/XmP.h>
+#  ifdef __cplusplus
 extern "C" {
-#   endif
+#  endif
 /****************************************************************
  *
  * Definitions for modules implementing and using text output routines.
  *
  ****************************************************************/
-#   define ShouldWordWrap(data, widget)	(data->wordwrap && \
-       (!(((XmDirectionMatch(XmPrim_layout_direction(widget), \
-			     XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) ? \
-            data->scrollvertical : data->scrollhorizontal) \
-       && XmIsScrolledWindow(widget->core.parent))) \
-       && widget->text.edit_mode != XmSINGLE_LINE_EDIT)
+#  define ShouldWordWrap(data, widget) \
+    (data->wordwrap && \
+     (!(((XmDirectionMatch(XmPrim_layout_direction(widget), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) ? \
+             data->scrollvertical : \
+             data->scrollhorizontal) && \
+        XmIsScrolledWindow(widget->core.parent))) && \
+     widget->text.edit_mode != XmSINGLE_LINE_EDIT)
 
-typedef struct _LineTableExtraRec
-{
-   Dimension width;
-   Boolean   wrappedbychar;
+typedef struct _LineTableExtraRec {
+  Dimension width;
+  Boolean wrappedbychar;
 } LineTableExtraRec, *LineTableExtra;
 
 /*
@@ -50,118 +50,108 @@ typedef struct _LineTableExtraRec
  */
 typedef unsigned int LineNum;
 
-typedef enum
-{
-   on,
-   off
-} OnOrOff; /* For when Booleans aren't obvious enough. */
+typedef enum { on, off } OnOrOff; /* For when Booleans aren't obvious enough. */
 
 /*
  * Return the line number containing the given position.  If text currently
  * knows of no line containing that position, returns NOLINE.
  */
-#   define NOLINE	30000
+#  define NOLINE 30000
 
 /*
  * These next define the types of the routines that output is required
  * to export for use by text and by input.
  */
-typedef struct _OutputDataRec
-{
-   XmFontList   fontlist; /* Fontlist for text. */
-   unsigned int blinkrate;
-   Boolean      wordwrap; /* Whether to wordwrap. */
-   Boolean      cursor_position_visible;
-   Boolean      autoshowinsertpoint;
-   Boolean      hasfocus;
-   Boolean      has_rect;
-   Boolean      handlingexposures; /* TRUE if in the midst of expose events. */
-   Boolean      exposevscroll;     /* Non-zero if we expect expose events to be
-				   off vertically. */
-   Boolean      exposehscroll;     /* Non-zero if we expect expose events to be
-				   off horizontally. */
-   Boolean      resizewidth, resizeheight;
-   Boolean      scrollvertical, scrollhorizontal;
-   Boolean      scrollleftside, scrolltopside;
-   Boolean      ignorevbar;             /* Whether to ignore callbacks from vbar. */
-   Boolean      ignorehbar;             /* Whether to ignore callbacks from hbar. */
-   short int    cursor_on;              /* Whether IBeam cursor is visible. */
-   Boolean      refresh_ibeam_off;      /* Indicates whether area under IBeam needs
-				 * to be re-captured */
-   Boolean      suspend_hoffset;        /* temporarily suspend horizontal scrolling */
-   Boolean      use_fontset;            /* True if font to be used is fontset (and
-				 * thus need X11R5 Xmb* routines to draw */
-   Boolean      have_inverted_image_gc; /* fg/bg of image gc have been swapped;
-				     * on == True, off == False */
-   OnOrOff      blinkstate;
-   Position     insertx, inserty;
-   int          number_lines; /* Number of lines that fit in the window. */
-   int          leftmargin, rightmargin;
-   int          topmargin, bottommargin;
-   int          scrollwidth;      /* Total width of text we have to display. */
-   int          vsliderSize;      /* How big the thumb is in the vbar. */
-   int          hoffset;          /* How much we've scrolled off the left. */
-   int          averagecharwidth; /* Number of pixels for an "average" char. */
-   int          tabwidth;         /* Number of pixels for a tab. */
-   short        columns, rows;
-   Dimension    lineheight; /* Number of pixels per line. */
-   Dimension    minwidth, minheight;
-   Dimension    prevW;
-   Dimension    prevH;
-   Dimension    cursorwidth, cursorheight;
-   Dimension    font_ascent;  /* ascent of the font[set] */
-   Dimension    font_descent; /* descent of the font[set] */
-   XtIntervalId timerid;
-   Pixmap       cursor;          /* Pixmap for IBeam cursor stencil. */
-   Pixmap       add_mode_cursor; /* Pixmap to use for add mode cursor. */
-   Pixmap       ibeam_off;       /* Pixmap for area under the IBeam. */
-   Pixmap       stipple_tile;    /* stipple for add mode cursor. */
-   GC           gc, imagegc;
-   Widget       vbar, hbar;
-   XFontStruct *font;             /* font used when NULL font is set. */
-                                  /* New for 1.2 */
-   GC    save_gc;                 /* GC for saving/resotring under IBeam */
-   short columns_set, rows_set;   /* history of previously set dimensions */
-                                  /* New for 2.0 */
-   XmRenderTable rendertable;     /* Alias for fontlist - only for resource
-				   setting */
-   GC            cursor_gc;       /* 1-bit depth GC for creating the I-beam
-				   stipples (normal & add mode) */
-   int           scrollheight;    /* Total height of text we have to display. */
-   int           voffset;         /* How much we've scrolled off the top. */
-   int           tabheight;       /* Number of pixels for a tab. */
-   Dimension     linewidth;       /* Number of pixels per line (when vw). */
-   Boolean       suspend_voffset; /* temporarily suspend horizontal scrolling */
-#   if USE_XFT
-   Boolean use_xft; /* True if font to be used is XftFont */
-#   endif
+typedef struct _OutputDataRec {
+  XmFontList fontlist; /* Fontlist for text. */
+  unsigned int blinkrate;
+  Boolean wordwrap; /* Whether to wordwrap. */
+  Boolean cursor_position_visible;
+  Boolean autoshowinsertpoint;
+  Boolean hasfocus;
+  Boolean has_rect;
+  Boolean handlingexposures; /* TRUE if in the midst of expose events. */
+  Boolean exposevscroll;     /* Non-zero if we expect expose events to be
+                         off vertically. */
+  Boolean exposehscroll;     /* Non-zero if we expect expose events to be
+                         off horizontally. */
+  Boolean resizewidth, resizeheight;
+  Boolean scrollvertical, scrollhorizontal;
+  Boolean scrollleftside, scrolltopside;
+  Boolean ignorevbar;             /* Whether to ignore callbacks from vbar. */
+  Boolean ignorehbar;             /* Whether to ignore callbacks from hbar. */
+  short int cursor_on;            /* Whether IBeam cursor is visible. */
+  Boolean refresh_ibeam_off;      /* Indicates whether area under IBeam needs
+                                   * to be re-captured */
+  Boolean suspend_hoffset;        /* temporarily suspend horizontal scrolling */
+  Boolean use_fontset;            /* True if font to be used is fontset (and
+                                   * thus need X11R5 Xmb* routines to draw */
+  Boolean have_inverted_image_gc; /* fg/bg of image gc have been swapped;
+                                   * on == True, off == False */
+  OnOrOff blinkstate;
+  Position insertx, inserty;
+  int number_lines; /* Number of lines that fit in the window. */
+  int leftmargin, rightmargin;
+  int topmargin, bottommargin;
+  int scrollwidth;      /* Total width of text we have to display. */
+  int vsliderSize;      /* How big the thumb is in the vbar. */
+  int hoffset;          /* How much we've scrolled off the left. */
+  int averagecharwidth; /* Number of pixels for an "average" char. */
+  int tabwidth;         /* Number of pixels for a tab. */
+  short columns, rows;
+  Dimension lineheight; /* Number of pixels per line. */
+  Dimension minwidth, minheight;
+  Dimension prevW;
+  Dimension prevH;
+  Dimension cursorwidth, cursorheight;
+  Dimension font_ascent;  /* ascent of the font[set] */
+  Dimension font_descent; /* descent of the font[set] */
+  XtIntervalId timerid;
+  Pixmap cursor;          /* Pixmap for IBeam cursor stencil. */
+  Pixmap add_mode_cursor; /* Pixmap to use for add mode cursor. */
+  Pixmap ibeam_off;       /* Pixmap for area under the IBeam. */
+  Pixmap stipple_tile;    /* stipple for add mode cursor. */
+  GC gc, imagegc;
+  Widget vbar, hbar;
+  XFontStruct *font;           /* font used when NULL font is set. */
+                               /* New for 1.2 */
+  GC save_gc;                  /* GC for saving/resotring under IBeam */
+  short columns_set, rows_set; /* history of previously set dimensions */
+                               /* New for 2.0 */
+  XmRenderTable rendertable;   /* Alias for fontlist - only for resource
+                               setting */
+  GC cursor_gc;                /* 1-bit depth GC for creating the I-beam
+                               stipples (normal & add mode) */
+  int scrollheight;            /* Total height of text we have to display. */
+  int voffset;                 /* How much we've scrolled off the top. */
+  int tabheight;               /* Number of pixels for a tab. */
+  Dimension linewidth;         /* Number of pixels per line (when vw). */
+  Boolean suspend_voffset;     /* temporarily suspend horizontal scrolling */
+#  if USE_XFT
+  Boolean use_xft; /* True if font to be used is XftFont */
+#  endif
 } OutputDataRec, *OutputData;
 
 /*
  * Create a new instance of an output object.  This is expected to fill in
  * info about innerwidget and output in the widget record.
  */
-typedef void (*OutputCreateProc)(
-   Widget,
-   ArgList,
-   Cardinal);
+typedef void (*OutputCreateProc)(Widget, ArgList, Cardinal);
 /*
  * Given an (x,y) coordinate, return the closest corresponding position. (For
  * use by input; text shouldn't ever need to know.)
  */
-typedef XmTextPosition (*XYToPosProc)(
-   XmTextWidget,
-   Position,  /* These are relative to the */
-   Position); /* innerwindow returned above. */
+typedef XmTextPosition (*XYToPosProc)(XmTextWidget,
+                                      Position,  /* These are relative to the */
+                                      Position); /* innerwindow returned above. */
 /*
  * Return the (x,y) coordinate corresponing to the given position.  If this
  * returns FALSE, then the given position isn't being displayed.
  */
-typedef Boolean (*PosToXYProc)(
-   XmTextWidget,
-   XmTextPosition,
-   Position *,  /* These are relative to the */
-   Position *); /* innerwindow returned above. */
+typedef Boolean (*PosToXYProc)(XmTextWidget,
+                               XmTextPosition,
+                               Position *,  /* These are relative to the */
+                               Position *); /* innerwindow returned above. */
 /*
  * Measures the extent of a line.  Given the line number and starting position
  * of a line, returns the starting position of the next line.  Also returns
@@ -184,39 +174,25 @@ typedef Boolean (*PosToXYProc)(
  * then no extra information should be generated, and the 'extra' parameter
  * should be ignored.)
  */
-#   define PASTENDPOS	2147483647 /* Biggest number that can fit in long */
+#  define PASTENDPOS 2147483647 /* Biggest number that can fit in long */
 typedef Boolean (*MeasureLineProc)(
-   XmTextWidget,
-   LineNum,
-   XmTextPosition,
-   XmTextPosition *,
-   LineTableExtraRec **);
+    XmTextWidget, LineNum, XmTextPosition, XmTextPosition *, LineTableExtraRec **);
 /*
  * Draw some text within a line.  The output finds out information about the
  * line by calling the line table routines.
  *
  * %%% Document special cases (like lines containing PASTENDPOS).
  */
-typedef void (*DrawProc)(
-   XmTextWidget,
-   LineNum,
-   XmTextPosition,
-   XmTextPosition,
-   XmHighlightMode);
+typedef void (*DrawProc)(XmTextWidget, LineNum, XmTextPosition, XmTextPosition, XmHighlightMode);
 /*
  * Output should draw or erase an insertion point at the given position.
  */
-typedef void (*DrawInsertionPointProc)(
-   XmTextWidget,
-   XmTextPosition,
-   OnOrOff);
+typedef void (*DrawInsertionPointProc)(XmTextWidget, XmTextPosition, OnOrOff);
 /*
  * Output should ensure that the given position is visible (e.g., not scrolled
  * off horizontally).
  */
-typedef void (*MakePositionVisibleProc)(
-   XmTextWidget,
-   XmTextPosition);
+typedef void (*MakePositionVisibleProc)(XmTextWidget, XmTextPosition);
 /* Text would like to move some lines around on the screen.  It would like to
  * move lines fromline through toline (inclusive) to now start at line
  * destline.  If output can perform this move by means of a XCopyArea or
@@ -225,66 +201,46 @@ typedef void (*MakePositionVisibleProc)(
  * "extra" entries in the linetable, because after returning text will go ahead
  * and move linetable entries around.
  */
-typedef Boolean (*MoveLinesProc)(
-   XmTextWidget,
-   LineNum,
-   LineNum,
-   LineNum);
+typedef Boolean (*MoveLinesProc)(XmTextWidget, LineNum, LineNum, LineNum);
 /*
  * Inform output of invalidated positions.
  */
-typedef void (*InvalidateProc)(
-   XmTextWidget,
-   XmTextPosition,
-   XmTextPosition,
-   long);
+typedef void (*InvalidateProc)(XmTextWidget, XmTextPosition, XmTextPosition, long);
 /*
  * Get preferred size of text widget based on the row and column
  * resources multiplied by font attributes as well as adding the
  * margin resource values to the computed size.
  */
-typedef void (*GetPreferredSizeProc)(
-   Widget,
-   Dimension *,
-   Dimension *);
+typedef void (*GetPreferredSizeProc)(Widget, Dimension *, Dimension *);
 /*
  * Get values out of the output object.
  */
-typedef void (*GetValuesProc)(
-   Widget,
-   ArgList,
-   Cardinal);
+typedef void (*GetValuesProc)(Widget, ArgList, Cardinal);
 /*
  * Set values in the output object.
  */
-typedef Boolean (*SetValuesProc)(
-   Widget,
-   Widget,
-   Widget,
-   ArgList,
-   Cardinal *);
+typedef Boolean (*SetValuesProc)(Widget, Widget, Widget, ArgList, Cardinal *);
 
-typedef struct _OutputRec
-{
-   struct _OutputDataRec  *data; /* Output-specific data; opaque type. */
-   XYToPosProc             XYToPos;
-   PosToXYProc             PosToXY;
-   MeasureLineProc         MeasureLine;
-   DrawProc                Draw;
-   DrawInsertionPointProc  DrawInsertionPoint;
-   MakePositionVisibleProc MakePositionVisible;
-   MoveLinesProc           MoveLines;
-   InvalidateProc          Invalidate;
-   GetPreferredSizeProc    GetPreferredSize;
-   GetValuesProc           GetValues;
-   SetValuesProc           SetValues;
-   XmRealizeOutProc        realize;
-   XtWidgetProc            destroy;
-   XmResizeFlagProc        resize;
-   XtExposeProc            expose;
+typedef struct _OutputRec {
+  struct _OutputDataRec *data; /* Output-specific data; opaque type. */
+  XYToPosProc XYToPos;
+  PosToXYProc PosToXY;
+  MeasureLineProc MeasureLine;
+  DrawProc Draw;
+  DrawInsertionPointProc DrawInsertionPoint;
+  MakePositionVisibleProc MakePositionVisible;
+  MoveLinesProc MoveLines;
+  InvalidateProc Invalidate;
+  GetPreferredSizeProc GetPreferredSize;
+  GetValuesProc GetValues;
+  SetValuesProc SetValues;
+  XmRealizeOutProc realize;
+  XtWidgetProc destroy;
+  XmResizeFlagProc resize;
+  XtExposeProc expose;
 } OutputRec;
-#   ifdef __cplusplus
+#  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */
-#   endif
+#  endif
 #endif /* _XmTextOutP_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

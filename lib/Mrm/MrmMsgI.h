@@ -28,7 +28,7 @@
 #if XM_MSGCAT
 
 #include <nl_types.h>
-#include "MrmMsgCatI.h"
+#include "Mrm/MrmMsgCatI.h"
 
 externalref nl_catd Mrm_catd;
 

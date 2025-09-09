@@ -19,13 +19,13 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/
+ */
 #ifndef _XmDragDrop_h
 #define _XmDragDrop_h
-#include <Xm/Xm.h>
 #include <Xm/DragC.h>
 #include <Xm/DragIcon.h>
-#include <Xm/DropTrans.h>
 #include <Xm/DragOverS.h>
 #include <Xm/DropSMgr.h>
+#include <Xm/DropTrans.h>
+#include <Xm/Xm.h>
 #endif /* _XmDragDrop_h */

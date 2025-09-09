@@ -7,7 +7,7 @@
  */
 #ifndef _XmPngI_h
 #define _XmPngI_h
-#include <stdio.h>
 #include <X11/Xlib.h>
+#include <stdio.h>
 int _XmPngGetImage(FILE *infile, XColor *bg, XImage **ximage);
 #endif

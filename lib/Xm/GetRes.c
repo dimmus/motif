@@ -26,36 +26,30 @@
  * HISTORY
  */
 #ifdef HAVE_CONFIG_H
-#   include <config.h>
+#  include <config.h>
 #endif
 #include "XmI.h"
 /********    Static Function Declarations    ********/
-static Cardinal GetSecResData(WidgetClass               w_class,
-                              XmSecondaryResourceData **secResDataRtn);
+static Cardinal GetSecResData(WidgetClass w_class, XmSecondaryResourceData **secResDataRtn);
 
 /********    End Static Function Declarations    ********/
-Cardinal
-XmGetSecondaryResourceData(
-   WidgetClass               w_class,
-   XmSecondaryResourceData **secondaryDataRtn)
+Cardinal XmGetSecondaryResourceData(WidgetClass w_class,
+                                    XmSecondaryResourceData **secondaryDataRtn)
 {
-   int num = GetSecResData(w_class, secondaryDataRtn);
-   return num;
+  int num = GetSecResData(w_class, secondaryDataRtn);
+  return num;
 }
 
 /*
  * GetSecResData()
  *  - Called from : XmGetSecondaryResourceData ().
  */
-static Cardinal
-GetSecResData(
-   WidgetClass               w_class,
-   XmSecondaryResourceData **secResDataRtn)
+static Cardinal GetSecResData(WidgetClass w_class, XmSecondaryResourceData **secResDataRtn)
 {
-   XmBaseClassExt *bcePtr; /* bcePtr is really **XmBaseClassExtRec */
-   Cardinal        count = 0;
-   bcePtr                = _XmGetBaseClassExtPtr(w_class, XmQmotif);
-   if ((bcePtr) && (*bcePtr) && ((*bcePtr)->getSecResData))
-      count = ((*bcePtr)->getSecResData)(w_class, secResDataRtn);
-   return count;
+  XmBaseClassExt *bcePtr; /* bcePtr is really **XmBaseClassExtRec */
+  Cardinal count = 0;
+  bcePtr = _XmGetBaseClassExtPtr(w_class, XmQmotif);
+  if ((bcePtr) && (*bcePtr) && ((*bcePtr)->getSecResData))
+    count = ((*bcePtr)->getSecResData)(w_class, secResDataRtn);
+  return count;
 }

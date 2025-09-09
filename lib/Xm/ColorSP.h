@@ -26,8 +26,8 @@
 /************************************************************
  *      INCLUDE FILES
  *************************************************************/
-#include <Xm/ManagerP.h>
 #include <Xm/ColorS.h>
+#include <Xm/ManagerP.h>
 /************************************************************
  *      TYPEDEFS AND DEFINES
  *************************************************************/
@@ -37,78 +37,70 @@ extern "C" {
 #define XmColorSelector_COLOR_NAME_SIZE 100
 #define XmColorSelector_NUM_TOGGLES 2
 
-typedef struct _ColorSelStrings
-{
-   XmString slider_labels[3];
-   XmString tog_labels[XmColorSelector_NUM_TOGGLES];
-   XmString no_cell_error, file_read_error;
+typedef struct _ColorSelStrings {
+  XmString slider_labels[3];
+  XmString tog_labels[XmColorSelector_NUM_TOGGLES];
+  XmString no_cell_error, file_read_error;
 } ColorSelStrings;
 
-typedef struct _ColorInfo
-{
-   char           name[XmColorSelector_COLOR_NAME_SIZE], no_space_lower_name[XmColorSelector_COLOR_NAME_SIZE];
-   unsigned short red, green, blue;
+typedef struct _ColorInfo {
+  char name[XmColorSelector_COLOR_NAME_SIZE], no_space_lower_name[XmColorSelector_COLOR_NAME_SIZE];
+  unsigned short red, green, blue;
 } ColorInfo;
 
-typedef struct _ColorSelectorClassPart
-{
-   XtPointer extension;
+typedef struct _ColorSelectorClassPart {
+  XtPointer extension;
 } ColorSelectorClassPart;
 
-typedef struct _XmColorSelectorClassRec
-{
-   CoreClassPart          core_class;
-   CompositeClassPart     composite_class;
-   ConstraintClassPart    constraint_class;
-   XmManagerClassPart     manager_class;
-   ColorSelectorClassPart color_selector_class;
+typedef struct _XmColorSelectorClassRec {
+  CoreClassPart core_class;
+  CompositeClassPart composite_class;
+  ConstraintClassPart constraint_class;
+  XmManagerClassPart manager_class;
+  ColorSelectorClassPart color_selector_class;
 } XmColorSelectorClassRec;
 
-typedef struct _XmColorSelectorPart
-{
-   /* resources */
-   XmColorMode     color_mode;    /* selector mode	   */
-   char           *color_name;    /* the colorname we select */
-   String          rgb_file;      /* where to look for	   */
-   Dimension       margin_width;  /* for geom management     */
-   Dimension       margin_height; /* for geom management	   */
-   ColorSelStrings strings;       /* strings for I18N. */
-   /* private state */
-   int        slider_red;    /* slider values		    */
-   int        slider_green;  /* slider values		    */
-   int        slider_blue;   /* slider values		    */
-   Widget     bb;            /* area to hold all the sliders     */
-   Widget     sliders[3];    /* red,green,blue sliders(slider)   */
-   Widget     scrolled_list; /* list (scrolled window)	    */
-   Widget     list;          /* list (simple)		    */
-   Widget     color_window;  /* label to show selected color     */
-   Widget     chose_radio;   /* selector type radio box	    */
-   Widget     chose_mode[2]; /* selector type toggles	    */
-   Pixel      color_pixel;   /* pixel value for colors  */
-   Boolean    good_cell;     /* does color_pixel contain
-					 * a good value? */
-   ColorInfo *colors;        /* infomation about all color names */
-   short      num_colors;    /* The number of colors. */
+typedef struct _XmColorSelectorPart {
+  /* resources */
+  XmColorMode color_mode;  /* selector mode	   */
+  char *color_name;        /* the colorname we select */
+  String rgb_file;         /* where to look for	   */
+  Dimension margin_width;  /* for geom management     */
+  Dimension margin_height; /* for geom management	   */
+  ColorSelStrings strings; /* strings for I18N. */
+  /* private state */
+  int slider_red;       /* slider values		    */
+  int slider_green;     /* slider values		    */
+  int slider_blue;      /* slider values		    */
+  Widget bb;            /* area to hold all the sliders     */
+  Widget sliders[3];    /* red,green,blue sliders(slider)   */
+  Widget scrolled_list; /* list (scrolled window)	    */
+  Widget list;          /* list (simple)		    */
+  Widget color_window;  /* label to show selected color     */
+  Widget chose_radio;   /* selector type radio box	    */
+  Widget chose_mode[2]; /* selector type toggles	    */
+  Pixel color_pixel;    /* pixel value for colors  */
+  Boolean good_cell;    /* does color_pixel contain
+                         * a good value? */
+  ColorInfo *colors;    /* infomation about all color names */
+  short num_colors;     /* The number of colors. */
 } XmColorSelectorPart;
 
-typedef struct _XmColorSelectorRec
-{
-   CorePart            core;
-   CompositePart       composite;
-   ConstraintPart      constraint;
-   XmManagerPart       manager;
-   XmColorSelectorPart cs;
+typedef struct _XmColorSelectorRec {
+  CorePart core;
+  CompositePart composite;
+  ConstraintPart constraint;
+  XmManagerPart manager;
+  XmColorSelectorPart cs;
 } XmColorSelectorRec;
 
-typedef struct _XmColorSelectorConstraintPart
-{
-   XtPointer extension;
+typedef struct _XmColorSelectorConstraintPart {
+  XtPointer extension;
 } XmColorSelectorConstraintPart;
 
-typedef struct _XmColorSelectorConstraintRec
-{
-   XmManagerConstraintPart       manager;
-   XmColorSelectorConstraintPart cs;
+typedef struct _XmColorSelectorConstraintRec {
+  XmManagerConstraintPart manager;
+  XmColorSelectorConstraintPart cs;
 } XmColorSelectorConstraintRec;
 
 /************************************************************

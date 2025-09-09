@@ -26,16 +26,16 @@
  */
 /* $XConsortium: ResEncodI.h /main/5 1995/07/13 17:49:43 drk $ */
 #ifndef _XmResEncodI_h
-#   define _XmResEncodI_h
-#   include <Xm/XmP.h>
-#   ifdef __cplusplus
+#  define _XmResEncodI_h
+#  include <Xm/XmP.h>
+#  ifdef __cplusplus
 extern "C" {
-#   endif
+#  endif
 /********    Private Function Declarations for ResEncod.c  ********/
 XtPointer _XmGetEncodingRegistryTarget(int *);
 /********    End Private Function Declarations    ********/
-#   ifdef __cplusplus
+#  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */
-#   endif
+#  endif
 #endif /* _XmResEncodI_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

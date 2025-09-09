@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/
+ */
 #ifndef _XmDesktopP_h
 #define _XmDesktopP_h
 #include <Xm/ExtObjectP.h>
@@ -27,42 +27,38 @@
 extern "C" {
 #endif
 #ifndef XmIsDesktopObject
-#   define XmIsDesktopObject(w)	XtIsSubclass(w, xmDesktopClass)
+#  define XmIsDesktopObject(w) XtIsSubclass(w, xmDesktopClass)
 #endif /* XmIsDesktopObject */
-typedef struct _XmDesktopRec      *XmDesktopObject;
+typedef struct _XmDesktopRec *XmDesktopObject;
 typedef struct _XmDesktopClassRec *XmDesktopObjectClass;
-externalref WidgetClass            xmDesktopClass;
+externalref WidgetClass xmDesktopClass;
 
-typedef struct _XmDesktopClassPart
-{
-   WidgetClass  child_class;
-   XtWidgetProc insert_child; /* physically add child to parent  */
-   XtWidgetProc delete_child; /* physically remove child	     */
-   XtPointer    extension;
+typedef struct _XmDesktopClassPart {
+  WidgetClass child_class;
+  XtWidgetProc insert_child; /* physically add child to parent  */
+  XtWidgetProc delete_child; /* physically remove child	     */
+  XtPointer extension;
 } XmDesktopClassPart, *XmDesktopClassPartPtr;
 
-typedef struct _XmDesktopClassRec
-{
-   ObjectClassPart    object_class;
-   XmExtClassPart     ext_class;
-   XmDesktopClassPart desktop_class;
+typedef struct _XmDesktopClassRec {
+  ObjectClassPart object_class;
+  XmExtClassPart ext_class;
+  XmDesktopClassPart desktop_class;
 } XmDesktopClassRec;
 
-typedef struct
-{
-   Widget   parent;
-   Widget  *children;
-   Cardinal num_children;
-   Cardinal num_slots;
+typedef struct {
+  Widget parent;
+  Widget *children;
+  Cardinal num_children;
+  Cardinal num_slots;
 } XmDesktopPart, *XmDesktopPartPtr;
 
 externalref XmDesktopClassRec xmDesktopClassRec;
 
-typedef struct _XmDesktopRec
-{
-   ObjectPart    object;
-   XmExtPart     ext;
-   XmDesktopPart desktop;
+typedef struct _XmDesktopRec {
+  ObjectPart object;
+  XmExtPart ext;
+  XmDesktopPart desktop;
 } XmDesktopRec;
 
 /********    Private Function Declarations    ********/

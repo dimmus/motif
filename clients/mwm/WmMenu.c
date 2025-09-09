@@ -92,6 +92,7 @@ static char rcsid[] = "$XConsortium: WmMenu.c /main/15 1996/11/20 15:20:17 rswis
 static void UnmapCallback (Widget w, XtPointer client_data,
 			   XtPointer call_data);
 static MenuItem *DuplicateMenuItems (MenuItem *menuItems);
+void MXtWarning (char *format, char *message);
 
 #if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
 static MenuExclusion *DuplicateMenuExclusions(MenuExclusion *exclusions);
@@ -188,7 +189,7 @@ MenuSpec *MakeMenu (WmScreenData *pSD,
     if (menuSpec == NULL)
     /* the menuSpecs list is exhausted */
     {
-	MWarning(((char *)GETMESSAGE(48, 1, "Menu specification %s not found\n")), menuName);
+	MXtWarning(((char *)GETMESSAGE(48, 1, "Menu specification %s not found\n")), menuName);
 	return (NULL);
     }
 
@@ -223,7 +224,7 @@ MenuSpec *MakeMenu (WmScreenData *pSD,
         if ((newMenuSpec = (MenuSpec *) XtMalloc (sizeof (MenuSpec))) == NULL)
 	/* Handle insufficent memory */
         {
-            MWarning(((char *)GETMESSAGE(48, 2, "Insufficient memory for menu %s\n")), menuName);
+            MXtWarning(((char *)GETMESSAGE(48, 2, "Insufficient memory for menu %s\n")), menuName);
 	    return (NULL);
         }
 	newMenuSpec->name = NULL;  /* distinguishes this as custom */
@@ -295,7 +296,7 @@ MenuSpec *MakeMenu (WmScreenData *pSD,
 	       (MenuButton *) XtMalloc (n * sizeof(MenuButton))) == NULL)
         /* insufficent memory */
 	{
-            MWarning(((char *)GETMESSAGE(48, 3, "Insufficient memory for menu %s\n")), menuName);
+            MXtWarning(((char *)GETMESSAGE(48, 3, "Insufficient memory for menu %s\n")), menuName);
 	    return (NULL);
 	}
         menuSpec->menuButtonSize = n;
@@ -421,7 +422,7 @@ MakeMenuSpec (String menuName, CARD32 commandID)
     if ((menuSpec = (MenuSpec *) XtMalloc (sizeof (MenuSpec))) == NULL)
       /* Handle insufficent memory */
     {
-	MWarning(((char *)GETMESSAGE(48, 2,
+	MXtWarning(((char *)GETMESSAGE(48, 2,
 		 "Insufficient memory for menu %s\n")), menuName);
 	return (NULL);
     }
@@ -652,7 +653,7 @@ DuplicateMenuSpec (MenuSpec *menuSpec)
     if ((newMenuSpec = (MenuSpec *) XtMalloc (sizeof (MenuSpec))) == NULL)
       /* Handle insufficent memory */
     {
-	Warning((char *)GETMESSAGE(48, 9,
+	XtWarning((char *)GETMESSAGE(48, 9,
 		 "Insufficient memory for menu specification\n"));
 	return (NULL);
     }
@@ -730,7 +731,7 @@ MakeMenuItem (String label, WmFunction wmFunction, String funcArgs,
     if ((menuItem = (MenuItem *) XtMalloc (sizeof (MenuItem))) == NULL)
       /* Handle insufficent memory */
     {
-	MWarning(((char *)GETMESSAGE(48, 10,
+	MXtWarning(((char *)GETMESSAGE(48, 10,
 		  "Insufficient memory for menu item %s\n")), label);
 	return (NULL);
     }
@@ -3454,7 +3455,7 @@ Widget CreateMenuWidget (WmScreenData *pSD,
     if (menuSpec == NULL)
     /* (submenu) specification not found */
     {
-	MWarning(((char *)GETMESSAGE(48, 4, "Menu specification %s not found\n")), menuName);
+	MXtWarning(((char *)GETMESSAGE(48, 4, "Menu specification %s not found\n")), menuName);
 	return (NULL);
     }
 
@@ -3466,7 +3467,7 @@ Widget CreateMenuWidget (WmScreenData *pSD,
     if (menuSpec->currentContext & CR_MENU_MARK)   /* marked? */
     /* menu recursion */
     {
-	MWarning(((char *)GETMESSAGE(48, 5, "Menu recursion detected for %s\n")), menuName);
+	MXtWarning(((char *)GETMESSAGE(48, 5, "Menu recursion detected for %s\n")), menuName);
 	return (NULL);
     }
     menuSpec->currentContext |= CR_MENU_MARK;   /* no, mark it */
@@ -3626,7 +3627,7 @@ Widget CreateMenuWidget (WmScreenData *pSD,
 		sPtr = (StrList *) XtMalloc(sizeof(StrList));
 		if (sPtr == NULL)
 		  {
-		     MWarning(((char *)GETMESSAGE(48, 2, "Insufficient memory for menu %s\n")), menuName);
+		     MXtWarning(((char *)GETMESSAGE(48, 2, "Insufficient memory for menu %s\n")), menuName);
 		     return (NULL);
 		  }
 		else
@@ -3751,7 +3752,7 @@ Widget CreateMenuWidget (WmScreenData *pSD,
 		        sPtr = (StrList *) XtMalloc(sizeof(StrList));
 			if (sPtr == NULL)
 			  {
-			     MWarning(((char *)GETMESSAGE(48, 2, "Insufficient memory for menu %s\n")), menuName);
+			     MXtWarning(((char *)GETMESSAGE(48, 2, "Insufficient memory for menu %s\n")), menuName);
 			     return (NULL);
 			  }
 			else
@@ -3765,7 +3766,7 @@ Widget CreateMenuWidget (WmScreenData *pSD,
                                  XtMalloc (sizeof (KeySpec ))) == NULL)
 	                /* Handle insufficent memory */
                         {
-                            MWarning (((char *)GETMESSAGE(48, 6, "Insufficient memory for menu %s\n")),
+                            MXtWarning (((char *)GETMESSAGE(48, 6, "Insufficient memory for menu %s\n")),
 				      menuName);
                             menuSpec->currentContext &= ~CR_MENU_MARK;
 	                    return (NULL);
@@ -3808,7 +3809,7 @@ Widget CreateMenuWidget (WmScreenData *pSD,
                     {
 			if (!SavePBInfo (topMenuSpec, menuItem, children[n]))
 			{
-                            MWarning(((char *)GETMESSAGE(48, 7, "Insufficient memory for menu %s\n")),
+                            MXtWarning(((char *)GETMESSAGE(48, 7, "Insufficient memory for menu %s\n")),
 				       menuName);
                             menuSpec->currentContext &= ~CR_MENU_MARK;
 	                    return (NULL);
@@ -4261,7 +4262,7 @@ static void UnmapCallback (Widget w, XtPointer client_data,
 
 /*************************************<->*************************************
  *
- *  MWarning (message)
+ *  MXtWarning (message)
  *
  *
  *  Description:
@@ -4276,7 +4277,7 @@ static void UnmapCallback (Widget w, XtPointer client_data,
  *
  *************************************<->***********************************/
 
-void MWarning (char *format, char *message)
+void MXtWarning (char *format, char *message)
 {
 
     if (strlen(format) + strlen(message)  <  (size_t) MAXWMPATH)
@@ -4284,10 +4285,10 @@ void MWarning (char *format, char *message)
 	 char pch[MAXWMPATH+1];
 
 	 sprintf (pch, format, message);
-	 Warning (pch);
+	 XtWarning (pch);
       }
 
-} /* END OF FUNCTION MWarning */
+} /* END OF FUNCTION MXtWarning */
 
 
 

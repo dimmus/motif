@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/
+ */
 #ifndef _XmDrawP_h
 #define _XmDrawP_h
 #include <Xm/XmP.h>
@@ -68,102 +68,94 @@ extern "C" {
        new one for toggle drawing
 ---------------------------------------------------------------------------*/
 /********    Private Function Declarations    ********/
-extern void XmeDrawShadows(
-   Display     *display,
-   Drawable     d,
-   GC           top_gc,
-   GC           bottom_gc,
-   Position     x,
-   Position     y,
-   Dimension    width,
-   Dimension    height,
-   Dimension    shad_thick,
-   unsigned int shad_type);
-extern void XmeClearBorder(
-   Display  *display,
-   Window    w,
-   Position  x,
-   Position  y,
-   Dimension width,
-   Dimension height,
-   Dimension shadow_thick);
-extern void XmeDrawSeparator(
-   Display      *display,
-   Drawable      d,
-   GC            top_gc,
-   GC            bottom_gc,
-   GC            separator_gc,
-   Position      x,
-   Position      y,
-   Dimension     width,
-   Dimension     height,
-   Dimension     shadow_thick,
-   Dimension     margin,
-   unsigned char orientation,
-   unsigned char separator_type);
-extern void XmeDrawDiamond(
-   Display  *display,
-   Drawable  d,
-   GC        top_gc,
-   GC        bottom_gc,
-   GC        center_gc,
-   Position  x,
-   Position  y,
-   Dimension width,
-   Dimension height,
-   Dimension shadow_thick,
-   Dimension margin);
-extern void XmeDrawCircle(
-   Display  *display,
-   Drawable  d,
-   GC        top_gc,
-   GC        bottom_gc,
-   GC        center_gc,
-   Position  x,
-   Position  y,
-   Dimension width,
-   Dimension height,
-   Dimension shadow_thick,
-   Dimension margin);
-extern void XmeDrawHighlight(
-   Display  *display,
-   Drawable  d,
-   GC        gc,
-   Position  x,
-   Position  y,
-   Dimension width,
-   Dimension height,
-   Dimension highlight_thick);
-extern void XmeDrawArrow(
-   Display      *display,
-   Drawable      d,
-   GC            top_gc,
-   GC            bot_gc,
-   GC            cent_gc,
-   Position      x,
-   Position      y,
-   Dimension     width,
-   Dimension     height,
-   Dimension     shadow_thick,
-   unsigned char direction);
-extern void XmeDrawPolygonShadow(
-   Display      *dpy,
-   Drawable      d,
-   GC            topGC,
-   GC            bottomGC,
-   XPoint       *points,
-   int           n_points,
-   Dimension     shadowThickness,
-   unsigned char shadowType);
-extern void XmeDrawIndicator(Display  *display,
-                             Drawable  d,
-                             GC        gc,
-                             Position  x,
-                             Position  y,
+extern void XmeDrawShadows(Display *display,
+                           Drawable d,
+                           GC top_gc,
+                           GC bottom_gc,
+                           Position x,
+                           Position y,
+                           Dimension width,
+                           Dimension height,
+                           Dimension shad_thick,
+                           unsigned int shad_type);
+extern void XmeClearBorder(Display *display,
+                           Window w,
+                           Position x,
+                           Position y,
+                           Dimension width,
+                           Dimension height,
+                           Dimension shadow_thick);
+extern void XmeDrawSeparator(Display *display,
+                             Drawable d,
+                             GC top_gc,
+                             GC bottom_gc,
+                             GC separator_gc,
+                             Position x,
+                             Position y,
+                             Dimension width,
+                             Dimension height,
+                             Dimension shadow_thick,
+                             Dimension margin,
+                             unsigned char orientation,
+                             unsigned char separator_type);
+extern void XmeDrawDiamond(Display *display,
+                           Drawable d,
+                           GC top_gc,
+                           GC bottom_gc,
+                           GC center_gc,
+                           Position x,
+                           Position y,
+                           Dimension width,
+                           Dimension height,
+                           Dimension shadow_thick,
+                           Dimension margin);
+extern void XmeDrawCircle(Display *display,
+                          Drawable d,
+                          GC top_gc,
+                          GC bottom_gc,
+                          GC center_gc,
+                          Position x,
+                          Position y,
+                          Dimension width,
+                          Dimension height,
+                          Dimension shadow_thick,
+                          Dimension margin);
+extern void XmeDrawHighlight(Display *display,
+                             Drawable d,
+                             GC gc,
+                             Position x,
+                             Position y,
+                             Dimension width,
+                             Dimension height,
+                             Dimension highlight_thick);
+extern void XmeDrawArrow(Display *display,
+                         Drawable d,
+                         GC top_gc,
+                         GC bot_gc,
+                         GC cent_gc,
+                         Position x,
+                         Position y,
+                         Dimension width,
+                         Dimension height,
+                         Dimension shadow_thick,
+                         unsigned char direction);
+extern void XmeDrawPolygonShadow(Display *dpy,
+                                 Drawable d,
+                                 GC topGC,
+                                 GC bottomGC,
+                                 XPoint *points,
+                                 int n_points,
+                                 Dimension shadowThickness,
+                                 unsigned char shadowType);
+extern void XmeDrawIndicator(Display *display,
+                             Drawable d,
+                             GC gc,
+                             Position x,
+                             Position y,
                              Dimension width,
                              Dimension height,
                              Dimension margin,
-                             XtEnum    type);
+                             XtEnum type);
 /********    End Private Function Declarations    ********/
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

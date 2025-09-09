@@ -32,7 +32,7 @@ extern "C" {
 #endif
 /* Quick fix for Linux-ARM where "arm" is the #define symbol */
 #ifdef arm
-#   undef arm
+#  undef arm
 #endif
 /* Menu System Traits */
 externalref XrmQuark XmQTmenuSystem;
@@ -40,10 +40,9 @@ externalref XrmQuark XmQTmenuSavvy;
 
 /* Trait structures and typedefs, place typedefs first */
 /* Used by the disable callback method of the menu savvy trait */
-typedef enum
-{
-   XmDISABLE_ACTIVATE, /* defer to the entryCallback */
-   XmENABLE_ACTIVATE   /* invoke own activate callback */
+typedef enum {
+  XmDISABLE_ACTIVATE, /* defer to the entryCallback */
+  XmENABLE_ACTIVATE   /* invoke own activate callback */
 } XmActivateState;
 
 /* Menu trait typedefs */
@@ -63,54 +62,52 @@ typedef void (*XmMenuSavvyDisableProc)(Widget, XmActivateState);
 typedef char *(*XmMenuSavvyGetAcceleratorProc)(Widget);
 typedef KeySym (*XmMenuSavvyGetMnemonicProc)(Widget);
 typedef char *(*XmMenuSavvyGetActivateCBNameProc)();
-#define XmMenuSystemTypeProc		XmMenuSystemWidgetProc
-#define XmMenuSystemStatusProc		XmMenuSystemWidgetProc
-#define XmMenuSystemGetPostedFromWidgetProc	XmMenuSystemDisarmProc
-#define XmMenuSystemArmProc		XmMenuSystemDisarmProc
-#define XmMenuSystemMenuBarCleanupProc	XmMenuSystemDisarmProc
-#define XmMenuSystemTearOffArmProc	XmMenuSystemDisarmProc
-#define XmMenuSystemReparentProc	XmMenuSystemPositionProc
-#define XmMenuSystemPopdownAllProc	XmMenuSystemPositionProc
-#define XmMenuSystemChildFocusProc	XmMenuSystemDisarmProc
+#define XmMenuSystemTypeProc XmMenuSystemWidgetProc
+#define XmMenuSystemStatusProc XmMenuSystemWidgetProc
+#define XmMenuSystemGetPostedFromWidgetProc XmMenuSystemDisarmProc
+#define XmMenuSystemArmProc XmMenuSystemDisarmProc
+#define XmMenuSystemMenuBarCleanupProc XmMenuSystemDisarmProc
+#define XmMenuSystemTearOffArmProc XmMenuSystemDisarmProc
+#define XmMenuSystemReparentProc XmMenuSystemPositionProc
+#define XmMenuSystemPopdownAllProc XmMenuSystemPositionProc
+#define XmMenuSystemChildFocusProc XmMenuSystemDisarmProc
 
 /* XmTmenuProcTrait */
 /* Version 0: initial release. */
-typedef struct _XmMenuSystemTraitRec
-{
-   int                                  version; /* 0 */
-   XmMenuSystemTypeProc                 type;
-   XmMenuSystemStatusProc               status;
-   XmMenuSystemCascadeProc              cascade;
-   XmMenuSystemVerifyProc               verifyButton;
-   XmMenuSystemControlTraversalProc     controlTraversal;
-   XmMenuSystemMenuBarCleanupProc       menuBarCleanup;
-   XmMenuSystemPopdownProc              popdown;
-   XmMenuSystemPopdownProc              buttonPopdown;
-   XmMenuSystemReparentProc             reparentToTearOffShell;
-   XmMenuSystemReparentProc             reparentToMenuShell;
-   XmMenuSystemArmProc                  arm;
-   XmMenuSystemDisarmProc               disarm;
-   XmMenuSystemTearOffArmProc           tearOffArm;
-   XmMenuSystemEntryCallbackProc        entryCallback;
-   XmMenuSystemUpdateHistoryProc        updateHistory;
-   XmMenuSystemGetPostedFromWidgetProc  getLastSelectToplevel;
-   XmMenuSystemPositionProc             position;
-   XmMenuSystemUpdateBindingsProc       updateBindings;
-   XmMenuSystemRecordPostFromWidgetProc recordPostFromWidget;
-   XmMenuSystemPopdownAllProc           popdownEveryone;
-   XmMenuSystemChildFocusProc           childFocus;
-   XmMenuSystemPopupPostedProc          getPopupPosted;
+typedef struct _XmMenuSystemTraitRec {
+  int version; /* 0 */
+  XmMenuSystemTypeProc type;
+  XmMenuSystemStatusProc status;
+  XmMenuSystemCascadeProc cascade;
+  XmMenuSystemVerifyProc verifyButton;
+  XmMenuSystemControlTraversalProc controlTraversal;
+  XmMenuSystemMenuBarCleanupProc menuBarCleanup;
+  XmMenuSystemPopdownProc popdown;
+  XmMenuSystemPopdownProc buttonPopdown;
+  XmMenuSystemReparentProc reparentToTearOffShell;
+  XmMenuSystemReparentProc reparentToMenuShell;
+  XmMenuSystemArmProc arm;
+  XmMenuSystemDisarmProc disarm;
+  XmMenuSystemTearOffArmProc tearOffArm;
+  XmMenuSystemEntryCallbackProc entryCallback;
+  XmMenuSystemUpdateHistoryProc updateHistory;
+  XmMenuSystemGetPostedFromWidgetProc getLastSelectToplevel;
+  XmMenuSystemPositionProc position;
+  XmMenuSystemUpdateBindingsProc updateBindings;
+  XmMenuSystemRecordPostFromWidgetProc recordPostFromWidget;
+  XmMenuSystemPopdownAllProc popdownEveryone;
+  XmMenuSystemChildFocusProc childFocus;
+  XmMenuSystemPopupPostedProc getPopupPosted;
 } XmMenuSystemTraitRec, *XmMenuSystemTrait;
 
 /* XmTmenuSavvyTrait */
 /* Version 0: initial release. */
-typedef struct _XmMenuSavvyTraitRec
-{
-   int                              version; /* 0 */
-   XmMenuSavvyDisableProc           disableCallback;
-   XmMenuSavvyGetAcceleratorProc    getAccelerator;
-   XmMenuSavvyGetMnemonicProc       getMnemonic;
-   XmMenuSavvyGetActivateCBNameProc getActivateCBName;
+typedef struct _XmMenuSavvyTraitRec {
+  int version; /* 0 */
+  XmMenuSavvyDisableProc disableCallback;
+  XmMenuSavvyGetAcceleratorProc getAccelerator;
+  XmMenuSavvyGetMnemonicProc getMnemonic;
+  XmMenuSavvyGetActivateCBNameProc getActivateCBName;
 } XmMenuSavvyTraitRec, *XmMenuSavvyTrait;
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

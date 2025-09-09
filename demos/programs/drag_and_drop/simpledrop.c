@@ -46,7 +46,7 @@
  *  General Types
  */
 
-typedef enum {closed, open} State ;
+typedef enum {closed, opened} State ;
 
 /*
  * The demo basic data structure

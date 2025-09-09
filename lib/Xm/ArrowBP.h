@@ -19,65 +19,61 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/
+ */
 #ifndef _XmArrowButtonP_h
-#   define _XmArrowButtonP_h
-#   include <Xm/ArrowB.h>
-#   include <Xm/PrimitiveP.h>
-#   ifdef __cplusplus
+#  define _XmArrowButtonP_h
+#  include <Xm/ArrowB.h>
+#  include <Xm/PrimitiveP.h>
+#  ifdef __cplusplus
 extern "C" {
-#   endif
+#  endif
 /*  Arrow class structure  */
-typedef struct _XmArrowButtonClassPart
-{
-   XtPointer extension;
+typedef struct _XmArrowButtonClassPart {
+  XtPointer extension;
 } XmArrowButtonClassPart;
 
 /*  Full class record declaration for Arrow class  */
-typedef struct _XmArrowButtonClassRec
-{
-   CoreClassPart          core_class;
-   XmPrimitiveClassPart   primitive_class;
-   XmArrowButtonClassPart arrowbutton_class;
+typedef struct _XmArrowButtonClassRec {
+  CoreClassPart core_class;
+  XmPrimitiveClassPart primitive_class;
+  XmArrowButtonClassPart arrowbutton_class;
 } XmArrowButtonClassRec;
 
 externalref XmArrowButtonClassRec xmArrowButtonClassRec;
 
 /*  The ArrowButton instance record  */
-typedef struct _XmArrowButtonPart
-{
-   XtCallbackList activate_callback;
-   XtCallbackList arm_callback;
-   XtCallbackList disarm_callback;
-   unsigned char  direction; /* The direction the arrow is pointing. */
-   Boolean        selected;
-   short          top_count;
-   short          cent_count;
-   short          bot_count;
-   XRectangle    *top;
-   XRectangle    *cent;
-   XRectangle    *bot;
-   GC             arrow_GC;
-   XtIntervalId   timer;
-   unsigned char  multiClick; /* KEEP/DISCARD resource */
-   int            click_count;
-   Time           armTimeStamp;
-   GC             insensitive_GC;
-   Dimension      detail_shadow_thickness;
+typedef struct _XmArrowButtonPart {
+  XtCallbackList activate_callback;
+  XtCallbackList arm_callback;
+  XtCallbackList disarm_callback;
+  unsigned char direction; /* The direction the arrow is pointing. */
+  Boolean selected;
+  short top_count;
+  short cent_count;
+  short bot_count;
+  XRectangle *top;
+  XRectangle *cent;
+  XRectangle *bot;
+  GC arrow_GC;
+  XtIntervalId timer;
+  unsigned char multiClick; /* KEEP/DISCARD resource */
+  int click_count;
+  Time armTimeStamp;
+  GC insensitive_GC;
+  Dimension detail_shadow_thickness;
 } XmArrowButtonPart;
 
 /*  Full instance record declaration  */
-typedef struct _XmArrowButtonRec
-{
-   CorePart          core;
-   XmPrimitivePart   primitive;
-   XmArrowButtonPart arrowbutton;
+typedef struct _XmArrowButtonRec {
+  CorePart core;
+  XmPrimitivePart primitive;
+  XmArrowButtonPart arrowbutton;
 } XmArrowButtonRec;
 
 /********    Private Function Declarations    ********/
 /********    End Private Function Declarations    ********/
-#   ifdef __cplusplus
+#  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */
-#   endif
+#  endif
 #endif /* _XmArrowButtonP_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

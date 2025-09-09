@@ -28,56 +28,27 @@
 extern "C" {
 #endif
 /********    Private Function Declarations    ********/
-extern void _XmTextFreeContextData(
-   Widget    w,
-   XtPointer clientData,
-   XtPointer callData);
-extern void _XmTextResetClipOrigin(
-   XmTextWidget   tw,
-   XmTextPosition position,
-   Boolean        clip_mask_reset);
-extern void _XmTextAdjustGC(
-   XmTextWidget tw);
-extern Boolean _XmTextShouldWordWrap(
-   XmTextWidget widget);
-extern Boolean _XmTextScrollable(
-   XmTextWidget widget);
-extern XmTextPosition _XmTextFindLineEnd(
-   XmTextWidget    widget,
-   XmTextPosition  position,
-   LineTableExtra *extra);
-extern void _XmTextOutputGetSecResData(
-   XmSecondaryResourceData *secResDataRtn);
-extern int _XmTextGetNumberLines(
-   XmTextWidget widget);
-extern void _XmTextMovingCursorPosition(
-   XmTextWidget   tw,
-   XmTextPosition position);
-extern void _XmTextChangeBlinkBehavior(
-   XmTextWidget widget,
-   Boolean      newvalue);
-extern void _XmTextOutputCreate(
-   Widget   wid,
-   ArgList  args,
-   Cardinal num_args);
-extern Boolean _XmTextGetBaselines(
-   Widget      widget,
-   Dimension **baselines,
-   int        *line_count);
-extern Boolean _XmTextGetDisplayRect(
-   Widget      w,
-   XRectangle *display_rect);
-extern void _XmTextMarginsProc(
-   Widget             w,
-   XmBaselineMargins *margins_rec);
-extern void _XmTextChangeHOffset(
-   XmTextWidget widget,
-   int          length);
-extern void _XmTextChangeVOffset(
-   XmTextWidget widget,
-   int          length);
-extern void _XmTextToggleCursorGC(
-   Widget widget);
+extern void _XmTextFreeContextData(Widget w, XtPointer clientData, XtPointer callData);
+extern void _XmTextResetClipOrigin(XmTextWidget tw,
+                                   XmTextPosition position,
+                                   Boolean clip_mask_reset);
+extern void _XmTextAdjustGC(XmTextWidget tw);
+extern Boolean _XmTextShouldWordWrap(XmTextWidget widget);
+extern Boolean _XmTextScrollable(XmTextWidget widget);
+extern XmTextPosition _XmTextFindLineEnd(XmTextWidget widget,
+                                         XmTextPosition position,
+                                         LineTableExtra *extra);
+extern void _XmTextOutputGetSecResData(XmSecondaryResourceData *secResDataRtn);
+extern int _XmTextGetNumberLines(XmTextWidget widget);
+extern void _XmTextMovingCursorPosition(XmTextWidget tw, XmTextPosition position);
+extern void _XmTextChangeBlinkBehavior(XmTextWidget widget, Boolean newvalue);
+extern void _XmTextOutputCreate(Widget wid, ArgList args, Cardinal num_args);
+extern Boolean _XmTextGetBaselines(Widget widget, Dimension **baselines, int *line_count);
+extern Boolean _XmTextGetDisplayRect(Widget w, XRectangle *display_rect);
+extern void _XmTextMarginsProc(Widget w, XmBaselineMargins *margins_rec);
+extern void _XmTextChangeHOffset(XmTextWidget widget, int length);
+extern void _XmTextChangeVOffset(XmTextWidget widget, int length);
+extern void _XmTextToggleCursorGC(Widget widget);
 /********    End Private Function Declarations    ********/
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

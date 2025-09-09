@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/
+ */
 /***********************************************************************
  *
  * Toggle Gadget
@@ -31,38 +31,21 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-externalref WidgetClass                       xmToggleButtonGadgetClass;
+externalref WidgetClass xmToggleButtonGadgetClass;
 typedef struct _XmToggleButtonGadgetClassRec *XmToggleButtonGadgetClass;
-typedef struct _XmToggleButtonGadgetRec      *XmToggleButtonGadget;
-typedef struct _XmToggleButtonGCacheObjRec   *XmToggleButtonGCacheObject;
+typedef struct _XmToggleButtonGadgetRec *XmToggleButtonGadget;
+typedef struct _XmToggleButtonGCacheObjRec *XmToggleButtonGCacheObject;
 /*fast subclass define */
 #ifndef XmIsToggleButtonGadget
-#   define XmIsToggleButtonGadget(w)     XtIsSubclass(w, xmToggleButtonGadgetClass)
+#  define XmIsToggleButtonGadget(w) XtIsSubclass(w, xmToggleButtonGadgetClass)
 #endif /* XmIsToggleButtonGadget */
 /********    Public Function Declarations    ********/
-Boolean XmToggleButtonGadgetGetState(
-   Widget w);
-void XmToggleButtonGadgetSetState(
-   Widget  w,
-   Boolean newstate,
-   Boolean notify);
-Boolean XmToggleButtonGadgetSetValue(
-   Widget              w,
-   XmToggleButtonState newstate,
-   Boolean             notify);
-Widget XmCreateToggleButtonGadget(
-   Widget   parent,
-   char    *name,
-   Arg     *arglist,
-   Cardinal argCount);
-Widget XmVaCreateToggleButtonGadget(
-   Widget parent,
-   char  *name,
-   ...);
-Widget XmVaCreateManagedToggleButtonGadget(
-   Widget parent,
-   char  *name,
-   ...);
+Boolean XmToggleButtonGadgetGetState(Widget w);
+void XmToggleButtonGadgetSetState(Widget w, Boolean newstate, Boolean notify);
+Boolean XmToggleButtonGadgetSetValue(Widget w, XmToggleButtonState newstate, Boolean notify);
+Widget XmCreateToggleButtonGadget(Widget parent, char *name, Arg *arglist, Cardinal argCount);
+Widget XmVaCreateToggleButtonGadget(Widget parent, char *name, ...);
+Widget XmVaCreateManagedToggleButtonGadget(Widget parent, char *name, ...);
 /********    End Public Function Declarations    ********/
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

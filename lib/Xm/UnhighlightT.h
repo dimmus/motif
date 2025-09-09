@@ -36,10 +36,9 @@ externalref XrmQuark XmQTspecifyUnhighlight;
 typedef GC (*XmSpecifyUnhighlightProc)(Widget wid, Widget child);
 
 /* Version 0: initial release. */
-typedef struct _XmSpecifyUnhighlightTraitRec
-{
-   int                      version; /* 0 */
-   XmSpecifyUnhighlightProc getUnhighlightGC;
+typedef struct _XmSpecifyUnhighlightTraitRec {
+  int version; /* 0 */
+  XmSpecifyUnhighlightProc getUnhighlightGC;
 } XmSpecifyUnhighlightTraitRec, *XmSpecifyUnhighlightTrait;
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

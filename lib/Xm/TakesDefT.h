@@ -32,23 +32,15 @@ extern "C" {
 #endif
 externalref XrmQuark XmQTtakesDefault;
 /* Trait structures and typedefs, place typedefs first */
-typedef void (*XmTakesDefaultNotifyProc)(Widget w,
-                                         XtEnum state);
+typedef void (*XmTakesDefaultNotifyProc)(Widget w, XtEnum state);
 
 /* Version 0: initial release. */
-typedef struct _XmTakesDefaultTraitRec
-{
-   int                      version; /* 0 */
-   XmTakesDefaultNotifyProc showAsDefault;
+typedef struct _XmTakesDefaultTraitRec {
+  int version; /* 0 */
+  XmTakesDefaultNotifyProc showAsDefault;
 } XmTakesDefaultTraitRec, *XmTakesDefaultTrait;
 
-enum
-{
-   XmDEFAULT_READY,
-   XmDEFAULT_ON,
-   XmDEFAULT_OFF,
-   XmDEFAULT_FORGET
-};
+enum { XmDEFAULT_READY, XmDEFAULT_ON, XmDEFAULT_OFF, XmDEFAULT_FORGET };
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif

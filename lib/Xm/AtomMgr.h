@@ -19,19 +19,16 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/
+ */
 #ifndef _XmAtomMgr_h
 #define _XmAtomMgr_h
-#include <Xm/Xm.h>
 #include <X11/Xresource.h>
+#include <Xm/Xm.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
 /* X11r5' XInternAtom equivalent */
-extern Atom XmInternAtom(
-   Display *display,
-   String   name,
-   Boolean  only_if_exists);
+extern Atom XmInternAtom(Display *display, String name, Boolean only_if_exists);
 /* X11r5's XGetAtomName equivalent */
 extern String XmGetAtomName(Display *display, Atom atom);
 #ifdef __cplusplus

@@ -19,30 +19,26 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/
+ */
 #ifndef _XmArrowButton_h
-#   define _XmArrowButton_h
-#   include <Xm/Xm.h>
-#   ifdef __cplusplus
+#  define _XmArrowButton_h
+#  include <Xm/Xm.h>
+#  ifdef __cplusplus
 extern "C" {
-#   endif
-#   ifndef XmIsArrowButton
-#      define XmIsArrowButton(w) XtIsSubclass(w, xmArrowButtonWidgetClass)
-#   endif /* XmIsArrowButton */
-externalref WidgetClass                xmArrowButtonWidgetClass;
+#  endif
+#  ifndef XmIsArrowButton
+#    define XmIsArrowButton(w) XtIsSubclass(w, xmArrowButtonWidgetClass)
+#  endif /* XmIsArrowButton */
+externalref WidgetClass xmArrowButtonWidgetClass;
 typedef struct _XmArrowButtonClassRec *XmArrowButtonWidgetClass;
-typedef struct _XmArrowButtonRec      *XmArrowButtonWidget;
+typedef struct _XmArrowButtonRec *XmArrowButtonWidget;
 /********    Public Function Declarations    ********/
-extern Widget XmCreateArrowButton(
-   Widget   parent,
-   char    *name,
-   ArgList  arglist,
-   Cardinal argcount);
+extern Widget XmCreateArrowButton(Widget parent, char *name, ArgList arglist, Cardinal argcount);
 extern Widget XmVaCreateManagedArrowButton(Widget parent, char *name, ...);
 extern Widget XmVaCreateArrowButton(Widget parent, char *name, ...);
 /********    End Public Function Declarations    ********/
-#   ifdef __cplusplus
+#  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */
-#   endif
+#  endif
 #endif /* _XmArrowButton_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

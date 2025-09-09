@@ -30,17 +30,14 @@ extern "C" {
 /********    External (DataF.c) function declaration *******/
 extern Widget _XmDataFieldGetDropReciever(Widget w);
 /********    Private Function Declarations    ********/
-extern Boolean _XmDataFieldConvert(
-   Widget         w,
-   Atom          *selection,
-   Atom          *target,
-   Atom          *type,
-   XtPointer     *value,
-   unsigned long *length,
-   int           *format);
-extern void _XmDataFieldLoseSelection(
-   Widget w,
-   Atom  *selection);
+extern Boolean _XmDataFieldConvert(Widget w,
+                                   Atom *selection,
+                                   Atom *target,
+                                   Atom *type,
+                                   XtPointer *value,
+                                   unsigned long *length,
+                                   int *format);
+extern void _XmDataFieldLoseSelection(Widget w, Atom *selection);
 /********    End Private Function Declarations    ********/
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

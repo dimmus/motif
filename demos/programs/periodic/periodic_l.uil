@@ -23,6 +23,10 @@
 ! HISTORY
 
 
+module periodic_l
+    version = 'v1.0'
+    names = case_sensitive
+
 value
 
 quarks : string_table ("up", "down", "charm", "strange", "top", "bottom");
@@ -833,3 +837,5 @@ toggleFillItems : string_table ( toggleOnItem, "Off" );
 toggleSetText : "XmNset:";
 toggleSetItem : "Set";
 toggleSetItems : string_table ( "Unset", toggleSetItem, "Indeterminate" );
+
+end module;

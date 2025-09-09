@@ -32,55 +32,32 @@
 extern "C" {
 #endif
 /********    Private Function Declarations    ********/
-extern int _XmTextFieldCountBytes(
-   XmTextFieldWidget tf,
-   wchar_t          *wc_value,
-   int               num_chars);
-extern void _XmTextFToggleCursorGC(
-   Widget widget);
-extern void _XmTextFieldDrawInsertionPoint(
-   XmTextFieldWidget tf,
-   Boolean           turn_on);
-extern void _XmTextFieldSetClipRect(
-   XmTextFieldWidget tf);
-extern void _XmTextFieldSetCursorPosition(
-   XmTextFieldWidget tf,
-   XEvent           *event,
-   XmTextPosition    position,
-   Boolean           adjust_flag,
-   Boolean           call_cb);
-extern Boolean _XmTextFieldReplaceText(
-   XmTextFieldWidget tf,
-   XEvent           *event,
-   XmTextPosition    replace_prev,
-   XmTextPosition    replace_next,
-   char             *insert,
-   int               insert_length,
-   Boolean           move_cursor);
-extern void _XmTextFieldDeselectSelection(
-   Widget  w,
-   Boolean disown,
-   Time    sel_time);
-extern Boolean _XmTextFieldSetDestination(
-   Widget         w,
-   XmTextPosition position,
-   Time           set_time);
-extern void _XmTextFieldStartSelection(
-   XmTextFieldWidget tf,
-   XmTextPosition    left,
-   XmTextPosition    right,
-   Time              sel_time);
+extern int _XmTextFieldCountBytes(XmTextFieldWidget tf, wchar_t *wc_value, int num_chars);
+extern void _XmTextFToggleCursorGC(Widget widget);
+extern void _XmTextFieldDrawInsertionPoint(XmTextFieldWidget tf, Boolean turn_on);
+extern void _XmTextFieldSetClipRect(XmTextFieldWidget tf);
+extern void _XmTextFieldSetCursorPosition(XmTextFieldWidget tf,
+                                          XEvent *event,
+                                          XmTextPosition position,
+                                          Boolean adjust_flag,
+                                          Boolean call_cb);
+extern Boolean _XmTextFieldReplaceText(XmTextFieldWidget tf,
+                                       XEvent *event,
+                                       XmTextPosition replace_prev,
+                                       XmTextPosition replace_next,
+                                       char *insert,
+                                       int insert_length,
+                                       Boolean move_cursor);
+extern void _XmTextFieldDeselectSelection(Widget w, Boolean disown, Time sel_time);
+extern Boolean _XmTextFieldSetDestination(Widget w, XmTextPosition position, Time set_time);
+extern void _XmTextFieldStartSelection(XmTextFieldWidget tf,
+                                       XmTextPosition left,
+                                       XmTextPosition right,
+                                       Time sel_time);
 extern void _XmTextFieldSetSel2(
-   Widget         w,
-   XmTextPosition left,
-   XmTextPosition right,
-   Boolean        disown,
-   Time           sel_time);
-extern void _XmTextFieldHandleSecondaryFinished(Widget  w,
-                                                XEvent *event);
-extern int  _XmTextFieldCountCharacters(XmTextFieldWidget tf,
-                                        char             *ptr,
-                                        int               n_bytes);
+    Widget w, XmTextPosition left, XmTextPosition right, Boolean disown, Time sel_time);
+extern void _XmTextFieldHandleSecondaryFinished(Widget w, XEvent *event);
+extern int _XmTextFieldCountCharacters(XmTextFieldWidget tf, char *ptr, int n_bytes);
 /********    End Private Function Declarations    ********/
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

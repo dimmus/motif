@@ -19,32 +19,29 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/
+ */
 #ifdef REV_INFO
-#   ifndef lint
+#  ifndef lint
 static char rcsid[] = "$TOG: AtomMgr.c /main/13 1997/09/08 14:06:18 cshi $"
-#   endif
+#  endif
 #endif
 #ifdef HAVE_CONFIG_H
-#   include <config.h>
+#  include <config.h>
 #endif
+#include <X11/Xresource.h>
 #include <Xm/AtomMgr.h>
 #include <Xm/XmP.h>
-#include <X11/Xresource.h>
-   /*****************************************************************************
- *
- *  XmInternAtom()
- *
- ****************************************************************************/
-   Atom
-   XmInternAtom(
-      Display * display,
-      String  name,
-      Boolean only_if_exists)
+    /*****************************************************************************
+     *
+     *  XmInternAtom()
+     *
+     ****************************************************************************/
+    Atom
+    XmInternAtom(Display * display, String name, Boolean only_if_exists)
 {
-   /* While not yet obsolete, this routine is not in favor.  Use */
-   /* XInternAtom directly. */
-   return XInternAtom(display, name, only_if_exists);
+  /* While not yet obsolete, this routine is not in favor.  Use */
+  /* XInternAtom directly. */
+  return XInternAtom(display, name, only_if_exists);
 }
 
 /*****************************************************************************
@@ -52,12 +49,9 @@ static char rcsid[] = "$TOG: AtomMgr.c /main/13 1997/09/08 14:06:18 cshi $"
  *  XmGetAtomName()
  *
  ****************************************************************************/
-String
-XmGetAtomName(
-   Display *display,
-   Atom     atom)
+String XmGetAtomName(Display *display, Atom atom)
 {
-   /* While not yet obsolete, this routine is not in favor.  Use */
-   /* XGetAtomName directly. */
-   return XGetAtomName(display, atom);
+  /* While not yet obsolete, this routine is not in favor.  Use */
+  /* XGetAtomName directly. */
+  return XGetAtomName(display, atom);
 }

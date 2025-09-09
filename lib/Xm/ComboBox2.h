@@ -28,17 +28,16 @@
 #if defined(__cplusplus)
 extern "C" {
 #endif
-enum
-{
-   XiCOMBINATIONBOX2_LABEL        = XmDROPDOWN_LABEL,
-   XiCOMBINATIONBOX2_TEXT         = XmDROPDOWN_TEXT,
-   XiCOMBINATIONBOX2_ARROW_BUTTON = XmDROPDOWN_ARROW_BUTTON,
-   XiCOMBINATIONBOX2_LIST         = XmDROPDOWN_LIST
+enum {
+  XiCOMBINATIONBOX2_LABEL = XmDROPDOWN_LABEL,
+  XiCOMBINATIONBOX2_TEXT = XmDROPDOWN_TEXT,
+  XiCOMBINATIONBOX2_ARROW_BUTTON = XmDROPDOWN_ARROW_BUTTON,
+  XiCOMBINATIONBOX2_LIST = XmDROPDOWN_LIST
 };
 XM_ALTERNATIVE(Use XmDropDown instead)
-extern WidgetClass             xmCombinationBox2WidgetClass;
+extern WidgetClass xmCombinationBox2WidgetClass;
 typedef XmDropDownWidgetClass *XmCombinationBox2WidgetClass;
-typedef XmDropDownWidget      *XmCombinationBox2Widget;
+typedef XmDropDownWidget *XmCombinationBox2Widget;
 /*	Function Name: XmCombinationBox2GetValue
  *	Description:   Retreives the value from the combo box.
  *	Arguments:     w - the combination box.
@@ -53,11 +52,7 @@ extern String XmCombinationBox2GetValue(Widget w) __attribute__((deprecated));
  *	Returns: The Widget created.
  */
 XM_ALTERNATIVE(Use XmDropDown instead)
-extern Widget XmCreateCombinationBox2(
-   Widget   w,
-   char    *name,
-   ArgList  args,
-   Cardinal argCount);
+extern Widget XmCreateCombinationBox2(Widget w, char *name, ArgList args, Cardinal argCount);
 /*
  * Variable argument list functions
  */

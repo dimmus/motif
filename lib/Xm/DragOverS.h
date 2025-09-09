@@ -19,26 +19,26 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/
+ */
 #ifndef _XmDragOverS_h
-#   define _XmDragOverS_h
-#   include <Xm/Xm.h>
-#   include <Xm/DragC.h>
-#   include <Xm/DragIcon.h>
-#   ifdef __cplusplus
+#  define _XmDragOverS_h
+#  include <Xm/DragC.h>
+#  include <Xm/DragIcon.h>
+#  include <Xm/Xm.h>
+#  ifdef __cplusplus
 extern "C" {
-#   endif
+#  endif
 /***********************************************************************
  *
  * DragOverShell Widget
  *
  ***********************************************************************/
 /* Class record constants */
-typedef struct _XmDragOverShellRec      *XmDragOverShellWidget;
+typedef struct _XmDragOverShellRec *XmDragOverShellWidget;
 typedef struct _XmDragOverShellClassRec *XmDragOverShellWidgetClass;
-externalref WidgetClass                  xmDragOverShellWidgetClass;
-#   ifdef __cplusplus
+externalref WidgetClass xmDragOverShellWidgetClass;
+#  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */
-#   endif
+#  endif
 #endif /* _XmDragOverS_h */
 /* DON'T ADD STUFF AFTER THIS #endif */

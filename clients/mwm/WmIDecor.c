@@ -195,7 +195,7 @@ Boolean MakeIcon (WmWorkspaceData *pWS, ClientData *pcd)
 	    (pcd->clientFunctions & MWM_FUNC_MINIMIZE) )
         {
             if (!InsertIconIntoBox(pWS->pIconBox, pcd))
-		Warning(((char *)GETMESSAGE(30, 1, "Could not make icon to go in icon box")));
+		XtWarning(((char *)GETMESSAGE(30, 1, "Could not make icon to go in icon box")));
 
 	}
 
@@ -208,7 +208,7 @@ Boolean MakeIcon (WmWorkspaceData *pWS, ClientData *pcd)
 	    AllocateRList ((unsigned)NUM_BOTH_TOP_RECTS)) == NULL)
     {
 	/* Out of memory! */
-	Warning (((char *)GETMESSAGE(30, 2, "Insufficient memory for icon creation")));
+	XtWarning (((char *)GETMESSAGE(30, 2, "Insufficient memory for icon creation")));
 	return(FALSE);
     }
 
@@ -216,7 +216,7 @@ Boolean MakeIcon (WmWorkspaceData *pWS, ClientData *pcd)
 	 AllocateRList ((unsigned)NUM_BOTH_BOTTOM_RECTS)) == NULL)
     {
 	/* Out of memory! */
-	Warning (((char *)GETMESSAGE(30, 3, "Insufficient memory for icon creation")));
+	XtWarning (((char *)GETMESSAGE(30, 3, "Insufficient memory for icon creation")));
 	return(FALSE);
     }
 

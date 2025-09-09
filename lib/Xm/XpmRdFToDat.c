@@ -31,29 +31,26 @@
 *  Developed by Dan Greening dgreen@cs.ucla.edu / dgreen@sti.com              *
 \*****************************************************************************/
 #ifdef HAVE_CONFIG_H
-#   include <config.h>
+#  include <config.h>
 #endif
 #include "XpmI.h"
 
-int
-XpmReadFileToData(
-   const char *filename,
-   char     ***data_return)
+int XpmReadFileToData(const char *filename, char ***data_return)
 {
-   XpmImage image;
-   XpmInfo  info;
-   int      ErrorStatus;
-   info.valuemask = XpmReturnComments | XpmReturnExtensions;
-   /*
-     * initialize return value
-     */
-   if (data_return)
-      *data_return = NULL;
-   ErrorStatus = XpmReadFileToXpmImage(filename, &image, &info);
-   if (ErrorStatus != XpmSuccess)
-      return (ErrorStatus);
-   ErrorStatus = XpmCreateDataFromXpmImage(data_return, &image, &info);
-   XpmFreeXpmImage(&image);
-   XpmFreeXpmInfo(&info);
-   return (ErrorStatus);
+  XpmImage image;
+  XpmInfo info;
+  int ErrorStatus;
+  info.valuemask = XpmReturnComments | XpmReturnExtensions;
+  /*
+   * initialize return value
+   */
+  if (data_return)
+    *data_return = NULL;
+  ErrorStatus = XpmReadFileToXpmImage(filename, &image, &info);
+  if (ErrorStatus != XpmSuccess)
+    return (ErrorStatus);
+  ErrorStatus = XpmCreateDataFromXpmImage(data_return, &image, &info);
+  XpmFreeXpmImage(&image);
+  XpmFreeXpmInfo(&info);
+  return (ErrorStatus);
 }

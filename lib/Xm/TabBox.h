@@ -23,24 +23,24 @@
  */
 #ifndef _XmTabBox_h_
 #define _XmTabBox_h_
-#include <Xm/Ext.h>
 #include <Xm/DrawUtils.h>
+#include <Xm/Ext.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
-typedef struct _XmTabBoxRec      *XmTabBoxWidget;
+typedef struct _XmTabBoxRec *XmTabBoxWidget;
 typedef struct _XmTabBoxClassRec *XmTabBoxWidgetClass;
-extern WidgetClass                xmTabBoxWidgetClass;
+extern WidgetClass xmTabBoxWidgetClass;
 #ifndef XmIsTabBox
-#   define XmIsTabBox(w) XtIsSubclass(w, xmTabBoxWidgetClass)
+#  define XmIsTabBox(w) XtIsSubclass(w, xmTabBoxWidgetClass)
 #endif /* XmIsTabBox */
 Widget XmCreateTabBox(Widget, String, ArgList, Cardinal);
-int    XmTabBoxGetIndex(Widget, int, int);
-int    XmTabBoxGetNumRows(Widget);
-int    XmTabBoxGetNumColumns(Widget);
-int    XmTabBoxGetNumTabs(Widget);
-int    XmTabBoxGetTabRow(Widget, int);
-int    XmTabBoxXYToIndex(Widget, int, int);
+int XmTabBoxGetIndex(Widget, int, int);
+int XmTabBoxGetNumRows(Widget);
+int XmTabBoxGetNumColumns(Widget);
+int XmTabBoxGetNumTabs(Widget);
+int XmTabBoxGetTabRow(Widget, int);
+int XmTabBoxXYToIndex(Widget, int, int);
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration */
 #endif

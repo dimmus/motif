@@ -26,10 +26,10 @@
  * HISTORY
  */
 #ifdef HAVE_CONFIG_H
-#   include <config.h>
+#  include <config.h>
 #endif
-#include "XmI.h"
 #include "RepTypeI.h"
+#include "XmI.h"
 
 /************************************************************************
  *
@@ -40,18 +40,16 @@
  *
  ************************************************************************/
 /*ARGSUSED*/
-void
-XmCvtStringToUnitType(
-   XrmValuePtr args,     /* unused */
-   Cardinal   *num_args, /* unused */
-   XrmValue   *from_val,
-   XrmValue   *to_val)
+void XmCvtStringToUnitType(XrmValuePtr args,   /* unused */
+                           Cardinal *num_args, /* unused */
+                           XrmValue *from_val,
+                           XrmValue *to_val)
 {
-   Display *dpy = _XmGetDefaultDisplay();
-   /* we cannot call XmRUnitType directly, since it would loop
+  Display *dpy = _XmGetDefaultDisplay();
+  /* we cannot call XmRUnitType directly, since it would loop
       if a program registers this function with to_type = XmRUnitType (which
       is very likely).
       So we use REAL_UNIT_TYPE_NAME, which has been registered with the
       same semantics as the original XmRUnitType in RepType.c */
-   XtConvertAndStore(XmGetXmDisplay(dpy), XmRString, from_val, REAL_UNIT_TYPE_NAME, to_val);
+  XtConvertAndStore(XmGetXmDisplay(dpy), XmRString, from_val, REAL_UNIT_TYPE_NAME, to_val);
 }

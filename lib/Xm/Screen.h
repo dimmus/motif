@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/
+ */
 #ifndef _XmScreen_h
 #define _XmScreen_h
 #include <Xm/Xm.h>
@@ -27,12 +27,12 @@
 extern "C" {
 #endif
 #ifndef XmIsScreen
-#   define XmIsScreen(w) (XtIsSubclass(w, xmScreenClass))
+#  define XmIsScreen(w) (XtIsSubclass(w, xmScreenClass))
 #endif /* XmIsScreen */
 /* Class record constants */
-typedef struct _XmScreenRec      *XmScreen;
+typedef struct _XmScreenRec *XmScreen;
 typedef struct _XmScreenClassRec *XmScreenClass;
-externalref WidgetClass           xmScreenClass;
+externalref WidgetClass xmScreenClass;
 /********    Public Function Declarations    ********/
 typedef void (*XmScreenColorProc)(Screen *screen,
                                   XColor *bg_color,
@@ -40,11 +40,8 @@ typedef void (*XmScreenColorProc)(Screen *screen,
                                   XColor *sel_color,
                                   XColor *ts_color,
                                   XColor *bs_color);
-typedef Status (*XmAllocColorProc)(Display *display,
-                                   Colormap colormap,
-                                   XColor  *screen_in_out);
-extern Widget XmGetXmScreen(
-   Screen *screen);
+typedef Status (*XmAllocColorProc)(Display *display, Colormap colormap, XColor *screen_in_out);
+extern Widget XmGetXmScreen(Screen *screen);
 /********    End Public Function Declarations    ********/
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

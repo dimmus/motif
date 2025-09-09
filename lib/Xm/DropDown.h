@@ -4,12 +4,12 @@
 #if defined(__cplusplus)
 extern "C" {
 #endif
-externalref WidgetClass             xmDropDownWidgetClass;
+externalref WidgetClass xmDropDownWidgetClass;
 typedef struct _XmDropDownClassRec *XmDropDownWidgetClass;
-typedef struct _XmDropDownRec      *XmDropDownWidget;
+typedef struct _XmDropDownRec *XmDropDownWidget;
 /* XmIsDropDown may already be defined for Fast Subclassing */
 #ifndef XmIsDropDown
-#   define XmIsDropDown(w) XtIsSubclass(w, xmDropDownWidgetClass)
+#  define XmIsDropDown(w) XtIsSubclass(w, xmDropDownWidgetClass)
 #endif /* XmIsDropDown */
 /***** Public Function Declarations *****/
 /*	Function Name: XmCreateDropDown
@@ -19,10 +19,7 @@ typedef struct _XmDropDownRec      *XmDropDownWidget;
  *                 args, num_args - the number and list of args.
  *	Returns: The Widget created.
  */
-extern Widget XmCreateDropDown(Widget   parent,
-                               char    *name,
-                               ArgList  args,
-                               Cardinal argCount);
+extern Widget XmCreateDropDown(Widget parent, char *name, ArgList args, Cardinal argCount);
 /*	Function Name: XmDropDownGetValue
  *	Description:   Retreives the value from the combo box.
  *	Arguments:     w - the combination box.
@@ -32,14 +29,8 @@ extern String XmDropDownGetValue(Widget w);
 /*
  * Variable argument list functions
  */
-extern Widget XmVaCreateDropDown(
-   Widget parent,
-   char  *name,
-   ...);
-extern Widget XmVaCreateManagedDropDown(
-   Widget parent,
-   char  *name,
-   ...);
+extern Widget XmVaCreateDropDown(Widget parent, char *name, ...);
+extern Widget XmVaCreateManagedDropDown(Widget parent, char *name, ...);
 /*      Function Name:  XmDropDownGetLabel
  *      Description:    Returns the "label" child of the XmDropDown
  *      Arguments:      w - The XmCombinationBox2 Widget

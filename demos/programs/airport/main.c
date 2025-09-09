@@ -472,7 +472,7 @@ static void ConfigureAirport(Widget area, Airport this)
    XtSetArg(args[n], XmNheight, &height); n++;
    XtGetValues(area, args, n);
 
-   if (this->state == open)  { /* destroy current data */
+   if (this->state == opened)  { /* destroy current data */
       XtFree((char *)this->park.spots);
       XClearWindow(this->display, XtWindow(area) );
       this->park.spot_count = 0;
@@ -545,7 +545,7 @@ static void ShowAirport(Widget area, Airport this, XtPointer cbs)
    if (this->state == closed) {
       ConfigureAirport(area, this);
       MakeAirportDropSite(area, this);
-      this->state = open;
+      this->state = opened;
    }
    DrawAirport(this, XtWindow(area), AirportResources.track_background,
 	       AirportResources.track_foreground);

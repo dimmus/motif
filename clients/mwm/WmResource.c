@@ -209,7 +209,7 @@ void InitBuiltinSystemMenu(void)
         if ((ResString =
              (char *)XtMalloc ((unsigned int) (strlen(tmpString) + 1))) == NULL)
         {
-            Warning (((char *)GETMESSAGE(62, 2, "Insufficient memory for local default menu.")));
+            XtWarning (((char *)GETMESSAGE(62, 2, "Insufficient memory for local default menu.")));
             gotItAll = False;
         }
         else
@@ -227,7 +227,7 @@ void InitBuiltinSystemMenu(void)
         if ((MovString =
              (char *)XtMalloc ((unsigned int) (strlen(tmpString) + 1))) == NULL)
         {
-            Warning (((char *)GETMESSAGE(62, 4, "Insufficient memory for local default menu.")));
+            XtWarning (((char *)GETMESSAGE(62, 4, "Insufficient memory for local default menu.")));
             gotItAll = False;
         }
         else
@@ -245,7 +245,7 @@ void InitBuiltinSystemMenu(void)
         if ((SizString =
              (char *)XtMalloc ((unsigned int) (strlen(tmpString) + 1))) == NULL)
         {
-            Warning (((char *)GETMESSAGE(62, 6, "Insufficient memory for local default menu.")));
+            XtWarning (((char *)GETMESSAGE(62, 6, "Insufficient memory for local default menu.")));
             gotItAll = False;
         }
         else
@@ -263,7 +263,7 @@ void InitBuiltinSystemMenu(void)
         if ((MinString =
              (char *)XtMalloc ((unsigned int) (strlen(tmpString) + 1))) == NULL)
         {
-            Warning (((char *)GETMESSAGE(62, 8, "Insufficient memory for local default menu.")));
+            XtWarning (((char *)GETMESSAGE(62, 8, "Insufficient memory for local default menu.")));
             gotItAll = False;
         }
         else
@@ -281,7 +281,7 @@ void InitBuiltinSystemMenu(void)
 	if ((MaxString =
              (char *)XtMalloc ((unsigned int) (strlen(tmpString) + 1))) == NULL)
         {
-            Warning (((char *)GETMESSAGE(62, 10, "Insufficient memory for local default menu.")));
+            XtWarning (((char *)GETMESSAGE(62, 10, "Insufficient memory for local default menu.")));
             gotItAll = False;
         }
         else
@@ -299,7 +299,7 @@ void InitBuiltinSystemMenu(void)
         if ((LowString =
              (char *)XtMalloc ((unsigned int) (strlen(tmpString) + 1))) == NULL)
         {
-            Warning (((char *)GETMESSAGE(62, 12, "Insufficient memory for local default menu.")));
+            XtWarning (((char *)GETMESSAGE(62, 12, "Insufficient memory for local default menu.")));
             gotItAll = False;
         }
         else
@@ -317,7 +317,7 @@ void InitBuiltinSystemMenu(void)
 		 (char *)XtMalloc ((unsigned int)
 				 (strlen(tmpString) + 1))) == NULL)
 	    {
-		Warning (((char *)GETMESSAGE(62, 14, "Insufficient memory for local default menu.")));
+		XtWarning (((char *)GETMESSAGE(62, 14, "Insufficient memory for local default menu.")));
 		gotItAll = False;
 	    }
 	    else
@@ -332,7 +332,7 @@ void InitBuiltinSystemMenu(void)
 		 (char *)XtMalloc ((unsigned int)
 				 (strlen(tmpString) + 1))) == NULL)
 	    {
-		Warning (((char *)GETMESSAGE(62, 16, "Insufficient memory for local default menu.")));
+		XtWarning (((char *)GETMESSAGE(62, 16, "Insufficient memory for local default menu.")));
 		gotItAll = False;
 	    }
 	    else
@@ -347,7 +347,7 @@ void InitBuiltinSystemMenu(void)
 		 (char *)XtMalloc ((unsigned int)
 				 (strlen(tmpString) + 1))) == NULL)
 	    {
-		Warning (((char *)GETMESSAGE(62, 18, "Insufficient memory for local default menu.")));
+		XtWarning (((char *)GETMESSAGE(62, 18, "Insufficient memory for local default menu.")));
 		gotItAll = False;
 	    }
 	    else
@@ -363,7 +363,7 @@ void InitBuiltinSystemMenu(void)
         if ((CloString =
              (char *)XtMalloc ((unsigned int) (strlen(tmpString) + 1))) == NULL)
         {
-            Warning (((char *)GETMESSAGE(62, 20, "Insufficient memory for local default menu.")));
+            XtWarning (((char *)GETMESSAGE(62, 20, "Insufficient memory for local default menu.")));
             gotItAll = False;
         }
         else
@@ -426,7 +426,7 @@ void InitBuiltinSystemMenu(void)
 	if ((builtinSystemMenu =
 	     (char *)XtMalloc ((unsigned int) (strlen(dsm) + 1))) == NULL)
 	{
-	   Warning (((char *)GETMESSAGE(62, 21, "Insufficient memory for localized default system menu")));
+	   XtWarning (((char *)GETMESSAGE(62, 21, "Insufficient memory for localized default system menu")));
 #ifdef WSM
 	    if (DtwmBehavior)
 	    {
@@ -3182,7 +3182,7 @@ ProcessWmResources (void)
     if (wmGD.autoRaiseDelay < 0)
     {
        wmGD.autoRaiseDelay = 500;
-       Warning (((char *)GETMESSAGE(62, 66, "Out of range autoRaiseDelay resource value. Must be non-negative")));
+       XtWarning (((char *)GETMESSAGE(62, 66, "Out of range autoRaiseDelay resource value. Must be non-negative")));
     }
 
     /*
@@ -3433,7 +3433,7 @@ ProcessWmColors (WmScreenData *pSD)
     }
     else
     {
-	Warning (((char *)GETMESSAGE(62, 22, "Insufficient memory for color data")));
+	XtWarning (((char *)GETMESSAGE(62, 22, "Insufficient memory for color data")));
 	ExitWM (WM_ERROR_EXIT_VALUE);
     }
 
@@ -4433,7 +4433,7 @@ MakeAppearanceResources (WmScreenData *pSD, AppearanceData *pAData, Boolean make
     if (! XmeRenderTableGetDefaultFont(pAData->fontList, &(pAData->font)))
     {
 	sprintf((char *)wmGD.tmpBuffer, ((char *)GETMESSAGE(62, 23, "failed to load font: %.100s")), (char*) pAData->fontList);
-	Warning((char *)wmGD.tmpBuffer);
+	XtWarning((char *)wmGD.tmpBuffer);
 	ExitWM(WM_ERROR_EXIT_VALUE);
     }
 
@@ -5170,7 +5170,7 @@ ProcessWorkspaceList (WmScreenData *pSD)
 	}
 	if (!(pwsI->name = (String) XtMalloc (1+strlen((char *)string))))
 	{
-	    Warning (((char *)GETMESSAGE(62, 27, "Insufficient memory for workspace data")));
+	    XtWarning (((char *)GETMESSAGE(62, 27, "Insufficient memory for workspace data")));
 	    ExitWM(WM_ERROR_EXIT_VALUE);
 	}
 	else
@@ -5360,7 +5360,7 @@ ProcessPresenceResources (WmScreenData *pSD)
 	if ((default_ws_pres_title =
 	     (char *)XtMalloc ((unsigned int) (strlen(tmpString) + 1))) == NULL)
 	{
-	    Warning (((char *)GETMESSAGE(62, 31, "Insufficient memory for local message string")));
+	    XtWarning (((char *)GETMESSAGE(62, 31, "Insufficient memory for local message string")));
 	    default_ws_pres_title = "Occupy Workspace";
 	}
 	else
@@ -6168,7 +6168,7 @@ char * WmRealloc(char *ptr, unsigned size)
 
     if (ptr == NULL)
     {
-	Warning (((char *)GETMESSAGE(62, 37, "Insufficient memory for window manager data")));
+	XtWarning (((char *)GETMESSAGE(62, 37, "Insufficient memory for window manager data")));
     }
 
     return (ptr);
@@ -6212,7 +6212,7 @@ char * WmMalloc(char *ptr, unsigned size)
 
     if (ptr == NULL)
     {
-	Warning (((char *)GETMESSAGE(62, 38, "Insufficient memory for window manager data")));
+	XtWarning (((char *)GETMESSAGE(62, 38, "Insufficient memory for window manager data")));
     }
 
     return (ptr);
@@ -6265,8 +6265,11 @@ void SetupDefaultResources(WmScreenData *pSD)
 	 */
 	if (strcmp (pSD->keyBindings, defaultKeyBindingsName))
 	{
-	   MWarning (((char *)GETMESSAGE(62, 67, "Key bindings %s not found, using builtin key bindings\n")),
-	   pSD->keyBindings);
+            {
+                char msg[256];
+                sprintf(msg, GETMESSAGE(62, 67, "Key bindings %s not found, using builtin key bindings\n"), pSD->keyBindings);
+                XtWarning(msg);
+            }
 	}
 	pSD->keyBindings = builtinKeyBindingsName;
     }
@@ -6278,8 +6281,11 @@ void SetupDefaultResources(WmScreenData *pSD)
 	 */
 	if (strcmp (pSD->buttonBindings, defaultButtonBindingsName))
 	{
-	   MWarning (((char *)GETMESSAGE(62, 68, "Button bindings %s not found, using builtin button bindings\n")),
-		     pSD->buttonBindings);
+	   {
+               char msg[256];
+               sprintf(msg, GETMESSAGE(62, 68, "Button bindings %s not found, using builtin button bindings\n"), pSD->buttonBindings);
+               XtWarning(msg);
+           }
 	}
 	pSD->buttonBindings = builtinButtonBindingsName;
     }

@@ -37,62 +37,63 @@
 extern "C" {
 #endif
 /********    Private Function Declarations for ImageCache.c    ********/
-extern Boolean _XmInstallImage(
-   XImage *image,
-   char   *image_name,
-   int     hot_x,
-   int     hot_y);
-extern Boolean _XmGetImage(
-   Screen  *screen,
-   char    *image_name,
-   XImage **image);
-extern Boolean _XmCachePixmap(
-   Pixmap    pixmap,
-   Screen   *screen,
-   char     *image_name,
-   Pixel     foreground,
-   Pixel     background,
-   int       depth,
-   Dimension width,
-   Dimension height);
-extern Pixmap  _XmGetColoredPixmap(Screen           *screen,
-                                   char             *image_name,
-                                   XmAccessColorData acc_color,
-                                   int               depth,
-                                   Boolean           only_if_exists);
-extern Boolean _XmGetPixmapData(
-   Screen       *screen,
-   Pixmap        pixmap,
-   char        **image_name,
-   int          *depth,
-   Pixel        *foreground,
-   Pixel        *background,
-   int          *hot_x,
-   int          *hot_y,
-   unsigned int *width,
-   unsigned int *height);
-extern Boolean _XmInImageCache(
-   String image_name);
-extern Pixmap _XmGetScaledPixmap(
-   Screen           *screen,
-   Widget            widget,
-   char             *image_name,
-   XmAccessColorData acc_color,
-   int               depth,
-   Boolean           only_if_exists,
-   double            scaling_ratio,
-   int               desired_w,
-   int               desired_h);
-extern void _XmPutScaledImage(Screen *screen, Display *display, Drawable d, int depth, GC gc, XImage *src, int sx, int sy, int sw, int sh, int dx, int dy, int dw, int dh);
+extern Boolean _XmInstallImage(XImage *image, char *image_name, int hot_x, int hot_y);
+extern Boolean _XmGetImage(Screen *screen, char *image_name, XImage **image);
+extern Boolean _XmCachePixmap(Pixmap pixmap,
+                              Screen *screen,
+                              char *image_name,
+                              Pixel foreground,
+                              Pixel background,
+                              int depth,
+                              Dimension width,
+                              Dimension height);
+extern Pixmap _XmGetColoredPixmap(Screen *screen,
+                                  char *image_name,
+                                  XmAccessColorData acc_color,
+                                  int depth,
+                                  Boolean only_if_exists);
+extern Boolean _XmGetPixmapData(Screen *screen,
+                                Pixmap pixmap,
+                                char **image_name,
+                                int *depth,
+                                Pixel *foreground,
+                                Pixel *background,
+                                int *hot_x,
+                                int *hot_y,
+                                unsigned int *width,
+                                unsigned int *height);
+extern Boolean _XmInImageCache(String image_name);
+extern Pixmap _XmGetScaledPixmap(Screen *screen,
+                                 Widget widget,
+                                 char *image_name,
+                                 XmAccessColorData acc_color,
+                                 int depth,
+                                 Boolean only_if_exists,
+                                 double scaling_ratio,
+                                 int desired_w,
+                                 int desired_h);
+extern void _XmPutScaledImage(Screen *screen,
+                              Display *display,
+                              Drawable d,
+                              int depth,
+                              GC gc,
+                              XImage *src,
+                              int sx,
+                              int sy,
+                              int sw,
+                              int sh,
+                              int dx,
+                              int dy,
+                              int dw,
+                              int dh);
 extern void _XmCleanPixmapCache(Screen *screen, Widget shell);
 /* for Xm.h */
-extern Pixmap XmGetScaledPixmap(
-   Widget widget,
-   char  *image_name,
-   Pixel  foreground,
-   Pixel  background,
-   int    depth,
-   double scaling_ratio);
+extern Pixmap XmGetScaledPixmap(Widget widget,
+                                char *image_name,
+                                Pixel foreground,
+                                Pixel background,
+                                int depth,
+                                double scaling_ratio);
 /********    End Private Function Declarations    ********/
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

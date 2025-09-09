@@ -1,0 +1,1188 @@
+# This configuration file can be used to auto-format the code base.
+# Not all guidelines specified in CODING_STYLE are followed, so the
+# result MUST NOT be committed indiscriminately, but each automated
+# change should be reviewed and only the appropriate ones committed.
+#
+# The easiest way to apply the formatting to your changes ONLY,
+# is to use the git-clang-format script (usually installed with clang-format).
+#
+# -  Fix up formatting before committing
+# 1. Edit and stage your files.
+# 2. Run `git clang-format`.
+# 3. Verify + correct + (un)stage changes.
+# 4. Commit.
+#
+# -  Fix up formatting after committing
+# 1. Commit your changes.
+# 2. Run `git clang-format HEAD~` - Refer the commit *before* your changes here.
+# 3. Verify + correct changes, `git difftool -d` can help here.
+# 4. Stage + commit, potentially with `--amend` (means to fixup the last commit).
+#
+# To run clang-format on all sourcefiles, use the following line:
+# $ git ls-files 'src/*.[ch]' 'src/*.cc' | xargs clang-format -i -style=file
+# =============================
+# Tested to work with version: 16.
+#
+# Introduction: https://clang.llvm.org/docs/ClangFormat.html
+# Supported options: https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+# See as well https://wiki.apertis.org/Guidelines/Coding_conventions#Code_formatting
+
+# ==============================================================================
+# DETAILED CLANG-FORMAT CONFIGURATION WITH EXAMPLES
+# ==============================================================================
+# ------------------------------------------------------------------------------
+# BASE STYLE AND LANGUAGE SETTINGS
+# ------------------------------------------------------------------------------
+
+# BasedOnStyle: Defines the base coding style to inherit from
+# Options: LLVM, Google, Chromium, Mozilla, WebKit, Microsoft, GNU, None
+# Current: GNU - Uses GNU coding standards as base (matches Log.c style)
+# Example with GNU: Braces on new lines, 3-space indentation (customized)
+# Example with Google: Braces on same line, 2-space indentation
+BasedOnStyle: GNU
+
+# Language: Specifies the language to format
+# Options: None, Cpp, CSharp, Java, JavaScript, Json, ObjC, Proto, TableGen, TextProto, Verilog
+# Current: Cpp - Format C/C++ code
+Language: Cpp
+
+# Standard: The C++ standard to assume when parsing
+# Options: c++03, c++11, c++14, c++17, c++20, Latest, Auto
+# Current: Latest - Use the latest C++ standard features
+# Example: Affects how auto, lambdas, and other modern features are formatted
+Standard: Latest
+
+# ------------------------------------------------------------------------------
+# LINE LENGTH AND COLUMN SETTINGS
+# ------------------------------------------------------------------------------
+
+# ColumnLimit: Maximum number of characters per line
+# Range: 0 (no limit) to any positive integer
+# Current: 80 - Traditional terminal width, forces readable line lengths
+# Example with 80:
+#   if (very_long_condition_that_exceeds_limit &&
+#       another_condition)
+# Example with 0 (no limit):
+#   if (very_long_condition_that_exceeds_limit && another_condition && yet_another_very_long_condition)
+ColumnLimit: 0
+
+# ------------------------------------------------------------------------------
+# INDENTATION AND TAB SETTINGS
+# ------------------------------------------------------------------------------
+
+# UseTab: Controls when to use tabs for indentation
+# Options: Never, ForIndentation, ForContinuationAndIndentation, AlignWithSpaces, Always
+# Current: Never - Always use spaces, never tabs
+# Example with Never:
+#   if (condition)
+#   {
+#     function_call();  // 2 spaces
+#   }
+# Example with Always:
+#   if (condition)
+#   {
+# 	function_call();  // tab character
+#   }
+UseTab: Never
+
+# TabWidth: Number of columns used for tab stops
+# Range: Positive integer
+# Current: 3 - Each tab represents 3 columns (matches IndentWidth)
+# Note: TabWidth and IndentWidth must be the same, or strange things happen.
+TabWidth: 3
+
+# IndentWidth: Number of columns to use for indentation
+# Range: Positive integer  
+# Current: 3 - Each indentation level is 3 spaces (matches Log.c style)
+# Example with 3:
+#   if (condition)
+#   {
+#      if (nested_condition)  // 3 spaces
+#      {
+#         action();           // 6 spaces total
+#      }
+#   }
+# Example with 2:
+#   if (condition)
+#   {
+#     if (nested_condition)  // 2 spaces
+#     {
+#       action();            // 4 spaces total
+#     }
+#   }
+IndentWidth: 3
+
+# PPIndentWidth: Indentation width for preprocessor statements
+# Range: -1 (use IndentWidth) or positive integer
+# Current: 3 - Preprocessor directives indented by 3 spaces (matches IndentWidth)
+# Example with 3:
+#   #ifdef DEBUG
+#      #define LOG(x) printf(x)  // 3 spaces after #ifdef
+#   #endif
+PPIndentWidth: 3
+
+# ContinuationIndentWidth: Indent width for line continuations
+# Range: Positive integer
+# Current: 3 - Continuation lines indented by 3 additional spaces (matches Log.c style)
+# Example with 3:
+#   int result = very_long_function_name(parameter1,
+#                                        parameter2);  // aligned to opening paren
+#   // vs for statements that don't align:
+#   if (very_long_condition_that_forces_break &&
+#      another_condition)  // 3 spaces continuation indent
+ContinuationIndentWidth: 3
+
+# ------------------------------------------------------------------------------
+# LINE ENDING AND EMPTY LINE SETTINGS
+# ------------------------------------------------------------------------------
+
+# LineEnding: Line ending style to use
+# Options: LF (Unix), CRLF (Windows), DeriveLF, DeriveCRLF
+# Current: LF - Use Unix-style line endings (\n)
+# Example: Ensures consistent line endings across different platforms
+LineEnding: LF
+
+# InsertNewlineAtEOF: Add newline at end of file if missing
+# Options: true, false
+# Current: true - Always ensure files end with a newline
+# Example with true: File ends with \n character (POSIX compliance)
+# Example with false: File may not have final newline
+InsertNewlineAtEOF: true
+
+# KeepEmptyLinesAtTheStartOfBlocks: Preserve empty lines at block start
+# Options: true, false
+# Current: false - Remove empty lines after opening braces
+# Example with false:
+#   void function()
+#   {
+#     int x = 5;  // no empty line after {
+#   }
+# Example with true:
+#   void function()
+#   {
+#
+#     int x = 5;  // empty line preserved after {
+#   }
+KeepEmptyLinesAtTheStartOfBlocks: false
+
+# MaxEmptyLinesToKeep: Maximum consecutive empty lines to preserve
+# Range: 0 to any positive integer
+# Current: 1 - Allow maximum 1 consecutive empty line
+# Example with 1:
+#   int a = 5;
+#
+#   int b = 10;  // only 1 empty line kept
+# Example with 2:
+#   int a = 5;
+#
+#
+#   int b = 10;  // up to 2 empty lines kept
+MaxEmptyLinesToKeep: 1
+
+# ------------------------------------------------------------------------------
+# SPECIFIC INDENTATION SETTINGS
+# ------------------------------------------------------------------------------
+
+# IndentCaseLabels: Indent case labels in switch statements
+# Options: true, false
+# Current: true - Indent case labels relative to switch
+# Example with true:
+#   switch (value)
+#   {
+#     case 1:      // indented
+#       action();
+#       break;
+#   }
+# Example with false:
+#   switch (value)
+#   {
+#   case 1:        // not indented, aligned with switch
+#     action();
+#     break;
+#   }
+IndentCaseLabels: true
+
+# IndentCaseBlocks: Indent the block inside case labels
+# Options: true, false
+# Current: true - Indent case blocks
+# Example with true:
+#   switch (value)
+#   {
+#     case 1:
+#       {          // this block is indented
+#         int x = 5;
+#         action(x);
+#       }
+#       break;
+#   }
+# Example with false:
+#   switch (value)
+#   {
+#     case 1:
+#     {            // this block is not indented
+#       int x = 5;
+#       action(x);
+#     }
+#     break;
+#   }
+IndentCaseBlocks: false
+
+# IndentGotoLabels: Indent goto labels
+# Options: true, false
+# Current: false - Don't indent goto labels, keep them at column 0
+# Example with false:
+#   void function()
+#   {
+#     if (condition)
+#       goto cleanup;
+#     normal_code();
+# cleanup:           // not indented
+#     cleanup_code();
+#   }
+# Example with true:
+#   void function()
+#   {
+#     if (condition)
+#       goto cleanup;
+#     normal_code();
+#     cleanup:       // indented
+#       cleanup_code();
+#   }
+IndentGotoLabels: false
+
+# IndentPPDirectives: Indentation for preprocessor directives
+# Options: None, AfterHash, BeforeHash
+# Current: AfterHash - Indent after the # character
+# Example with AfterHash:
+#   #ifdef DEBUG
+#   #  define LOG(x) printf(x)    // spaces after #
+#   #  ifdef VERBOSE
+#   #    define VLOG(x) printf(x)  // more spaces after #
+#   #  endif
+#   #endif
+# Example with None:
+#   #ifdef DEBUG
+#   #define LOG(x) printf(x)      // no extra indentation
+#   #ifdef VERBOSE
+#   #define VLOG(x) printf(x)
+#   #endif
+#   #endif
+IndentPPDirectives: AfterHash
+
+# IndentWrappedFunctionNames: Indent function names when wrapped
+# Options: true, false
+# Current: false - Don't add extra indent to wrapped function names
+# Example with false:
+#   very_long_return_type
+#   function_name(int param);  // function name not indented
+# Example with true:
+#   very_long_return_type
+#     function_name(int param);  // function name indented
+IndentWrappedFunctionNames: false
+
+# ------------------------------------------------------------------------------
+# ALIGNMENT SETTINGS
+# ------------------------------------------------------------------------------
+
+# AlignAfterOpenBracket: Align parameters after opening bracket
+# Options: Align, DontAlign, AlwaysBreak, BlockIndent
+# Current: Align - Align parameters to opening bracket position
+# Example with Align:
+#   like_this_long_name(parameter_one,
+#                       parameter_two,     // aligned to opening paren
+#                       parameter_three);
+# Example with DontAlign:
+#   like_this_long_name(parameter_one,
+#       parameter_two,                     // continuation indent only
+#       parameter_three);
+# Example with AlwaysBreak:
+#   like_this_long_name(
+#       parameter_one,                     // always break after opening paren
+#       parameter_two,
+#       parameter_three);
+AlignAfterOpenBracket: Align
+
+# AlignArrayOfStructures: Align array of structures
+# Options: Left, Right, None
+# Current: Left - Left-align array elements
+# Example with Left:
+#   struct test demo[] = {
+#     {56, 23,    "hello"},
+#     {-1, 93463, "world"},
+#     {7,  5,     "!!"   }
+#   };
+# Example with Right:
+#   struct test demo[] = {
+#     {56,    23, "hello"},
+#     {-1, 93463, "world"},
+#     { 7,     5,    "!!"}
+#   };
+# Example with None:
+#   struct test demo[] = {
+#     {56, 23, "hello"},
+#     {-1, 93463, "world"},
+#     {7, 5, "!!"}
+#   };
+AlignArrayOfStructures: Left
+
+# AlignEscapedNewlines: Align escaped newlines in macros
+# Options: DontAlign, Left, Right
+# Current: Left - Align backslashes to the left
+# Example with Left:
+#   #define MACRO(x) \
+#     do { \
+#       something; \
+#     } while (0)
+# Example with Right:
+#   #define MACRO(x)  \
+#     do {            \
+#       something;    \
+#     } while (0)
+AlignEscapedNewlines: Left
+
+# AlignOperands: Align operands of binary and ternary expressions
+# Options: DontAlign, Align, AlignAfterOperator
+# Current: Align - Align operands across lines
+# Example with Align:
+#   int result = first_operand +
+#                second_operand;        // aligned
+# Example with DontAlign:
+#   int result = first_operand +
+#       second_operand;                // continuation indent only
+# Example with AlignAfterOperator:
+#   int result = first_operand
+#              + second_operand;       // aligned after operator
+AlignOperands: AlignAfterOperator
+# ------------------------------------------------------------------------------
+# CONSECUTIVE ALIGNMENT SETTINGS
+# ------------------------------------------------------------------------------
+
+# AlignConsecutiveAssignments: Align consecutive assignment operators
+# Current: Disabled to preserve original variable name alignment pattern
+# Example with Enabled=true:
+#   int    short_var = 1;
+#   double longer_variable = 2.0;
+#   char   x = 'a';
+# Example with Enabled=false:
+#   int short_var = 1;
+#   double longer_variable = 2.0;
+#   char x = 'a';
+AlignConsecutiveAssignments:
+    Enabled:          true           # Disable alignment of = operators to preserve original style
+    AcrossEmptyLines: false           # Don't align across empty lines
+    AcrossComments:   false           # Don't align across comment lines
+    AlignCompound:    true            # Align compound assignments (+=, -=, etc.)
+    PadOperators:     false           # Don't pad operators with extra spaces
+
+# AlignConsecutiveBitFields: Align consecutive bit field colons
+# Example with Enabled=true:
+#   struct BitField {
+#     unsigned int a : 1;
+#     unsigned int b : 12;
+#     unsigned int c : 3;
+#   };
+# Example with Enabled=false:
+#   struct BitField {
+#     unsigned int a : 1;
+#     unsigned int b : 12;
+#     unsigned int c : 3;
+#   };
+AlignConsecutiveBitFields:
+    Enabled:          true            # Enable bit field colon alignment
+    AcrossEmptyLines: false           # Don't align across empty lines
+    AcrossComments:   false           # Don't align across comment lines
+
+# AlignConsecutiveDeclarations: Align consecutive variable declarations
+# Example with Enabled=true:
+#   int         a;
+#   float       b;
+#   const char *c;
+# Example with Enabled=false:
+#   int a;
+#   float b;
+#   const char *c;
+AlignConsecutiveDeclarations:
+    Enabled:          true            # Enable declaration alignment
+    AcrossEmptyLines: false           # Don't align across empty lines
+    AcrossComments:   false           # Don't align across comment lines
+
+# AlignConsecutiveMacros: Align consecutive macro definitions
+# Example with Enabled=true:
+#   #define SHORT_MACRO       42
+#   #define LONGER_MACRO_NAME 0x42
+#   #define MACRO             (a + b)
+# Example with Enabled=false:
+#   #define SHORT_MACRO 42
+#   #define LONGER_MACRO_NAME 0x42
+#   #define MACRO (a + b)
+AlignConsecutiveMacros:
+    Enabled:          true            # Enable macro alignment
+    AcrossEmptyLines: false           # Don't align across empty lines
+    AcrossComments:   true            # Do align across comment lines
+
+# AlignTrailingComments: Align trailing comments
+# Options for Kind: Leave, Always, Never
+# Current: Leave - Don't change existing trailing comment alignment
+# Example with Kind=Always:
+#   int a = 5;    // comment 1
+#   int bb = 10;  // comment 2  (aligned)
+# Example with Kind=Leave:
+#   int a = 5;  // comment 1
+#   int bb = 10;   // comment 2  (left as-is)
+AlignTrailingComments:
+    Kind:           Always             # Leave existing alignment unchanged
+    OverEmptyLines: 0                 # Don't align over empty lines
+
+# ------------------------------------------------------------------------------
+# PARAMETER AND ARGUMENT PACKING SETTINGS
+# ------------------------------------------------------------------------------
+
+# BinPackArguments: Pack function call arguments on lines
+# Options: true, false
+# Current: false - Don't pack arguments, prefer one per line
+# Example with false (current):
+#   like_this_long_name(parameter_one,
+#                       parameter_two,
+#                       parameter_three,
+#                       parameter_four,
+#                       parameter_five,
+#                       parameter_six);
+# Example with true:
+#   like_this_long_name(parameter_one, parameter_two, parameter_three, parameter_four,
+#                       parameter_five, parameter_six);
+# Benefits of false: Easier to read diffs when parameters are added/removed
+BinPackArguments: false
+
+# BinPackParameters: Pack function declaration parameters on lines
+# Options: true, false
+# Current: false - Don't pack parameters, prefer one per line
+# Example with false (current):
+#   void function_name(int parameter_one,
+#                      float parameter_two,
+#                      const char *parameter_three);
+# Example with true:
+#   void function_name(int parameter_one, float parameter_two,
+#                      const char *parameter_three);
+BinPackParameters: false
+
+# AllowAllArgumentsOnNextLine: Allow all arguments on next line when they don't fit
+# Options: true, false
+# Current: false - Don't put all arguments on next line
+# Example with false (current):
+#   function_call(
+#       argument_one,
+#       argument_two);
+# Example with true:
+#   function_call(
+#       argument_one, argument_two);
+AllowAllArgumentsOnNextLine: false
+
+# AllowAllParametersOfDeclarationOnNextLine: Allow all parameters on next line
+# Options: true, false
+# Current: false - Don't put all parameters on next line in declarations
+# Example with false (current):
+#   void function_name(
+#       int param_one,
+#       int param_two);
+# Example with true:
+#   void function_name(
+#       int param_one, int param_two);
+AllowAllParametersOfDeclarationOnNextLine: false
+
+# ------------------------------------------------------------------------------
+# SHORT CONSTRUCTS ON SINGLE LINE SETTINGS
+# ------------------------------------------------------------------------------
+
+# AllowShortBlocksOnASingleLine: Allow short blocks on single line
+# Options: Never, Empty, Always
+# Current: Never - Never allow blocks on single line, always break them up
+# Example with Never (current):
+#   if (condition)
+#   {
+#     action();
+#   }
+# Example with Always:
+#   if (condition) { action(); }
+# Example with Empty:
+#   if (condition) {}  // only empty blocks allowed
+AllowShortBlocksOnASingleLine: Never
+
+# AllowShortCaseLabelsOnASingleLine: Allow short case labels on single line
+# Options: true, false
+# Current: false - Always break case labels to multiple lines
+# Example with false (current):
+#   switch (value)
+#   {
+#     case 1:
+#       return "one";
+#     case 2:
+#       return "two";
+#   }
+# Example with true:
+#   switch (value)
+#   {
+#     case 1: return "one";
+#     case 2: return "two";
+#   }
+AllowShortCaseLabelsOnASingleLine: true
+
+# AllowShortEnumsOnASingleLine: Allow short enums on single line
+# Options: true, false
+# Current: true - Allow short enums to be on one line
+# Example with true (current):
+#   enum Color { RED, GREEN, BLUE };
+# Example with false:
+#   enum Color
+#   {
+#     RED,
+#     GREEN,
+#     BLUE
+#   };
+AllowShortEnumsOnASingleLine: true
+
+# AllowShortFunctionsOnASingleLine: Allow short functions on single line
+# Options: None, InlineOnly, Empty, Inline, All
+# Current: None - Never allow functions on single line
+# Example with None (current):
+#   int getValue()
+#   {
+#     return 42;
+#   }
+# Example with All:
+#   int getValue() { return 42; }
+# Example with Empty:
+#   void empty() {}  // only empty functions allowed
+AllowShortFunctionsOnASingleLine: Empty
+
+# AllowShortIfStatementsOnASingleLine: Allow short if statements on single line
+# Options: Never, WithoutElse, OnlyFirstIf, AllIfsAndElse
+# Current: AllIfsAndElse - Allow all if/else statements on single line
+# Example with AllIfsAndElse (current):
+#   if (condition) action();
+#   if (x > 0) return x; else return -x;
+# Example with Never:
+#   if (condition)
+#     action();
+#   if (x > 0)
+#     return x;
+#   else
+#     return -x;
+AllowShortIfStatementsOnASingleLine: WithoutElse
+
+# AllowShortLoopsOnASingleLine: Allow short loops on single line
+# Options: true, false
+# Current: false - Never allow loops on single line
+# Example with false (current):
+#   for (int i = 0; i < 10; ++i)
+#     process(i);
+#   while (condition)
+#     action();
+# Example with true:
+#   for (int i = 0; i < 10; ++i) process(i);
+#   while (condition) action();
+AllowShortLoopsOnASingleLine: true
+
+# ------------------------------------------------------------------------------
+# BREAKING AND WRAPPING SETTINGS
+# ------------------------------------------------------------------------------
+
+# AlwaysBreakAfterReturnType: Break after return type in function declarations
+# Options: None, All, TopLevel, AllDefinitions, TopLevelDefinitions
+# Current: AllDefinitions - Break after return type in all function definitions
+# Example with AllDefinitions (current):
+#   int
+#   function_name(int param)    // return type on separate line
+#   {
+#     return param + 1;
+#   }
+# Example with None:
+#   int function_name(int param)  // return type on same line
+#   {
+#     return param + 1;
+#   }
+AlwaysBreakAfterReturnType: AllDefinitions
+
+# AlwaysBreakBeforeMultilineStrings: Break before multiline string literals
+# Options: true, false
+# Current: false - Don't force break before multiline strings
+# Example with false (current):
+#   const char *foo = "multi"
+#                     "line";      // strings aligned
+# Example with true:
+#   const char *foo =
+#       "multi"
+#       "line";                    // break before first string
+AlwaysBreakBeforeMultilineStrings: false
+
+# ------------------------------------------------------------------------------
+# BRACE PLACEMENT SETTINGS
+# ------------------------------------------------------------------------------
+
+# BreakBeforeBraces: Brace breaking style
+# Options: Attach, Linux, Mozilla, Stroustrup, Allman, Whitesmiths, GNU, WebKit, Custom
+# Current: Custom - Use custom brace wrapping settings defined below
+# This tries to match EFL's style as much as possible.
+BreakBeforeBraces: Custom
+
+# BraceWrapping: Custom brace wrapping configuration (used when BreakBeforeBraces: Custom)
+BraceWrapping:
+    # AfterCaseLabel: Wrap braces after case labels
+    # Current: true - Put opening brace on new line after case
+    # Example with true:
+    #   case 1:
+    #   {
+    #     action();
+    #   }
+    # Example with false:
+    #   case 1: {
+    #     action();
+    #   }
+    AfterCaseLabel:        true
+
+    # AfterControlStatement: Wrap braces after control statements (if, for, while, etc.)
+    # Current: true - Put opening brace on new line after control statements
+    # Example with true:
+    #   if (condition)
+    #   {
+    #     action();
+    #   }
+    # Example with false:
+    #   if (condition) {
+    #     action();
+    #   }
+    AfterControlStatement: true
+
+    # AfterEnum: Wrap braces after enum declarations
+    # Current: true - Put opening brace on new line after enum
+    # Example with true:
+    #   enum Color
+    #   {
+    #     RED, GREEN, BLUE
+    #   };
+    # Example with false:
+    #   enum Color {
+    #     RED, GREEN, BLUE
+    #   };
+    AfterEnum:             true
+
+    # AfterExternBlock: Wrap braces after extern blocks
+    # Current: false - Keep opening brace on same line as extern
+    # Example with false:
+    #   extern "C" {
+    #     void function();
+    #   }
+    # Example with true:
+    #   extern "C"
+    #   {
+    #     void function();
+    #   }
+    AfterExternBlock:      false
+
+    # AfterFunction: Wrap braces after function definitions
+    # Current: true - Put opening brace on new line after function signature
+    # Example with true:
+    #   void function()
+    #   {
+    #     body();
+    #   }
+    # Example with false:
+    #   void function() {
+    #     body();
+    #   }
+    AfterFunction:         true
+
+    # AfterStruct: Wrap braces after struct declarations
+    # Current: true - Put opening brace on new line after struct
+    # Example with true:
+    #   struct Data
+    #   {
+    #     int value;
+    #   };
+    # Example with false:
+    #   struct Data {
+    #     int value;
+    #   };
+    AfterStruct:           true
+
+    # AfterUnion: Wrap braces after union declarations
+    # Current: false - Keep opening brace on same line as union
+    # Example with false:
+    #   union Data {
+    #     int i;
+    #     float f;
+    #   };
+    # Example with true:
+    #   union Data
+    #   {
+    #     int i;
+    #     float f;
+    #   };
+    AfterUnion:            false
+
+    # BeforeElse: Put opening brace on new line before else
+    # Current: true - Put else opening brace on new line
+    # Example with true:
+    #   if (condition)
+    #   {
+    #     action1();
+    #   }
+    #   else
+    #   {
+    #     action2();
+    #   }
+    # Example with false:
+    #   if (condition)
+    #   {
+    #     action1();
+    #   } else {
+    #     action2();
+    #   }
+    BeforeElse:            true
+
+    # BeforeWhile: Put opening brace on new line before while in do-while
+    # Current: true - Put while on new line in do-while loops
+    # Example with true:
+    #   do
+    #   {
+    #     action();
+    #   }
+    #   while (condition);
+    # Example with false:
+    #   do
+    #   {
+    #     action();
+    #   } while (condition);
+    BeforeWhile:           true
+
+    # IndentBraces: Indent braces themselves
+    # Current: false - Don't indent the braces
+    # Example with false:
+    #   if (condition)
+    #   {           // brace not indented
+    #     action();
+    #   }
+    # Example with true:
+    #   if (condition)
+    #     {         // brace indented
+    #       action();
+    #     }
+    IndentBraces:          false
+
+    # SplitEmptyFunction: Split empty function braces onto separate lines
+    # Current: false - Keep empty function braces together
+    # Example with false:
+    #   void empty() {}
+    # Example with true:
+    #   void empty()
+    #   {
+    #   }
+    SplitEmptyFunction:    false
+
+    # SplitEmptyRecord: Split empty class/struct braces onto separate lines
+    # Current: false - Keep empty record braces together
+    # Example with false:
+    #   class Empty {};
+    # Example with true:
+    #   class Empty
+    #   {
+    #   };
+    SplitEmptyRecord:      false
+# ------------------------------------------------------------------------------
+# OTHER BREAKING SETTINGS
+# ------------------------------------------------------------------------------
+
+# BreakAfterAttributes: Break after C++11 attributes
+# Options: Always, Leave, Never
+# Current: Never - Never break after attributes
+# Example with Never (current):
+#   [[nodiscard]] int function();
+# Example with Always:
+#   [[nodiscard]]
+#   int function();
+BreakAfterAttributes: Never
+
+# BreakBeforeBinaryOperators: Break before binary operators
+# Options: None, NonAssignment, All
+# Current: None - Don't break before binary operators
+# Example with None (current):
+#   int result = operand1 +
+#                operand2;
+# Example with All:
+#   int result = operand1
+#              + operand2;
+BreakBeforeBinaryOperators: All
+
+# BreakBeforeInlineASMColon: Break before inline assembly colon
+# Options: Never, OnlyMultiline, Always
+# Current: OnlyMultiline - Break only for multiline inline assembly
+# Example with OnlyMultiline:
+#   asm("instruction" : "output" : "input");  // single line, no break
+#   asm("instruction"
+#       : "output"                            // multiline, break before colons
+#       : "input");
+BreakBeforeInlineASMColon: OnlyMultiline
+
+# BreakBeforeTernaryOperators: Break before ternary operators (? :)
+# Options: true, false
+# Current: true - Break before ? and :
+# Example with true (current):
+#   int result = condition
+#              ? value1
+#              : value2;
+# Example with false:
+#   int result = condition ?
+#                value1 :
+#                value2;
+BreakBeforeTernaryOperators: true
+
+# ------------------------------------------------------------------------------
+# POINTER AND QUALIFIER ALIGNMENT SETTINGS
+# ------------------------------------------------------------------------------
+
+# DerivePointerAlignment: Derive pointer alignment from existing code
+# Options: true, false
+# Current: false - Use explicit PointerAlignment setting
+# With false: Always use the specified PointerAlignment
+# With true: Try to detect alignment from existing code
+DerivePointerAlignment: false
+
+# PointerAlignment: Align pointers and references
+# Options: Left, Right, Middle
+# Current: Right - Align * and & to the right (with variable name)
+# Example with Right (current):
+#   int *pointer;
+#   int &reference;
+# Example with Left:
+#   int* pointer;
+#   int& reference;
+# Example with Middle:
+#   int * pointer;
+#   int & reference;
+PointerAlignment: Right
+
+# QualifierAlignment: Alignment of specifiers/qualifiers
+# Options: Leave, Left, Right, Custom
+# Current: Custom - Use custom qualifier order
+QualifierAlignment: Custom
+
+# QualifierOrder: Order of qualifiers when QualifierAlignment is Custom
+# Current: ["static", "inline", "volatile", "restrict", "const", "type"]
+# This defines the order in which qualifiers should appear
+# Example with this order:
+#   static inline volatile restrict const int variable;
+# The "type" placeholder represents where the actual type (int, char, etc.) goes
+QualifierOrder: ["static", "inline", "volatile", "restrict", "const", "type"]
+
+# ------------------------------------------------------------------------------
+# COMMENT AND STRING FORMATTING SETTINGS
+# ------------------------------------------------------------------------------
+
+# ReflowComments: Reformat comments to fit within column limit
+# Options: true, false
+# Current: false - Don't reformat comments, leave them as-is
+# Example with false (current):
+#   // This is a very long comment that exceeds the column limit but won't be reflowed
+# Example with true:
+#   // This is a very long comment that exceeds the column limit and will be
+#   // reflowed to fit within the limit
+ReflowComments: false
+
+# BreakStringLiterals: Allow breaking string literals
+# Options: true, false
+# Current: true - Allow breaking long string literals across lines
+# Example with true (current):
+#   const char *str = "This is a very long string that will be "
+#                     "broken across multiple lines";
+# Example with false:
+#   const char *str = "This is a very long string that will not be broken";
+BreakStringLiterals: false
+
+# ------------------------------------------------------------------------------
+# CODE MODIFICATION SETTINGS
+# ------------------------------------------------------------------------------
+
+# RemoveSemicolon: Remove unnecessary semicolons
+# Options: true, false
+# Current: true - Remove unnecessary semicolons (e.g., after function definitions)
+# Example with true (current):
+#   void function()
+#   {
+#     return;  // semicolon after return kept (necessary)
+#   }        // no semicolon after function definition
+# Example with false:
+#   void function()
+#   {
+#     return;
+#   };       // unnecessary semicolon kept
+RemoveSemicolon: true
+
+# RemoveParentheses: Remove unnecessary parentheses (commented out - not in clang-format 16)
+# Options: Leave, MultipleParentheses, ReturnStatement
+# Note: This option is not available in clang-format 16
+# RemoveParentheses: ReturnStatement
+
+# InsertBraces: Insert braces around single-statement control structures
+# Options: true, false
+# Current: false - Don't automatically insert braces
+# Example with false (current):
+#   if (condition)
+#     single_statement();  // no braces added
+# Example with true:
+#   if (condition)
+#   {
+#     single_statement();  // braces automatically added
+#   }
+InsertBraces: false
+
+# SeparateDefinitionBlocks: Add empty lines between definition blocks
+# Options: Leave, Always, Never
+# Current: Always - Always add empty lines between different definition blocks
+# Example with Always (current):
+#   void function1()
+#   {
+#     // body
+#   }
+#                          // empty line added
+#   void function2()
+#   {
+#     // body
+#   }
+# Example with Never:
+#   void function1()
+#   {
+#     // body
+#   }
+#   void function2()       // no empty line
+#   {
+#     // body
+#   }
+SeparateDefinitionBlocks: Always
+
+# ------------------------------------------------------------------------------
+# SPACING SETTINGS
+# ------------------------------------------------------------------------------
+
+# SpaceAfterCStyleCast: Add space after C-style casts
+# Options: true, false
+# Current: false - No space after C-style casts
+# Example with false (current):
+#   int x = (int)value;
+# Example with true:
+#   int x = (int) value;
+SpaceAfterCStyleCast: false
+
+# SpaceAfterLogicalNot: Add space after logical NOT operator (!)
+# Options: true, false
+# Current: false - No space after !
+# Example with false (current):
+#   if (!condition)
+# Example with true:
+#   if (! condition)
+SpaceAfterLogicalNot: false
+
+# SpaceAroundPointerQualifiers: Add spaces around pointer qualifiers
+# Options: Default, Before, After, Both
+# Current: Default - Use default spacing for pointer qualifiers
+# Example with Default:
+#   const int *const ptr;
+# Example with Both:
+#   const int * const ptr;
+SpaceAroundPointerQualifiers: Default
+
+# SpaceBeforeAssignmentOperators: Add space before assignment operators
+# Options: true, false
+# Current: true - Add space before assignment operators
+# Example with true (current):
+#   int x = 5;
+#   y += 10;
+# Example with false:
+#   int x= 5;
+#   y+= 10;
+SpaceBeforeAssignmentOperators: true
+
+# SpaceBeforeCaseColon: Add space before colon in case labels
+# Options: true, false
+# Current: false - No space before colon in case labels
+# Example with false (current):
+#   case 1:
+#   default:
+# Example with true:
+#   case 1 :
+#   default :
+SpaceBeforeCaseColon: false
+
+# SpaceBeforeParens: Add space before parentheses
+# Options: Never, ControlStatements, ControlStatementsExceptForEachMacros, NonEmptyParentheses, Always, Custom
+# Current: ControlStatementsExceptForEachMacros - Add space before control statement parens but not function calls
+# Example with ControlStatementsExceptForEachMacros (current):
+#   if (condition)    // space before parentheses
+#   for (int i = 0; i < 10; ++i)  // space before parentheses
+#   function_call();  // no space before parentheses
+# Example with Always:
+#   if (condition)
+#   function_call (); // space added before parentheses
+SpaceBeforeParens: ControlStatementsExceptForEachMacros
+
+# SpaceInEmptyParentheses: Add space inside empty parentheses
+# Options: true, false
+# Current: false - No space inside empty parentheses
+# Example with false (current):
+#   void function();
+# Example with true:
+#   void function( );
+SpaceInEmptyParentheses: false
+
+# BitFieldColonSpacing: Spacing around bit field colons
+# Options: Both, None, Before, After
+# Current: Both - Add space before and after bit field colons
+# Example with Both (current):
+#   unsigned int field : 3;
+# Example with None:
+#   unsigned int field:3;
+# Example with Before:
+#   unsigned int field :3;
+# Example with After:
+#   unsigned int field: 3;
+BitFieldColonSpacing: Both
+
+# SpaceInEmptyBlock: Add space inside empty blocks
+# Options: true, false
+# Current: false - No space inside empty blocks
+# Example with false (current):
+#   void function() {}
+# Example with true:
+#   void function() { }
+SpaceInEmptyBlock: false
+
+# SpacesBeforeTrailingComments: Number of spaces before trailing comments
+# Range: 0 to any positive integer
+# Current: 2 - Use two spaces before trailing comments
+# Example with 2 (current):
+#   foo = bar;  // comment
+# Example with 1:
+#   foo = bar; // comment
+# Note: This doesn't work for C-style comments.
+SpacesBeforeTrailingComments: 2
+
+# SpaceBeforeSquareBrackets: Add space before square brackets
+# Options: true, false
+# Current: false - No space before square brackets
+# Example with false (current):
+#   array[index]
+# Example with true:
+#   array [index]
+SpaceBeforeSquareBrackets: false
+
+# SpacesInSquareBrackets: Add spaces inside square brackets
+# Options: true, false
+# Current: false - No spaces inside square brackets
+# Example with false (current):
+#   array[index]
+# Example with true:
+#   array[ index ]
+SpacesInSquareBrackets: false
+
+# SpacesInLineCommentPrefix: Spaces in line comment prefix
+# Controls spacing after // in line comments
+SpacesInLineCommentPrefix:
+    Minimum: 1        # Minimum 1 space after //
+    Maximum: -1       # No maximum limit (-1 means unlimited)
+    # Example with Minimum=1:
+    #   // comment    (at least 1 space after //)
+    #   //comment     (would be formatted to: // comment)
+
+# ------------------------------------------------------------------------------
+# INCLUDE AND SORTING SETTINGS
+# ------------------------------------------------------------------------------
+
+# SortIncludes: Sort #include statements
+# Options: Never, CaseSensitive, CaseInsensitive
+# Current: Never - Don't sort includes, preserve original order
+# Example with Never (current):
+#   #include "local_header.h"
+#   #include <system_header.h>
+#   #include "another_local.h"    // order preserved
+# Example with CaseSensitive:
+#   #include <system_header.h>    // system headers first
+#   #include "another_local.h"    // then local headers, sorted
+#   #include "local_header.h"
+SortIncludes: Never
+
+# IncludeBlocks: Group include blocks
+# Options: Preserve, Merge, Regroup
+# Current: Preserve - Keep include blocks as they are
+# Example with Preserve (current):
+#   #include <stdio.h>
+#   #include <stdlib.h>
+#                              // blank line preserved
+#   #include "local.h"
+# Example with Merge:
+#   #include <stdio.h>
+#   #include <stdlib.h>
+#   #include "local.h"         // blank lines removed
+IncludeBlocks: Preserve
+
+# IncludeIsMainRegex: Regex to identify the main include file
+# Current: "" - Empty regex, no special main include treatment
+# Used to identify which header file is the "main" one for a source file
+# Example: If set to "(Test)?$", then "foo.h" would be main for "foo.cpp"
+IncludeIsMainRegex: ""
+
+# IncludeCategories: Categories for sorting includes (when SortIncludes is enabled)
+# Each category has: Regex (pattern), Priority (sort order), CaseSensitive
+# Lower priority numbers are sorted first
+# Current settings (used when sorting is enabled):
+#   - System headers (<...>) get priority -2 (sorted first)
+#   - Local headers ("...") get priority -1 (sorted second)
+IncludeCategories:
+    - {Regex: "<.*>",   Priority: -2, CaseSensitive: true}    # System headers like <stdio.h>
+    - {Regex: "\".*\"", Priority: -1, CaseSensitive: true}    # Local headers like "myheader.h"
+
+# ------------------------------------------------------------------------------
+# MACRO HANDLING SETTINGS
+# ------------------------------------------------------------------------------
+
+# AttributeMacros: List of macros that should be interpreted as attributes
+# Current: ["__capability"] - Treat __capability as an attribute macro
+# These macros are formatted like attributes rather than function calls
+# Example: Instead of treating __capability as a function:
+#   int __capability(data_ptr) *ptr;  // formatted as attribute
+# Rather than:
+#   int __capability (data_ptr) *ptr; // formatted as function call
+AttributeMacros: ["__capability"]
+
+# StatementAttributeLikeMacros: List of macros that behave like statement attributes
+# Current: [] - Empty list, no statement attribute-like macros defined
+# These macros are treated as attributes that can appear before statements
+# Example: If "LIKELY" were in this list:
+#   LIKELY if (condition) { ... }     // LIKELY treated as statement attribute
+StatementAttributeLikeMacros: []
+
+# StatementMacros: List of macros that should be treated as statements
+# Current: [] - Empty list, no statement macros defined
+# These macros are formatted as if they were statements (with proper indentation)
+# Example: If "ASSERT" were in this list:
+#   ASSERT(condition);                // formatted as statement
+#   rather than as a function call with special formatting
+StatementMacros: []
+
+# SkipMacroDefinitionBody: Skip formatting the body of macro definitions
+# Options: true, false
+# Current: true - Don't format inside macro definition bodies
+# Note: This option requires clang-format version 18 or later
+# Example with true (current):
+#   #define MACRO(x) \
+#     do { \
+#       complex_formatting_here; \    // formatting inside macro body is preserved
+#     } while(0)
+# Example with false:
+#   #define MACRO(x) \
+#     do \
+#     { \
+#       complex_formatting_here; \    // formatting inside macro body is applied
+#     } while (0)
+SkipMacroDefinitionBody: true # clang-format >= 18
+
+# ==============================================================================
+# END OF CONFIGURATION
+# ==============================================================================

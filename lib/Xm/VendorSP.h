@@ -19,17 +19,17 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/
+ */
 #ifndef _XmVendorSP_h
 #define _XmVendorSP_h
 #ifndef _XmNO_BC_INCL
-#   define _XmNO_BC_INCL
+#  define _XmNO_BC_INCL
 #endif
-#include <Xm/XmP.h>
-#include <Xm/VendorS.h>
 #include <X11/ShellP.h>
 #include <Xm/DesktopP.h>
 #include <Xm/ExtObjectP.h>
+#include <Xm/VendorS.h>
+#include <Xm/XmP.h>
 #ifdef __cplusplus
 extern "C" {
 #endif

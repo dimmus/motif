@@ -19,53 +19,43 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/
+ */
 #ifdef REV_INFO
-#   ifndef lint
+#  ifndef lint
 static char rcsid[] = "$XConsortium: ResInd.c /main/17 1996/06/07 11:40:05 daniel $"
-#   endif
+#  endif
 #endif
 #ifdef HAVE_CONFIG_H
-#   include <config.h>
+#  include <config.h>
 #endif
-#include <limits.h>
-#include <ctype.h> /* for isspace */
-#include <Xm/ScreenP.h>
-#include <Xm/ManagerP.h>
-#include <Xm/TraitP.h>
-#include <Xm/UnitTypeT.h>
 #include "RepTypeI.h"
 #include "ResIndI.h"
 #include "ScreenI.h"
 #include "XmI.h"
+#include <Xm/ManagerP.h>
+#include <Xm/ScreenP.h>
+#include <Xm/TraitP.h>
+#include <Xm/UnitTypeT.h>
+#include <ctype.h> /* for isspace */
+#include <limits.h>
 #if XM_PRINTING
-#   include "PrintSI.h"
+#  include "PrintSI.h"
 #endif
 /*********** Macros and Internal Types   ************/
-#define MAKEINT(float_value) ((int) (((float_value) > 0.0) ? \
-            ((float_value) + 0.5) : \
-            ((float_value) - 0.5)))
-#define FLOATABS(float_value) ((float_value) > 0.0 ? \
-            (float_value) : \
-            ((float_value) * -1.0))
-#define OVERFLOW(float_value) \
-            (FLOATABS(float_value) > (float) INT_MAX) ? 1 : 0
-   /********    Static Function Declarations    ********/
-   static void
-   FromPixels(
-      Widget        widget,
-      int           offset,
-      XtArgVal     *value,
-      unsigned char orientation);
-static XmImportOperator ToPixels(
-   Widget        widget,
-   int           offset,
-   XtArgVal     *value,
-   unsigned char orientation);
-static XmParseResult ParseUnitString(
-   String spec,
-   float *float_value, /* RETURN */
-   int   *unit_type);    /* RETURN */
+#define MAKEINT(float_value) \
+  ((int)(((float_value) > 0.0) ? ((float_value) + 0.5) : ((float_value) - 0.5)))
+#define FLOATABS(float_value) ((float_value) > 0.0 ? (float_value) : ((float_value) * -1.0))
+#define OVERFLOW(float_value) (FLOATABS(float_value) > (float)INT_MAX) ? 1 : 0
+    /********    Static Function Declarations    ********/
+    static void
+    FromPixels(Widget widget, int offset, XtArgVal *value, unsigned char orientation);
+static XmImportOperator ToPixels(Widget widget,
+                                 int offset,
+                                 XtArgVal *value,
+                                 unsigned char orientation);
+static XmParseResult ParseUnitString(String spec,
+                                     float *float_value, /* RETURN */
+                                     int *unit_type);    /* RETURN */
 
 /********    End Static Function Declarations    ********/
 /**********************************************************************
@@ -80,20 +70,15 @@ static XmParseResult ParseUnitString(
  *			future, if desired.
  *
  **********************************************************************/
-int
-XmConvertStringToUnits(
-   Screen *screen,
-   String  spec,
-   int     orientation,
-   int     to_type,
-   XtEnum *parse_error) /* RETURN */
+int XmConvertStringToUnits(
+    Screen *screen, String spec, int orientation, int to_type, XtEnum *parse_error) /* RETURN */
 {
-   int value;
-   _XmDisplayToAppContext(DisplayOfScreen(screen));
-   _XmAppLock(app);
-   value = _XmConvertStringToUnits(screen, spec, XmPIXELS, orientation, to_type, parse_error);
-   _XmAppUnlock(app);
-   return value;
+  int value;
+  _XmDisplayToAppContext(DisplayOfScreen(screen));
+  _XmAppLock(app);
+  value = _XmConvertStringToUnits(screen, spec, XmPIXELS, orientation, to_type, parse_error);
+  _XmAppUnlock(app);
+  return value;
 }
 
 /**********************************************************************
@@ -106,48 +91,46 @@ XmConvertStringToUnits(
  * overflow.
  *
  **********************************************************************/
-int
-_XmConvertFloatUnitsToIntUnits(int unitType, float unitValue, int *intUnitType, float *intUnitValue, int default_from_type)
+int _XmConvertFloatUnitsToIntUnits(
+    int unitType, float unitValue, int *intUnitType, float *intUnitValue, int default_from_type)
 {
-   float multiplier;
-   switch (unitType)
-   {
-      case XmINCHES:
-         multiplier   = 1000.0;
-         *intUnitType = Xm1000TH_INCHES;
-         break;
-      case XmCENTIMETERS:
-         multiplier   = 1000.0;
-         *intUnitType = Xm100TH_MILLIMETERS;
-         break;
-      case XmMILLIMETERS:
-         multiplier   = 100.0;
-         *intUnitType = Xm100TH_MILLIMETERS;
-         break;
-      case XmPOINTS:
-         multiplier   = 100.0;
-         *intUnitType = Xm100TH_POINTS;
-         break;
-      case XmFONT_UNITS:
-         multiplier   = 100.0;
-         *intUnitType = Xm100TH_FONT_UNITS;
-         break;
-      case XmPIXELS:
-         multiplier   = 1.0;
-         *intUnitType = XmPIXELS;
-         break;
-      default:
-         multiplier   = 1.0;
-         *intUnitType = default_from_type;
-         break;
-   };
-   /* Normalize to units _XmConvertUnits will understand. */
-   *intUnitValue = multiplier * unitValue;
-   if (OVERFLOW(*intUnitValue))
-   {
-      return (False);
-   }
-   return (True);
+  float multiplier;
+  switch (unitType) {
+    case XmINCHES:
+      multiplier = 1000.0;
+      *intUnitType = Xm1000TH_INCHES;
+      break;
+    case XmCENTIMETERS:
+      multiplier = 1000.0;
+      *intUnitType = Xm100TH_MILLIMETERS;
+      break;
+    case XmMILLIMETERS:
+      multiplier = 100.0;
+      *intUnitType = Xm100TH_MILLIMETERS;
+      break;
+    case XmPOINTS:
+      multiplier = 100.0;
+      *intUnitType = Xm100TH_POINTS;
+      break;
+    case XmFONT_UNITS:
+      multiplier = 100.0;
+      *intUnitType = Xm100TH_FONT_UNITS;
+      break;
+    case XmPIXELS:
+      multiplier = 1.0;
+      *intUnitType = XmPIXELS;
+      break;
+    default:
+      multiplier = 1.0;
+      *intUnitType = default_from_type;
+      break;
+  };
+  /* Normalize to units _XmConvertUnits will understand. */
+  *intUnitValue = multiplier * unitValue;
+  if (OVERFLOW(*intUnitValue)) {
+    return (False);
+  }
+  return (True);
 }
 
 /**********************************************************************
@@ -156,41 +139,38 @@ _XmConvertFloatUnitsToIntUnits(int unitType, float unitValue, int *intUnitType, 
  * Does the real work of converting string unit specifications
  *
  **********************************************************************/
-int
-_XmConvertStringToUnits(
-   Screen *screen,
-   String  spec,
-   int     default_from_type,
-   int     orientation,
-   int     to_type,
-   XtEnum *parse_error) /* RETURN */
+int _XmConvertStringToUnits(Screen *screen,
+                            String spec,
+                            int default_from_type,
+                            int orientation,
+                            int to_type,
+                            XtEnum *parse_error) /* RETURN */
 {
-   float floatValue, convertValue;
-   int   unitType, fromType; /* the type that we will pass to XmConvertUnits */
-   if (parse_error)
-      *parse_error = False;
-   switch (ParseUnitString(spec, &floatValue, &unitType))
-   {
-      default:
-      case XmPARSE_ERROR:
-         if (parse_error)
-            *parse_error = True;
-         return 0;
-      case XmPARSE_NO_UNITS:
-         fromType     = default_from_type;
-         convertValue = floatValue;
-         if (OVERFLOW(convertValue))
-         {
-            return 0;
-         }
-         break;
-      case XmPARSE_UNITS_OK:
-         if (unitType == to_type) /* No conversion required */
-            return (MAKEINT(floatValue));
-         if (_XmConvertFloatUnitsToIntUnits(unitType, floatValue, &fromType, &convertValue, default_from_type) == False)
-            return 0;
-   }
-   return _XmConvertUnits(screen, orientation, fromType, MAKEINT(convertValue), to_type);
+  float floatValue, convertValue;
+  int unitType, fromType; /* the type that we will pass to XmConvertUnits */
+  if (parse_error)
+    *parse_error = False;
+  switch (ParseUnitString(spec, &floatValue, &unitType)) {
+    default:
+    case XmPARSE_ERROR:
+      if (parse_error)
+        *parse_error = True;
+      return 0;
+    case XmPARSE_NO_UNITS:
+      fromType = default_from_type;
+      convertValue = floatValue;
+      if (OVERFLOW(convertValue)) {
+        return 0;
+      }
+      break;
+    case XmPARSE_UNITS_OK:
+      if (unitType == to_type) /* No conversion required */
+        return (MAKEINT(floatValue));
+      if (_XmConvertFloatUnitsToIntUnits(
+              unitType, floatValue, &fromType, &convertValue, default_from_type) == False)
+        return 0;
+  }
+  return _XmConvertUnits(screen, orientation, fromType, MAKEINT(convertValue), to_type);
 }
 
 /**********************************************************************
@@ -198,10 +178,9 @@ _XmConvertStringToUnits(
  * XmeParseUnits
  *
  **********************************************************************/
-XmParseResult
-XmeParseUnits(String spec, int *unitType)
+XmParseResult XmeParseUnits(String spec, int *unitType)
 {
-   /*
+  /*
    * Figure out which unit type was specified using same
    * method used in ResConvert.c. The performance of this
    * could be improved, but the readability of the code
@@ -209,24 +188,30 @@ XmeParseUnits(String spec, int *unitType)
    * the worst case, the tests below take up about 30%
    * of the total conversion time.
    */
-   /* an empty string here means unit_type wasn't specified */
-   if (*spec == '\0')
-      return XmPARSE_NO_UNITS;
-   else if (XmeNamesAreEqual(spec, "pix") || XmeNamesAreEqual(spec, "pixel") || XmeNamesAreEqual(spec, "pixels"))
-      *unitType = XmPIXELS;
-   else if (XmeNamesAreEqual(spec, "in") || XmeNamesAreEqual(spec, "inch") || XmeNamesAreEqual(spec, "inches"))
-      *unitType = XmINCHES;
-   else if (XmeNamesAreEqual(spec, "cm") || XmeNamesAreEqual(spec, "centimeter") || XmeNamesAreEqual(spec, "centimeters"))
-      *unitType = XmCENTIMETERS;
-   else if (XmeNamesAreEqual(spec, "mm") || XmeNamesAreEqual(spec, "millimeter") || XmeNamesAreEqual(spec, "millimeters"))
-      *unitType = XmMILLIMETERS;
-   else if (XmeNamesAreEqual(spec, "pt") || XmeNamesAreEqual(spec, "point") || XmeNamesAreEqual(spec, "points"))
-      *unitType = XmPOINTS;
-   else if (XmeNamesAreEqual(spec, "fu") || XmeNamesAreEqual(spec, "font_unit") || XmeNamesAreEqual(spec, "font_units"))
-      *unitType = XmFONT_UNITS;
-   else
-      return XmPARSE_ERROR;
-   return XmPARSE_UNITS_OK;
+  /* an empty string here means unit_type wasn't specified */
+  if (*spec == '\0')
+    return XmPARSE_NO_UNITS;
+  else if (XmeNamesAreEqual(spec, "pix") || XmeNamesAreEqual(spec, "pixel") ||
+           XmeNamesAreEqual(spec, "pixels"))
+    *unitType = XmPIXELS;
+  else if (XmeNamesAreEqual(spec, "in") || XmeNamesAreEqual(spec, "inch") ||
+           XmeNamesAreEqual(spec, "inches"))
+    *unitType = XmINCHES;
+  else if (XmeNamesAreEqual(spec, "cm") || XmeNamesAreEqual(spec, "centimeter") ||
+           XmeNamesAreEqual(spec, "centimeters"))
+    *unitType = XmCENTIMETERS;
+  else if (XmeNamesAreEqual(spec, "mm") || XmeNamesAreEqual(spec, "millimeter") ||
+           XmeNamesAreEqual(spec, "millimeters"))
+    *unitType = XmMILLIMETERS;
+  else if (XmeNamesAreEqual(spec, "pt") || XmeNamesAreEqual(spec, "point") ||
+           XmeNamesAreEqual(spec, "points"))
+    *unitType = XmPOINTS;
+  else if (XmeNamesAreEqual(spec, "fu") || XmeNamesAreEqual(spec, "font_unit") ||
+           XmeNamesAreEqual(spec, "font_units"))
+    *unitType = XmFONT_UNITS;
+  else
+    return XmPARSE_ERROR;
+  return XmPARSE_UNITS_OK;
 }
 
 /**********************************************************************
@@ -235,48 +220,46 @@ XmeParseUnits(String spec, int *unitType)
  * Internal routine for parsing <float><units> specifications
  *
  **********************************************************************/
-static XmParseResult
-ParseUnitString(
-   String spec,
-   float *float_value, /* RETURN */
-   int   *unit_type)     /* RETURN */
+static XmParseResult ParseUnitString(String spec,
+                                     float *float_value, /* RETURN */
+                                     int *unit_type)     /* RETURN */
 {
-   char  *string = spec;
-   double power;
-   int    sign;
-   char   c;
-   /* Skip leading whitespace */
-   while (((c = *string) >= 0 && (c <= 127)) && (isspace(c))) string++;
-   /* Check for sign */
-   sign = (*string == '-') ? -1 : 1;
-   if ((*string == '+') || (*string == '-'))
-      string++;
-   /*
+  char *string = spec;
+  double power;
+  int sign;
+  char c;
+  /* Skip leading whitespace */
+  while (((c = *string) >= 0 && (c <= 127)) && (isspace(c)))
+    string++;
+  /* Check for sign */
+  sign = (*string == '-') ? -1 : 1;
+  if ((*string == '+') || (*string == '-'))
+    string++;
+  /*
    * Do floating point arithmetic here whether we have a decimal
    * point or not to avoid parsing an extra time.
    */
-   /* Parse digits left of decimal point */
-   *float_value = 0;
-   while ((*string >= '0') && (*string <= '9'))
-   {
-      *float_value = 10.0 * *float_value + (*string - '0');
-      string++;
-   }
-   /* Handle decimal point */
-   if (*string == '.')
-      string++;
-   /* Parse digits right of decimal point */
-   power = 1.0;
-   while ((*string >= '0') && (*string <= '9'))
-   {
-      *float_value = 10.0 * *float_value + (*string - '0');
-      power       *= 10;
-      string++;
-   }
-   *float_value = sign * *float_value / power;
-   /* Skip whitespace between float and unit */
-   while (((c = *string) >= 0 && (c <= 127)) && (isspace(c))) string++;
-   return (XmeParseUnits(string, unit_type));
+  /* Parse digits left of decimal point */
+  *float_value = 0;
+  while ((*string >= '0') && (*string <= '9')) {
+    *float_value = 10.0 * *float_value + (*string - '0');
+    string++;
+  }
+  /* Handle decimal point */
+  if (*string == '.')
+    string++;
+  /* Parse digits right of decimal point */
+  power = 1.0;
+  while ((*string >= '0') && (*string <= '9')) {
+    *float_value = 10.0 * *float_value + (*string - '0');
+    power *= 10;
+    string++;
+  }
+  *float_value = sign * *float_value / power;
+  /* Skip whitespace between float and unit */
+  while (((c = *string) >= 0 && (c <= 127)) && (isspace(c)))
+    string++;
+  return (XmeParseUnits(string, unit_type));
 }
 
 /**********************************************************************
@@ -285,109 +268,100 @@ ParseUnitString(
  * Does the real work of conversion.
  *
  **********************************************************************/
-int
-_XmConvertUnits(
-   Screen      *screen,
-   int          dimension,
-   register int from_type,
-   register int from_val,
-   register int to_type)
+int _XmConvertUnits(Screen *screen,
+                    int dimension,
+                    register int from_type,
+                    register int from_val,
+                    register int to_type)
 {
-   /*
+  /*
    * from_val_in_mm is actually from_val_in_1000thmillimeters for accuracy
    *     likewise for mm_per_pixel
    */
-   register int from_val_in_mm = 0;
-   register int mm_per_pixel   = 0; /* time 100000 */
-   int          font_unit;
-   /*  Do error checking  */
-   if (!XmRepTypeValidValue(XmRID_ORIENTATION,
-                            (unsigned char)dimension,
-                            (Widget)NULL))
-      return (0);
-   if (!XmRepTypeValidValue(XmRID_UNIT_TYPE, from_type, (Widget)NULL))
-      return (0);
-   if (!XmRepTypeValidValue(XmRID_UNIT_TYPE, to_type, (Widget)NULL))
-      return (0);
-   if (screen == NULL)
-      return (0);
-   /*  Check for type to same type conversions  */
-   if (from_type == to_type)
-      return (from_val);
-      /*  Get the screen dimensional data  */
+  register int from_val_in_mm = 0;
+  register int mm_per_pixel = 0; /* time 100000 */
+  int font_unit;
+  /*  Do error checking  */
+  if (!XmRepTypeValidValue(XmRID_ORIENTATION, (unsigned char)dimension, (Widget)NULL))
+    return (0);
+  if (!XmRepTypeValidValue(XmRID_UNIT_TYPE, from_type, (Widget)NULL))
+    return (0);
+  if (!XmRepTypeValidValue(XmRID_UNIT_TYPE, to_type, (Widget)NULL))
+    return (0);
+  if (screen == NULL)
+    return (0);
+  /*  Check for type to same type conversions  */
+  if (from_type == to_type)
+    return (from_val);
+  /*  Get the screen dimensional data  */
 #if XM_PRINTING
-   /* specialize for printing */
-   _XmProcessLock();
-   /* if there is at least one print shell around, look if this
+  /* specialize for printing */
+  _XmProcessLock();
+  /* if there is at least one print shell around, look if this
      screen is from it and get the proper resolution */
-   if (_XmPrintShellCounter)
-   {
-      XmPrintShellWidget pshell = NULL;
-      XFindContext(DisplayOfScreen(screen), (XID)screen, _XmPrintScreenToShellContext, (XPointer *)&pshell);
-      if (pshell)
-         mm_per_pixel = 25400 / pshell->print.print_resolution;
-   }
-   _XmProcessUnlock();
+  if (_XmPrintShellCounter) {
+    XmPrintShellWidget pshell = NULL;
+    XFindContext(
+        DisplayOfScreen(screen), (XID)screen, _XmPrintScreenToShellContext, (XPointer *)&pshell);
+    if (pshell)
+      mm_per_pixel = 25400 / pshell->print.print_resolution;
+  }
+  _XmProcessUnlock();
 #endif /* XM_PRINTING */
-   if (!mm_per_pixel)
-   {
-      if (dimension == XmHORIZONTAL)
-         mm_per_pixel = (WidthMMOfScreen(screen) * 1000) / WidthOfScreen(screen);
-      else
-         mm_per_pixel = (HeightMMOfScreen(screen) * 1000) / HeightOfScreen(screen);
-   }
-   if (from_type == XmPIXELS)
-      from_val_in_mm = from_val * mm_per_pixel;
-   else if (from_type == Xm100TH_POINTS)
-      from_val_in_mm = (from_val * 353) / 100;
-   else if (from_type == XmPOINTS)
-      from_val_in_mm = (from_val * 353);
-   else if (from_type == Xm1000TH_INCHES)
-      from_val_in_mm = (from_val * 254) / 10;
-   else if (from_type == XmINCHES)
-      from_val_in_mm = (from_val * 254) * 100;
-   else if (from_type == Xm100TH_MILLIMETERS)
-      from_val_in_mm = from_val * 10;
-   else if (from_type == XmMILLIMETERS)
-      from_val_in_mm = from_val * 1000;
-   else if (from_type == XmCENTIMETERS)
-      from_val_in_mm = from_val * 10000;
-   else if (from_type == Xm100TH_FONT_UNITS)
-   {
-      font_unit      = _XmGetFontUnit(screen, dimension);
-      from_val_in_mm = from_val * font_unit * mm_per_pixel / 100;
-   }
-   else if (from_type == XmFONT_UNITS)
-   {
-      font_unit      = _XmGetFontUnit(screen, dimension);
-      from_val_in_mm = from_val * font_unit * mm_per_pixel;
-   }
-   if (to_type == XmPIXELS)
-      return (from_val_in_mm / mm_per_pixel);
-   else if (to_type == Xm100TH_POINTS)
-      return ((from_val_in_mm * 100) / 353);
-   else if (to_type == XmPOINTS)
-      return ((from_val_in_mm) / 353);
-   else if (to_type == Xm1000TH_INCHES)
-      return ((from_val_in_mm * 10) / 254);
-   else if (to_type == XmINCHES)
-      return ((from_val_in_mm / 100) / 254);
-   else if (to_type == Xm100TH_MILLIMETERS)
-      return (from_val_in_mm / 10);
-   else if (to_type == XmMILLIMETERS)
-      return (from_val_in_mm / 1000);
-   else if (to_type == XmCENTIMETERS)
-      return (from_val_in_mm / 10000);
-   else if (to_type == Xm100TH_FONT_UNITS)
-   {
-      font_unit = _XmGetFontUnit(screen, dimension);
-      return ((from_val_in_mm * 100) / (mm_per_pixel * font_unit));
-   }
-   else /* to_type == XmFONT_UNITS */
-   {
-      font_unit = _XmGetFontUnit(screen, dimension);
-      return ((from_val_in_mm) / (mm_per_pixel * font_unit));
-   }
+  if (!mm_per_pixel) {
+    if (dimension == XmHORIZONTAL)
+      mm_per_pixel = (WidthMMOfScreen(screen) * 1000) / WidthOfScreen(screen);
+    else
+      mm_per_pixel = (HeightMMOfScreen(screen) * 1000) / HeightOfScreen(screen);
+  }
+  if (from_type == XmPIXELS)
+    from_val_in_mm = from_val * mm_per_pixel;
+  else if (from_type == Xm100TH_POINTS)
+    from_val_in_mm = (from_val * 353) / 100;
+  else if (from_type == XmPOINTS)
+    from_val_in_mm = (from_val * 353);
+  else if (from_type == Xm1000TH_INCHES)
+    from_val_in_mm = (from_val * 254) / 10;
+  else if (from_type == XmINCHES)
+    from_val_in_mm = (from_val * 254) * 100;
+  else if (from_type == Xm100TH_MILLIMETERS)
+    from_val_in_mm = from_val * 10;
+  else if (from_type == XmMILLIMETERS)
+    from_val_in_mm = from_val * 1000;
+  else if (from_type == XmCENTIMETERS)
+    from_val_in_mm = from_val * 10000;
+  else if (from_type == Xm100TH_FONT_UNITS) {
+    font_unit = _XmGetFontUnit(screen, dimension);
+    from_val_in_mm = from_val * font_unit * mm_per_pixel / 100;
+  }
+  else if (from_type == XmFONT_UNITS) {
+    font_unit = _XmGetFontUnit(screen, dimension);
+    from_val_in_mm = from_val * font_unit * mm_per_pixel;
+  }
+  if (to_type == XmPIXELS)
+    return (from_val_in_mm / mm_per_pixel);
+  else if (to_type == Xm100TH_POINTS)
+    return ((from_val_in_mm * 100) / 353);
+  else if (to_type == XmPOINTS)
+    return ((from_val_in_mm) / 353);
+  else if (to_type == Xm1000TH_INCHES)
+    return ((from_val_in_mm * 10) / 254);
+  else if (to_type == XmINCHES)
+    return ((from_val_in_mm / 100) / 254);
+  else if (to_type == Xm100TH_MILLIMETERS)
+    return (from_val_in_mm / 10);
+  else if (to_type == XmMILLIMETERS)
+    return (from_val_in_mm / 1000);
+  else if (to_type == XmCENTIMETERS)
+    return (from_val_in_mm / 10000);
+  else if (to_type == Xm100TH_FONT_UNITS) {
+    font_unit = _XmGetFontUnit(screen, dimension);
+    return ((from_val_in_mm * 100) / (mm_per_pixel * font_unit));
+  }
+  else /* to_type == XmFONT_UNITS */ {
+    font_unit = _XmGetFontUnit(screen, dimension);
+    return ((from_val_in_mm) / (mm_per_pixel * font_unit));
+  }
 }
 
 /**********************************************************************
@@ -399,22 +373,20 @@ _XmConvertUnits(
  *  horizontal or vertical resolution data.
  *
  **********************************************************************/
-int
-XmConvertUnits(
-   Widget       widget,
-   int          dimension,
-   register int from_type,
-   register int from_val,
-   register int to_type)
+int XmConvertUnits(Widget widget,
+                   int dimension,
+                   register int from_type,
+                   register int from_val,
+                   register int to_type)
 {
-   int     value;
-   Screen *screen;
-   _XmWidgetToAppContext(widget);
-   _XmAppLock(app);
-   screen = XtScreen(widget);
-   value  = _XmConvertUnits(screen, dimension, from_type, from_val, to_type);
-   _XmAppUnlock(app);
-   return value;
+  int value;
+  Screen *screen;
+  _XmWidgetToAppContext(widget);
+  _XmAppLock(app);
+  screen = XtScreen(widget);
+  value = _XmConvertUnits(screen, dimension, from_type, from_val, to_type);
+  _XmAppUnlock(app);
+  return value;
 }
 
 /*********************************************************************
@@ -424,18 +396,14 @@ XmConvertUnits(
  *      the vertical resolution of the screen.
  *
  *********************************************************************/
-int
-XmCvtToHorizontalPixels(
-   Screen      *screen,
-   register int from_val,
-   register int from_type)
+int XmCvtToHorizontalPixels(Screen *screen, register int from_val, register int from_type)
 {
-   int value;
-   _XmDisplayToAppContext(DisplayOfScreen(screen));
-   _XmAppLock(app);
-   value = _XmConvertUnits(screen, XmHORIZONTAL, from_type, from_val, XmPIXELS);
-   _XmAppUnlock(app);
-   return value;
+  int value;
+  _XmDisplayToAppContext(DisplayOfScreen(screen));
+  _XmAppLock(app);
+  value = _XmConvertUnits(screen, XmHORIZONTAL, from_type, from_val, XmPIXELS);
+  _XmAppUnlock(app);
+  return value;
 }
 
 /**********************************************************************
@@ -446,26 +414,21 @@ XmCvtToHorizontalPixels(
  *
  **********************************************************************/
 /*ARGSUSED*/
-static XmImportOperator
-ToPixels(
-   Widget        widget,
-   int           offset, /* unused */
-   XtArgVal     *value,
-   unsigned char orientation)
+static XmImportOperator ToPixels(Widget widget,
+                                 int offset, /* unused */
+                                 XtArgVal *value,
+                                 unsigned char orientation)
 {
-   Screen                *screen = XtScreen(widget);
-   register unsigned char unit_type;
-   /*  Get the unit type of the widget  */
-   unit_type = _XmGetUnitType(widget);
-   /*  Check for type to same type conversions  */
-   if (unit_type == XmPIXELS) return XmSYNTHETIC_LOAD;
-   /* otherwise, let _XmConvertUnits do the work */
-   *value = (XtArgVal)_XmConvertUnits(screen,
-                                      (int)orientation,
-                                      unit_type,
-                                      (int)(*value),
-                                      XmPIXELS);
-   return XmSYNTHETIC_LOAD;
+  Screen *screen = XtScreen(widget);
+  register unsigned char unit_type;
+  /*  Get the unit type of the widget  */
+  unit_type = _XmGetUnitType(widget);
+  /*  Check for type to same type conversions  */
+  if (unit_type == XmPIXELS)
+    return XmSYNTHETIC_LOAD;
+  /* otherwise, let _XmConvertUnits do the work */
+  *value = (XtArgVal)_XmConvertUnits(screen, (int)orientation, unit_type, (int)(*value), XmPIXELS);
+  return XmSYNTHETIC_LOAD;
 }
 
 /**********************************************************************
@@ -476,18 +439,14 @@ ToPixels(
  *  accessed from a widget.
  *
  **********************************************************************/
-XmImportOperator
-XmeToHorizontalPixels(
-   Widget    widget,
-   int       offset,
-   XtArgVal *value)
+XmImportOperator XmeToHorizontalPixels(Widget widget, int offset, XtArgVal *value)
 {
-   XmImportOperator ret_value;
-   _XmWidgetToAppContext(widget);
-   _XmAppLock(app);
-   ret_value = ToPixels(widget, offset, value, XmHORIZONTAL);
-   _XmAppUnlock(app);
-   return ret_value;
+  XmImportOperator ret_value;
+  _XmWidgetToAppContext(widget);
+  _XmAppLock(app);
+  ret_value = ToPixels(widget, offset, value, XmHORIZONTAL);
+  _XmAppUnlock(app);
+  return ret_value;
 }
 
 /*********************************************************************
@@ -497,18 +456,14 @@ XmeToHorizontalPixels(
  *      the vertical resolution of the screen.
  *
  *********************************************************************/
-int
-XmCvtToVerticalPixels(
-   Screen      *screen,
-   register int from_val,
-   register int from_type)
+int XmCvtToVerticalPixels(Screen *screen, register int from_val, register int from_type)
 {
-   int value;
-   _XmDisplayToAppContext(DisplayOfScreen(screen));
-   _XmAppLock(app);
-   value = _XmConvertUnits(screen, XmVERTICAL, from_type, from_val, XmPIXELS);
-   _XmAppUnlock(app);
-   return value;
+  int value;
+  _XmDisplayToAppContext(DisplayOfScreen(screen));
+  _XmAppLock(app);
+  value = _XmConvertUnits(screen, XmVERTICAL, from_type, from_val, XmPIXELS);
+  _XmAppUnlock(app);
+  return value;
 }
 
 /********************************************************************
@@ -519,40 +474,32 @@ XmCvtToVerticalPixels(
  *  accessed from a widget.
  *
  **********************************************************************/
-XmImportOperator
-XmeToVerticalPixels(
-   Widget    widget,
-   int       offset,
-   XtArgVal *value)
+XmImportOperator XmeToVerticalPixels(Widget widget, int offset, XtArgVal *value)
 {
-   XmImportOperator ret_value;
-   _XmWidgetToAppContext(widget);
-   _XmAppLock(app);
-   ret_value = ToPixels(widget, offset, value, XmVERTICAL);
-   _XmAppUnlock(app);
-   return ret_value;
+  XmImportOperator ret_value;
+  _XmWidgetToAppContext(widget);
+  _XmAppLock(app);
+  ret_value = ToPixels(widget, offset, value, XmVERTICAL);
+  _XmAppUnlock(app);
+  return ret_value;
 }
 
 /*********************************************************************
-*
-*
-*  XmCvtFromHorizontalPixels
-*      Convert from a pixel unit type to specified type using
-*      the horizontal resolution of the screen.
-*
+ *
+ *
+ *  XmCvtFromHorizontalPixels
+ *      Convert from a pixel unit type to specified type using
+ *      the horizontal resolution of the screen.
+ *
  **********************************************************************/
-int
-XmCvtFromHorizontalPixels(
-   Screen      *screen,
-   register int from_val,
-   register int to_type)
+int XmCvtFromHorizontalPixels(Screen *screen, register int from_val, register int to_type)
 {
-   int value;
-   _XmDisplayToAppContext(DisplayOfScreen(screen));
-   _XmAppLock(app);
-   value = _XmConvertUnits(screen, XmHORIZONTAL, XmPIXELS, from_val, to_type);
-   _XmAppUnlock(app);
-   return value;
+  int value;
+  _XmDisplayToAppContext(DisplayOfScreen(screen));
+  _XmAppLock(app);
+  value = _XmConvertUnits(screen, XmHORIZONTAL, XmPIXELS, from_val, to_type);
+  _XmAppUnlock(app);
+  return value;
 }
 
 /**********************************************************************
@@ -563,25 +510,20 @@ XmCvtFromHorizontalPixels(
  *
  **********************************************************************/
 /*ARGSUSED*/
-static void
-FromPixels(
-   Widget        widget,
-   int           offset, /* unused */
-   XtArgVal     *value,
-   unsigned char orientation)
+static void FromPixels(Widget widget,
+                       int offset, /* unused */
+                       XtArgVal *value,
+                       unsigned char orientation)
 {
-   Screen       *screen = XtScreen(widget);
-   unsigned char unit_type;
-   /*  Get the unit type of the widget  */
-   unit_type = _XmGetUnitType(widget);
-   /*  Check for type to same type conversions  */
-   if (unit_type == XmPIXELS) return;
-   /* otherwise, let _XmConvertUnits do the work */
-   *value = (XtArgVal)_XmConvertUnits(screen,
-                                      (int)orientation,
-                                      XmPIXELS,
-                                      (int)(*value),
-                                      unit_type);
+  Screen *screen = XtScreen(widget);
+  unsigned char unit_type;
+  /*  Get the unit type of the widget  */
+  unit_type = _XmGetUnitType(widget);
+  /*  Check for type to same type conversions  */
+  if (unit_type == XmPIXELS)
+    return;
+  /* otherwise, let _XmConvertUnits do the work */
+  *value = (XtArgVal)_XmConvertUnits(screen, (int)orientation, XmPIXELS, (int)(*value), unit_type);
 }
 
 /**********************************************************************
@@ -592,38 +534,30 @@ FromPixels(
  *  accessed from a getvalues hook table.
  *
  **********************************************************************/
-void
-XmeFromHorizontalPixels(
-   Widget    widget,
-   int       offset,
-   XtArgVal *value)
+void XmeFromHorizontalPixels(Widget widget, int offset, XtArgVal *value)
 {
-   _XmWidgetToAppContext(widget);
-   _XmAppLock(app);
-   FromPixels(widget, offset, value, XmHORIZONTAL);
-   _XmAppUnlock(app);
+  _XmWidgetToAppContext(widget);
+  _XmAppLock(app);
+  FromPixels(widget, offset, value, XmHORIZONTAL);
+  _XmAppUnlock(app);
 }
 
 /*********************************************************************
-*
-*
-*  XmCvtFromVerticalPixels
-*      Convert from a pixel unit type to specified type using
-*      the horizontal resolution of the screen.
-*
+ *
+ *
+ *  XmCvtFromVerticalPixels
+ *      Convert from a pixel unit type to specified type using
+ *      the horizontal resolution of the screen.
+ *
  **********************************************************************/
-int
-XmCvtFromVerticalPixels(
-   Screen      *screen,
-   register int from_val,
-   register int to_type)
+int XmCvtFromVerticalPixels(Screen *screen, register int from_val, register int to_type)
 {
-   int value;
-   _XmDisplayToAppContext(DisplayOfScreen(screen));
-   _XmAppLock(app);
-   value = _XmConvertUnits(screen, XmVERTICAL, XmPIXELS, from_val, to_type);
-   _XmAppUnlock(app);
-   return value;
+  int value;
+  _XmDisplayToAppContext(DisplayOfScreen(screen));
+  _XmAppLock(app);
+  value = _XmConvertUnits(screen, XmVERTICAL, XmPIXELS, from_val, to_type);
+  _XmAppUnlock(app);
+  return value;
 }
 
 /**********************************************************************
@@ -634,16 +568,12 @@ XmCvtFromVerticalPixels(
  *  accessed from a getvalues hook table.
  *
  **********************************************************************/
-void
-XmeFromVerticalPixels(
-   Widget    widget,
-   int       offset,
-   XtArgVal *value)
+void XmeFromVerticalPixels(Widget widget, int offset, XtArgVal *value)
 {
-   _XmWidgetToAppContext(widget);
-   _XmAppLock(app);
-   FromPixels(widget, offset, value, XmVERTICAL);
-   _XmAppUnlock(app);
+  _XmWidgetToAppContext(widget);
+  _XmAppLock(app);
+  FromPixels(widget, offset, value, XmVERTICAL);
+  _XmAppUnlock(app);
 }
 
 /**********************************************************************
@@ -655,19 +585,17 @@ XmeFromVerticalPixels(
  *
  **********************************************************************/
 /*ARGSUSED*/
-void
-_XmUnitTypeDefault(
-   Widget    widget,
-   int       offset, /* unused */
-   XrmValue *value)
+void _XmUnitTypeDefault(Widget widget,
+                        int offset, /* unused */
+                        XrmValue *value)
 {
-   static unsigned char unit_type;
-   value->size = sizeof(unit_type);
-   value->addr = (XPointer)&unit_type;
-   if (XmIsManager(widget->core.parent))
-      unit_type = ((XmManagerWidget)(widget->core.parent))->manager.unit_type;
-   else
-      unit_type = XmPIXELS;
+  static unsigned char unit_type;
+  value->size = sizeof(unit_type);
+  value->addr = (XPointer)&unit_type;
+  if (XmIsManager(widget->core.parent))
+    unit_type = ((XmManagerWidget)(widget->core.parent))->manager.unit_type;
+  else
+    unit_type = XmPIXELS;
 }
 
 /**********************************************************************
@@ -677,28 +605,21 @@ _XmUnitTypeDefault(
  * and look in the appropriate field.
  *
  **********************************************************************/
-unsigned char
-_XmGetUnitType(
-   Widget widget)
+unsigned char _XmGetUnitType(Widget widget)
 {
-   XmSpecUnitTypeTrait trait;
-   if ((trait = (XmSpecUnitTypeTrait)
-           XmeTraitGet((XtPointer)XtClass(widget),
-                       XmQTspecifyUnitType))
-       != NULL)
-   {
-      return trait->getUnitType(widget);
-   }
-   else if (XmIsExtObject(widget))
-   {
-      /* CR 8952: Look on the real widget class too. */
-      XmExtObject extObj = (XmExtObject)widget;
-      Widget      parent = extObj->ext.logicalParent;
-      if ((trait = (XmSpecUnitTypeTrait)
-              XmeTraitGet((XtPointer)XtClass(parent),
-                          XmQTspecifyUnitType))
-          != NULL)
-         return trait->getUnitType(parent);
-   }
-   return XmPIXELS;
+  XmSpecUnitTypeTrait trait;
+  if ((trait = (XmSpecUnitTypeTrait)XmeTraitGet((XtPointer)XtClass(widget),
+                                                XmQTspecifyUnitType)) != NULL)
+  {
+    return trait->getUnitType(widget);
+  }
+  else if (XmIsExtObject(widget)) {
+    /* CR 8952: Look on the real widget class too. */
+    XmExtObject extObj = (XmExtObject)widget;
+    Widget parent = extObj->ext.logicalParent;
+    if ((trait = (XmSpecUnitTypeTrait)XmeTraitGet((XtPointer)XtClass(parent),
+                                                  XmQTspecifyUnitType)) != NULL)
+      return trait->getUnitType(parent);
+  }
+  return XmPIXELS;
 }

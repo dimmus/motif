@@ -26,22 +26,22 @@
 #include <Xm/Ext.h>
 #include <Xm/Hierarchy.h>
 /************************************************************
-*	INCLUDE FILES
-*************************************************************/
+ *	INCLUDE FILES
+ *************************************************************/
 /************************************************************
-*	TYPEDEFS AND DEFINES
-*************************************************************/
+ *	TYPEDEFS AND DEFINES
+ *************************************************************/
 #if defined(__cplusplus)
 extern "C" {
 #endif
 typedef struct _XmOutlineClassRec *XmOutlineWidgetClass;
-typedef struct _XmOutlineRec      *XmOutlineWidget;
+typedef struct _XmOutlineRec *XmOutlineWidget;
 /************************************************************
-*	MACROS
-*************************************************************/
+ *	MACROS
+ *************************************************************/
 /************************************************************
-*	GLOBAL FUNCTION DECLARATIONS
-*************************************************************/
+ *	GLOBAL FUNCTION DECLARATIONS
+ *************************************************************/
 /*	Function Name: XmCreateOutline
  *	Description: Creation Routine for UIL and ADA.
  *	Arguments: parent - the parent widget.
@@ -49,7 +49,7 @@ typedef struct _XmOutlineRec      *XmOutlineWidget;
  *                 args, num_args - the number and list of args.
  *	Returns: The Widget created.
  */
-Widget             XmCreateOutline(Widget, String, ArgList, Cardinal);
+Widget XmCreateOutline(Widget, String, ArgList, Cardinal);
 extern WidgetClass xmOutlineWidgetClass;
 #if defined(__cplusplus)
 }

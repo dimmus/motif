@@ -19,40 +19,38 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/
+ */
 #ifdef REV_INFO
-#   ifndef lint
+#  ifndef lint
 static char rcsid[] = "$XConsortium: Cache.c /main/12 1995/07/14 10:12:26 drk $"
-#   endif
+#  endif
 #endif
 #ifdef HAVE_CONFIG_H
-#   include <config.h>
+#  include <config.h>
 #endif
 #include "CacheI.h"
 #include <Xm/GadgetP.h>
-   /********    Static Function Declarations    ********/
-   /********    End Static Function Declarations    ********/
-   /************************************************************************
- *
- *  _XmCacheDelete
- *	Delete an existing cache record.  NOTE: <data> is a pointer to the
- *      fourth field in the cache record - It is *not* a pointer to the
- *	cache record itself!
- *
- ************************************************************************/
-   void
-   _XmCacheDelete(
-      XtPointer data)
+    /********    Static Function Declarations    ********/
+    /********    End Static Function Declarations    ********/
+    /************************************************************************
+     *
+     *  _XmCacheDelete
+     *	Delete an existing cache record.  NOTE: <data> is a pointer to the
+     *      fourth field in the cache record - It is *not* a pointer to the
+     *	cache record itself!
+     *
+     ************************************************************************/
+    void
+    _XmCacheDelete(XtPointer data)
 {
-   XmGadgetCachePtr ptr;
-   ptr = (XmGadgetCachePtr)DataToGadgetCache(data);
-   if (--ptr->ref_count <= 0)
-   {
-      (ptr->prev)->next = ptr->next;
-      if (ptr->next) /* not the last record */
-         (ptr->next)->prev = ptr->prev;
-      XtFree((char *)ptr);
-   }
+  XmGadgetCachePtr ptr;
+  ptr = (XmGadgetCachePtr)DataToGadgetCache(data);
+  if (--ptr->ref_count <= 0) {
+    (ptr->prev)->next = ptr->next;
+    if (ptr->next) /* not the last record */
+      (ptr->next)->prev = ptr->prev;
+    XtFree((char *)ptr);
+  }
 }
 
 /************************************************************************
@@ -61,13 +59,9 @@ static char rcsid[] = "$XConsortium: Cache.c /main/12 1995/07/14 10:12:26 drk $"
  *	Copy <size> bytes from <src> to <dest>.
  *
  ************************************************************************/
-void
-_XmCacheCopy(
-   XtPointer src,
-   XtPointer dest,
-   size_t    size)
+void _XmCacheCopy(XtPointer src, XtPointer dest, size_t size)
 {
-   memcpy(dest, src, size);
+  memcpy(dest, src, size);
 }
 
 /************************************************************************
@@ -85,44 +79,36 @@ _XmCacheCopy(
  *	    append it to the class-cache linked list, and return the address.
  *
  ************************************************************************/
-XtPointer
-_XmCachePart(
-   XmCacheClassPartPtr cp,
-   XtPointer           cpart,
-   size_t              size)
+XtPointer _XmCachePart(XmCacheClassPartPtr cp, XtPointer cpart, size_t size)
 {
-   XmGadgetCachePtr ptr, last;
-   if (ClassCacheHead(cp).next == NULL) /* First one */
-   {
-      ClassCacheHead(cp).next = (struct _XmGadgetCache *)XtMalloc(size + XtOffsetOf(XmGadgetCacheRef, data));
-      ptr                     = (XmGadgetCachePtr)ClassCacheHead(cp).next;
-      ClassCacheCopy(cp)(cpart, CacheDataPtr(ptr), size);
-      ptr->ref_count = 1;
-      ptr->next      = NULL;
-      ptr->prev      = (struct _XmGadgetCache *)&ClassCacheHead(cp);
-      return (CacheDataPtr(ptr));
-   }
-   ptr = (XmGadgetCachePtr)ClassCacheHead(cp).next;
-   do
-   {
-      if ((ClassCacheCompare(cp)(cpart, CacheDataPtr(ptr))))
-      {
-         ptr->ref_count++;
-         return ((XtPointer)CacheDataPtr(ptr));
-      }
-      else
-      {
-         last = ptr;
-         ptr  = (XmGadgetCachePtr)ptr->next;
-      }
-   }
-   while (ptr);
-   /* Malloc a new rec off of last, fill it out*/
-   ptr        = (XmGadgetCachePtr)XtMalloc(size + XtOffsetOf(XmGadgetCacheRef, data));
-   last->next = (struct _XmGadgetCache *)ptr;
-   ClassCacheCopy(cp)(cpart, CacheDataPtr(ptr), size);
-   ptr->ref_count = 1;
-   ptr->next      = NULL;
-   ptr->prev      = last;
-   return (CacheDataPtr(ptr));
+  XmGadgetCachePtr ptr, last;
+  if (ClassCacheHead(cp).next == NULL) /* First one */ {
+    ClassCacheHead(cp).next = (struct _XmGadgetCache *)XtMalloc(
+        size + XtOffsetOf(XmGadgetCacheRef, data));
+    ptr = (XmGadgetCachePtr)ClassCacheHead(cp).next;
+    ClassCacheCopy(cp)(cpart, CacheDataPtr(ptr), size);
+    ptr->ref_count = 1;
+    ptr->next = NULL;
+    ptr->prev = (struct _XmGadgetCache *)&ClassCacheHead(cp);
+    return (CacheDataPtr(ptr));
+  }
+  ptr = (XmGadgetCachePtr)ClassCacheHead(cp).next;
+  do {
+    if ((ClassCacheCompare(cp)(cpart, CacheDataPtr(ptr)))) {
+      ptr->ref_count++;
+      return ((XtPointer)CacheDataPtr(ptr));
+    }
+    else {
+      last = ptr;
+      ptr = (XmGadgetCachePtr)ptr->next;
+    }
+  } while (ptr);
+  /* Malloc a new rec off of last, fill it out*/
+  ptr = (XmGadgetCachePtr)XtMalloc(size + XtOffsetOf(XmGadgetCacheRef, data));
+  last->next = (struct _XmGadgetCache *)ptr;
+  ClassCacheCopy(cp)(cpart, CacheDataPtr(ptr), size);
+  ptr->ref_count = 1;
+  ptr->next = NULL;
+  ptr->prev = last;
+  return (CacheDataPtr(ptr));
 }

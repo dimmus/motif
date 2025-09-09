@@ -36,10 +36,9 @@ externalref XrmQuark XmQTspecifyUnitType;
 typedef unsigned char (*XmSpecUnitTypeGetProc)(Widget wid);
 
 /* Version 0: initial release. */
-typedef struct _XmSpecUnitTypeTraitRec
-{
-   int                   version; /* 0 */
-   XmSpecUnitTypeGetProc getUnitType;
+typedef struct _XmSpecUnitTypeTraitRec {
+  int version; /* 0 */
+  XmSpecUnitTypeGetProc getUnitType;
 } XmSpecUnitTypeTraitRec, *XmSpecUnitTypeTrait;
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

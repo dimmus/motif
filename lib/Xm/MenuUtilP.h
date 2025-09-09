@@ -19,16 +19,16 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/
+ */
 #ifndef _XmMenuUtilP_h
-#   define _XmMenuUtilP_h
-#   include <Xm/XmP.h>
-#   include <Xm/RowColumnP.h>
-#   ifdef __cplusplus
+#  define _XmMenuUtilP_h
+#  include <Xm/RowColumnP.h>
+#  include <Xm/XmP.h>
+#  ifdef __cplusplus
 extern "C" {
-#   endif
-#   ifdef __cplusplus
+#  endif
+#  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */
-#   endif
+#  endif
 #endif /* _XmMenuUtilP_h */
 /* DON'T ADD STUFF AFTER THIS #endif */

@@ -32,16 +32,15 @@
 extern "C" {
 #endif
 /********    Private Function Declarations    ********/
-extern void _XmDrawHighlight(
-   Display  *display,
-   Drawable  d,
-   GC        gc,
-   Position  x,
-   Position  y,
-   Dimension width,
-   Dimension height,
-   Dimension highlight_thick,
-   int       line_style);
+extern void _XmDrawHighlight(Display *display,
+                             Drawable d,
+                             GC gc,
+                             Position x,
+                             Position y,
+                             Dimension width,
+                             Dimension height,
+                             Dimension highlight_thick,
+                             int line_style);
 /********    End Private Function Declarations    ********/
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

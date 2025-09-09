@@ -31,54 +31,22 @@
 extern "C" {
 #endif
 /********    Public Function Declarations    ********/
-extern void XmImRegister(
-   Widget       w,
-   unsigned int reserved);
-extern void XmImUnregister(
-   Widget w);
-extern void XmImSetFocusValues(
-   Widget   w,
-   ArgList  args,
-   Cardinal num_args);
-extern void XmImSetValues(
-   Widget   w,
-   ArgList  args,
-   Cardinal num_args);
-extern void XmImUnsetFocus(
-   Widget w);
-extern XIM XmImGetXIM(
-   Widget w);
-extern void XmImCloseXIM(
-   Widget w);
+extern void XmImRegister(Widget w, unsigned int reserved);
+extern void XmImUnregister(Widget w);
+extern void XmImSetFocusValues(Widget w, ArgList args, Cardinal num_args);
+extern void XmImSetValues(Widget w, ArgList args, Cardinal num_args);
+extern void XmImUnsetFocus(Widget w);
+extern XIM XmImGetXIM(Widget w);
+extern void XmImCloseXIM(Widget w);
 extern int XmImMbLookupString(
-   Widget            w,
-   XKeyPressedEvent *event,
-   char             *buf,
-   int               nbytes,
-   KeySym           *keysym,
-   int              *status);
-extern void XmImVaSetFocusValues(
-   Widget w,
-   ...);
-extern void XmImVaSetValues(
-   Widget w,
-   ...);
-extern XIC XmImGetXIC(
-   Widget        w,
-   XmInputPolicy input_policy,
-   ArgList       args,
-   Cardinal      num_args);
-extern XIC XmImSetXIC(
-   Widget w,
-   XIC    input_context);
-extern void XmImFreeXIC(
-   Widget w,
-   XIC    input_context);
-extern void XmImMbResetIC(
-   Widget w,
-   char **mb);
-extern XIMResetState XmImGetXICResetState(
-   Widget w);
+    Widget w, XKeyPressedEvent *event, char *buf, int nbytes, KeySym *keysym, int *status);
+extern void XmImVaSetFocusValues(Widget w, ...);
+extern void XmImVaSetValues(Widget w, ...);
+extern XIC XmImGetXIC(Widget w, XmInputPolicy input_policy, ArgList args, Cardinal num_args);
+extern XIC XmImSetXIC(Widget w, XIC input_context);
+extern void XmImFreeXIC(Widget w, XIC input_context);
+extern void XmImMbResetIC(Widget w, char **mb);
+extern XIMResetState XmImGetXICResetState(Widget w);
 /********    End Public Function Declarations    ********/
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

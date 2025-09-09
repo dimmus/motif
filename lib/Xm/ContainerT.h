@@ -34,31 +34,28 @@ externalref XrmQuark XmQTcontainer;
 
 /* Trait structures and typedefs, place typedefs first */
 /* this one can be expanded in the future */
-typedef struct _XmContainerDataRec
-{
-   Mask      valueMask;
-   Cardinal *detail_order;
-   Cardinal  detail_order_count;
-   XmTabList detail_tablist;
-   Dimension first_column_width;
-   XtEnum    selection_mode; /* XmNORMAL_MODE,	XmADD_MODE */
-   Pixel     select_color;
+typedef struct _XmContainerDataRec {
+  Mask valueMask;
+  Cardinal *detail_order;
+  Cardinal detail_order_count;
+  XmTabList detail_tablist;
+  Dimension first_column_width;
+  XtEnum selection_mode; /* XmNORMAL_MODE,	XmADD_MODE */
+  Pixel select_color;
 } XmContainerDataRec, *XmContainerData;
 
-#define ContAllValid             (0xFFFF)
-#define ContDetailOrder	         (1L<<0)
-#define ContDetailTabList        (1L<<1)
-#define ContFirstColumnWidth     (1L<<2)
-#define ContSelectionMode        (1L<<3)
-#define ContSelectColor          (1L<<4)
-typedef void (*XmContainerGetValuesProc)(Widget          w,
-                                         XmContainerData contData);
+#define ContAllValid (0xFFFF)
+#define ContDetailOrder (1L << 0)
+#define ContDetailTabList (1L << 1)
+#define ContFirstColumnWidth (1L << 2)
+#define ContSelectionMode (1L << 3)
+#define ContSelectColor (1L << 4)
+typedef void (*XmContainerGetValuesProc)(Widget w, XmContainerData contData);
 
 /* Version 0: initial release. */
-typedef struct _XmContainerTraitRec
-{
-   int                      version; /* 0 */
-   XmContainerGetValuesProc getValues;
+typedef struct _XmContainerTraitRec {
+  int version; /* 0 */
+  XmContainerGetValuesProc getValues;
 } XmContainerTraitRec, *XmContainerTrait;
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

@@ -1,0 +1,30 @@
+# Install binding files
+install(FILES
+    xmbind.alias
+    acorn
+    apollo
+    dec
+    dg_AViiON
+    doubleclick
+    hal
+    hitachi
+    hp
+    ibm
+    intergraph
+    intergraph17
+    megatek
+    motorola
+    ncr_at
+    ncr_vt
+    pc
+    sgi
+    sni
+    sni_97801
+    siemens_9733
+    siemens_wx200
+    sony
+    sun
+    sun_at
+    tek
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/X11/bindings
+)

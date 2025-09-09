@@ -39,10 +39,9 @@
  *	Arguments: none
  *	Returns: the stack
  */
-XmStack
-_XmStackInit()
+XmStack _XmStackInit()
 {
-   return ((XmStack)XtCalloc(sizeof(XmStackRec), (Cardinal)1));
+  return ((XmStack)XtCalloc(sizeof(XmStackRec), (Cardinal)1));
 }
 
 /*	Function Name: _XmStackFree
@@ -50,11 +49,10 @@ _XmStackInit()
  *	Arguments: stack - the stack
  *	Returns: none
  */
-void
-_XmStackFree(XmStack stack)
+void _XmStackFree(XmStack stack)
 {
-   XtFree((XtPointer)stack->elems);
-   XtFree((XtPointer)stack);
+  XtFree((XtPointer)stack->elems);
+  XtFree((XtPointer)stack);
 }
 
 /*	Function Name: _XmStackPush
@@ -63,18 +61,16 @@ _XmStackFree(XmStack stack)
  *                 elem - element to push onto it.
  *	Returns: none
  */
-void
-_XmStackPush(XmStack stack, XtPointer elem)
+void _XmStackPush(XmStack stack, XtPointer elem)
 {
-   if ((++stack->top) >= stack->alloc)
-   {
-      stack->alloc += STACK_INC;
-      stack->elems  = (XtPointer *)XtRealloc((XtPointer)stack->elems,
-                                            sizeof(XtPointer) * stack->alloc);
-   }
-   stack->elems[stack->top] = elem;
+  if ((++stack->top) >= stack->alloc) {
+    stack->alloc += STACK_INC;
+    stack->elems = (XtPointer *)XtRealloc((XtPointer)stack->elems,
+                                          sizeof(XtPointer) * stack->alloc);
+  }
+  stack->elems[stack->top] = elem;
 #ifdef STACK_DEBUG
-   printf("Pushing %d as elem %d\n", (int)elem, stack->top);
+  printf("Pushing %d as elem %d\n", (int)elem, stack->top);
 #endif
 }
 
@@ -83,17 +79,14 @@ _XmStackPush(XmStack stack, XtPointer elem)
  *	Arguments: stack - stack to pop off of.
  *	Returns: elem - the element that has been popped.
  */
-XtPointer
-_XmStackPop(XmStack stack)
+XtPointer _XmStackPop(XmStack stack)
 {
-   if (stack->top <= 0)
-      return (NULL); /* no elements on the stack. */
+  if (stack->top <= 0)
+    return (NULL); /* no elements on the stack. */
 #ifdef STACK_DEBUG
-   printf("Popping %d from elem %d\n",
-          (int)stack->elems[stack->top],
-          stack->top);
+  printf("Popping %d from elem %d\n", (int)stack->elems[stack->top], stack->top);
 #endif
-   return (stack->elems[(stack->top)--]);
+  return (stack->elems[(stack->top)--]);
 }
 
 /************************************************************
@@ -102,9 +95,9 @@ _XmStackPop(XmStack stack)
  *
  ************************************************************/
 #ifdef QUEUE_DEBUG
-#   define QUEUE_INC 5
+#  define QUEUE_INC 5
 #else
-#   define QUEUE_INC 25
+#  define QUEUE_INC 25
 #endif
 /************************************************************
  *
@@ -116,10 +109,9 @@ _XmStackPop(XmStack stack)
  *	Arguments: none
  *	Returns: the queue
  */
-XmQueue
-_XmQueueInit()
+XmQueue _XmQueueInit()
 {
-   return ((XmQueue)XtCalloc(sizeof(XmQueueRec), (Cardinal)1));
+  return ((XmQueue)XtCalloc(sizeof(XmQueueRec), (Cardinal)1));
 }
 
 /*	Function Name: _XmQueueFree
@@ -127,26 +119,23 @@ _XmQueueInit()
  *	Arguments: queue - the queue
  *	Returns: none
  */
-void
-_XmQueueFree(XmQueue queue)
+void _XmQueueFree(XmQueue queue)
 {
-   int       count;
-   _XmQElem *elem  = queue->first;
-   XmStack   stack = _XmStackInit();
-   for (count = 0; count < 2; count++)
-   {
-      while (elem != NULL)
-      {
-         if (elem->alloced)
-            _XmStackPush(stack, (XtPointer)elem);
-         elem = elem->next;
-      }
-      elem = queue->free_elems;
-   }
-   while ((elem = (_XmQElem *)_XmStackPop(stack)) != NULL)
-      XtFree((XtPointer)elem);
-   _XmStackFree(stack);
-   XtFree((XtPointer)queue);
+  int count;
+  _XmQElem *elem = queue->first;
+  XmStack stack = _XmStackInit();
+  for (count = 0; count < 2; count++) {
+    while (elem != NULL) {
+      if (elem->alloced)
+        _XmStackPush(stack, (XtPointer)elem);
+      elem = elem->next;
+    }
+    elem = queue->free_elems;
+  }
+  while ((elem = (_XmQElem *)_XmStackPop(stack)) != NULL)
+    XtFree((XtPointer)elem);
+  _XmStackFree(stack);
+  XtFree((XtPointer)queue);
 }
 
 /*	Function Name: QueuePush
@@ -164,18 +153,17 @@ _XmQueueFree(XmQueue queue)
  * BX 3.0 or BX 3.1.
  */
 #ifdef notdef
-void
-QueuePush(XmQueue queue, XtPointer data_in)
+void QueuePush(XmQueue queue, XtPointer data_in)
 {
-   _XmQElem *elem = _Xm_GetNewElement(queue);
-   _Xm_AddQueue(queue, queue->last, elem);
-   if (queue->first == NULL)
-      queue->first = elem;
-   queue->last = elem;
-   elem->data  = data_in;
-#   ifdef QUEUE_DEBUG
-   printf("Pushing %d\n", (int)data_in);
-#   endif
+  _XmQElem *elem = _Xm_GetNewElement(queue);
+  _Xm_AddQueue(queue, queue->last, elem);
+  if (queue->first == NULL)
+    queue->first = elem;
+  queue->last = elem;
+  elem->data = data_in;
+#  ifdef QUEUE_DEBUG
+  printf("Pushing %d\n", (int)data_in);
+#  endif
 }
 #endif
 /*	Function Name: _XmQueuePop
@@ -183,19 +171,18 @@ QueuePush(XmQueue queue, XtPointer data_in)
  *	Arguments: queue - queue to pop off of.
  *	Returns: elem - the element that has been popped.
  */
-XtPointer
-_XmQueuePop(XmQueue queue)
+XtPointer _XmQueuePop(XmQueue queue)
 {
-   _XmQElem *first = _Xm_RemQueue(&queue->first);
-   if (queue->first == NULL)
-      queue->last = NULL;
-   if (first == NULL)
-      return (NULL);
-   _Xm_AddQueue(NULL, queue->free_elems, first);
+  _XmQElem *first = _Xm_RemQueue(&queue->first);
+  if (queue->first == NULL)
+    queue->last = NULL;
+  if (first == NULL)
+    return (NULL);
+  _Xm_AddQueue(NULL, queue->free_elems, first);
 #ifdef QUEUE_DEBUG
-   printf("Popping %d\n", (int)first->data);
+  printf("Popping %d\n", (int)first->data);
 #endif
-   return (first->data);
+  return (first->data);
 }
 
 /*	Function Name: _XmQueueCount
@@ -203,14 +190,13 @@ _XmQueuePop(XmQueue queue)
  *	Arguments: queue - queue to check.
  *	Returns: number of items in queue.
  */
-int
-_XmQueueCount(XmQueue queue)
+int _XmQueueCount(XmQueue queue)
 {
-   register int       i;
-   register _XmQElem *elem = queue->first;
-   for (i = 0; elem != NULL; i++)
-      elem = elem->next;
-   return (i);
+  register int i;
+  register _XmQElem *elem = queue->first;
+  for (i = 0; elem != NULL; i++)
+    elem = elem->next;
+  return (i);
 }
 
 /*	Function Name: _XmQueuePrint
@@ -219,19 +205,18 @@ _XmQueueCount(XmQueue queue)
  *	Returns: none.
  */
 #ifdef QUEUE_DEBUG
-void
-_XmQueuePrint(XmQueue queue)
+void _XmQueuePrint(XmQueue queue)
 {
-   _XmQElem *elem;
-   printf("Elements:\n");
-   for (elem = queue->first; elem != NULL; elem = elem->next)
-      printf("Element - %d\n", elem->data);
-   printf("Reverse Elements:\n");
-   for (elem = queue->last; elem != NULL; elem = elem->prev)
-      printf("Element - %d\n", elem->data);
-   printf("Free Elements:\n");
-   for (elem = queue->free_elems; elem != NULL; elem = elem->next)
-      printf("Free Element - %d\n", elem->data);
+  _XmQElem *elem;
+  printf("Elements:\n");
+  for (elem = queue->first; elem != NULL; elem = elem->next)
+    printf("Element - %d\n", elem->data);
+  printf("Reverse Elements:\n");
+  for (elem = queue->last; elem != NULL; elem = elem->prev)
+    printf("Element - %d\n", elem->data);
+  printf("Free Elements:\n");
+  for (elem = queue->free_elems; elem != NULL; elem = elem->next)
+    printf("Free Element - %d\n", elem->data);
 }
 #endif
 /************************************************************
@@ -247,36 +232,32 @@ _XmQueuePrint(XmQueue queue)
  *                 elem - element to add.
  *	Returns: none.
  */
-void
-_Xm_AddQueue(XmQueue queue, _XmQElem *after, _XmQElem *elem)
+void _Xm_AddQueue(XmQueue queue, _XmQElem *after, _XmQElem *elem)
 {
-   if (elem != NULL)
-   {
-      elem->prev = after;
-      if (after == NULL)
-         /*
-	     * If queue is NULL then this is being added to the
-	     * free elements queue, and we make certain assumptions, like
-	     * we are always adding to then end of the list, so that
-	     * we never will try to add before the first element.
-	     */
-         if (queue != NULL)
-         {
-            elem->next = queue->first;
-            if (elem->next != NULL)
-               elem->next->prev = elem;
-         }
-         else
-            elem->next = NULL;
+  if (elem != NULL) {
+    elem->prev = after;
+    if (after == NULL)
+      /*
+       * If queue is NULL then this is being added to the
+       * free elements queue, and we make certain assumptions, like
+       * we are always adding to then end of the list, so that
+       * we never will try to add before the first element.
+       */
+      if (queue != NULL) {
+        elem->next = queue->first;
+        if (elem->next != NULL)
+          elem->next->prev = elem;
+      }
       else
-         elem->next = after->next;
-   }
-   if (after != NULL)
-   {
-      if (after->next != NULL)
-         after->next->prev = elem;
-      after->next = elem;
-   }
+        elem->next = NULL;
+    else
+      elem->next = after->next;
+  }
+  if (after != NULL) {
+    if (after->next != NULL)
+      after->next->prev = elem;
+    after->next = elem;
+  }
 }
 
 /*	Function Name: _Xm_RemQueue
@@ -285,19 +266,17 @@ _Xm_AddQueue(XmQueue queue, _XmQElem *after, _XmQElem *elem)
  *	Arguments: queue - the queue to remove it from.
  *	Returns: the element removed.
  */
-_XmQElem *
-_Xm_RemQueue(_XmQElem **queue)
+_XmQElem *_Xm_RemQueue(_XmQElem **queue)
 {
-   _XmQElem *elem = *queue;
-   if (elem != NULL)
-   {
-      *queue = elem->next;
-      if (elem->next != NULL)
-         elem->next->prev = elem->prev;
-      if (elem->prev != NULL)
-         elem->prev->next = elem->next;
-   }
-   return (elem);
+  _XmQElem *elem = *queue;
+  if (elem != NULL) {
+    *queue = elem->next;
+    if (elem->next != NULL)
+      elem->next->prev = elem->prev;
+    if (elem->prev != NULL)
+      elem->prev->next = elem->next;
+  }
+  return (elem);
 }
 
 /*	Function Name: GetNewElement
@@ -306,31 +285,28 @@ _Xm_RemQueue(_XmQElem **queue)
  *	Arguments: queue - the queue to get the element from.
  *	Returns: an element.
  */
-_XmQElem *
-_Xm_GetNewElement(XmQueue queue)
+_XmQElem *_Xm_GetNewElement(XmQueue queue)
 {
-   _XmQElem *elem;
-   if ((elem = _Xm_RemQueue(&queue->free_elems)) == NULL)
-   {
-      register int i;
-      /*
-	 * We are out of free elements, alloc some more.
-	 */
-      queue->free_elems          = (_XmQElem *)XtCalloc(sizeof(_XmQElem), QUEUE_INC);
-      queue->free_elems->alloced = True;
-      queue->free_elems->next = elem = queue->free_elems + 1;
-      for (i = 1; i < (QUEUE_INC - 1); i++, elem++)
-      {
-         elem->prev = elem - 1;
-         elem->next = elem + 1;
-      }
+  _XmQElem *elem;
+  if ((elem = _Xm_RemQueue(&queue->free_elems)) == NULL) {
+    register int i;
+    /*
+     * We are out of free elements, alloc some more.
+     */
+    queue->free_elems = (_XmQElem *)XtCalloc(sizeof(_XmQElem), QUEUE_INC);
+    queue->free_elems->alloced = True;
+    queue->free_elems->next = elem = queue->free_elems + 1;
+    for (i = 1; i < (QUEUE_INC - 1); i++, elem++) {
       elem->prev = elem - 1;
-      /*
-	 * Pop an element off the free elements queue.
-	 */
-      elem = _Xm_RemQueue(&queue->free_elems);
-   }
-   return (elem);
+      elem->next = elem + 1;
+    }
+    elem->prev = elem - 1;
+    /*
+     * Pop an element off the free elements queue.
+     */
+    elem = _Xm_RemQueue(&queue->free_elems);
+  }
+  return (elem);
 }
 
 /************************************************************
@@ -348,10 +324,9 @@ _Xm_GetNewElement(XmQueue queue)
  *	Arguments: none
  *	Returns: the queue
  */
-XmList
-_XmListInit()
+XmList _XmListInit()
 {
-   return ((XmList)_XmQueueInit());
+  return ((XmList)_XmQueueInit());
 }
 
 /*	Function Name: _XmListFree
@@ -359,10 +334,9 @@ _XmListInit()
  *	Arguments: list - the list
  *	Returns: none
  */
-void
-_XmListFree(XmList list)
+void _XmListFree(XmList list)
 {
-   _XmQueueFree((XmQueue)list);
+  _XmQueueFree((XmQueue)list);
 }
 
 /*	Function Name: _XmListAddAfter
@@ -374,17 +348,16 @@ _XmListFree(XmList list)
  *                 data_in - the data to push onto the queue.
  *	Returns: The new added element.
  */
-XmListElem *
-_XmListAddAfter(XmList list, XmListElem *elem_in, XtPointer data_in)
+XmListElem *_XmListAddAfter(XmList list, XmListElem *elem_in, XtPointer data_in)
 {
-   XmListElem *elem = (XmListElem *)_Xm_GetNewElement((XmQueue)list);
-   _Xm_AddQueue((XmQueue)list, elem_in, elem);
-   if (elem_in == NULL)
-      list->first = elem;
-   if (elem_in == list->last)
-      list->last = elem;
-   elem->data = data_in;
-   return (elem);
+  XmListElem *elem = (XmListElem *)_Xm_GetNewElement((XmQueue)list);
+  _Xm_AddQueue((XmQueue)list, elem_in, elem);
+  if (elem_in == NULL)
+    list->first = elem;
+  if (elem_in == list->last)
+    list->last = elem;
+  elem->data = data_in;
+  return (elem);
 }
 
 /*	Function Name: _XmListAddBefore
@@ -396,15 +369,14 @@ _XmListAddAfter(XmList list, XmListElem *elem_in, XtPointer data_in)
  *                 data_in - the data to push onto the queue.
  *	Returns: The new added element.
  */
-XmListElem *
-_XmListAddBefore(XmList list, XmListElem *elem_in, XtPointer data_in)
+XmListElem *_XmListAddBefore(XmList list, XmListElem *elem_in, XtPointer data_in)
 {
-   XmListElem *after;
-   if (elem_in == NULL)
-      after = list->last;
-   else
-      after = elem_in->prev;
-   return (_XmListAddAfter(list, after, data_in));
+  XmListElem *after;
+  if (elem_in == NULL)
+    after = list->last;
+  else
+    after = elem_in->prev;
+  return (_XmListAddAfter(list, after, data_in));
 }
 
 /*	Function Name: _XmListRemove
@@ -412,22 +384,21 @@ _XmListAddBefore(XmList list, XmListElem *elem_in, XtPointer data_in)
  *	Arguments: list - the list to remove the element from.
  *	Returns: none.
  */
-void
-_XmListRemove(XmList list, XmListElem *elem)
+void _XmListRemove(XmList list, XmListElem *elem)
 {
-   XmListElem *dead = (XmListElem *)_Xm_RemQueue((_XmQElem **)&elem);
-   /*
-     * if NULL is passed, then no action is taken.
-     */
-   if (dead == NULL)
-      return;
-   if (list->first == dead)
-      if ((list->first = dead->next) == NULL)
-         list->last = NULL;
-   if (list->last == dead)
-      if ((list->last = dead->prev) == NULL)
-         list->first = NULL;
-   _Xm_AddQueue(NULL, list->free_elems, (_XmQElem *)dead);
+  XmListElem *dead = (XmListElem *)_Xm_RemQueue((_XmQElem **)&elem);
+  /*
+   * if NULL is passed, then no action is taken.
+   */
+  if (dead == NULL)
+    return;
+  if (list->first == dead)
+    if ((list->first = dead->next) == NULL)
+      list->last = NULL;
+  if (list->last == dead)
+    if ((list->last = dead->prev) == NULL)
+      list->first = NULL;
+  _Xm_AddQueue(NULL, list->free_elems, (_XmQElem *)dead);
 }
 
 /*	Function Name: _XmListCount
@@ -435,10 +406,9 @@ _XmListRemove(XmList list, XmListElem *elem)
  *	Arguments: list - list to check.
  *	Returns: number of items in list.
  */
-int
-_XmListCount(XmList list)
+int _XmListCount(XmList list)
 {
-   return (_XmQueueCount((XmQueue)list));
+  return (_XmQueueCount((XmQueue)list));
 }
 
 /*	Function Name: _XmListExec
@@ -458,17 +428,16 @@ _XmListCount(XmList list)
  *        	start->next, start->next->next...
  *
  */
-XmListElem *
-_XmListExec(XmList list, XmListElem *start, XmListElem *end, XmListFunc func, XtPointer data)
+XmListElem *_XmListExec(
+    XmList list, XmListElem *start, XmListElem *end, XmListFunc func, XtPointer data)
 {
-   if (start == NULL)
-      start = list->first;
-   for (; (start != end) && (start != NULL); start = start->next)
-   {
-      if (!(*func)(start, data))
-         return (start);
-   }
-   return (NULL);
+  if (start == NULL)
+    start = list->first;
+  for (; (start != end) && (start != NULL); start = start->next) {
+    if (!(*func)(start, data))
+      return (start);
+  }
+  return (NULL);
 }
 
 /*	Function Name: _XmListPrint
@@ -477,9 +446,8 @@ _XmListExec(XmList list, XmListElem *start, XmListElem *end, XmListFunc func, Xt
  *	Returns: none.
  */
 #ifdef QUEUE_DEBUG
-void
-_XmListPrint(XmList list)
+void _XmListPrint(XmList list)
 {
-   _XmQueuePrint((XmQueue)list);
+  _XmQueuePrint((XmQueue)list);
 }
 #endif

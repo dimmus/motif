@@ -26,16 +26,16 @@
  */
 /* $XConsortium: ToggleBGI.h /main/5 1995/07/13 18:13:03 drk $ */
 #ifndef _XmToggleBGI_h
-#   define _XmToggleBGI_h
-#   include <Xm/ToggleBGP.h>
-#   ifdef __cplusplus
+#  define _XmToggleBGI_h
+#  include <Xm/ToggleBGP.h>
+#  ifdef __cplusplus
 extern "C" {
-#   endif
+#  endif
 /********    Private Function Declarations    ********/
 extern int _XmToggleBCacheCompare(XtPointer A, XtPointer B);
 /********    End Private Function Declarations    ********/
-#   ifdef __cplusplus
+#  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */
-#   endif
+#  endif
 #endif /* _XmToggleBGI_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

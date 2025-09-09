@@ -32,30 +32,19 @@
 extern "C" {
 #endif
 /********    Private Function Declarations    ********/
-extern Boolean _XmTextHasDestination(
-   Widget w);
-extern Boolean _XmTextSetDestinationSelection(
-   Widget         w,
-   XmTextPosition position,
-   Boolean        disown,
-   Time           set_time);
-extern Boolean _XmTextSetSel2(
-   XmTextWidget   tw,
-   XmTextPosition left,
-   XmTextPosition right,
-   Time           set_time);
-extern Boolean _XmTextGetSel2(
-   XmTextWidget    tw,
-   XmTextPosition *left,
-   XmTextPosition *right);
-extern void _XmTextInputGetSecResData(
-   XmSecondaryResourceData *secResDataRtn);
-extern void _XmTextInputCreate(
-   Widget   wid,
-   ArgList  args,
-   Cardinal num_args);
-extern void _XmTextHandleSecondaryFinished(Widget  w,
-                                           XEvent *event);
+extern Boolean _XmTextHasDestination(Widget w);
+extern Boolean _XmTextSetDestinationSelection(Widget w,
+                                              XmTextPosition position,
+                                              Boolean disown,
+                                              Time set_time);
+extern Boolean _XmTextSetSel2(XmTextWidget tw,
+                              XmTextPosition left,
+                              XmTextPosition right,
+                              Time set_time);
+extern Boolean _XmTextGetSel2(XmTextWidget tw, XmTextPosition *left, XmTextPosition *right);
+extern void _XmTextInputGetSecResData(XmSecondaryResourceData *secResDataRtn);
+extern void _XmTextInputCreate(Widget wid, ArgList args, Cardinal num_args);
+extern void _XmTextHandleSecondaryFinished(Widget w, XEvent *event);
 /********    End Private Function Declarations    ********/
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

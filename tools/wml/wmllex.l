@@ -39,6 +39,8 @@
 #endif
 #include <stdio.h>
 #include <unistd.h>
+#include "wml.h"
+#include "wmlparse.h"
 
 /* Explicit declaration for fileno if not available */
 #ifndef fileno

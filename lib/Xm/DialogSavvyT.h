@@ -35,14 +35,12 @@ externalref XrmQuark XmQTdialogShellSavvy;
    If the child has the trait, the resource will be get and set by
    the DialogShell ChangeManaged */
 /* Trait structures and typedefs, place typedefs first */
-typedef void (*XmDialogSavvyMapUnmapProc)(Widget  wid,
-                                          Boolean map_unmap);
+typedef void (*XmDialogSavvyMapUnmapProc)(Widget wid, Boolean map_unmap);
 
 /* Version 0: initial release. */
-typedef struct _XmDialogSavvyTraitRec
-{
-   int                       version; /* 0 */
-   XmDialogSavvyMapUnmapProc callMapUnmapCB;
+typedef struct _XmDialogSavvyTraitRec {
+  int version; /* 0 */
+  XmDialogSavvyMapUnmapProc callMapUnmapCB;
 } XmDialogSavvyTraitRec, *XmDialogSavvyTrait;
 
 /* This macro is part of the trait and is used for the following situation

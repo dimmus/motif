@@ -32,23 +32,20 @@
 \*****************************************************************************/
 /* October 2004, source code review by Thomas Biege <thomas@suse.de> */
 #ifdef HAVE_CONFIG_H
-#   include <config.h>
+#  include <config.h>
 #endif
 #include "XpmI.h"
 
-int
-XpmWriteFileFromBuffer(
-   const char *filename,
-   char       *buffer)
+int XpmWriteFileFromBuffer(const char *filename, char *buffer)
 {
-   size_t fcheck, len;
-   FILE  *fp = fopen(filename, "w");
-   if (!fp)
-      return XpmOpenFailed;
-   len    = strlen(buffer);
-   fcheck = fwrite(buffer, len, 1, fp);
-   fclose(fp);
-   if (fcheck != 1)
-      return XpmOpenFailed; /* maybe use a better return value */
-   return XpmSuccess;
+  size_t fcheck, len;
+  FILE *fp = fopen(filename, "w");
+  if (!fp)
+    return XpmOpenFailed;
+  len = strlen(buffer);
+  fcheck = fwrite(buffer, len, 1, fp);
+  fclose(fp);
+  if (fcheck != 1)
+    return XpmOpenFailed; /* maybe use a better return value */
+  return XpmSuccess;
 }

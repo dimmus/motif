@@ -32,10 +32,7 @@
 extern "C" {
 #endif
 /********    Private Function Declarations    ********/
-extern Boolean _XmNotifyChildrenVisual(
-   Widget cur,
-   Widget new_w,
-   Mask   visual_flag);
+extern Boolean _XmNotifyChildrenVisual(Widget cur, Widget new_w, Mask visual_flag);
 /********    End Private Function Declarations    ********/
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

@@ -19,43 +19,36 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/
+ */
 #ifndef _XmDisplayI_h
-#   define _XmDisplayI_h
-#   include <Xm/DisplayP.h>
-#   ifdef __cplusplus
+#  define _XmDisplayI_h
+#  include <Xm/DisplayP.h>
+#  ifdef __cplusplus
 extern "C" {
-#   endif
-typedef struct _XmDisplayEventQueryStruct
-{
-   XmDisplay                      dd;
-   XmDragContext                  dc;
-   XmTopLevelEnterCallbackStruct *enterCB;
-   XmDragMotionCallbackStruct    *motionCB;
-   XmTopLevelLeaveCallbackStruct *leaveCB;
-   XmDropStartCallbackStruct     *dropStartCB;
-   Boolean                        hasEnter;
-   Boolean                        hasMotion;
-   Boolean                        hasLeave;
-   Boolean                        hasDropStart;
+#  endif
+typedef struct _XmDisplayEventQueryStruct {
+  XmDisplay dd;
+  XmDragContext dc;
+  XmTopLevelEnterCallbackStruct *enterCB;
+  XmDragMotionCallbackStruct *motionCB;
+  XmTopLevelLeaveCallbackStruct *leaveCB;
+  XmDropStartCallbackStruct *dropStartCB;
+  Boolean hasEnter;
+  Boolean hasMotion;
+  Boolean hasLeave;
+  Boolean hasDropStart;
 } XmDisplayEventQueryStruct;
 
 /********    Private Function Declarations    ********/
-extern XmDropSiteManagerObject _XmGetDropSiteManagerObject(
-   XmDisplay xmDisplay);
-extern unsigned char _XmGetDragProtocolStyle(
-   Widget w);
-extern unsigned char _XmGetDragTrackingMode(
-   Widget w);
-extern Widget _XmGetDragContextFromHandle(
-   Widget w,
-   Atom   iccHandle);
+extern XmDropSiteManagerObject _XmGetDropSiteManagerObject(XmDisplay xmDisplay);
+extern unsigned char _XmGetDragProtocolStyle(Widget w);
+extern unsigned char _XmGetDragTrackingMode(Widget w);
+extern Widget _XmGetDragContextFromHandle(Widget w, Atom iccHandle);
 extern WidgetClass _XmGetXmDisplayClass(void);
-extern WidgetClass _XmSetXmDisplayClass(
-   WidgetClass wc);
+extern WidgetClass _XmSetXmDisplayClass(WidgetClass wc);
 /********    End Private Function Declarations    ********/
-#   ifdef __cplusplus
+#  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */
-#   endif
+#  endif
 #endif /* _XmDisplayI_h */
 /* DON'T ADD STUFF AFTER THIS #endif */

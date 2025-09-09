@@ -25,21 +25,21 @@
  * HISTORY
  */
 #ifndef _XmGadget_h
-#   define _XmGadget_h
-#   include <Xm/Xm.h>
-#   ifdef __cplusplus
+#  define _XmGadget_h
+#  include <Xm/Xm.h>
+#  ifdef __cplusplus
 extern "C" {
-#   endif
-#   ifndef XmIsGadget
-#      define XmIsGadget(w) XtIsSubclass(w, xmGadgetClass)
-#   endif /* XmIsGadget */
-externalref WidgetClass           xmGadgetClass;
+#  endif
+#  ifndef XmIsGadget
+#    define XmIsGadget(w) XtIsSubclass(w, xmGadgetClass)
+#  endif /* XmIsGadget */
+externalref WidgetClass xmGadgetClass;
 typedef struct _XmGadgetClassRec *XmGadgetClass;
-typedef struct _XmGadgetRec      *XmGadget;
+typedef struct _XmGadgetRec *XmGadget;
 /********    Public Function Declarations    ********/
 /********    End Public Function Declarations    ********/
-#   ifdef __cplusplus
+#  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */
-#   endif
+#  endif
 #endif /* _XmGadget_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

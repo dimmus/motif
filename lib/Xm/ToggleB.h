@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/
+ */
 /***********************************************************************
  *
  * Toggle Widget
@@ -31,37 +31,20 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-externalref WidgetClass                 xmToggleButtonWidgetClass;
+externalref WidgetClass xmToggleButtonWidgetClass;
 typedef struct _XmToggleButtonClassRec *XmToggleButtonWidgetClass;
-typedef struct _XmToggleButtonRec      *XmToggleButtonWidget;
+typedef struct _XmToggleButtonRec *XmToggleButtonWidget;
 /*fast subclass define */
 #ifndef XmIsToggleButton
-#   define XmIsToggleButton(w)     XtIsSubclass(w, xmToggleButtonWidgetClass)
+#  define XmIsToggleButton(w) XtIsSubclass(w, xmToggleButtonWidgetClass)
 #endif /* XmIsToggleButton */
 /********    Public Function Declarations    ********/
-Boolean XmToggleButtonGetState(
-   Widget w);
-void XmToggleButtonSetState(
-   Widget  w,
-   Boolean newstate,
-   Boolean notify);
-Boolean XmToggleButtonSetValue(
-   Widget              w,
-   XmToggleButtonState newstate,
-   Boolean             notify);
-Widget XmCreateToggleButton(
-   Widget   parent,
-   char    *name,
-   Arg     *arglist,
-   Cardinal argCount);
-Widget XmVaCreateToggleButton(
-   Widget parent,
-   char  *name,
-   ...);
-Widget XmVaCreateManagedToggleButton(
-   Widget parent,
-   char  *name,
-   ...);
+Boolean XmToggleButtonGetState(Widget w);
+void XmToggleButtonSetState(Widget w, Boolean newstate, Boolean notify);
+Boolean XmToggleButtonSetValue(Widget w, XmToggleButtonState newstate, Boolean notify);
+Widget XmCreateToggleButton(Widget parent, char *name, Arg *arglist, Cardinal argCount);
+Widget XmVaCreateToggleButton(Widget parent, char *name, ...);
+Widget XmVaCreateManagedToggleButton(Widget parent, char *name, ...);
 /********    End Public Function Declarations    ********/
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

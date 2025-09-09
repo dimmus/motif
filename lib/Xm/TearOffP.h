@@ -19,21 +19,20 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/
+ */
 #ifndef _XmTearOffP_h
-#   define _XmTearOffP_h
-#   include <Xm/XmP.h>
-#   ifdef __cplusplus
+#  define _XmTearOffP_h
+#  include <Xm/XmP.h>
+#  ifdef __cplusplus
 extern "C" {
-#   endif
-typedef struct _XmExcludedParentPaneRec
-{
-   short   pane_list_size;
-   Widget *pane;
-   short   num_panes;
+#  endif
+typedef struct _XmExcludedParentPaneRec {
+  short pane_list_size;
+  Widget *pane;
+  short num_panes;
 } XmExcludedParentPaneRec;
-#   ifdef __cplusplus
+#  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */
-#   endif
+#  endif
 #endif /* _XmTearOffP_h */
 /* DON'T ADD STUFF AFTER THIS #endif */

@@ -32,15 +32,10 @@
 extern "C" {
 #endif
 /********    Private Function Declarations    ********/
-extern Widget _XmGetRC_PopupPosted(
-   Widget wid);
-extern Boolean _XmGetInDragMode(
-   Widget widget);
-extern void _XmSetInDragMode(
-   Widget  widget,
-   Boolean mode);
-extern XmMenuState _XmGetMenuState(
-   Widget widget);
+extern Widget _XmGetRC_PopupPosted(Widget wid);
+extern Boolean _XmGetInDragMode(Widget widget);
+extern void _XmSetInDragMode(Widget widget, Boolean mode);
+extern XmMenuState _XmGetMenuState(Widget widget);
 /********    End Private Function Declarations    ********/
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

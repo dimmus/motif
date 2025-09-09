@@ -29,6 +29,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdlib.h>
 char buf[1024];
 
 char *OSF_COPYRIGHT = "$\n\

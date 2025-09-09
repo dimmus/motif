@@ -24,10 +24,10 @@
 #ifndef _XmDataFP_h
 #define _XmDataFP_h
 #include <Xm/DataF.h>
-#include <Xm/XmP.h>
 #include <Xm/ExtP.h>
-#include <Xm/TextFP.h>
 #include <Xm/Picture.h>
+#include <Xm/TextFP.h>
+#include <Xm/XmP.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -35,38 +35,34 @@ extern "C" {
  * Motif doesn't define this:  go figure
  */
 #ifndef XmTextFieldIndex
-#   define XmTextFieldIndex (XmPrimitiveIndex + 1)
+#  define XmTextFieldIndex (XmPrimitiveIndex + 1)
 #endif
 #define XmDataFieldIndex (XmTextFieldIndex)
 
-typedef struct _XmDataFieldClassPart
-{
-   XtPointer extension;
+typedef struct _XmDataFieldClassPart {
+  XtPointer extension;
 } XmDataFieldClassPart;
 
-typedef struct _XmDataFieldClassRec
-{
-   CoreClassPart        core_class;
-   XmPrimitiveClassPart primitive_class;
-   XmDataFieldClassPart data_class;
+typedef struct _XmDataFieldClassRec {
+  CoreClassPart core_class;
+  XmPrimitiveClassPart primitive_class;
+  XmDataFieldClassPart data_class;
 } XmDataFieldClassRec;
 
-typedef struct _XmDataFieldPart
-{
-   unsigned char  alignment; /* XmALIGNMENT_BEGINNING by default */
-   String         picture_source;
-   XmPicture      picture;
-   Boolean        auto_fill;
-   XtCallbackList picture_error_cb;
-   XtCallbackList validate_cb;
+typedef struct _XmDataFieldPart {
+  unsigned char alignment; /* XmALIGNMENT_BEGINNING by default */
+  String picture_source;
+  XmPicture picture;
+  Boolean auto_fill;
+  XtCallbackList picture_error_cb;
+  XtCallbackList validate_cb;
 } XmDataFieldPart;
 
-typedef struct _XmDataFieldRec
-{
-   CorePart        core;
-   XmPrimitivePart primitive;
-   XmTextFieldPart text;
-   XmDataFieldPart data;
+typedef struct _XmDataFieldRec {
+  CorePart core;
+  XmPrimitivePart primitive;
+  XmTextFieldPart text;
+  XmDataFieldPart data;
 } XmDataFieldRec;
 
 extern XmDataFieldClassRec xmDataFieldClassRec;
@@ -74,7 +70,8 @@ extern XmDataFieldClassRec xmDataFieldClassRec;
 #define XmTextF_focus_callback(w) (((XmDataFieldWidget)(w))->text.focus_callback)
 #define XmTextF_losing_focus_callback(w) (((XmDataFieldWidget)(w))->text.losing_focus_callback)
 #define XmTextF_modify_verify_callback(w) (((XmDataFieldWidget)(w))->text.modify_verify_callback)
-#define XmTextF_wcs_modify_verify_callback(w) (((XmDataFieldWidget)(w))->text.wcs_modify_verify_callback)
+#define XmTextF_wcs_modify_verify_callback(w) \
+  (((XmDataFieldWidget)(w))->text.wcs_modify_verify_callback)
 #define XmTextF_motion_verify_callback(w) (((XmDataFieldWidget)(w))->text.motion_verify_callback)
 #define XmTextF_gain_primary_callback(w) (((XmDataFieldWidget)(w))->text.gain_primary_callback)
 #define XmTextF_lose_primary_callback(w) (((XmDataFieldWidget)(w))->text.lose_primary_callback)
@@ -82,7 +79,7 @@ extern XmDataFieldClassRec xmDataFieldClassRec;
 #define XmTextF_value(w) (((XmDataFieldWidget)(w))->text.value)
 #define XmTextF_wc_value(w) (((XmDataFieldWidget)(w))->text.wc_value)
 #define XmTextF_font_list(w) (((XmDataFieldWidget)(w))->text.font_list)
-#define XmTextF_font(w) ((XFontStruct*)(((XmDataFieldWidget)(w))->text.font))
+#define XmTextF_font(w) ((XFontStruct *)(((XmDataFieldWidget)(w))->text.font))
 #define XmTextF_selection_array(w) (((XmDataFieldWidget)(w))->text.selection_array)
 #define XmTextF_highlight(w) (((XmDataFieldWidget)(w))->text.highlight)
 #define XmTextF_gc(w) (((XmDataFieldWidget)(w))->text.gc)
@@ -164,8 +161,8 @@ extern XmDataFieldClassRec xmDataFieldClassRec;
 #define XmTextF_redisplay(w) (((XmDataFieldWidget)(w))->text.redisplay)
 #define XmTextF_have_fontset(w) (((XmDataFieldWidget)(w))->text.have_fontset)
 #if USE_XFT
-#   define XmTextF_use_xft(w) (((XmDataFieldWidget)(w))->text.use_xft)
-#   define XmTextF_xft_font(w) (((XftFont*)((XmDataFieldWidget)(w))->text.font))
+#  define XmTextF_use_xft(w) (((XmDataFieldWidget)(w))->text.use_xft)
+#  define XmTextF_xft_font(w) (((XftFont *)((XmDataFieldWidget)(w))->text.font))
 #endif
 #define XmTextF_changed_visible(w) (((XmDataFieldWidget)(w))->text.changed_visible)
 #define XmDataField_alignment(w) (((XmDataFieldWidget)(w))->data.alignment)

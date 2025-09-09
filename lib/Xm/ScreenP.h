@@ -19,115 +19,108 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/
+ */
 #ifndef _XmScreenP_h
-#   define _XmScreenP_h
-#   include <Xm/DesktopP.h>
-#   include <Xm/Screen.h>
-#   include <Xm/DragIcon.h>
-#   ifdef __cplusplus
+#  define _XmScreenP_h
+#  include <Xm/DesktopP.h>
+#  include <Xm/DragIcon.h>
+#  include <Xm/Screen.h>
+#  ifdef __cplusplus
 extern "C" {
-#   endif
-typedef struct _XmScreenClassPart
-{
-   XtPointer extension;
+#  endif
+typedef struct _XmScreenClassPart {
+  XtPointer extension;
 } XmScreenClassPart, *XmScreenClassPartPtr;
 
-typedef struct _XmScreenClassRec
-{
-   /*    ObjectClassPart		object_class;
+typedef struct _XmScreenClassRec {
+  /*    ObjectClassPart		object_class;
     XmExtClassPart		ext_class; */
-   CoreClassPart      core_class;
-   XmDesktopClassPart desktop_class;
-   XmScreenClassPart  screen_class;
+  CoreClassPart core_class;
+  XmDesktopClassPart desktop_class;
+  XmScreenClassPart screen_class;
 } XmScreenClassRec;
 
-typedef struct _XmDragCursorRec
-{
-   struct _XmDragCursorRec *next;
-   Cursor                   cursor;
-   XmDragIconObject         stateIcon;
-   XmDragIconObject         opIcon;
-   XmDragIconObject         sourceIcon;
-   Boolean                  dirty;
+typedef struct _XmDragCursorRec {
+  struct _XmDragCursorRec *next;
+  Cursor cursor;
+  XmDragIconObject stateIcon;
+  XmDragIconObject opIcon;
+  XmDragIconObject sourceIcon;
+  Boolean dirty;
 } XmDragCursorRec, *XmDragCursorCache;
 typedef struct _XmScratchPixmapKeyRec *XmScratchPixmapKey;
 
-typedef struct _XmScratchPixmapKeyRec
-{
-   Cardinal  depth;
-   Dimension width;
-   Dimension height;
+typedef struct _XmScratchPixmapKeyRec {
+  Cardinal depth;
+  Dimension width;
+  Dimension height;
 } XmScratchPixmapKeyRec;
 
-typedef struct
-{
-   Boolean           mwmPresent;
-   unsigned short    numReparented;
-   int               darkThreshold;
-   int               foregroundThreshold;
-   int               lightThreshold;
-   XmDragIconObject  defaultNoneCursorIcon;
-   XmDragIconObject  defaultValidCursorIcon;
-   XmDragIconObject  defaultInvalidCursorIcon;
-   XmDragIconObject  defaultMoveCursorIcon;
-   XmDragIconObject  defaultCopyCursorIcon;
-   XmDragIconObject  defaultLinkCursorIcon;
-   XmDragIconObject  defaultSourceCursorIcon;
-   Cursor            nullCursor;
-   XmDragCursorRec  *cursorCache;
-   Cardinal          maxCursorWidth;
-   Cardinal          maxCursorHeight;
-   Cursor            menuCursor;
-   unsigned char     unpostBehavior;
-   XFontStruct      *font_struct;
-   int               h_unit;
-   int               v_unit;
-   XtPointer         scratchPixmaps;
-   unsigned char     moveOpaque;
-   XmScreenColorProc color_calc_proc;
-   XmAllocColorProc  color_alloc_proc;
-   XtEnum            bitmap_conversion_model;
-   /* to save internally-created XmDragIcons */
-   XmDragIconObject xmStateCursorIcon;
-   XmDragIconObject xmMoveCursorIcon;
-   XmDragIconObject xmCopyCursorIcon;
-   XmDragIconObject xmLinkCursorIcon;
-   XmDragIconObject xmSourceCursorIcon;
-   GC               imageGC;         /* OBSOLETE FIELD */
-   int              imageGCDepth;    /* OBSOLETE FIELD */
-   Pixel            imageForeground; /* OBSOLETE FIELD */
-   Pixel            imageBackground; /* OBSOLETE FIELD */
-   XtPointer        screenInfo;      /* extension */
-   XtPointer        user_data;
-   Pixmap           insensitive_stipple_bitmap;
-#   ifdef DEFAULT_GLYPH_PIXMAP
-   Pixmap       default_glyph_pixmap;
-   unsigned int default_glyph_pixmap_width;
-   unsigned int default_glyph_pixmap_height;
-#   endif
-   XtPointer inUsePixmaps;
+typedef struct {
+  Boolean mwmPresent;
+  unsigned short numReparented;
+  int darkThreshold;
+  int foregroundThreshold;
+  int lightThreshold;
+  XmDragIconObject defaultNoneCursorIcon;
+  XmDragIconObject defaultValidCursorIcon;
+  XmDragIconObject defaultInvalidCursorIcon;
+  XmDragIconObject defaultMoveCursorIcon;
+  XmDragIconObject defaultCopyCursorIcon;
+  XmDragIconObject defaultLinkCursorIcon;
+  XmDragIconObject defaultSourceCursorIcon;
+  Cursor nullCursor;
+  XmDragCursorRec *cursorCache;
+  Cardinal maxCursorWidth;
+  Cardinal maxCursorHeight;
+  Cursor menuCursor;
+  unsigned char unpostBehavior;
+  XFontStruct *font_struct;
+  int h_unit;
+  int v_unit;
+  XtPointer scratchPixmaps;
+  unsigned char moveOpaque;
+  XmScreenColorProc color_calc_proc;
+  XmAllocColorProc color_alloc_proc;
+  XtEnum bitmap_conversion_model;
+  /* to save internally-created XmDragIcons */
+  XmDragIconObject xmStateCursorIcon;
+  XmDragIconObject xmMoveCursorIcon;
+  XmDragIconObject xmCopyCursorIcon;
+  XmDragIconObject xmLinkCursorIcon;
+  XmDragIconObject xmSourceCursorIcon;
+  GC imageGC;            /* OBSOLETE FIELD */
+  int imageGCDepth;      /* OBSOLETE FIELD */
+  Pixel imageForeground; /* OBSOLETE FIELD */
+  Pixel imageBackground; /* OBSOLETE FIELD */
+  XtPointer screenInfo;  /* extension */
+  XtPointer user_data;
+  Pixmap insensitive_stipple_bitmap;
+#  ifdef DEFAULT_GLYPH_PIXMAP
+  Pixmap default_glyph_pixmap;
+  unsigned int default_glyph_pixmap_width;
+  unsigned int default_glyph_pixmap_height;
+#  endif
+  XtPointer inUsePixmaps;
 } XmScreenPart, *XmScreenPartPtr;
 
-typedef struct _XmScreenInfo
-{
-   /* so much for information hiding */
-   XtPointer menu_state;           /* MenuUtil.c */
-   Boolean   destroyCallbackAdded; /* ImageCache.c */
+typedef struct _XmScreenInfo {
+  /* so much for information hiding */
+  XtPointer menu_state;         /* MenuUtil.c */
+  Boolean destroyCallbackAdded; /* ImageCache.c */
 } XmScreenInfo;
 
 externalref XmScreenClassRec xmScreenClassRec;
 
-typedef struct _XmScreenRec
-{
-   /*    ObjectPart			object;
+typedef struct _XmScreenRec {
+  /*    ObjectPart			object;
     XmExtPart			ext; */
-   CorePart      core;
-   XmDesktopPart desktop;
-   XmScreenPart  screen;
+  CorePart core;
+  XmDesktopPart desktop;
+  XmScreenPart screen;
 } XmScreenRec;
-#   ifdef __cplusplus
+#  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */
-#   endif
+#  endif
 #endif /* _XmScreenP_h */
 /* DON'T ADD STUFF AFTER THIS #endif */

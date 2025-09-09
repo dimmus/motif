@@ -19,63 +19,58 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/
+ */
 #ifndef _XmDragUnderI_h
 #define _XmDragUnderI_h
-#include <Xm/XmP.h>
 #include <Xm/Screen.h> /* for XmScreen */
+#include <Xm/XmP.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
 /* Structure describing a pixmap */
-typedef struct _DragPixmapData
-{
-   Pixmap       pixmap;
-   int          x, y;
-   unsigned int width, height;
+typedef struct _DragPixmapData {
+  Pixmap pixmap;
+  int x, y;
+  unsigned int width, height;
 } DragPixmapData;
 
-typedef struct _XmAnimationSaveData
-{
-   Display        *display;
-   XmScreen        xmScreen;
-   Window          window;
-   Position        windowX;
-   Position        windowY;
-   unsigned int    windowDepth;
-   XmRegion        clipRegion;
-   XmRegion        dropSiteRegion;
-   Dimension       shadowThickness;
-   Dimension       highlightThickness;
-   Pixel           background;
-   Pixel           foreground;
-   Pixel           highlightColor;
-   Pixmap          highlightPixmap;
-   Pixel           topShadowColor;
-   Pixmap          topShadowPixmap;
-   Pixel           bottomShadowColor;
-   Pixmap          bottomShadowPixmap;
-   Dimension       borderWidth;
-   Pixmap          animationMask;
-   Pixmap          animationPixmap;
-   unsigned int    animationPixmapDepth;
-   unsigned char   animationStyle;
-   Widget          dragOver;
-   GC              highlightGC;
-   GC              topShadowGC;
-   GC              bottomShadowGC;
-   GC              drawGC;
-   DragPixmapData *savedPixmaps;
-   Cardinal        numSavedPixmaps;
-   Widget          dragUnder;
-   unsigned char   activeMode;
+typedef struct _XmAnimationSaveData {
+  Display *display;
+  XmScreen xmScreen;
+  Window window;
+  Position windowX;
+  Position windowY;
+  unsigned int windowDepth;
+  XmRegion clipRegion;
+  XmRegion dropSiteRegion;
+  Dimension shadowThickness;
+  Dimension highlightThickness;
+  Pixel background;
+  Pixel foreground;
+  Pixel highlightColor;
+  Pixmap highlightPixmap;
+  Pixel topShadowColor;
+  Pixmap topShadowPixmap;
+  Pixel bottomShadowColor;
+  Pixmap bottomShadowPixmap;
+  Dimension borderWidth;
+  Pixmap animationMask;
+  Pixmap animationPixmap;
+  unsigned int animationPixmapDepth;
+  unsigned char animationStyle;
+  Widget dragOver;
+  GC highlightGC;
+  GC topShadowGC;
+  GC bottomShadowGC;
+  GC drawGC;
+  DragPixmapData *savedPixmaps;
+  Cardinal numSavedPixmaps;
+  Widget dragUnder;
+  unsigned char activeMode;
 } XmAnimationSaveDataRec, *XmAnimationSaveData;
 
 /********    Private Function Declarations for DragUnder.c    ********/
-extern void _XmDragUnderAnimation(
-   Widget    w,
-   XtPointer clientData,
-   XtPointer callData);
+extern void _XmDragUnderAnimation(Widget w, XtPointer clientData, XtPointer callData);
 /********    End Private Function Declarations    ********/
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

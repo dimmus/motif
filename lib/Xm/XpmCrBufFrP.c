@@ -31,40 +31,37 @@
 *  Developed by Arnaud Le Hors                                                *
 \*****************************************************************************/
 #ifdef HAVE_CONFIG_H
-#   include <config.h>
+#  include <config.h>
 #endif
 #include "XpmI.h"
 
-int
-XpmCreateBufferFromPixmap(
-   Display       *display,
-   char         **buffer_return,
-   Pixmap         pixmap,
-   Pixmap         shapemask,
-   XpmAttributes *attributes)
+int XpmCreateBufferFromPixmap(Display *display,
+                              char **buffer_return,
+                              Pixmap pixmap,
+                              Pixmap shapemask,
+                              XpmAttributes *attributes)
 {
-   XImage      *ximage     = NULL;
-   XImage      *shapeimage = NULL;
-   unsigned int width      = 0;
-   unsigned int height     = 0;
-   int          ErrorStatus;
-   /* get geometry */
-   if (attributes && attributes->valuemask & XpmSize)
-   {
-      width  = attributes->width;
-      height = attributes->height;
-   }
-   /* get the ximages */
-   if (pixmap)
-      xpmCreateImageFromPixmap(display, pixmap, &ximage, &width, &height);
-   if (shapemask)
-      xpmCreateImageFromPixmap(display, shapemask, &shapeimage, &width, &height);
-   /* create the buffer */
-   ErrorStatus = XpmCreateBufferFromImage(display, buffer_return, ximage, shapeimage, attributes);
-   /* destroy the ximages */
-   if (ximage)
-      XDestroyImage(ximage);
-   if (shapeimage)
-      XDestroyImage(shapeimage);
-   return (ErrorStatus);
+  XImage *ximage = NULL;
+  XImage *shapeimage = NULL;
+  unsigned int width = 0;
+  unsigned int height = 0;
+  int ErrorStatus;
+  /* get geometry */
+  if (attributes && attributes->valuemask & XpmSize) {
+    width = attributes->width;
+    height = attributes->height;
+  }
+  /* get the ximages */
+  if (pixmap)
+    xpmCreateImageFromPixmap(display, pixmap, &ximage, &width, &height);
+  if (shapemask)
+    xpmCreateImageFromPixmap(display, shapemask, &shapeimage, &width, &height);
+  /* create the buffer */
+  ErrorStatus = XpmCreateBufferFromImage(display, buffer_return, ximage, shapeimage, attributes);
+  /* destroy the ximages */
+  if (ximage)
+    XDestroyImage(ximage);
+  if (shapeimage)
+    XDestroyImage(shapeimage);
+  return (ErrorStatus);
 }

@@ -26,76 +26,69 @@
  * HISTORY
  */
 #ifdef HAVE_CONFIG_H
-#   include <config.h>
+#  include <config.h>
 #endif
-#include <Xm/XmP.h>
-#include <Xm/MwmUtil.h>
 #include "XmI.h"
+#include <Xm/MwmUtil.h>
+#include <Xm/XmP.h>
 
 /************************************************************************
  *
  *  XmIsMotifWMRunning
  *
  ************************************************************************/
-Boolean
-XmIsMotifWMRunning(
-   Widget shell)
+Boolean XmIsMotifWMRunning(Widget shell)
 {
-   Atom             motif_wm_info_atom;
-   Atom             actual_type;
-   int              actual_format;
-   unsigned long    num_items, bytes_after;
-   PropMotifWmInfo *prop = 0;
-   Window           root = RootWindowOfScreen(XtScreen(shell));
-   _XmWidgetToAppContext(shell);
-   _XmAppLock(app);
-   motif_wm_info_atom = XInternAtom(XtDisplay(shell),
-                                    _XA_MOTIF_WM_INFO,
-                                    FALSE);
-   _XmProcessLock();
-   XGetWindowProperty(XtDisplay(shell),
-                      root,
-                      motif_wm_info_atom,
-                      0,
-                      (long)PROP_MOTIF_WM_INFO_ELEMENTS,
-                      FALSE,
-                      motif_wm_info_atom,
-                      &actual_type,
-                      &actual_format,
-                      &num_items,
-                      &bytes_after,
-                      (unsigned char **)&prop);
-   _XmProcessUnlock();
-   if ((actual_type != motif_wm_info_atom) || (actual_format != 32) || (num_items < PROP_MOTIF_WM_INFO_ELEMENTS))
-   {
-      if (prop != 0) XFree((char *)prop);
-      _XmAppUnlock(app);
-      return (FALSE);
-   }
-   else
-   {
-      Window       wm_window = (Window)prop->wmWindow;
-      Window       top, parent, *children;
-      unsigned int num_children;
-      Boolean      returnVal;
-      Cardinal     i;
-      if (XQueryTree(XtDisplay(shell),
+  Atom motif_wm_info_atom;
+  Atom actual_type;
+  int actual_format;
+  unsigned long num_items, bytes_after;
+  PropMotifWmInfo *prop = 0;
+  Window root = RootWindowOfScreen(XtScreen(shell));
+  _XmWidgetToAppContext(shell);
+  _XmAppLock(app);
+  motif_wm_info_atom = XInternAtom(XtDisplay(shell), _XA_MOTIF_WM_INFO, FALSE);
+  _XmProcessLock();
+  XGetWindowProperty(XtDisplay(shell),
                      root,
-                     &top,
-                     &parent,
-                     &children,
-                     &num_children))
-      {
-         i = 0;
-         while ((i < num_children) && (children[i] != wm_window))
-            i++;
-         returnVal = (i == num_children) ? FALSE : TRUE;
-      }
-      else
-         returnVal = FALSE;
-      if (prop) XFree((char *)prop);
-      if (children) XFree((char *)children);
-      _XmAppUnlock(app);
-      return (returnVal);
-   }
+                     motif_wm_info_atom,
+                     0,
+                     (long)PROP_MOTIF_WM_INFO_ELEMENTS,
+                     FALSE,
+                     motif_wm_info_atom,
+                     &actual_type,
+                     &actual_format,
+                     &num_items,
+                     &bytes_after,
+                     (unsigned char **)&prop);
+  _XmProcessUnlock();
+  if ((actual_type != motif_wm_info_atom) || (actual_format != 32) ||
+      (num_items < PROP_MOTIF_WM_INFO_ELEMENTS))
+  {
+    if (prop != 0)
+      XFree((char *)prop);
+    _XmAppUnlock(app);
+    return (FALSE);
+  }
+  else {
+    Window wm_window = (Window)prop->wmWindow;
+    Window top, parent, *children;
+    unsigned int num_children;
+    Boolean returnVal;
+    Cardinal i;
+    if (XQueryTree(XtDisplay(shell), root, &top, &parent, &children, &num_children)) {
+      i = 0;
+      while ((i < num_children) && (children[i] != wm_window))
+        i++;
+      returnVal = (i == num_children) ? FALSE : TRUE;
+    }
+    else
+      returnVal = FALSE;
+    if (prop)
+      XFree((char *)prop);
+    if (children)
+      XFree((char *)children);
+    _XmAppUnlock(app);
+    return (returnVal);
+  }
 }

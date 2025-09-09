@@ -26,16 +26,16 @@
 #include <Xm/Ext.h>
 #include <Xm/Hierarchy.h>
 /************************************************************
-*	INCLUDE FILES
-*************************************************************/
+ *	INCLUDE FILES
+ *************************************************************/
 /************************************************************
-*	TYPEDEFS AND DEFINES
-*************************************************************/
+ *	TYPEDEFS AND DEFINES
+ *************************************************************/
 #if defined(__cplusplus)
 extern "C" {
 #endif
 typedef struct _XmTreeClassRec *XmTreeWidgetClass;
-typedef struct _XmTreeRec      *XmTreeWidget;
+typedef struct _XmTreeRec *XmTreeWidget;
 /*	Function Name: XmCreateTree
  *	Description: Creation Routine for UIL and ADA.
  *	Arguments: parent - the parent widget.
@@ -43,14 +43,14 @@ typedef struct _XmTreeRec      *XmTreeWidget;
  *                 args, num_args - the number and list of args.
  *	Returns: The Widget created.
  */
-Widget             XmCreateTree(Widget, String, ArgList, Cardinal);
+Widget XmCreateTree(Widget, String, ArgList, Cardinal);
 extern WidgetClass xmTreeWidgetClass;
 /************************************************************
-*	MACROS
-*************************************************************/
+ *	MACROS
+ *************************************************************/
 /************************************************************
-*	GLOBAL FUNCTION DECLARATIONS
-*************************************************************/
+ *	GLOBAL FUNCTION DECLARATIONS
+ *************************************************************/
 #if defined(__cplusplus)
 }
 #endif

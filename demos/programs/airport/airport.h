@@ -91,7 +91,7 @@ typedef struct _Track {
    GC gc;
 } TrackRec, *Track;
 
-typedef enum {closed, open} AirportState ;
+typedef enum {closed, opened} AirportState ;
 
 /*
  * The airport data structure consists of

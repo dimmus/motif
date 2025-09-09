@@ -19,58 +19,54 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/
+ */
 #ifndef _XmShellEP_h
-#   define _XmShellEP_h
-#   include <Xm/DesktopP.h>
-#   ifdef __cplusplus
+#  define _XmShellEP_h
+#  include <Xm/DesktopP.h>
+#  ifdef __cplusplus
 extern "C" {
-#   endif
-#   define XmInheritEventHandler		((XtEventHandler)_XtInherit)
-#   define _XmRAW_MAP 0
-#   define _XmPOPUP_MAP 1
-#   define _XmMANAGE_MAP 2
-#   ifndef XmIsShellExt
-#      define XmIsShellExt(w)	XtIsSubclass(w, xmShellExtObjectClass)
-#   endif /* XmIsShellExt */
-typedef struct _XmShellExtRec      *XmShellExtObject;
+#  endif
+#  define XmInheritEventHandler ((XtEventHandler)_XtInherit)
+#  define _XmRAW_MAP 0
+#  define _XmPOPUP_MAP 1
+#  define _XmMANAGE_MAP 2
+#  ifndef XmIsShellExt
+#    define XmIsShellExt(w) XtIsSubclass(w, xmShellExtObjectClass)
+#  endif /* XmIsShellExt */
+typedef struct _XmShellExtRec *XmShellExtObject;
 typedef struct _XmShellExtClassRec *XmShellExtObjectClass;
-externalref WidgetClass             xmShellExtObjectClass;
+externalref WidgetClass xmShellExtObjectClass;
 
-typedef struct _XmShellExtClassPart
-{
-   XtEventHandler structureNotifyHandler;
-   XtPointer      extension;
+typedef struct _XmShellExtClassPart {
+  XtEventHandler structureNotifyHandler;
+  XtPointer extension;
 } XmShellExtClassPart, *XmShellExtClassPartPtr;
 
-typedef struct _XmShellExtClassRec
-{
-   ObjectClassPart     object_class;
-   XmExtClassPart      ext_class;
-   XmDesktopClassPart  desktop_class;
-   XmShellExtClassPart shell_class;
+typedef struct _XmShellExtClassRec {
+  ObjectClassPart object_class;
+  XmExtClassPart ext_class;
+  XmDesktopClassPart desktop_class;
+  XmShellExtClassPart shell_class;
 } XmShellExtClassRec;
 
-typedef struct
-{
-   unsigned long lastConfigureRequest;
-   Boolean       useAsyncGeometry;
+typedef struct {
+  unsigned long lastConfigureRequest;
+  Boolean useAsyncGeometry;
 } XmShellExtPart, *XmShellExtPartPtr;
 
 externalref XmShellExtClassRec xmShellExtClassRec;
 
-typedef struct _XmShellExtRec
-{
-   ObjectPart     object;
-   XmExtPart      ext;
-   XmDesktopPart  desktop;
-   XmShellExtPart shell;
+typedef struct _XmShellExtRec {
+  ObjectPart object;
+  XmExtPart ext;
+  XmDesktopPart desktop;
+  XmShellExtPart shell;
 } XmShellExtRec;
 
 /********    Private Function Declarations    ********/
 /********    End Private Function Declarations    ********/
-#   ifdef __cplusplus
+#  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */
-#   endif
+#  endif
 #endif /* _XmShellEP_h */
 /* DON'T ADD STUFF AFTER THIS #endif */

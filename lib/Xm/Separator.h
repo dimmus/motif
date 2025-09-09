@@ -19,37 +19,27 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/
+ */
 /*  Separator Widget  */
 #ifndef _XmSeparator_h
-#   define _XmSeparator_h
-#   include <Xm/Xm.h>
-#   ifdef __cplusplus
+#  define _XmSeparator_h
+#  include <Xm/Xm.h>
+#  ifdef __cplusplus
 extern "C" {
-#   endif
-#   ifndef XmIsSeparator
-#      define XmIsSeparator(w) XtIsSubclass(w, xmSeparatorWidgetClass)
-#   endif /* XmIsSeparator */
-externalref WidgetClass              xmSeparatorWidgetClass;
+#  endif
+#  ifndef XmIsSeparator
+#    define XmIsSeparator(w) XtIsSubclass(w, xmSeparatorWidgetClass)
+#  endif /* XmIsSeparator */
+externalref WidgetClass xmSeparatorWidgetClass;
 typedef struct _XmSeparatorClassRec *XmSeparatorWidgetClass;
-typedef struct _XmSeparatorRec      *XmSeparatorWidget;
+typedef struct _XmSeparatorRec *XmSeparatorWidget;
 /********    Public Function Declarations    ********/
-Widget XmCreateSeparator(
-   Widget   parent,
-   char    *name,
-   ArgList  arglist,
-   Cardinal argcount);
-Widget XmVaCreateSeparator(
-   Widget parent,
-   char  *name,
-   ...);
-Widget XmVaCreateManagedSeparator(
-   Widget parent,
-   char  *name,
-   ...);
+Widget XmCreateSeparator(Widget parent, char *name, ArgList arglist, Cardinal argcount);
+Widget XmVaCreateSeparator(Widget parent, char *name, ...);
+Widget XmVaCreateManagedSeparator(Widget parent, char *name, ...);
 /********    End Public Function Declarations    ********/
-#   ifdef __cplusplus
+#  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */
-#   endif
+#  endif
 #endif /* _XmSeparator_h */
 /* DON'T ADD STUFF AFTER THIS #endif */

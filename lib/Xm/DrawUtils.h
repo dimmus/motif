@@ -23,17 +23,12 @@
  */
 #ifndef __XmDraw_h__
 #define __XmDraw_h__
-#include <Xm/Xm.h>
 #include <Xm/Ext.h>
+#include <Xm/Xm.h>
 #if defined(__cplusplus)
 extern "C" {
 #endif
-typedef enum
-{
-   XmBEVEL_BOTTOM,
-   XmBEVEL_TOP,
-   XmBEVEL_BOTH
-} XmBevelOption;
+typedef enum { XmBEVEL_BOTTOM, XmBEVEL_TOP, XmBEVEL_BOTH } XmBevelOption;
 
 void XmDrawBevel(Display *, Drawable, GC, GC, int, int, unsigned int, XmBevelOption);
 #if defined(__cplusplus)

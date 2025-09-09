@@ -26,16 +26,16 @@
  */
 /* $XConsortium: DestI.h /main/6 1995/07/14 10:18:13 drk $ */
 #ifndef _XmDestI_h
-#   define _XmDestI_h
-#   include <Xm/XmP.h>
-#   ifdef __cplusplus
+#  define _XmDestI_h
+#  include <Xm/XmP.h>
+#  ifdef __cplusplus
 extern "C" {
-#   endif
+#  endif
 /********    Private Function Declarations for Dest.c    ********/
 extern void _XmSetDestination(Display *dpy, Widget w);
 /********    End Private Function Declarations    ********/
-#   ifdef __cplusplus
+#  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */
-#   endif
+#  endif
 #endif /* _XmDestI_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

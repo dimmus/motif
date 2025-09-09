@@ -19,52 +19,45 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/
+ */
 #ifndef _XmGMUtilsI_h
 #define _XmGMUtilsI_h
 /* Include files:
-*/
+ */
 #include <Xm/XmP.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
 /********    Private Function Declarations    ********/
-extern void _XmGMCalcSize(
-   XmManagerWidget manager,
-   Dimension       margin_width,
-   Dimension       margin_height,
-   Dimension      *replyWidth,
-   Dimension      *replyHeight);
-extern Boolean _XmGMDoLayout(
-   XmManagerWidget manager,
-   Dimension       margin_width,
-   Dimension       margin_height,
-   int             resize_policy,
-   Boolean         queryonly);
-extern void _XmGMEnforceMargin(
-   XmManagerWidget manager,
-   Dimension       margin_width,
-   Dimension       margin_height,
-   Boolean         setvalue);
-extern XtGeometryResult _XmGMHandleQueryGeometry(
-   Widget            widget,
-   XtWidgetGeometry *intended,
-   XtWidgetGeometry *desired,
-   Dimension         margin_width,
-   Dimension         margin_height,
-   int               resize_policy);
-extern Boolean _XmGMOverlap(
-   XmManagerWidget manager,
-   Widget          w);
-extern XtGeometryResult _XmGMHandleGeometryManager(
-   Widget            parent,
-   Widget            w,
-   XtWidgetGeometry *request,
-   XtWidgetGeometry *reply,
-   Dimension         margin_width,
-   Dimension         margin_height,
-   int               resize_policy,
-   int               allow_overlap);
+extern void _XmGMCalcSize(XmManagerWidget manager,
+                          Dimension margin_width,
+                          Dimension margin_height,
+                          Dimension *replyWidth,
+                          Dimension *replyHeight);
+extern Boolean _XmGMDoLayout(XmManagerWidget manager,
+                             Dimension margin_width,
+                             Dimension margin_height,
+                             int resize_policy,
+                             Boolean queryonly);
+extern void _XmGMEnforceMargin(XmManagerWidget manager,
+                               Dimension margin_width,
+                               Dimension margin_height,
+                               Boolean setvalue);
+extern XtGeometryResult _XmGMHandleQueryGeometry(Widget widget,
+                                                 XtWidgetGeometry *intended,
+                                                 XtWidgetGeometry *desired,
+                                                 Dimension margin_width,
+                                                 Dimension margin_height,
+                                                 int resize_policy);
+extern Boolean _XmGMOverlap(XmManagerWidget manager, Widget w);
+extern XtGeometryResult _XmGMHandleGeometryManager(Widget parent,
+                                                   Widget w,
+                                                   XtWidgetGeometry *request,
+                                                   XtWidgetGeometry *reply,
+                                                   Dimension margin_width,
+                                                   Dimension margin_height,
+                                                   int resize_policy,
+                                                   int allow_overlap);
 /********    End Private Function Declarations    ********/
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

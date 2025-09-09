@@ -104,29 +104,29 @@ extern "C" {
  * HeDu (hedu@cul-ipn.uni-kiel.de) 4/94
  */
 #ifndef XPMI_h
-#   define XPMI_h
-#   include "XpmP.h"
+#  define XPMI_h
+#  include "XpmP.h"
 /*
  * lets try to solve include files
  */
-#   include <sys/types.h>
-#   include <stdio.h>
-#   include <stdlib.h>
-#   include <limits.h>
-#   include <string.h>
-#   include <strings.h>
+#  include <limits.h>
+#  include <stdio.h>
+#  include <stdlib.h>
+#  include <string.h>
+#  include <strings.h>
+#  include <sys/types.h>
 /* stdio.h doesn't declare popen on a Sequent DYNIX OS */
-#   ifdef sequent
+#  ifdef sequent
 extern FILE *popen();
-#   endif
-#   ifdef FOR_MSW
-#      include "simx.h"
-#   else
+#  endif
+#  ifdef FOR_MSW
+#    include "simx.h"
+#  else
 /* Include X11 headers after system headers to avoid conflicts */
-#      include <X11/Xmd.h>
-#      include <X11/Xos.h>
-#      include <X11/Xfuncs.h>
-#   endif
+#    include <X11/Xfuncs.h>
+#    include <X11/Xmd.h>
+#    include <X11/Xos.h>
+#  endif
 /* The following should help people wanting to use their own memory allocation
  * functions. To avoid the overhead of a function call when the standard
  * functions are used these are all macros, even the XpmFree function which
@@ -134,75 +134,72 @@ extern FILE *popen();
  * So if change these be sure to change the XpmFree function in misc.c
  * accordingly.
  */
-#   ifndef NO_XPMFREE_MACRO
-#      ifdef XpmFree
-#         undef XpmFree
-#      endif
-#      define XpmFree(ptr) free(ptr)
-#   endif
-#   ifndef FOR_MSW
-#      define XpmMalloc(size) malloc((size))
-#      define XpmRealloc(ptr, size) realloc((ptr), (size))
-#      define XpmCalloc(nelem, elsize) calloc((nelem), (elsize))
-#   else
+#  ifndef NO_XPMFREE_MACRO
+#    ifdef XpmFree
+#      undef XpmFree
+#    endif
+#    define XpmFree(ptr) free(ptr)
+#  endif
+#  ifndef FOR_MSW
+#    define XpmMalloc(size) malloc((size))
+#    define XpmRealloc(ptr, size) realloc((ptr), (size))
+#    define XpmCalloc(nelem, elsize) calloc((nelem), (elsize))
+#  else
 /* checks for mallocs bigger than 64K */
-#      define XpmMalloc(size) boundCheckingMalloc((long)(size))/* in simx.[ch] */
-#      define XpmRealloc(ptr, size) boundCheckingRealloc((ptr),(long)(size))
-#      define XpmCalloc(nelem, elsize) \
-		boundCheckingCalloc((long)(nelem),(long) (elsize))
-#   endif
+#    define XpmMalloc(size) boundCheckingMalloc((long)(size)) /* in simx.[ch] */
+#    define XpmRealloc(ptr, size) boundCheckingRealloc((ptr), (long)(size))
+#    define XpmCalloc(nelem, elsize) boundCheckingCalloc((long)(nelem), (long)(elsize))
+#  endif
 
-#   include <limits.h>
-#   ifndef SIZE_MAX
-#      ifdef ULONG_MAX
-#         define SIZE_MAX ULONG_MAX
-#      else
-#         define SIZE_MAX UINT_MAX
-#      endif
-#   endif
-#   define XPMMAXCMTLEN BUFSIZ
+#  include <limits.h>
+#  ifndef SIZE_MAX
+#    ifdef ULONG_MAX
+#      define SIZE_MAX ULONG_MAX
+#    else
+#      define SIZE_MAX UINT_MAX
+#    endif
+#  endif
+#  define XPMMAXCMTLEN BUFSIZ
 
-typedef struct
-{
-   unsigned int type;
+typedef struct {
+  unsigned int type;
 
-   union {
-      FILE  *file;
-      char **data;
-   } stream;
+  union {
+    FILE *file;
+    char **data;
+  } stream;
 
-   char        *cptr;
-   unsigned int line;
-   int          CommentLength;
-   char         Comment[XPMMAXCMTLEN];
-   const char  *Bcmt, *Ecmt;
-   char         Bos, Eos;
-   int          format; /* 1 if XPM1, 0 otherwise */
-#   ifdef CXPMPROG
-   int lineNum;
-   int charNum;
-#   endif
+  char *cptr;
+  unsigned int line;
+  int CommentLength;
+  char Comment[XPMMAXCMTLEN];
+  const char *Bcmt, *Ecmt;
+  char Bos, Eos;
+  int format; /* 1 if XPM1, 0 otherwise */
+#  ifdef CXPMPROG
+  int lineNum;
+  int charNum;
+#  endif
 } xpmData;
 
-#   define XPMARRAY 0
-#   define XPMFILE  1
-#   define XPMPIPE  2
-#   define XPMBUFFER 3
-#   define EOL '\n'
-#   define TAB '\t'
-#   define SPC ' '
+#  define XPMARRAY 0
+#  define XPMFILE 1
+#  define XPMPIPE 2
+#  define XPMBUFFER 3
+#  define EOL '\n'
+#  define TAB '\t'
+#  define SPC ' '
 
-typedef struct
-{
-   const char *type; /* key word */
-   const char *Bcmt; /* string beginning comments */
-   const char *Ecmt; /* string ending comments */
-   char        Bos;  /* character beginning strings */
-   char        Eos;  /* character ending strings */
-   const char *Strs; /* strings separator */
-   const char *Dec;  /* data declaration string */
-   const char *Boa;  /* string beginning assignment */
-   const char *Eoa;  /* string ending assignment */
+typedef struct {
+  const char *type; /* key word */
+  const char *Bcmt; /* string beginning comments */
+  const char *Ecmt; /* string ending comments */
+  char Bos;         /* character beginning strings */
+  char Eos;         /* character ending strings */
+  const char *Strs; /* strings separator */
+  const char *Dec;  /* data declaration string */
+  const char *Boa;  /* string beginning assignment */
+  const char *Eoa;  /* string ending assignment */
 } xpmDataType;
 
 extern xpmDataType xpmDataTypes[];
@@ -211,21 +208,28 @@ extern xpmDataType xpmDataTypes[];
  * rgb values and ascii names (from rgb text file) rgb values,
  * range of 0 -> 65535 color mnemonic of rgb value
  */
-typedef struct
-{
-   int   r, g, b;
-   char *name;
+typedef struct {
+  int r, g, b;
+  char *name;
 } xpmRgbName;
 
 /* Maximum number of rgb mnemonics allowed in rgb text file. */
-#   define MAX_RGBNAMES 1024
+#  define MAX_RGBNAMES 1024
 extern const char *xpmColorKeys[];
-#   define TRANSPARENT_COLOR "None" /* this must be a string! */
+#  define TRANSPARENT_COLOR "None" /* this must be a string! */
 /* number of xpmColorKeys */
-#   define NKEYS 5
+#  define NKEYS 5
 /* XPM internal routines */
 FUNC(xpmParseData, int, (xpmData * data, XpmImage *image, XpmInfo *info));
-FUNC(xpmParseDataAndCreate, int, (Display * display, xpmData *data, XImage **image_return, XImage **shapeimage_return, XpmImage *image, XpmInfo *info, XpmAttributes *attributes));
+FUNC(xpmParseDataAndCreate,
+     int,
+     (Display * display,
+      xpmData *data,
+      XImage **image_return,
+      XImage **shapeimage_return,
+      XpmImage *image,
+      XpmInfo *info,
+      XpmAttributes *attributes));
 FUNC(xpmFreeColorTable, void, (XpmColor * colorTable, int ncolors));
 FUNC(xpmInitAttributes, void, (XpmAttributes * attributes));
 FUNC(xpmInitXpmImage, void, (XpmImage * image));
@@ -233,52 +237,75 @@ FUNC(xpmInitXpmInfo, void, (XpmInfo * info));
 FUNC(xpmSetInfoMask, void, (XpmInfo * info, XpmAttributes *attributes));
 FUNC(xpmSetInfo, void, (XpmInfo * info, XpmAttributes *attributes));
 FUNC(xpmSetAttributes, void, (XpmAttributes * attributes, XpmImage *image, XpmInfo *info));
-FUNC(xpmCreatePixmapFromImage, void, (Display * display, Drawable d, XImage *ximage, Pixmap *pixmap_return));
-FUNC(xpmCreateImageFromPixmap, void, (Display * display, Pixmap pixmap, XImage **ximage_return, unsigned int *width, unsigned int *height));
+FUNC(xpmCreatePixmapFromImage,
+     void,
+     (Display * display, Drawable d, XImage *ximage, Pixmap *pixmap_return));
+FUNC(xpmCreateImageFromPixmap,
+     void,
+     (Display * display,
+      Pixmap pixmap,
+      XImage **ximage_return,
+      unsigned int *width,
+      unsigned int *height));
 
 /* structures and functions related to hastable code */
-typedef struct _xpmHashAtom
-{
-   char *name;
-   void *data;
+typedef struct _xpmHashAtom {
+  char *name;
+  void *data;
 } *xpmHashAtom;
 
-typedef struct
-{
-   unsigned int size;
-   unsigned int limit;
-   unsigned int used;
-   xpmHashAtom *atomTable;
+typedef struct {
+  unsigned int size;
+  unsigned int limit;
+  unsigned int used;
+  xpmHashAtom *atomTable;
 } xpmHashTable;
 
 FUNC(xpmHashTableInit, int, (xpmHashTable * table));
 FUNC(xpmHashTableFree, void, (xpmHashTable * table));
 FUNC(xpmHashSlot, xpmHashAtom *, (xpmHashTable * table, char *s));
 FUNC(xpmHashIntern, int, (xpmHashTable * table, char *tag, void *data));
-#   define HashAtomData(i) ((void *)(long)i)
-#   define HashColorIndex(slot) ((unsigned long)((*slot)->data))
-#   define USE_HASHTABLE (cpp > 2 && ncolors > 4)
+#  define HashAtomData(i) ((void *)(long)i)
+#  define HashColorIndex(slot) ((unsigned long)((*slot)->data))
+#  define USE_HASHTABLE (cpp > 2 && ncolors > 4)
 /* I/O utility */
 FUNC(xpmNextString, int, (xpmData * mdata));
 FUNC(xpmNextUI, int, (xpmData * mdata, unsigned int *ui_return));
 FUNC(xpmGetString, int, (xpmData * mdata, char **sptr, unsigned int *l));
-#   define xpmGetC(mdata) \
-	((!mdata->type || mdata->type == XPMBUFFER) ? \
-	 (*mdata->cptr++) : (getc(mdata->stream.file)))
+#  define xpmGetC(mdata) \
+    ((!mdata->type || mdata->type == XPMBUFFER) ? (*mdata->cptr++) : (getc(mdata->stream.file)))
 FUNC(xpmNextWord, unsigned int, (xpmData * mdata, char *buf, unsigned int buflen));
 FUNC(xpmGetCmt, int, (xpmData * mdata, char **cmt));
 FUNC(xpmParseHeader, int, (xpmData * mdata));
-FUNC(xpmParseValues, int, (xpmData * data, unsigned int *width, unsigned int *height, unsigned int *ncolors, unsigned int *cpp, unsigned int *x_hotspot, unsigned int *y_hotspot, unsigned int *hotspot, unsigned int *extensions));
-FUNC(xpmParseColors, int, (xpmData * data, unsigned int ncolors, unsigned int cpp, XpmColor **colorTablePtr, xpmHashTable *hashtable));
-FUNC(xpmParseExtensions, int, (xpmData * data, XpmExtension **extensions, unsigned int *nextensions));
+FUNC(xpmParseValues,
+     int,
+     (xpmData * data,
+      unsigned int *width,
+      unsigned int *height,
+      unsigned int *ncolors,
+      unsigned int *cpp,
+      unsigned int *x_hotspot,
+      unsigned int *y_hotspot,
+      unsigned int *hotspot,
+      unsigned int *extensions));
+FUNC(xpmParseColors,
+     int,
+     (xpmData * data,
+      unsigned int ncolors,
+      unsigned int cpp,
+      XpmColor **colorTablePtr,
+      xpmHashTable *hashtable));
+FUNC(xpmParseExtensions,
+     int,
+     (xpmData * data, XpmExtension **extensions, unsigned int *nextensions));
 /* RGB utility */
 FUNC(xpmReadRgbNames, int, (char *rgb_fname, xpmRgbName *rgbn));
 FUNC(xpmGetRgbName, char *, (xpmRgbName * rgbn, int rgbn_max, int red, int green, int blue));
 FUNC(xpmFreeRgbNames, void, (xpmRgbName * rgbn, int rgbn_max));
-#   ifdef FOR_MSW
+#  ifdef FOR_MSW
 FUNC(xpmGetRGBfromName, int, (char *name, int *r, int *g, int *b));
-#   endif
-#   ifndef AMIGA
+#  endif
+#  ifndef AMIGA
 FUNC(xpm_xynormalizeimagebits, void, (register unsigned char *bp, register XImage *img));
 FUNC(xpm_znormalizeimagebits, void, (register unsigned char *bp, register XImage *img));
 /*
@@ -300,37 +327,36 @@ FUNC(xpm_znormalizeimagebits, void, (register unsigned char *bp, register XImage
  * for a pixel with coordinates x and y for image data in ZPixmap format.
  *
  */
-#      define XYNORMALIZE(bp, img) \
-    if ((img->byte_order == MSBFirst) || (img->bitmap_bit_order == MSBFirst)) \
-	xpm_xynormalizeimagebits((unsigned char *)(bp), img)
-#      define ZNORMALIZE(bp, img) \
-    if (img->byte_order == MSBFirst) \
-	xpm_znormalizeimagebits((unsigned char *)(bp), img)
-#      define XYINDEX(x, y, img) \
-    ((y) * img->bytes_per_line) + \
-    (((x) + img->xoffset) / img->bitmap_unit) * (img->bitmap_unit >> 3)
-#      define ZINDEX(x, y, img) ((y) * img->bytes_per_line) + \
-    (((x) * img->bits_per_pixel) >> 3)
-#      define ZINDEX32(x, y, img) ((y) * img->bytes_per_line) + ((x) << 2)
-#      define ZINDEX16(x, y, img) ((y) * img->bytes_per_line) + ((x) << 1)
-#      define ZINDEX8(x, y, img) ((y) * img->bytes_per_line) + (x)
-#      define ZINDEX1(x, y, img) ((y) * img->bytes_per_line) + ((x) >> 3)
-#   endif /* not AMIGA */
-#   if !HAVE_STRDUP
+#    define XYNORMALIZE(bp, img) \
+      if ((img->byte_order == MSBFirst) || (img->bitmap_bit_order == MSBFirst)) \
+      xpm_xynormalizeimagebits((unsigned char *)(bp), img)
+#    define ZNORMALIZE(bp, img) \
+      if (img->byte_order == MSBFirst) \
+      xpm_znormalizeimagebits((unsigned char *)(bp), img)
+#    define XYINDEX(x, y, img) \
+      ((y) * img->bytes_per_line) + \
+          (((x) + img->xoffset) / img->bitmap_unit) * (img->bitmap_unit >> 3)
+#    define ZINDEX(x, y, img) ((y) * img->bytes_per_line) + (((x) * img->bits_per_pixel) >> 3)
+#    define ZINDEX32(x, y, img) ((y) * img->bytes_per_line) + ((x) << 2)
+#    define ZINDEX16(x, y, img) ((y) * img->bytes_per_line) + ((x) << 1)
+#    define ZINDEX8(x, y, img) ((y) * img->bytes_per_line) + (x)
+#    define ZINDEX1(x, y, img) ((y) * img->bytes_per_line) + ((x) >> 3)
+#  endif /* not AMIGA */
+#  if !HAVE_STRDUP
 FUNC(xpmstrdup, char *, (char *s1));
-#   else
-#      undef xpmstrdup
+#  else
+#    undef xpmstrdup
 /* Ensure strdup is properly declared */
 extern char *strdup(const char *s);
-#      define xpmstrdup strdup
-#   endif
-#   if !HAVE_STRCASECMP
+#    define xpmstrdup strdup
+#  endif
+#  if !HAVE_STRCASECMP
 FUNC(xpmstrcasecmp, int, (char *s1, char *s2));
-#   else
-#      undef xpmstrcasecmp
-#      define xpmstrcasecmp strcasecmp
+#  else
+#    undef xpmstrcasecmp
+#    define xpmstrcasecmp strcasecmp
 /* strings.h already included above, no need to include again */
-#   endif
+#  endif
 FUNC(xpmatoui, unsigned int, (char *p, unsigned int l, unsigned int *ui_return));
 #endif
 #ifdef __cplusplus

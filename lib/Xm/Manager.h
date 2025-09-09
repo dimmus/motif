@@ -25,21 +25,21 @@
  * HISTORY
  */
 #ifndef _XmManager_h
-#   define _XmManager_h
-#   include <Xm/Xm.h>
-#   ifdef __cplusplus
+#  define _XmManager_h
+#  include <Xm/Xm.h>
+#  ifdef __cplusplus
 extern "C" {
-#   endif
-#   ifndef XmIsManager
-#      define XmIsManager(w) XtIsSubclass(w, xmManagerWidgetClass)
-#   endif /* XmIsManager */
-externalref WidgetClass            xmManagerWidgetClass;
+#  endif
+#  ifndef XmIsManager
+#    define XmIsManager(w) XtIsSubclass(w, xmManagerWidgetClass)
+#  endif /* XmIsManager */
+externalref WidgetClass xmManagerWidgetClass;
 typedef struct _XmManagerClassRec *XmManagerWidgetClass;
-typedef struct _XmManagerRec      *XmManagerWidget;
+typedef struct _XmManagerRec *XmManagerWidget;
 /********    Public Function Declarations    ********/
 /********    End Public Function Declarations    ********/
-#   ifdef __cplusplus
+#  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */
-#   endif
+#  endif
 #endif /* _XmManager_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

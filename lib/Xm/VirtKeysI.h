@@ -26,28 +26,20 @@
  */
 /* $XConsortium: VirtKeysI.h /main/5 1995/07/13 18:20:49 drk $ */
 #ifndef _XmVirtKeyI_h
-#   define _XmVirtKeyI_h
-#   include <Xm/VirtKeysP.h>
-#   ifdef __cplusplus
+#  define _XmVirtKeyI_h
+#  include <Xm/VirtKeysP.h>
+#  ifdef __cplusplus
 extern "C" {
-#   endif
+#  endif
 /********    Private Function Declarations    ********/
-extern void _XmVirtKeysInitialize(
-   Widget widget);
-extern void _XmVirtKeysDestroy(
-   Widget widget);
-extern void _XmVirtKeysStoreBindings(
-   Widget shell,
-   String binding);
-extern Boolean _XmVirtKeysLoadFileBindings(
-   char   *fileName,
-   String *binding);
-extern int _XmVirtKeysLoadFallbackBindings(
-   Display *display,
-   String  *binding);
+extern void _XmVirtKeysInitialize(Widget widget);
+extern void _XmVirtKeysDestroy(Widget widget);
+extern void _XmVirtKeysStoreBindings(Widget shell, String binding);
+extern Boolean _XmVirtKeysLoadFileBindings(char *fileName, String *binding);
+extern int _XmVirtKeysLoadFallbackBindings(Display *display, String *binding);
 /********    End Private Function Declarations    ********/
-#   ifdef __cplusplus
+#  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */
-#   endif
+#  endif
 #endif /* _XmVirtKeyI_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

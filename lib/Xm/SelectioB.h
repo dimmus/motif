@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/
+ */
 #ifndef _XmSelectionBox_h
 #define _XmSelectionBox_h
 #include <Xm/Xm.h>
@@ -27,41 +27,23 @@
 extern "C" {
 #endif
 /* Class record constants */
-externalref WidgetClass                 xmSelectionBoxWidgetClass;
+externalref WidgetClass xmSelectionBoxWidgetClass;
 typedef struct _XmSelectionBoxClassRec *XmSelectionBoxWidgetClass;
-typedef struct _XmSelectionBoxRec      *XmSelectionBoxWidget;
+typedef struct _XmSelectionBoxRec *XmSelectionBoxWidget;
 #ifndef XmIsSelectionBox
-#   define XmIsSelectionBox(w)  (XtIsSubclass (w, xmSelectionBoxWidgetClass))
+#  define XmIsSelectionBox(w) (XtIsSubclass(w, xmSelectionBoxWidgetClass))
 #endif
 /********    Public Function Declarations    ********/
 XM_ALTERNATIVE(Use XtNameToWidget instead)
 extern Widget XmSelectionBoxGetChild(Widget sb, unsigned char which);
-extern Widget XmCreateSelectionBox(
-   Widget   p,
-   String   name,
-   ArgList  args,
-   Cardinal n);
-extern Widget XmCreateSelectionDialog(
-   Widget   ds_p,
-   String   name,
-   ArgList  sb_args,
-   Cardinal sb_n);
-extern Widget XmCreatePromptDialog(
-   Widget   ds_p,
-   String   name,
-   ArgList  sb_args,
-   Cardinal sb_n);
+extern Widget XmCreateSelectionBox(Widget p, String name, ArgList args, Cardinal n);
+extern Widget XmCreateSelectionDialog(Widget ds_p, String name, ArgList sb_args, Cardinal sb_n);
+extern Widget XmCreatePromptDialog(Widget ds_p, String name, ArgList sb_args, Cardinal sb_n);
 /*
  * Variable argument list functions
  */
-extern Widget XmVaCreateSelectionBox(
-   Widget parent,
-   char  *name,
-   ...);
-extern Widget XmVaCreateManagedSelectionBox(
-   Widget parent,
-   char  *name,
-   ...);
+extern Widget XmVaCreateSelectionBox(Widget parent, char *name, ...);
+extern Widget XmVaCreateManagedSelectionBox(Widget parent, char *name, ...);
 /********    End Public Function Declarations    ********/
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

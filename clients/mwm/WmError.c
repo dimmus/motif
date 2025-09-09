@@ -50,6 +50,9 @@ static char rcsid[] = "$XConsortium: WmError.c /main/6 1996/10/07 14:27:34 drk $
  */
 #include "WmError.h"
 
+/* Forward declaration for WmXtWarning */
+void WmXtWarning (char *message);
+
 #ifdef DEBUG
 
 #define E_MAJOR_CODE		0
@@ -118,7 +121,7 @@ WmInitErrorHandler (Display *display)
 
 	if ((pchErrorFormat[i] = (char *) XtMalloc (1+strlen(buffer))) == NULL)
 	{
-	    Warning ("Insufficient memory for error message initialization.");
+	    XtWarning ("Insufficient memory for error message initialization.");
 	    ExitWM (1);
 	}
 
@@ -172,7 +175,7 @@ WmXErrorHandler (Display *display, XErrorEvent *errorEvent)
     char message[BUFSIZ];
 
     XGetErrorText (display, errorEvent->error_code, buffer, BUFSIZ);
-    Warning ("X error occurred during window management operation");
+    XtWarning ("X error occurred during window management operation");
     fprintf (stderr, "Description = '%s'\n  ", buffer);
 
     fprintf (stderr, pchErrorFormat[E_MAJOR_CODE], errorEvent->request_code);
@@ -240,7 +243,7 @@ WmXIOErrorHandler (Display *display)
   char  err[100];
 
   sprintf (err, "%s: %s\n", "I/O error on display:", XDisplayString(display));
-  Warning(err);
+  XtWarning(err);
 
   ExitWM (WM_ERROR_EXIT_VALUE);
 
@@ -270,7 +273,7 @@ _X_NORETURN void
 WmXtErrorHandler (char *message)
 {
 
-    Warning (message);
+    XtWarning (message);
     ExitWM (WM_ERROR_EXIT_VALUE);
 } /* END OF FUNCTION WmXtErrorHandler */
 
@@ -297,7 +300,7 @@ WmXtWarningHandler (char *message)
 {
 
 #ifdef DEBUG
-    Warning (message);
+    WmXtWarning (message);
 #endif /* DEBUG */
 
 } /* END OF FUNCTIONS WmXtWarningHandler */
@@ -305,7 +308,7 @@ WmXtWarningHandler (char *message)
 
 /*************************************<->*************************************
  *
- *  Warning (message)
+ *  XtWarning (message)
  *
  *
  *  Description:
@@ -320,7 +323,7 @@ WmXtWarningHandler (char *message)
  *************************************<->***********************************/
 
 void
-Warning (char *message)
+WmXtWarning (char *message)
 {
 #ifdef WSM
     char pch[MAXWMPATH+1];
@@ -334,7 +337,63 @@ Warning (char *message)
     fflush (stderr);
 #endif /* WSM */
 
+} /* END OF FUNCTION WmXtWarning */
+
+/*************************************<->*************************************
+ *
+ *  Warning (message)
+ *
+ *
+ *  Description:
+ *  -----------
+ *  This function is a simple wrapper around XtWarning.
+ *
+ *
+ *  Inputs:
+ *  ------
+ *  message = pointer to a message string
+ *
+ *************************************<->***********************************/
+
+void
+Warning (char *message)
+{
+    XtWarning (message);
 } /* END OF FUNCTION Warning */
+
+/*************************************<->*************************************
+ *
+ *  MWarning (format, message)
+ *
+ *
+ *  Description:
+ *  -----------
+ *  This function is a simple wrapper around XtWarning that formats
+ *  a message using sprintf.
+ *
+ *
+ *  Inputs:
+ *  ------
+ *  format = pointer to a format string
+ *  message = pointer to a message string
+ *
+ *************************************<->***********************************/
+
+void
+MWarning (char *format, char *message)
+{
+    char pch[MAXWMPATH+1];
+    
+    if (strlen(format) + strlen(message) < (size_t) MAXWMPATH)
+    {
+        sprintf (pch, format, message);
+        XtWarning (pch);
+    }
+    else
+    {
+        XtWarning (message);
+    }
+} /* END OF FUNCTION MWarning */
 
 #ifdef WSM
 #ifdef DEBUGGER

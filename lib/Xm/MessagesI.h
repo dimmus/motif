@@ -19,13 +19,13 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/
+ */
 #ifndef _XmMessagesI_h
-#   define _XmMessagesI_h
-#   include <X11/Intrinsic.h>
-#   ifdef __cplusplus
+#  define _XmMessagesI_h
+#  include <X11/Intrinsic.h>
+#  ifdef __cplusplus
 extern "C" {
-#   endif
+#  endif
 /* The symbol _XmConst is used for constant data that cannot be
  * declared const in the header file because of usage as arguments to
  * routines which have string arguments that are not declared const.
@@ -34,9 +34,9 @@ extern "C" {
  * In the source file, however, _XmConst is defined to be const,
  * so as to allow shared data in a shared library environment.
  */
-#   ifndef _XmConst
-#      define _XmConst
-#   endif
+#  ifndef _XmConst
+#    define _XmConst
+#  endif
 externalref _XmConst char *_XmMsgBaseClass_0000;
 externalref _XmConst char *_XmMsgBaseClass_0001;
 externalref _XmConst char *_XmMsgBaseClass_0002;
@@ -328,9 +328,9 @@ externalref _XmConst char *_XmMsgDataF_0005;
 externalref _XmConst char *_XmMsgDataF_0006;
 externalref _XmConst char *_XmMsgDataFWcs_0000;
 externalref _XmConst char *_XmMsgDataFWcs_0001;
-#   include "XmMsgI.h"
-#   ifdef __cplusplus
+#  include "XmMsgI.h"
+#  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */
-#   endif
+#  endif
 #endif /* _XmMessagesI_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

@@ -35,10 +35,9 @@ externalref XrmQuark XmQTspecifyLayoutDirection;
 typedef XmDirection (*XmGetLayoutDirectionProc)(Widget);
 
 /* Version 0: initial release. */
-typedef struct
-{
-   int                      version; /* 0 */
-   XmGetLayoutDirectionProc get_direction;
+typedef struct {
+  int version; /* 0 */
+  XmGetLayoutDirectionProc get_direction;
 } XmSpecifyLayoutDirectionTraitRec, *XmSpecifyLayoutDirectionTrait;
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

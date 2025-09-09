@@ -31,22 +31,20 @@
 *  Developed by Arnaud Le Hors                                                *
 \*****************************************************************************/
 #ifdef HAVE_CONFIG_H
-#   include <config.h>
+#  include <config.h>
 #endif
 #include "XpmI.h"
 
-void
-xpmCreateImageFromPixmap(
-   Display      *display,
-   Pixmap        pixmap,
-   XImage      **ximage_return,
-   unsigned int *width,
-   unsigned int *height)
+void xpmCreateImageFromPixmap(Display *display,
+                              Pixmap pixmap,
+                              XImage **ximage_return,
+                              unsigned int *width,
+                              unsigned int *height)
 {
-   unsigned int dum;
-   int          dummy;
-   Window       win;
-   if (*width == 0 && *height == 0)
-      XGetGeometry(display, pixmap, &win, &dummy, &dummy, width, height, &dum, &dum);
-   *ximage_return = XGetImage(display, pixmap, 0, 0, *width, *height, AllPlanes, ZPixmap);
+  unsigned int dum;
+  int dummy;
+  Window win;
+  if (*width == 0 && *height == 0)
+    XGetGeometry(display, pixmap, &win, &dummy, &dummy, width, height, &dum, &dum);
+  *ximage_return = XGetImage(display, pixmap, 0, 0, *width, *height, AllPlanes, ZPixmap);
 }

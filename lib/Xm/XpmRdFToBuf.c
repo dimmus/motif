@@ -36,72 +36,64 @@
  */
 /* October 2004, source code review by Thomas Biege <thomas@suse.de> */
 #ifdef HAVE_CONFIG_H
-#   include <config.h>
+#  include <config.h>
 #endif
 #include "XpmI.h"
 #include <sys/stat.h>
 #if !defined(FOR_MSW) && !defined(WIN32)
-#   include <unistd.h>
+#  include <unistd.h>
 #endif
 #ifndef VAX11C
-#   include <fcntl.h>
+#  include <fcntl.h>
 #endif
 #if defined(FOR_MSW) || defined(WIN32)
-#   include <io.h>
-#   define stat _stat
-#   define fstat _fstat
-#   define fdopen _fdopen
-#   define O_RDONLY _O_RDONLY
+#  include <io.h>
+#  define stat _stat
+#  define fstat _fstat
+#  define fdopen _fdopen
+#  define O_RDONLY _O_RDONLY
 #endif
-int
-XpmReadFileToBuffer(
-   const char *filename,
-   char      **buffer_return)
+int XpmReadFileToBuffer(const char *filename, char **buffer_return)
 {
-   int         fd, fcheck;
-   off_t       len;
-   char       *ptr;
-   struct stat stats;
-   FILE       *fp;
-   *buffer_return = NULL;
+  int fd, fcheck;
+  off_t len;
+  char *ptr;
+  struct stat stats;
+  FILE *fp;
+  *buffer_return = NULL;
 #ifndef VAX11C
-   fd = open(filename, O_RDONLY);
+  fd = open(filename, O_RDONLY);
 #else
-   fd = open(filename, O_RDONLY, NULL);
+  fd = open(filename, O_RDONLY, NULL);
 #endif
-   if (fd < 0)
-      return XpmOpenFailed;
-   if (fstat(fd, &stats))
-   {
-      close(fd);
-      return XpmOpenFailed;
-   }
-   fp = fdopen(fd, "r");
-   if (!fp)
-   {
-      close(fd);
-      return XpmOpenFailed;
-   }
-   len = stats.st_size;
-   if (len < 0 || len >= SIZE_MAX)
-   {
-      close(fd);
-      return XpmOpenFailed;
-   }
-   ptr = (char *)XpmMalloc(len + 1);
-   if (!ptr)
-   {
-      fclose(fp);
-      return XpmNoMemory;
-   }
-   fcheck = fread(ptr, 1, len, fp);
-   fclose(fp);
-   if (fcheck != len)
-   {
-      XpmFree(ptr);
-      return XpmOpenFailed;
-   }
-   ptr[len]       = '\0';
-   *buffer_return = ptr;
-   return XpmSuccess;
+  if (fd < 0)
+    return XpmOpenFailed;
+  if (fstat(fd, &stats)) {
+    close(fd);
+    return XpmOpenFailed;
+  }
+  fp = fdopen(fd, "r");
+  if (!fp) {
+    close(fd);
+    return XpmOpenFailed;
+  }
+  len = stats.st_size;
+  if (len < 0 || len >= SIZE_MAX) {
+    close(fd);
+    return XpmOpenFailed;
+  }
+  ptr = (char *)XpmMalloc(len + 1);
+  if (!ptr) {
+    fclose(fp);
+    return XpmNoMemory;
+  }
+  fcheck = fread(ptr, 1, len, fp);
+  fclose(fp);
+  if (fcheck != len) {
+    XpmFree(ptr);
+    return XpmOpenFailed;
+  }
+  ptr[len] = '\0';
+  *buffer_return = ptr;
+  return XpmSuccess;
 }

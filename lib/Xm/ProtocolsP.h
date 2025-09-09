@@ -19,61 +19,55 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/
+ */
 #ifndef _XmProtocolsP_h
 #define _XmProtocolsP_h
-#include <Xm/Protocols.h>
 #include <Xm/ExtObjectP.h>
+#include <Xm/Protocols.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
-typedef struct _XmProtocolClassPart
-{
-   XtPointer extension;
+typedef struct _XmProtocolClassPart {
+  XtPointer extension;
 } XmProtocolClassPart;
 
-typedef struct _XmProtocolClassRec
-{
-   ObjectClassPart     object_class;
-   XmExtClassPart      ext_class;
-   XmProtocolClassPart protocol_class;
+typedef struct _XmProtocolClassRec {
+  ObjectClassPart object_class;
+  XmExtClassPart ext_class;
+  XmProtocolClassPart protocol_class;
 } XmProtocolClassRec, *XmProtocolObjectClass;
 
-typedef struct _XmProtocolPart
-{
-   XtCallbackRec  pre_hook, post_hook;
-   XtCallbackList callbacks;
-   Atom           atom;
-   Boolean        active;
+typedef struct _XmProtocolPart {
+  XtCallbackRec pre_hook, post_hook;
+  XtCallbackList callbacks;
+  Atom atom;
+  Boolean active;
 } XmProtocolPart, *XmProtocolPartPtr;
 
-typedef struct _XmProtocolRec
-{
-   ObjectPart     object;
-   XmExtPart      ext;
-   XmProtocolPart protocol;
+typedef struct _XmProtocolRec {
+  ObjectPart object;
+  XmExtPart ext;
+  XmProtocolPart protocol;
 } XmProtocolRec, *XmProtocol, **XmProtocolList;
 #ifndef XmIsProtocol
-#   define XmIsProtocol(w)	XtIsSubclass(w, xmProtocolObjectClass)
+#  define XmIsProtocol(w) XtIsSubclass(w, xmProtocolObjectClass)
 #endif /* XmIsProtocol */
 /* Class record constants */
 externalref XmProtocolClassRec xmProtocolClassRec;
-externalref WidgetClass        xmProtocolObjectClass;
+externalref WidgetClass xmProtocolObjectClass;
 
-typedef struct _XmProtocolMgrRec
-{
-   Atom           property;
-   XmProtocolList protocols;
-   Cardinal       num_protocols;
-   Cardinal       max_protocols;
+typedef struct _XmProtocolMgrRec {
+  Atom property;
+  XmProtocolList protocols;
+  Cardinal num_protocols;
+  Cardinal max_protocols;
 } XmProtocolMgrRec, *XmProtocolMgr, **XmProtocolMgrList;
 
-typedef struct _XmAllProtocolsMgrRec
-{
-   XmProtocolMgrList protocol_mgrs;
-   Cardinal          num_protocol_mgrs;
-   Cardinal          max_protocol_mgrs;
-   Widget            shell;
+typedef struct _XmAllProtocolsMgrRec {
+  XmProtocolMgrList protocol_mgrs;
+  Cardinal num_protocol_mgrs;
+  Cardinal max_protocol_mgrs;
+  Widget shell;
 } XmAllProtocolsMgrRec, *XmAllProtocolsMgr;
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

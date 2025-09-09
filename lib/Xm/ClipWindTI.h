@@ -30,17 +30,16 @@
  */
 #ifndef _XmClipWindowTI_H
 #define _XmClipWindowTI_H
-#include <Xm/Xm.h>
 #include <Xm/NavigatorT.h>
+#include <Xm/Xm.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
 externalref XrmQuark _XmQTclipWindow;
 
 /* Version 0: initial release. */
-typedef struct _XmClipWindowTraitRec
-{
-   int version; /* 0 */
+typedef struct _XmClipWindowTraitRec {
+  int version; /* 0 */
 } XmClipWindowTraitRec, *XmClipWindowTrait;
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

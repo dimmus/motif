@@ -7,7 +7,7 @@
  */
 #ifndef _XmJpegI_h
 #define _XmJpegI_h
-#include <stdio.h>
 #include <X11/Xlib.h>
+#include <stdio.h>
 int _XmJpegGetImage(FILE *infile, XImage **ximage);
 #endif

@@ -19,40 +19,28 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/
+ */
 #ifndef _XmCascadeB_h
 #define _XmCascadeB_h
 #include <Xm/Xm.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
-externalref WidgetClass                  xmCascadeButtonWidgetClass;
-typedef struct _XmCascadeButtonRec      *XmCascadeButtonWidget;
+externalref WidgetClass xmCascadeButtonWidgetClass;
+typedef struct _XmCascadeButtonRec *XmCascadeButtonWidget;
 typedef struct _XmCascadeButtonClassRec *XmCascadeButtonWidgetClass;
 /* fast subclass define */
 #ifndef XmIsCascadeButton
-#   define XmIsCascadeButton(w) XtIsSubclass(w, xmCascadeButtonWidgetClass)
+#  define XmIsCascadeButton(w) XtIsSubclass(w, xmCascadeButtonWidgetClass)
 #endif /* XmIsCascadeButton */
 /********    Public Function Declarations    ********/
-extern Widget XmCreateCascadeButton(
-   Widget   parent,
-   char    *name,
-   ArgList  al,
-   Cardinal ac);
-extern void XmCascadeButtonHighlight(
-   Widget  cb,
-   Boolean highlight);
+extern Widget XmCreateCascadeButton(Widget parent, char *name, ArgList al, Cardinal ac);
+extern void XmCascadeButtonHighlight(Widget cb, Boolean highlight);
 /*
  * Variable argument list functions
  */
-extern Widget XmVaCreateCascadeButton(
-   Widget parent,
-   char  *name,
-   ...);
-extern Widget XmVaCreateManagedCascadeButton(
-   Widget parent,
-   char  *name,
-   ...);
+extern Widget XmVaCreateCascadeButton(Widget parent, char *name, ...);
+extern Widget XmVaCreateManagedCascadeButton(Widget parent, char *name, ...);
 /********    End Public Function Declarations    ********/
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

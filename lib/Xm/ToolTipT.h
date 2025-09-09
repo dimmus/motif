@@ -12,10 +12,9 @@ extern "C" {
 externalref XrmQuark XmQTtoolTip;
 
 /* Trait structures and typedefs, place typedefs first */
-typedef struct _XmToolTipTraitRec
-{
-   int      version;
-   XmString tool_tip_string;
+typedef struct _XmToolTipTraitRec {
+  int version;
+  XmString tool_tip_string;
 } XmToolTipTraitRec, *XmToolTipTrait;
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

@@ -19,54 +19,47 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/
+ */
 #ifndef _XmDragIconP_h
 #define _XmDragIconP_h
-#include <Xm/VendorSEP.h>
 #include <Xm/DragIcon.h>
+#include <Xm/VendorSEP.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
 typedef void (*XmCloneVisualProc)(XmDragIconObject, Widget, Widget);
-typedef void (*XmMovePixmapProc)(XmDragIconObject,
-                                 XmDragIconObject,
-                                 XmDragIconObject,
-                                 Position,
-                                 Position);
+typedef void (*XmMovePixmapProc)(
+    XmDragIconObject, XmDragIconObject, XmDragIconObject, Position, Position);
 
-typedef struct
-{
-   XtPointer extension;
+typedef struct {
+  XtPointer extension;
 } XmDragIconClassPart;
 
-typedef struct _XmDragIconClassRec
-{
-   RectObjClassPart    rectangle_class;
-   XmDragIconClassPart dragIcon_class;
+typedef struct _XmDragIconClassRec {
+  RectObjClassPart rectangle_class;
+  XmDragIconClassPart dragIcon_class;
 } XmDragIconClassRec;
 
-typedef struct
-{
-   Cardinal      depth;
-   Pixmap        pixmap;
-   Dimension     width, height;
-   Pixmap        mask;
-   Position      hot_x, hot_y;
-   Position      offset_x, offset_y;
-   unsigned char attachment;
-   Boolean       isDirty;
-   Region        region;
-   Region        restore_region;
-   Position      x_offset, y_offset;
+typedef struct {
+  Cardinal depth;
+  Pixmap pixmap;
+  Dimension width, height;
+  Pixmap mask;
+  Position hot_x, hot_y;
+  Position offset_x, offset_y;
+  unsigned char attachment;
+  Boolean isDirty;
+  Region region;
+  Region restore_region;
+  Position x_offset, y_offset;
 } XmDragIconPart, *XmDragIconPartPtr;
 
 externalref XmDragIconClassRec xmDragIconClassRec;
 
-typedef struct _XmDragIconRec
-{
-   ObjectPart     object;
-   RectObjPart    rectangle;
-   XmDragIconPart drag;
+typedef struct _XmDragIconRec {
+  ObjectPart object;
+  RectObjPart rectangle;
+  XmDragIconPart drag;
 } XmDragIconRec;
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

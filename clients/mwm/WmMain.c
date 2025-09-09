@@ -264,7 +264,7 @@ int WmReturnIdentity ( int argc, char *argv[], char *environ[])
 	if (!(tempString =
 	      (char *)(XtMalloc ((unsigned int)(strlen (argv[0]) + 1)))))
 	{
-		Warning(((char *)GETMESSAGE(44, 2, "Insufficient memory for name of window manager")));
+		XtWarning(((char *)GETMESSAGE(44, 2, "Insufficient memory for name of window manager")));
 		exit(WM_ERROR_EXIT_VALUE);
 	}
 

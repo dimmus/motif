@@ -51,6 +51,7 @@
 
 #include <stdio.h>
 #include <Xm/Xm.h>          /* Motif Toolkit */
+#include <Xm/Scale.h>       /* Scale widget */
 #include <Mrm/MrmPublic.h>   /* Mrm */
 #include <Xmd/RegEdit.h>
 #include <Xmd/Help.h>

@@ -26,19 +26,16 @@
  * HISTORY
  */
 #ifndef _XmRCHookI_h
-#   define _XmRCHookI_h
-#   include <X11/Intrinsic.h>
-#   ifdef __cplusplus
+#  define _XmRCHookI_h
+#  include <X11/Intrinsic.h>
+#  ifdef __cplusplus
 extern "C" {
-#   endif
+#  endif
 /********    Private Function Declarations    ********/
-void _XmRCColorHook(
-   Widget    w,
-   ArgList   alIn,
-   Cardinal *acPtrIn);
+void _XmRCColorHook(Widget w, ArgList alIn, Cardinal *acPtrIn);
 /********    End Private Function Declarations    ********/
-#   ifdef __cplusplus
+#  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */
-#   endif
+#  endif
 #endif /* _XmRCHookI_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

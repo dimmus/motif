@@ -166,8 +166,8 @@ WmScreenData *dtSD;       /* for the "DT screen" of the display */
  */
 extern int firstTime;
 #if XM_MSGCAT
-extern char * pWarningStringFile;
-extern char * pWarningStringLine;
+extern char * pXtWarningStringFile;
+extern char * pXtWarningStringLine;
 #endif
 
 /*
@@ -516,7 +516,7 @@ void InitWmGlobal (int argc, char *argv [], char *environ [])
 
     if (!wmGD.display)
     {
-	Warning(((char *)GETMESSAGE(40, 1, "Could not open display.")));
+	XtWarning(((char *)GETMESSAGE(40, 1, "Could not open display.")));
 	ExitWM (WM_ERROR_EXIT_VALUE);
     }
 
@@ -682,7 +682,7 @@ void InitWmGlobal (int argc, char *argv [], char *environ [])
 	    XtCalloc (wmGD.numScreens, sizeof(WmScreenData))))
     {
 	ShowWaitState (FALSE);
-	Warning (((char *)GETMESSAGE(40, 2, "Insufficient memory for Screen data")));
+	XtWarning (((char *)GETMESSAGE(40, 2, "Insufficient memory for Screen data")));
 	ExitWM (WM_ERROR_EXIT_VALUE);
     }
     else
@@ -715,7 +715,7 @@ void InitWmGlobal (int argc, char *argv [], char *environ [])
 	    {
 		sprintf(pch,
 		    ((char *)GETMESSAGE(40, 3, "Another window manager is running on screen %d")), sNum);
-		Warning ((char *) &pch[0]);
+		XtWarning ((char *) &pch[0]);
 		wmGD.Screens[scr].managed = False;
 	    }
 	    else
@@ -807,7 +807,7 @@ void InitWmGlobal (int argc, char *argv [], char *environ [])
 		    if (!wmGD.display1)
 		    {
 			ShowWaitState (FALSE);
-			Warning(((char *)GETMESSAGE(40, 4, "Could not open second display connection.")));
+			XtWarning(((char *)GETMESSAGE(40, 4, "Could not open second display connection.")));
 			ExitWM (WM_ERROR_EXIT_VALUE);
 		    }
 
@@ -895,7 +895,7 @@ void InitWmGlobal (int argc, char *argv [], char *environ [])
 	     * No screens for me to manage, give up.
 	     */
 	    ShowWaitState (FALSE);
-	    Warning (((char *)GETMESSAGE(40, 5, "Unable to manage any screens on display.")));
+	    XtWarning (((char *)GETMESSAGE(40, 5, "Unable to manage any screens on display.")));
 	    ExitWM (WM_ERROR_EXIT_VALUE);
 	}
     }
@@ -935,7 +935,7 @@ void InitWmGlobal (int argc, char *argv [], char *environ [])
     if (fcntl (ConnectionNumber (DISPLAY), F_SETFD, 1) == -1)
     {
 	ShowWaitState (FALSE);
-	Warning (((char *)GETMESSAGE(40, 6, "Cannot configure X connection")));
+	XtWarning (((char *)GETMESSAGE(40, 6, "Cannot configure X connection")));
 	ExitWM (WM_ERROR_EXIT_VALUE);
     }
 
@@ -1430,7 +1430,7 @@ InitWmScreen (WmScreenData *pSD, int sNum)
 	if ((wmGD.screenNames[sNum] =
 	     (unsigned char *)XtRealloc (wmGD.screenNames[sNum], buf_size)) == NULL)
 	{
-	    Warning (((char *)GETMESSAGE(40, 7, "Cannot create enough memory for the screen names")));
+	    XtWarning (((char *)GETMESSAGE(40, 7, "Cannot create enough memory for the screen names")));
 	    ExitWM (WM_ERROR_EXIT_VALUE);
 	}
 	else
@@ -1586,7 +1586,7 @@ InitWmScreen (WmScreenData *pSD, int sNum)
     if (!(pSD->pWS = (WmWorkspaceData *) XtMalloc (sizeof(WmWorkspaceData))))
     {
 	ShowWaitState (FALSE);
-	Warning (((char *)GETMESSAGE(40, 8, "Insufficient memory for Workspace data")));
+	XtWarning (((char *)GETMESSAGE(40, 8, "Insufficient memory for Workspace data")));
 	ExitWM (WM_ERROR_EXIT_VALUE);
     }
 
@@ -1632,7 +1632,7 @@ InitWmScreen (WmScreenData *pSD, int sNum)
 	if ((pSD->displayString =
 	     (String)XtMalloc ((unsigned int) (strlen(buffer) + 1))) == NULL)
 	{
-	    Warning (((char *)GETMESSAGE(40, 9,
+	    XtWarning (((char *)GETMESSAGE(40, 9,
 				    "Insufficient memory for displayString")));
 	}
 	else
@@ -2222,7 +2222,7 @@ void CopyArgv (int argc, char *argv [])
 
     if ((wmGD.argv = (char **)XtMalloc ((argc + 1) * sizeof (char *))) == NULL)
     {
-	Warning (((char *)GETMESSAGE(40, 10, "Insufficient memory for window manager data")));
+	XtWarning (((char *)GETMESSAGE(40, 10, "Insufficient memory for window manager data")));
 	wmGD.argv = argv;
 #ifdef WSM
 	dpy2Argv = argv;
@@ -2238,7 +2238,7 @@ void CopyArgv (int argc, char *argv [])
 #ifdef WSM
 	if ((dpy2Argv = (char **)XtMalloc((argc + 1) * sizeof(char *))) == NULL)
 	{
-	    Warning (((char *)GETMESSAGE(40, 11, "Insufficient memory for window manager data")));
+	    XtWarning (((char *)GETMESSAGE(40, 11, "Insufficient memory for window manager data")));
 	    dpy2Argv = argv;
 	}
 	else
@@ -2286,7 +2286,7 @@ void InitScreenNames (void)
 	  (unsigned char **) XtMalloc (numScreens * sizeof(char *))))
     {
 	ShowWaitState (FALSE);
-	Warning (((char *)GETMESSAGE(40, 12, "Insufficient memory for screen names")));
+	XtWarning (((char *)GETMESSAGE(40, 12, "Insufficient memory for screen names")));
 	ExitWM (WM_ERROR_EXIT_VALUE);
     }
 
@@ -2296,7 +2296,7 @@ void InitScreenNames (void)
 	      (unsigned char *) XtMalloc (4*sizeof(char))))
 	{
 	    ShowWaitState (FALSE);
-	    Warning (((char *)GETMESSAGE(40, 13, "Insufficient memory for screen names")));
+	    XtWarning (((char *)GETMESSAGE(40, 13, "Insufficient memory for screen names")));
 	    ExitWM (WM_ERROR_EXIT_VALUE);
 	}
 	/* default name is left justified, 3-chars max, zero terminated */
@@ -2331,7 +2331,7 @@ void InitNlsStrings (void)
     if ((wmNLS.default_icon_box_title =
 	 (char *)XtMalloc ((unsigned int) (strlen(tmpString) + 1))) == NULL)
     {
-	Warning (((char *)GETMESSAGE(40, 15, "Insufficient memory for local message string")));
+	XtWarning (((char *)GETMESSAGE(40, 15, "Insufficient memory for local message string")));
 	wmNLS.default_icon_box_title = "Icons";
     }
     else
@@ -2341,27 +2341,27 @@ void InitNlsStrings (void)
 
 #ifdef WSM
     tmpString = ((char *)GETMESSAGE(40, 20, "%s: %s on line %d of configuration file %s\n"));
-    if ((pWarningStringFile =
+    if ((pXtWarningStringFile =
 	 (char *)XtMalloc ((unsigned int) (strlen(tmpString) + 1))) == NULL)
     {
-	Warning (((char *)GETMESSAGE(40, 17, "Insufficient memory for local message string")));
-	pWarningStringFile = "%s: %s on line %d of configuration file %s\n";
+	XtWarning (((char *)GETMESSAGE(40, 17, "Insufficient memory for local message string")));
+	pXtWarningStringFile = "%s: %s on line %d of configuration file %s\n";
     }
     else
     {
-	strcpy(pWarningStringFile, tmpString);
+	strcpy(pXtWarningStringFile, tmpString);
     }
 
     tmpString = ((char *)GETMESSAGE(40, 21, "%s: %s on line %d of specification string\n"));
-    if ((pWarningStringLine =
+    if ((pXtWarningStringLine =
 	 (char *)XtMalloc ((unsigned int) (strlen(tmpString) + 1))) == NULL)
     {
-	Warning (((char *)GETMESSAGE(40, 19, "Insufficient memory for local message string")));
-	pWarningStringLine = "%s: %s on line %d of specification string\n";
+	XtWarning (((char *)GETMESSAGE(40, 19, "Insufficient memory for local message string")));
+	pXtWarningStringLine = "%s: %s on line %d of specification string\n";
     }
     else
     {
-	strcpy(pWarningStringLine, tmpString);
+	strcpy(pXtWarningStringLine, tmpString);
     }
 
 
@@ -2369,7 +2369,7 @@ void InitNlsStrings (void)
     if ((wmNLS.defaultVersionTitle =
 	 (char *)XtMalloc ((unsigned int) (strlen(tmpString) + 1))) == NULL)
     {
-	Warning (((char *)GETMESSAGE(40, 15, "Insufficient memory for local message string")));
+	XtWarning (((char *)GETMESSAGE(40, 15, "Insufficient memory for local message string")));
 	wmNLS.defaultVersionTitle = "About Workspace Manager";
     }
     else
@@ -2381,7 +2381,7 @@ void InitNlsStrings (void)
     if ((wmNLS.defaultDtwmHelpTitle =
 	 (char *)XtMalloc ((unsigned int) (strlen(tmpString) + 1))) == NULL)
     {
-	Warning (((char *)GETMESSAGE(40, 15, "Insufficient memory for local message string")));
+	XtWarning (((char *)GETMESSAGE(40, 15, "Insufficient memory for local message string")));
 	wmNLS.defaultDtwmHelpTitle = "Workspace Manager - Help";
     }
     else
@@ -2393,7 +2393,7 @@ void InitNlsStrings (void)
     if ((wmNLS.defaultHelpTitle =
 	 (char *)XtMalloc ((unsigned int) (strlen(tmpString) + 1))) == NULL)
     {
-	Warning (((char *)GETMESSAGE(40, 15, "Insufficient memory for local message string")));
+	XtWarning (((char *)GETMESSAGE(40, 15, "Insufficient memory for local message string")));
 	wmNLS.defaultHelpTitle = "Workspace Manager - Help";
     }
     else
@@ -2444,7 +2444,7 @@ InitWmDisplayEnv (void)
 	 (String)XtMalloc ((unsigned int) (strlen(buffer) + 1))) == NULL)
     {
 	wmGD.displayString = NULL;
-        Warning (((char *)GETMESSAGE(40, 9,
+        XtWarning (((char *)GETMESSAGE(40, 9,
 				     "Insufficient memory for displayString")));
     }
     else

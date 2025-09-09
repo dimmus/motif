@@ -31,7 +31,7 @@
 extern "C" {
 #endif
 /* Macros */
-#define XmeTraitRemove(w, t) XmeTraitSet((XtPointer) w, t, NULL)
+#define XmeTraitRemove(w, t) XmeTraitSet((XtPointer)w, t, NULL)
 /********    Private Function Declarations    ********/
 /*
  * XmeTraitGet(object, trait) returns a pointer to the trait_record

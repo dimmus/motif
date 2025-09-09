@@ -25,59 +25,34 @@
  * HISTORY
  */
 #ifndef _XmContainer_h
-#   define _XmContainer_h
-#   include <Xm/Xm.h>
-#   include <Xm/Manager.h>
-#   ifdef __cplusplus
+#  define _XmContainer_h
+#  include <Xm/Manager.h>
+#  include <Xm/Xm.h>
+#  ifdef __cplusplus
 extern "C" {
-#   endif
+#  endif
 /* Class record constants */
-externalref WidgetClass              xmContainerWidgetClass;
+externalref WidgetClass xmContainerWidgetClass;
 typedef struct _XmContainerClassRec *XmContainerWidgetClass;
-typedef struct _XmContainerRec      *XmContainerWidget;
-#   ifndef XmIsContainer
-#      define XmIsContainer(w) XtIsSubclass(w, xmContainerWidgetClass)
-#   endif /* XmIsContainer */
+typedef struct _XmContainerRec *XmContainerWidget;
+#  ifndef XmIsContainer
+#    define XmIsContainer(w) XtIsSubclass(w, xmContainerWidgetClass)
+#  endif /* XmIsContainer */
 /********    Public Function Declarations    ********/
-extern Widget XmCreateContainer(
-   Widget   parent,
-   String   name,
-   ArgList  arglist,
-   Cardinal argcount);
-extern Widget XmVaCreateContainer(
-   Widget parent,
-   char  *name,
-   ...);
-extern Widget XmVaCreateManagedContainer(
-   Widget parent,
-   char  *name,
-   ...);
-extern int XmContainerGetItemChildren(
-   Widget      wid,
-   Widget      item,
-   WidgetList *item_children);
-extern void XmContainerRelayout(
-   Widget wid);
-extern void XmContainerReorder(
-   Widget     wid,
-   WidgetList cwid_list,
-   int        cwid_count);
-extern Boolean XmContainerCut(
-   Widget wid,
-   Time   timestamp);
-extern Boolean XmContainerCopy(
-   Widget wid,
-   Time   timestamp);
-extern Boolean XmContainerPaste(
-   Widget wid);
-extern Boolean XmContainerCopyLink(
-   Widget wid,
-   Time   timestamp);
-extern Boolean XmContainerPasteLink(
-   Widget wid);
+extern Widget XmCreateContainer(Widget parent, String name, ArgList arglist, Cardinal argcount);
+extern Widget XmVaCreateContainer(Widget parent, char *name, ...);
+extern Widget XmVaCreateManagedContainer(Widget parent, char *name, ...);
+extern int XmContainerGetItemChildren(Widget wid, Widget item, WidgetList *item_children);
+extern void XmContainerRelayout(Widget wid);
+extern void XmContainerReorder(Widget wid, WidgetList cwid_list, int cwid_count);
+extern Boolean XmContainerCut(Widget wid, Time timestamp);
+extern Boolean XmContainerCopy(Widget wid, Time timestamp);
+extern Boolean XmContainerPaste(Widget wid);
+extern Boolean XmContainerCopyLink(Widget wid, Time timestamp);
+extern Boolean XmContainerPasteLink(Widget wid);
 /********    End Public Function Declarations    ********/
-#   ifdef __cplusplus
+#  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */
-#   endif
+#  endif
 #endif /* _XmContainer_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

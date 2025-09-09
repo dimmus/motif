@@ -19,86 +19,42 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/
+ */
 #ifndef _XmRowColumn_h
-#   define _XmRowColumn_h
-#   include <Xm/Xm.h>
-#   ifdef __cplusplus
+#  define _XmRowColumn_h
+#  include <Xm/Xm.h>
+#  ifdef __cplusplus
 extern "C" {
-#   endif
-externalref WidgetClass              xmRowColumnWidgetClass;
+#  endif
+externalref WidgetClass xmRowColumnWidgetClass;
 typedef struct _XmRowColumnClassRec *XmRowColumnWidgetClass;
-typedef struct _XmRowColumnRec      *XmRowColumnWidget;
-#   ifndef XmIsRowColumn
-#      define XmIsRowColumn(w) XtIsSubclass((w),xmRowColumnWidgetClass)
-#   endif
+typedef struct _XmRowColumnRec *XmRowColumnWidget;
+#  ifndef XmIsRowColumn
+#    define XmIsRowColumn(w) XtIsSubclass((w), xmRowColumnWidgetClass)
+#  endif
 /********    Public Function Declarations    ********/
-extern void XmMenuPosition(
-   Widget               p,
-   XButtonPressedEvent *event);
-extern Widget XmCreateRowColumn(
-   Widget   p,
-   char    *name,
-   ArgList  al,
-   Cardinal ac);
-extern Widget XmCreateWorkArea(
-   Widget   p,
-   char    *name,
-   ArgList  al,
-   Cardinal ac);
-extern Widget XmCreateRadioBox(
-   Widget   p,
-   char    *name,
-   ArgList  al,
-   Cardinal ac);
-extern Widget XmCreateOptionMenu(
-   Widget   p,
-   char    *name,
-   ArgList  al,
-   Cardinal ac);
-extern Widget XmOptionLabelGadget(
-   Widget m);
-extern Widget XmOptionButtonGadget(
-   Widget m);
-extern Widget XmCreateMenuBar(
-   Widget   p,
-   char    *name,
-   ArgList  al,
-   Cardinal ac);
-extern Widget XmCreatePopupMenu(
-   Widget   p,
-   char    *name,
-   ArgList  al,
-   Cardinal ac);
-extern Widget XmCreatePulldownMenu(
-   Widget   p,
-   char    *name,
-   ArgList  al,
-   Cardinal ac);
-extern Widget XmGetPostedFromWidget(
-   Widget menu);
-extern Widget XmGetTearOffControl(
-   Widget menu);
-extern void XmAddToPostFromList(
-   Widget m,
-   Widget widget);
-extern void XmRemoveFromPostFromList(
-   Widget m,
-   Widget widget);
+extern void XmMenuPosition(Widget p, XButtonPressedEvent *event);
+extern Widget XmCreateRowColumn(Widget p, char *name, ArgList al, Cardinal ac);
+extern Widget XmCreateWorkArea(Widget p, char *name, ArgList al, Cardinal ac);
+extern Widget XmCreateRadioBox(Widget p, char *name, ArgList al, Cardinal ac);
+extern Widget XmCreateOptionMenu(Widget p, char *name, ArgList al, Cardinal ac);
+extern Widget XmOptionLabelGadget(Widget m);
+extern Widget XmOptionButtonGadget(Widget m);
+extern Widget XmCreateMenuBar(Widget p, char *name, ArgList al, Cardinal ac);
+extern Widget XmCreatePopupMenu(Widget p, char *name, ArgList al, Cardinal ac);
+extern Widget XmCreatePulldownMenu(Widget p, char *name, ArgList al, Cardinal ac);
+extern Widget XmGetPostedFromWidget(Widget menu);
+extern Widget XmGetTearOffControl(Widget menu);
+extern void XmAddToPostFromList(Widget m, Widget widget);
+extern void XmRemoveFromPostFromList(Widget m, Widget widget);
 /*
  * Variable argument list functions
  */
-extern Widget XmVaCreateRowColumn(
-   Widget parent,
-   char  *name,
-   ...);
-extern Widget XmVaCreateManagedRowColumn(
-   Widget parent,
-   char  *name,
-   ...);
+extern Widget XmVaCreateRowColumn(Widget parent, char *name, ...);
+extern Widget XmVaCreateManagedRowColumn(Widget parent, char *name, ...);
 /********    End Public Function Declarations    ********/
-#   ifdef __cplusplus
+#  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */
-#   endif
+#  endif
 #endif /* _XmRowColumn_h  */
 /* DON'T ADD STUFF AFTER THIS #endif */

@@ -16,24 +16,19 @@ extern "C" {
  * @typedef XmBool
  * Boolean type for XM logging system
  */
-typedef enum _XmBool
-{
-   XM_FALSE = 0,
-   XM_TRUE  = 1
-} XmBool;
+typedef enum _XmBool { XM_FALSE = 0, XM_TRUE = 1 } XmBool;
 
 /**
  * @typedef XmLogLevel
  * Log levels for the logging system
  */
-typedef enum _XmLogLevel
-{
-   XM_LOG_LEVEL_UNKNOWN  = -1,
-   XM_LOG_LEVEL_CRITICAL = 0,
-   XM_LOG_LEVEL_ERR      = 1,
-   XM_LOG_LEVEL_WARN     = 2,
-   XM_LOG_LEVEL_INFO     = 3,
-   XM_LOG_LEVEL_DBG      = 4
+typedef enum _XmLogLevel {
+  XM_LOG_LEVEL_UNKNOWN = -1,
+  XM_LOG_LEVEL_CRITICAL = 0,
+  XM_LOG_LEVEL_ERR = 1,
+  XM_LOG_LEVEL_WARN = 2,
+  XM_LOG_LEVEL_INFO = 3,
+  XM_LOG_LEVEL_DBG = 4
 } XmLogLevel;
 
 /**
@@ -46,14 +41,13 @@ typedef enum _XmLogLevel
  * @typedef XmLogDomain
  * Log domain structure
  */
-typedef struct _XmLogDomain
-{
-   const char *name;
-   const char *color;
-   const char *domain_str;
-   size_t      namelen;
-   int         level;
-   XmBool      deleted;
+typedef struct _XmLogDomain {
+  const char *name;
+  const char *color;
+  const char *domain_str;
+  size_t namelen;
+  int level;
+  XmBool deleted;
 } XmLogDomain;
 
 /**
@@ -61,24 +55,24 @@ typedef struct _XmLogDomain
  * Callback function type for printing log messages
  */
 typedef void (*XmLogPrintCb)(const XmLogDomain *d,
-                             XmLogLevel         level,
-                             const char        *file,
-                             const char        *fnc,
-                             int                line,
-                             const char        *fmt,
-                             void              *data,
-                             va_list            args);
+                             XmLogLevel level,
+                             const char *file,
+                             const char *fnc,
+                             int line,
+                             const char *fmt,
+                             void *data,
+                             va_list args);
 
 /*============================================================================*
  *                                 Colors                                     *
  *============================================================================*/
 
-#define LOG_COLOR_RESET  "\033[0m"
-#define LOG_COLOR_RED    "\033[31m"
-#define LOG_COLOR_GREEN  "\033[32m"
+#define LOG_COLOR_RESET "\033[0m"
+#define LOG_COLOR_RED "\033[31m"
+#define LOG_COLOR_GREEN "\033[32m"
 #define LOG_COLOR_YELLOW "\033[33m"
-#define LOG_COLOR_BLUE   "\033[34m"
-#define LOG_COLOR_CYAN   "\033[36m"
+#define LOG_COLOR_BLUE "\033[34m"
+#define LOG_COLOR_CYAN "\033[36m"
 
 /*============================================================================*
  *                              Logging Macros                                *
@@ -95,84 +89,75 @@ extern int XM_LOG_DOMAIN_GLOBAL;
  * Log a message at the specified level using the global domain
  */
 #define XM_LOG(level, fmt, ...) \
-   XmLogPrint(XM_LOG_DOMAIN_GLOBAL, level, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__)
+  XmLogPrint(XM_LOG_DOMAIN_GLOBAL, level, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__)
 
 /**
  * @def XM_LOG_CRIT(fmt, ...)
  * Log a critical message
  */
-#define XM_LOG_CRIT(fmt, ...) \
-   XM_LOG(XM_LOG_LEVEL_CRITICAL, fmt, ##__VA_ARGS__)
+#define XM_LOG_CRIT(fmt, ...) XM_LOG(XM_LOG_LEVEL_CRITICAL, fmt, ##__VA_ARGS__)
 
 /**
  * @def XM_LOG_ERR(fmt, ...)
  * Log an error message
  */
-#define XM_LOG_ERR(fmt, ...) \
-   XM_LOG(XM_LOG_LEVEL_ERR, fmt, ##__VA_ARGS__)
+#define XM_LOG_ERR(fmt, ...) XM_LOG(XM_LOG_LEVEL_ERR, fmt, ##__VA_ARGS__)
 
 /**
  * @def XM_LOG_WARN(fmt, ...)
  * Log a warning message
  */
-#define XM_LOG_WARN(fmt, ...) \
-   XM_LOG(XM_LOG_LEVEL_WARN, fmt, ##__VA_ARGS__)
+#define XM_LOG_WARN(fmt, ...) XM_LOG(XM_LOG_LEVEL_WARN, fmt, ##__VA_ARGS__)
 
 /**
  * @def XM_LOG_INFO(fmt, ...)
  * Log an info message
  */
-#define XM_LOG_INFO(fmt, ...) \
-   XM_LOG(XM_LOG_LEVEL_INFO, fmt, ##__VA_ARGS__)
+#define XM_LOG_INFO(fmt, ...) XM_LOG(XM_LOG_LEVEL_INFO, fmt, ##__VA_ARGS__)
 
 /**
  * @def XM_LOG_DBG(fmt, ...)
  * Log a debug message
  */
-#define XM_LOG_DBG(fmt, ...) \
-   XM_LOG(XM_LOG_LEVEL_DBG, fmt, ##__VA_ARGS__)
+#define XM_LOG_DBG(fmt, ...) XM_LOG(XM_LOG_LEVEL_DBG, fmt, ##__VA_ARGS__)
 
 /**
  * @def XM_LOG_DOM(level, domain, fmt, ...)
  * Log a message at the specified level using a specific domain
  */
 #define XM_LOG_DOM(level, domain, fmt, ...) \
-   XmLogPrint(domain, level, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__)
+  XmLogPrint(domain, level, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__)
 
 /**
  * @def XM_LOG_DOM_CRIT(domain, fmt, ...)
  * Log a critical message to a specific domain
  */
 #define XM_LOG_DOM_CRIT(domain, fmt, ...) \
-   XM_LOG_DOM(XM_LOG_LEVEL_CRITICAL, domain, fmt, ##__VA_ARGS__)
+  XM_LOG_DOM(XM_LOG_LEVEL_CRITICAL, domain, fmt, ##__VA_ARGS__)
 
 /**
  * @def XM_LOG_DOM_ERR(domain, fmt, ...)
  * Log an error message to a specific domain
  */
-#define XM_LOG_DOM_ERR(domain, fmt, ...) \
-   XM_LOG_DOM(XM_LOG_LEVEL_ERR, domain, fmt, ##__VA_ARGS__)
+#define XM_LOG_DOM_ERR(domain, fmt, ...) XM_LOG_DOM(XM_LOG_LEVEL_ERR, domain, fmt, ##__VA_ARGS__)
 
 /**
  * @def XM_LOG_DOM_WARN(domain, fmt, ...)
  * Log a warning message to a specific domain
  */
-#define XM_LOG_DOM_WARN(domain, fmt, ...) \
-   XM_LOG_DOM(XM_LOG_LEVEL_WARN, domain, fmt, ##__VA_ARGS__)
+#define XM_LOG_DOM_WARN(domain, fmt, ...) XM_LOG_DOM(XM_LOG_LEVEL_WARN, domain, fmt, ##__VA_ARGS__)
 
 /**
  * @def XM_LOG_DOM_INFO(domain, fmt, ...)
  * Log an info message to a specific domain
  */
-#define XM_LOG_DOM_INFO(domain, fmt, ...) \
-   XM_LOG_DOM(XM_LOG_LEVEL_INFO, domain, fmt, ##__VA_ARGS__)
+#define XM_LOG_DOM_INFO(domain, fmt, ...) XM_LOG_DOM(XM_LOG_LEVEL_INFO, domain, fmt, ##__VA_ARGS__)
 
 /**
  * @def XM_LOG_DOM_DBG(domain, fmt, ...)
  * Log a debug message to a specific domain
  */
-#define XM_LOG_DOM_DBG(domain, fmt, ...) \
-   XM_LOG_DOM(XM_LOG_LEVEL_DBG, domain, fmt, ##__VA_ARGS__)
+#define XM_LOG_DOM_DBG(domain, fmt, ...) XM_LOG_DOM(XM_LOG_LEVEL_DBG, domain, fmt, ##__VA_ARGS__)
 
 /*============================================================================*
  *                                 API                                        *
@@ -351,13 +336,13 @@ XmBool XmLogFunctionDisableGet(void);
  * This is the default print callback that outputs to stderr.
  */
 void XmLogPrintCbStdErr(const XmLogDomain *d,
-                        XmLogLevel         level,
-                        const char        *file,
-                        const char        *fnc,
-                        int                line,
-                        const char        *fmt,
-                        void              *data,
-                        va_list            args);
+                        XmLogLevel level,
+                        const char *file,
+                        const char *fnc,
+                        int line,
+                        const char *fmt,
+                        void *data,
+                        va_list args);
 
 /**
  * @brief Print callback for stdout output.
@@ -365,13 +350,13 @@ void XmLogPrintCbStdErr(const XmLogDomain *d,
  * This callback outputs log messages to stdout.
  */
 void XmLogPrintCbStdOut(const XmLogDomain *d,
-                        XmLogLevel         level,
-                        const char        *file,
-                        const char        *fnc,
-                        int                line,
-                        const char        *fmt,
-                        void              *data,
-                        va_list            args);
+                        XmLogLevel level,
+                        const char *file,
+                        const char *fnc,
+                        int line,
+                        const char *fmt,
+                        void *data,
+                        va_list args);
 
 /**
  * @brief Print callback for file output.
@@ -379,13 +364,13 @@ void XmLogPrintCbStdOut(const XmLogDomain *d,
  * @param[in] data Should be a FILE* pointer.
  */
 void XmLogPrintCbFile(const XmLogDomain *d,
-                      XmLogLevel         level,
-                      const char        *file,
-                      const char        *fnc,
-                      int                line,
-                      const char        *fmt,
-                      void              *data,
-                      va_list            args);
+                      XmLogLevel level,
+                      const char *file,
+                      const char *fnc,
+                      int line,
+                      const char *fmt,
+                      void *data,
+                      va_list args);
 
 /*============================================================================*
  *                              Core Functions                                *
@@ -404,7 +389,13 @@ void XmLogPrintCbFile(const XmLogDomain *d,
  * @param[in] fmt The format string.
  * @param[in] ... Variable arguments for the format string.
  */
-void XmLogPrint(int domain, XmLogLevel level, const char *file, const char *fnc, int line, const char *fmt, ...);
+void XmLogPrint(int domain,
+                XmLogLevel level,
+                const char *file,
+                const char *fnc,
+                int line,
+                const char *fmt,
+                ...);
 
 /**
  * @brief Get the color code for a log level.
@@ -417,23 +408,23 @@ const char *XmLogLevelColorGet(int level);
 
 /**
  * @brief Initialize the logging system with default configuration
- * 
+ *
  * This function sets up the default print callback based on the
  * XM_DEFAULT_LOG_OUTPUT configuration value set at build time.
- * 
+ *
  * @return XM_TRUE if initialization successful, XM_FALSE otherwise
  */
 XmBool XmLogInit(void);
 
 /**
  * @brief Set the log output destination at runtime
- * 
+ *
  * This function allows changing the log output destination after
  * the logging system has been initialized.
- * 
+ *
  * @param[in] output The output destination ("stderr", "stdout", or "file")
  * @param[in] filename Optional filename for file output (ignored for stderr/stdout)
- * 
+ *
  * @return XM_TRUE if successful, XM_FALSE if invalid output type
  */
 XmBool XmLogSetOutput(const char *output, const char *filename);

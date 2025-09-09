@@ -26,12 +26,12 @@
  * HISTORY
  */
 #ifdef HAVE_CONFIG_H
-#   include <config.h>
+#  include <config.h>
 #endif
-#include "XmI.h"
-#include <Xm/TraitP.h>
-#include <Xm/CareVisualT.h>
 #include "CareVisualTI.h"
+#include "XmI.h"
+#include <Xm/CareVisualT.h>
+#include <Xm/TraitP.h>
 
 /************************************************************************
  *
@@ -42,25 +42,18 @@
  *	parent redrawn as well.
  *
  ************************************************************************/
-Boolean
-_XmNotifyChildrenVisual(
-   Widget cur,
-   Widget new_w,
-   Mask   visual_flag)
+Boolean _XmNotifyChildrenVisual(Widget cur, Widget new_w, Mask visual_flag)
 {
-   register int      i;
-   Widget            child;
-   Boolean           redisplay = False;
-   XmCareVisualTrait care_visual;
-   CompositeWidget   cw = (CompositeWidget)new_w;
-   for (i = 0; i < cw->composite.num_children; i++)
-   {
-      child = cw->composite.children[i];
-      if ((care_visual = (XmCareVisualTrait)
-              XmeTraitGet((XtPointer)XtClass(child),
-                          XmQTcareParentVisual))
-          != NULL)
-         redisplay |= care_visual->redraw(child, cur, new_w, visual_flag);
-   }
-   return (redisplay);
+  register int i;
+  Widget child;
+  Boolean redisplay = False;
+  XmCareVisualTrait care_visual;
+  CompositeWidget cw = (CompositeWidget)new_w;
+  for (i = 0; i < cw->composite.num_children; i++) {
+    child = cw->composite.children[i];
+    if ((care_visual = (XmCareVisualTrait)XmeTraitGet((XtPointer)XtClass(child),
+                                                      XmQTcareParentVisual)) != NULL)
+      redisplay |= care_visual->redraw(child, cur, new_w, visual_flag);
+  }
+  return (redisplay);
 }

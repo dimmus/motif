@@ -25,41 +25,38 @@
  * HISTORY
  */
 #ifndef _XmClipWindowP_h
-#   define _XmClipWindowP_h
-#   include <Xm/DrawingAP.h>
-#   ifdef __cplusplus
+#  define _XmClipWindowP_h
+#  include <Xm/DrawingAP.h>
+#  ifdef __cplusplus
 extern "C" {
-#   endif
-externalref WidgetClass               xmClipWindowWidgetClass;
+#  endif
+externalref WidgetClass xmClipWindowWidgetClass;
 typedef struct _XmClipWindowClassRec *XmClipWindowWidgetClass;
-typedef struct _XmClipWindowRec      *XmClipWindowWidget;
-#   ifndef XmIsClipWindow
-#      define XmIsClipWindow(w)  (XtIsSubclass (w, xmClipWindowWidgetClass))
-#   endif
+typedef struct _XmClipWindowRec *XmClipWindowWidget;
+#  ifndef XmIsClipWindow
+#    define XmIsClipWindow(w) (XtIsSubclass(w, xmClipWindowWidgetClass))
+#  endif
 /*  New fields for the ClipWindow widget class record  */
-typedef struct
-{
-   XtPointer extension;
+typedef struct {
+  XtPointer extension;
 } XmClipWindowClassPart;
 
 /* Full class record declaration */
-typedef struct _XmClipWindowClassRec
-{
-   CoreClassPart          core_class;
-   CompositeClassPart     composite_class;
-   ConstraintClassPart    constraint_class;
-   XmManagerClassPart     manager_class;
-   XmDrawingAreaClassPart drawing_area_class;
-   XmClipWindowClassPart  clip_window_class;
+typedef struct _XmClipWindowClassRec {
+  CoreClassPart core_class;
+  CompositeClassPart composite_class;
+  ConstraintClassPart constraint_class;
+  XmManagerClassPart manager_class;
+  XmDrawingAreaClassPart drawing_area_class;
+  XmClipWindowClassPart clip_window_class;
 } XmClipWindowClassRec;
 
 externalref XmClipWindowClassRec xmClipWindowClassRec;
 
 /* New fields for the ClipWindow widget record */
-typedef struct
-{
-   unsigned char flags;
-   Dimension     old_width;
+typedef struct {
+  unsigned char flags;
+  Dimension old_width;
 } XmClipWindowPart;
 
 /****************************************************************
@@ -67,20 +64,19 @@ typedef struct
  * Full instance record declaration
  *
  ****************************************************************/
-typedef struct _XmClipWindowRec
-{
-   CorePart          core;
-   CompositePart     composite;
-   ConstraintPart    constraint;
-   XmManagerPart     manager;
-   XmDrawingAreaPart drawing_area;
-   XmClipWindowPart  clip_window;
+typedef struct _XmClipWindowRec {
+  CorePart core;
+  CompositePart composite;
+  ConstraintPart constraint;
+  XmManagerPart manager;
+  XmDrawingAreaPart drawing_area;
+  XmClipWindowPart clip_window;
 } XmClipWindowRec;
 
 /********    Private Function Declarations    ********/
 /********    End Private Function Declarations    ********/
-#   ifdef __cplusplus
+#  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */
-#   endif
+#  endif
 #endif /* _XmClipWindowP_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

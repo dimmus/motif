@@ -19,16 +19,16 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/
+ */
 #ifndef _XmTransltnsP_h
-#   define _XmTransltnsP_h
-#   include <X11/Intrinsic.h> /* for externalref */
-#   ifdef __cplusplus
+#  define _XmTransltnsP_h
+#  include <X11/Intrinsic.h> /* for externalref */
+#  ifdef __cplusplus
 extern "C" {
-#   endif
-#   ifndef _XmConst
-#      define _XmConst
-#   endif
+#  endif
+#  ifndef _XmConst
+#    define _XmConst
+#  endif
 externalref _XmConst char _XmArrowB_defaultTranslations[];
 externalref _XmConst char _XmBulletinB_defaultTranslations[];
 externalref _XmConst char _XmCascadeB_menubar_events[];
@@ -107,8 +107,8 @@ externalref _XmConst char _XmVirtKeys_siemensWx200FallbackBindingString[];
 externalref _XmConst char _XmVirtKeys_siemens9733FallbackBindingString[];
 externalref _XmConst char _XmVirtKeys_sunFallbackBindingString[];
 externalref _XmConst char _XmVirtKeys_tekFallbackBindingString[];
-#   ifdef __cplusplus
+#  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */
-#   endif
+#  endif
 #endif /* _XmTransltnsP_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

@@ -100,7 +100,7 @@ initMesg()
     if ((confirm_mesg[0] =
          (char *)XtMalloc ((unsigned int) (strlen(tmpString) + 1))) == NULL)
     {
-        Warning (((char *)GETMESSAGE(22, 2, "Insufficient memory for local message string")));
+        XtWarning (((char *)GETMESSAGE(22, 2, "Insufficient memory for local message string")));
 	confirm_mesg[0] = "Switch to Default Behavior?";
     }
     else
@@ -112,7 +112,7 @@ initMesg()
     if ((confirm_mesg[1] =
          (char *)XtMalloc ((unsigned int) (strlen(tmpString) + 1))) == NULL)
     {
-        Warning (((char *)GETMESSAGE(22, 2, "Insufficient memory for local message string")));
+        XtWarning (((char *)GETMESSAGE(22, 2, "Insufficient memory for local message string")));
 	confirm_mesg[1] = "Switch to Custom Behavior?";
     }
     else
@@ -131,7 +131,7 @@ initMesg()
     if ((confirm_mesg[2] =
          (char *)XtMalloc ((unsigned int) (strlen(tmpString) + 1))) == NULL)
     {
-        Warning (((char *)GETMESSAGE(22, 5, "Insufficient memory for local message string")));
+        XtWarning (((char *)GETMESSAGE(22, 5, "Insufficient memory for local message string")));
 	if (MwmBehavior)
 	{
 	    confirm_mesg[2] = "Restart Mwm?";
@@ -171,7 +171,7 @@ initMesg()
     if ((confirm_mesg[3] =
          (char *)XtMalloc ((unsigned int) (strlen(tmpString) + 1))) == NULL)
     {
-        Warning (((char *)GETMESSAGE(22, 8, "Insufficient memory for local message string")));
+        XtWarning (((char *)GETMESSAGE(22, 8, "Insufficient memory for local message string")));
 	if (MwmBehavior)
 	{
 	    confirm_mesg[3] = "QUIT Mwm?";

@@ -19,45 +19,35 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/
+ */
 /****************************************************************
  *
  * Vertical Paned Widget (SubClass of CompositeClass)
  *
  ****************************************************************/
 #ifndef _XmPanedW_h
-#   define _XmPanedW_h
-#   include <Xm/Xm.h>
-#   ifdef __cplusplus
+#  define _XmPanedW_h
+#  include <Xm/Xm.h>
+#  ifdef __cplusplus
 extern "C" {
-#   endif
+#  endif
 /* Class record constant */
 externalref WidgetClass xmPanedWindowWidgetClass;
-#   ifndef XmIsPanedWindow
-#      define XmIsPanedWindow(w)	XtIsSubclass(w, xmPanedWindowWidgetClass)
-#   endif /* XmIsPanedWindow */
+#  ifndef XmIsPanedWindow
+#    define XmIsPanedWindow(w) XtIsSubclass(w, xmPanedWindowWidgetClass)
+#  endif /* XmIsPanedWindow */
 typedef struct _XmPanedWindowClassRec *XmPanedWindowWidgetClass;
-typedef struct _XmPanedWindowRec      *XmPanedWindowWidget;
+typedef struct _XmPanedWindowRec *XmPanedWindowWidget;
 /********    Public Function Declarations    ********/
-extern Widget XmCreatePanedWindow(
-   Widget   parent,
-   char    *name,
-   ArgList  args,
-   Cardinal argCount);
+extern Widget XmCreatePanedWindow(Widget parent, char *name, ArgList args, Cardinal argCount);
 /*
  * Variable argument list functions
  */
-extern Widget XmVaCreatePanedWindow(
-   Widget parent,
-   char  *name,
-   ...);
-extern Widget XmVaCreateManagedPanedWindow(
-   Widget parent,
-   char  *name,
-   ...);
+extern Widget XmVaCreatePanedWindow(Widget parent, char *name, ...);
+extern Widget XmVaCreateManagedPanedWindow(Widget parent, char *name, ...);
 /********    End Public Function Declarations    ********/
-#   ifdef __cplusplus
+#  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */
-#   endif
+#  endif
 #endif /* _XmPanedWindow_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

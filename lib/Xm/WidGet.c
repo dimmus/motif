@@ -26,50 +26,42 @@
  * HISTORY
  */
 #ifdef HAVE_CONFIG_H
-#   include <config.h>
+#  include <config.h>
 #endif
 #include "XmI.h"
-#include <Xm/PrimitiveP.h>
-#include <Xm/ManagerP.h>
 #include <Xm/GadgetP.h>
+#include <Xm/ManagerP.h>
+#include <Xm/PrimitiveP.h>
 
 /************************************************************************
  *
  *   XmWidgetGetBaselines
  *
  ************************************************************************/
-Boolean
-XmWidgetGetBaselines(
-   Widget      wid,
-   Dimension **baselines,
-   int        *line_count)
+Boolean XmWidgetGetBaselines(Widget wid, Dimension **baselines, int *line_count)
 {
-   _XmWidgetToAppContext(wid);
-   _XmAppLock(app);
-   if (XmIsPrimitive(wid))
-   {
-      XmPrimitiveClassExt *wcePtr;
-      WidgetClass          wc = XtClass(wid);
-      wcePtr                  = _XmGetPrimitiveClassExtPtr(wc, NULLQUARK);
-      if (*wcePtr && (*wcePtr)->widget_baseline)
-      {
-         _XmAppUnlock(app);
-         return ((*((*wcePtr)->widget_baseline))(wid, baselines, line_count));
-      }
-   }
-   else if (XmIsGadget(wid))
-   {
-      XmGadgetClassExt *wcePtr;
-      WidgetClass       wc = XtClass(wid);
-      wcePtr               = _XmGetGadgetClassExtPtr(wc, NULLQUARK);
-      if (*wcePtr && (*wcePtr)->widget_baseline)
-      {
-         _XmAppUnlock(app);
-         return ((*((*wcePtr)->widget_baseline))(wid, baselines, line_count));
-      }
-   }
-   _XmAppUnlock(app);
-   return (False);
+  _XmWidgetToAppContext(wid);
+  _XmAppLock(app);
+  if (XmIsPrimitive(wid)) {
+    XmPrimitiveClassExt *wcePtr;
+    WidgetClass wc = XtClass(wid);
+    wcePtr = _XmGetPrimitiveClassExtPtr(wc, NULLQUARK);
+    if (*wcePtr && (*wcePtr)->widget_baseline) {
+      _XmAppUnlock(app);
+      return ((*((*wcePtr)->widget_baseline))(wid, baselines, line_count));
+    }
+  }
+  else if (XmIsGadget(wid)) {
+    XmGadgetClassExt *wcePtr;
+    WidgetClass wc = XtClass(wid);
+    wcePtr = _XmGetGadgetClassExtPtr(wc, NULLQUARK);
+    if (*wcePtr && (*wcePtr)->widget_baseline) {
+      _XmAppUnlock(app);
+      return ((*((*wcePtr)->widget_baseline))(wid, baselines, line_count));
+    }
+  }
+  _XmAppUnlock(app);
+  return (False);
 }
 
 /************************************************************************
@@ -77,36 +69,30 @@ XmWidgetGetBaselines(
  *   XmWidgetDisplayRect
  *
  ************************************************************************/
-Boolean
-XmWidgetGetDisplayRect(
-   Widget      wid,
-   XRectangle *displayrect)
+Boolean XmWidgetGetDisplayRect(Widget wid, XRectangle *displayrect)
 {
-   _XmWidgetToAppContext(wid);
-   _XmAppLock(app);
-   if (XmIsPrimitive(wid))
-   {
-      XmPrimitiveClassExt *wcePtr;
-      WidgetClass          wc = XtClass(wid);
-      wcePtr                  = _XmGetPrimitiveClassExtPtr(wc, NULLQUARK);
-      if (*wcePtr && (*wcePtr)->widget_display_rect)
-         (*((*wcePtr)->widget_display_rect))(wid, displayrect);
-      _XmAppUnlock(app);
-      return (True);
-   }
-   else if (XmIsGadget(wid))
-   {
-      XmGadgetClassExt *wcePtr;
-      WidgetClass       wc = XtClass(wid);
-      wcePtr               = _XmGetGadgetClassExtPtr(wc, NULLQUARK);
-      if (*wcePtr && (*wcePtr)->widget_display_rect)
-         (*((*wcePtr)->widget_display_rect))(wid, displayrect);
-      _XmAppUnlock(app);
-      return (True);
-   }
-   else
-   {
-      _XmAppUnlock(app);
-      return (False);
-   }
+  _XmWidgetToAppContext(wid);
+  _XmAppLock(app);
+  if (XmIsPrimitive(wid)) {
+    XmPrimitiveClassExt *wcePtr;
+    WidgetClass wc = XtClass(wid);
+    wcePtr = _XmGetPrimitiveClassExtPtr(wc, NULLQUARK);
+    if (*wcePtr && (*wcePtr)->widget_display_rect)
+      (*((*wcePtr)->widget_display_rect))(wid, displayrect);
+    _XmAppUnlock(app);
+    return (True);
+  }
+  else if (XmIsGadget(wid)) {
+    XmGadgetClassExt *wcePtr;
+    WidgetClass wc = XtClass(wid);
+    wcePtr = _XmGetGadgetClassExtPtr(wc, NULLQUARK);
+    if (*wcePtr && (*wcePtr)->widget_display_rect)
+      (*((*wcePtr)->widget_display_rect))(wid, displayrect);
+    _XmAppUnlock(app);
+    return (True);
+  }
+  else {
+    _XmAppUnlock(app);
+    return (False);
+  }
 }

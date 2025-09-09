@@ -930,7 +930,7 @@ static int getCStrCount
     if (!str) return(0);
     if (!*str) return(0);
 
-    while (newStr = getNextCStrDelim(str))
+    while ((newStr = getNextCStrDelim(str)))
     {
 	x++;
 	str = ++newStr;
@@ -1360,13 +1360,13 @@ XtPointer CONVERT
 	switch(toVal.size)
 	{
 	case 1:
-	    val = (XTPOINTER)(*(char*)toVal.addr);    /* may be exists bug */
+        val = (XTPOINTER)(void*)(*(char*)toVal.addr);    /* may be exists bug */
 	    break;
 	case 2:
-	    val = (XTPOINTER)(*(short*)toVal.addr);    /* may be exists bug */
+        val = (XTPOINTER)(void*)(*(short*)toVal.addr);    /* may be exists bug */
 	    break;
 	case 4:
-	    val = (XTPOINTER)(*(int*)toVal.addr);    /* may be exists bug */
+        val = (XTPOINTER)(void*)(*(int*)toVal.addr);    /* may be exists bug */
 	    break;
 	case 8:
 	default:
@@ -1564,7 +1564,7 @@ Widget BxFindTopShell
 {
     Widget	p;
 
-    while(p = XtParent(start))
+    while((p = XtParent(start)))
     {
 	start = p;
     }
@@ -2339,7 +2339,7 @@ GRA(XpmAttributes *, attributes)
 	 */
 	curkey = 0;
 	lastwaskey = 0;
-	while (l = xpmNextWord(data, buf)) {
+        while ((l = xpmNextWord(data, buf))) {
 	    if (!lastwaskey) {
 		for (key = 1; key < NKEYS + 1; key++)
 		    if ((strlen(xpmColorKeys[key - 1]) == l)
@@ -3409,6 +3409,8 @@ GRA(xpmData *, mdata)
             c = xpmGetC(mdata);
         }
         return (c);
+    default:
+        return EOF;
     }
 }
 
@@ -3430,6 +3432,8 @@ GRA(xpmData *, mdata)
             /* if not natural XPM2 */
             mdata->InsideString = !mdata->InsideString;
         return (ungetc(c, mdata->stream.file));
+    default:
+        return EOF;
     }
 }
 

@@ -27,46 +27,42 @@
  */
 #ifndef _XmAccessColorsT_H
 #define _XmAccessColorsT_H
-#include <Xm/Xm.h>
 #include <X11/Xresource.h>
+#include <Xm/Xm.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
 externalref XrmQuark XmQTaccessColors;
 
 /* this one can be expanded in the future */
-typedef struct _XmAccessColorDataRec
-{
-   Mask  valueMask;
-   Pixel foreground;
-   Pixel background;
-   Pixel highlight_color;
-   Pixel top_shadow_color;
-   Pixel bottom_shadow_color;
-   Pixel select_color;
+typedef struct _XmAccessColorDataRec {
+  Mask valueMask;
+  Pixel foreground;
+  Pixel background;
+  Pixel highlight_color;
+  Pixel top_shadow_color;
+  Pixel bottom_shadow_color;
+  Pixel select_color;
 } XmAccessColorDataRec, *XmAccessColorData;
 
-typedef void (*XmAccessColorsGetProc)(Widget            widget,
-                                      XmAccessColorData color_data);
-typedef void (*XmAccessColorsSetProc)(Widget            widget,
-                                      XmAccessColorData color_data);
+typedef void (*XmAccessColorsGetProc)(Widget widget, XmAccessColorData color_data);
+typedef void (*XmAccessColorsSetProc)(Widget widget, XmAccessColorData color_data);
 
 /* Trait structures and typedefs, place typedefs first */
 /* Version 0: initial release. */
-typedef struct _XmAccessColorsTraitRec
-{
-   int                   version; /* 0 */
-   XmAccessColorsGetProc getColors;
-   XmAccessColorsGetProc setColors;
+typedef struct _XmAccessColorsTraitRec {
+  int version; /* 0 */
+  XmAccessColorsGetProc getColors;
+  XmAccessColorsGetProc setColors;
 } XmAccessColorsTraitRec, *XmAccessColorsTrait;
 
-#define AccessColorInvalid         0L
-#define AccessForeground           (1L<<0)
-#define AccessBackgroundPixel      (1L<<1)
-#define AccessHighlightColor       (1L<<2)
-#define AccessTopShadowColor       (1L<<3)
-#define AccessBottomShadowColor    (1L<<4)
-#define AccessSelectColor          (1L<<5)
+#define AccessColorInvalid 0L
+#define AccessForeground (1L << 0)
+#define AccessBackgroundPixel (1L << 1)
+#define AccessHighlightColor (1L << 2)
+#define AccessTopShadowColor (1L << 3)
+#define AccessBottomShadowColor (1L << 4)
+#define AccessSelectColor (1L << 5)
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif

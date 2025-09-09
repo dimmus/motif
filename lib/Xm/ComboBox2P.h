@@ -28,28 +28,32 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define XmCombinationBox2_UP 		XmDropDown_UP
-#define XmCombinationBox2_UNPOSTED	XmDropDown_UNPOSTED
-#define XmCombinationBox2_DOWN        	XmDropDown_DOWN
-#define XmCombinationBox2_POSTED	XmDropDown_POSTED
-#define XmCombinationBox2_IN_PROGRESS 	XmDropDown_IN_PROGRESS
-#define XmCombinationBox2_BEGIN_POPUP_FROM_TEXT \
-  XmDropDown_BEGIN_POPUP_FROM_TEXT
+#define XmCombinationBox2_UP XmDropDown_UP
+#define XmCombinationBox2_UNPOSTED XmDropDown_UNPOSTED
+#define XmCombinationBox2_DOWN XmDropDown_DOWN
+#define XmCombinationBox2_POSTED XmDropDown_POSTED
+#define XmCombinationBox2_IN_PROGRESS XmDropDown_IN_PROGRESS
+#define XmCombinationBox2_BEGIN_POPUP_FROM_TEXT XmDropDown_BEGIN_POPUP_FROM_TEXT
 #define XmComboBox2_h_space(w) (((XmCombinationBox2Widget)(w))->combo.h_space)
 #define XmComboBox2_v_space(w) (((XmCombinationBox2Widget)(w))->combo.v_space)
 #define XmComboBox2_popup_offset(w) (((XmCombinationBox2Widget)(w))->combo.popup_offset)
 #define XmComboBox2_verify(w) (((XmCombinationBox2Widget)(w))->combo.verify)
 #define XmComboBox2_editable(w) (((XmCombinationBox2Widget)(w))->combo.editable)
 #define XmComboBox2_show_label(w) (((XmCombinationBox2Widget)(w))->combo.show_label)
-#define XmComboBox2_customized_combo_box(w) (((XmCombinationBox2Widget)(w))->combo.customized_combo_box)
+#define XmComboBox2_customized_combo_box(w) \
+  (((XmCombinationBox2Widget)(w))->combo.customized_combo_box)
 #define XmComboBox2_use_text_field(w) (((XmCombinationBox2Widget)(w))->combo.use_text_field)
 #define XmComboBox2_popup_shell(w) (((XmCombinationBox2Widget)(w))->combo.popup_shell)
 #define XmComboBox2_popup_cursor(w) (((XmCombinationBox2Widget)(w))->combo.popup_cursor)
 #define XmComboBox2_translations(w) (((XmCombinationBox2Widget)(w))->combo.translations)
-#define XmComboBox2_verify_text_callback(w) (((XmCombinationBox2Widget)(w))->combo.verify_text_callback)
-#define XmComboBox2_verify_text_failed_callback(w) (((XmCombinationBox2Widget)(w))->combo.verify_text_failed_callback)
-#define XmComboBox2_update_text_callback(w) (((XmCombinationBox2Widget)(w))->combo.update_text_callback)
-#define XmComboBox2_update_shell_callback(w) (((XmCombinationBox2Widget)(w))->combo.update_shell_callback)
+#define XmComboBox2_verify_text_callback(w) \
+  (((XmCombinationBox2Widget)(w))->combo.verify_text_callback)
+#define XmComboBox2_verify_text_failed_callback(w) \
+  (((XmCombinationBox2Widget)(w))->combo.verify_text_failed_callback)
+#define XmComboBox2_update_text_callback(w) \
+  (((XmCombinationBox2Widget)(w))->combo.update_text_callback)
+#define XmComboBox2_update_shell_callback(w) \
+  (((XmCombinationBox2Widget)(w))->combo.update_shell_callback)
 #define XmComboBox2_visible_items(w) (((XmCombinationBox2Widget)(w))->combo.visible_items)
 #define XmComboBox2_new_visual_style(w) (((XmCombinationBox2Widget)(w))->combo.new_visual_style)
 #define XmComboBox2_old_text(w) (((XmCombinationBox2Widget)(w))->combo.old_text)
@@ -68,21 +72,18 @@ extern "C" {
 /* Should return True to ignore invalid entry warning. Combination Box
  *  does not currently use this. Presumes do it in subclasses
  */
-typedef Boolean (*XmCombinationBox2TextProc)(
-   Widget,
-   char *text);
-typedef Boolean (*XmCombinationBox2TextListMapProc)(
-   Widget, /* combo box */
-   Widget, /* text */
-   Widget  /* list */
+typedef Boolean (*XmCombinationBox2TextProc)(Widget, char *text);
+typedef Boolean (*XmCombinationBox2TextListMapProc)(Widget, /* combo box */
+                                                    Widget, /* text */
+                                                    Widget  /* list */
 );
 /* Version number for the first Revision  */
 #define XmCombinationBox2ExtensionVersion 2
-typedef XmDropDownClassPart      XmCombinationBox2ClassPartExtension;
-typedef XmDropDownClassPart      XmCombinationBox2ClassPart;
-typedef XmDropDownClassRec       XmCombinationBox2ClassRec;
-typedef XmDropDownPart           XmCombinationBox2Part;
-typedef XmDropDownRec            XmCombinationBox2Rec;
+typedef XmDropDownClassPart XmCombinationBox2ClassPartExtension;
+typedef XmDropDownClassPart XmCombinationBox2ClassPart;
+typedef XmDropDownClassRec XmCombinationBox2ClassRec;
+typedef XmDropDownPart XmCombinationBox2Part;
+typedef XmDropDownRec XmCombinationBox2Rec;
 extern XmCombinationBox2ClassRec xmCombinationBox2ClassRec __attribute__((deprecated));
 #ifdef __cplusplus
 } /* Closes scope of 'extern "C"' declaration */
