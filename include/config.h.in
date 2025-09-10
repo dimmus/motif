@@ -1,0 +1,249 @@
+/* include/config.h.in.  Generated from configure.ac by autoheader.  */
+
+/* Define to 1 if you have the <alloca.h> header file. */
+#undef HAVE_ALLOCA_H
+
+/* Define to 1 if you have the <dlfcn.h> header file. */
+#undef HAVE_DLFCN_H
+
+/* Define to 1 if you have the <Dt/Action.h> header file. */
+#undef HAVE_DT_ACTION_H
+
+/* Define to 1 if you have the <Dt/Service.h> header file. */
+#undef HAVE_DT_SERVICE_H
+
+/* Define to 1 if you have the <Dt/Wsm.h> header file. */
+#undef HAVE_DT_WSM_H
+
+/* Define to 1 if you have the <fcntl.h> header file. */
+#undef HAVE_FCNTL_H
+
+/* Define to 1 if you have the `getcwd' function. */
+#undef HAVE_GETCWD
+
+/* Define to 1 if you have the `getwd' function. */
+#undef HAVE_GETWD
+
+/* Define to 1 if you have the `iconv' function. */
+#undef HAVE_ICONV
+
+/* Define to 1 if you have the <iconv.h> header file. */
+#undef HAVE_ICONV_H
+
+/* Define to 1 if the system has the type `intptr_t'. */
+#undef HAVE_INTPTR_T
+
+/* Define to 1 if you have the <inttypes.h> header file. */
+#undef HAVE_INTTYPES_H
+
+/* Define to 1 if you have the `nanosleep' function. */
+#undef HAVE_NANOSLEEP
+
+/* Define to 1 if you have the `putenv' function. */
+#undef HAVE_PUTENV
+
+/* Define to 1 if you have the `regcomp' function. */
+#undef HAVE_REGCOMP
+
+/* Define to 1 if you have the `regex' function. */
+#undef HAVE_REGEX
+
+/* Define to 1 if you have the <stdint.h> header file. */
+#undef HAVE_STDINT_H
+
+/* Define to 1 if you have the <stdio.h> header file. */
+#undef HAVE_STDIO_H
+
+/* Define to 1 if you have the <stdlib.h> header file. */
+#undef HAVE_STDLIB_H
+
+/* Define to 1 if you have the `strcasecmp' function. */
+#undef HAVE_STRCASECMP
+
+/* Define to 1 if you have the `strdup' function. */
+#undef HAVE_STRDUP
+
+/* Define to 1 if you have the <strings.h> header file. */
+#undef HAVE_STRINGS_H
+
+/* Define to 1 if you have the <string.h> header file. */
+#undef HAVE_STRING_H
+
+/* Define to 1 if you have the `strlcat' function. */
+#undef HAVE_STRLCAT
+
+/* Define to 1 if you have the <sys/poll.h> header file. */
+#undef HAVE_SYS_POLL_H
+
+/* Define to 1 if you have the <sys/stat.h> header file. */
+#undef HAVE_SYS_STAT_H
+
+/* Define to 1 if you have the <sys/time.h> header file. */
+#undef HAVE_SYS_TIME_H
+
+/* Define to 1 if you have the <sys/types.h> header file. */
+#undef HAVE_SYS_TYPES_H
+
+/* Define to 1 if the system has the type `uintptr_t'. */
+#undef HAVE_UINTPTR_T
+
+/* Define to 1 if you have the <unistd.h> header file. */
+#undef HAVE_UNISTD_H
+
+/* Define to 1 if you have the <wctype.h> header file. */
+#undef HAVE_WCTYPE_H
+
+/* Define to 1 if you have the <X11/Xos_r.h> header file. */
+#undef HAVE_X11_XOS_R_H
+
+/* Define to 1 if you have the <X11/Xpoll.h> header file. */
+#undef HAVE_X11_XPOLL_H
+
+/* Use local string case comparison functions */
+#undef LOCAL_STRCASECMP
+
+/* Define to the sub-directory where libtool stores uninstalled libraries. */
+#undef LT_OBJDIR
+
+/* Enable MWM QATS protocol support */
+#undef MWM_QATS_PROTOCOL
+
+/* Enable locale support (auto-detected) */
+#undef NL_CAT_LOCALE
+
+/* "No OL Compatability" */
+#undef NO_OL_COMPAT
+
+/* Define to the address where bug reports for this package should be sent. */
+#undef PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#undef PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#undef PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#undef PACKAGE_TARNAME
+
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
+
+/* Define to the version of this package. */
+#undef PACKAGE_VERSION
+
+/* Enable HP Panelist support */
+#undef PANELIST
+
+/* Define to 1 if all of the C90 standard headers exist (not just the ones
+   required in a freestanding environment). This macro is provided for
+   backward compatibility; new code need not use it. */
+#undef STDC_HEADERS
+
+/* Enable wide character support (auto-detected) */
+#undef SUPPORTS_WCHARS
+
+/* 1 if Motif ws built with Xft support */
+#undef USE_XFT
+
+/* Enable CDE/DTE integration (auto-detected with warnings) */
+#undef WSM
+
+/* Default logging level for Motif */
+#undef XM_DEFAULT_LOG_LEVEL
+
+/* Default logging output destination */
+#undef XM_DEFAULT_LOG_OUTPUT
+
+/* 1 if X/Open message catalog support is enabled */
+#undef XM_MSGCAT
+
+/* 1 if Motif was built with printing support */
+#undef XM_PRINTING
+
+/* 1 if UIL compiler debugging support is enabled */
+#undef XM_UIL_DEBUG
+
+/* 1 if Motif was built with UTF8 Support */
+#undef XM_UTF8
+
+/* 1 if Motif was built with JPEG support */
+#undef XM_WITH_JPEG
+
+/* 1 if Motif was built with PNG support */
+#undef XM_WITH_PNG
+
+/* Define if multi-thread safe API is not available */
+#undef XNO_MTSAFE_API
+
+/* Define if multi-thread safe password API is not available */
+#undef XNO_MTSAFE_PWDAPI
+
+/* Disable XOS locking for single-threaded builds */
+#undef XOS_USE_NO_LOCKING
+
+/* Use Xlib-only locking */
+#undef XOS_USE_XLIB_LOCKING
+
+/* Use Xt-based locking (auto-detected) */
+#undef XOS_USE_XT_LOCKING
+
+/* Define if libXt was compiled with thread support */
+#undef XTHREADS
+
+/* Enable XTHREADS file/line debugging */
+#undef XTHREADS_FILE_LINE
+
+/* Enable XTHREADS warnings */
+#undef XTHREADS_WARN
+
+/* Define to use multi-thread safe API */
+#undef XUSE_MTSAFE_API
+
+/* Define to use multi-thread safe password API */
+#undef XUSE_MTSAFE_PWDAPI
+
+/* Define to 1 if the X Window System is missing or not being used. */
+#undef X_DISPLAY_MISSING
+
+/* Force use of multi-thread safe API */
+#undef X_FORCE_USE_MTSAFE_API
+
+/* Define if pwd.h should be included */
+#undef X_INCLUDE_PWD_H
+
+/* Define if system is not POSIX compliant */
+#undef X_NOT_POSIX
+
+/* Define to 1 if `lex' declares `yytext' as a `char *' by default, not a
+   `char[]'. */
+#undef YYTEXT_POINTER
+
+/* Define for POSIX compliance */
+#undef _POSIX_SOURCE
+
+/* Define if compiler supports ANSI C */
+#undef __STDC__
+
+/* Define to empty if `const' does not conform to ANSI C. */
+#undef const
+
+/* Define to the type of a signed integer type wide enough to hold a pointer,
+   if such a type exists, and if the system does not define it. */
+#undef intptr_t
+
+/* Define to `int' if <sys/types.h> does not define. */
+#undef mode_t
+
+/* Define to `long int' if <sys/types.h> does not define. */
+#undef off_t
+
+/* Define as a signed integer type capable of holding a process identifier. */
+#undef pid_t
+
+/* Define to `unsigned int' if <sys/types.h> does not define. */
+#undef size_t
+
+/* Define to the type of an unsigned integer type wide enough to hold a
+   pointer, if such a type exists, and if the system does not define it. */
+#undef uintptr_t

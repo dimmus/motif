@@ -15,8 +15,8 @@ if [ -z "$SOURCE_DIR" ] || [ -z "$BUILD_DIR" ]; then
 fi
 
 # Set up paths
-WML_DIR="$SOURCE_DIR/tools/wml"
-OUTPUT_DIR="$BUILD_DIR/tools/wml"
+WML_DIR="$SOURCE_DIR/src/bin/wml"
+OUTPUT_DIR="$BUILD_DIR/src/bin/wml"
 
 # Create output directory
 mkdir -p "$OUTPUT_DIR"

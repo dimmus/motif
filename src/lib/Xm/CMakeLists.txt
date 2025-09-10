@@ -277,7 +277,7 @@ configure_file(
 # Generate string definition files using makestrs
 add_custom_command(
     OUTPUT ${XM_STRING_FILES} ${XM_INCLUDE_FILES}
-    COMMAND ${CMAKE_SOURCE_DIR}/tools/cmake/utils/generate_xm_strings.sh
+    COMMAND ${CMAKE_SOURCE_DIR}/tools/cmake/scripts/generate_xm_strings.sh
         ${CMAKE_SOURCE_DIR}
         ${CMAKE_BINARY_DIR}
         ${CMAKE_BINARY_DIR}/src/bin/utils/makestrs
@@ -292,9 +292,9 @@ if(WITH_MESSAGE_CATALOG)
         COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/include/Xm
         COMMAND ${CMAKE_BINARY_DIR}/src/bin/utils/mkcatdefs
             ${CMAKE_BINARY_DIR}/include/Xm/XmMsgCatI.h
-            ${CMAKE_SOURCE_DIR}/src/lib/Xm/Xm.msg
+            ${CMAKE_SOURCE_DIR}/localized/C/msg/Xm.msg
             > /dev/null 2>&1
-        DEPENDS ${CMAKE_BINARY_DIR}/src/bin/utils/mkcatdefs ${CMAKE_SOURCE_DIR}/src/lib/Xm/Xm.msg
+        DEPENDS ${CMAKE_BINARY_DIR}/src/bin/utils/mkcatdefs ${CMAKE_SOURCE_DIR}/localized/C/msg/Xm.msg
         COMMENT "Generating Xm message catalog header"
     )
 else()

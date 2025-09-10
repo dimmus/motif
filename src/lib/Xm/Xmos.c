@@ -51,6 +51,7 @@ static char rcsid[] = "$TOG: Xmos.c /main/33 1998/01/21 11:07:25 csn $"
 #include <stdlib.h>
 #include <string.h> /* for strdup, strlcat */
 #include <unistd.h>
+#include <pwd.h> /* for getpwnam, getpwuid */
 
 /* Ensure nanosleep is properly declared */
 #if HAVE_NANOSLEEP

@@ -388,7 +388,7 @@ package_archive: .FORCE
 # Tests
 #
 test: .FORCE
-	@$(PYTHON) ./tools/cmake/utils/make_test.py "$(BUILD_DIR)"
+	@$(PYTHON) ./tools/cmake/scripts/make_test.py "$(BUILD_DIR)"
 
 
 # -----------------------------------------------------------------------------
@@ -478,13 +478,13 @@ check_cmake: .FORCE
 #
 
 source_archive: .FORCE
-	@$(PYTHON) ./tools/cmake/utils/make_source_archive.py
+	@$(PYTHON) ./tools/cmake/scripts/make_source_archive.py
 
 update: .FORCE
-	@$(PYTHON) ./tools/cmake/utils/make_update.py
+	@$(PYTHON) ./tools/cmake/scripts/make_update.py
 
 update_code: .FORCE
-	@$(PYTHON) ./tools/cmake/utils/make_update.py --no-libraries
+	@$(PYTHON) ./tools/cmake/scripts/make_update.py --no-libraries
 
 format: .FORCE
 	@PATH="${LIBDIR}/llvm/bin/:$(PATH)" $(PYTHON) tools/utils_maintenance/clang_format_paths.py $(PATHS)

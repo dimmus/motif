@@ -511,53 +511,51 @@ endif()
 
 if(CMAKE_COMPILER_IS_GNUCC)
 
+  # ============================================================================
+  # GCC C WARNING FLAGS - TURN WARNINGS ON
+  # ============================================================================
   add_check_c_compiler_flags(
-    C_WARNINGS
+    C_WARNINGS_ON
 
     C_WARN_ALL -Wall
     C_WARN_ERROR_IMPLICIT_FUNCTION_DECLARATION -Werror=implicit-function-declaration
-
-    # System headers sometimes do this, disable for now, was: `-Werror=strict-prototypes`.
     C_WARN_STRICT_PROTOTYPES -Wstrict-prototypes
-
     C_WARN_ERROR_RETURN_TYPE -Werror=return-type
     C_WARN_ERROR_VLA -Werror=vla
     C_WARN_MISSING_PROTOTYPES -Wmissing-prototypes
-    C_WARN_NO_CHAR_SUBSCRIPTS -Wno-char-subscripts
-    C_WARN_NO_UNKNOWN_PRAGMAS -Wno-unknown-pragmas
     C_WARN_POINTER_ARITH -Wpointer-arith
     C_WARN_UNUSED_PARAMETER -Wunused-parameter
     C_WARN_WRITE_STRINGS -Wwrite-strings
     C_WARN_LOGICAL_OP -Wlogical-op
     C_WARN_UNDEF -Wundef
-
-    # Needs: `-Wuninitialized`.
     C_WARN_INIT_SELF -Winit-self
-
     C_WARN_MISSING_INCLUDE_DIRS -Wmissing-include-dirs
-    C_WARN_NO_DIV_BY_ZERO -Wno-div-by-zero
     C_WARN_TYPE_LIMITS -Wtype-limits
     C_WARN_FORMAT_SIGN -Wformat-signedness
     C_WARN_RESTRICT -Wrestrict
-
-    # Useful but too many false positives and inconvenient to suppress each occurrence.
-    C_WARN_NO_STRINGOP_OVERREAD -Wno-stringop-overread
-    C_WARN_NO_STRINGOP_OVERFLOW -Wno-stringop-overflow
-
-    # C-only.
     C_WARN_NO_NULL -Wnonnull
     C_WARN_ABSOLUTE_VALUE -Wabsolute-value
-
     C_WARN_UNINITIALIZED -Wuninitialized
     C_WARN_REDUNDANT_DECLS -Wredundant-decls
     C_WARN_SHADOW -Wshadow
-
-    # Disable because it gives warnings for `printf()` & friends.
-    # C_WARN_DOUBLE_PROMOTION `-Wdouble-promotion -Wno-error=double-promotion`
-
-    # Use `ATTR_FALLTHROUGH` macro to suppress.
     C_WARN_IMPLICIT_FALLTHROUGH -Wimplicit-fallthrough=5
   )
+
+  # ============================================================================
+  # GCC C WARNING FLAGS - TURN WARNINGS OFF
+  # ============================================================================
+  add_check_c_compiler_flags(
+    C_WARNINGS_OFF
+
+    C_WARN_NO_CHAR_SUBSCRIPTS -Wno-char-subscripts
+    C_WARN_NO_UNKNOWN_PRAGMAS -Wno-unknown-pragmas
+    C_WARN_NO_DIV_BY_ZERO -Wno-div-by-zero
+    C_WARN_NO_STRINGOP_OVERREAD -Wno-stringop-overread
+    C_WARN_NO_STRINGOP_OVERFLOW -Wno-stringop-overflow
+  )
+
+  # Combine both categories
+  set(C_WARNINGS "${C_WARNINGS_ON} ${C_WARNINGS_OFF}")
 
   if(NOT APPLE)
     add_check_c_compiler_flags(
@@ -579,26 +577,20 @@ if(CMAKE_COMPILER_IS_GNUCC)
     C_WARN_NO_TYPE_LIMITS -Wno-type-limits
   )
 
+  # ============================================================================
+  # GCC C++ WARNING FLAGS - TURN WARNINGS ON
+  # ============================================================================
   add_check_cxx_compiler_flags(
-    CXX_WARNINGS
+    CXX_WARNINGS_ON
 
     CXX_WARN_UNINITIALIZED -Wuninitialized
     CXX_WARN_REDUNDANT_DECLS -Wredundant-decls
-
     CXX_WARN_ALL -Wall
-    CXX_WARN_NO_INVALID_OFFSETOF -Wno-invalid-offsetof
-    CXX_WARN_NO_SIGN_COMPARE -Wno-sign-compare
     CXX_WARN_LOGICAL_OP -Wlogical-op
-
-    # Needs: `-Wuninitialized`.
     CXX_WARN_INIT_SELF -Winit-self
-
     CXX_WARN_MISSING_INCLUDE_DIRS -Wmissing-include-dirs
-    CXX_WARN_NO_DIV_BY_ZERO -Wno-div-by-zero
     CXX_WARN_TYPE_LIMITS -Wtype-limits
     CXX_WARN_ERROR_RETURN_TYPE -Werror=return-type
-    CXX_WARN_NO_CHAR_SUBSCRIPTS -Wno-char-subscripts
-    CXX_WARN_NO_UNKNOWN_PRAGMAS -Wno-unknown-pragmas
     CXX_WARN_POINTER_ARITH -Wpointer-arith
     CXX_WARN_UNUSED_PARAMETER -Wunused-parameter
     CXX_WARN_WRITE_STRINGS -Wwrite-strings
@@ -606,25 +598,27 @@ if(CMAKE_COMPILER_IS_GNUCC)
     CXX_WARN_COMMA_SUBSCRIPT -Wcomma-subscript
     CXX_WARN_FORMAT_SIGN -Wformat-signedness
     CXX_WARN_RESTRICT -Wrestrict
-    CXX_WARN_NO_SUGGEST_OVERRIDE -Wno-suggest-override
-    CXX_WARN_UNINITIALIZED -Wuninitialized
-
-    # NOTE(@ideasman42): In GCC 13.2.1 on Linux this causes internal compiler errors.
-    # The crashes can be resolved by disabling the flag per module (but not via pragmas).
-    # However this also causes a type mix-up FreeStyle  (Blender & FreeStyle's `Curve`)
-    # so it seems to impact GCC's the internal state enough that it's too risky to enable.
-    # When this is resolved the check can be enabled for fixed GCC versions.
-    #
-    # Prevents linking errors with MSVC.
-    # `CXX_WARN_MISMATCHED_TAGS -Wmismatched-tags`
-
-    # Useful but too many false positives and inconvenient to suppress each occurrence.
-    CXX_WARN_NO_STRINGOP_OVERREAD -Wno-stringop-overread
-    CXX_WARN_NO_STRINGOP_OVERFLOW -Wno-stringop-overflow
-
-    # Use `[[fallthrough]]` or `ATTR_FALLTHROUGH` macro to suppress.
     CXX_WARN_IMPLICIT_FALLTHROUGH -Wimplicit-fallthrough=5
   )
+
+  # ============================================================================
+  # GCC C++ WARNING FLAGS - TURN WARNINGS OFF
+  # ============================================================================
+  add_check_cxx_compiler_flags(
+    CXX_WARNINGS_OFF
+
+    CXX_WARN_NO_INVALID_OFFSETOF -Wno-invalid-offsetof
+    CXX_WARN_NO_SIGN_COMPARE -Wno-sign-compare
+    CXX_WARN_NO_DIV_BY_ZERO -Wno-div-by-zero
+    CXX_WARN_NO_CHAR_SUBSCRIPTS -Wno-char-subscripts
+    CXX_WARN_NO_UNKNOWN_PRAGMAS -Wno-unknown-pragmas
+    CXX_WARN_NO_SUGGEST_OVERRIDE -Wno-suggest-override
+    CXX_WARN_NO_STRINGOP_OVERREAD -Wno-stringop-overread
+    CXX_WARN_NO_STRINGOP_OVERFLOW -Wno-stringop-overflow
+  )
+
+  # Combine both categories
+  set(CXX_WARNINGS "${CXX_WARNINGS_ON} ${CXX_WARNINGS_OFF}")
 
   # causes too many warnings
   if(NOT APPLE)
@@ -685,24 +679,36 @@ if(CMAKE_COMPILER_IS_GNUCC)
 elseif(CMAKE_C_COMPILER_ID MATCHES "Clang")
   # Matches both "Clang" & "AppleClang" on macOS.
 
+  # ============================================================================
+  # CLANG C WARNING FLAGS - TURN WARNINGS ON
+  # ============================================================================
   add_check_c_compiler_flags(
-    C_WARNINGS
+    C_WARNINGS_ON
 
-    # Strange, clang complains these are not supported, but then uses them.
     C_WARN_ALL -Wall
     C_WARN_ERROR_IMPLICIT_FUNCTION_DECLARATION -Werror=implicit-function-declaration
     C_WARN_ERROR_RETURN_TYPE -Werror=return-type
-    C_WARN_NO_AUTOLOGICAL_COMPARE -Wno-tautological-compare
-    C_WARN_NO_UNKNOWN_PRAGMAS -Wno-unknown-pragmas
-    C_WARN_NO_CHAR_SUBSCRIPTS -Wno-char-subscripts
     C_WARN_STRICT_PROTOTYPES -Wstrict-prototypes
     C_WARN_MISSING_PROTOTYPES -Wmissing-prototypes
     C_WARN_UNUSED_PARAMETER -Wunused-parameter
     C_WARN_UNDEF -Wundef
     C_WARN_UNDEF_PREFIX -Wundef-prefix
-
     C_WARN_ERROR_UNGUARDED_AVAILABILITY_NEW -Werror=unguarded-availability-new
   )
+
+  # ============================================================================
+  # CLANG C WARNING FLAGS - TURN WARNINGS OFF
+  # ============================================================================
+  add_check_c_compiler_flags(
+    C_WARNINGS_OFF
+
+    C_WARN_NO_AUTOLOGICAL_COMPARE -Wno-tautological-compare
+    C_WARN_NO_UNKNOWN_PRAGMAS -Wno-unknown-pragmas
+    C_WARN_NO_CHAR_SUBSCRIPTS -Wno-char-subscripts
+  )
+
+  # Combine both categories
+  set(C_WARNINGS "${C_WARNINGS_ON} ${C_WARNINGS_OFF}")
 
   # Add specific warning suppressions for Motif
   add_check_c_compiler_flags(
@@ -717,39 +723,38 @@ elseif(CMAKE_C_COMPILER_ID MATCHES "Clang")
     C_WARN_NO_TYPE_LIMITS -Wno-type-limits
   )
 
+  # ============================================================================
+  # CLANG C++ WARNING FLAGS - TURN WARNINGS ON
+  # ============================================================================
   add_check_cxx_compiler_flags(
-    CXX_WARNINGS
+    CXX_WARNINGS_ON
 
     CXX_WARN_ALL -Wall
-    # Using C++20 features while having C++17 as the project language isn't allowed by MSVC.
     CXX_CXX20_DESIGNATOR -Wc++20-designator
+    CXX_WARN_UNDEF -Wundef
+    CXX_WARN_UNDEF_PREFIX -Wundef-prefix
+    CXX_WARN_UNUSED_PARAMETER -Wunused-parameter
+    CXX_WARN_MISMATCHED_TAGS -Wmismatched-tags
+    CXX_WARN_ERROR_UNGUARDED_AVAILABILITY_NEW -Werror=unguarded-availability-new
+  )
+
+  # ============================================================================
+  # CLANG C++ WARNING FLAGS - TURN WARNINGS OFF
+  # ============================================================================
+  add_check_cxx_compiler_flags(
+    CXX_WARNINGS_OFF
 
     CXX_WARN_NO_AUTOLOGICAL_COMPARE -Wno-tautological-compare
     CXX_WARN_NO_UNKNOWN_PRAGMAS -Wno-unknown-pragmas
     CXX_WARN_NO_CHAR_SUBSCRIPTS -Wno-char-subscripts
-
-    # We get a lot of these, if its a problem a developer needs to look into it.
     CXX_WARN_NO_OVERLOADED_VIRTUAL -Wno-overloaded-virtual
-
     CXX_WARN_NO_SIGN_COMPARE -Wno-sign-compare
     CXX_WARN_NO_INVALID_OFFSETOF -Wno-invalid-offsetof
-
-    # Apple Clang (tested on version 12) doesn't support this flag while LLVM Clang 11 does.
     CXX_WARN_NO_SUGGEST_OVERRIDE -Wno-suggest-override
-
-    CXX_WARN_UNDEF -Wundef
-    CXX_WARN_UNDEF_PREFIX -Wundef-prefix
-    CXX_WARN_UNUSED_PARAMETER -Wunused-parameter
-
-    # Prevents linking errors with MSVC.
-    CXX_WARN_MISMATCHED_TAGS -Wmismatched-tags
-
-    # Gives too many unfixable warnings.
-    # `C_WARN_UNUSED_MACROS -Wunused-macros`
-    # `CXX_WARN_UNUSED_MACROS -Wunused-macros`
-
-    CXX_WARN_ERROR_UNGUARDED_AVAILABILITY_NEW -Werror=unguarded-availability-new
   )
+
+  # Combine both categories
+  set(CXX_WARNINGS "${CXX_WARNINGS_ON} ${CXX_WARNINGS_OFF}")
   if(MSVC_CLANG)
     # clang-cl produces an unhealthy amount of warnings in its default
     # configuration as it for reasons unknown decided to enable all
@@ -1123,7 +1128,11 @@ elseif(CMAKE_C_COMPILER_ID STREQUAL "Intel")
   string(APPEND CXX_WARNINGS " -wd188,186,144,913,556,858,597,177,1292,167,279,592,94,2722,3199")
 elseif(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
   # Most MSVC warnings are C & C++.
-  set(_WARNINGS
+
+  # ============================================================================
+  # MSVC WARNING FLAGS - TURN WARNINGS ON
+  # ============================================================================
+  set(_WARNINGS_ON
     # warning level:
     "/W3"
     "/w34062"  # switch statement contains 'default' but no 'case' labels
@@ -1132,6 +1141,17 @@ elseif(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
     "/w34189"  # local variable is initialized but not referenced
     # see https://docs.microsoft.com/en-us/cpp/error-messages/compiler-warnings/c5038?view=vs-2017
     "/w35038"  # order of initialization in c++ constructors
+    # errors:
+    "/we4013"  # 'function' undefined; assuming extern returning int
+    "/we4133"  # incompatible pointer types
+    "/we4431"  # missing type specifier - int assumed
+    "/we4033"  # 'function' must return a value
+  )
+
+  # ============================================================================
+  # MSVC WARNING FLAGS - TURN WARNINGS OFF
+  # ============================================================================
+  set(_WARNINGS_OFF
     # disable:
     "/wd4018"  # signed/unsigned mismatch
     "/wd4146"  # unary minus operator applied to unsigned type, result still unsigned
@@ -1147,17 +1167,16 @@ elseif(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
     "/wd4996"  # identifier was declared deprecated
     "/wd4661"  # no suitable definition provided for explicit template instantiation request
     "/wd4848"  # 'no_unique_address' is a vendor extension in C++17
-    # errors:
-    "/we4013"  # 'function' undefined; assuming extern returning int
-    "/we4133"  # incompatible pointer types
-    "/we4431"  # missing type specifier - int assumed
-    "/we4033"  # 'function' must return a value
   )
 
-  string(REPLACE ";" " " _WARNINGS "${_WARNINGS}")
+  # Combine both categories
+  list(APPEND _WARNINGS_ON ${_WARNINGS_OFF})
+  string(REPLACE ";" " " _WARNINGS "${_WARNINGS_ON}")
   set(C_WARNINGS "${_WARNINGS}")
   set(CXX_WARNINGS "${_WARNINGS}")
   unset(_WARNINGS)
+  unset(_WARNINGS_ON)
+  unset(_WARNINGS_OFF)
 endif()
 
 # Select C++17 as the standard for C++ projects.

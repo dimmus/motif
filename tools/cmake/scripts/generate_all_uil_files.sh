@@ -15,17 +15,17 @@ if [ -z "$SOURCE_DIR" ] || [ -z "$BUILD_DIR" ]; then
 fi
 
 # Set up paths
-WML_DIR="$SOURCE_DIR/tools/wml"
+WML_DIR="$SOURCE_DIR/src/bin/wml"
 UIL_YACC_FILE="$WML_DIR/Uil.y"
 UIL_LEX_FILE="$WML_DIR/wmluiltok.l"
-OUTPUT_DIR="$BUILD_DIR/tools/wml"
+OUTPUT_DIR="$BUILD_DIR/src/bin/wml"
 
 # Create output directory
 mkdir -p "$OUTPUT_DIR"
 
 # Copy stub UilSymGen.h first to break circular dependency
 echo "Copying stub UilSymGen.h to break circular dependency"
-cp "${SOURCE_DIR}/tools/wml/UilSymGen.h.stub" "${OUTPUT_DIR}/UilSymGen.h"
+cp "${SOURCE_DIR}/src/bin/wml/UilSymGen.h.stub" "${OUTPUT_DIR}/src/lib/Uil/UilSymGen.h"
 
 # Check if required tools are available
 if ! command -v bison >/dev/null 2>&1; then
@@ -37,20 +37,6 @@ if ! command -v flex >/dev/null 2>&1; then
     echo "Error: flex is required but not installed"
     exit 1
 fi
-
-echo "Generating UIL parser and lexer files..."
-
-# Generate UIL parser using Bison
-cd "$OUTPUT_DIR"
-bison -d -o UilLexPars.c "$UIL_YACC_FILE"
-
-# Generate UIL lexer using Flex
-flex -o UilLexAna.c "$UIL_LEX_FILE"
-
-echo "UIL parser files generated successfully:"
-echo "  - $OUTPUT_DIR/UilLexPars.c"
-echo "  - $OUTPUT_DIR/UilLexPars.h"
-echo "  - $OUTPUT_DIR/UilLexAna.c"
 
 # Now generate WML target files if wml and wmluiltok are available
 if [ -f "$OUTPUT_DIR/wml" ] && [ -f "$OUTPUT_DIR/wmluiltok" ]; then
@@ -67,5 +53,3 @@ if [ -f "$OUTPUT_DIR/wml" ] && [ -f "$OUTPUT_DIR/wmluiltok" ]; then
 else
     echo "Warning: wml or wmluiltok not found, skipping WML target generation"
 fi
-
-echo "All UIL files generation completed"

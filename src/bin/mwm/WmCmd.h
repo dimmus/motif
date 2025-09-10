@@ -25,7 +25,7 @@
 #define _WM_CMD_
 
 #include <Xm/Xm.h>
-#include "WmWsmLib/wsm_proto.h"
+#include "wsm_proto.h"
 
 #define WINDOW_MASK 0x3fffffff
 #define ALL_WINDOWS 0x3fffffff

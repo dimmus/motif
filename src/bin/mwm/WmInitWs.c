@@ -137,8 +137,8 @@ typedef struct
 #include "WmInitWs.h"
 
 #if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
-# include "WmWsmLib/wsm_proto.h"
-# include "WmWsmLib/utm_send.h"
+# include "wsm_proto.h"
+# include "utm_send.h"
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
 
 #ifdef WSM

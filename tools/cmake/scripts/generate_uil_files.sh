@@ -15,10 +15,10 @@ if [ -z "$SOURCE_DIR" ] || [ -z "$BUILD_DIR" ]; then
 fi
 
 # Set up paths
-WML_DIR="$SOURCE_DIR/tools/wml"
+WML_DIR="$SOURCE_DIR/src/bin/wml"
 UIL_YACC_FILE="$WML_DIR/Uil.y"
 UIL_LEX_FILE="$WML_DIR/wmluiltok.l"
-OUTPUT_DIR="$BUILD_DIR/tools/wml"
+OUTPUT_DIR="$BUILD_DIR/src/bin/wml"
 
 # Create output directory
 mkdir -p "$OUTPUT_DIR"
@@ -39,11 +39,6 @@ echo "Generating UIL parser from $UIL_YACC_FILE"
 cd "$OUTPUT_DIR"
 bison -d -o UilLexPars.c "$UIL_YACC_FILE"
 
-# Generate UIL lexer using Flex
-echo "Generating UIL lexer from $UIL_LEX_FILE"
-flex -o UilLexAna.c "$UIL_LEX_FILE"
-
 echo "UIL files generated successfully:"
 echo "  - $OUTPUT_DIR/UilLexPars.c"
 echo "  - $OUTPUT_DIR/UilLexPars.h"
-echo "  - $OUTPUT_DIR/UilLexAna.c"

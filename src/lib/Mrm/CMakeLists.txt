@@ -57,9 +57,9 @@ if(WITH_MESSAGE_CATALOG)
         COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/include/Mrm
         COMMAND ${CMAKE_BINARY_DIR}/src/bin/utils/mkcatdefs
             ${CMAKE_BINARY_DIR}/include/Mrm/MrmMsgCatI.h
-            ${CMAKE_SOURCE_DIR}/src/lib/Mrm/Mrm.msg
+            ${CMAKE_SOURCE_DIR}/localized/C/msg/Mrm.msg
             > /dev/null 2>&1
-        DEPENDS ${CMAKE_BINARY_DIR}/src/bin/utils/mkcatdefs ${CMAKE_SOURCE_DIR}/src/lib/Mrm/Mrm.msg
+        DEPENDS ${CMAKE_BINARY_DIR}/src/bin/utils/mkcatdefs ${CMAKE_SOURCE_DIR}/localized/C/msg/Mrm.msg
         COMMENT "Generating Mrm message catalog header"
     )
 else()

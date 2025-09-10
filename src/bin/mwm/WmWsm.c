@@ -28,7 +28,7 @@
 
 #include <Xm/Xm.h>
 #include "WmGlobal.h"
-#include "WmWsmLib/wsm_proto.h"
+#include "wsm_proto.h"
 
 /*------------------------------------------------------------------*
  |                              GetPCD                              |

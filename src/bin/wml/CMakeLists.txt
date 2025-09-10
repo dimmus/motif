@@ -135,13 +135,13 @@ if(USING_YACC OR USING_BYACC)
     add_custom_command(
         OUTPUT Uil.c Uil.h UilLexPars.h UilLexPars.c
         COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_SOURCE_DIR} bash -c 'echo "// Placeholder for UilSymGen.h" > UilSymGen.h'
-        COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_SOURCE_DIR} cpp -I${CMAKE_SOURCE_DIR}/src/bin/uil -I${CMAKE_SOURCE_DIR}/include -I${CMAKE_SOURCE_DIR}/src/lib -I${CMAKE_CURRENT_SOURCE_DIR} -P Uil.y Uil_processed.y
+        COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_SOURCE_DIR} cpp -I${CMAKE_SOURCE_DIR}/src/bin/uil -I${CMAKE_SOURCE_DIR}/include -I${CMAKE_SOURCE_DIR}/src/lib -I${CMAKE_SOURCE_DIR}/src/lib/Uil -I${CMAKE_CURRENT_SOURCE_DIR} -P ${CMAKE_SOURCE_DIR}/src/bin/uil/Uil.y Uil_processed.y
         COMMAND ${BISON_EXECUTABLE} -d -o Uil.c Uil_processed.y
         COMMAND ${CMAKE_COMMAND} -E remove Uil_processed.y
         COMMAND ${CMAKE_COMMAND} -E remove UilSymGen.h
         COMMAND ${CMAKE_COMMAND} -E create_symlink Uil.h UilLexPars.h
         COMMAND ${CMAKE_COMMAND} -E create_symlink Uil.c UilLexPars.c
-        DEPENDS Uil.y
+        DEPENDS ${CMAKE_SOURCE_DIR}/src/bin/uil/Uil.y
         COMMENT "Generating Uil.c and Uil.h from Uil.y using ${BISON_EXECUTABLE}"
     )
     set(BISON_uil_OUTPUTS Uil.c Uil.h UilLexPars.h UilLexPars.c)
@@ -152,9 +152,9 @@ else()
         COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_SOURCE_DIR} bash -c 'echo "// Placeholder for UilSymGen.h" > UilSymGen.h'
         COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_SOURCE_DIR} bash -c 'echo "// Placeholder for UilLexPars.h" > UilLexPars.h'
         COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_SOURCE_DIR} bash -c 'echo "// Placeholder for UilLexPars.c" > UilLexPars.c'
-        COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_SOURCE_DIR} cpp -DNO_STD_HEADERS -DNO_X11_HEADERS -DNO_MRM_HEADERS -I${CMAKE_SOURCE_DIR}/src/bin/uil -I${CMAKE_SOURCE_DIR}/include -I${CMAKE_SOURCE_DIR}/src/lib -I${CMAKE_CURRENT_SOURCE_DIR} -P Uil.y Uil_processed.y
+        COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_SOURCE_DIR} cpp -DNO_STD_HEADERS -DNO_X11_HEADERS -DNO_MRM_HEADERS -I${CMAKE_SOURCE_DIR}/src/bin/uil -I${CMAKE_SOURCE_DIR}/include -I${CMAKE_SOURCE_DIR}/src/lib -I${CMAKE_SOURCE_DIR}/src/lib/Uil -I${CMAKE_CURRENT_SOURCE_DIR} -P ${CMAKE_SOURCE_DIR}/src/bin/uil/Uil.y Uil_processed.y
         COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_BINARY_DIR} ${BISON_EXECUTABLE} -d -o Uil.c ${CMAKE_CURRENT_SOURCE_DIR}/Uil_processed.y
-        COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/fix_yystype.sh ${CMAKE_CURRENT_BINARY_DIR}/Uil.h
+        COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/tools/cmake/scripts/fix_yystype.sh ${CMAKE_CURRENT_BINARY_DIR}/Uil.h
         COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_CURRENT_SOURCE_DIR}/Uil_processed.y
         COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_CURRENT_SOURCE_DIR}/UilSymGen.h
         COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_CURRENT_SOURCE_DIR}/UilLexPars.h
@@ -163,7 +163,7 @@ else()
         COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_COMMAND} -E create_symlink Uil.c UilLexPars.c
         COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/Uil.h ${CMAKE_CURRENT_SOURCE_DIR}/UilLexPars.h
         COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/Uil.c ${CMAKE_CURRENT_SOURCE_DIR}/UilLexPars.c
-        DEPENDS Uil.y
+        DEPENDS ${CMAKE_SOURCE_DIR}/src/bin/uil/Uil.y
         COMMENT "Generating Uil.c and Uil.h from Uil.y using bison"
     )
     set(BISON_uil_OUTPUTS ${CMAKE_CURRENT_BINARY_DIR}/Uil.c ${CMAKE_CURRENT_BINARY_DIR}/Uil.h ${CMAKE_CURRENT_BINARY_DIR}/UilLexPars.h ${CMAKE_CURRENT_BINARY_DIR}/UilLexPars.c)
@@ -263,13 +263,14 @@ target_include_directories(wmldbcreate PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR} 
     ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_SOURCE_DIR}/src/bin/uil
+    ${CMAKE_SOURCE_DIR}/src/lib/Uil
 )
 
 # Custom command to generate WML target files
 add_custom_command(
     OUTPUT ${WML_TARGETS}
     COMMAND ${CMAKE_COMMAND} -E remove ${WML_TARGETS} wml.report wml-uil.mm
-    COMMAND $<TARGET_FILE:wmluiltok> < ${CMAKE_CURRENT_SOURCE_DIR}/Uil.y > tokens.dat
+    COMMAND $<TARGET_FILE:wmluiltok> < ${CMAKE_SOURCE_DIR}/src/bin/uil/Uil.y > tokens.dat
     COMMAND ${CMAKE_COMMAND} -E remove wml-uil.mm
     COMMAND $<TARGET_FILE:wml> ${CMAKE_CURRENT_SOURCE_DIR}/motif.wml
     COMMAND ${CMAKE_COMMAND} -E remove tokens.dat

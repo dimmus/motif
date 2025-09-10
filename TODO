@@ -125,7 +125,7 @@ WITH_NINJA_POOL_JOBS
 
 Implement build with ninja. Do we need to generate build.ninja somewhere?
 
-Separate CFLAGS (or CXXFLAGS) that switch ON from OFF (-Wno-...)
+Separate CFLAGS (or CXXFLAGS) that switch ON from OFF (-Wno-...).
 
 Is it favourable to convert all .c and .h files to .cc and .hh?
 I wish to use constructions like:

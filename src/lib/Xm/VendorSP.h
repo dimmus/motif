@@ -25,11 +25,11 @@
 #ifndef _XmNO_BC_INCL
 #  define _XmNO_BC_INCL
 #endif
+#include <Xm/XmP.h>
 #include <X11/ShellP.h>
 #include <Xm/DesktopP.h>
 #include <Xm/ExtObjectP.h>
 #include <Xm/VendorS.h>
-#include <Xm/XmP.h>
 #ifdef __cplusplus
 extern "C" {
 #endif

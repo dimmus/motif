@@ -1,4 +1,4 @@
-add_subdirectory(WmWsmLib)
+# WmWsmLib moved to src/lib/Wsm
 
 # Mwm sources
 set(MWM_SRCS
@@ -43,6 +43,7 @@ add_executable(mwm ${MWM_SRCS})
 target_include_directories(mwm PRIVATE
     ${CMAKE_BINARY_DIR}/lib
     ${CMAKE_SOURCE_DIR}/lib
+    ${CMAKE_SOURCE_DIR}/src/lib/Wsm
     ${X_INCLUDE_DIRS}
 )
 

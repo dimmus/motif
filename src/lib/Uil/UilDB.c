@@ -55,6 +55,7 @@ static char rcsid[] = "$XConsortium: UilDB.c /main/11 1996/11/21 20:03:11 drk $"
  */
 #include <stdlib.h>
 #include <unistd.h>
+#include <pwd.h>  /* for getpwnam, getpwuid */
 #include "UilDefI.h"
 
 /* X_INCLUDE_PWD_H is now configured by build system */

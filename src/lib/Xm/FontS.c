@@ -34,6 +34,8 @@
 #  include <stdint.h>
 #elif HAVE_INTTYPES_H
 #  include <inttypes.h>
+#else
+#  include <stdint.h>  /* Fallback for intptr_t */
 #endif
 #include "Xm/XmI.h"
 #include <Xm/ButtonBox.h>

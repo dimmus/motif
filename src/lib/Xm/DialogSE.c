@@ -28,10 +28,10 @@ static char rcsid[] = "$XConsortium: DialogSE.c /main/10 1995/07/14 10:19:03 drk
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
 #endif
-#include <X11/ShellP.h>
 #include <Xm/BaseClassP.h>
 #include <Xm/DialogSEP.h>
 #include <Xm/Xm.h> /* To make cpp on Sun happy. CR 5943 */
+#include <X11/ShellP.h>
     /********    Static Function Declarations    ********/
     static void
     ClassInitialize(void);

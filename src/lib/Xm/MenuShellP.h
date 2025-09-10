@@ -22,9 +22,9 @@
  */
 #ifndef _XmMenuShellP_h
 #  define _XmMenuShellP_h
+#  include <Xm/XmP.h>
 #  include <X11/ShellP.h>
 #  include <Xm/MenuShell.h>
-#  include <Xm/XmP.h>
 #  ifdef __cplusplus
 extern "C" {
 #  endif

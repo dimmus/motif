@@ -28,8 +28,8 @@
 
 #include <Xm/Xm.h>
 #include <Xm/ScrollBarP.h>
-#include "./WmWsmLib/utm_send.h"
-#include "./WmWsmLib/wsm_proto.h"
+#include "utm_send.h"
+#include "wsm_proto.h"
 #include "WmGlobal.h"
 #include "WmFunction.h"
 #include "WmCmd.h"

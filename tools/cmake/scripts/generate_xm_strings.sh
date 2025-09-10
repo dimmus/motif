@@ -13,19 +13,19 @@ if [ -z "$SOURCE_DIR" ] || [ -z "$BUILD_DIR" ] || [ -z "$MAKESTRS" ]; then
 fi
 
 # Create directories
-mkdir -p "$BUILD_DIR/lib/Xm"
+mkdir -p "$BUILD_DIR/src/lib/Xm"
 mkdir -p "$BUILD_DIR/include/Xm"
 
 # Copy template files
-cp "$SOURCE_DIR/src/lib/Xm/xmstring.list" "$BUILD_DIR/lib/Xm/"
-cp "$SOURCE_DIR/src/lib/Xm/XmStrDefs.ht" "$BUILD_DIR/lib/Xm/"
-cp "$SOURCE_DIR/src/lib/Xm/XmStrDefs22.ht" "$BUILD_DIR/lib/Xm/"
-cp "$SOURCE_DIR/src/lib/Xm/XmStrDefs23.ht" "$BUILD_DIR/lib/Xm/"
-cp "$SOURCE_DIR/src/lib/Xm/XmStrDefsI.ht" "$BUILD_DIR/lib/Xm/"
-cp "$SOURCE_DIR/src/lib/Xm/XmStrDefs.ct" "$BUILD_DIR/lib/Xm/"
+cp "$SOURCE_DIR/src/lib/Xm/xmstring.list" "$BUILD_DIR/src/lib/Xm/"
+cp "$SOURCE_DIR/src/lib/Xm/XmStrDefs.ht" "$BUILD_DIR/src/lib/Xm/"
+cp "$SOURCE_DIR/src/lib/Xm/XmStrDefs22.ht" "$BUILD_DIR/src/lib/Xm/"
+cp "$SOURCE_DIR/src/lib/Xm/XmStrDefs23.ht" "$BUILD_DIR/src/lib/Xm/"
+cp "$SOURCE_DIR/src/lib/Xm/XmStrDefsI.ht" "$BUILD_DIR/src/lib/Xm/"
+cp "$SOURCE_DIR/src/lib/Xm/XmStrDefs.ct" "$BUILD_DIR/src/lib/Xm/"
 
 # Generate string files
-cd "$BUILD_DIR/lib/Xm"
+cd "$BUILD_DIR/src/lib/Xm"
 "$MAKESTRS" -f xmstring.list > XmStrDefs.c 2>/dev/null
 
 # The makestrs tool should generate the header files directly
@@ -54,9 +54,9 @@ cp XmStrDefsI.h "$BUILD_DIR/include/Xm/"
 
 # Generate message catalog header file
 if [ -f "$BUILD_DIR/src/bin/utils/mkcatdefs" ]; then
-    "$BUILD_DIR/src/bin/utils/mkcatdefs" "$BUILD_DIR/include/Xm/XmMsgCatI.h" "$SOURCE_DIR/src/lib/Xm/Xm.msg" >/dev/null 2>&1
+    "$BUILD_DIR/src/bin/utils/mkcatdefs" "$BUILD_DIR/include/Xm/XmMsgCatI.h" "$SOURCE_DIR/localized/C/msg/Xm.msg" >/dev/null 2>&1
 elif [ -f "$SOURCE_DIR/src/bin/utils/mkcatdefs" ]; then
-    "$SOURCE_DIR/src/bin/utils/mkcatdefs" "$BUILD_DIR/include/Xm/XmMsgCatI.h" "$SOURCE_DIR/src/lib/Xm/Xm.msg" >/dev/null 2>&1
+    "$SOURCE_DIR/src/bin/utils/mkcatdefs" "$BUILD_DIR/include/Xm/XmMsgCatI.h" "$SOURCE_DIR/localized/C/msg/Xm.msg" >/dev/null 2>&1
 else
     # Fallback to stub file if mkcatdefs is not available
     cp "$SOURCE_DIR/src/lib/Xm/XmMsgCatI.h" "$BUILD_DIR/include/Xm/"
