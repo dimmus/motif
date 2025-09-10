@@ -1342,7 +1342,7 @@ include_directories(include)
 include_directories(${X_INCLUDE_DIRS})
 
 # Add system includes header to all targets
-add_compile_definitions(SYSTEM_INCLUDES_H="${CMAKE_SOURCE_DIR}/include/system_includes.h")
+add_compile_definitions(MOTIF_SYSTEM_H="${CMAKE_SOURCE_DIR}/include/motif_system.h")
 
 # Add conditional include directories
 if(XFT_FOUND)
@@ -1367,7 +1367,7 @@ file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/include/Mrm)
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/include/Dt)
 
 # Copy Xm headers (excluding symlinks)
-file(GLOB XM_HEADER_FILES "${CMAKE_SOURCE_DIR}/lib/Xm/*.h")
+file(GLOB XM_HEADER_FILES "${CMAKE_SOURCE_DIR}/src/lib/Xm/*.h")
 foreach(header ${XM_HEADER_FILES})
     get_filename_component(filename ${header} NAME)
     # Skip symlinks to avoid circular dependencies
@@ -1377,7 +1377,7 @@ foreach(header ${XM_HEADER_FILES})
 endforeach()
 
 # Copy Mrm headers
-file(GLOB MRM_HEADER_FILES "${CMAKE_SOURCE_DIR}/lib/Mrm/*.h")
+file(GLOB MRM_HEADER_FILES "${CMAKE_SOURCE_DIR}/src/lib/Mrm/*.h")
 foreach(header ${MRM_HEADER_FILES})
     get_filename_component(filename ${header} NAME)
     configure_file(${header} ${CMAKE_BINARY_DIR}/include/Mrm/${filename} COPYONLY)
@@ -1394,19 +1394,17 @@ endif()
 
 # Add subdirectories
 add_subdirectory(include)
-add_subdirectory(lib)
-add_subdirectory(tools/wml)
+add_subdirectory(src/lib)
 add_subdirectory(tools)
-add_subdirectory(clients)
+add_subdirectory(src/bin)
 add_subdirectory(data)
-add_subdirectory(localized/util)
 
 if(WITH_DEMOS)
-    add_subdirectory(demos)
+    add_subdirectory(src/examples)
 endif()
 
 if(WITH_TESTS)
-    add_subdirectory(tests)
+    add_subdirectory(src/tests)
 endif()
 
 if(WITH_DOCS)
@@ -1415,7 +1413,7 @@ endif()
 
 # Create pkg-config file
 configure_file(
-    ${CMAKE_SOURCE_DIR}/motif.pc.in
+    ${CMAKE_SOURCE_DIR}/data/motif.pc.in
     ${CMAKE_BINARY_DIR}/motif.pc
     @ONLY
 )

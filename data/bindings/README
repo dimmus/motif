@@ -2,26 +2,17 @@
 
 This directory contains a collection of sample ".motifbind" files:
 
-acorn
-apollo
-dec
-dg_AViiON
-doubleclick
-hitachi
-hp
-ibm
-intergraph17
-intergraph
-megatek
-motorola
-ncr_at
-ncr_vt
-sgi
-siemens_9733
-siemens_wx200
-sun_mit
-sun_news
-tek
+CDE - Common Desktop Environment
+dec - DEC workstations (still relevant for historical compatibility)
+doubleclick - Generic double-click bindings
+hal - HAL workstations
+hp - HP workstations
+ibm - IBM workstations
+pc - PC systems
+sgi - Silicon Graphics (still relevant)
+sony - Sony workstations
+sun - Sun workstations (still relevant)
+sun_at - Sun AT keyboards
 
 These files were provided by various vendors, though not necessarily
 the vendors whose hardware they apply to.  Each file contains a set of

@@ -1,5 +1,5 @@
-# Install Xm headers from lib/Xm directory
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/lib/Xm/
+# Install Xm headers from src/lib/Xm directory
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/lib/Xm/
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Xm
     FILES_MATCHING PATTERN "*.h"
 )
@@ -25,7 +25,7 @@ file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/include/Xm)
 
 # Generate Xm.h
 configure_file(
-    ${CMAKE_SOURCE_DIR}/lib/Xm/Xm.h.in
+    ${CMAKE_SOURCE_DIR}/src/lib/Xm/Xm.h.in
     ${CMAKE_BINARY_DIR}/include/Xm/Xm.h
     @ONLY
 )

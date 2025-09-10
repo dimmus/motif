@@ -1,0 +1,5 @@
+add_subdirectory(xmbind)
+add_subdirectory(mwm)
+add_subdirectory(uil)
+add_subdirectory(wml)
+add_subdirectory(utils)
