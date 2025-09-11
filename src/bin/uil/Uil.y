@@ -43,8 +43,6 @@
 #include "UilDefI.h"
 #include "UilCompGl.h"
 
-#define		YYSTYPE		yystype
-
 #ifndef YYDEBUG
 #define		YYDEBUG		1
 #endif
@@ -61,6 +59,9 @@ YYSTYPE		prev_yylval;
 int yyerror(char *s);
 
 	/* End user declarations section */
+
+/* Override YYSTYPE to use yystype from UilSarDef.h */
+#define		YYSTYPE		yystype
 
 %}    
 

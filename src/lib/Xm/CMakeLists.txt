@@ -270,7 +270,7 @@ set(XM_INCLUDE_FILES
 # Generate xmstring.list from xmstring.list.in (equivalent to AC_CONFIG_FILES)
 configure_file(
     ${CMAKE_SOURCE_DIR}/src/lib/Xm/xmstring.list.in
-    ${CMAKE_SOURCE_DIR}/src/lib/Xm/xmstring.list
+    ${CMAKE_BINARY_DIR}/src/lib/Xm/xmstring.list
     COPYONLY
 )
 
@@ -281,7 +281,7 @@ add_custom_command(
         ${CMAKE_SOURCE_DIR}
         ${CMAKE_BINARY_DIR}
         ${CMAKE_BINARY_DIR}/src/bin/utils/makestrs
-    DEPENDS ${CMAKE_BINARY_DIR}/src/bin/utils/makestrs ${CMAKE_BINARY_DIR}/src/bin/utils/mkcatdefs ${CMAKE_SOURCE_DIR}/src/lib/Xm/xmstring.list
+    DEPENDS ${CMAKE_BINARY_DIR}/src/bin/utils/makestrs ${CMAKE_BINARY_DIR}/src/bin/utils/mkcatdefs ${CMAKE_BINARY_DIR}/src/lib/Xm/xmstring.list
     COMMENT "Generating Xm string definition files"
 )
 
@@ -432,9 +432,9 @@ set(XM_HEADERS
     ManagerP.h
     PrimitiveP.h
     GadgetP.h
-    XmStrDefs.h
-    XmStrDefs22.h
-    XmStrDefs23.h
+    ${CMAKE_BINARY_DIR}/include/Xm/XmStrDefs.h
+    ${CMAKE_BINARY_DIR}/include/Xm/XmStrDefs22.h
+    ${CMAKE_BINARY_DIR}/include/Xm/XmStrDefs23.h
     VaSimpleP.h
     VirtKeys.h
     VirtKeysP.h
@@ -520,7 +520,7 @@ set(XM_HEADERS
     Xmfuncs.h
     deprecated.h
     obsolete.h
-    version.h
+    ${CMAKE_BINARY_DIR}/src/lib/Xm/version.h
 )
 
 # Extra headers
@@ -668,7 +668,7 @@ set(XM_INTERNAL_HEADERS
     XmImI.h
     XmMsgI.h
     XmRenderTI.h
-    XmStrDefsI.h
+    ${CMAKE_BINARY_DIR}/include/Xm/XmStrDefsI.h
     XmStringI.h
     XmTabListI.h
     XmosI.h
@@ -715,18 +715,6 @@ target_include_directories(Xm
 )
 
 # Add system includes for compilation
-target_compile_definitions(Xm PRIVATE
-    _GNU_SOURCE
-    _DEFAULT_SOURCE
-    _POSIX_C_SOURCE=200809L
-    _BSD_SOURCE
-    _XOPEN_SOURCE=600
-    _XOPEN_SOURCE_EXTENDED=1
-    _SVID_SOURCE
-    _ATFILE_SOURCE
-)
-
-# Add system includes to fix compilation errors
 target_compile_definitions(Xm PRIVATE
     _GNU_SOURCE
     _DEFAULT_SOURCE
@@ -837,12 +825,12 @@ install(FILES ${CMAKE_BINARY_DIR}/include/Xm/Xm.h
 # Generate version.h
 configure_file(
     ${CMAKE_SOURCE_DIR}/src/lib/Xm/version.h.in
-    ${CMAKE_BINARY_DIR}/lib/Xm/version.h
+    ${CMAKE_BINARY_DIR}/src/lib/Xm/version.h
     @ONLY
 )
 
 # Install version.h
-install(FILES ${CMAKE_BINARY_DIR}/lib/Xm/version.h
+install(FILES ${CMAKE_BINARY_DIR}/src/lib/Xm/version.h
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Xm
 )
 

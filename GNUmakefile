@@ -16,6 +16,7 @@ Motif Convenience Targets
    * full:          Enable all supported dependencies & options.
    * lite:          Disable non essential features for a smaller binary and faster build.
    * release:       Complete build with all options enabled, matching the releases.
+   * install:       Install to system (requires sudo).
    * developer:     Enable faster builds, error checking and tests, recommended for developers.
    * ninja:         Use ninja build tool for faster builds.
    * ccache:        Use ccache for faster rebuilds.
@@ -148,6 +149,18 @@ endif
 # Source and Build DIR's
 MOTIF_DIR:=$(shell pwd -P)
 BUILD_TYPE:=Release
+
+# Detect system super user command for installation
+SUDO_CMD:=$(shell which sudo 2>/dev/null)
+DOAS_CMD:=$(shell which doas 2>/dev/null)
+
+ifdef SUDO_CMD
+	SU_CMD:=sudo
+else ifdef DOAS_CMD
+	SU_CMD:=doas
+else
+	SU_CMD:=sudo
+endif
 
 # CMake arguments, assigned to local variable to make it mutable.
 CMAKE_CONFIG_ARGS := $(BUILD_CMAKE_ARGS)
@@ -325,10 +338,14 @@ all: .FORCE
 
 	@echo
 	@echo Building Motif ...
-	$(BUILD_COMMAND) -C "$(BUILD_DIR)" -j $(NPROCS) install
+	$(BUILD_COMMAND) -C "$(BUILD_DIR)" -j $(NPROCS)
+	@echo
+	@echo Installing Motif to system with $(SU_CMD)...
+	@echo "This will install to /usr/local (requires superuser privileges)"
+	$(SU_CMD) $(BUILD_COMMAND) -C "$(BUILD_DIR)" install
 	@echo
 	@echo Edit build configuration with: \"$(BUILD_DIR)/CMakeCache.txt\" run make again to rebuild.
-	@echo Motif successfully built, run from: $(MOTIF_BIN)
+	@echo Motif UI Library successfully built
 	@echo
 
 debug: all
@@ -338,6 +355,18 @@ release: all
 developer: all
 ninja: all
 ccache: all
+
+# -----------------------------------------------------------------------------
+# Install Motif to system (manual installation)
+install: .FORCE
+	@echo
+	@echo Installing Motif to system with $(SU_CMD)...
+	@echo "This will install to /usr/local (requires superuser privileges)"
+	@echo
+	$(SU_CMD) $(BUILD_COMMAND) -C "$(BUILD_DIR)" install
+	@echo
+	@echo Motif successfully installed to system
+	@echo
 
 # -----------------------------------------------------------------------------
 # Build dependencies

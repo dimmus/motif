@@ -131,31 +131,26 @@ add_custom_target(wmlparse_target
 
 # Generate Uil.c and Uil.h from Uil.y using detected parser
 if(USING_YACC OR USING_BYACC)
-    # Use yacc/byacc - they generate y.tab.c and y.tab.h
+    # Use yacc/byacc - they generate y.tab.c and y.tab.h (direct processing like automake)
     add_custom_command(
         OUTPUT Uil.c Uil.h UilLexPars.h UilLexPars.c
         COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_SOURCE_DIR} bash -c 'echo "// Placeholder for UilSymGen.h" > UilSymGen.h'
-        COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_SOURCE_DIR} cpp -I${CMAKE_SOURCE_DIR}/src/bin/uil -I${CMAKE_SOURCE_DIR}/include -I${CMAKE_SOURCE_DIR}/src/lib -I${CMAKE_SOURCE_DIR}/src/lib/Uil -I${CMAKE_CURRENT_SOURCE_DIR} -P ${CMAKE_SOURCE_DIR}/src/bin/uil/Uil.y Uil_processed.y
-        COMMAND ${BISON_EXECUTABLE} -d -o Uil.c Uil_processed.y
-        COMMAND ${CMAKE_COMMAND} -E remove Uil_processed.y
+        COMMAND ${BISON_EXECUTABLE} -d -o Uil.c ${CMAKE_SOURCE_DIR}/src/bin/uil/Uil.y
         COMMAND ${CMAKE_COMMAND} -E remove UilSymGen.h
         COMMAND ${CMAKE_COMMAND} -E create_symlink Uil.h UilLexPars.h
         COMMAND ${CMAKE_COMMAND} -E create_symlink Uil.c UilLexPars.c
         DEPENDS ${CMAKE_SOURCE_DIR}/src/bin/uil/Uil.y
-        COMMENT "Generating Uil.c and Uil.h from Uil.y using ${BISON_EXECUTABLE}"
+        COMMENT "Generating Uil.c and Uil.h from Uil.y using ${BISON_EXECUTABLE} (direct processing)"
     )
     set(BISON_uil_OUTPUTS Uil.c Uil.h UilLexPars.h UilLexPars.c)
 else()
-    # Use bison - generate in binary directory
+    # Use bison - generate in binary directory (direct processing like automake)
     add_custom_command(
         OUTPUT Uil.c Uil.h UilLexPars.h UilLexPars.c
         COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_SOURCE_DIR} bash -c 'echo "// Placeholder for UilSymGen.h" > UilSymGen.h'
         COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_SOURCE_DIR} bash -c 'echo "// Placeholder for UilLexPars.h" > UilLexPars.h'
         COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_SOURCE_DIR} bash -c 'echo "// Placeholder for UilLexPars.c" > UilLexPars.c'
-        COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_SOURCE_DIR} cpp -DNO_STD_HEADERS -DNO_X11_HEADERS -DNO_MRM_HEADERS -I${CMAKE_SOURCE_DIR}/src/bin/uil -I${CMAKE_SOURCE_DIR}/include -I${CMAKE_SOURCE_DIR}/src/lib -I${CMAKE_SOURCE_DIR}/src/lib/Uil -I${CMAKE_CURRENT_SOURCE_DIR} -P ${CMAKE_SOURCE_DIR}/src/bin/uil/Uil.y Uil_processed.y
-        COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_BINARY_DIR} ${BISON_EXECUTABLE} -d -o Uil.c ${CMAKE_CURRENT_SOURCE_DIR}/Uil_processed.y
-        COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/tools/cmake/scripts/fix_yystype.sh ${CMAKE_CURRENT_BINARY_DIR}/Uil.h
-        COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_CURRENT_SOURCE_DIR}/Uil_processed.y
+        COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_BINARY_DIR} ${BISON_EXECUTABLE} -d -o Uil.c ${CMAKE_SOURCE_DIR}/src/bin/uil/Uil.y
         COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_CURRENT_SOURCE_DIR}/UilSymGen.h
         COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_CURRENT_SOURCE_DIR}/UilLexPars.h
         COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_CURRENT_SOURCE_DIR}/UilLexPars.c
@@ -164,7 +159,7 @@ else()
         COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/Uil.h ${CMAKE_CURRENT_SOURCE_DIR}/UilLexPars.h
         COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/Uil.c ${CMAKE_CURRENT_SOURCE_DIR}/UilLexPars.c
         DEPENDS ${CMAKE_SOURCE_DIR}/src/bin/uil/Uil.y
-        COMMENT "Generating Uil.c and Uil.h from Uil.y using bison"
+        COMMENT "Generating Uil.c and Uil.h from Uil.y using bison (direct processing)"
     )
     set(BISON_uil_OUTPUTS ${CMAKE_CURRENT_BINARY_DIR}/Uil.c ${CMAKE_CURRENT_BINARY_DIR}/Uil.h ${CMAKE_CURRENT_BINARY_DIR}/UilLexPars.h ${CMAKE_CURRENT_BINARY_DIR}/UilLexPars.c)
 endif()
@@ -304,7 +299,7 @@ add_dependencies(wmldbcreate wml_generated_files)
 add_dependencies(libwml wmlparse_target ${WMLPARSE_H_TARGET})
 
 # Install headers
-install(FILES UilDBDef.h
+install(FILES ${CMAKE_SOURCE_DIR}/src/lib/Uil/UilDBDef.h
     DESTINATION include/uil
 )
 

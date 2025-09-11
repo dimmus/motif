@@ -130,6 +130,13 @@ motif_project_hack_pre()
 project(MOTIF)
 # project(MOTIF LANGUAGES CXX VERSION "2.4.1")
 
+# Set install directory variables
+include(GNUInstallDirs)
+
+# Installation instructions
+message(STATUS "Installation target: ${CMAKE_INSTALL_PREFIX}")
+message(STATUS "To install: sudo make install (or use GNUmakefile: make install)")
+
 motif_project_hack_post()
 
 enable_testing()

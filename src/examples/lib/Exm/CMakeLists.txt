@@ -47,20 +47,20 @@ add_library(ExmMrm STATIC ${EXMMRM_SRCS})
 
 # Set include directories for both libraries
 target_include_directories(Exm PUBLIC
-    ${CMAKE_SOURCE_DIR}/lib
+    ${CMAKE_SOURCE_DIR}/src/lib
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_BINARY_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_SOURCE_DIR}/demos/lib
+    ${CMAKE_SOURCE_DIR}/src/examples/lib
     ${X_INCLUDE_DIRS}
 )
 
 target_include_directories(ExmMrm PUBLIC
-    ${CMAKE_SOURCE_DIR}/lib
+    ${CMAKE_SOURCE_DIR}/src/lib
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_BINARY_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_SOURCE_DIR}/demos/lib
+    ${CMAKE_SOURCE_DIR}/src/examples/lib
     ${X_INCLUDE_DIRS}
 )
 

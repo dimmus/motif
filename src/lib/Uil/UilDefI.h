@@ -220,6 +220,7 @@ typedef int boolean;
 **
 */
 #include "Uil.h"
+#include "UilDef.h"                        /* for public UIL types */
 #include "UilDBDef.h"                      /* for binary database */
 #include "UilMess.h"
 #include "UilSymDef.h"			/* must come before UilKeyDef.h */

@@ -1,8 +1,8 @@
 add_executable(xmbind xmbind.c)
 
 target_include_directories(xmbind PRIVATE
-    ${CMAKE_SOURCE_DIR}/lib
-    ${CMAKE_BINARY_DIR}/lib
+    ${CMAKE_SOURCE_DIR}/src/lib
+    ${CMAKE_BINARY_DIR}/src/lib
     ${X_INCLUDE_DIRS}
 )
 

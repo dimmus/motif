@@ -25,7 +25,7 @@ add_library(WsmDemo STATIC ${WSM_SRCS})
 
 # Set include directories
 target_include_directories(WsmDemo PUBLIC
-    ${CMAKE_SOURCE_DIR}/lib
+    ${CMAKE_SOURCE_DIR}/src/lib
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_BINARY_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}

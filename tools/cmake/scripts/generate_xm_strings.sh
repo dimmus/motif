@@ -17,12 +17,11 @@ mkdir -p "$BUILD_DIR/src/lib/Xm"
 mkdir -p "$BUILD_DIR/include/Xm"
 
 # Copy template files
-cp "$SOURCE_DIR/src/lib/Xm/xmstring.list" "$BUILD_DIR/src/lib/Xm/"
-cp "$SOURCE_DIR/src/lib/Xm/XmStrDefs.ht" "$BUILD_DIR/src/lib/Xm/"
-cp "$SOURCE_DIR/src/lib/Xm/XmStrDefs22.ht" "$BUILD_DIR/src/lib/Xm/"
-cp "$SOURCE_DIR/src/lib/Xm/XmStrDefs23.ht" "$BUILD_DIR/src/lib/Xm/"
-cp "$SOURCE_DIR/src/lib/Xm/XmStrDefsI.ht" "$BUILD_DIR/src/lib/Xm/"
-cp "$SOURCE_DIR/src/lib/Xm/XmStrDefs.ct" "$BUILD_DIR/src/lib/Xm/"
+cp -f "$SOURCE_DIR/src/lib/Xm/XmStrDefs.ht" "$BUILD_DIR/src/lib/Xm/"
+cp -f "$SOURCE_DIR/src/lib/Xm/XmStrDefs22.ht" "$BUILD_DIR/src/lib/Xm/"
+cp -f "$SOURCE_DIR/src/lib/Xm/XmStrDefs23.ht" "$BUILD_DIR/src/lib/Xm/"
+cp -f "$SOURCE_DIR/src/lib/Xm/XmStrDefsI.ht" "$BUILD_DIR/src/lib/Xm/"
+cp -f "$SOURCE_DIR/src/lib/Xm/XmStrDefs.ct" "$BUILD_DIR/src/lib/Xm/"
 
 # Generate string files
 cd "$BUILD_DIR/src/lib/Xm"
@@ -44,10 +43,10 @@ if [ ! -f "XmStrDefsI.h" ] || [ ! -s "XmStrDefsI.h" ]; then
 fi
 
 # Copy generated files to include directory
-cp XmStrDefs.h "$BUILD_DIR/include/Xm/"
-cp XmStrDefs22.h "$BUILD_DIR/include/Xm/"
-cp XmStrDefs23.h "$BUILD_DIR/include/Xm/"
-cp XmStrDefsI.h "$BUILD_DIR/include/Xm/"
+cp -f XmStrDefs.h "$BUILD_DIR/include/Xm/"
+cp -f XmStrDefs22.h "$BUILD_DIR/include/Xm/"
+cp -f XmStrDefs23.h "$BUILD_DIR/include/Xm/"
+cp -f XmStrDefsI.h "$BUILD_DIR/include/Xm/"
 
 # Copy generated .c file to lib directory (it stays in lib/Xm)
 # The .c file is needed for compilation and should remain in the lib directory

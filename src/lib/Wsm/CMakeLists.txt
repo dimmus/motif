@@ -20,7 +20,7 @@ target_include_directories(Wsm PRIVATE
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/src/lib
     ${CMAKE_BINARY_DIR}/include
-    ${CMAKE_BINARY_DIR}/lib
+    ${CMAKE_BINARY_DIR}/src/lib
     ${X_INCLUDE_DIRS}
 )
 
