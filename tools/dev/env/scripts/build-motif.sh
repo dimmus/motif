@@ -304,10 +304,10 @@ prepare_source() {
         rm -rf "${BUILD_DIR}"
     fi
     
-    # Always clean CMake cache to avoid path conflicts
-    if [[ -f "${BUILD_DIR}/build/CMakeCache.txt" ]]; then
-        log_info "🧹 Removing existing CMake cache to avoid path conflicts"
-        rm -f "${BUILD_DIR}/build/CMakeCache.txt"
+    # Always clean CMake cache and build directory to avoid path conflicts
+    if [[ -d "${BUILD_DIR}/build" ]]; then
+        log_info "🧹 Removing existing CMake build directory to avoid path conflicts"
+        rm -rf "${BUILD_DIR}/build"
     fi
     
     # Copy source to build location
@@ -498,25 +498,25 @@ run_tests() {
         fi
     fi
     
-    # Basic installation verification
-    log_info "Verifying installation..."
+    # Basic build verification
+    log_info "Verifying build artifacts..."
     
-    # Check if libraries were installed
-    if [[ -d "${INSTALL_DIR}/lib" ]]; then
-        log_info "Installed libraries:"
-        find "${INSTALL_DIR}/lib" -name "*.so*" -o -name "*.a" | sort | tee -a "${LOG_FILE}"
+    # Check if libraries were built
+    if [[ -d "${BUILD_DIR}/build/src/lib/Xm" ]]; then
+        log_info "Built libraries:"
+        find "${BUILD_DIR}/build/src/lib/Xm" -name "*.so*" -o -name "*.a" | sort | tee -a "${LOG_FILE}"
     fi
     
-    # Check if headers were installed
-    if [[ -d "${INSTALL_DIR}/include" ]]; then
-        log_info "Installed headers:"
-        find "${INSTALL_DIR}/include" -name "*.h" | wc -l | xargs echo "Header files:" | tee -a "${LOG_FILE}"
+    # Check if headers are available in source
+    if [[ -d "${BUILD_DIR}/src/lib/Xm" ]]; then
+        log_info "Available headers:"
+        find "${BUILD_DIR}/src/lib/Xm" -name "*.h" | wc -l | xargs echo "Header files:" | tee -a "${LOG_FILE}"
     fi
     
-    # Check if binaries were installed
-    if [[ -d "${INSTALL_DIR}/bin" ]]; then
-        log_info "Installed binaries:"
-        find "${INSTALL_DIR}/bin" -type f -executable | sort | tee -a "${LOG_FILE}"
+    # Check if binaries were built
+    if [[ -d "${BUILD_DIR}/build/src" ]]; then
+        log_info "Built binaries:"
+        find "${BUILD_DIR}/build/src" -type f -executable | sort | tee -a "${LOG_FILE}"
     fi
     
     return 0
@@ -653,8 +653,10 @@ main() {
         build_motif || exit_code=$?
     fi
     
+    # Skip installation in Docker builds - just build and test
     if [[ ${exit_code} -eq 0 ]]; then
-        install_motif || exit_code=$?
+        log_info "Skipping installation in Docker build environment"
+        log_info "Build artifacts are available in: ${BUILD_DIR}/build"
     fi
     
          if [[ ${exit_code} -eq 0 ]]; then
