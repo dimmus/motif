@@ -581,7 +581,7 @@ InitTogglesWindow (Widget w, XtPointer client_data, XtPointer call_data)
     for (i=0; i<NUM_TOG; i++) {
 	char child_name[20] ;
 
-	sprintf(child_name, "RCChild%d", i);
+	sprintf(child_name, "RCChild%u", i);
 	toggles[i] = XtVaCreateWidget(child_name, xmToggleButtonWidgetClass,
 				      work_area, NULL);
     }

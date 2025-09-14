@@ -1,8 +1,8 @@
 /* $XConsortium: README /main/3 1996/07/15 14:02:47 drk $ */
 README for the DNDDemo and simpledrop.
 
-    This directory contains the demos illustrating typical usage of
-    the drag and drop features.  "simpledrop" is a minimalist demo,
+    This directory contains the examples illustrating typical usage of
+    the drag and drop features.  "simpledrop" is a minimalist example,
     helpful in showing how to get started in drag and drop without
     too many special effects.  "DNDDemo" uses most of the tricks
     available in drag and drop to provide drag over and drag under

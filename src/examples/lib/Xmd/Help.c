@@ -27,7 +27,7 @@
  */
 
 /* uncomment for ExmTab button - you'll need to change the Imakefiles
-   for many of the demos however. */
+   for many of the examples however. */
 /* #define USE_TAB 1 */
 
 /* This define controls whether XmCSText or XmLabel is used as */

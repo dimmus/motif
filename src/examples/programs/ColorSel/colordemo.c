@@ -374,7 +374,7 @@ main(int argc, char **argv)
 /*
  *  Take Note:
  *
- * The following push button demostrates the point in using
+ * The following push button demonstrates the point in using
  * the colorSelector widget.
  *
  */
