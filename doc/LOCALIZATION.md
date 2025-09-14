@@ -18,10 +18,10 @@ The project includes localization support for:
 - **English** (default/C locale)
 - **French** (`fr_FR.ISO8859-1`)
 - **German** (`de_DE.ISO8859-1`)
-- **Hebrew** (`hebrew`) (in demos)
+- **Hebrew** (`hebrew`) (in examples)
 - **Japanese** (`ja_JP.eucJP`, `ja_JP.dt-eucJP`)
 - **Swedish** (`sv_SE.ISO8859-1`)
-- **Spanish** (`es_ES.ISO8859-1`)  (in demos)
+- **Spanish** (`es_ES.ISO8859-1`)  (in examples)
 - **Italian** (`it_IT.ISO8859-1`)
 
 ## Testing Methods
@@ -33,8 +33,8 @@ The project includes localization support for:
 The simplest way to test localization:
 
 ```bash
-# Navigate to the demo directory
-cd demos/programs/hellomotifi18n
+# Navigate to the example directory
+cd examples/programs/hellomotifi18n
 
 # Test different languages
 # English (default)
@@ -63,7 +63,7 @@ LANG=sv_SE.ISO8859-1 XAPPLRESDIR=./swedish ./helloint
 A more complex application with full localization:
 
 ```bash
-cd demos/programs/fileview
+cd examples/programs/fileview
 
 # Use the provided script for different languages
 ./xmfile french    # French interface
@@ -174,8 +174,8 @@ for locale in "${LOCALES[@]}"; do
     export LANG=$locale
     export LC_ALL=$locale
     
-    # Test helloint demo
-    cd demos/programs/hellomotifi18n
+    # Test helloint example
+    cd examples/programs/hellomotifi18n
     timeout 10s ./helloint &
     sleep 2
     pkill helloint
@@ -254,7 +254,7 @@ sudo systemctl restart display-manager
 
 ```bash
 # Recompile UIL files for different locales
-cd demos/programs/hellomotifi18n
+cd examples/programs/hellomotifi18n
 make clean
 make
 
@@ -282,7 +282,7 @@ LANG=fr_FR.ISO8859-1 uil -o test.uid test.uil
 The localization files are organized as follows:
 
 ```
-demos/programs/hellomotifi18n/
+examples/programs/hellomotifi18n/
 ├── C/                    # Default locale (English)
 ├── english/              # English localization
 ├── french/               # French localization
@@ -290,7 +290,7 @@ demos/programs/hellomotifi18n/
 ├── japanese/             # Japanese localization
 └── swedish/              # Swedish localization
 
-demos/programs/fileview/
+examples/programs/fileview/
 ├── English.uil           # English UIL file
 ├── French.uil            # French UIL file
 ├── German.uil            # German UIL file

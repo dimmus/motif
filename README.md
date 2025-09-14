@@ -400,17 +400,17 @@ uil -o MyApp.uid MyApp.uil
 The distribution includes comprehensive demonstration programs:
 
 ```bash
-# After building with --enable-demos
-cd demos/programs
+# After building with --enable-examples
+cd examples/programs
 
-# Classic demos
+# Classic examples
 ./hellomotif/hellomotif          # Basic Motif application
 ./draw/draw                      # Drawing application
 ./animate/animate                # Animation demo
 ./filemanager/filemanager        # File manager
 ./periodic/periodic              # Periodic table
 
-# Advanced widget demos  
+# Advanced widget examples  
 ./Notebook/notebook              # Notebook widget
 ./Container/container            # Container widget
 ./Tree/tree                      # Tree widget
@@ -476,7 +476,7 @@ motif/
 │   ├── uil/         # UIL compiler
 │   └── xmbind/      # Key binding utility
 ├── include/         # Header files
-├── demos/           # Demonstration programs
+├── examples/         # Example programs
 ├── doc/             # Documentation and man pages
 ├── data/            # Resource files and bitmaps
 └── tools/           # Development utilities
