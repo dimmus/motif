@@ -218,7 +218,7 @@ set(ABI_VERSION "${ABI_CURRENT}:${ABI_REVISION}:${ABI_AGE}")
 
 set_option(WITH_SHARED_LIBS "Build shared libraries" ON)
 set_option(WITH_STATIC_LIBS "Build static libraries" OFF)
-set_option(WITH_DEMOS "Build demos" ON)
+set_option(WITH_DEMOS "Build examples" ON)
 set_option(WITH_TESTS "Build tests" OFF)
 set_option(WITH_DEBUG "Enable debug build" OFF)
 set_option(WITH_UTF8 "Enable UTF-8 support" ON)
@@ -453,6 +453,24 @@ endif()
 # Always define HAVE_XICPROC to avoid -Wundef warnings
 if(NOT DEFINED HAVE_XICPROC)
     set(HAVE_XICPROC 0)
+endif()
+
+# Check if compiler supports ANSI C (__STDC__)
+# Modern compilers should define __STDC__ by default
+check_c_source_compiles("
+#ifdef __STDC__
+int main() { return 0; }
+#else
+#error __STDC__ not defined
+#endif
+" HAVE_STDC)
+
+if(HAVE_STDC)
+    set(__STDC__ 1)
+    message(STATUS "Compiler supports ANSI C (__STDC__ defined)")
+else()
+    set(__STDC__ 0)
+    message(STATUS "Compiler does not support ANSI C (__STDC__ not defined)")
 endif()
 
 # Check for Xmu library
@@ -1362,8 +1380,11 @@ if(WITH_PRINTING)
     if(XP_FOUND)
         set(XM_PRINTING "#define XM_PRINTING 1")
         add_compile_definitions(XM_PRINTING)
+        message(STATUS "Printing support enabled (libXp found)")
     else()
-        message(FATAL_ERROR "libXp not found for printing support")
+        message(WARNING "libXp not found - disabling printing support")
+        set(WITH_PRINTING OFF CACHE BOOL "Enable printing support" FORCE)
+        set(XM_PRINTING "#define XM_PRINTING 0")
     endif()
 else()
     set(XM_PRINTING "#define XM_PRINTING 0")
@@ -1460,6 +1481,22 @@ foreach(header ${XM_HEADER_FILES})
     endif()
 endforeach()
 
+# Copy generated version.h to include directory (as a custom command)
+add_custom_command(
+    OUTPUT ${CMAKE_BINARY_DIR}/include/Xm/version.h
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/include/Xm
+    COMMAND ${CMAKE_COMMAND} -E copy
+        ${CMAKE_BINARY_DIR}/src/lib/Xm/version.h
+        ${CMAKE_BINARY_DIR}/include/Xm/version.h
+    DEPENDS ${CMAKE_BINARY_DIR}/src/lib/Xm/version.h
+    COMMENT "Copying version.h to include directory"
+)
+
+# Create a target that depends on the version header copy
+add_custom_target(copy_version_header ALL
+    DEPENDS ${CMAKE_BINARY_DIR}/include/Xm/version.h
+)
+
 # Copy Mrm headers
 file(GLOB MRM_HEADER_FILES "${CMAKE_SOURCE_DIR}/src/lib/Mrm/*.h")
 foreach(header ${MRM_HEADER_FILES})
@@ -1526,7 +1563,7 @@ install(FILES README.md
 # message(STATUS "Features:")
 # message(STATUS "  shared libs....: ${WITH_SHARED_LIBS}")
 # message(STATUS "  static libs....: ${WITH_STATIC_LIBS}")
-# message(STATUS "  demos..........: ${WITH_DEMOS}")
+# message(STATUS "  examples.......: ${WITH_DEMOS}")
 # message(STATUS "  tests..........: ${WITH_TESTS}")
 # message(STATUS "  debug..........: ${WITH_DEBUG}")
 # message(STATUS "  utf8...........: ${WITH_UTF8}")

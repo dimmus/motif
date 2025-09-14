@@ -223,7 +223,7 @@
 #undef _POSIX_SOURCE
 
 /* Define if compiler supports ANSI C */
-#undef __STDC__
+#cmakedefine __STDC__
 
 /* Define to empty if `const' does not conform to ANSI C. */
 #undef const
