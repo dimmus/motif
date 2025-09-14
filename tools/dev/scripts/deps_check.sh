@@ -210,10 +210,8 @@ get_package_names() {
     case $OS_NAME in
         ubuntu|debian|linuxmint)
             case $base_pkg in
-                autoconf) echo "autoconf" ;;
-                autoconf-archive) echo "autoconf-archive" ;;
-                automake) echo "automake" ;;
-                autopoint) echo "autopoint" ;;
+                cmake) echo "cmake" ;;
+                ninja) echo "ninja-build" ;;
                 pkg-config) echo "pkg-config" ;;
                 gcc) echo "build-essential" ;;
                 make) echo "make" ;;
@@ -234,10 +232,8 @@ get_package_names() {
             ;;
         arch|manjaro)
             case $base_pkg in
-                autoconf) echo "autoconf" ;;
-                autoconf-archive) echo "autoconf-archive" ;;
-                automake) echo "automake" ;;
-                autopoint) echo "gettext" ;;
+                cmake) echo "cmake" ;;
+                ninja) echo "ninja" ;;
                 pkg-config) echo "pkgconf" ;;
                 gcc) echo "base-devel" ;;
                 make) echo "make" ;;
@@ -258,10 +254,8 @@ get_package_names() {
             ;;
         rhel|centos|fedora|rocky|alma)
             case $base_pkg in
-                autoconf) echo "autoconf" ;;
-                autoconf-archive) echo "autoconf-archive" ;;
-                automake) echo "automake" ;;
-                autopoint) echo "gettext" ;;
+                cmake) echo "cmake" ;;
+                ninja) echo "ninja-build" ;;
                 pkg-config) echo "pkgconfig" ;;
                 gcc) echo "gcc" ;;
                 make) echo "make" ;;
@@ -282,10 +276,8 @@ get_package_names() {
             ;;
         openindiana|omnios)
             case $base_pkg in
-                autoconf) echo "autoconf" ;;
-                autoconf-archive) echo "autoconf-archive" ;;
-                automake) echo "automake" ;;
-                autopoint) echo "gettext" ;;
+                cmake) echo "developer/cmake" ;;
+                ninja) echo "developer/ninja" ;;
                 pkg-config) echo "pkg-config" ;;
                 gcc) echo "gcc" ;;
                 make) echo "make" ;;
@@ -306,10 +298,8 @@ get_package_names() {
             ;;
         alpine)
             case $base_pkg in
-                autoconf) echo "autoconf" ;;
-                autoconf-archive) echo "autoconf-archive" ;;
-                automake) echo "automake" ;;
-                autopoint) echo "gettext" ;;
+                cmake) echo "cmake" ;;
+                ninja) echo "ninja" ;;
                 pkg-config) echo "pkgconf" ;;
                 gcc) echo "build-base" ;;
                 make) echo "make" ;;
@@ -330,10 +320,8 @@ get_package_names() {
             ;;
         void)
             case $base_pkg in
-                autoconf) echo "autoconf" ;;
-                autoconf-archive) echo "autoconf-archive" ;;
-                automake) echo "automake" ;;
-                autopoint) echo "gettext" ;;
+                cmake) echo "cmake" ;;
+                ninja) echo "ninja" ;;
                 pkg-config) echo "pkg-config" ;;
                 gcc) echo "base-devel" ;;
                 make) echo "make" ;;
@@ -354,10 +342,8 @@ get_package_names() {
             ;;
         freebsd)
             case $base_pkg in
-                autoconf) echo "autoconf" ;;
-                autoconf-archive) echo "autoconf-archive" ;;
-                automake) echo "automake" ;;
-                autopoint) echo "gettext" ;;
+                cmake) echo "cmake" ;;
+                ninja) echo "ninja" ;;
                 pkg-config) echo "pkgconf" ;;
                 gcc) echo "gcc" ;;
                 make) echo "gmake" ;;
@@ -384,7 +370,7 @@ check_dependencies() {
     log_info "Checking project dependencies..."
     
     # Define required dependencies (essential for building)
-    required_deps="autoconf autoconf-archive automake autopoint pkg-config gcc make flex bison libX11 libXt libXmu libXext libXpm libXft libjpeg libpng check"
+    required_deps="cmake ninja pkg-config gcc make flex bison libX11 libXt libXmu libXext libXpm libXft libjpeg libpng check"
     
     # Define optional dependencies (nice to have but not essential)
     optional_deps="libXp"
@@ -446,7 +432,7 @@ install_missing_dependencies() {
     # Get list of missing required packages
     missing_required=""
     missing_optional=""
-    required_deps="autoconf autoconf-archive automake autopoint pkg-config gcc make flex bison libX11 libXt libXmu libXext libXpm libXft libjpeg libpng check"
+    required_deps="cmake ninja pkg-config gcc make flex bison libX11 libXt libXmu libXext libXpm libXft libjpeg libpng check"
     optional_deps="libXp"
     
     # Check required dependencies
@@ -558,9 +544,11 @@ main() {
             log_success "Dependency installation completed successfully!"
             echo
             log_info "You can now build Motif with:"
-            echo "  ./autogen.sh"
-            echo "  ./configure"
-            echo "  make"
+            echo "  make build"
+            echo "  sudo make install"
+            echo ""
+            echo "Or for development with all features:"
+            echo "  make full release ninja ccache"
             exit 0
         else
             log_error "Installation verification failed"
