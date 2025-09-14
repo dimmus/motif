@@ -13,7 +13,7 @@ set(WITH_DEBUG OFF CACHE BOOL "Enable debug build" FORCE)
 
 # Enable all features
 set(WITH_TESTS ON CACHE BOOL "Build tests" FORCE)
-set(WITH_DEMOS ON CACHE BOOL "Build demos" FORCE)
+set(WITH_DEMOS ON CACHE BOOL "Build examples" FORCE)
 
 # Enable all optional features
 set(WITH_UTF8 ON CACHE BOOL "Enable UTF-8 support" FORCE)

@@ -1,1 +1,1 @@
-/run/media/dimmus/dev2/x/xde-classic/build_linux/include/Xm/Xm.h
+/media/dimmus/dev2/x/xde-classic/build_linux/include/Xm/Xm.h

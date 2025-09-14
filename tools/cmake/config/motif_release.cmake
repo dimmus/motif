@@ -13,7 +13,7 @@ set(WITH_DEBUG OFF CACHE BOOL "Enable debug build" FORCE)
 
 # Enable essential features
 set(WITH_TESTS OFF CACHE BOOL "Build tests" FORCE)
-set(WITH_DEMOS ON CACHE BOOL "Build demos" FORCE)
+set(WITH_DEMOS ON CACHE BOOL "Build examples" FORCE)
 
 # Disable development features
 set(WITH_COMPILER_CODE_COVERAGE OFF CACHE BOOL "Enable code coverage" FORCE)

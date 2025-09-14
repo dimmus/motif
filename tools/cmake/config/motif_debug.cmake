@@ -13,7 +13,7 @@ set(WITH_DEBUG ON CACHE BOOL "Enable debug build" FORCE)
 
 # Enable all debugging and testing features
 set(WITH_TESTS ON CACHE BOOL "Build tests" FORCE)
-set(WITH_DEMOS ON CACHE BOOL "Build demos" FORCE)
+set(WITH_DEMOS ON CACHE BOOL "Build examples" FORCE)
 
 # Enable developer-friendly features
 set(WITH_COMPILER_CODE_COVERAGE ON CACHE BOOL "Enable code coverage" FORCE)

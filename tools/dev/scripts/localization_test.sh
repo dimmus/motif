@@ -185,10 +185,10 @@ detect_available_locales() {
     echo "${available_locales[@]}"
 }
 
-# Demo programs configuration
+# Example programs configuration
 declare -A DEMO_PROGRAMS=(
-    ["helloint"]="demos/programs/hellomotifi18n"
-    ["fileview"]="demos/programs/fileview"
+    ["helloint"]="examples/programs/hellomotifi18n"
+    ["fileview"]="examples/programs/fileview"
 )
 
 # Test script configuration (only include if programs exist)
