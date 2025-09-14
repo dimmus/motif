@@ -27,7 +27,7 @@ jobs:
         with:
           arch: ${{ matrix.arch }}
           branch: v3.22
-            packages: >
+          packages: >
             libx11-dev
             libxpm-dev
             libxt-dev
