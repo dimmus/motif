@@ -1,5 +1,5 @@
-# Exm demo library
-# Extended Motif widgets for demos
+# Exm example library
+# Extended Motif widgets for examples
 
 # Exm library sources
 set(EXM_SRCS
@@ -44,6 +44,10 @@ add_library(Exm STATIC ${EXM_SRCS})
 
 # Create the ExmMrm library
 add_library(ExmMrm STATIC ${EXMMRM_SRCS})
+
+# Ensure string generation happens before building Exm libraries
+add_dependencies(Exm xm_strings)
+add_dependencies(ExmMrm xm_strings)
 
 # Set include directories for both libraries
 target_include_directories(Exm PUBLIC

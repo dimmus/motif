@@ -1,5 +1,5 @@
-# Wsm demo library
-# Workspace management utilities for Motif demos
+# Wsm example library
+# Workspace management utilities for Motif examples
 
 # Wsm library sources
 set(WSM_SRCS
@@ -22,6 +22,9 @@ set(WSM_HEADERS
 
 # Create the WsmDemo library (renamed to avoid conflict with WmWsmLib)
 add_library(WsmDemo STATIC ${WSM_SRCS})
+
+# Make WsmDemo depend on the version header being copied and string generation
+add_dependencies(WsmDemo copy_version_header xm_strings)
 
 # Set include directories
 target_include_directories(WsmDemo PUBLIC

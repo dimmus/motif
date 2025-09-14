@@ -1,5 +1,5 @@
-# Xmd demo library
-# Common utilities for Motif demos
+# Xmd example library
+# Common utilities for Motif examples
 
 # Xmd library sources
 set(XMD_SRCS
@@ -39,6 +39,9 @@ target_link_libraries(Xmd
     Xm
     ${X_LIBRARIES}
 )
+
+# Ensure string generation happens before building Xmd
+add_dependencies(Xmd xm_strings)
 
 # Create onHelp utility program
 add_executable(onHelp onHelp.c)
