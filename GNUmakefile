@@ -12,11 +12,14 @@ define HELP_TEXT
 Motif Convenience Targets
    Provided for building Motif (multiple targets can be used at once).
 
+   * build:         Configure and build Motif (no installation).
+   * all:           Build and install Motif (legacy behavior).
    * debug:         Build a debug binary.
    * full:          Enable all supported dependencies & options.
    * lite:          Disable non essential features for a smaller binary and faster build.
    * release:       Complete build with all options enabled, matching the releases.
    * install:       Install to system (requires sudo).
+   * uninstall:     Uninstall from system (requires sudo).
    * developer:     Enable faster builds, error checking and tests, recommended for developers.
    * ninja:         Use ninja build tool for faster builds.
    * ccache:        Use ccache for faster rebuilds.
@@ -314,8 +317,8 @@ endif
 
 
 # -----------------------------------------------------------------------------
-# Build Motif
-all: .FORCE
+# Build Motif (configuration and compilation only)
+build: .FORCE
 	@echo
 	@echo Configuring Motif in \"$(BUILD_DIR)\" ...
 
@@ -340,21 +343,20 @@ all: .FORCE
 	@echo Building Motif ...
 	$(BUILD_COMMAND) -C "$(BUILD_DIR)" -j $(NPROCS)
 	@echo
-	@echo Installing Motif to system with $(SU_CMD)...
-	@echo "This will install to /usr/local (requires superuser privileges)"
-	$(SU_CMD) $(BUILD_COMMAND) -C "$(BUILD_DIR)" install
-	@echo
-	@echo Edit build configuration with: \"$(BUILD_DIR)/CMakeCache.txt\" run make again to rebuild.
 	@echo Motif UI Library successfully built
 	@echo
 
-debug: all
-full: all
-lite: all
-release: all
-developer: all
-ninja: all
-ccache: all
+# -----------------------------------------------------------------------------
+# Build and Install Motif (legacy all target for backward compatibility)
+all: build install
+
+debug: build
+full: build
+lite: build
+release: build
+developer: build
+ninja: build
+ccache: build
 
 # -----------------------------------------------------------------------------
 # Install Motif to system (manual installation)
@@ -366,6 +368,22 @@ install: .FORCE
 	$(SU_CMD) $(BUILD_COMMAND) -C "$(BUILD_DIR)" install
 	@echo
 	@echo Motif successfully installed to system
+	@echo
+
+# -----------------------------------------------------------------------------
+# Uninstall Motif from system (manual uninstallation)
+uninstall: .FORCE
+	@echo
+	@echo Uninstalling Motif from system with $(SU_CMD)...
+	@echo "This will remove files from /usr/local (requires superuser privileges)"
+	@echo
+	@if [ -f "$(BUILD_DIR)/install_manifest.txt" ]; then \
+		$(SU_CMD) xargs rm -f < "$(BUILD_DIR)/install_manifest.txt"; \
+		echo "Motif successfully uninstalled from system"; \
+	else \
+		echo "Error: install_manifest.txt not found. Run 'make install' first."; \
+		exit 1; \
+	fi
 	@echo
 
 # -----------------------------------------------------------------------------
@@ -545,6 +563,6 @@ clean_all: .FORCE
 	@rm -rf "$(BUILD_DIR)"
 	@echo Build directory completely removed.
 
-.PHONY: all
+.PHONY: all build
 
 .FORCE:
