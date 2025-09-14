@@ -8,7 +8,7 @@
 
 **Motif** is the legendary user interface toolkit that defined the Unix desktop era and powered countless industrial, enterprise, and scientific applications throughout the 1990s and 2000s. Originally developed by the Open Software Foundation (OSF) in 1988, Motif became the de facto standard for professional Unix workstations and mission-critical applications.
 
-This is a modern, actively maintained implementation of the Motif toolkit, preserving its industrial-strength reliability while adding contemporary features like UTF-8 support, Xft font rendering, and modern image format support.
+This is a modern, actively maintained implementation of the Motif toolkit, preserving its industrial-strength reliability while adding contemporary features like UTF-8 support, Xft font rendering, and modern image format support. The project uses a modern CMake-based build system for improved cross-platform compatibility and developer experience.
 
 ## Build Status
 
@@ -95,15 +95,16 @@ The comprehensive Motif widget set includes:
 #### Build Dependencies
 ```bash
 # Essential build tools
-autoconf >= 2.69
-autoconf-archive          # Required for additional autoconf macros
-automake >= 1.16.1
-autopoint
-pkg-config
+cmake >= 3.16             # Primary build system
+pkg-config                # Package configuration
 gcc >= 13.0 (supports C23 standard and GCC 15 compatibility)
-make (GNU Make required)
-flex/lex
-yacc/bison
+make (GNU Make required)  # Build orchestration
+flex/lex                  # Lexical analysis
+yacc/bison                # Parser generation
+
+# Optional but recommended
+ninja                     # Faster build tool
+ccache                    # Compiler cache for faster rebuilds
 ```
 
 **Compiler Support**:
@@ -131,14 +132,15 @@ libXp-dev            # Printing support (if available)
 #### Ubuntu/Debian Installation
 ```bash
 sudo apt-get update
-sudo apt-get install build-essential autoconf autoconf-archive automake autopoint pkg-config \
-                     flex bison libx11-dev libxt-dev libxmu-dev libxext-dev \
-                     libxpm-dev libxft-dev libjpeg-dev libpng-dev
+sudo apt-get install build-essential cmake pkg-config flex bison \
+                     libx11-dev libxt-dev libxmu-dev libxext-dev \
+                     libxpm-dev libxft-dev libjpeg-dev libpng-dev \
+                     ninja-build ccache
 ```
 
 #### RHEL/CentOS/Fedora Installation
 ```bash
-sudo yum install gcc autoconf autoconf-archive automake autopoint pkgconfig flex bison \
+sudo yum install gcc cmake pkgconfig flex bison ninja-build ccache \
                  libX11-devel libXt-devel libXmu-devel libXext-devel \
                  libXpm-devel libXft-devel libjpeg-devel libpng-devel
 ```
@@ -172,37 +174,33 @@ The dependency checker automatically:
 
 ### Troubleshooting
 
-#### Autoconf Error: "possibly undefined macro: dnl"
-If you encounter this error during the build process:
-```
-configure.ac:1: error: possibly undefined macro: dnl
-      If this token and others are legitimate, please use m4_pattern_allow.
-      See the Autoconf documentation.
-autoreconf: error: /usr/bin/autoconf failed with exit status: 1
-```
+#### CMake Build Issues
+If you encounter issues during the build process:
 
-**Solution**: Install the `autoconf-archive` package which provides additional autoconf macros:
-
+**Missing Dependencies**: Ensure all required packages are installed:
 ```bash
-# Ubuntu/Debian
-sudo apt-get install autoconf-archive
+# Check dependencies
+make deps
 
-# Arch Linux
-sudo pacman -S autoconf-archive
-
-# RHEL/CentOS/Fedora
-sudo yum install autoconf-archive
-# or for newer versions:
-sudo dnf install autoconf-archive
-
-# Alpine Linux
-sudo apk add autoconf-archive
-
-# FreeBSD
-sudo pkg install autoconf-archive
+# Or install manually for your OS (see installation commands above)
 ```
 
-After installing `autoconf-archive`, run `./autogen.sh` again to regenerate the configure script.
+**Build Directory Issues**: Clean and rebuild if you encounter strange build errors:
+```bash
+make clean
+make build
+```
+
+**Permission Issues**: Ensure you have proper permissions for installation:
+```bash
+# Use sudo for system installation
+sudo make install
+
+# Or install to user directory
+cmake -H. -Bbuild -DCMAKE_INSTALL_PREFIX=$HOME/.local
+make build
+make install
+```
 
 ## Building and Installation
 
@@ -217,60 +215,94 @@ make deps
 # Or manually install dependencies for your OS
 # (see manual installation commands above)
 
-./autogen.sh
-./configure
-make -j$(nproc)
+# Build Motif (CMake-based build system)
+make build
+
+# Install to system
 sudo make install
+
+# Uninstall if needed
+sudo make uninstall
 ```
 
-### Configuration Options
+### Build System
+
+This project uses **CMake** as the primary build system, providing modern dependency management and cross-platform compatibility.
+
+#### Available Build Targets
+```bash
+# Core build targets
+make build          # Configure and build Motif (no installation)
+make all            # Build and install Motif (legacy behavior)
+make install        # Install to system (requires sudo)
+make uninstall      # Uninstall from system (requires sudo)
+
+# Build variants
+make debug          # Build debug version with symbols
+make release        # Build optimized release version
+make lite           # Build minimal version (faster, smaller)
+make full           # Build with all optional features
+make developer      # Build with development tools and checks
+
+# Build tools
+make ninja          # Use Ninja build tool for faster builds
+make ccache         # Use ccache for faster rebuilds
+make config         # Run CMake configuration tool
+```
 
 #### Feature Control
 ```bash
-./configure \
-    --enable-utf8                    # UTF-8 text support (recommended)
-    --enable-printing                # Print support (if libXp available)
-    --enable-message-catalog         # X/Open message catalogs
-    --with-xft                       # Xft font rendering (recommended)
-    --with-jpeg                      # JPEG image support
-    --with-png                       # PNG image support
-```
+# Configure with specific features
+make config
 
-#### Development Options
-```bash
-./configure \
-    --enable-demos                   # Build demonstration programs
-    --enable-tests                   # Build automated tests
-    --enable-debug                   # Debug build with symbols
+# Or use CMake directly with feature flags
+cmake -H. -Bbuild \
+    -DWITH_UTF8=ON                    # UTF-8 text support (recommended)
+    -DWITH_PRINTING=ON                # Print support (if libXp available)
+    -DWITH_MESSAGE_CATALOG=ON         # X/Open message catalogs
+    -DWITH_XFT=ON                     # Xft font rendering (recommended)
+    -DWITH_JPEG=ON                    # JPEG image support
+    -DWITH_PNG=ON                     # PNG image support
+    -DWITH_DEMOS=ON                   # Build demonstration programs
+    -DWITH_TESTS=ON                   # Build automated tests
+    -DCMAKE_BUILD_TYPE=Debug          # Debug build with symbols
 ```
 
 #### Installation Paths
 ```bash
-./configure \
-    --prefix=/usr/local              # Installation prefix
-    --sysconfdir=/etc                # Configuration files
-    --libdir=/usr/local/lib64        # Library directory
+# Configure installation paths
+cmake -H. -Bbuild \
+    -DCMAKE_INSTALL_PREFIX=/usr/local    # Installation prefix
+    -DCMAKE_INSTALL_SYSCONFDIR=/etc      # Configuration files
+    -DCMAKE_INSTALL_LIBDIR=lib64         # Library directory
 ```
 
 ### Complete Build Example
 ```bash
-# Configure with all modern features
-./configure \
-    --prefix=/usr/local \
-    --enable-utf8 \
-    --enable-demos \
-    --with-xft \
-    --with-jpeg \
-    --with-png
+# Build with all modern features using CMake
+make full release ninja ccache
+
+# Or configure manually with specific features
+cmake -H. -Bbuild \
+    -DCMAKE_INSTALL_PREFIX=/usr/local \
+    -DWITH_UTF8=ON \
+    -DWITH_DEMOS=ON \
+    -DWITH_XFT=ON \
+    -DWITH_JPEG=ON \
+    -DWITH_PNG=ON \
+    -DCMAKE_BUILD_TYPE=Release
 
 # Build with parallel jobs
-make -j$(nproc)
+make build
 
 # Install
 sudo make install
 
 # Update library cache
 sudo ldconfig
+
+# Uninstall if needed
+sudo make uninstall
 ```
 
 ## Development and Usage
@@ -465,16 +497,31 @@ We welcome contributions to keep this historic toolkit alive and relevant:
 ```bash
 git clone https://github.com/dimmus/motif.git
 cd motif
-./autogen.sh
-./configure --enable-debug --enable-demos --enable-tests
-make -j$(nproc)
-make check  # Run tests
-make gcov   # Generate code coverage reports
+
+# Development build with all features
+make developer debug full ninja ccache
+
+# Or configure manually for development
+cmake -H. -Bbuild \
+    -DCMAKE_BUILD_TYPE=Debug \
+    -DWITH_DEMOS=ON \
+    -DWITH_TESTS=ON \
+    -DWITH_UTF8=ON \
+    -DWITH_XFT=ON
+
+# Build
+make build
+
+# Run tests
+make test
+
+# Generate code coverage reports
+make gcov
 ```
 
 ### Code Coverage
 
-When tests are enabled (`--enable-tests`), you can generate code coverage reports:
+When tests are enabled (`-DWITH_TESTS=ON`), you can generate code coverage reports:
 
 ```bash
 # Generate coverage reports
@@ -492,6 +539,30 @@ The coverage system automatically detects your compiler:
 - **Clang**: Uses `llvm-cov gcov` for coverage analysis
 
 Coverage reports are generated as `.gcov` files in the source directories.
+
+### Additional Build Commands
+
+```bash
+# View all available targets
+make help
+
+# Clean build directory
+make clean
+
+# Clean everything including build directory
+make clean_all
+
+# Package the build
+make package_archive
+
+# Format source code
+make format PATHS="lib/Xm clients"
+
+# Run static analysis
+make check_cppcheck
+make check_clang_array
+make check_struct_comments
+```
 
 ## License
 
