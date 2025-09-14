@@ -15,7 +15,7 @@ LOG_FILE="/home/builder/build.log"
 # Build options (can be overridden via command line)
 BUILD_TYPE="release"
 INCREMENTAL=false
-NO_TESTS=false
+NO_TESTS=true  # Default to skipping tests in Docker builds
 OPTIMIZE=false
 NO_DEPS=false
 JOBS=""
@@ -171,6 +171,10 @@ parse_arguments() {
                 NO_TESTS=true
                 shift
                 ;;
+            --tests)
+                NO_TESTS=false
+                shift
+                ;;
             --optimize)
                 OPTIMIZE=true
                 shift
@@ -234,8 +238,9 @@ Motif Build Script for Container Environments (CMake)
 Usage: $(basename "$0") [OPTIONS]
 
 Options:
-  --incremental    Build incrementally (skip tests, reuse CMake build artifacts)
-  --no-tests       Skip running tests after build
+  --incremental    Build incrementally (reuse CMake build artifacts)
+  --no-tests       Skip running tests after build (default in Docker)
+  --tests          Run tests after build (overrides --no-tests)
   --optimize       Use aggressive optimization flags
   --no-deps        Skip dependency checking
   --jobs N         Number of parallel build jobs (default: auto-detect)
@@ -244,11 +249,12 @@ Options:
   --help, -h       Show this help message
 
 Examples:
-  $(basename "$0")                    # Standard CMake build
+  $(basename "$0")                    # Standard CMake build (no tests)
   $(basename "$0") --incremental      # Incremental CMake build
   $(basename "$0") --jobs 8           # Build with 8 parallel jobs
   $(basename "$0") --optimize         # Optimized build
-  $(basename "$0") --no-tests         # Build without tests
+  $(basename "$0") --tests            # Build with tests
+  $(basename "$0") --no-tests         # Build without tests (explicit)
 EOF
 }
 
@@ -310,6 +316,18 @@ prepare_source() {
         rm -rf "${BUILD_DIR}/build"
     fi
     
+    # Also clean any CMake cache files in the source directory
+    if [[ -f "${BUILD_DIR}/CMakeCache.txt" ]]; then
+        log_info "🧹 Removing CMakeCache.txt from source directory"
+        rm -f "${BUILD_DIR}/CMakeCache.txt"
+    fi
+    
+    # Clean any CMakeFiles directories
+    if [[ -d "${BUILD_DIR}/CMakeFiles" ]]; then
+        log_info "🧹 Removing CMakeFiles directory"
+        rm -rf "${BUILD_DIR}/CMakeFiles"
+    fi
+    
     # Copy source to build location
     log_info "📁 Copying source code to build directory..."
     rm -rf "${BUILD_DIR}"
@@ -324,6 +342,7 @@ prepare_source() {
               --exclude='libtool' --exclude='.libs' --exclude='.deps' \
               --exclude='cmake_install.cmake' --exclude='CTestTestfile.cmake' \
               --exclude='.cache/' --exclude='build.log' \
+              --exclude='CMakeLists.txt.user' \
               "${MOTIF_SOURCE}/" "${BUILD_DIR}/" 2>&1 | tee -a "${LOG_FILE}"
     else
         log_info "📦 Using cp for file copying"
@@ -332,6 +351,8 @@ prepare_source() {
         cp -r "${MOTIF_SOURCE}"/* "${temp_dir}/" 2>&1 | tee -a "${LOG_FILE}"
         # Remove problematic directories and files
         rm -rf "${temp_dir}/.cache" "${temp_dir}/build.log" "${temp_dir}/build/CMakeCache.txt" 2>/dev/null || true
+        rm -f "${temp_dir}/CMakeCache.txt" 2>/dev/null || true
+        rm -rf "${temp_dir}/CMakeFiles" 2>/dev/null || true
         # Copy to build directory
         cp -r "${temp_dir}"/* "${BUILD_DIR}/" 2>&1 | tee -a "${LOG_FILE}"
         rm -rf "${temp_dir}"
@@ -372,6 +393,7 @@ configure_build() {
         "-DCMAKE_BUILD_TYPE=${BUILD_TYPE:-Release}"
         "-DBUILD_SHARED_LIBS=ON"
         "-DCMAKE_VERBOSE_MAKEFILE=ON"
+        "-DCMAKE_SOURCE_DIR=${BUILD_DIR}"
     )
     
     # Add debug options in development builds
@@ -400,7 +422,8 @@ configure_build() {
     
     # Run CMake configuration
     log_info "Running CMake configuration..."
-    cmake "${cmake_opts[@]}" .. 2>&1 | tee -a "${LOG_FILE}"
+    # Use absolute path to source directory to avoid path conflicts
+    cmake "${cmake_opts[@]}" "${BUILD_DIR}" 2>&1 | tee -a "${LOG_FILE}"
     
     log_success "CMake configuration completed"
     return 0
