@@ -84,7 +84,7 @@ and
 .IP "\fBXmdHelp Markup\fP"
 Reads and writes files in using the XmdHelp Markup language.  This is a
 simple quasi-SGML used by the Xmd Help widget.  See the onHelp application
-in demos/lib/Xmd for more information.
+in examples/lib/Xmd for more information.
 .PP
 The radio box immediately below the \fBFormat\fP menu allows interactively
 switching the operation to be performed between \fBOpen\fP, \fBSave\fP,

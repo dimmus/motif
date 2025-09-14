@@ -73,7 +73,7 @@ of other layers as possible.  The various files have the following roles:
 	strings.uil -- Contains applications specific strings to be localized.
 
 In addition, XmdTextEditor uses a standardized uil include file,
-demos/lib/uil/menus.uih, to generate it's initial set of style-guide
+examples/lib/uil/menus.uih, to generate it's initial set of style-guide
 compliant menus.  The initialization code in texteditor.c then unmanages
 unneeded menu items and fetches and manages additional menu items from
 textedit.uil.  menus.uih itself includes menu_strings.uih which allows easy

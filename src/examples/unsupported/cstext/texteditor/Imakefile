@@ -25,7 +25,7 @@ XCOMM HISTORY
 XCOMM
 XCOMM   $XConsortium: Imakefile /main/5 1995/07/14 09:43:08 drk $
 
-     DEMOLIBDIR = $(MTOP)/demos/lib/
+     DEMOLIBDIR = $(MTOP)/examples/lib/
         DEMOLIB = $(DEMOLIBDIR)Xmd/libXmd.a
         DEPLIBS = $(DEMOLIB) MrmClientDepLibs
 LOCAL_LIBRARIES = $(DEMOLIB) MrmClientLibs
