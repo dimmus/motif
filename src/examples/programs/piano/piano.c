@@ -613,7 +613,7 @@ void DoSaveVoiceCB (Widget w, XtPointer clientData, XtPointer callData)
 
 	  for (note = staffData->notes;  note != NULL;  note = note->next)
 	    {
-	      fprintf(fp, "%d %d %d %d %d\n",
+	      fprintf(fp, "%u %d %d %d %d\n",
 		      note->noteType,
 		      note->noteDuration,
 		      note->noteNumber,

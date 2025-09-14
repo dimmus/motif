@@ -277,5 +277,7 @@ void Doit(Widget w, XtPointer client_data, XtPointer data)
   sprintf(date, "%02d%02d%02d%02d%02d", (mn + 1), dy,
 	  hr, mi, yr - (100 * (yr / 100)));
   sprintf(buffer, dateCommand, date);
-  system(buffer);
+  if (system(buffer) != 0) {
+    /* Handle error if needed - for now just ignore */
+  }
 }

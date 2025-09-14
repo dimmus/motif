@@ -405,7 +405,7 @@ InitContainerSpatial (Widget w, XtPointer client_data, XtPointer call_data)
     for (i=0; i<NUM_ICONS ; i++) {
 	char icon_name[20] ;
 
-	sprintf(icon_name, "IconGadget%d", i);
+	sprintf(icon_name, "IconGadget%u", i);
 	icons[i] = XtVaCreateWidget(icon_name, xmIconGadgetClass,
 				    w, NULL);
     }

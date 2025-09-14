@@ -352,7 +352,7 @@ BuildEvent(Widget w, Atom sel, XtPointer data, ResIdent ident, unsigned long len
 	{
 	    char buf[BUFSIZ];
 
-	    sprintf(buf, "Unknown Protocol request %d.",event->any_event.type);
+	    sprintf(buf, "Unknown Protocol request %u.",event->any_event.type);
 	    SendFailure(w, sel, ident, buf);
 	    return(NULL);
 	}
@@ -462,7 +462,7 @@ ExecuteCommand(Widget w, Atom sel, ResIdent ident, EditresEvent *event)
     default:
         {
 	    char buf[BUFSIZ];
-	    sprintf(buf,"Unknown Protocol request %d.",event->any_event.type);
+	    sprintf(buf,"Unknown Protocol request %u.",event->any_event.type);
 	    SendFailure(w, sel, ident, buf);
 	    return;
 	}

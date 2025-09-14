@@ -110,7 +110,9 @@ expandPath(char *dirname)
 
     /* Move currentdir info into a buffer for manipulation */
     if (currentdir == NULL) {
-      getcwd(buf, 1024);
+      if (getcwd(buf, 1024) == NULL) {
+        /* Handle error if needed - for now just ignore */
+      }
     } else {
       strcpy(buf, currentdir);
     }
@@ -302,7 +304,7 @@ process_single_entry(Widget parent, char* dir, int ind,
   if (user != NULL)
     details[num_details++] = XmStringCreateLocalized(user->pw_name);
   else {
-    sprintf(buf, "%d", FI[ind].statbuf.st_uid);
+    sprintf(buf, "%u", FI[ind].statbuf.st_uid);
     details[num_details++] = XmStringCreateLocalized(buf);
   }
 
@@ -681,7 +683,9 @@ selectCB(Widget w, XtPointer ignore, XtPointer cb)
       char buf[256];
       sprintf(buf, str, pathname);
       strcat(buf, " &");
-      system(buf);
+      if (system(buf) != 0) {
+        /* Handle error if needed - for now just ignore */
+      }
       XtFree(pathname);
     }
   }

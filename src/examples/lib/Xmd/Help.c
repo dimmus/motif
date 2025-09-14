@@ -794,13 +794,20 @@ ReadHelpFile(Widget w)
   input = fopen(full_pathname, "r");
   if (input == NULL) return;
 
-  fgets(line, 256, input);
+  if (fgets(line, 256, input) == NULL) {
+    fclose(input);
+    return;
+  }
 
   /* Read until we find a title */
   while(! feof(input) &&
 	(subtitle = strncmp(line,"<title>",7) != 0) &&
-	strncmp(line,"<subtitle>", 10) != 0)
-    fgets(line, 256, input);
+	strncmp(line,"<subtitle>", 10) != 0) {
+    if (fgets(line, 256, input) == NULL) {
+      fclose(input);
+      return;
+    }
+  }
 
   while(! feof(input)) {
     XmString tmp;
@@ -851,12 +858,18 @@ ReadHelpFile(Widget w)
        which has <title> at the begin */
     subtitle = False;
     tmp = XmStringCreateLocalized("");
-    fgets(line, 256, input);
+    if (fgets(line, 256, input) == NULL) {
+      fclose(input);
+      return;
+    }
     while(! feof(input) &&
 	  (subtitle = strncmp(line,"<title>", 7) != 0) &&
 	  strncmp(line,"<subtitle>", 10) != 0) {
       tmp = XmStringConcatAndFree(tmp, parse_text(line));
-      fgets(line, 256, input);
+      if (fgets(line, 256, input) == NULL) {
+        fclose(input);
+        return;
+      }
     }
     help -> help.help_text[help -> help.num_titles++] = tmp;
   }

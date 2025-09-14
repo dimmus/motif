@@ -204,7 +204,7 @@ ErrorHandler(Display *display_local, XErrorEvent *event)
   XGetErrorText(display_local, event -> error_code, errortext, 100);
 
   printf("X Protocol error: %s\n", errortext);
-  printf("XID %ld serial %ld major %d minor %d\n",
+  printf("XID %lu serial %lu major %d minor %d\n",
 	 event -> resourceid,
 	 event -> serial,
 	 event -> request_code,

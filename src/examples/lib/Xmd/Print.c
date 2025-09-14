@@ -873,6 +873,8 @@ XmdPrintDocument(char* pathname,
     sprintf(command, "cp %s %s", pathname, cb -> printer);
   }
 
-  system(command);
+  if (system(command) != 0) {
+    /* Handle error if needed - for now just ignore */
+  }
 
 }

@@ -164,7 +164,9 @@ deleteItem(Widget widget, XtPointer ignore, XtPointer ignore2)
   for(i = 0; i < count; i++) {
     char buf[256];
     sprintf(buf, deleteCommand, getPathFromIcon(selected[i]));
-    system(buf);
+    if (system(buf) != 0) {
+      /* Handle error if needed - for now just ignore */
+    }
   }
 
   XtVaSetValues(fileviewer, XmNselectedObjectCount, 0, NULL, NULL);
