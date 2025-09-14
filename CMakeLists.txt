@@ -422,6 +422,8 @@ check_include_file("sys/poll.h" HAVE_SYS_POLL_H)
 check_include_file("sys/time.h" HAVE_SYS_TIME_H)
 check_include_file("X11/Xos_r.h" HAVE_X11_XOS_R_H)
 check_include_file("X11/Xpoll.h" HAVE_X11_XPOLL_H)
+check_include_file("stdint.h" HAVE_STDINT_H)
+check_include_file("inttypes.h" HAVE_INTTYPES_H)
 
 check_function_exists(getcwd HAVE_GETCWD)
 check_function_exists(getwd HAVE_GETWD)
@@ -429,7 +431,10 @@ check_function_exists(iconv HAVE_ICONV)
 check_function_exists(nanosleep HAVE_NANOSLEEP)
 check_function_exists(putenv HAVE_PUTENV)
 check_function_exists(regcomp HAVE_REGCOMP)
-check_function_exists(regex HAVE_REGEX)
+check_function_exists(regexec HAVE_REGEX)
+if(NOT HAVE_REGEX)
+    set(HAVE_REGEX 0)
+endif()
 check_function_exists(strcasecmp HAVE_STRCASECMP)
 check_function_exists(strdup HAVE_STRDUP)
 check_function_exists(strlcat HAVE_STRLCAT)
@@ -437,6 +442,34 @@ check_function_exists(getpwnam HAVE_GETPWNAM)
 check_function_exists(getpwuid HAVE_GETPWUID)
 check_function_exists(re_comp HAVE_RE_COMP)
 check_function_exists(re_exec HAVE_RE_EXEC)
+
+# Check for X11-specific functions
+include(CheckSymbolExists)
+find_package(X11 REQUIRED)
+check_symbol_exists(XICProc "X11/Xlib.h" HAVE_XICPROC)
+if(NOT HAVE_XICPROC)
+    set(HAVE_XICPROC 0)
+endif()
+# Always define HAVE_XICPROC to avoid -Wundef warnings
+if(NOT DEFINED HAVE_XICPROC)
+    set(HAVE_XICPROC 0)
+endif()
+
+# Check for Xmu library
+find_library(XMU_LIBRARY Xmu)
+if(XMU_LIBRARY)
+    set(HAVE_LIBXMU TRUE)
+else()
+    set(HAVE_LIBXMU FALSE)
+endif()
+
+# PWC_DEBUG is a project-specific debug flag
+option(WITH_PWC_DEBUG "Enable PWC debug output" OFF)
+if(WITH_PWC_DEBUG)
+    set(HAVE_PWC_DEBUG TRUE)
+else()
+    set(HAVE_PWC_DEBUG FALSE)
+endif()
 
 # Add compile definitions based on checks
 if(HAVE_ALLOCA_H)
@@ -506,6 +539,27 @@ if(HAVE_RE_EXEC)
     add_compile_definitions(HAVE_RE_EXEC)
 endif()
 
+# Add definitions for new checks
+if(HAVE_STDINT_H)
+    add_compile_definitions(HAVE_STDINT_H)
+endif()
+if(HAVE_INTTYPES_H)
+    add_compile_definitions(HAVE_INTTYPES_H)
+endif()
+if(HAVE_XICPROC)
+    add_compile_definitions(HAVE_XICPROC=1)
+else()
+    add_compile_definitions(HAVE_XICPROC=0)
+endif()
+if(HAVE_LIBXMU)
+    add_compile_definitions(HAVE_LIBXMU)
+endif()
+if(HAVE_PWC_DEBUG)
+    add_compile_definitions(PWC_DEBUG=1)
+else()
+    add_compile_definitions(PWC_DEBUG=0)
+endif()
+
 # Compiler flags
 if(WITH_DEBUG)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Og -ggdb -DDEBUG")
@@ -559,6 +613,10 @@ if(CMAKE_COMPILER_IS_GNUCC)
     C_WARN_NO_DIV_BY_ZERO -Wno-div-by-zero
     C_WARN_NO_STRINGOP_OVERREAD -Wno-stringop-overread
     C_WARN_NO_STRINGOP_OVERFLOW -Wno-stringop-overflow
+    C_WARN_NO_UNUSED_FUNCTION -Wno-unused-function
+    C_WARN_NO_UNUSED_VARIABLE -Wno-unused-variable
+    C_WARN_NO_UNUSED_BUT_SET_VARIABLE -Wno-unused-but-set-variable
+    C_WARN_NO_UNUSED_VALUE -Wno-unused-value
   )
 
   # Combine both categories
