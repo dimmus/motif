@@ -219,7 +219,7 @@ typedef int boolean;
 ** Common includes needed by most modules
 **
 */
-#include "Uil.h"
+// #include "Uil.h"
 #include "UilDef.h"                        /* for public UIL types */
 #include "UilDBDef.h"                      /* for binary database */
 #include "UilMess.h"

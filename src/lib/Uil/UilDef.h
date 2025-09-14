@@ -54,10 +54,11 @@
 ** Common includes needed by public functions.
 **
 */
-#include <uil/Uil.h>
-#include <uil/UilDBDef.h> 	/* This has to be loaded first. */
-#include <uil/UilSymGl.h>
-#include <uil/UilSymDef.h>
+// #include "Uil.h"
+#include "UilAPI.h"
+#include "UilDBDef.h" 	/* This has to be loaded first. */
+#include "UilSymGl.h"
+#include "UilSymDef.h"
 
 /*
 ** Function declarations not defined elsewhere

@@ -705,11 +705,14 @@ set_target_properties(Xm PROPERTIES
 target_include_directories(Xm
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
-        $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/lib/Xm>
+        $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
+        $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/src/lib>
+        $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/src/lib/Xm>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
     PRIVATE
         ${CMAKE_SOURCE_DIR}/src/lib/Xm
+        ${CMAKE_BINARY_DIR}/src/lib/Xm
         ${CMAKE_BINARY_DIR}/include
         ${X_INCLUDE_DIRS}
 )

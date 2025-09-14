@@ -25,12 +25,6 @@ pkg_check_modules(X11 REQUIRED x11)
 pkg_check_modules(XT REQUIRED xt)
 pkg_check_modules(XMU REQUIRED xmu)
 
-# Find Motif library (libXm)
-find_library(XM_LIBRARY Xm PATHS ${CMAKE_SOURCE_DIR}/src/lib/Xm)
-if(NOT XM_LIBRARY)
-    message(FATAL_ERROR "libXm not found. Please build the Motif library first.")
-endif()
-
 # Include directories
 include_directories(
     ${CMAKE_SOURCE_DIR}/src/lib
@@ -129,47 +123,6 @@ add_custom_target(wmlparse_target
     COMMENT "Parser generation target"
 )
 
-# Generate Uil.c and Uil.h from Uil.y using detected parser
-if(USING_YACC OR USING_BYACC)
-    # Use yacc/byacc - they generate y.tab.c and y.tab.h (direct processing like automake)
-    add_custom_command(
-        OUTPUT Uil.c Uil.h UilLexPars.h UilLexPars.c
-        COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_SOURCE_DIR} bash -c 'echo "// Placeholder for UilSymGen.h" > UilSymGen.h'
-        COMMAND ${BISON_EXECUTABLE} -d -o Uil.c ${CMAKE_SOURCE_DIR}/src/bin/uil/Uil.y
-        COMMAND ${CMAKE_COMMAND} -E remove UilSymGen.h
-        COMMAND ${CMAKE_COMMAND} -E create_symlink Uil.h UilLexPars.h
-        COMMAND ${CMAKE_COMMAND} -E create_symlink Uil.c UilLexPars.c
-        DEPENDS ${CMAKE_SOURCE_DIR}/src/bin/uil/Uil.y
-        COMMENT "Generating Uil.c and Uil.h from Uil.y using ${BISON_EXECUTABLE} (direct processing)"
-    )
-    set(BISON_uil_OUTPUTS Uil.c Uil.h UilLexPars.h UilLexPars.c)
-else()
-    # Use bison - generate in binary directory (direct processing like automake)
-    add_custom_command(
-        OUTPUT Uil.c Uil.h UilLexPars.h UilLexPars.c
-        COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_SOURCE_DIR} bash -c 'echo "// Placeholder for UilSymGen.h" > UilSymGen.h'
-        COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_SOURCE_DIR} bash -c 'echo "// Placeholder for UilLexPars.h" > UilLexPars.h'
-        COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_SOURCE_DIR} bash -c 'echo "// Placeholder for UilLexPars.c" > UilLexPars.c'
-        COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_BINARY_DIR} ${BISON_EXECUTABLE} -d -o Uil.c ${CMAKE_SOURCE_DIR}/src/bin/uil/Uil.y
-        COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_CURRENT_SOURCE_DIR}/UilSymGen.h
-        COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_CURRENT_SOURCE_DIR}/UilLexPars.h
-        COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_CURRENT_SOURCE_DIR}/UilLexPars.c
-        COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_COMMAND} -E create_symlink Uil.h UilLexPars.h
-        COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_COMMAND} -E create_symlink Uil.c UilLexPars.c
-        COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/Uil.h ${CMAKE_CURRENT_SOURCE_DIR}/UilLexPars.h
-        COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/Uil.c ${CMAKE_CURRENT_SOURCE_DIR}/UilLexPars.c
-        DEPENDS ${CMAKE_SOURCE_DIR}/src/bin/uil/Uil.y
-        COMMENT "Generating Uil.c and Uil.h from Uil.y using bison (direct processing)"
-    )
-    set(BISON_uil_OUTPUTS ${CMAKE_CURRENT_BINARY_DIR}/Uil.c ${CMAKE_CURRENT_BINARY_DIR}/Uil.h ${CMAKE_CURRENT_BINARY_DIR}/UilLexPars.h ${CMAKE_CURRENT_BINARY_DIR}/UilLexPars.c)
-endif()
-
-# Create a target for the UIL parser generation
-add_custom_target(uil_parser_target
-    DEPENDS ${BISON_uil_OUTPUTS}
-    COMMENT "UIL parser generation target"
-)
-
 # Create wmlparse.h in source directory (for compatibility)
 if(USING_YACC OR USING_BYACC)
     # For yacc/byacc, wmlparse.h is already created in the source directory
@@ -244,14 +197,14 @@ target_link_libraries(wml libwml)
 # Build wmldbcreate executable
 add_executable(wmldbcreate wmldbcreate.c)
 target_link_libraries(wmldbcreate 
-    ${XM_LIBRARY}
     ${X11_LIBRARIES}
     ${XT_LIBRARIES}
     ${XMU_LIBRARIES}
+    Xm
 )
 
-# Ensure UIL parser files are generated before building wmldbcreate
-add_dependencies(wmldbcreate uil_parser_target uil_lexpars_symlinks)
+# Ensure UIL parser files and Xm strings are generated before building wmldbcreate
+add_dependencies(wmldbcreate uil_parser_target uil_lexpars_symlinks xm_strings)
 
 # Add include directory for generated headers
 target_include_directories(wmldbcreate PRIVATE 
@@ -259,13 +212,14 @@ target_include_directories(wmldbcreate PRIVATE
     ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_SOURCE_DIR}/src/bin/uil
     ${CMAKE_SOURCE_DIR}/src/lib/Uil
+    ${CMAKE_BINARY_DIR}/src/lib/Uil
 )
 
 # Custom command to generate WML target files
 add_custom_command(
     OUTPUT ${WML_TARGETS}
     COMMAND ${CMAKE_COMMAND} -E remove ${WML_TARGETS} wml.report wml-uil.mm
-    COMMAND $<TARGET_FILE:wmluiltok> < ${CMAKE_SOURCE_DIR}/src/bin/uil/Uil.y > tokens.dat
+    COMMAND $<TARGET_FILE:wmluiltok> < ${CMAKE_SOURCE_DIR}/src/lib/Uil/Uil.y > tokens.dat
     COMMAND ${CMAKE_COMMAND} -E remove wml-uil.mm
     COMMAND $<TARGET_FILE:wml> ${CMAKE_CURRENT_SOURCE_DIR}/motif.wml
     COMMAND ${CMAKE_COMMAND} -E remove tokens.dat
@@ -341,8 +295,8 @@ add_custom_target(wml_clean
         Uil.c
         Uil.h
         wml.report
-        UilLexPars.h
-        UilLexPars.c
+        # UilLexPars.h
+        # UilLexPars.c
         wmllex_processed.c
         wmluiltok_processed.c
     COMMENT "Cleaning WML generated files"
