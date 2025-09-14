@@ -27,7 +27,7 @@ jobs:
         with:
           arch: ${{ matrix.arch }}
           branch: v3.22
-          packages: >
+            packages: >
             libx11-dev
             libxpm-dev
             libxt-dev
@@ -38,10 +38,9 @@ jobs:
             libpng-dev
             linux-headers
             alpine-sdk
-            autoconf
-            autoconf-archive
-            automake
-            libtool
+            cmake
+            ninja
+            pkgconfig
             flex-dev
             flex
             byacc
@@ -50,18 +49,16 @@ jobs:
             check-dev
             clang
             clang-dev
-      - name: Make
+      - name: Build with CMake
         run: |
           cd /home/runner/work/motif/motif
           make clean || true
-          make distclean || true
-          CC=${{ matrix.compiler }} ./autogen.sh
-          make -j1
+          CC=${{ matrix.compiler }} make build ninja
         shell: alpine.sh {0}
       # - name: Test
       #   run: |
       #     cd /home/runner/work/motif/motif
       #     Xvfb :0 &>/dev/null &
-      #     DISPLAY=:0 make check
+      #     DISPLAY=:0 make test
       #     kill -TERM %1
       #   shell: alpine.sh {0}

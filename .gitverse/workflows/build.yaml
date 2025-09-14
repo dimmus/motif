@@ -35,23 +35,21 @@ jobs:
             libpng-dev \
             linux-headers-generic \
             build-essential \
-            autoconf \
-            autoconf-archive \
-            automake \
-            libtool \
+            cmake \
+            ninja-build \
+            pkg-config \
             flex \
             bison \
             xvfb \
             xbitmaps \
             check \
             clang
-      - name: Make
+      - name: Build with CMake
         run: |
-          CC=${{ matrix.compiler }} ./autogen.sh
-          make
+          CC=${{ matrix.compiler }} make build ninja
       # - name: Test
       #   run: |
       #     cd /home/runner/work/motif/motif
       #     Xvfb :0 &>/dev/null &
-      #     DISPLAY=:0 make check
+      #     DISPLAY=:0 make test
       #     kill -TERM %1
