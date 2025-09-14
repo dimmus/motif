@@ -164,6 +164,8 @@ foreach(DEMO_DIR ${DEMO_DIRS})
                         COMMAND ${CMAKE_BINARY_DIR}/src/bin/uil/uil -o ${UID_FILE} ${UIL_FILE} 
                                 -I${CMAKE_SOURCE_DIR}/src/bin/uil 
                                 -I${CMAKE_BINARY_DIR}/src/bin/uil
+                                -I${CMAKE_SOURCE_DIR}/src/examples/programs/${DEMO_DIR}
+                                -I${CMAKE_SOURCE_DIR}/src/examples/programs/${DEMO_DIR}/english/uid
                         DEPENDS uil ${UIL_FILE}
                         COMMENT "Compiling UIL file ${UIL_FILE}"
                     )

@@ -82,9 +82,9 @@ if(USING_YACC OR USING_BYACC)
     # Use yacc/byacc - they generate y.tab.c and y.tab.h (direct processing like automake)
     add_custom_command(
         OUTPUT Uil.c Uil.h UilLexPars.h UilLexPars.c
-        COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_SOURCE_DIR} bash -c 'echo "// Placeholder for UilSymGen.h" > UilSymGen.h'
+        COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_BINARY_DIR} bash -c 'echo "// Placeholder for UilSymGen.h" > UilSymGen.h'
         COMMAND ${BISON_EXECUTABLE} -d -o Uil.c ${CMAKE_SOURCE_DIR}/src/lib/Uil/Uil.y
-        COMMAND ${CMAKE_COMMAND} -E remove UilSymGen.h
+        COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_CURRENT_BINARY_DIR}/UilSymGen.h
         COMMAND ${CMAKE_COMMAND} -E create_symlink Uil.h UilLexPars.h
         COMMAND ${CMAKE_COMMAND} -E create_symlink Uil.c UilLexPars.c
         DEPENDS ${CMAKE_SOURCE_DIR}/src/lib/Uil/Uil.y
@@ -98,7 +98,7 @@ else()
         COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_SOURCE_DIR} bash -c 'echo "// Placeholder for UilSymGen.h" > UilSymGen.h'
         COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_SOURCE_DIR} bash -c 'echo "// Placeholder for UilLexPars.h" > UilLexPars.h'
         COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_SOURCE_DIR} bash -c 'echo "// Placeholder for UilLexPars.c" > UilLexPars.c'
-        COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_BINARY_DIR} ${BISON_EXECUTABLE} -d -o Uil.c ${CMAKE_CURRENT_SOURCE_DIR}/Uil.y
+        COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_BINARY_DIR} ${BISON_EXECUTABLE} -d -o Uil.c ${CMAKE_SOURCE_DIR}/src/lib/Uil/Uil.y
         COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_CURRENT_SOURCE_DIR}/UilSymGen.h
         COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_CURRENT_SOURCE_DIR}/UilLexPars.h
         COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_CURRENT_SOURCE_DIR}/UilLexPars.c
@@ -106,7 +106,7 @@ else()
         COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_COMMAND} -E create_symlink Uil.c UilLexPars.c
         COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/Uil.h UilLexPars.h
         COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/Uil.c UilLexPars.c
-        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/Uil.y
+        DEPENDS ${CMAKE_SOURCE_DIR}/src/lib/Uil/Uil.y
         COMMENT "Generating Uil.c and Uil.h from Uil.y using bison (direct processing)"
     )
     set(BISON_uil_OUTPUTS ${CMAKE_CURRENT_BINARY_DIR}/Uil.c ${CMAKE_CURRENT_BINARY_DIR}/Uil.h ${CMAKE_CURRENT_BINARY_DIR}/UilLexPars.h ${CMAKE_CURRENT_BINARY_DIR}/UilLexPars.c)
