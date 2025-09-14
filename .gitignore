@@ -37,4 +37,5 @@ Thumbs.db
 *.list
 build
 .cache
-TODObuild.log
+TODO
+build.log
