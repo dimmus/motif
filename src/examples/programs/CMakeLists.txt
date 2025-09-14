@@ -65,9 +65,9 @@ foreach(DEMO_DIR ${DEMO_DIRS})
             )
             install(TARGETS simpledrop RUNTIME DESTINATION ${CMAKE_INSTALL_DATADIR}/Xm/${DEMO_DIR})
             
-            message(STATUS "Added drag_and_drop demos: DNDDemo, simpledrop")
+            message(STATUS "Added drag_and_drop examples: DNDDemo, simpledrop")
         elseif(DEMO_SOURCES)
-            # Get the demo name (directory name)
+            # Get the example name (directory name)
             set(DEMO_NAME ${DEMO_DIR})
             
             # Handle special cases where directory name conflicts with existing files
@@ -81,6 +81,8 @@ foreach(DEMO_DIR ${DEMO_DIRS})
                 set(DEMO_NAME "hellomotifi18n_demo")
             elseif(DEMO_NAME STREQUAL "periodic")
                 set(DEMO_NAME "periodic_demo")
+            elseif(DEMO_NAME STREQUAL "workspace")
+                set(DEMO_NAME "workspace")
             endif()
             
             # Create the executable
@@ -108,15 +110,20 @@ foreach(DEMO_DIR ${DEMO_DIRS})
                 target_link_libraries(${DEMO_NAME} ExmMrm)
             endif()
             
+            # Special case for workspace program - ensure it links with WsmDemo
+            if(DEMO_NAME STREQUAL "workspace")
+                target_link_libraries(${DEMO_NAME} WsmDemo)
+            endif()
+            
             # Set include directories
             target_include_directories(${DEMO_NAME} PRIVATE
+                ${CMAKE_SOURCE_DIR}/src/examples/lib
                 ${CMAKE_SOURCE_DIR}/src/lib
                 ${CMAKE_SOURCE_DIR}/include
                 ${CMAKE_BINARY_DIR}/include
                 ${CMAKE_CURRENT_SOURCE_DIR}/${DEMO_DIR}
                 ${CMAKE_CURRENT_SOURCE_DIR}/pixmaps
                 ${CMAKE_CURRENT_BINARY_DIR}/pixmaps
-                ${CMAKE_SOURCE_DIR}/src/examples/lib
                 ${X_INCLUDE_DIRS}
             )
             
@@ -127,10 +134,20 @@ foreach(DEMO_DIR ${DEMO_DIRS})
             
             # Check for UIL files and process them
             file(GLOB UIL_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${DEMO_DIR}/*.uil")
-            # Remove problematic UIL files
+            # Remove problematic UIL files that cause UIL compiler segfault
             if(DEMO_DIR STREQUAL "periodic")
                 list(REMOVE_ITEM UIL_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${DEMO_DIR}/periodic_l.uil")
                 list(REMOVE_ITEM UIL_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${DEMO_DIR}/periodic.uil")
+            endif()
+            if(DEMO_DIR STREQUAL "hellomotif")
+                list(REMOVE_ITEM UIL_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${DEMO_DIR}/hellomotif.uil")
+            endif()
+            if(DEMO_DIR STREQUAL "animate")
+                list(REMOVE_ITEM UIL_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${DEMO_DIR}/animate.uil")
+                list(REMOVE_ITEM UIL_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${DEMO_DIR}/dog.uil")
+                list(REMOVE_ITEM UIL_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${DEMO_DIR}/plane.uil")
+                list(REMOVE_ITEM UIL_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${DEMO_DIR}/superman.uil")
+                list(REMOVE_ITEM UIL_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${DEMO_DIR}/xmanimate.uil")
             endif()
             if(UIL_FILES)
                 # Ensure the output directory exists
