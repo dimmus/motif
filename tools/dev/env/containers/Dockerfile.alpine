@@ -14,10 +14,6 @@ RUN apk update && \
     apk add --no-cache \
         build-base \
         git \
-        autoconf \
-        autoconf-archive \
-        automake \
-        libtool \
         pkgconf \
         make \
         gcc \

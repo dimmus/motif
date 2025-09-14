@@ -36,9 +36,6 @@ archlinux:
     base_tools:
       - base-devel
       - git
-      - autoconf
-      - automake
-      - libtool
       - pkgconf
       - make
       - gcc
@@ -150,9 +147,6 @@ ubuntu:
     base_tools:
       - build-essential
       - git
-      - autoconf
-      - automake
-      - libtool
       - pkg-config
       - make
       - gcc
@@ -266,9 +260,6 @@ freebsd:
     base_tools:
       - build-essential
       - git
-      - autoconf
-      - automake
-      - libtool
       - pkg-config
       - make
       - gcc
@@ -387,9 +378,6 @@ centos:
     base_tools:
       - "@Development Tools"
       - git
-      - autoconf
-      - automake
-      - libtool
       - pkgconf-devel
       - make
       - gcc
@@ -496,9 +484,6 @@ fedora:
     base_tools:
       - "@Development Tools"
       - git
-      - autoconf
-      - automake
-      - libtool
       - pkgconf-devel
       - make
       - gcc
@@ -605,10 +590,6 @@ alpine:
     base_tools:
       - build-base
       - git
-      - autoconf
-      - autoconf-archive
-      - automake
-      - libtool
       - pkgconf
       - make
       - gcc

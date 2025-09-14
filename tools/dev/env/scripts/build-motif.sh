@@ -125,7 +125,7 @@ check_dependencies() {
     log_info "Checking build dependencies..."
     
     local missing_deps=()
-    local required_commands=("gcc" "make" "autoconf" "automake" "libtool" "pkg-config")
+    local required_commands=("gcc" "make" "cmake" "ninja" "pkg-config")
     
     for cmd in "${required_commands[@]}"; do
         if ! command -v "${cmd}" &> /dev/null; then
@@ -146,6 +146,14 @@ check_dependencies() {
         pkg-config --list-all | grep -i x11 | head -10 | tee -a "${LOG_FILE}" || true
         return 1
     fi
+    
+    # Check CMake version
+    local cmake_version=$(cmake --version | head -1 | cut -d' ' -f3)
+    log_info "CMake version: ${cmake_version}"
+    
+    # Check Ninja version
+    local ninja_version=$(ninja --version 2>/dev/null || echo "unknown")
+    log_info "Ninja version: ${ninja_version}"
     
     log_success "All dependencies found"
     return 0
@@ -221,12 +229,12 @@ parse_arguments() {
 # Show help
 show_help() {
     cat << EOF
-Motif Build Script for Container Environments
+Motif Build Script for Container Environments (CMake)
 
 Usage: $(basename "$0") [OPTIONS]
 
 Options:
-  --incremental    Build incrementally (skip tests, reuse build artifacts)
+  --incremental    Build incrementally (skip tests, reuse CMake build artifacts)
   --no-tests       Skip running tests after build
   --optimize       Use aggressive optimization flags
   --no-deps        Skip dependency checking
@@ -236,8 +244,8 @@ Options:
   --help, -h       Show this help message
 
 Examples:
-  $(basename "$0")                    # Standard build
-  $(basename "$0") --incremental      # Incremental build
+  $(basename "$0")                    # Standard CMake build
+  $(basename "$0") --incremental      # Incremental CMake build
   $(basename "$0") --jobs 8           # Build with 8 parallel jobs
   $(basename "$0") --optimize         # Optimized build
   $(basename "$0") --no-tests         # Build without tests
@@ -253,7 +261,7 @@ prepare_source() {
         return 1
     fi
     
-    # Handle incremental builds with simple copy approach
+    # Handle incremental builds with CMake approach
     if [[ "${INCREMENTAL}" == "true" ]]; then
         log_info "📦 Incremental build requested"
         
@@ -267,20 +275,20 @@ prepare_source() {
                 log_info "✅ Build cache copied successfully"
                 
                 # Check if we can reuse the copied build directory
-                if [[ -f "${BUILD_DIR}/Makefile" ]]; then
-                    log_info "✅ Found existing Makefile, attempting to reuse build directory"
-                    cd "${BUILD_DIR}"
+                if [[ -f "${BUILD_DIR}/build/CMakeCache.txt" ]]; then
+                    log_info "✅ Found existing CMake cache, attempting to reuse build directory"
+                    cd "${BUILD_DIR}/build"
                     
-                    # Check if we can run make
-                    if make -n all >/dev/null 2>&1; then
-                        log_info "🚀 Build directory is usable, proceeding with incremental build"
+                    # Check if we can run cmake build
+                    if cmake --build . --dry-run >/dev/null 2>&1; then
+                        log_info "🚀 CMake build directory is usable, proceeding with incremental build"
                         return 0
                     else
                         log_info "⚠️  Build directory exists but is not usable, will reconfigure"
                         # Don't remove, just reconfigure
                     fi
                 else
-                    log_info "🔄 No Makefile found in cache, will do full build"
+                    log_info "🔄 No CMake cache found in build directory, will do full build"
                 fi
             else
                 log_info "⚠️  Failed to copy build cache, will do full build"
@@ -305,12 +313,22 @@ prepare_source() {
     if command -v rsync &> /dev/null; then
         log_info "📦 Using rsync for efficient file copying"
         rsync -a --exclude='.git' --exclude='*.o' --exclude='*.lo' --exclude='*.la' \
+              --exclude='build/' --exclude='CMakeCache.txt' --exclude='CMakeFiles/' \
               --exclude='Makefile' --exclude='config.log' --exclude='config.status' \
               --exclude='libtool' --exclude='.libs' --exclude='.deps' \
-              "${MOTIF_SOURCE}/" "${BUILD_DIR}/" | tee -a "${LOG_FILE}"
+              --exclude='cmake_install.cmake' --exclude='CTestTestfile.cmake' \
+              --exclude='.cache' --exclude='build.log' \
+              "${MOTIF_SOURCE}/" "${BUILD_DIR}/" 2>&1 | tee -a "${LOG_FILE}"
     else
         log_info "📦 Using cp for file copying"
-        cp -r "${MOTIF_SOURCE}"/* "${BUILD_DIR}/" | tee -a "${LOG_FILE}"
+        # Create a temporary directory to avoid permission issues
+        local temp_dir=$(mktemp -d)
+        cp -r "${MOTIF_SOURCE}"/* "${temp_dir}/" 2>&1 | tee -a "${LOG_FILE}"
+        # Remove problematic directories
+        rm -rf "${temp_dir}/.cache" "${temp_dir}/build.log" 2>/dev/null || true
+        # Copy to build directory
+        cp -r "${temp_dir}"/* "${BUILD_DIR}/" 2>&1 | tee -a "${LOG_FILE}"
+        rm -rf "${temp_dir}"
     fi
     
     cd "${BUILD_DIR}"
@@ -321,60 +339,72 @@ prepare_source() {
 
 # Configure build
 configure_build() {
-    log_info "Configuring build..."
+    log_info "Configuring build with CMake..."
     
     cd "${BUILD_DIR}"
     
-    # Run autogen if needed
-    if [[ -f autogen.sh && ! -f configure ]]; then
-        log_info "Running autogen.sh..."
-        ./autogen.sh 2>&1 | tee -a "${LOG_FILE}"
-    fi
-    
-    # Check if configure script exists
-    if [[ ! -f configure ]]; then
-        log_error "Configure script not found"
+    # Check if CMakeLists.txt exists
+    if [[ ! -f CMakeLists.txt ]]; then
+        log_error "CMakeLists.txt not found in ${BUILD_DIR}"
+        log_info "Available files in build directory:"
+        ls -la "${BUILD_DIR}" | head -10 | tee -a "${LOG_FILE}"
         return 1
     fi
     
-    # Configure with standard options
-    log_info "Running configure..."
+    # Create build directory for CMake
+    local cmake_build_dir="${BUILD_DIR}/build"
+    mkdir -p "${cmake_build_dir}"
+    cd "${cmake_build_dir}"
     
     # Set environment variables to prioritize system headers
     export CPPFLAGS="-I/usr/include ${CPPFLAGS:-}"
     export CFLAGS="-I/usr/include ${CFLAGS:-}"
     
-    local configure_opts=(
-        "--prefix=${INSTALL_DIR}"
-        "--enable-shared"
-        "--disable-static"
-        "--with-x"
-        "--enable-xft"
-        "--enable-jpeg"
-        "--enable-png"
+    # Prepare CMake configuration options
+    local cmake_opts=(
+        "-DCMAKE_INSTALL_PREFIX=${INSTALL_DIR}"
+        "-DCMAKE_BUILD_TYPE=${BUILD_TYPE:-Release}"
+        "-DBUILD_SHARED_LIBS=ON"
+        "-DCMAKE_VERBOSE_MAKEFILE=ON"
     )
     
     # Add debug options in development builds
     if [[ "${BUILD_TYPE:-release}" == "debug" ]]; then
-        configure_opts+=(
-            "--enable-debug"
-            "--enable-debug-themes"
+        cmake_opts+=(
+            "-DCMAKE_BUILD_TYPE=Debug"
+            "-DCMAKE_C_FLAGS_DEBUG=-g -O0"
+            "-DCMAKE_CXX_FLAGS_DEBUG=-g -O0"
         )
     fi
     
-    log_debug "Configure options: ${configure_opts[*]}"
+    # Add optimization flags if requested
+    if [[ "${OPTIMIZE}" == "true" ]]; then
+        cmake_opts+=(
+            "-DCMAKE_C_FLAGS_RELEASE=-O3 -march=native -mtune=native"
+            "-DCMAKE_CXX_FLAGS_RELEASE=-O3 -march=native -mtune=native"
+        )
+    fi
     
-    ./configure "${configure_opts[@]}" 2>&1 | tee -a "${LOG_FILE}"
+    # Set parallel jobs
+    if [[ -n "${JOBS}" ]]; then
+        cmake_opts+=("-DCMAKE_JOB_POOLS=compile=${JOBS}")
+    fi
     
-    log_success "Configuration completed"
+    log_debug "CMake options: ${cmake_opts[*]}"
+    
+    # Run CMake configuration
+    log_info "Running CMake configuration..."
+    cmake "${cmake_opts[@]}" .. 2>&1 | tee -a "${LOG_FILE}"
+    
+    log_success "CMake configuration completed"
     return 0
 }
 
 # Build Motif
 build_motif() {
-    log_info "Building Motif..."
+    log_info "Building Motif with CMake..."
     
-    cd "${BUILD_DIR}"
+    cd "${BUILD_DIR}/build"
     
     # Use specified jobs or auto-detect
     local num_cores="${JOBS:-$(nproc 2>/dev/null || echo "2")}"
@@ -383,11 +413,11 @@ build_motif() {
     # Check if this is an incremental build
     if [[ "${INCREMENTAL}" == "true" ]]; then
         local obj_count=$(find . -name "*.o" 2>/dev/null | wc -l)
-        local lib_count=$(find . -name "*.la" 2>/dev/null | wc -l)
+        local cmake_cache_count=$(find . -name "CMakeCache.txt" 2>/dev/null | wc -l)
         
         log_info "📦 Incremental build status:"
         log_info "   Object files: ${obj_count}"
-        log_info "   Library files: ${lib_count}"
+        log_info "   CMake cache files: ${cmake_cache_count}"
         
         if [[ ${obj_count} -gt 100 ]]; then
             log_info "🚀 Most components already built, this should be fast!"
@@ -398,9 +428,17 @@ build_motif() {
         fi
     fi
     
-    # Build the project
-    log_info "🔨 Starting compilation..."
-    make -j"${num_cores}" 2>&1 | tee -a "${LOG_FILE}"
+    # Build the project using CMake
+    log_info "🔨 Starting CMake build..."
+    
+    # Use ninja if available, otherwise make
+    if command -v ninja &> /dev/null; then
+        log_info "Using Ninja build system"
+        ninja -j"${num_cores}" 2>&1 | tee -a "${LOG_FILE}"
+    else
+        log_info "Using Make build system"
+        make -j"${num_cores}" 2>&1 | tee -a "${LOG_FILE}"
+    fi
     
     log_success "Build completed"
     return 0
@@ -410,13 +448,14 @@ build_motif() {
 install_motif() {
     log_info "Installing Motif..."
     
-    cd "${BUILD_DIR}"
+    cd "${BUILD_DIR}/build"
     
     # Create install directory
     mkdir -p "${INSTALL_DIR}"
     
-    # Install
-    make install 2>&1 | tee -a "${LOG_FILE}"
+    # Install using CMake
+    log_info "Running CMake install..."
+    cmake --install . --prefix "${INSTALL_DIR}" 2>&1 | tee -a "${LOG_FILE}"
     
     log_success "Installation completed"
     return 0
@@ -431,16 +470,26 @@ run_tests() {
     
     log_info "Running tests..."
     
-    cd "${BUILD_DIR}"
+    cd "${BUILD_DIR}/build"
     
-    # Check if tests are available
-    if make -n check &>/dev/null; then
-        log_info "Running test suite..."
-        make check 2>&1 | tee -a "${LOG_FILE}" || {
+    # Check if tests are available using CMake
+    if cmake --build . --target help 2>/dev/null | grep -q "test"; then
+        log_info "Running CMake test suite..."
+        ctest --output-on-failure 2>&1 | tee -a "${LOG_FILE}" || {
             log_warning "Some tests failed, but continuing..."
         }
     else
-        log_info "No test suite available"
+        log_info "No CMake test suite available"
+        
+        # Try running tests with make if available
+        if make -n test &>/dev/null; then
+            log_info "Running Make test suite..."
+            make test 2>&1 | tee -a "${LOG_FILE}" || {
+                log_warning "Some tests failed, but continuing..."
+            }
+        else
+            log_info "No test suite available"
+        fi
     fi
     
     # Basic installation verification
@@ -483,7 +532,9 @@ User: $(whoami)
 Build Configuration:
 - Source: ${MOTIF_SOURCE}
 - Build Directory: ${BUILD_DIR}
+- CMake Build Directory: ${BUILD_DIR}/build
 - Install Directory: ${INSTALL_DIR}
+- Build System: CMake
 - Compiler: ${CC:-gcc}
 - C++ Compiler: ${CXX:-g++}
 - CFLAGS: ${CFLAGS:-default}
@@ -552,8 +603,9 @@ save_build_cache() {
         
         # Show what was cached
         local obj_count=$(find "${host_cache}" -name "*.o" 2>/dev/null | wc -l)
-        local lib_count=$(find "${host_cache}" -name "*.la" 2>/dev/null | wc -l)
-        log_info "   Cached: ${obj_count} object files, ${lib_count} library files"
+        local cmake_cache_count=$(find "${host_cache}" -name "CMakeCache.txt" 2>/dev/null | wc -l)
+        local lib_count=$(find "${host_cache}" -name "*.so*" -o -name "*.a" 2>/dev/null | wc -l)
+        log_info "   Cached: ${obj_count} object files, ${cmake_cache_count} CMake cache files, ${lib_count} library files"
     else
         log_warning "⚠️  Failed to save build cache"
     fi
@@ -568,6 +620,7 @@ main() {
     parse_arguments "$@"
     
     # Initialize log file
+    mkdir -p "$(dirname "${LOG_FILE}")"
     echo "Motif Build Log" > "${LOG_FILE}"
     echo "===============" >> "${LOG_FILE}"
     echo "Started: $(date)" >> "${LOG_FILE}"
