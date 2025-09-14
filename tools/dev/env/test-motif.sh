@@ -266,6 +266,7 @@ EOF
         build_args+=("--no-tests")
         log_info "⏭️  Skipping tests for faster build"
     fi
+    # Note: --tests flag is not needed as it's the default behavior when --no-tests is not specified
     if [[ "${OPTIMIZE}" == "true" ]]; then
         build_args+=("--optimize")
         log_info "⚡ Using optimized build flags"

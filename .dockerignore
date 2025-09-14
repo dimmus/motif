@@ -1,0 +1,39 @@
+# Ignore attic directory (old versions)
+.attic/
+
+# Ignore build artifacts
+build/
+*.o
+*.lo
+*.la
+*.so
+*.a
+
+# Ignore CMake build files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+CTestTestfile.cmake
+
+# Ignore git
+.git/
+.gitignore
+
+# Ignore logs
+*.log
+logs/
+
+# Ignore temporary files
+*.tmp
+*.temp
+.cache/
+
+# Ignore IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignore OS files
+.DS_Store
+Thumbs.db

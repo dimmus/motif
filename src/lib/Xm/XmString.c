@@ -4754,11 +4754,16 @@ void _XmEntryTextSet(_XmStringEntry entry, XtPointer val)
             parameter, or requires that the byte count is set in the segment.
             However, to my knowledge, nobody needs this now. But it needs to
             be looked at.. */
-      strncpy((char *)((_XmStringOptSeg)(entry))->data.chars,
-              (char *)val,
-              _XmStrByteCount((XmString)entry) - 1);
-      ((char *)((_XmStringOptSeg)(entry))->data.chars)[_XmStrByteCount((XmString)entry) - 1] =
-          '\0';
+      if (val != NULL) {
+        strncpy((char *)((_XmStringOptSeg)(entry))->data.chars,
+                (char *)val,
+                _XmStrByteCount((XmString)entry) - 1);
+        ((char *)((_XmStringOptSeg)(entry))->data.chars)[_XmStrByteCount((XmString)entry) - 1] =
+            '\0';
+      } else {
+        /* If val is NULL, just null-terminate the destination */
+        ((char *)((_XmStringOptSeg)(entry))->data.chars)[0] = '\0';
+      }
     }
   }
   else {

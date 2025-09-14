@@ -577,6 +577,19 @@ void XmTabbedStackListSimpleModify(XmTabbedStackList tab_list, int position, XmS
 XmString XmTabbedStackListSimpleQuery(XmTabbedStackList tab_list, int position)
 {
   XmTabAttributeRec attributes;
+  
+  /* Initialize attributes with default values */
+  attributes.label_string = NULL;
+  attributes.string_direction = XmSTRING_DIRECTION_L_TO_R;
+  attributes.label_pixmap = XmUNSPECIFIED_PIXMAP;
+  attributes.label_alignment = XmALIGNMENT_CENTER;
+  attributes.pixmap_placement = XmPIXMAP_RIGHT;
+  attributes.foreground = XmCOLOR_DYNAMIC;
+  attributes.background = XmCOLOR_DYNAMIC;
+  attributes.background_pixmap = XmPIXMAP_DYNAMIC;
+  attributes.sensitive = True;
+  attributes.value_mode = XmTAB_VALUE_COPY;
+  
   XmTabbedStackListQuery(tab_list, position, &attributes);
   if (attributes.value_mode != XmTAB_VALUE_COPY) {
     attributes.label_string = XiXmStringCopy(attributes.label_string);

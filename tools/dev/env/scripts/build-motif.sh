@@ -328,6 +328,15 @@ prepare_source() {
         rm -rf "${BUILD_DIR}/CMakeFiles"
     fi
     
+    # Clean any other CMake-generated files
+    find "${BUILD_DIR}" -name "CMakeCache.txt" -delete 2>/dev/null || true
+    find "${BUILD_DIR}" -name "CMakeFiles" -type d -exec rm -rf {} + 2>/dev/null || true
+    find "${BUILD_DIR}" -name "cmake_install.cmake" -delete 2>/dev/null || true
+    find "${BUILD_DIR}" -name "CTestTestfile.cmake" -delete 2>/dev/null || true
+    
+    # Force clean build directory creation
+    mkdir -p "${BUILD_DIR}/build"
+    
     # Copy source to build location
     log_info "📁 Copying source code to build directory..."
     rm -rf "${BUILD_DIR}"
@@ -422,8 +431,8 @@ configure_build() {
     
     # Run CMake configuration
     log_info "Running CMake configuration..."
-    # Use absolute path to source directory to avoid path conflicts
-    cmake "${cmake_opts[@]}" "${BUILD_DIR}" 2>&1 | tee -a "${LOG_FILE}"
+    # Use -S and -B flags to explicitly set source and build directories
+    cmake -S "${BUILD_DIR}" -B "${cmake_build_dir}" "${cmake_opts[@]}" 2>&1 | tee -a "${LOG_FILE}"
     
     log_success "CMake configuration completed"
     return 0
