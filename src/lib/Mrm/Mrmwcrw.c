@@ -1889,7 +1889,7 @@ Urm__CW_FixupValue (long			val,
 	  }
 	*swap_needed = FALSE;
 	_MrmOSIEEEDoubleToHost( floatval );
-	*((double *)(&unitsvalue->value[0])) = *floatval;
+	memcpy(&unitsvalue->value[0], floatval, sizeof(double));
       }
     break ;
     default:
@@ -2520,7 +2520,9 @@ Urm__CW_ConvertValue (Widget			parent,
 	screen = DefaultScreenOfDisplay(display);
 	unitsfloatvalue = (RGMUnitsFloatPtr) *val;
 	float_units = unitsfloatvalue->units;
-	float_val = (float)(*((double *)(&unitsfloatvalue->value[0])));
+	double temp_double;
+	memcpy(&temp_double, &unitsfloatvalue->value[0], sizeof(double));
+	float_val = (float)temp_double;
 
 	if (float_val != 0)
 	  {

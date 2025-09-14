@@ -2794,7 +2794,7 @@ static void DoSecondaryExtend(Widget w, Time ev_time)
 {
   XmTextWidget tw = (XmTextWidget)w;
   InputData data = tw->text.input->data;
-  XmTextPosition position, left, right;
+  XmTextPosition position, left = 0, right = 0;
   position = (*tw->text.output->XYToPos)(tw, data->select_pos_x, data->select_pos_y);
   _XmTextDisableRedisplay(tw, FALSE);
   _XmTextGetSel2(tw, &left, &right);

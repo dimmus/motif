@@ -722,12 +722,12 @@ sym_dump_symbol (sym_entry_type *az_symbol_entry)
 			      az_symbol_entry,
 			      az_symbol_entry->header.b_tag,
 			      az_symbol_entry->header.w_node_size,
-			      az_symbol_entry->header.b_type );
+			      (unsigned int)az_symbol_entry->header.b_type );
 
 		l_array = (int *) az_symbol_entry->b_value;
 
 		for (i=0;  i<(int)(az_symbol_entry->header.w_node_size-1);  i++)
-		    _debug_output( "\t%x", l_array[ i ] );
+		    _debug_output( "\t%x", (unsigned int)l_array[ i ] );
 
 		_debug_output("\n");
 		break;

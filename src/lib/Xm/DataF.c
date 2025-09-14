@@ -4365,7 +4365,7 @@ static void df_StartPrimary(Widget w, XEvent *event, char **params, Cardinal *nu
 static void df_MoveDestination(Widget w, XEvent *event, char **params, Cardinal *num_params)
 {
   XmDataFieldWidget tf = (XmDataFieldWidget)w;
-  XmTextPosition left, right;
+  XmTextPosition left = 0, right = 0;
   XmTextPosition new_position;
   Boolean old_has_focus = XmTextF_has_focus(tf);
   Boolean reset_cursor = False;

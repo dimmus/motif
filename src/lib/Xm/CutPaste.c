@@ -951,7 +951,7 @@ static void ClipboardReplaceItem(Display *display,
     else {
       next_length = loc_length;
     }
-    if (type == 0 || type == None)
+    if (type == None)
       type = itematom;
     /* put the new values in the root */
     XChangeProperty(display,

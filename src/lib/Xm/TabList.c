@@ -558,6 +558,7 @@ int XmTabbedStackListSimpleAppend(XmTabbedStackList tab_list, XmString label_str
 void XmTabbedStackListSimpleModify(XmTabbedStackList tab_list, int position, XmString label_string)
 {
   XmTabAttributeRec attributes;
+  attributes.label_string = label_string;
   XmTabbedStackListModify(tab_list, position, XmTAB_LABEL_STRING, &attributes);
 }
 

@@ -193,7 +193,7 @@ void		save_widget_machine_code(sym_widget_entry_type *widget_entry, URMResourceC
     az_src_rec = widget_entry->header.az_src_rec;
 
     if (widget_entry->resource_id != 0 ) {
-	sprintf (buffer, "Resource ID: %08lX", widget_entry->resource_id);
+	sprintf (buffer, "Resource ID: %08lX", (unsigned long)widget_entry->resource_id);
 	src_append_machine_code (
 		az_src_rec,
 		0,
@@ -802,7 +802,7 @@ void	unload_stack(char *rec, int rec_size, src_source_record_type *az_src_rec)
 		switch (c_ptr->type) {
 		    case URMrIndex:
 			sprintf (buffer, "(%d) index, offset: %X (hex)",
-				j, c_ptr->key.index_offs);
+				j, (unsigned int)c_ptr->key.index_offs);
 
 			src_append_machine_code (
 				az_src_rec,
@@ -900,7 +900,7 @@ void		save_value_machine_code(sym_value_entry_type *value_entry, URMResourceCont
     az_src_rec = value_entry->header.az_src_rec;
 
     if (value_entry->resource_id != 0) {
-	sprintf (buffer, "Resource ID: %08lX", value_entry->resource_id);
+	sprintf (buffer, "Resource ID: %08lX", (unsigned long)value_entry->resource_id);
 	src_append_machine_code (
 		az_src_rec,
 		0,
@@ -956,7 +956,7 @@ void		save_value_machine_code(sym_value_entry_type *value_entry, URMResourceCont
 	case sym_k_horizontal_integer_value:
 	case sym_k_vertical_integer_value:
 
-	    sprintf (buffer, "value: %ld",
+	    sprintf (buffer, "value: %lu",
 		     (* (unsigned long *) rc_buffer) );
 	    src_append_machine_code (
 		az_src_rec, 0, rc_size, rc_buffer, buffer );
@@ -970,7 +970,7 @@ void		save_value_machine_code(sym_value_entry_type *value_entry, URMResourceCont
 
 	    for (offset = 0; offset < (int)rc_size; offset += sizeof(int), index++)
 		{
-		sprintf (buffer, "value[%d]: %ld",
+		sprintf (buffer, "value[%d]: %lu",
 			 index, ((unsigned long *) rc_buffer)[index] );
 
 		src_append_machine_code

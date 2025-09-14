@@ -102,7 +102,7 @@ char debugfilename[80];
 
 int main(int argc, char **argv)
 {
-    _db_header	header;
+    /* _db_header	header; */ /* unused variable */
 
     strcpy(outfilename, "motif.wmd");
     strcpy(debugfilename, "motif.dbg");
@@ -423,7 +423,7 @@ void emit_length_and_string(int table_id)
 {
     _db_header	header;
     int		*lengths;
-    char	*string_table;
+    /* char	*string_table; */ /* unused variable */
     char	**table = NULL;
     int		i;
 
@@ -616,8 +616,9 @@ void emit_int_and_table_shorts(int table_id)
 {
     _db_header		header = {0};  /* Initialize to zero */
     UilEnumSetDescDef	*table = NULL;
-    int			j, i;
-    unsigned short int	*value_vec;
+    int			i;
+    /* int			j; */ /* unused variable */
+    /* unsigned short int	*value_vec; */ /* unused variable */
 
     switch (table_id)
 	{

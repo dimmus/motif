@@ -150,9 +150,9 @@ static int xpmWriteFile(FILE *file, XpmImage *image, const char *name, XpmInfo *
   /* print the hints line */
   if (cmts && info->hints_cmt)
     fprintf(file, "/*%s*/\n", info->hints_cmt);
-  fprintf(file, "\"%d %d %d %d", image->width, image->height, image->ncolors, image->cpp);
+  fprintf(file, "\"%u %u %u %u", image->width, image->height, image->ncolors, image->cpp);
   if (info && (info->valuemask & XpmHotspot))
-    fprintf(file, " %d %d", info->x_hotspot, info->y_hotspot);
+    fprintf(file, " %u %u", info->x_hotspot, info->y_hotspot);
   if (extensions)
     fprintf(file, " XPMEXT");
   fprintf(file, "\",\n");

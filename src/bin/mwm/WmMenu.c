@@ -1992,7 +1992,7 @@ static void SearchForOtherMatches (WmScreenData *pSD, ClientData *pCD,
 		    }
 		    else
 		    {
-			sprintf(new_funcargs, "%d %ld %ld", (int)tree->commandID,
+			sprintf(new_funcargs, "%d %lu %lu", (int)tree->commandID,
 				pCD->client, selection);
 			inLine_function = F_InvokeCommand;
 		    }
@@ -2247,8 +2247,8 @@ static void InsertTreeOnClient (WmScreenData *pSD, ClientData *pCD,
 	{
 	    /* Store away the push button information so it can be
 	       created later. */
-	    sprintf(funcarg_buf, "%d %ld %ld", (int)tree->commandID,
-		    (pCD == NULL ? None : pCD->client), selection);
+            sprintf(funcarg_buf, "%d %lu %lu", (int)tree->commandID,
+                    (pCD == NULL ? None : pCD->client), selection);
 
 	    /* If the menuSpec is global and we are supposed to be
 	       duplicating global menu specs, then create a duplicate

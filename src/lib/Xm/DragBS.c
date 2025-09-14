@@ -1152,7 +1152,7 @@ Atom _XmAllocMotifAtom(Widget shell, Time time)
     atomsTable->entries = (xmAtomsTableEntry)XtRealloc(
         (char *)atomsTable->entries, /* NULL ok */
         (atomsTable->numEntries * sizeof(xmAtomsTableEntryRec)));
-    sprintf(atomname, "%s%d", "_MOTIF_ATOM_", i);
+    sprintf(atomname, "%s%u", "_MOTIF_ATOM_", i);
     atomsTable->entries[i].atom = XInternAtom(display, atomname, False);
     atomsTable->entries[i].time = time;
     atomReturn = atomsTable->entries[i].atom;

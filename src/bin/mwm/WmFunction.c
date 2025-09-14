@@ -2965,7 +2965,7 @@ Boolean F_Pack_Icons (String args, ClientData *pCD, XEvent *event)
 Boolean F_Post_RMenu (String args, ClientData *pCD, XEvent *event)
 {
     MenuSpec    *rootMenu;
-    unsigned int button = NoButton;
+    /* unsigned int button = NoButton; */ /* unused variable */
     int          x, y;
     long         flags = POST_AT_XY;
     Window       rwin, cwin;
@@ -4610,7 +4610,7 @@ Boolean F_InvokeCommand (String args, ClientData *pCD, XEvent *event)
 
     if (args == (String) NULL) return(FALSE);
 
-    if (sscanf(args, "%d %d %ld", (int *)&commandID, (int *)&clientWindow,
+    if (sscanf(args, "%d %d %lu", (int *)&commandID, (int *)&clientWindow,
 	       &notifySelection) != 3)
       return(FALSE);
 

@@ -7008,7 +7008,7 @@ static void PreeditVerifyReplace(XmTextFieldWidget tf,
  */
 static int PreeditStart(XIC xic, XPointer client_data, XPointer call_data)
 {
-  XmTextPosition cursorPos, nextPos, lastPos;
+  XmTextPosition cursorPos = 0, nextPos = 0, lastPos;
   Boolean replace_res, pending_delete = False;
   wchar_t *wc;
   char *mb;

@@ -824,9 +824,9 @@ static Boolean UpdateColorWindow(XmColorSelectorWidget csw, Boolean use_name)
     freeMe = XmColorS_color_name(csw);
     sprintf(buf,
             "#%02x%02x%02x",
-            XmColorS_slider_red(csw),
-            XmColorS_slider_green(csw),
-            XmColorS_slider_blue(csw));
+            (unsigned int)XmColorS_slider_red(csw),
+            (unsigned int)XmColorS_slider_green(csw),
+            (unsigned int)XmColorS_slider_blue(csw));
     if (FindColor(csw, &index)) {
       XmColorS_color_name(csw) = XtNewString(XmColorS_colors(csw)[index].name);
       sprintf(new_label, "%s (%s)", XmColorS_color_name(csw), buf);

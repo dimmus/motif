@@ -130,9 +130,9 @@ int XpmCreateDataFromXpmImage(char ***data_return, XpmImage *image, XpmInfo *inf
     return (XpmNoMemory);
   /* print the hints line */
   s = buf;
-  s += sprintf(s, "%d %d %d %d", image->width, image->height, image->ncolors, image->cpp);
+  s += sprintf(s, "%u %u %u %u", image->width, image->height, image->ncolors, image->cpp);
   if (info && (info->valuemask & XpmHotspot)) {
-    s += sprintf(s, " %d %d", info->x_hotspot, info->y_hotspot);
+    s += sprintf(s, " %u %u", info->x_hotspot, info->y_hotspot);
   }
   if (extensions) {
     strncpy(s, " XPMEXT", 8);

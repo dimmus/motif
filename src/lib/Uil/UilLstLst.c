@@ -669,7 +669,7 @@ void	lst_output_machine_code(src_source_record_type *az_src_rec)
 			hex_longword [HEX_PER_LONG + 1], line_written;
 	unsigned long	* code_ptr;
 
-	unsigned long temp_long;
+	/* unsigned long temp_long; */ /* unused variable */
         static unsigned short start_hex_long [4];
 	/*if 64-bit environment, it should have vals { 55, 38, 21, 4 };
 	  if 32 bit environment, { 31, 22, 13, 4 };

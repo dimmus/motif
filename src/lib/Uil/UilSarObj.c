@@ -1464,10 +1464,9 @@ void		sar_save_argument_pair(yystype *argument_frame, yystype *value_frame, yyst
     sym_value_entry_type	* arg_value_entry;
     unsigned char		actual_tag;
 
-    yystype			* source_frame;
+    /* yystype			* source_frame; */ /* unused but set variable */
 
-
-    source_frame = & yylval;
+    /* source_frame = & yylval; */ /* unused assignment */
 
 /*    Search the syntax stack for the object frame.    */
 
@@ -1575,9 +1574,9 @@ void		sar_save_reason_binding(yystype *reason_frame, yystype *proc_ref_frame, yy
     yystype			* object_frame;
     sym_callback_entry_type	* callback_entry;
     sym_list_entry_type		* list_entry;
-    yystype			* source_frame;
+    /* yystype			* source_frame; */ /* unused but set variable */
 
-    source_frame = & yylval;
+    /* source_frame = & yylval; */ /* unused assignment */
 
 /*    Search the syntax stack for the object frame.    */
 
@@ -1994,9 +1993,9 @@ void		sar_add_list_entry(yystype *entry_frame)
     sym_list_entry_type		* list_entry;
     sym_obj_entry_type		* entry_entry;
 
-    yystype			* source_frame;
+    /* yystype			* source_frame; */ /* unused but set variable */
 
-    source_frame = & yylval;
+    /* source_frame = & yylval; */ /* unused assignment */
 
 /*    Search the syntax stack for the list frame.    */
 
@@ -2110,10 +2109,10 @@ void		sar_add_forward_list_entry(yystype *entry_frame)
     sym_list_entry_type		* list_entry;
     sym_obj_entry_type		* entry_entry;
     sym_name_entry_type		* name_entry;
-    yystype			* source_frame;
+    /* yystype			* source_frame; */ /* unused but set variable */
     sym_nested_list_entry_type	*nested_entry;
 
-    source_frame = & yylval;
+    /* source_frame = & yylval; */ /* unused assignment */
 
 /*    Search the syntax stack for the list frame.    */
 

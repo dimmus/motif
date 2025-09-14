@@ -620,7 +620,7 @@ void UpdateFeedbackText (WmScreenData *pSD, int x, int y, unsigned int width, un
 
     if (pSD->fbStyle & FB_SIZE)
     {
-	sprintf (pSD->fbSize,     "%4dx%-4d", width, height);
+	sprintf (pSD->fbSize,     "%4ux%-4u", width, height);
 	XTextExtents(pSD->feedbackAppearance.font, pSD->fbSize,
 		 strlen(pSD->fbSize), &direction, &ascent,
 		 &descent, &xcs);

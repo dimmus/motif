@@ -129,9 +129,9 @@ int XpmCreateBufferFromXpmImage(char **buffer_return, XpmImage *image, XpmInfo *
   if (cmts && info->hints_cmt) {
     used_size += snprintf(ptr + used_size, ptr_size - used_size, "/*%s*/\n", info->hints_cmt);
   }
-  l = sprintf(buf, "\"%d %d %d %d", image->width, image->height, image->ncolors, image->cpp);
+  l = sprintf(buf, "\"%u %u %u %u", image->width, image->height, image->ncolors, image->cpp);
   if (info && (info->valuemask & XpmHotspot)) {
-    l += snprintf(buf + l, sizeof(buf) - l, " %d %d", info->x_hotspot, info->y_hotspot);
+    l += snprintf(buf + l, sizeof(buf) - l, " %u %u", info->x_hotspot, info->y_hotspot);
   }
   if (extensions) {
     l += sprintf(buf + l, " XPMEXT");

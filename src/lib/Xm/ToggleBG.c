@@ -1793,20 +1793,22 @@ static void Initialize(Widget rw,
   if (TBG_UnselectColor(new_w) == INVALID_PIXEL)
     TBG_UnselectColor(new_w) = LabG_Background(new_w);
   TBG_ReversedSelect(new_w) = (TBG_SelectColor(new_w) == XmREVERSED_GROUND_COLORS);
-  if ((TBG_SelectColor(new_w) == INVALID_PIXEL) ||
-      (TBG_SelectColor(new_w) == XmDEFAULT_SELECT_COLOR))
   {
-    XrmValue value;
-    value.size = sizeof(Pixel);
-    DefaultSelectColor(
-        (Widget)new_w, XtOffsetOf(XmToggleButtonGCacheObjRec, toggle_cache.select_color), &value);
-    memcpy((char *)&TBG_SelectColor(new_w), value.addr, value.size);
-  }
-  else if (TBG_SelectColor(new_w) == XmREVERSED_GROUND_COLORS) {
-    TBG_SelectColor(new_w) = LabG_Foreground(new_w);
-  }
-  else if (TBG_SelectColor(new_w) == XmHIGHLIGHT_COLOR) {
-    TBG_SelectColor(new_w) = LabG_HighlightColor(new_w);
+    Pixel select_color = TBG_SelectColor(new_w);
+    if (select_color == INVALID_PIXEL)
+    {
+      XrmValue value;
+      value.size = sizeof(Pixel);
+      DefaultSelectColor(
+          (Widget)new_w, XtOffsetOf(XmToggleButtonGCacheObjRec, toggle_cache.select_color), &value);
+      memcpy((char *)&TBG_SelectColor(new_w), value.addr, value.size);
+    }
+    else if (select_color == XmREVERSED_GROUND_COLORS) {
+      TBG_SelectColor(new_w) = LabG_Foreground(new_w);
+    }
+    else if (select_color == XmHIGHLIGHT_COLOR) {
+      TBG_SelectColor(new_w) = LabG_HighlightColor(new_w);
+    }
   }
   GetGC(new_w);
   GetUnselectGC(new_w);
@@ -2809,21 +2811,23 @@ static Boolean SetValues(Widget current,
     XtReleaseGC(XtParent(newcbox), TBG_IndeterminateGC(newcbox));
     XtReleaseGC(XtParent(newcbox), TBG_IndeterminateBoxGC(newcbox));
     TBG_ReversedSelect(newcbox) = (TBG_SelectColor(newcbox) == XmREVERSED_GROUND_COLORS);
-    if ((TBG_SelectColor(newcbox) == INVALID_PIXEL) ||
-        (TBG_SelectColor(newcbox) == XmDEFAULT_SELECT_COLOR))
     {
-      XrmValue value;
-      value.size = sizeof(Pixel);
-      DefaultSelectColor((Widget)newcbox,
-                         XtOffsetOf(XmToggleButtonGCacheObjRec, toggle_cache.select_color),
-                         &value);
-      memcpy((char *)&TBG_SelectColor(newcbox), value.addr, value.size);
-    }
-    else if (TBG_SelectColor(newcbox) == XmREVERSED_GROUND_COLORS) {
-      TBG_SelectColor(newcbox) = LabG_Foreground(newcbox);
-    }
-    else if (TBG_SelectColor(newcbox) == XmHIGHLIGHT_COLOR) {
-      TBG_SelectColor(newcbox) = LabG_HighlightColor(newcbox);
+      Pixel select_color = TBG_SelectColor(newcbox);
+      if (select_color == INVALID_PIXEL)
+      {
+        XrmValue value;
+        value.size = sizeof(Pixel);
+        DefaultSelectColor((Widget)newcbox,
+                           XtOffsetOf(XmToggleButtonGCacheObjRec, toggle_cache.select_color),
+                           &value);
+        memcpy((char *)&TBG_SelectColor(newcbox), value.addr, value.size);
+      }
+      else if (select_color == XmREVERSED_GROUND_COLORS) {
+        TBG_SelectColor(newcbox) = LabG_Foreground(newcbox);
+      }
+      else if (select_color == XmHIGHLIGHT_COLOR) {
+        TBG_SelectColor(newcbox) = LabG_HighlightColor(newcbox);
+      }
     }
     GetGC(newcbox);
     flag = TRUE;

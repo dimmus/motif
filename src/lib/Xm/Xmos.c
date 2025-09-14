@@ -163,8 +163,11 @@ static unsigned char AddEntryToCache(char *entryName, unsigned entryNameLen)
     dirCache = (XmDirCache)XtRealloc((char *)dirCache, numCacheAlloc * sizeof(XmDirCacheRec *));
   }
   dirCache[numCacheEntries] = (XmDirCacheRec *)XtMalloc(sizeof(XmDirCacheRec) + entryNameLen);
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstringop-truncation"
   strncpy(dirCache[numCacheEntries]->file_name, entryName, entryNameLen);
-  dirCache[numCacheEntries]->file_name[entryNameLen] = '\0';
+#pragma GCC diagnostic pop
+  dirCache[numCacheEntries]->file_name[entryNameLen] = '\0'; /* manually null-terminate */
   /* Use dirCacheName character array as temporary buffer for full file name.*/
   strncpy(&dirCacheName[dirCacheNameLen], entryName, MAX_USER_NAME_LEN);
   dirCacheName[dirCacheNameLen + MAX_USER_NAME_LEN] = '\0';

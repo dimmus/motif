@@ -424,8 +424,8 @@ UrmCWRSetCompressedArgTag (URMResourceContextPtr	context_id,
   /*
    *  Local variables
    */
-  RGMArgListDescPtr	argdesc ;	/* arglist desc in record */
-  RGMArgumentPtr	argptr ;	/* argument being set */
+  RGMArgListDescPtr	argdesc = NULL ;	/* arglist desc in record */
+  RGMArgumentPtr	argptr = NULL ;	/* argument being set */
 
 
   /*
@@ -1480,8 +1480,8 @@ UrmCWRSetExtraArgs (URMResourceContextPtr	context_id ,
   /*
    *  Local variables
    */
-  RGMArgListDescPtr	argdesc ;	/* arglist desc in record */
-  RGMArgumentPtr	argptr ;	/* argument being set */
+  RGMArgListDescPtr	argdesc = NULL ;	/* arglist desc in record */
+  RGMArgumentPtr	argptr = NULL ;	/* argument being set */
 
 
   /*

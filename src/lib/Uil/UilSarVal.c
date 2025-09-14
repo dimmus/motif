@@ -2614,9 +2614,9 @@ void	sar_make_font_item(yystype *target_frame, yystype *charset_frame, yystype *
     case sym_k_font_value:
     case sym_k_fontset_value:
     {
-	int	charset;
+	/* int	charset; */ /* unused but set variable */
 
-	charset = font_value_entry->b_charset;
+	/* charset = font_value_entry->b_charset; */ /* unused assignment */
 
 	/*
 	**  If the attr_frame is not null, it must be a value frame with contains

@@ -509,8 +509,8 @@ static void FetchPixelData(Widget w, char *value, int screen)
   Colors colors;
   /* read color use */
   count = 0;
-  sscanf(&(value[count]), "%x_", &colorUse);
-  sprintf(tmp, "%x_", colorUse);
+  sscanf(&(value[count]), "%x_", (unsigned int*)&colorUse);
+  sprintf(tmp, "%x_", (unsigned int)colorUse);
   count += strlen(tmp);
   tmpColorObj->color_obj.colorUse[screen] = colorUse;
   for (i = 0; i < XmCO_NUM_COLORS; i++) {

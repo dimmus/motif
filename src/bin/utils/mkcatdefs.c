@@ -343,10 +343,10 @@ mkcatdefs(char *fname)
 	if (!chkcontin(line))
 	  contin = 0;
       } else if (setno > 1) { /* set must have been seen first */
-	char msgname [MAXIDLEN];
+	char msgname_local [MAXIDLEN];
 
-	msgname [0] = '\0';
-	if (sscanf (cp, "%s", msgname) && msgname[0]) {
+	msgname_local [0] = '\0';
+	if (sscanf (cp, "%s", msgname_local) && msgname_local[0]) {
 	  len = mblen(cp, MB_CUR_MAX);
 	  if (len < 0) {
 	    fprintf (stderr,
@@ -356,7 +356,7 @@ mkcatdefs(char *fname)
 	    return;
 	  }
 	  if (len == 1 && isalpha(*cp) != 0) {
-	    cpt = msgname;
+	    cpt = msgname_local;
 	    do  {
 	      len = mblen(cpt, MB_CUR_MAX);
 	      if (len < 0) {
@@ -368,27 +368,27 @@ mkcatdefs(char *fname)
 	      }
 	      if (len == 1 && (isalnum(*cpt) == 0) && (*cpt != '_')) {
 		fprintf(stderr, "mkcatdefs: %s is an invalid identifier\n",
-			msgname);
+			msgname_local);
 		errflg = 1;
 		return;
 	      }
 	    }   while (*(cpt += len));
-	    cp += strlen(msgname);
+	    cp += strlen(msgname_local);
 	    fprintf (msgfp,"%d%s", msgno,cp);
 	    if (inclfile)
-	      fprintf (outfp, "#define %s %d\n", msgname, msgno);
+	      fprintf (outfp, "#define %s %d\n", msgname_local, msgno);
 	    symbflg = 1;
 	    if (chkcontin(line))
 	      contin = 1;
-	    if(insert(msgname,msgno++) < 0) {
+	    if(insert(msgname_local,msgno++) < 0) {
 	      fprintf(stderr, "mkcatdefs: name %s used more than once\n",
-		      msgname);
+		      msgname_local);
 	      errflg = 1;
 	      return;
 	    }
 	    continue;
-	  } else if (isdigit (msgname[0])){
-	    cpt = msgname;
+	  } else if (isdigit (msgname_local[0])){
+	    cpt = msgname_local;
 	    do  {
 	      if (!isdigit(*cpt)) {
 		fprintf(stderr, "mkcatdefs: invalid syntax in %s\n", line);
@@ -396,18 +396,18 @@ mkcatdefs(char *fname)
 		return;
 	      }
 	    }   while (*++cpt);
-	    n = atoi (msgname);
+	    n = atoi (msgname_local);
 	    if ((n >= msgno) || (n == 0 && msgno == 1))
 	      msgno = n + 1;
 	    else {
 	      errflg = 1;
 	      if (n == 0)
 		fprintf(stderr, "mkcatdefs: %s is an invalid identifier\n",
-			msgname);
+			msgname_local);
 	      else if (n == msgno)
 		fprintf(stderr,
 			"mkcatdefs: message id %s already assigned to identifier\n",
-			msgname);
+			msgname_local);
 	      else
 		fprintf(stderr,
 			"mkcatdefs: source messages not in ascending sequence\n");
@@ -445,7 +445,7 @@ chkcontin(char *line)
 {
   int	len;		/* # bytes in character */
   wchar_t	wc;		/* process code of current character in line */
-  wchar_t	wcprev;		/* process code of previous character in line */
+  wchar_t	wcprev = 0;	/* process code of previous character in line */
 
   for (wc=0; *line; line+=len) {
     wcprev = wc;
@@ -607,5 +607,5 @@ hash (char *name) /* pointer to symbol */
   while (*name)
     hashval += *name++;
 
-  return (hashval & HASHMAX);
+  return (hashval & (HASHMAX));
 }

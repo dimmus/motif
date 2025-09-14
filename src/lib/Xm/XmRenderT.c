@@ -2185,7 +2185,7 @@ unsigned int XmRenderTableCvtToProp(Widget widget, /* unused */
     else {
       snprintf(temp,
                sizeof temp,
-               "%d \"%s\" %d,",
+               "%u \"%s\" %u,",
                _XmRendFontType(rendition),
                _XmRendFontName(rendition),
                _XmRendLoadModel(rendition));
@@ -2210,7 +2210,7 @@ unsigned int XmRenderTableCvtToProp(Widget widget, /* unused */
         temp2[1023] = '\0';
         snprintf(temp,
                  sizeof(temp) - 5,
-                 "%s %f %d %d %d, ",
+                 "%s %f %u %u %u, ",
                  temp2,
                  tab->value,
                  tab->units,
@@ -2227,7 +2227,7 @@ unsigned int XmRenderTableCvtToProp(Widget widget, /* unused */
     if (_XmRendBG(rendition) == XmAS_IS)
       str = "-1, ";
     else {
-      sprintf(temp, "%ld, ", _XmRendBG(rendition));
+      sprintf(temp, "%lu, ", _XmRendBG(rendition));
       str = temp;
     }
     size = strlen(str);
@@ -2235,7 +2235,7 @@ unsigned int XmRenderTableCvtToProp(Widget widget, /* unused */
     if (_XmRendFG(rendition) == XmAS_IS)
       str = "-1, ";
     else {
-      sprintf(temp, "%ld, ", _XmRendFG(rendition));
+      sprintf(temp, "%lu, ", _XmRendFG(rendition));
       str = temp;
     }
     size = strlen(str);
