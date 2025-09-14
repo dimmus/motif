@@ -304,6 +304,12 @@ prepare_source() {
         rm -rf "${BUILD_DIR}"
     fi
     
+    # Always clean CMake cache to avoid path conflicts
+    if [[ -f "${BUILD_DIR}/build/CMakeCache.txt" ]]; then
+        log_info "🧹 Removing existing CMake cache to avoid path conflicts"
+        rm -f "${BUILD_DIR}/build/CMakeCache.txt"
+    fi
+    
     # Copy source to build location
     log_info "📁 Copying source code to build directory..."
     rm -rf "${BUILD_DIR}"
@@ -317,15 +323,15 @@ prepare_source() {
               --exclude='Makefile' --exclude='config.log' --exclude='config.status' \
               --exclude='libtool' --exclude='.libs' --exclude='.deps' \
               --exclude='cmake_install.cmake' --exclude='CTestTestfile.cmake' \
-              --exclude='.cache' --exclude='build.log' \
+              --exclude='.cache/' --exclude='build.log' \
               "${MOTIF_SOURCE}/" "${BUILD_DIR}/" 2>&1 | tee -a "${LOG_FILE}"
     else
         log_info "📦 Using cp for file copying"
         # Create a temporary directory to avoid permission issues
         local temp_dir=$(mktemp -d)
         cp -r "${MOTIF_SOURCE}"/* "${temp_dir}/" 2>&1 | tee -a "${LOG_FILE}"
-        # Remove problematic directories
-        rm -rf "${temp_dir}/.cache" "${temp_dir}/build.log" 2>/dev/null || true
+        # Remove problematic directories and files
+        rm -rf "${temp_dir}/.cache" "${temp_dir}/build.log" "${temp_dir}/build/CMakeCache.txt" 2>/dev/null || true
         # Copy to build directory
         cp -r "${temp_dir}"/* "${BUILD_DIR}/" 2>&1 | tee -a "${LOG_FILE}"
         rm -rf "${temp_dir}"
