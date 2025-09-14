@@ -179,28 +179,54 @@ install_packages() {
     
     log_info "Installing packages: $packages"
     
-    case $PKG_MANAGER in
-        apt)
-            sudo apt-get update
-            sudo apt-get install -y "$packages"
-            ;;
-        pacman)
-            sudo pacman -Sy --noconfirm "$packages"
-            ;;
-        dnf)
-            sudo dnf install -y "$packages"
-            ;;
-        apk)
-            sudo apk update
-            sudo apk add "$packages"
-            ;;
-        xbps)
-            sudo xbps-install -y "$packages"
-            ;;
-        pkg)
-            sudo pkg install -y "$packages"
-            ;;
-    esac
+    # Check if we're in container mode (no sudo needed)
+    if [ "${CONTAINER_MODE:-0}" = "1" ]; then
+        case $PKG_MANAGER in
+            apt)
+                apt-get update
+                apt-get install -y $packages
+                ;;
+            pacman)
+                pacman -Sy --noconfirm $packages
+                ;;
+            dnf)
+                dnf install -y $packages
+                ;;
+            apk)
+                apk update
+                apk add $packages
+                ;;
+            xbps)
+                xbps-install -y $packages
+                ;;
+            pkg)
+                pkg install -y $packages
+                ;;
+        esac
+    else
+        case $PKG_MANAGER in
+            apt)
+                sudo apt-get update
+                sudo apt-get install -y $packages
+                ;;
+            pacman)
+                sudo pacman -Sy --noconfirm $packages
+                ;;
+            dnf)
+                sudo dnf install -y $packages
+                ;;
+            apk)
+                sudo apk update
+                sudo apk add $packages
+                ;;
+            xbps)
+                sudo xbps-install -y $packages
+                ;;
+            pkg)
+                sudo pkg install -y $packages
+                ;;
+        esac
+    fi
 }
 
 # Function to get package names for current OS
@@ -507,16 +533,26 @@ main() {
     echo "=========================================="
     echo
     
-    # Check if running as root
+    # Check if running as root (allow in containers)
     if [ "$(id -u)" -eq 0 ]; then
-        log_error "This script should not be run as root"
-        exit 1
+        if [ -f /.dockerenv ] || [ -f /run/.containerenv ]; then
+            log_info "Running as root in container - this is allowed"
+        else
+            log_error "This script should not be run as root on the host system"
+            exit 1
+        fi
     fi
     
-    # Check if sudo is available
+    # Check if sudo is available (skip in containers)
     if ! command -v sudo >/dev/null 2>&1; then
-        log_error "sudo is not available. Please install it first."
-        exit 1
+        if [ -f /.dockerenv ] || [ -f /run/.containerenv ]; then
+            log_info "Running in container without sudo - using direct package installation"
+            # Set a flag to use direct package installation
+            export CONTAINER_MODE=1
+        else
+            log_error "sudo is not available. Please install it first."
+            exit 1
+        fi
     fi
     
     # Detect OS
