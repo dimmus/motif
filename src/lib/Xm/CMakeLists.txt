@@ -251,11 +251,11 @@ endif()
 
 # String definition files that need to be generated
 set(XM_STRING_FILES
-    XmStrDefs.h
-    XmStrDefs22.h
-    XmStrDefs23.h
-    XmStrDefsI.h
-    XmStrDefs.c
+    ${CMAKE_BINARY_DIR}/src/lib/Xm/XmStrDefs.h
+    ${CMAKE_BINARY_DIR}/src/lib/Xm/XmStrDefs22.h
+    ${CMAKE_BINARY_DIR}/src/lib/Xm/XmStrDefs23.h
+    ${CMAKE_BINARY_DIR}/src/lib/Xm/XmStrDefsI.h
+    ${CMAKE_BINARY_DIR}/src/lib/Xm/XmStrDefs.c
 )
 
 # Also create the include files that other targets need
@@ -687,7 +687,7 @@ endif()
 list(APPEND XM_INTERNAL_HEADERS ToolTipI.h)
 
 # Create the library
-add_library(Xm ${XM_ALL_SRCS} ${XM_STRING_FILES})
+add_library(Xm ${XM_ALL_SRCS} ${CMAKE_BINARY_DIR}/src/lib/Xm/XmStrDefs.c)
 
 # Ensure message catalog header, string files, and Xm.h symlink are generated before building this target
 add_dependencies(Xm xm_msgcat_header xm_strings xm_h_symlink)
