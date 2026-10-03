@@ -285,7 +285,7 @@ set(MOTIF_CONFIG_DEFINITIONS)
 set(CMAKE_REQUIRED_INCLUDES ${MOTIF_XT_INCLUDE_DIRS})
 foreach(_header
     alloca.h iconv.h wctype.h fcntl.h sys/poll.h sys/time.h stdint.h
-    inttypes.h X11/Xos_r.h X11/Xpoll.h)
+    inttypes.h X11/Xpoll.h)
   string(MAKE_C_IDENTIFIER "HAVE_${_header}" _var)
   string(TOUPPER "${_var}" _var)
   check_include_file("${_header}" ${_var})
@@ -338,8 +338,6 @@ endif()
 list(APPEND MOTIF_CONFIG_DEFINITIONS
   HAVE_LIBXMU
   NO_OL_COMPAT=1
-  _Xos_processLock=XtProcessLock
-  _Xos_processUnlock=XtProcessUnlock
 )
 if(WITH_PWC_DEBUG)
   list(APPEND MOTIF_CONFIG_DEFINITIONS PWC_DEBUG=1)

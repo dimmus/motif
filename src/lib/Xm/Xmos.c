@@ -70,25 +70,8 @@ extern int regex();
 #endif
 #include <sys/stat.h>
 /* X_INCLUDE_PWD_H is now configured by build system */
-#define X_INCLUDE_DIRENT_H
-/* Include necessary headers manually */
 #include <dirent.h>
 #include <sys/types.h>
-/* XOS_USE_XT_LOCKING is now configured by build system */
-/* Force use of local Xmos_r.h to avoid deprecated readdir_r in system headers */
-#include <Xm/Xmos_r.h>
-/* Override any system readdir_r definitions with our safe version */
-#ifdef _XReaddir
-#  undef _XReaddir
-#endif
-#define _XReaddir(d, p) \
-  ((_Xos_processLock), \
-   (((p).result = readdir((d))) ? (memcpy(&((p).dir_entry), (p).result, (p).result->d_reclen), \
-                                   ((p).result = &(p).dir_entry), \
-                                   0) : \
-                                  0), \
-   (_Xos_processUnlock), \
-   (p).result)
 #include "XmI.h"
 #include "XmosI.h"
 #if !HAVE_GETCWD && HAVE_GETWD
@@ -600,7 +583,6 @@ void _XmOSGetDirEntries(String qualifiedDir,
   }
   if (dirStream || useCache) {
     unsigned loopCount = 0;
-    _Xreaddirparams dirEntryBuf;
     if (loadCache)
       ResetCache(qualifiedDir);
     /* The POSIX specification for the "readdir" routine makes
@@ -643,7 +625,7 @@ void _XmOSGetDirEntries(String qualifiedDir,
             }
           }
           else {
-            if ((dirEntry = _XReaddir(dirStream, dirEntryBuf)) == NULL) {
+            if ((dirEntry = readdir(dirStream)) == NULL) {
               dirName = NULL;
               break;
             }

@@ -50,13 +50,7 @@
 #include <X11/Intrinsic.h>
 #endif
 
-#define X_INCLUDE_TIME_H
-/* XOS_USE_XT_LOCKING is now configured by build system */
-#ifdef HAVE_X11_XOS_R_H
-#include <X11/Xos_r.h>
-#else
-#include <Xm/Xmos_r.h>
-#endif
+#include <time.h>
 
 #ifndef NO_MRM_HEADERS
 #include <Mrm/MrmAppl.h>
@@ -308,7 +302,7 @@ extern void lst_open_listing  _ARGUMENTS(( void ));
 extern void Uil_lst_cleanup_listing  _ARGUMENTS(( void ));
 extern status create_listing_file  _ARGUMENTS(( uil_fcb_type *az_fcb ));
 extern void lst_output_line  _ARGUMENTS(( char *ac_line , boolean v_new_page ));
-extern char *current_time  _ARGUMENTS(( _Xctimeparams *ctime_buf ));
+extern char *current_time  _ARGUMENTS(( char *ctime_buf ));	/* at least 26 bytes */
 extern void lst_output_listing  _ARGUMENTS(( void ));
 extern void lst_output_messages  _ARGUMENTS(( src_message_item_type *az_message_item ));
 extern void lst_output_machine_code  _ARGUMENTS(( src_source_record_type *az_src_rec ));

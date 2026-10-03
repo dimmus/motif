@@ -40,25 +40,8 @@
 #  include <config.h>
 #endif
 #include <X11/Xlocale.h>
-#define X_INCLUDE_DIRENT_H
-/* Include necessary headers manually */
 #include <dirent.h>
 #include <sys/types.h>
-/* XOS_USE_XT_LOCKING is now configured by build system */
-/* Force use of local Xmos_r.h to avoid deprecated readdir_r in system headers */
-#include <Xm/Xmos_r.h>
-/* Override any system readdir_r definitions with our safe version */
-#ifdef _XReaddir
-#  undef _XReaddir
-#endif
-#define _XReaddir(d, p) \
-  ((_Xos_processLock), \
-   (((p).result = readdir((d))) ? (memcpy(&((p).dir_entry), (p).result, (p).result->d_reclen), \
-                                   ((p).result = &(p).dir_entry), \
-                                   0) : \
-                                  0), \
-   (_Xos_processUnlock), \
-   (p).result)
 #include "HashI.h"
 #include "ImageCachI.h"
 #include "XmI.h"
@@ -155,13 +138,12 @@ static DtCachedDir MakeCachedDirEntry(String dirName)
     char *p;
     int numFiles = 0;
     int nameHeapSize = 0;
-    _Xreaddirparams dirEntryBuf;
     /*
      * Original code was caching each struct direct in stackBuf.
      * Instead, just cache currDirect->d_name, null-terminated.
      */
     cachedDirType = DtVALID_CACHED_DIR;
-    while ((currDirect = _XReaddir(fileDesc, dirEntryBuf)) != NULL) {
+    while ((currDirect = readdir(fileDesc)) != NULL) {
       bufLen = strlen(currDirect->d_name);
       if (bufLen + oldBufLen + 1 >= MAX_CACHE_DIR_SIZE) {
         /*

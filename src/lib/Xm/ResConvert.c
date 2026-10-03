@@ -28,13 +28,6 @@ static char rcsid[] = "$TOG: ResConvert.c /main/29 1999/05/18 19:19:39 mgreess $
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
 #endif
-#define X_INCLUDE_STRING_H
-/* XOS_USE_XT_LOCKING is now configured by build system */
-#if HAVE_X11_XOS_R_H
-#  include <X11/Xos_r.h>
-#else
-#  include <Xm/Xmos_r.h>
-#endif
 #include "MessagesI.h"
 #include "RepTypeI.h"
 #include "ResConverI.h"
@@ -47,6 +40,7 @@ static char rcsid[] = "$TOG: ResConvert.c /main/29 1999/05/18 19:19:39 mgreess $
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #define MSG2 _XmMMsgResConvert_0001
 #define MSG3 _XmMMsgResConvert_0002
 #define MSG4 _XmMMsgResConvert_0003
@@ -1496,7 +1490,7 @@ static Boolean ConvertStringToButtonType(Display *display,
   XmButtonTypeTable buttonTable;
   int i, comma_count;
   String work_str, btype_str;
-  _Xstrtokparams strtok_buf;
+  char *strtok_buf;
   comma_count = 0;
   while (in_str[in_str_size]) {
     if (in_str[in_str_size++] == ',') {
@@ -1509,8 +1503,8 @@ static Boolean ConvertStringToButtonType(Display *display,
   work_str = (String)XtMalloc(in_str_size);
   strncpy(work_str, in_str, in_str_size - 1);
   work_str[in_str_size - 1] = '\0';
-  for (i = 0, btype_str = _XStrtok(work_str, ",", strtok_buf); btype_str;
-       btype_str = _XStrtok(NULL, ",", strtok_buf), ++i)
+  for (i = 0, btype_str = strtok_r(work_str, ",", &strtok_buf); btype_str;
+       btype_str = strtok_r(NULL, ",", &strtok_buf), ++i)
   {
     while (*btype_str && isspace((unsigned char)*btype_str))
       btype_str++;
@@ -1562,7 +1556,7 @@ static Boolean CvtStringToKeySymTable(Display *display,
   int i, comma_count;
   String work_str, ks_str;
   KeySym ks;
-  _Xstrtokparams strtok_buf;
+  char *strtok_buf;
   comma_count = 0;
   while (in_str[in_str_size]) {
     if (in_str[in_str_size++] == ',')
@@ -1572,8 +1566,8 @@ static Boolean CvtStringToKeySymTable(Display *display,
   keySymTable = (XmKeySymTable)_XmMallocArray(comma_count + 2, sizeof(KeySym));
   keySymTable[comma_count + 1] = (KeySym)NULL;
   work_str = XtNewString(in_str);
-  for (ks_str = _XStrtok(work_str, ",", strtok_buf), i = 0; ks_str;
-       ks_str = _XStrtok(NULL, ",", strtok_buf), i++)
+  for (ks_str = strtok_r(work_str, ",", &strtok_buf), i = 0; ks_str;
+       ks_str = strtok_r(NULL, ",", &strtok_buf), i++)
   {
     if (!*ks_str)
       keySymTable[i] = NoSymbol;
@@ -1615,10 +1609,10 @@ static Boolean CvtStringToCharSetTable(Display *display,   /* unused */
   char *dataPtr;
   int i;
   String work_str, cs_str;
-  _Xstrtokparams strtok_buf;
+  char *strtok_buf;
   work_str = XtNewString(in_str);
-  for (cs_str = _XStrtok(work_str, ",", strtok_buf); cs_str;
-       cs_str = _XStrtok(NULL, ",", strtok_buf))
+  for (cs_str = strtok_r(work_str, ",", &strtok_buf); cs_str;
+       cs_str = strtok_r(NULL, ",", &strtok_buf))
   {
     if (*cs_str)
       strDataSize += strlen(cs_str) + 1;
@@ -1629,8 +1623,8 @@ static Boolean CvtStringToCharSetTable(Display *display,   /* unused */
   charsetTable[numCharsets] = (XmStringCharSet)NULL;
   dataPtr = (char *)&charsetTable[numCharsets + 1];
   memcpy(work_str, in_str, strlen(in_str) + 1);
-  for (i = 0, cs_str = _XStrtok(work_str, ",", strtok_buf); cs_str;
-       cs_str = _XStrtok(NULL, ",", strtok_buf), ++i)
+  for (i = 0, cs_str = strtok_r(work_str, ",", &strtok_buf); cs_str;
+       cs_str = strtok_r(NULL, ",", &strtok_buf), ++i)
   {
     if (*cs_str) {
       size_t len = strlen(cs_str) + 1;
@@ -2200,7 +2194,7 @@ static Boolean cvtStringToXmRenderTable(
   XmRenderTable rt;
   char *tag;
   Boolean has_default = FALSE, in_db = FALSE;
-  _Xstrtokparams strtok_buf;
+  char *strtok_buf;
   if (from->addr) {
     s = XtNewString((char *)from->addr);
     rt = NULL;
@@ -2212,7 +2206,7 @@ static Boolean cvtStringToXmRenderTable(
       has_default = TRUE;
     }
     /* Try to get first tag. */
-    if ((tag = _XStrtok(s, " \t\r\n\v\f,", strtok_buf)) != NULL) {
+    if ((tag = strtok_r(s, " \t\r\n\v\f,", &strtok_buf)) != NULL) {
       XmRenditionFree(rend[0]);
       rend[0] = _XmRenditionCreate(NULL, widget, resname, resclass, tag, NULL, 0, &in_db);
       if (!has_default && !in_db) {
@@ -2234,7 +2228,7 @@ static Boolean cvtStringToXmRenderTable(
       XmRenditionFree(rend[0]);
       _XM_CONVERTER_DONE(to, XmRenderTable, rt, XmRenderTableFree(rt);)
     }
-    while ((tag = _XStrtok(NULL, " \t\r\n\v\f,", strtok_buf)) != NULL) {
+    while ((tag = strtok_r(NULL, " \t\r\n\v\f,", &strtok_buf)) != NULL) {
       XmRenditionFree(rend[0]);
       rend[0] = _XmRenditionCreate(NULL, widget, resname, resclass, tag, NULL, 0, NULL);
       rt = XmRenderTableAddRenditions(rt, rend, 1, XmMERGE_REPLACE);

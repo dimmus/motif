@@ -93,9 +93,6 @@
 /* Define to 1 if you have the <wctype.h> header file. */
 #undef HAVE_WCTYPE_H
 
-/* Define to 1 if you have the <X11/Xos_r.h> header file. */
-#undef HAVE_X11_XOS_R_H
-
 /* Define to 1 if you have the <X11/Xpoll.h> header file. */
 #undef HAVE_X11_XPOLL_H
 
