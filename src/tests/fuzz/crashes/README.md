@@ -18,18 +18,6 @@ properties can make every Motif application that touches the clipboard
 exit.  The reproducer is replayed with `FUZZ_CLIPBOARD_EXIT=1`, which
 lets the exit happen instead of catching it.
 
-## motifbind/parsekeysym-stack-overflow
-A `.motifbind` line (or `_MOTIF_BINDINGS` property) with a key name
-longer than 100 bytes overflows `keySymName[100]` in `ParseKeySym`
-(`MapEvents.c:395`), a stack buffer, through `strncpy` of the whole
-name.  Reached from `_XmVirtKeysInitialize` as every Motif application
-starts, so a hostile root-window property is enough.
-
-## motifbind/parsemodifiers-stack-overflow
-The same bug in `ParseModifiers` (`MapEvents.c:455`): a modifier name
-longer than 100 bytes is copied with `strncpy` of its whole length into
-`modStr[100]` on the stack.
-
 ## uid/corrupt-xmstring-segv
 A corrupt `.uid` makes `MrmFetchWidget` create an `XmPushButton` whose
 `XmNlabelString` is not a valid compound string; `Label.c` Initialize
