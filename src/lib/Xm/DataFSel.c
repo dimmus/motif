@@ -165,12 +165,8 @@ static void InsertSelection(Widget w,
     /* if no conversion, num_vals won't change */
     /* status >0 if some characters can't be converted; continue anyway */
     if (num_vals && (status == Success || status > 0)) {
-      for (i = 0; i < num_vals; i++)
-        malloc_size += strlen(tmp_value[i]);
-      total_tmp_value = _XmMallocArray(malloc_size + 1, sizeof(char));
-      total_tmp_value[0] = '\0';
-      for (i = 0; i < num_vals; i++)
-        strcat(total_tmp_value, tmp_value[i]);
+      total_tmp_value = _XmConcatStrings(tmp_value, num_vals);
+      malloc_size = strlen(total_tmp_value);
       XFreeStringList(tmp_value);
     }
     if (total_tmp_value == NULL) {

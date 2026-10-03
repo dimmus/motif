@@ -4892,13 +4892,8 @@ static void df_DoStuff(Widget w,
       if (num_vals && (status == Success || status > 0)) {
         if (XmTextF_max_char_size(tf) == 1) {
           char *total_tmp_value;
-          for (i = 0, malloc_size = 1; i < num_vals; i++)
-            malloc_size += strlen(tmp_value[i]);
-          prim_select->num_chars = malloc_size - 1;
-          total_tmp_value = _XmMallocArray(malloc_size, 1);
-          total_tmp_value[0] = '\0';
-          for (i = 0; i < num_vals; i++)
-            strcat(total_tmp_value, tmp_value[i]);
+          total_tmp_value = _XmConcatStrings(tmp_value, num_vals);
+          prim_select->num_chars = strlen(total_tmp_value);
           replace_res = _XmDataFieldReplaceText(tf,
                                                 NULL,
                                                 prim_select->position,
@@ -5683,16 +5678,20 @@ static void df_TextLeave(Widget w, XEvent *event, String *params, Cardinal *num_
 static void df_ClassPartInitialize(WidgetClass w_class)
 {
   char *event_bindings;
+  size_t size;
   _XmFastSubclassInit(w_class, XmDATAFIELD_BIT);
   /* Install traits */
   XmeTraitSet((XtPointer)w_class, XmQTaccessTextual, (XtPointer)&dataFieldCS);
-  event_bindings = XtMalloc((strlen(EventBindings1) + strlen(EventBindings2) +
-                             strlen(EventBindings3) + strlen("\n") + strlen(EventBindings4) + 1));
-  strcpy(event_bindings, EventBindings4);
-  strcat(event_bindings, "\n");
-  strcat(event_bindings, EventBindings1);
-  strcat(event_bindings, EventBindings2);
-  strcat(event_bindings, EventBindings3);
+  size = strlen(EventBindings1) + strlen(EventBindings2) + strlen(EventBindings3) + strlen("\n") +
+         strlen(EventBindings4) + 1;
+  event_bindings = XtMalloc(size);
+  snprintf(event_bindings,
+           size,
+           "%s\n%s%s%s",
+           EventBindings4,
+           EventBindings1,
+           EventBindings2,
+           EventBindings3);
   _XmProcessLock();
   w_class->core_class.tm_table = (String)XtParseTranslationTable(event_bindings);
   _XmProcessUnlock();
@@ -6251,12 +6250,16 @@ static void df_MakeIBeamOffArea(XmDataFieldWidget tf, Dimension width, Dimension
 static void df_MakeIBeamStencil(XmDataFieldWidget tf, int line_width)
 {
   Screen *screen = XtScreen(tf);
-  char pixmap_name[17];
+  char pixmap_name[64];
   XGCValues values;
   unsigned long valuemask;
   if (!XmTextF_has_rect(tf))
     _XmDataFieldSetClipRect(tf);
-  sprintf(pixmap_name, "_XmDataF_%d_%d", XmTextF_cursor_height(tf), line_width);
+  snprintf(pixmap_name,
+           sizeof(pixmap_name),
+           "_XmDataF_%d_%d",
+           XmTextF_cursor_height(tf),
+           line_width);
   XmTextF_cursor(tf) = (Pixmap)XmGetPixmapByDepth(screen, pixmap_name, 1, 0, 1);
   if (XmTextF_cursor(tf) == XmUNSPECIFIED_PIXMAP) {
     Display *dpy = XtDisplay(tf);
@@ -6314,7 +6317,7 @@ static void df_MakeIBeamStencil(XmDataFieldWidget tf, int line_width)
     XFreeGC(XtDisplay(tf), fillGC);
   }
   /* Get/create the image_gc used to paint the I-Beam */
-  sprintf(pixmap_name, "_XmText_CM_%d", XmTextF_cursor_height(tf));
+  snprintf(pixmap_name, sizeof(pixmap_name), "_XmText_CM_%d", XmTextF_cursor_height(tf));
   XmTextF_image_clip(tf) = XmGetPixmapByDepth(XtScreen(tf), pixmap_name, 1, 0, 1);
   if (XmTextF_image_clip(tf) == XmUNSPECIFIED_PIXMAP)
     XmTextF_image_clip(tf) = df_GetClipMask(tf, pixmap_name);
@@ -6337,10 +6340,14 @@ static void df_MakeIBeamStencil(XmDataFieldWidget tf, int line_width)
 static void df_MakeAddModeCursor(XmDataFieldWidget tf, int line_width)
 {
   Screen *screen = XtScreen(tf);
-  char pixmap_name[25];
+  char pixmap_name[64];
   if (!XmTextF_has_rect(tf))
     _XmDataFieldSetClipRect(tf);
-  sprintf(pixmap_name, "_XmDataF_AddMode_%d_%d", XmTextF_cursor_height(tf), line_width);
+  snprintf(pixmap_name,
+           sizeof(pixmap_name),
+           "_XmDataF_AddMode_%d_%d",
+           XmTextF_cursor_height(tf),
+           line_width);
   XmTextF_add_mode_cursor(tf) = (Pixmap)XmGetPixmapByDepth(screen, pixmap_name, 1, 0, 1);
   if (XmTextF_add_mode_cursor(tf) == XmUNSPECIFIED_PIXMAP) {
     GC fillGC;
@@ -6475,7 +6482,6 @@ static void df_DropTransferCallback(Widget w,
   char *total_tmp_value;
   wchar_t *wc_total_tmp_value;
   char **tmp_value;
-  int malloc_size = 0;
   int num_vals, status;
   Arg args[8];
   Cardinal n, i;
@@ -6549,12 +6555,7 @@ static void df_DropTransferCallback(Widget w,
         XtDisplay(transfer_rec->widget), &tmp_prop, &tmp_value, &num_vals);
     /* if no conversion, num_vals is not changed */
     if (num_vals && (status == Success || status > 0)) {
-      for (i = 0; i < num_vals; i++)
-        malloc_size += strlen(tmp_value[i]);
-      total_tmp_value = _XmMallocArray(malloc_size + 1, sizeof(char));
-      total_tmp_value[0] = '\0';
-      for (i = 0; i < num_vals; i++)
-        strcat(total_tmp_value, tmp_value[i]);
+      total_tmp_value = _XmConcatStrings(tmp_value, num_vals);
       total_length = strlen(total_tmp_value);
       XFreeStringList(tmp_value);
     }
@@ -8451,15 +8452,7 @@ Boolean XmDataFieldPaste(Widget w)
   /* add new text */
   if (num_vals && (status == Success || status > 0)) {
     if (XmTextF_max_char_size(tf) == 1) {
-      char *total_tmp_value;
-      for (i = 0, malloc_size = 1; i < num_vals; i++) {
-        malloc_size += strlen(tmp_value[i]);
-      }
-      total_tmp_value = _XmMallocArray(malloc_size, 1);
-      total_tmp_value[0] = '\0';
-      for (i = 0; i < num_vals; i++) {
-        strcat(total_tmp_value, tmp_value[i]);
-      }
+      char *total_tmp_value = _XmConcatStrings(tmp_value, num_vals);
       rep_status = _XmDataFieldReplaceText(tf,
                                            NULL,
                                            paste_pos_left,
@@ -8468,8 +8461,7 @@ Boolean XmDataFieldPaste(Widget w)
                                            strlen(total_tmp_value),
                                            True);
       XFreeStringList(tmp_value);
-      if (malloc_size)
-        XtFree(total_tmp_value);
+      XtFree(total_tmp_value);
     }
     else {
       wchar_t *wc_value;
