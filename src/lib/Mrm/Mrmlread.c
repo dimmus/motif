@@ -311,7 +311,7 @@ MrmFetchLiteral (MrmHierarchy		hierarchy_id,
 	  **  Do necessary conversions (Fixups were done by Urm__FetchLiteral)
 	  */
 	  vec_count = ((RGMIntegerVectorPtr)*value_return)->count;
-	  vec_size  = vec_count * sizeof ( int * );
+	  vec_size  = vec_count * sizeof ( int );
 	  result = Urm__CW_ConvertValue (NULL, (long*)value_return,
 					 (MrmType)*type_return, 0, display,
 					 hierarchy_id, NULL) ;

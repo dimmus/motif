@@ -568,7 +568,7 @@ UrmCreateWidgetInstance (URMResourceContextPtr	context_id,
   RGMArgListDescPtr	argdesc = NULL ;  /* arg list descriptor in record */
   Arg			*args = NULL ;  /* arg list argument for create */
   Cardinal		num_used = 0 ;	/* number of args used in arglist */
-  MrmCount		num_listent = ov_num_args ;  /* # entries in args */
+  Cardinal		num_listent = ov_num_args ;  /* # entries in args */
   WCIClassDescPtr	cldesc ;	/* class descriptor */
   URMPointerListPtr	ptrlist = NULL ; /* to hold scratch callbacks */
   URMPointerListPtr	cblist = NULL ; /* to hold scratch contexts */
@@ -840,7 +840,7 @@ UrmSetWidgetInstance (URMResourceContextPtr	context_id,
   RGMArgListDescPtr	argdesc = NULL ; /* arg list descriptor in record */
   Arg			*args = NULL ;  /* arg list argument for create */
   Cardinal		num_used = 0 ;	/* number of args used in arglist */
-  MrmCount		num_listent = ov_num_args ; /* # entries in args */
+  Cardinal		num_listent = ov_num_args ; /* # entries in args */
   URMPointerListPtr	ptrlist = NULL ;/* to hold scratch contexts */
   URMPointerListPtr	cblist = NULL ; /* to hold scratch callbacks */
   URMPointerListPtr	ftllist = NULL ;/* to hold scratch fontlists */
@@ -1126,8 +1126,11 @@ Urm__CW_CreateArglist (Widget			parent,
   IDBFile		act_file ;	/* file from which literals read */
   RGMTextVectorPtr	vecptr ;	/* text vector arg value */
   char			err_msg[300] ;
-  _SavePixmapItem	pixargs[10] ;	/* to save pixmap args */
+  _SavePixmapItem	pixargs_buf[10] ; /* to save pixmap args */
+  _SavePixmapItemPtr	pixargs = pixargs_buf ; /* saved pixmap args */
   Cardinal		pixargs_cnt = 0 ; /* # pixargs saved */
+  Cardinal		max_used ;	/* # entries the caller allocated */
+  int			nctx ;		/* # contexts before reading literal */
   _SavePixmapItemPtr	savepix ;	/* current saved pixmap entry */
   Screen		*screen ;	/* screen for pixmaps */
   Display		*display ;	/* display for pixmaps */
@@ -1140,6 +1143,19 @@ Urm__CW_CreateArglist (Widget			parent,
   int			vec_size ;
   RGMFontListPtr	fontlist;	/* for converting old style fontlist */
   Boolean		swap_needed;  /* for resource arguments */
+
+
+  /*
+   * The caller allocated args for count+extra entries (plus any override
+   * arguments, which it appends after ours). Each argument fills at most
+   * one entry, plus one for its related count argument, and the compiler
+   * includes the latter in extra; never fill more. Each argument saves at
+   * most one pixmap.
+   */
+  max_used = *num_used + argdesc->count + argdesc->extra ;
+  if ( argdesc->count > XtNumber (pixargs_buf) )
+    pixargs = (_SavePixmapItemPtr)
+      XtMalloc (argdesc->count * sizeof (_SavePixmapItem)) ;
 
   /*
    * Loop through all the arguments in descriptor. An entry is made in the
@@ -1158,7 +1174,7 @@ Urm__CW_CreateArglist (Widget			parent,
    * appears in the widget reference structure. This is currently done
    * by the compiler, which orders submenus first in an arglist.
    */
-  for ( ndx=0 ; ndx<argdesc->count ; ndx++ )
+  for ( ndx=0 ; ndx<argdesc->count && *num_used<max_used ; ndx++ )
     {
       argptr = &argdesc->args[ndx] ;
       reptype = argptr->arg_val.rep_type ;
@@ -1220,11 +1236,7 @@ Urm__CW_CreateArglist (Widget			parent,
 	  break ;
         case MrmRtypeResource:
 	  resptr = (RGMResourceDescPtr) val ;
-	  if (resptr->cvt_type & MrmResourceUnswapped)
-	    {
-	      resptr->cvt_type &= ~MrmResourceUnswapped;
-	      swap_needed = TRUE;
-	    }
+	  resptr->cvt_type &= ~MrmResourceUnswapped;
 
 	  switch ( resptr->res_group )
 	    {
@@ -1260,11 +1272,19 @@ Urm__CW_CreateArglist (Widget			parent,
 		}
 	      break ;
 	    case URMgLiteral:
+	      nctx = UrmPlistNum (ctxlist) ;
 	      result = Urm__CW_ReadLiteral (resptr, hierarchy_id, file_id,
 					    ctxlist, &reptype, &argval,
 					    &vec_count, &act_file, &vec_size) ;
 	      val = argval ;
 	      if ( result != MrmSUCCESS ) continue ;
+
+	      /*
+	       * The literal is converted from the byte order and format of
+	       * the file it was read from, as Urm__ValidLiteral checked it.
+	       */
+	      swap_needed = UrmRCByteSwap
+		((URMResourceContextPtr) UrmPlistPtrN (ctxlist, nctx)) ;
 	      switch ( reptype )
 		{
 		case MrmRtypeIconImage:
@@ -1290,21 +1310,21 @@ Urm__CW_CreateArglist (Widget			parent,
 		    }
 		  break;
 		case MrmRtypeFontList:
-		  if (strcmp(file_id->db_version, URM1_1version) <= 0)
+		  if (strcmp(act_file->db_version, URM1_1version) <= 0)
 		    {
 		      int count = ((OldRGMFontListPtr)val)->count;
 		      fontlist = (RGMFontListPtr)
 			XtMalloc(sizeof(RGMFontList) +
 				 (sizeof(RGMFontItem) * (count - 1)));
 		      result = Urm__CW_FixupValue((long)fontlist, reptype,
-						  (XtPointer)val, file_id,
+						  (XtPointer)val, act_file,
 						  &swap_needed);
 		      val = (long)fontlist;
 		    }
 		  else
 		    result = Urm__CW_FixupValue(val, reptype,
 						(XtPointer)val,
-						file_id, &swap_needed) ;
+						act_file, &swap_needed) ;
 		  break;
 		case MrmRtypeSingleFloat:
 		  if ( swap_needed )
@@ -1324,7 +1344,7 @@ Urm__CW_CreateArglist (Widget			parent,
 		  break;
 		default:
 		  result = Urm__CW_FixupValue(val,reptype,(XtPointer)val,
-					      file_id, &swap_needed) ;
+					      act_file, &swap_needed) ;
 		}
 	      if ( result != MrmSUCCESS ) continue ;
 
@@ -1438,6 +1458,9 @@ Urm__CW_CreateArglist (Widget			parent,
 		    case MrmRtypeCStringVector:
 		      vec_size -= (sizeof ( RGMTextVector ) -
 				   sizeof ( RGMTextEntry ));
+		      break;
+		    case MrmRtypeIntegerVector:
+		      vec_size = vec_count * sizeof (int);
 		      break;
 		    default:
 		      break;
@@ -1557,7 +1580,7 @@ Urm__CW_CreateArglist (Widget			parent,
        * Create an additional arglist entry for the count field for any argument
        * which has a related argument (which is always a counter)
        */
-      if ( argptr->tag_code != UilMrmUnknownCode )
+      if ( argptr->tag_code != UilMrmUnknownCode && *num_used < max_used )
 	if ( argptr->stg_or_relcode.related_code != 0)
 	  {
 	    switch ( reptype )
@@ -1599,7 +1622,9 @@ Urm__CW_CreateArglist (Widget			parent,
   if ( pixargs_cnt > 0 )
     {
       Urm__CW_GetPixmapParms (parent, &screen, &display, &fgint, &bgint) ;
-      for ( ndx=0,savepix=pixargs ; ndx<pixargs_cnt ; ndx++,savepix++ )
+      for ( ndx=0,savepix=pixargs ;
+	    ndx<pixargs_cnt && *num_used<max_used ;
+	    ndx++,savepix++ )
         {
 	  if ( savepix->pixtype == MrmRtypeXBitmapFile ) {
 	    result = Urm__CW_ReadBitmapFile
@@ -1623,13 +1648,16 @@ Urm__CW_CreateArglist (Widget			parent,
 	  argptr = savepix->pixarg ;
 	  if ( argptr->tag_code == UilMrmUnknownCode )
             args[*num_used].name = (char *)
-	      (widgetrec+argptr->stg_or_relcode.tag_offs) ;
+	      widgetrec+argptr->stg_or_relcode.tag_offs ;
 	  else
             Urm__UncompressCode
 	      (file_id, argptr->tag_code, &(args[*num_used].name)) ;
 	  *num_used += 1 ;
         }
     }
+
+  if ( pixargs != pixargs_buf )
+    XtFree ((char *) pixargs) ;
 
   /*
    * arglist creation complete.
@@ -1778,15 +1806,22 @@ Urm__CW_FixupValue (long			val,
       wcharentry = (RGMWCharEntryPtr)val;
       if (*swap_needed)
 	swapbytes(wcharentry->wchar_item.count);
+      if (wcharentry->wchar_item.count < 0)
+	return(Urm__UT_Error("Urm__CW_FixupValue", _MrmMMsg_0110,
+			     NULL, NULL, MrmFAILURE));
+
       /* Allocate memory */
       max_size = wcharentry->wchar_item.count;
       wcstr_r = (wchar_t *)XtMalloc(sizeof(wchar_t) * (max_size + 1));
 
       /* Convert, realloc, store */
       str_size = mbstowcs(wcstr_r, wcharentry->wchar_item.bytes, max_size);
-      if (str_size == -1)
-	return(Urm__UT_Error("Urm__CW_FixupValue", _MrmMMsg_0110,
-			     NULL, NULL, MrmFAILURE));
+      if (str_size == (size_t)-1)
+	{
+	  XtFree((char *)wcstr_r);
+	  return(Urm__UT_Error("Urm__CW_FixupValue", _MrmMMsg_0110,
+			       NULL, NULL, MrmFAILURE));
+	}
       if (str_size != max_size)
 	wcstr_r = (wchar_t *)XtRealloc((char *)wcstr_r,
 				       sizeof(wchar_t) * (str_size + 1));
@@ -2930,8 +2965,11 @@ Urm__CW_ReadLiteral (RGMResourceDescPtr		resptr ,
 	result = Urm__HGetIndexedLiteral
 	  (hierarchy_id, resptr->key.index, context_id, act_file_id) ;
       else
-	result = UrmGetIndexedLiteral
-	  (file_id, resptr->key.index, context_id) ;
+	{
+	  *act_file_id = file_id ;
+	  result = UrmGetIndexedLiteral
+	    (file_id, resptr->key.index, context_id) ;
+	}
       if ( result != MrmSUCCESS )
 	{
 	  UrmFreeResourceContext (context_id) ;
@@ -3113,6 +3151,7 @@ Urm__CW_LoadIconImage (RGMIconImagePtr		iconptr ,
    * Load any resource colors in the color table.
    */
   ctable = iconptr->color_table.ctptr ;
+  swap_needed = FALSE ;
   if (ctable->validation != URMColorTableValid)
     { if ( Urm__SwapValidation(ctable->validation) == URMColorTableValid )
         {	swapbytes( ctable->validation );
@@ -3241,6 +3280,7 @@ Urm__CW_FixupCallback (Widget			parent ,
   int			vec_size ;
   RGMFontListPtr	fontlist;	/* for converting old style fontlist */
   Boolean		swap_needed = FALSE;
+  int			nctx ;		/* # contexts before reading literal */
 
   /*
    * Loop through all the items in the callback list
@@ -3248,6 +3288,7 @@ Urm__CW_FixupCallback (Widget			parent ,
   for ( ndx=0 ; ndx<cbdesc->count ; ndx++ )
     {
       itmptr = &cbdesc->item[ndx] ;
+      swap_needed = FALSE ;
 
       /*
        * Set the routine pointer to the actual routine address. This
@@ -3296,13 +3337,21 @@ Urm__CW_FixupCallback (Widget			parent ,
 	      break;
 
 	    case URMgLiteral:
+	      nctx = UrmPlistNum (ctxlist) ;
 	      result = Urm__CW_ReadLiteral
 		(resptr, hierarchy_id, file_id, ctxlist,
 		 &reptype, &tag_val, &vec_count, &act_file, &vec_size);
 	      if ( result != MrmSUCCESS ) continue ;
 
+	      /*
+	       * The literal is converted from the byte order and format of
+	       * the file it was read from, as Urm__ValidLiteral checked it.
+	       * Its buffer belongs to the context saved in ctxlist.
+	       */
+	      swap_needed = UrmRCByteSwap
+		((URMResourceContextPtr) UrmPlistPtrN (ctxlist, nctx)) ;
 	      if ((reptype == MrmRtypeFontList) &&
-		  (strcmp(file_id->db_version, URM1_1version) <= 0))
+		  (strcmp(act_file->db_version, URM1_1version) <= 0))
 		{
 		  int count = ((OldRGMFontListPtr)tag_val)->count;
 
@@ -3310,14 +3359,13 @@ Urm__CW_FixupCallback (Widget			parent ,
 		    XtMalloc(sizeof(RGMFontList) +
 			     (sizeof(RGMFontItem) * (count - 1)));
 		  result = Urm__CW_FixupValue((long)fontlist, reptype,
-					      (XtPointer)tag_val, file_id,
+					      (XtPointer)tag_val, act_file,
 					      &swap_needed);
-		  XtFree((char *)tag_val);
 		  tag_val = (long)fontlist;
 		}
 	      else
 		result = Urm__CW_FixupValue (tag_val, reptype,
-					     (XtPointer)tag_val, file_id,
+					     (XtPointer)tag_val, act_file,
 					     &swap_needed) ;
 
 	      if ( result != MrmSUCCESS ) continue ;
@@ -3332,6 +3380,9 @@ Urm__CW_FixupCallback (Widget			parent ,
 		case MrmRtypeCStringVector:
 		  vec_size -= (sizeof ( RGMTextVector ) -
 			       sizeof ( RGMTextEntry ));
+		  break;
+		case MrmRtypeIntegerVector:
+		  vec_size = vec_count * sizeof (int);
 		  break;
 		default:
 		  break;
