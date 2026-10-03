@@ -564,11 +564,14 @@ static Boolean ClipboardConvertProc(Widget wid,
       rval = False;
       goto done;
     }
-    if (*size == 0) {
+    /* the length comes from the format record on the root window: it
+       must fit the allocation size, which XtMalloc() takes as Cardinal */
+    if (*size == 0 || *size > (Cardinal)~0) {
+      *size = 0;
       rval = False;
       goto done;
     }
-    *value = XtMalloc((int)*size);
+    *value = XtMalloc((Cardinal)*size);
     if (ClipboardRetrieve(display,
                           window,
                           format_name,
@@ -578,9 +581,14 @@ static Boolean ClipboardConvertProc(Widget wid,
                           &private_id,
                           type) != ClipboardSuccess)
     {
+      XtFree((char *)*value);
+      *value = NULL;
+      *size = 0;
       rval = False;
       goto done;
     }
+    /* only hand out what was actually copied into the buffer */
+    *size = outlength;
     /* Fix size to be in format units */
     if (*format == 32)
       *size = *size / sizeof(long);
@@ -2956,6 +2964,7 @@ static int ClipboardRetrieve(Display *display,
   itemId loc_private;
   unsigned long copiedlength, remaininglength;
   Time timestamp;
+  *outtype = None;
   status = ClipboardLock(display, window);
   if (status == ClipboardLocked)
     return ClipboardLocked;
@@ -3159,6 +3168,8 @@ int XmClipboardInquireCount(Display *display,
                                &loc_count_len,
                                &ignoreformat))
     {
+      ClipboardClose(display, header);
+      ClipboardUnlock(display, window, 0);
       _XmAppUnlock(app);
       return ClipboardNoData;
     }
@@ -3169,17 +3180,22 @@ int XmClipboardInquireCount(Display *display,
       atomptr = (Atom *)alloc_to_free;
       /* returned count is in bytes, targets are atoms of
                length sizeof(long) */
-      loc_count = (int)loc_count_len / sizeof(Atom);
+      loc_count = (int)(loc_count_len / sizeof(Atom));
+      /* the reply comes from another client */
+      if (ignoretype != XA_ATOM || ignoreformat != 32)
+        loc_count = 0;
       /* max the lengths of all the atom names */
       for (i = 0; i < loc_count; i++) {
         int temp;
         if ((*atomptr) != (Atom)0) {
           char *str;
           str = XGetAtomName(display, *atomptr);
-          temp = strlen(str);
-          XFree(str);
-          if (temp > loc_maxlength) {
-            loc_maxlength = temp;
+          if (str != NULL) {
+            temp = strlen(str);
+            XFree(str);
+            if (temp > loc_maxlength) {
+              loc_maxlength = temp;
+            }
           }
         }
         atomptr++;
@@ -3256,7 +3272,10 @@ int XmClipboardInquireFormat(Display *display, /* Display id of application inqu
                                &loc_matchlength,
                                &ignoreformat))
     {
-      *outlength = 0;
+      if (outlength != 0)
+        *outlength = 0;
+      ClipboardClose(display, header);
+      ClipboardUnlock(display, window, 0);
       _XmAppUnlock(app);
       return ClipboardNoData;
     }
@@ -3267,11 +3286,14 @@ int XmClipboardInquireFormat(Display *display, /* Display id of application inqu
       /* returned count is in bytes, targets are atoms
                of length sizeof(long) */
       loc_matchlength = loc_matchlength / sizeof(Atom);
-      if (loc_matchlength >= n) {
+      /* the reply comes from another client */
+      if (ignoretype != XA_ATOM || ignoreformat != 32)
+        loc_matchlength = 0;
+      if (n > 0 && loc_matchlength >= (unsigned long)n) {
         nth_atom = nth_atom + n - 1;
         ptr = XGetAtomName(display, *nth_atom);
-        XtFree((char *)alloc_to_free);
       }
+      XtFree((char *)alloc_to_free);
     }
   }
   if (ptr != 0) {
@@ -3351,6 +3373,8 @@ int XmClipboardInquireLength(
                                &loc_length,
                                &ignoreformat))
     {
+      ClipboardClose(display, header);
+      ClipboardUnlock(display, window, 0);
       _XmAppUnlock(app);
       return ClipboardNoData;
     }
