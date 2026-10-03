@@ -14,20 +14,36 @@ named ones.  The suites open the fixtures in `png/`, `jpeg/` and `svg/` by
 relative path, so CTest runs them from a copy of those directories in the
 build tree (`<build>/src/tests/fixtures`).
 
-Suites labelled `X11` (`FontList`, `FontListEntry`, `Layout`) need an X
-server.  When `xvfb-run` is found at configure time, CTest starts each of
-them under its own Xvfb; configure with `-DXVFB_RUN_EXECUTABLE=OFF` to use
-`$DISPLAY` instead.  Without `DISPLAY` these suites exit with status 77 and
-CTest reports them as skipped.
+Suites labelled `X11` (`FontList`, `FontListEntry`, `XmStringCT`,
+`Widgets`, `Text`, `Layout`) need an X server, as do the `Uil.load*`
+tests, those in `interactive/` and `visual/` and some in `fuzz/`.  When
+`xvfb-run` is found at configure time, CTest starts each of them under
+its own Xvfb (with `-noreset`, see `XVFB_RUN_ARGS`); configure with
+`-DXVFB_RUN_EXECUTABLE=OFF` to use `$DISPLAY` instead.  Without `DISPLAY`
+these tests exit with status 77 and CTest reports them as skipped.
 
 Test cases tagged `xfail` document known library bugs.  They are left out
 of normal runs and checked by `Xm.<suite>.xfail` (`motif_tests --xfail
 <suite>`), which passes only while all of them still fail.  When a fix
 makes one pass, remove its tag.
 
-`XmString/` holds the old interactive XmString programs and data, which
-are not built; `environment/fonts` holds BDF fonts for future rendering
-tests.
+The other directories:
+
+- `uil/` compiles every `.uil` file in the tree with `uil` and loads the
+  `.uid` with Mrm (`Uil.compile.*`, `Uil.load.*`, `Uil.loadbuffer.*`).
+- `interactive/` drives a Text/TextField program and mwm (in a nested
+  Xephyr) with real input through `xdotool` (`Text.xdotool`,
+  `Mwm.xdotool`); they are skipped without `xdotool` or `Xephyr`.
+- `visual/` renders a fixed scene with the BDF fonts of
+  `environment/fonts` and compares it with `golden/scene.png`
+  (`Visual.*`; `--target update-golden` regenerates it).
+- `fuzz/` holds the libFuzzer targets (`-DWITH_FUZZERS=ON`, Clang); see
+  `fuzz/README.md`.
+- `XmString/` holds the old interactive XmString programs and data, which
+  are not built.
+
+With `-DWITH_COMPILER_CODE_COVERAGE=ON` the `coverage` target runs the
+tests and reports libXm's line coverage (see `coverage.cmake`).
 
 `bench/` holds `xmbench`, a set of micro- and macro-benchmarks for libXm.
 It is not part of CTest and is not built by default; `cmake --build
