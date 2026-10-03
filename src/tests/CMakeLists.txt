@@ -176,3 +176,51 @@ if(XVFB_RUN_EXECUTABLE)
 else()
     message(STATUS "Tests: not using xvfb-run, X11 suites use $DISPLAY or are skipped")
 endif()
+
+# -----------------------------------------------------------------------------
+# Coverage report
+#
+# With -DWITH_COMPILER_CODE_COVERAGE=ON, the "coverage" target runs the
+# tests and reports libXm's line coverage, failing below MOTIF_COVERAGE_MIN
+# so the gate can be ratcheted up.  It uses gcovr, else lcov+genhtml, else
+# plain gcov (GCC), or llvm-profdata+llvm-cov (Clang).
+if(WITH_COMPILER_CODE_COVERAGE)
+    set(MOTIF_COVERAGE_MIN 30 CACHE STRING
+        "Minimum % line coverage of libXm the 'coverage' target requires")
+
+    find_program(GCOVR_EXECUTABLE gcovr)
+    find_program(LCOV_EXECUTABLE lcov)
+    find_program(GENHTML_EXECUTABLE genhtml)
+    find_program(LLVM_PROFDATA_EXECUTABLE llvm-profdata)
+    find_program(LLVM_COV_EXECUTABLE llvm-cov)
+    if(NOT DEFINED GCOV_EXECUTABLE)
+        if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
+            # Match the gcov to the gcc in use.
+            string(REGEX REPLACE "gcc" "gcov" _gcov_guess "${CMAKE_C_COMPILER}")
+            find_program(GCOV_EXECUTABLE NAMES "${_gcov_guess}" gcov)
+        else()
+            find_program(GCOV_EXECUTABLE gcov)
+        endif()
+    endif()
+    mark_as_advanced(GCOVR_EXECUTABLE LCOV_EXECUTABLE GENHTML_EXECUTABLE
+        LLVM_PROFDATA_EXECUTABLE LLVM_COV_EXECUTABLE GCOV_EXECUTABLE)
+
+    add_custom_target(coverage
+        COMMAND ${CMAKE_COMMAND}
+            -DBUILD_DIR=${CMAKE_BINARY_DIR}
+            -DSOURCE_DIR=${CMAKE_SOURCE_DIR}
+            -DOUTPUT_DIR=${CMAKE_BINARY_DIR}/coverage
+            -DCOMPILER_ID=${CMAKE_C_COMPILER_ID}
+            -DMIN_LINE=${MOTIF_COVERAGE_MIN}
+            -DCTEST=${CMAKE_CTEST_COMMAND}
+            -DGCOVR=${GCOVR_EXECUTABLE}
+            -DLCOV=${LCOV_EXECUTABLE}
+            -DGENHTML=${GENHTML_EXECUTABLE}
+            -DGCOV=${GCOV_EXECUTABLE}
+            -DLLVM_PROFDATA=${LLVM_PROFDATA_EXECUTABLE}
+            -DLLVM_COV=${LLVM_COV_EXECUTABLE}
+            -P ${CMAKE_CURRENT_SOURCE_DIR}/coverage.cmake
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+        USES_TERMINAL
+        COMMENT "Running the tests and reporting libXm coverage")
+endif()
