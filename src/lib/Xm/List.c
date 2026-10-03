@@ -86,6 +86,20 @@ static char rcsid[] = "$TOG: List.c /main/47 1999/10/12 16:58:17 mgreess $"
  *
  ****************/
 #define CHAR_WIDTH_GUESS 10
+/*
+ * What the window shows, for ScrollList.  These live in fields of the
+ * instance record that the List does not use otherwise.  ListGen counts
+ * the changes that can alter how rows are drawn; the Drawn values are
+ * those of the last full DrawList, valid while DrawnGen equals ListGen
+ * (and DrawnTop is not -1).
+ */
+#define ListGen(lw) ((lw)->list.vmin)
+#define DrawnGen(lw) ((lw)->list.vExtent)
+#define DrawnTop(lw) ((lw)->list.vOrigin)
+#define DrawnXOrigin(lw) ((lw)->list.vmax)
+#define DrawnVizCount(lw) ((lw)->list.FontHeight)
+#define DrawnItemHeight(lw) ((lw)->list.CharWidth)
+#define RowsChanged(lw) (ListGen(lw)++)
 /****************
  *
  * List Error Messages
@@ -124,6 +138,8 @@ static void DrawListShadow(XmListWidget w);
 static void DrawList(XmListWidget w, XEvent *event, Boolean all);
 static void DrawItem(Widget w, int position);
 static void DrawItems(XmListWidget lw, int top, int bot, Boolean all);
+static void ScrollList(XmListWidget lw, int old_top);
+static void FinishDrawList(XmListWidget lw, int top, int num);
 static void DrawHighlight(XmListWidget lw, int position, Boolean on);
 static void SetClipRect(XmListWidget widget);
 static void SetDefaultSize(XmListWidget lw,
@@ -659,7 +675,7 @@ externaldef(xmlistclassrec) XmListClassRec xmListClassRec = {
         NULLQUARK,                         /* xrm_class	      */
         True,                              /* compress_motion    */
         XtExposeCompressMaximal |          /* compress_exposure  */
-            XtExposeNoRegion,
+            XtExposeNoRegion | XtExposeGraphicsExpose, /* see ScrollList */
         TRUE,                        /* compress enter/exit*/
         FALSE,                       /* visible_interest   */
         Destroy,                     /* destroy	      */
@@ -714,6 +730,8 @@ static void SliderMove(Widget w, XtPointer closure, XtPointer cd)
   /* w is a navigator widget */
   XmListWidget lw = (XmListWidget)closure;
   XmNavigatorDataRec nav_data;
+  int old_top = lw->list.top_position;
+  Position old_x = lw->list.XOrigin;
   /* get the navigator information using the trait getValue since I
      cannot use a callback struct */
   nav_data.valueMask = NavValue;
@@ -728,7 +746,10 @@ static void SliderMove(Widget w, XtPointer closure, XtPointer cd)
   if (nav_data.dimMask & NavigDimensionY) {
     lw->list.top_position = (int)nav_data.value.y;
   }
-  DrawList(lw, NULL, TRUE);
+  if ((lw->list.XOrigin == old_x) && (lw->list.top_position != old_top))
+    ScrollList(lw, old_top);
+  else
+    DrawList(lw, NULL, TRUE);
   /* now update the other navigator value */
   _XmSFUpdateNavigatorsValue(XtParent((Widget)lw), &nav_data, False);
 }
@@ -781,6 +802,8 @@ static void Initialize(Widget request,
   lw->list.HighlightGC = NULL;
   lw->list.InsensitiveGC = NULL;
   lw->list.XOrigin = 0;
+  ListGen(lw) = 0;
+  DrawnTop(lw) = -1;
   lw->list.Traversing = FALSE;
   lw->list.KbdSelection = FALSE;
   lw->list.CurrentKbdItem = 0;
@@ -1046,6 +1069,7 @@ static void Resize(Widget wid)
   XmListWidget lw = (XmListWidget)wid;
   int listwidth, top;
   int viz;
+  RowsChanged(lw);
   /* Don't allow underflow! */
   int borders = 2 * (lw->list.margin_width + lw->list.HighlightThickness +
                      lw->primitive.shadow_thickness);
@@ -1149,6 +1173,7 @@ static Boolean SetValues(
   Dimension height = 0;
   int i, j;
   XrmValue val;
+  RowsChanged(newlw);
   if (!XmRepTypeValidValue(XmRID_SELECTION_POLICY, newlw->list.SelectionPolicy, (Widget)newlw))
     newlw->list.SelectionPolicy = oldlw->list.SelectionPolicy;
   if (!XmRepTypeValidValue(XmRID_SELECTION_MODE, newlw->list.SelectionMode, (Widget)newlw))
@@ -1777,7 +1802,6 @@ static Dimension CalcVizWidth(XmListWidget lw)
  ************************************************************************/
 static void DrawList(XmListWidget lw, XEvent *event, Boolean all)
 {
-  Position y = 0;
   int top, num;
   if (!XtIsRealized((Widget)lw))
     return;
@@ -1789,36 +1813,172 @@ static void DrawList(XmListWidget lw, XEvent *event, Boolean all)
     num = top + lw->list.visibleItemCount;
     ASSIGN_MIN(num, lw->list.itemCount);
     DrawItems(lw, top, num, all);
-    if (top < num)
-      y = LINEHEIGHTS(lw, num - top - 1) + lw->list.BaseY;
-    y += lw->list.MaxItemHeight;
-    {
-      /* Don't allow underflow! */
-      int available_height;
-      if (lw->core.height <= (Dimension)lw->list.BaseY)
-        available_height = 1;
-      else
-        available_height = lw->core.height - lw->list.BaseY;
-      if (y < available_height)
-        XClearArea(XtDisplay(lw),
-                   XtWindow(lw),
-                   lw->list.BaseX,
-                   y,
-                   CalcVizWidth(lw),
-                   (available_height - y),
-                   False);
+    if (all) {
+      DrawnGen(lw) = ListGen(lw);
+      DrawnTop(lw) = top;
+      DrawnXOrigin(lw) = lw->list.XOrigin;
+      DrawnVizCount(lw) = lw->list.visibleItemCount;
+      DrawnItemHeight(lw) = lw->list.MaxItemHeight;
     }
-    if (lw->list.Traversing) {
-      if (lw->list.CurrentKbdItem >= lw->list.itemCount)
-        lw->list.CurrentKbdItem = lw->list.itemCount - 1;
-      if (lw->list.matchBehavior == XmQUICK_NAVIGATE) {
-        XPoint xmim_point;
-        GetPreeditPosition(lw, &xmim_point);
-        XmImVaSetValues((Widget)lw, XmNspotLocation, &xmim_point, NULL);
-      }
-      DrawHighlight(lw, lw->list.CurrentKbdItem, TRUE);
-    }
+    FinishDrawList(lw, top, num);
   }
+}
+
+/************************************************************************
+ *									*
+ * FinishDrawList - clear the window below the rows top..num - 1 and	*
+ *	draw the location cursor, the end of DrawList.			*
+ *									*
+ ************************************************************************/
+static void FinishDrawList(XmListWidget lw, int top, int num)
+{
+  Position y = 0;
+  /* Don't allow underflow! */
+  int available_height;
+  if (top < num)
+    y = LINEHEIGHTS(lw, num - top - 1) + lw->list.BaseY;
+  y += lw->list.MaxItemHeight;
+  if (lw->core.height <= (Dimension)lw->list.BaseY)
+    available_height = 1;
+  else
+    available_height = lw->core.height - lw->list.BaseY;
+  if (y < available_height)
+    XClearArea(XtDisplay(lw),
+               XtWindow(lw),
+               lw->list.BaseX,
+               y,
+               CalcVizWidth(lw),
+               (available_height - y),
+               False);
+  if (lw->list.Traversing) {
+    if (lw->list.CurrentKbdItem >= lw->list.itemCount)
+      lw->list.CurrentKbdItem = lw->list.itemCount - 1;
+    if (lw->list.matchBehavior == XmQUICK_NAVIGATE) {
+      XPoint xmim_point;
+      GetPreeditPosition(lw, &xmim_point);
+      XmImVaSetValues((Widget)lw, XmNspotLocation, &xmim_point, NULL);
+    }
+    DrawHighlight(lw, lw->list.CurrentKbdItem, TRUE);
+  }
+}
+
+/************************************************************************
+ *									*
+ * ScrollList - DrawList(lw, NULL, TRUE) after the top position moved	*
+ *	from old_top, copying the rows that stay visible instead of	*
+ *	drawing them again when the window is known to show them.	*
+ *									*
+ *	A row is drawn as a band, from one pixel above its text area to	*
+ *	its bottom, filled and then written; the bands do not overlap	*
+ *	when the spacing is not 0.  Between the bands there is only the	*
+ *	location cursor, which SliderMove has just erased, and it can	*
+ *	reach the top pixel line of the band below when listSpacing is	*
+ *	0.  So the kept rows are copied from the text area of the first	*
+ *	one down, and the top lines of their bands are filled again.	*
+ *	The rows are only copied while the window holds what the last	*
+ *	full DrawList drew, with the same items, extents, horizontal	*
+ *	origin and visible count (see ListGen); the rows whose selection	*
+ *	changed since, and those the copy does not cover entirely, are	*
+ *	drawn again.  Where the source of the copy is not in the window,	*
+ *	the X server sends GraphicsExpose and Redisplay draws everything.	*
+ *									*
+ ************************************************************************/
+static void ScrollList(XmListWidget lw, int old_top)
+{
+  Display *dpy = XtDisplay(lw);
+  Window win = XtWindow(lw);
+  int top = lw->list.top_position;
+  int height = lw->list.MaxItemHeight;
+  int num, old_num, first, last, pos;
+  int shift, y, y0, y1, d0, d1;
+  int clip_x, clip_y, clip_w, clip_h;
+  XRectangle rects[2][64], *lines[2];
+  int nlines[2] = {0, 0}, size = 64, k;
+  ElementPtr item;
+  XGCValues values;
+  GC gc;
+  if (!XtIsRealized((Widget)lw) || !lw->list.items || !lw->list.itemCount ||
+      !XtIsSensitive((Widget)lw) || (lw->list.spacing < 1) || (DrawnTop(lw) != old_top) ||
+      (DrawnGen(lw) != ListGen(lw)) || (DrawnXOrigin(lw) != lw->list.XOrigin) ||
+      (DrawnVizCount(lw) != lw->list.visibleItemCount) || (DrawnItemHeight(lw) != height))
+  {
+    DrawList(lw, NULL, TRUE);
+    return;
+  }
+  num = MIN(top + lw->list.visibleItemCount, lw->list.itemCount);
+  old_num = MIN(old_top + lw->list.visibleItemCount, lw->list.itemCount);
+  first = MAX(top, old_top);
+  last = MIN(num, old_num);
+  if (first >= last) {
+    DrawList(lw, NULL, TRUE);
+    return;
+  }
+  SetClipRect(lw);
+  lw->list.BaseY = ((int)lw->list.margin_height + lw->list.HighlightThickness +
+                    lw->primitive.shadow_thickness);
+  /* the clip rectangle of SetClipRect */
+  clip_x = lw->list.margin_width + lw->list.HighlightThickness + lw->primitive.shadow_thickness;
+  clip_y = lw->list.BaseY;
+  clip_w = ((int)lw->core.width <= 2 * clip_x) ? 1 : (lw->core.width - (2 * clip_x));
+  clip_h = ((int)lw->core.height <= 2 * clip_y) ? 1 : (lw->core.height - (2 * clip_y));
+  /* Copy the kept rows, keeping source and destination in the clip. */
+  shift = LINEHEIGHTS(lw, top - old_top);
+  d0 = MAX(LINEHEIGHTS(lw, first - top) + lw->list.BaseY, clip_y);
+  d1 = MIN(LINEHEIGHTS(lw, last - 1 - top) + lw->list.BaseY + height, clip_y + clip_h);
+  d0 = MAX(d0, clip_y - shift);
+  d1 = MIN(d1, clip_y + clip_h - shift);
+  if (d0 < d1) {
+    values.graphics_exposures = True;
+    gc = XtGetGC((Widget)lw, GCGraphicsExposures, &values);
+    XCopyArea(dpy, win, win, gc, clip_x, d0 + shift, clip_w, d1 - d0, clip_x, d0);
+    XtReleaseGC((Widget)lw, gc);
+  }
+  /* Draw the other rows, fill the top lines of the copied ones. */
+  lines[0] = rects[0];
+  lines[1] = rects[1];
+  for (pos = top; pos < num; pos++) {
+    item = lw->list.InternalList[pos];
+    y = LINEHEIGHTS(lw, pos - top) + lw->list.BaseY;
+    y0 = MAX(y, clip_y);
+    y1 = MIN(y + height, clip_y + clip_h);
+    if ((pos < first) || (pos >= last) || (item->selected != item->LastTimeDrawn) ||
+        ((y0 < y1) && ((y0 < d0) || (y1 > d1))))
+    {
+      DrawItems(lw, pos, pos + 1, TRUE);
+      continue;
+    }
+    k = item->selected ? 1 : 0;
+    if (nlines[k] == size) {
+      /* more visible rows than room on the stack */
+      size *= 2;
+      if (lines[0] == rects[0]) {
+        lines[0] = (XRectangle *)memcpy(XtMalloc(size * sizeof(XRectangle)), rects[0],
+                                        sizeof(rects[0]));
+        lines[1] = (XRectangle *)memcpy(XtMalloc(size * sizeof(XRectangle)), rects[1],
+                                        sizeof(rects[1]));
+      }
+      else {
+        lines[0] = (XRectangle *)XtRealloc((char *)lines[0], size * sizeof(XRectangle));
+        lines[1] = (XRectangle *)XtRealloc((char *)lines[1], size * sizeof(XRectangle));
+      }
+    }
+    lines[k][nlines[k]].x = lw->list.BaseX;
+    lines[k][nlines[k]].y = y - 1;
+    lines[k][nlines[k]].width = CalcVizWidth(lw) + 1;
+    lines[k][nlines[k]].height = 1;
+    nlines[k]++;
+  }
+  if (nlines[0])
+    XFillRectangles(dpy, win, lw->list.InverseGC, lines[0], nlines[0]);
+  if (nlines[1])
+    XFillRectangles(dpy, win, lw->list.NormalGC, lines[1], nlines[1]);
+  if (lines[0] != rects[0]) {
+    XtFree((char *)lines[0]);
+    XtFree((char *)lines[1]);
+  }
+  DrawnGen(lw) = ListGen(lw);
+  DrawnTop(lw) = top;
+  FinishDrawList(lw, top, num);
 }
 
 /************************************************************************
@@ -2378,6 +2538,7 @@ static void ResetExtents(XmListWidget lw, Boolean recache_extents)
   register int i;
   Dimension maxheight = 0;
   Dimension maxwidth = 0;
+  RowsChanged(lw);
   if (!lw->list.InternalList || !lw->list.itemCount)
     return;
   for (i = 0; i < lw->list.itemCount; i++) {
@@ -2486,6 +2647,7 @@ static int AddInternalElements(
   int nsel = 0;
   if (nitems <= 0)
     return nsel;
+  RowsChanged(lw);
   /* CR 9663: Discard default width when we get real items. */
   if (lw->list.LastItem == 0)
     lw->list.MaxWidth = 0;
@@ -2542,6 +2704,7 @@ static int DeleteInternalElements(XmListWidget lw, XmString string, int position
   int curpos;
   int dsel = 0;
   int i;
+  RowsChanged(lw);
   if (!position && string)
     position = ItemNumber(lw, string);
   if (!position) {
@@ -2595,6 +2758,7 @@ static int DeleteInternalElementPositions(XmListWidget lw,
   Boolean reset_height = FALSE;
   int nsel = 0;
   int first = oldItemCount;
+  RowsChanged(lw);
   /* See what caller can do to flag errors, if necessary,
    * when this information is not present. */
   if (!position_list || !position_count)
@@ -2692,6 +2856,7 @@ static int ReplaceInternalElement(XmListWidget lw, int position, Boolean selecta
   Element *item = lw->list.InternalList[curpos];
   int dsel = (item->selected ? -1 : 0);
   XmString name = lw->list.items[curpos];
+  RowsChanged(lw);
   /* The old name is an alias for an entry in the items list. */
   item->first_char = 0;
   item->length = UNKNOWN_LENGTH;
@@ -2985,6 +3150,7 @@ static void CopySelectedPositions(XmListWidget lw)
 static void ClearItemList(XmListWidget lw)
 {
   register int i;
+  RowsChanged(lw);
   if (!(lw->list.items && lw->list.itemCount))
     return;
   for (i = 0; i < lw->list.itemCount; i++)
