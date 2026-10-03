@@ -327,10 +327,14 @@ static Boolean ConvertInsertSelection(Widget w,
   if (req_event == NULL)
     return False;
   /* Work around for intrinsics selection bug */
+  _XmProcessLock();
   if (old_serial != req_event->serial)
     old_serial = req_event->serial;
-  else
+  else {
+    _XmProcessUnlock();
     return False;
+  }
+  _XmProcessUnlock();
   /* The parameter is the ATOM_PAIR the requestor stored on its window. */
   if (!_XmGetWindowPropertyChecked(req_event->display,
                                    req_event->requestor,

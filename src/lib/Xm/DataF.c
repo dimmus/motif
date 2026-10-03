@@ -952,22 +952,26 @@ static void df_FreeContextData(Widget w, XtPointer clientData, XtPointer callDat
 
 static TextFDestData df_GetTextFDestData(Widget w)
 {
-  static TextFDestData dest_data;
+  TextFDestData dest_data;
   Display *display = XtDisplay(w);
   Screen *screen = XtScreen(w);
+  XContext loc_context;
+  _XmProcessLock();
   if (_XmDataFDestContext == 0)
     _XmDataFDestContext = XUniqueContext();
-  if (XFindContext(display, (Window)screen, _XmDataFDestContext, (char **)&dest_data)) {
+  loc_context = _XmDataFDestContext;
+  _XmProcessUnlock();
+  if (XFindContext(display, (Window)screen, loc_context, (char **)&dest_data)) {
     XmTextContextData ctx_data;
     Widget xm_display = (Widget)XmGetXmDisplay(display);
     ctx_data = (XmTextContextData)XtMalloc(sizeof(XmTextContextDataRec));
     ctx_data->screen = screen;
-    ctx_data->context = _XmDataFDestContext;
+    ctx_data->context = loc_context;
     ctx_data->type = _XM_IS_DEST_CTX;
     dest_data = (TextFDestData)XtCalloc(1, sizeof(TextFDestDataRec));
     XtAddCallback(
         xm_display, XmNdestroyCallback, (XtCallbackProc)df_FreeContextData, (XtPointer)ctx_data);
-    XSaveContext(XtDisplay(w), (Window)screen, _XmDataFDestContext, (XPointer)dest_data);
+    XSaveContext(XtDisplay(w), (Window)screen, loc_context, (XPointer)dest_data);
   }
   return dest_data;
 }
@@ -976,9 +980,13 @@ static void df_SetDropContext(Widget w)
 {
   Display *display = XtDisplay(w);
   Screen *screen = XtScreen(w);
+  XContext loc_context;
+  _XmProcessLock();
   if (_XmDataFDNDContext == 0)
     _XmDataFDNDContext = XUniqueContext();
-  XSaveContext(display, (Window)screen, _XmDataFDNDContext, (XPointer)w);
+  loc_context = _XmDataFDNDContext;
+  _XmProcessUnlock();
+  XSaveContext(display, (Window)screen, loc_context, (XPointer)w);
 }
 
 static void df_DeleteDropContext(Widget w)
@@ -1001,22 +1009,26 @@ Widget _XmDataFieldGetDropReciever(Widget w)
 
 static TextFGCData df_GetTextFGCData(Widget w)
 {
-  static TextFGCData gc_data;
+  TextFGCData gc_data;
   Display *display = XtDisplay(w);
   Screen *screen = XtScreen(w);
+  XContext loc_context;
+  _XmProcessLock();
   if (_XmDataFGCContext == 0)
     _XmDataFGCContext = XUniqueContext();
-  if (XFindContext(display, (Window)screen, _XmDataFGCContext, (char **)&gc_data)) {
+  loc_context = _XmDataFGCContext;
+  _XmProcessUnlock();
+  if (XFindContext(display, (Window)screen, loc_context, (char **)&gc_data)) {
     XmTextContextData ctx_data;
     Widget xm_display = (Widget)XmGetXmDisplay(display);
     ctx_data = (XmTextContextData)XtMalloc(sizeof(XmTextContextDataRec));
     ctx_data->screen = screen;
-    ctx_data->context = _XmDataFGCContext;
+    ctx_data->context = loc_context;
     ctx_data->type = _XM_IS_GC_DATA_CTX;
     gc_data = (TextFGCData)XtCalloc(1, sizeof(TextFGCDataRec));
     XtAddCallback(
         xm_display, XmNdestroyCallback, (XtCallbackProc)df_FreeContextData, (XtPointer)ctx_data);
-    XSaveContext(display, (Window)screen, _XmDataFGCContext, (XPointer)gc_data);
+    XSaveContext(display, (Window)screen, loc_context, (XPointer)gc_data);
     gc_data->tf = (XmDataFieldWidget)w;
   }
   if (gc_data->tf == NULL)
@@ -6150,7 +6162,8 @@ static void df_LoadGCs(XmDataFieldWidget tf, Pixel background, Pixel foreground)
   Screen *screen = XtScreen((Widget)tf);
   XGCValues values;
   static XContext context = 0;
-  static Pixmap tf_cache_pixmap;
+  XContext loc_context;
+  Pixmap tf_cache_pixmap;
   unsigned long value_mask = (GCFunction | GCForeground | GCBackground | GCClipMask | GCArcMode);
   unsigned long dynamic_mask;
   if (XmTextF_stipple_tile(tf) != None)
@@ -6160,14 +6173,17 @@ static void df_LoadGCs(XmDataFieldWidget tf, Pixel background, Pixel foreground)
                                                         tf->primitive.foreground,
                                                         tf->core.background_pixel,
                                                         tf->core.depth);
+  _XmProcessLock();
   if (context == 0)
     context = XUniqueContext();
-  if (XFindContext(display, (Window)screen, context, (char **)&tf_cache_pixmap)) {
+  loc_context = context;
+  _XmProcessUnlock();
+  if (XFindContext(display, (Window)screen, loc_context, (char **)&tf_cache_pixmap)) {
     XmTextContextData ctx_data;
     Widget xm_display = (Widget)XmGetXmDisplay(display);
     ctx_data = (XmTextContextData)XtMalloc(sizeof(XmTextContextDataRec));
     ctx_data->screen = screen;
-    ctx_data->context = context;
+    ctx_data->context = loc_context;
     ctx_data->type = _XM_IS_PIXMAP_CTX;
     /* Get the Pixmap identifier that the X Toolkit uses to cache our */
     /* GC's.  We never actually use this Pixmap; just so long as it's */
@@ -6175,7 +6191,7 @@ static void df_LoadGCs(XmDataFieldWidget tf, Pixel background, Pixel foreground)
     tf_cache_pixmap = XCreatePixmap(display, (Drawable)RootWindowOfScreen(screen), 1, 1, 1);
     XtAddCallback(
         xm_display, XmNdestroyCallback, (XtCallbackProc)df_FreeContextData, (XtPointer)ctx_data);
-    XSaveContext(display, (Window)screen, context, (XPointer)tf_cache_pixmap);
+    XSaveContext(display, (Window)screen, loc_context, (XPointer)tf_cache_pixmap);
   }
   /* Used to be: values.clip_mask = tf_cache_pixmap; */
   values.clip_mask = 0;          /* use in caching Text Field gc's */
