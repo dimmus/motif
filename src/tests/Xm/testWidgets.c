@@ -12,16 +12,26 @@
  * its own process; run it under ASan, UBSan and LSan to catch memory
  * errors and leaks.
  */
+#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <wchar.h>
 #include <X11/Intrinsic.h>
 #include <X11/Shell.h>
 #include <Xm/Xm.h>
+#include <Xm/AccTextT.h>
 #include <Xm/BulletinB.h>
+#include <Xm/Container.h>
 #include <Xm/FontS.h>
+#include <Xm/IconG.h>
+#include <Xm/Label.h>
 #include <Xm/RepType.h>
+#include <Xm/Scale.h>
 #include <Xm/SlideC.h>
+#include <Xm/SpinB.h>
+#include <Xm/TextF.h>
+#include <Xm/TraitP.h>
 #include <check.h>
 
 #include "leak.h"
@@ -512,6 +522,119 @@ START_TEST(slide_context_without_widget)
 }
 END_TEST
 
+/*
+ * Scale.c, GetValueString: XmNdecimalPoints is not bounded, and the
+ * value string was formatted into fixed stack buffers.
+ */
+START_TEST(scale_many_decimal_points)
+{
+	Widget top, w;
+
+	current_class = "xmScaleWidgetClass";
+	top = init_xt("WidgetRegress");
+	XtAppSetWarningMsgHandler(app, xt_warning_handler);
+	w = XtVaCreateManagedWidget("scale", xmScaleWidgetClass, top,
+				    XmNshowValue, True,
+				    XmNdecimalPoints, 400,
+				    XmNvalue, 42, NULL);
+	XtRealizeWidget(top);
+	pump(top);
+	XmScaleSetValue(w, 43);
+	pump(top);
+	uninit_xt();
+}
+END_TEST
+
+/*
+ * SpinB.c, NumToString: abs(INT_MIN) counted no digits, so the value
+ * string of a numeric spin box was printed past its buffer.
+ */
+START_TEST(spin_box_int_min)
+{
+	Widget top, sb, tf;
+
+	current_class = "xmSpinBoxWidgetClass";
+	top = init_xt("WidgetRegress");
+	XtAppSetWarningMsgHandler(app, xt_warning_handler);
+	sb = XtCreateManagedWidget("spin", xmSpinBoxWidgetClass, top, NULL, 0);
+	tf = XtVaCreateManagedWidget("text", xmTextFieldWidgetClass, sb,
+				     XmNspinBoxChildType, XmNUMERIC,
+				     XmNminimumValue, INT_MIN,
+				     XmNmaximumValue, INT_MIN + 10,
+				     XmNposition, INT_MIN, NULL);
+	XtRealizeWidget(top);
+	pump(top);
+	XtVaSetValues(tf, XmNposition, INT_MIN + 1, NULL);
+	pump(top);
+	uninit_xt();
+}
+END_TEST
+
+/*
+ * IconG.c: a 0 in XmNdetailOrder (which is 1-based) indexed the detail
+ * table at (Cardinal)-1, and the detail loop read past the reordered
+ * table when XmNdetailOrderCount was less than XmNdetailCount.
+ */
+START_TEST(icon_gadget_detail_order)
+{
+	static Cardinal order[] = { 0 };
+	Widget top, c;
+	XmString details[3];
+	int i;
+
+	current_class = "xmIconGadgetClass";
+	top = init_xt("WidgetRegress");
+	XtAppSetWarningMsgHandler(app, xt_warning_handler);
+	c = XtVaCreateManagedWidget("container", xmContainerWidgetClass, top,
+				    XmNlayoutType, XmDETAIL,
+				    XmNdetailOrder, order,
+				    XmNdetailOrderCount, 1,
+				    XmNwidth, 300, XmNheight, 200, NULL);
+	for (i = 0; i < 3; i++)
+		details[i] = XmStringCreateLocalized("detail");
+	XtVaCreateManagedWidget("icon", xmIconGadgetClass, c,
+				XmNdetail, details,
+				XmNdetailCount, 3, NULL);
+	for (i = 0; i < 3; i++)
+		XmStringFree(details[i]);
+	XtRealizeWidget(top);
+	pump(top);
+	uninit_xt();
+}
+END_TEST
+
+/*
+ * Label.c, the XmQTaccessTextual setValue method: an XmFORMAT_WCS value
+ * was converted into a buffer without room for the terminating NUL.
+ * The method frees the value it is given.
+ */
+START_TEST(label_set_wide_value)
+{
+	static const wchar_t *values[] = { L"", L"wide" };
+	XmAccessTextualTrait trait;
+	Widget top, w;
+	size_t i;
+
+	current_class = "xmLabelWidgetClass";
+	top = init_xt("WidgetRegress");
+	XtAppSetWarningMsgHandler(app, xt_warning_handler);
+	w = XtCreateManagedWidget("label", xmLabelWidgetClass, top, NULL, 0);
+	trait = (XmAccessTextualTrait)XmeTraitGet((XtPointer)xmLabelWidgetClass,
+						   XmQTaccessTextual);
+	ck_assert_ptr_nonnull(trait);
+	for (i = 0; i < sizeof values / sizeof values[0]; i++) {
+		size_t n = wcslen(values[i]) + 1;
+		wchar_t *v = (wchar_t *)XtMalloc(n * sizeof(wchar_t));
+
+		wmemcpy(v, values[i], n);
+		trait->setValue(w, (XtPointer)v, XmFORMAT_WCS);
+	}
+	XtRealizeWidget(top);
+	pump(top);
+	uninit_xt();
+}
+END_TEST
+
 /* The generated table must have found the headers */
 START_TEST(class_table)
 {
@@ -552,6 +675,15 @@ void widgets_suite(SRunner *runner)
 	tcase_add_loop_test(t, widget_smoke, 0, n_normal);
 	tcase_set_timeout(t, 120);
 	suite_add_tcase(s, t);
+
+	if (!only || !*only) {
+		t = tcase_create("Regressions");
+		tcase_add_test(t, scale_many_decimal_points);
+		tcase_add_test(t, spin_box_int_min);
+		tcase_add_test(t, icon_gadget_detail_order);
+		tcase_add_test(t, label_set_wide_value);
+		suite_add_tcase(s, t);
+	}
 
 	/* Some of them hang: give up early */
 	t = tcase_create("Known bugs");

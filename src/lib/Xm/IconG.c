@@ -1854,7 +1854,8 @@ static void Redisplay(Widget wid,
       lab_baseline = XmStringBaseline(IG_RenderTable(wid), IG_LabelString(wid));
     /* detail_x is in gadget relative coordinate */
     detail_x = container_data.first_column_width;
-    for (i = 0; i < IG_DetailCount(wid); i++) {
+    /* new_detail has no more than detail_order_count strings */
+    for (i = 0; i < MIN(IG_DetailCount(wid), container_data.detail_order_count); i++) {
       Position next_tab_x = 0;
       w = 0;
       detail_x += DEFAULT_HOR_SPACING;
@@ -1910,6 +1911,7 @@ static void Redisplay(Widget wid,
         detail_x += w;
       }
     }
+    XtFree((char *)new_detail);
   }
   /**** draw the highlight if needed */
   if (ig->gadget.highlighted) {
@@ -2584,40 +2586,37 @@ static void UpdateGCs(Widget wid)
 
 /************************************************************************
  * GetStringTableReOrdered.
- *  lazy alloc/filling using realloc
- * --- Never free the returned array.---
+ *  Return the MIN(order_count, st_count) strings of st in the order of
+ *  the 1-based order table, in a new array to free with XtFree (not a
+ *  static one: gadgets of different threads draw at the same time).
+ *  An order entry out of range gives a NULL string.
  ************************************************************************/
 static XmStringTable GetStringTableReOrdered(XmStringTable st,
                                              Cardinal st_count,
                                              Cardinal *order,
                                              Cardinal order_count)
 {
-  static XmString *Default_st = NULL;
-  static Cardinal Max_st_count = 0;
+  XmStringTable table;
   Cardinal i, count;
   if (!order_count || !st_count)
     return NULL;
   /* here we are filling up a new string table out of an existing
        one and a new order table. Take only the minimum number of both */
   count = MIN(order_count, st_count);
-  if (count > Max_st_count) {
-    Max_st_count = MAX(count, 33);
-    Default_st = (XmStringTable)_XmReallocArray((char *)Default_st, Max_st_count, sizeof(XmString));
-  }
+  table = (XmStringTable)_XmMallocArray(count, sizeof(XmString));
   for (i = 0; i < count; i++) {
     if (order) {
-      if (order[i] <= st_count)
-        Default_st[i] = st[order[i] - 1];
+      /* XmNdetailOrder comes from the application: 0 is out of range */
+      if (order[i] >= 1 && order[i] <= st_count)
+        table[i] = st[order[i] - 1];
       else
-        Default_st[i] = NULL;
+        table[i] = NULL;
     }
     else {
-      Default_st[i] = st[i];
+      table[i] = st[i];
     }
   }
-  return Default_st;
-  /* This is realloced memory, be sure that no one is keeping
-       reference to this stuff longer enough for it to be realloced again */
+  return table;
 }
 
 /************************************************************************
@@ -2719,6 +2718,7 @@ static void GetSize(Widget wid, Dimension *ret_width, Dimension *ret_height)
                          &detail_width,
                          &detail_height,
                          &detail_baseline);
+    XtFree((char *)new_detail);
     /* width in detail is sum of first_column_width (where
            the x has been removed already) + the detail width */
     ideal_width = container_data.first_column_width + (int)detail_width + mw - ht;
