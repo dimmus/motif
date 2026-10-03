@@ -2163,8 +2163,7 @@ unsigned int XmRenderTableCvtToProp(Widget widget, /* unused */
   int chars_used = 0, size;
   char *buffer;
   char *str;
-  char temp[2048];
-  char temp2[1024];
+  char temp[256];
   XmRendition rendition;
   _XmWidgetToAppContext(widget);
   _XmAppLock(app);
@@ -2188,53 +2187,47 @@ unsigned int XmRenderTableCvtToProp(Widget widget, /* unused */
   /* Now iterate over the list of renditions */
   for (i = 0; i < _XmRTCount(table); i++) {
     rendition = _XmRTRenditions(table)[i];
-    snprintf(temp, sizeof temp, "\"%s\", ", _XmRendTag(rendition));
-    size = strlen(temp);
-    CVTaddString(buffer, temp, size);
-    if (_XmRendFontType(rendition) == XmAS_IS)
-      str = "-1, ";
-    else {
-      snprintf(temp,
-               sizeof temp,
-               "%u \"%s\" %u,",
-               _XmRendFontType(rendition),
-               _XmRendFontName(rendition),
-               _XmRendLoadModel(rendition));
-      str = temp;
+    /* Names and tab lists can be of any length: add them piecewise */
+    /* rather than through a fixed size buffer that truncates them. */
+    CVTaddString(buffer, "\"", 1);
+    CVTaddString(buffer, _XmRendTag(rendition), strlen(_XmRendTag(rendition)));
+    CVTaddString(buffer, "\", ", 3);
+    if ((_XmRendFontType(rendition) == XmAS_IS) || (_XmRendFontName(rendition) == NULL)) {
+      CVTaddString(buffer, "-1, ", 4);
     }
-    size = strlen(str);
-    CVTaddString(buffer, str, size);
+    else {
+      sprintf(temp, "%u \"", _XmRendFontType(rendition));
+      CVTaddString(buffer, temp, strlen(temp));
+      CVTaddString(buffer, _XmRendFontName(rendition), strlen(_XmRendFontName(rendition)));
+      sprintf(temp, "\" %u,", _XmRendLoadModel(rendition));
+      CVTaddString(buffer, temp, strlen(temp));
+    }
     if ((unsigned int)(unsigned long)_XmRendTabs(rendition) == XmAS_IS ||
-        _XmRendTabs(rendition) == NULL)
-      str = "-1, ";
+        _XmRendTabs(rendition) == NULL) {
+      CVTaddString(buffer, "-1, ", 4);
+    }
     else {
       _XmTab tab;
       _XmTabList tlist;
       int number;
-      strncpy(temp, "[ ", 2);
-      temp[2] = '\0';
+      CVTaddString(buffer, "[ ", 2);
       tlist = (_XmTabList)_XmRendTabs(rendition);
       number = tlist->count;
       tab = (_XmTab)tlist->start;
       while (number > 0) {
-        strncpy(temp2, temp, 1023);
-        temp2[1023] = '\0';
         snprintf(temp,
-                 sizeof(temp) - 5,
-                 "%s %f %u %u %u, ",
-                 temp2,
+                 sizeof temp,
+                 " %f %u %u %u, ",
                  tab->value,
                  tab->units,
                  tab->alignment,
                  tab->offsetModel);
+        CVTaddString(buffer, temp, strlen(temp));
         tab = (_XmTab)tab->next;
         number--;
       }
-      strcat(temp, " ], ");
-      str = temp;
+      CVTaddString(buffer, " ], ", 4);
     }
-    size = strlen(str);
-    CVTaddString(buffer, str, size);
     if (_XmRendBG(rendition) == XmUNSPECIFIED_PIXEL)
       str = "-1, ";
     else {
