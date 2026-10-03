@@ -3166,7 +3166,17 @@ Urm__CW_ReadLiteral (RGMResourceDescPtr		resptr ,
       break;
     case MrmRtypeChar8Vector:
     case MrmRtypeCStringVector:
-      *vec_count = ((RGMTextVectorPtr)*val)->count ;
+      {
+	/*
+	 * The count is swapped in place when the vector is fixed up, and
+	 * that is the count Urm__ValidLiteral checked, so read it the same
+	 * way here.
+	 */
+	MrmCount count = ((RGMTextVectorPtr)*val)->count ;
+
+	if ( UrmRCByteSwap (context_id) ) swapbytes (count) ;
+	*vec_count = count ;
+      }
       break;
     case MrmRtypeIconImage:
       result = Urm__CW_LoadIconImage ((RGMIconImagePtr)*val,
