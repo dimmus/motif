@@ -1251,7 +1251,8 @@ void _XmOSGenerateMaskName(String imageName, String maskNameBuf, size_t buf_len)
   }
   else
     len = strlen(imageName);
-  snprintf(maskNameBuf, buf_len, "%s_m%s", imageName, suffix ? suffix : "");
+  /* Insert "_m" before the suffix, not after it. */
+  snprintf(maskNameBuf, buf_len, "%.*s_m%s", len, imageName, suffix ? suffix : "");
 }
 
 Status _XmOSGetInitialCharsDirection(XtPointer characters,
