@@ -856,16 +856,21 @@ int _XmStringIndexCacheTag(XmStringTag tag, int length)
     _tag_cache[_cache_count] = _XmStringGetCurrentCharset();
     _cache_count++;
   }
-  /* Look for an existing cache entry. */
+  /* Look for an existing cache entry.  A counted tag (from a byte */
+  /* stream) may hold a NUL; it then matches no entry, and comparing */
+  /* it with strncmp must not lead to reading past a shorter entry. */
   for (i = 0; i < _cache_count; i++) {
-    if (((tag == _tag_cache[i]) ||
-         ((length != XmSTRING_TAG_STRLEN) && (strncmp(tag, _tag_cache[i], length) == 0)) ||
-         ((length == XmSTRING_TAG_STRLEN) && (strcmp(tag, _tag_cache[i]) == 0))) &&
-        ((length == XmSTRING_TAG_STRLEN) || (_tag_cache[i][length] == '\0')))
-    {
-      _XmProcessUnlock();
-      return (i);
+    if (length == XmSTRING_TAG_STRLEN) {
+      if ((tag == _tag_cache[i]) || (strcmp(tag, _tag_cache[i]) == 0))
+        break;
     }
+    else if ((strncmp(tag, _tag_cache[i], length) == 0) &&
+             (memchr(tag, '\0', length) == NULL) && (_tag_cache[i][length] == '\0'))
+      break;
+  }
+  if (i < _cache_count) {
+    _XmProcessUnlock();
+    return (i);
   }
   /* Add this entry to the cache. */
   if (length == XmSTRING_TAG_STRLEN)
