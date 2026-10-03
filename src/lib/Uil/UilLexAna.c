@@ -1358,6 +1358,14 @@ found_localized_string:
 			 [src_az_current_source_buffer->w_current_position],
 			 MB_CUR_MAX);
 
+	  /*
+	  **  Treat the null at the end of the line (0) and an invalid
+	  **  multibyte sequence (-1) as single bytes, so that the end of
+	  **  the line is seen and the scan always advances.
+	  */
+	  if (mb_len < 1)
+	    mb_len = 1;
+
 	  mb_byte = src_az_current_source_buffer->c_text
 	    [src_az_current_source_buffer->w_current_position];
 
