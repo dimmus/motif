@@ -316,6 +316,8 @@ Urm__IsSubtreeResource (IDBFile			cfile,
   /*
    * Do a string comparison for for the subtree resources.
    */
+  if ( cfile->resource_ctable == NULL )
+    return FALSE;
   if ( code < UilMrmMinValidCode )
     return FALSE;
   if ( code >= cfile->resource_ctable->num_entries )

@@ -106,6 +106,53 @@ static SubstitutionRec	uidSubs[1];
 
 
 /*
+ * Check a compression table read from a UID file into a resource context,
+ * before Urm__FixupCompressionTable turns its offsets into pointers: the
+ * entry vector and every string it locates must lie within the resource.
+ * The table is still in the byte order of the file.
+ */
+static Boolean
+Urm__ValidCompressionTable (URMResourceContextPtr	ctx,
+			    Boolean			byte_swapped)
+{
+  UidCompressionTablePtr	ctable ;	/* the table */
+  size_t			size ;		/* bytes in the resource */
+  unsigned			validation ;	/* validation code */
+  MrmCount			num_entries ;	/* number of entries */
+  MrmOffset			stoffset ;	/* string offset */
+  int				ndx ;		/* loop index */
+
+  ctable = (UidCompressionTablePtr) UrmRCBuffer (ctx) ;
+  size = UrmRCSize (ctx) ;
+  if ( ctable == NULL || size < XtOffsetOf (UidCompressionTable, entry) )
+    return FALSE ;
+
+  validation = ctable->validation ;
+  num_entries = ctable->num_entries ;
+  if ( byte_swapped )
+    {
+      swapbytes (validation) ;
+      swapbytes (num_entries) ;
+    }
+  if ( validation != UidCompressionTableValid || num_entries < 0 ||
+       ! _UrmInBuffer (XtOffsetOf (UidCompressionTable, entry),
+		       (size_t) num_entries * sizeof (UidCTableEntry), size) )
+    return FALSE ;
+
+  for ( ndx=UilMrmMinValidCode ; ndx<num_entries ; ndx++ )
+    {
+      stoffset = ctable->entry[ndx].stoffset ;
+      if ( byte_swapped ) swapbytes (stoffset) ;
+      if ( ! _UrmStringInBuffer (ctable, stoffset, size) )
+	return FALSE ;
+    }
+
+  return TRUE ;
+}
+
+
+
+/*
  *++
  *
  *  PROCEDURE DESCRIPTION:
@@ -310,10 +357,32 @@ Urm__OpenHierarchyInternal (MrmCount			num_files,
       if ( result != MrmSUCCESS ) return result;
       result = UrmGetIndexedLiteral (cur_file, UilMrmClassTableIndex,
 				     class_ctx);
-      if ( result != MrmSUCCESS ) continue;
-      result = UrmGetIndexedLiteral (cur_file, UilMrmResourceTableIndex,
-				     resource_ctx);
-      if ( result != MrmSUCCESS ) continue;
+      if ( result == MrmSUCCESS )
+	result = UrmGetIndexedLiteral (cur_file, UilMrmResourceTableIndex,
+				       resource_ctx);
+      if ( result != MrmSUCCESS )
+	{
+	  UrmFreeResourceContext (class_ctx);
+	  UrmFreeResourceContext (resource_ctx);
+	  continue;
+	}
+
+      /*
+       * The tables are used unchecked from now on, so reject the file if
+       * they are not valid.
+       */
+      if ( ! Urm__ValidCompressionTable (class_ctx, cur_file->byte_swapped) ||
+	   ! Urm__ValidCompressionTable (resource_ctx,
+					 cur_file->byte_swapped) )
+	{
+	  UrmFreeResourceContext (class_ctx);
+	  UrmFreeResourceContext (resource_ctx);
+	  XtFree (uidPath);
+	  uidPath = 0;
+	  Urm__CloseHierarchy (hiptr) ;
+	  return Urm__UT_Error ("Urm__OpenHierarchy", _MrmMMsg_0028,
+				NULL, NULL, MrmNOT_VALID);
+	}
 
       /*
        * Retain the buffers from the contexts, but free the contexts
@@ -744,6 +813,7 @@ I18NOpenFile (Display			*display,
    */
   char			*resolvedname; /* current resolved name */
   Boolean		user_path ;
+  size_t		len ;		/* length of name */
 
   uidSubs[0].substitution = name;
 
@@ -761,7 +831,8 @@ I18NOpenFile (Display			*display,
    * resolve the pathname with .uid suffix first. If that fails or the suffix is
    * already on the file then just try to resolve the pathname.
    */
-  if ( strcmp (&name[strlen(name)-4],".uid") != 0 )
+  len = strlen (name);
+  if ( len < 4 || strcmp (&name[len-4], ".uid") != 0 )
     resolvedname = XtResolvePathname (display,
 				      "uid",
 				      NULL,
