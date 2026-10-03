@@ -1242,12 +1242,13 @@ static void ImPreeditDrawCallback(XIC xic, XPointer client_data, XPointer call_d
   if (data->text) {             /* text field is non-NULL */
     if (data->chg_length > 0) { /* replace */
       if ((int)text->length > (int)data->chg_length) {
-        pb->text = (wchar_t *)XtRealloc((char *)pb->text,
-                                        (pb->length - data->chg_length + text->length + 1) *
-                                            sizeof(wchar_t));
-        pb->feedback = (XIMFeedback *)XtRealloc(
-            (char *)pb->feedback,
-            (pb->length - data->chg_length + text->length + 1) * sizeof(XIMFeedback));
+        pb->text = (wchar_t *)_XmReallocArray((char *)pb->text,
+                                              pb->length - data->chg_length + text->length + 1,
+                                              sizeof(wchar_t));
+        pb->feedback =
+            (XIMFeedback *)_XmReallocArray((char *)pb->feedback,
+                                           pb->length - data->chg_length + text->length + 1,
+                                           sizeof(XIMFeedback));
       }
       from = data->chg_first + data->chg_length;
       to = data->chg_first + text->length;
@@ -1256,10 +1257,12 @@ static void ImPreeditDrawCallback(XIC xic, XPointer client_data, XPointer call_d
     else if (data->chg_length == 0) { /* insert */
       /* do we really need to change anything? */
       if (data->text->length) {
-        pb->text = (wchar_t *)XtRealloc((char *)pb->text,
-                                        (pb->length + text->length + 1) * sizeof(wchar_t));
-        pb->feedback = (XIMFeedback *)XtRealloc(
-            (char *)pb->feedback, (pb->length + text->length + 1) * sizeof(XIMFeedback));
+        pb->text = (wchar_t *)_XmReallocArray((char *)pb->text,
+                                              pb->length + text->length + 1,
+                                              sizeof(wchar_t));
+        pb->feedback = (XIMFeedback *)_XmReallocArray((char *)pb->feedback,
+                                                      pb->length + text->length + 1,
+                                                      sizeof(XIMFeedback));
         from = data->chg_first;
         to = data->chg_first + text->length;
         ml = pb->length - from;
@@ -1271,7 +1274,7 @@ static void ImPreeditDrawCallback(XIC xic, XPointer client_data, XPointer call_d
      */
     if (from || to || ml) {
       /* convert multibyte to wide char */
-      wchar = (wchar_t *)XtMalloc((text->length + 1) * sizeof(wchar_t));
+      wchar = (wchar_t *)_XmMallocArray(text->length + 1, sizeof(wchar_t));
       if (text->encoding_is_wchar)
         memcpy(wchar, text->string.wide_char, text->length * sizeof(wchar_t));
       else
@@ -2031,9 +2034,9 @@ static Cardinal add_ref(XmImRefInfo refs, Widget widget)
       refs->max_refs = 10;
     else
       refs->max_refs += (refs->max_refs / 2);
-    refs->refs = (Widget *)XtRealloc((char *)refs->refs, refs->max_refs * sizeof(Widget));
-    refs->callbacks = (XtPointer **)XtRealloc((char *)refs->callbacks,
-                                              refs->max_refs * sizeof(XtPointer *));
+    refs->refs = (Widget *)_XmReallocArray((char *)refs->refs, refs->max_refs, sizeof(Widget));
+    refs->callbacks =
+        (XtPointer **)_XmReallocArray((char *)refs->callbacks, refs->max_refs, sizeof(XtPointer *));
   }
   assert(refs->num_refs < refs->max_refs);
   refs->callbacks[refs->num_refs] = NULL;
@@ -2064,9 +2067,10 @@ static Cardinal remove_ref(XmImRefInfo refs, Widget widget)
     /* Free some storage from the array? */
     if ((refs->num_refs * 3 < refs->max_refs) && (refs->max_refs >= 20)) {
       refs->max_refs /= 2;
-      refs->refs = (Widget *)XtRealloc((char *)refs->refs, refs->max_refs * sizeof(Widget));
-      refs->callbacks = (XtPointer **)XtRealloc((char *)refs->callbacks,
-                                                refs->max_refs * sizeof(XtPointer *));
+      refs->refs = (Widget *)_XmReallocArray((char *)refs->refs, refs->max_refs, sizeof(Widget));
+      refs->callbacks = (XtPointer **)_XmReallocArray((char *)refs->callbacks,
+                                                      refs->max_refs,
+                                                      sizeof(XtPointer *));
     }
   }
   else {
@@ -2123,7 +2127,7 @@ static void VaSetArg(VaArgList list, char *name, XPointer value)
 {
   if (list->max <= list->count) {
     list->max += 10;
-    list->args = (VaArg *)XtRealloc((char *)list->args, list->max * sizeof(VaArg));
+    list->args = (VaArg *)_XmReallocArray((char *)list->args, list->max, sizeof(VaArg));
   }
   list->args[list->count].name = name;
   list->args[list->count].value = value;

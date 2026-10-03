@@ -4026,7 +4026,7 @@ static void InputSetValues(
   if ((XtPointer)data->sarray != temp_ptr) {
     XtFree((char *)temp_ptr);
     temp_ptr = (XtPointer)data->sarray;
-    data->sarray = (XmTextScanType *)XtMalloc(data->sarraycount * sizeof(XmTextScanType));
+    data->sarray = (XmTextScanType *)_XmMallocArray(data->sarraycount, sizeof(XmTextScanType));
     memcpy((void *)data->sarray, (void *)temp_ptr, (data->sarraycount * sizeof(XmTextScanType)));
   }
   /*
@@ -4226,7 +4226,7 @@ void _XmTextInputCreate(Widget wid, ArgList args, Cardinal num_args)
    * Fix for HaL DTS 9841 - copy the selectionArray into dedicated memory.
    */
   temp_ptr = (XtPointer)data->sarray;
-  data->sarray = (XmTextScanType *)XtMalloc(data->sarraycount * sizeof(XmTextScanType));
+  data->sarray = (XmTextScanType *)_XmMallocArray(data->sarraycount, sizeof(XmTextScanType));
   memcpy((void *)data->sarray, (void *)temp_ptr, (data->sarraycount * sizeof(XmTextScanType)));
   /*
    * End fix for HaL DTS 9841

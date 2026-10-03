@@ -5145,7 +5145,7 @@ Boolean _XmTextGetBaselines(Widget w, Dimension **baselines, int *line_count)
   Dimension *base_array;
   int i;
   *line_count = data->number_lines;
-  base_array = (Dimension *)XtMalloc((sizeof(Dimension) * (*line_count)));
+  base_array = (Dimension *)_XmMallocArray(*line_count, sizeof(Dimension));
   for (i = 0; i < *line_count; i++) {
     base_array[i] = data->topmargin + i * data->lineheight + data->font_ascent;
   }
