@@ -239,9 +239,9 @@ void		save_widget_machine_code(sym_widget_entry_type *widget_entry, URMResourceC
     snprintf (buffer, sizeof (buffer), "locked: ");
 
     if (w_rec->lock) {
-	strcat (buffer, "true");
+	strncat (buffer, "true", sizeof (buffer) - strlen (buffer) - 1);
     } else {
-	strcat (buffer, "false");
+	strncat (buffer, "false", sizeof (buffer) - strlen (buffer) - 1);
     }
 
     src_append_machine_code (
@@ -511,7 +511,8 @@ void	unload_stack(char *rec, int rec_size, src_source_record_type *az_src_rec)
 		    snprintf (buffer, sizeof (buffer), "(%d) ", j);
 
 		    format_arg_value (& arg_ptr->arg_val,
-				& buffer [strlen (buffer)]);
+				& buffer [strlen (buffer)],
+				sizeof (buffer) - strlen (buffer));
 
 		    src_append_machine_code (
 			az_src_rec,
@@ -926,9 +927,9 @@ void		save_value_machine_code(sym_value_entry_type *value_entry, URMResourceCont
 	     access_from_code (UrmRCAccess (az_context)) );
 
     if (UrmRCLock (az_context)) {
-	strcat (buffer, "true");
+	strncat (buffer, "true", sizeof (buffer) - strlen (buffer) - 1);
     } else {
-	strcat (buffer, "false");
+	strncat (buffer, "false", sizeof (buffer) - strlen (buffer) - 1);
     }
 
     src_append_machine_code ( az_src_rec, 0, 0, 0, buffer );
@@ -1527,7 +1528,7 @@ char * group_from_code
 }
 
 
-void format_arg_value(RGMArgValuePtr argval_ptr, char *buffer)
+void format_arg_value(RGMArgValuePtr argval_ptr, char *buffer, size_t size)
 
 /*
  *++
@@ -1564,14 +1565,14 @@ void format_arg_value(RGMArgValuePtr argval_ptr, char *buffer)
 	case MrmRtypeInteger:
         case MrmRtypeHorizontalInteger:
         case MrmRtypeVerticalInteger:
-	    sprintf (buffer, "value: %d", argval_ptr->datum.ival);
+	    snprintf (buffer, size, "value: %d", argval_ptr->datum.ival);
 	    break;
 
 	case MrmRtypeBoolean:
 	    if (argval_ptr->datum.ival) {
-		sprintf (buffer, "value: true");
+		snprintf (buffer, size, "value: true");
 	    } else {
-		sprintf (buffer, "value: false");
+		snprintf (buffer, size, "value: false");
 	    }
 	    break;
 
@@ -1582,34 +1583,34 @@ void format_arg_value(RGMArgValuePtr argval_ptr, char *buffer)
 	case MrmRtypeCString:
 	case MrmRtypeAddrName:
         case MrmRtypeKeysym:
-	    sprintf (buffer, "offset: %X (hex)", argval_ptr->datum.offset);
+	    snprintf (buffer, size, "offset: %X (hex)", argval_ptr->datum.offset);
 	    off_put (k_unknown_off, argval_ptr->datum.offset);
 	    break;
 
 	case MrmRtypeFloat:
         case MrmRtypeHorizontalFloat:
         case MrmRtypeVerticalFloat:
-	    sprintf (buffer, "offset: %X (hex)", argval_ptr->datum.offset);
+	    snprintf (buffer, size, "offset: %X (hex)", argval_ptr->datum.offset);
 	    off_put (k_float_off, argval_ptr->datum.offset);
 	    break;
 
 	  case MrmRtypeSingleFloat: /* single float data type RAP */
-	    sprintf (buffer, "offset: %X (hex)", argval_ptr->datum.offset);
+	    snprintf (buffer, size, "offset: %X (hex)", argval_ptr->datum.offset);
             off_put (k_single_float_off, argval_ptr->datum.offset);
             break;
 
 	case MrmRtypeCallback:
-	    sprintf (buffer, "offset: %X (hex)", argval_ptr->datum.offset);
+	    snprintf (buffer, size, "offset: %X (hex)", argval_ptr->datum.offset);
 	    off_put (k_callback_off, argval_ptr->datum.offset);
 	    break;
 
 	case MrmRtypeResource:
-	    sprintf (buffer, "offset: %X (hex)", argval_ptr->datum.offset);
+	    snprintf (buffer, size, "offset: %X (hex)", argval_ptr->datum.offset);
 	    off_put (k_resource_off, argval_ptr->datum.offset);
 	    break;
 
 	default:
-	    sprintf (buffer, "value unknown");
+	    snprintf (buffer, size, "value unknown");
 	    break;
     }
 

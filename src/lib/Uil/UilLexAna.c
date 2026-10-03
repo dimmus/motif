@@ -1602,7 +1602,7 @@ found_token:
 
   case token_comment:       /* RAP preserve comments */
     {
-      size_t size;
+      size_t size, len;
       unsigned char *c_token;
 
       if (last_token_seen != token_comment)
@@ -1618,8 +1618,8 @@ found_token:
 	  comment_text = XtRealloc(comment_text, comment_size);
 	}
 
-      strcat (comment_text, (char *)c_token);
-      strcat (comment_text, "\n");
+      len = strlen (comment_text);
+      snprintf (comment_text + len, comment_size - len, "%s\n", (char *)c_token);
       if (c_token != az_current_lex_buffer->c_text)
 	XtFree( (char *)c_token );
       last_token_seen = token_comment;
