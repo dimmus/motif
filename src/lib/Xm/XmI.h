@@ -168,6 +168,7 @@ extern size_t _XmUtf8ToUcs2Buf(char *draw_text, size_t seg_len, XChar2b *buf);
 extern Pixel _XmAssignInsensitiveColor(Widget w);
 extern char *_XmMallocArray(size_t num, size_t size);
 extern char *_XmReallocArray(char *ptr, size_t num, size_t size);
+extern char *_XmConcatStrings(char **list, int count);
 extern Boolean _XmGetWindowPropertyChecked(Display *display,
                                            Window w,
                                            Atom property,

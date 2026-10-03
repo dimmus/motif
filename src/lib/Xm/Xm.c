@@ -340,6 +340,31 @@ char *_XmReallocArray(char *ptr, size_t num, size_t size)
 
 /************************************************************************
  *
+ *  _XmConcatStrings
+ *	Concatenate the count strings of list into one string allocated
+ *	with XtMalloc.  This is what a strcat() loop into a buffer of the
+ *	summed lengths did, without the rescans and in size_t.
+ *
+ ************************************************************************/
+char *_XmConcatStrings(char **list, int count)
+{
+  size_t size = 1, length = 0, n;
+  char *s;
+  int i;
+  for (i = 0; i < count; i++)
+    size += strlen(list[i]);
+  s = _XmMallocArray(size, 1);
+  for (i = 0; i < count; i++) {
+    n = strlen(list[i]);
+    memcpy(s + length, list[i], n);
+    length += n;
+  }
+  s[length] = '\0';
+  return s;
+}
+
+/************************************************************************
+ *
  *  _XmGetWindowPropertyChecked
  *	Read the first long_length 32-bit units of a window property and
  *	check what came back.
