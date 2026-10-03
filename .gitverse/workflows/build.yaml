@@ -1,55 +1,65 @@
 name: Build
+
+# Mirror of the essential Linux jobs of .github/workflows/build.yml.  All
+# of the logic is in tools/dev/env/ci/, so the two stay in step.
 on:
   push:
-    branches:
-      - master
   pull_request:
-    types:
-      - opened
-    branches:
-      - master
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  build:
-    strategy:
-      matrix:
-        arch: [x86_64, x86]
-        compiler: [gcc, clang]
+  ubuntu:
+    name: Ubuntu ${{ matrix.cc }} ${{ matrix.profile }}
     runs-on: ubuntu-cloud-runner
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        cc: [gcc, clang]
+        profile: [debug-asan, release-lto]
     steps:
       - uses: actions/checkout@v4
-      - name: Setup Ubuntu dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            libx11-dev \
-            libxpm-dev \
-            libxt-dev \
-            libxmu-dev \
-            libxext-dev \
-            libxft-dev \
-            libjpeg-dev \
-            libpng-dev \
-            linux-headers-generic \
-            build-essential \
-            cmake \
-            ninja-build \
-            pkg-config \
-            flex \
-            bison \
-            xvfb \
-            xbitmaps \
-            check \
-            clang
-      - name: Build with CMake
-        run: |
-          CC=${{ matrix.compiler }} make build ninja
-      # - name: Test
-      #   run: |
-      #     cd /home/runner/work/motif/motif
-      #     Xvfb :0 &>/dev/null &
-      #     DISPLAY=:0 make test
-      #     kill -TERM %1
+      - name: Install dependencies
+        run: tools/dev/env/ci/deps.sh
+      - name: Allow ASan shadow memory
+        if: matrix.profile == 'debug-asan'
+        run: sudo sysctl vm.mmap_rnd_bits=28 || true
+      - name: Build and test
+        env:
+          CC: ${{ matrix.cc }}
+          MOTIF_CI_PROFILE: ${{ matrix.profile }}
+          MOTIF_CI_NO_SKIP: "1"
+        run: tools/dev/env/ci/build.sh
+
+  install:
+    name: Install and consume
+    runs-on: ubuntu-cloud-runner
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: tools/dev/env/ci/deps.sh dpkg-dev
+      - name: Build, install and consume
+        env:
+          CC: gcc
+          MOTIF_CI_NO_SKIP: "1"
+        run: tools/dev/env/ci/package-smoke.sh _build _stage
+
+  werror:
+    name: Warnings as errors (non-blocking)
+    runs-on: ubuntu-cloud-runner
+    timeout-minutes: 60
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: tools/dev/env/ci/deps.sh
+      - name: Build with -Werror
+        env:
+          CC: gcc
+          MOTIF_CI_PROFILE: debug
+          MOTIF_CI_TESTS: "0"
+          CMAKE_ARGS: -DCMAKE_COMPILE_WARNING_AS_ERROR=ON
+        run: tools/dev/env/ci/build.sh

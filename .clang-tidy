@@ -1,0 +1,40 @@
+---
+# clang-tidy configuration for Motif (C).
+#
+# The enabled groups are bugprone-*, cert-* and clang-analyzer-* (which
+# includes security.insecureAPI.*).  The checks disabled below are either
+# C++-only, flag idioms that are everywhere in a 1990s X toolkit and carry
+# no bug signal (reserved _Xm identifiers, swappable Widget/XtPointer
+# parameters, memcpy() itself), or are duplicates of a check kept under
+# another name.  CI runs this in ratchet mode against
+# tools/dev/env/ci/baselines/clang-tidy.txt: fixing a warning is always
+# fine, adding one fails the job.  Re-enable checks here as they get clean.
+Checks: >
+  -*,
+  bugprone-*,
+  cert-*,
+  clang-analyzer-*,
+  -bugprone-easily-swappable-parameters,
+  -bugprone-reserved-identifier,
+  -cert-dcl37-c,
+  -cert-dcl51-cpp,
+  -bugprone-narrowing-conversions,
+  -bugprone-implicit-widening-of-multiplication-result,
+  -bugprone-assignment-in-if-condition,
+  -bugprone-assignment-in-selection-statement,
+  -cert-exp45-c,
+  -bugprone-signed-bitwise,
+  -cert-int09-c,
+  -bugprone-branch-clone,
+  -bugprone-multi-level-implicit-pointer-conversion,
+  -bugprone-casting-through-void,
+  -bugprone-switch-missing-default-case,
+  -bugprone-macro-parentheses,
+  -cert-err33-c,
+  -clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling,
+  -clang-analyzer-optin.performance.Padding
+# Only report on Motif's own headers, not on system or X11 headers.
+HeaderFilterRegex: '.*/(src|include)/.*'
+WarningsAsErrors: ''
+FormatStyle: none
+...
