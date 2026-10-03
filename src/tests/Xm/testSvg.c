@@ -127,6 +127,8 @@ START_TEST(rasterize_bad_size)
 	ck_assert_msg(!img->f.sub_image(img, 0, 0, 1, 0), "Expected zero height to fail");
 	ck_assert_msg(!img->f.sub_image(img, 0, 0, (unsigned int)-1, 1), "Expected huge width to fail");
 	ck_assert_msg(!img->f.sub_image(img, 0, 0, 1, 65536), "Expected huge height to fail");
+	/* Each dimension is in range, but w * h * 4 overflows the rasterizer's int */
+	ck_assert_msg(!img->f.sub_image(img, 0, 0, 65535, 8193), "Expected huge area to fail");
 	XDestroyImage(img);
 }
 END_TEST

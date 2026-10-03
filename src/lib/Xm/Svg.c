@@ -7,6 +7,7 @@
  */
 #include "SvgI.h"
 #include <X11/Xlibint.h>
+#include <limits.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -39,7 +40,9 @@ static XImage *rasterize(XImage *src, int x, int y, unsigned int w, unsigned int
   NSVGrasterizer *rast;
   (void)x;
   (void)y;
-  if (!w || !h || w > SVG_MAX_DIM || h > SVG_MAX_DIM || !(rast = nsvgCreateRasterizer()))
+  /* nanosvgrast indexes the bitmap with int (y * stride), so w * h * 4 must fit */
+  if (!w || !h || w > SVG_MAX_DIM || h > SVG_MAX_DIM || (size_t)w * h > INT_MAX / 4 ||
+      !(rast = nsvgCreateRasterizer()))
     return NULL;
   if (!(data = Xcalloc((size_t)w * h, 4))) {
     nsvgDeleteRasterizer(rast);
