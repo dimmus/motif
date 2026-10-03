@@ -47,6 +47,9 @@ static char rcsid[] = "$TOG: DragICC.c /main/14 1997/06/18 17:38:07 samborn $"
 #define BUFFER_HEAP 1
 #define NUM_HEADER_ARGS 0
 #define MAXSTACK 1000
+/* read one fixed-size record from the data part of a property buffer */
+#define READ_DS_DATA(propBuf, rec) \
+  (_XmReadDragBuffer((propBuf), BUFFER_DATA, (BYTE *)(rec), sizeof(*(rec))) == sizeof(*(rec)))
     /*
      * We assume that there are only 64 possible messageTypes for each
      * clientMessage type that we use.  This allows us to only eat up a
@@ -1071,11 +1074,21 @@ Boolean _XmReadDSFromStream(XmDropSiteManagerObject dsm,
 {
   xmDSHeaderStruct dsHeader;
   XmReceiverDSTree dsmInfo = (XmReceiverDSTree)iccInfo;
-  xmPropertyBufferRec *propBuf = &dsmInfo->propBufRec;
-  int i;
+  xmPropertyBufferRec *propBuf;
+  CARD32 i;
+  size_t remaining;
   xmICCRegBoxRec box;
   XmRegion region;
-  _XmReadDragBuffer(propBuf, BUFFER_DATA, (BYTE *)&dsHeader, sizeof(xmDSHeaderStruct));
+  /*
+   * The stream comes from another client's property: stop after the
+   * advertised number of drop sites, and fail on any short read.  The
+   * stream itself is freed by its owner with _XmFreeDragReceiverInfo().
+   */
+  if (dsmInfo == NULL || dsmInfo->currDropSite >= dsmInfo->numDropSites)
+    return False;
+  propBuf = &dsmInfo->propBufRec;
+  if (!READ_DS_DATA(propBuf, &dsHeader))
+    return False;
   if (dsmInfo->byteOrder != _XmByteOrderChar) {
     swap2bytes(dsHeader.flags);
     swap2bytes(dsHeader.import_targets_id);
@@ -1091,8 +1104,8 @@ Boolean _XmReadDSFromStream(XmDropSiteManagerObject dsm,
     case XmDRAG_UNDER_HIGHLIGHT: {
       XmICCDropSiteHighlight info = (XmICCDropSiteHighlight)dropSiteInfoRtn;
       xmDSHighlightDataStruct dsHighlight;
-      _XmReadDragBuffer(
-          propBuf, BUFFER_DATA, (BYTE *)&dsHighlight, sizeof(xmDSHighlightDataStruct));
+      if (!READ_DS_DATA(propBuf, &dsHighlight))
+        return False;
       if (dsmInfo->byteOrder != _XmByteOrderChar) {
         swap2bytes(dsHighlight.borderWidth);
         swap2bytes(dsHighlight.highlightThickness);
@@ -1110,7 +1123,8 @@ Boolean _XmReadDSFromStream(XmDropSiteManagerObject dsm,
     case XmDRAG_UNDER_SHADOW_OUT: {
       XmICCDropSiteShadow info = (XmICCDropSiteShadow)dropSiteInfoRtn;
       xmDSShadowDataStruct dsShadow;
-      _XmReadDragBuffer(propBuf, BUFFER_DATA, (BYTE *)&dsShadow, sizeof(xmDSShadowDataStruct));
+      if (!READ_DS_DATA(propBuf, &dsShadow))
+        return False;
       if (dsmInfo->byteOrder != _XmByteOrderChar) {
         swap2bytes(dsShadow.borderWidth);
         swap2bytes(dsShadow.highlightThickness);
@@ -1133,7 +1147,8 @@ Boolean _XmReadDSFromStream(XmDropSiteManagerObject dsm,
     case XmDRAG_UNDER_PIXMAP: {
       XmICCDropSitePixmap info = (XmICCDropSitePixmap)dropSiteInfoRtn;
       xmDSPixmapDataStruct dsPixmap;
-      _XmReadDragBuffer(propBuf, BUFFER_DATA, (BYTE *)&dsPixmap, sizeof(xmDSPixmapDataStruct));
+      if (!READ_DS_DATA(propBuf, &dsPixmap))
+        return False;
       if (dsmInfo->byteOrder != _XmByteOrderChar) {
         swap2bytes(dsPixmap.borderWidth);
         swap2bytes(dsPixmap.highlightThickness);
@@ -1156,7 +1171,8 @@ Boolean _XmReadDSFromStream(XmDropSiteManagerObject dsm,
     case XmDRAG_UNDER_NONE: {
       XmICCDropSiteNone info = (XmICCDropSiteNone)dropSiteInfoRtn;
       xmDSNoneDataStruct dsNone;
-      _XmReadDragBuffer(propBuf, BUFFER_DATA, (BYTE *)&dsNone, sizeof(xmDSNoneDataStruct));
+      if (!READ_DS_DATA(propBuf, &dsNone))
+        return False;
       if (dsmInfo->byteOrder != _XmByteOrderChar) {
         swap2bytes(dsNone.borderWidth);
       }
@@ -1166,10 +1182,15 @@ Boolean _XmReadDSFromStream(XmDropSiteManagerObject dsm,
       break;
   }
   /*
-   *  Read the region, byte swapping if necessary.
+   *  Read the region, byte swapping if necessary.  The box count is
+   *  bounded by the bytes actually left in the buffer.
    */
-  region = dropSiteInfoRtn->header.region = _XmRegionCreateSize((long)dsHeader.dsRegionNumBoxes);
-  for (i = 0; i < (long)dsHeader.dsRegionNumBoxes; i++) {
+  remaining = propBuf->data.size - (size_t)(propBuf->data.curr - propBuf->data.bytes);
+  if (dsHeader.dsRegionNumBoxes > remaining / sizeof(xmICCRegBoxRec))
+    return False;
+  if ((region = _XmRegionCreateSize((long)dsHeader.dsRegionNumBoxes)) == NULL)
+    return False;
+  for (i = 0; i < dsHeader.dsRegionNumBoxes; i++) {
     _XmReadDragBuffer(propBuf, BUFFER_DATA, (BYTE *)&box, sizeof(xmICCRegBoxRec));
     if (dsmInfo->byteOrder != _XmByteOrderChar) {
       swap2bytes(box.x1);
@@ -1184,14 +1205,8 @@ Boolean _XmReadDSFromStream(XmDropSiteManagerObject dsm,
   }
   region->numRects = (long)dsHeader.dsRegionNumBoxes;
   _XmRegionComputeExtents(region);
-  if (++dsmInfo->currDropSite == dsmInfo->numDropSites) {
-    /* free all the wire data */
-    XtFree((char *)dsmInfo->propBufRec.data.bytes);
-    XtFree((char *)dsmInfo);
-#ifdef DEBUG
-    printf("freed the dsmInfo, all done\n");
-#endif
-  }
+  dropSiteInfoRtn->header.region = region;
+  dsmInfo->currDropSite++;
   return True;
 }
 

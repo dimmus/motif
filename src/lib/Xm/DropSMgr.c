@@ -181,7 +181,10 @@ static XmDSInfo GetDSFromStream(XmDropSiteManagerObject dsm,
                                 XtPointer dataPtr,
                                 Boolean *close,
                                 unsigned char *type);
-static void GetNextDS(XmDropSiteManagerObject dsm, XmDSInfo parentInfo, XtPointer dataPtr);
+static Boolean GetNextDS(XmDropSiteManagerObject dsm,
+                         XmDSInfo parentInfo,
+                         XtPointer dataPtr,
+                         int depth);
 static XmDSInfo ReadTree(XmDropSiteManagerObject dsm, XtPointer dataPtr);
 static void FreeDSTree(XmDSInfo tree);
 static void ChangeRoot(XmDropSiteManagerObject dsm, XtPointer clientData, XtPointer callData);
@@ -2022,7 +2025,8 @@ static XmDSInfo GetDSFromStream(XmDropSiteManagerObject dsm,
   XmDSInfo info;
   XmICCDropSiteInfoStruct iccInfo;
   size_t size;
-  _XmReadDSFromStream(dsm, dataPtr, &iccInfo);
+  if (!_XmReadDSFromStream(dsm, dataPtr, &iccInfo))
+    return NULL;
   switch (iccInfo.header.animationStyle) {
     case XmDRAG_UNDER_HIGHLIGHT:
       if (iccInfo.header.dropType & XmDSM_DS_LEAF)
@@ -2129,29 +2133,49 @@ static XmDSInfo GetDSFromStream(XmDropSiteManagerObject dsm,
   return (info);
 }
 
-static void GetNextDS(XmDropSiteManagerObject dsm, XmDSInfo parentInfo, XtPointer dataPtr)
+/*
+ * The drop site stream comes from another client.  Bound the nesting
+ * depth so a hostile peer cannot exhaust the stack; real drop site
+ * trees are nowhere near this deep.
+ */
+#define MAX_REMOTE_DS_DEPTH 256
+
+/*
+ * Read the children of parentInfo (a composite drop site) from the
+ * stream, recursively.  Returns False if the stream ended early or was
+ * malformed; whatever was read up to that point stays in the tree.
+ */
+static Boolean GetNextDS(XmDropSiteManagerObject dsm,
+                         XmDSInfo parentInfo,
+                         XtPointer dataPtr,
+                         int depth)
 {
-  Boolean close = TRUE;
+  Boolean close;
   unsigned char type;
-  XmDSInfo new_w = GetDSFromStream(dsm, dataPtr, &close, &type);
-  while (!close) {
+  XmDSInfo new_w;
+  if (depth >= MAX_REMOTE_DS_DEPTH)
+    return False;
+  do {
+    if ((new_w = GetDSFromStream(dsm, dataPtr, &close, &type)) == NULL)
+      return False;
     AddDSChild(parentInfo, new_w, GetDSNumChildren(parentInfo));
-    if (!(type & XmDSM_DS_LEAF))
-      GetNextDS(dsm, new_w, dataPtr);
-    new_w = GetDSFromStream(dsm, dataPtr, &close, &type);
-  }
-  AddDSChild(parentInfo, new_w, GetDSNumChildren(parentInfo));
-  if (!(type & XmDSM_DS_LEAF))
-    GetNextDS(dsm, new_w, dataPtr);
+    if (!(type & XmDSM_DS_LEAF) && !GetNextDS(dsm, new_w, dataPtr, depth + 1))
+      return False;
+  } while (!close);
+  return True;
 }
 
 static XmDSInfo ReadTree(XmDropSiteManagerObject dsm, XtPointer dataPtr)
 {
   Boolean junkb;
-  unsigned char junkc;
-  XmDSInfo root = GetDSFromStream(dsm, dataPtr, &junkb, &junkc);
+  unsigned char type;
+  XmDSInfo root;
+  if ((root = GetDSFromStream(dsm, dataPtr, &junkb, &type)) == NULL)
+    return NULL;
   SetDSShell(root, True);
-  GetNextDS(dsm, root, dataPtr);
+  /* only a composite root has children (and room to store them) */
+  if (!(type & XmDSM_DS_LEAF))
+    (void)GetNextDS(dsm, root, dataPtr, 0);
   return root;
 }
 
