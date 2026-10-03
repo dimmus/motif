@@ -139,6 +139,7 @@ function(motif_x_test name)
 endfunction()
 
 add_subdirectory(uil)
+add_subdirectory(interactive)
 
 foreach(suite IN LISTS MOTIF_TEST_SUITES)
     add_test(NAME Xm.${suite}
