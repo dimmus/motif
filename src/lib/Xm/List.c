@@ -2806,7 +2806,7 @@ static void ReplaceItem(XmListWidget lw, XmString item, int pos)
   lw->list.items[pos] = XmStringCopy(item);
   /*Selected items should be replaced also*/
   UpdateSelectedPositions(lw, lw->list.selectedItemCount);
-  for (i = 0; i < lw->list.selectedItemCount; i++) {
+  for (i = 0; (i < lw->list.selectedItemCount) && (i < lw->list.selectedPositionCount); i++) {
     if (lw->list.selectedPositions[i] == pos + 1) {
       XmStringFree(lw->list.selectedItems[i]);
       lw->list.selectedItems[i] = XmStringCopy(item);
@@ -3044,6 +3044,15 @@ static void BuildSelectedPositions(XmListWidget lw, int count)
         nsel++;
         if (nsel >= lw->list.selectedPositionCount)
           break;
+      }
+    }
+    /* The count can be stale, as when XmNselectedItems names items
+     * the list does not have: keep only the positions found. */
+    if (nsel < lw->list.selectedPositionCount) {
+      lw->list.selectedPositionCount = nsel;
+      if (nsel == 0) {
+        XtFree((char *)lw->list.selectedPositions);
+        lw->list.selectedPositions = NULL;
       }
     }
   }
