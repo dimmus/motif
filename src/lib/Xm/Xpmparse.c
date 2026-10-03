@@ -560,7 +560,13 @@ int xpmParseExtensions(xpmData *data, XpmExtension **extensions, unsigned int *n
   unsigned int nlines, a, l, notstart, notend = 0;
   int status;
   char *string, *s, *s2, **sp;
-  xpmNextString(data);
+  /*
+   * xpmNextString() fails at the end of the data. Check it everywhere, or
+   * an unterminated extension (no XPMENDEXT) loops forever on empty
+   * strings in buffer mode, appending lines until memory runs out.
+   */
+  if ((status = xpmNextString(data)) != XpmSuccess)
+    return (status);
   exts = (XpmExtension *)XpmMalloc(sizeof(XpmExtension));
   /* get the whole string */
   status = xpmGetString(data, &string, &l);
@@ -571,8 +577,8 @@ int xpmParseExtensions(xpmData *data, XpmExtension **extensions, unsigned int *n
   /* look for the key word XPMEXT, skip lines before this */
   while ((notstart = strncmp("XPMEXT", string, 6)) && (notend = strncmp("XPMENDEXT", string, 9))) {
     XpmFree(string);
-    xpmNextString(data);
-    status = xpmGetString(data, &string, &l);
+    if ((status = xpmNextString(data)) == XpmSuccess)
+      status = xpmGetString(data, &string, &l);
     if (status != XpmSuccess) {
       XpmFree(exts);
       return (status);
@@ -609,8 +615,8 @@ int xpmParseExtensions(xpmData *data, XpmExtension **extensions, unsigned int *n
     strncpy(ext->name, s + a, l - a - 6);
     XpmFree(string);
     /* now store the related lines */
-    xpmNextString(data);
-    status = xpmGetString(data, &string, &l);
+    if ((status = xpmNextString(data)) == XpmSuccess)
+      status = xpmGetString(data, &string, &l);
     if (status != XpmSuccess) {
       ext->lines = NULL;
       ext->nlines = 0;
@@ -632,8 +638,8 @@ int xpmParseExtensions(xpmData *data, XpmExtension **extensions, unsigned int *n
       ext->lines = sp;
       ext->lines[nlines] = string;
       nlines++;
-      xpmNextString(data);
-      status = xpmGetString(data, &string, &l);
+      if ((status = xpmNextString(data)) == XpmSuccess)
+        status = xpmGetString(data, &string, &l);
       if (status != XpmSuccess) {
         ext->nlines = nlines;
         XpmFreeExtensions(exts, num + 1);
