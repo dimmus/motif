@@ -134,12 +134,16 @@ Idb__FU_OpenFile (char 			*name,
    */
   int		file_desc;		/* 'unix' file descriptor */
   int		length;			/* the length of the above string */
+  int		copy_len;		/* bytes of it put in returned_fname */
   IDBLowLevelFile *a_file;		/* pointer to the file_id */
 
-  /* Fill in the result name with the name specified so far */
+  /* Fill in the result name with the name specified so far.  Copy no
+   * more than the name: callers may size the buffer to fit it exactly,
+   * and strncpy would pad it with NULs up to FNAMELEN. */
   length = strlen (name);
-  strncpy (returned_fname, name, FNAMELEN - 1);
-  returned_fname[FNAMELEN - 1] = '\0';
+  copy_len = length < FNAMELEN ? length : FNAMELEN - 1;
+  memcpy (returned_fname, name, copy_len);
+  returned_fname[copy_len] = '\0';
 
   /* Check if this file is to be opened for read or write access */
   if (access == URMWriteAccess)
