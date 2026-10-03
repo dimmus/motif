@@ -569,7 +569,7 @@ GetWMState(
 		  &nitems, &leftover, (unsigned char **)&property);
 
     if (!((ret_val == Success) && (actual_type == wmGD.xa_WM_STATE) &&
-         (nitems == PROP_WM_STATE_ELEMENTS)))
+         (actual_format == 32) && (nitems == PROP_WM_STATE_ELEMENTS)))
     {
         /*
          * The property could not be retrieved or is not correctly set up.
@@ -696,8 +696,24 @@ GetMwmHints(
      *    since Mwm 1.1.n won't try to access the extra elements.
      */
 
-    if ((ret_val == Success) && (actual_type == wmGD.xa_MWM_HINTS))
+    if ((ret_val == Success) && (actual_type == wmGD.xa_MWM_HINTS) &&
+	(actual_format == 32) && (nitems >= 1))
     {
+	/*
+	 * The property may be shorter than PropMwmHints.  Drop the flags
+	 * for any field the client did not supply so that the caller
+	 * never reads past the end of the returned data.
+	 */
+
+	if (nitems < 2)
+	    property->flags &= ~MWM_HINTS_FUNCTIONS;
+	if (nitems < 3)
+	    property->flags &= ~MWM_HINTS_DECORATIONS;
+	if (nitems < 4)
+	    property->flags &= ~MWM_HINTS_INPUT_MODE;
+	if (nitems < 5)
+	    property->flags &= ~MWM_HINTS_STATUS;
+
 	return (property);			/* indicate success */
     }
 
@@ -758,7 +774,7 @@ PropMwmInfo *GetMwmInfo (Window rootWindowOfScreen)
                                      (unsigned char **)&property);
 
     if ((ret_val == Success) && (actual_type == wmGD.xa_MWM_INFO) &&
-        (nitems == PROP_MWM_INFO_ELEMENTS))
+        (actual_format == 32) && (nitems == PROP_MWM_INFO_ELEMENTS))
     {
 	return (property);			/* indicate success */
     }

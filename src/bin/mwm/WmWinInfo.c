@@ -1000,14 +1000,19 @@ ProcessWmSaveHint (ClientData *pCD)
     Atom actualType;
     int actualFormat;
     unsigned long nitems, leftover;
-    BITS32 *saveHintFlags = (BITS32 *)NULL;
+    unsigned long *saveHintFlags = (unsigned long *)NULL;
+
+    /*
+     * Format 32 data is returned by Xlib as an array of long, and only
+     * the first element is used.
+     */
 
     if ((XGetWindowProperty(DISPLAY, pCD->client, wmGD.xa_WMSAVE_HINT,
-			    0L, (long)1000000, False, AnyPropertyType,
+			    0L, 1L, False, AnyPropertyType,
 			    &actualType, &actualFormat, &nitems,
 			    &leftover, (unsigned char **)&saveHintFlags)
 	 == Success) &&
-	(actualType != None) && (actualFormat == 32))
+	(actualType != None) && (actualFormat == 32) && (nitems >= 1))
     {
 	/* the WMSAVE_HINT property exists for the client window */
 	pCD->wmSaveHintFlags = (int)*saveHintFlags;
