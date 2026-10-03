@@ -5349,7 +5349,8 @@ static void ValidateString(XmTextFieldWidget tf, char *value, Boolean is_wchar)
   int str_len = 0;
   int i, j;
   char stack_cache[400];
-  char *params[1], *err_str;
+  char *params[1], *err_str, err_buf[8];
+  int err_len;
   char *temp_str, *curr_str, *start_temp;
   wchar_t tmp;
   int num_conv;
@@ -5366,11 +5367,10 @@ static void ValidateString(XmTextFieldWidget tf, char *value, Boolean is_wchar)
           temp_str++;
         }
         else {
-          err_str = XmStackAlloc(6, stack_cache);
-          sprintf(err_str, "\\%o", (unsigned char)*curr_str);
-          params[0] = err_str;
+          /* Not XmStackAlloc(stack_cache): temp_str may live there. */
+          snprintf(err_buf, sizeof(err_buf), "\\%o", (unsigned char)*curr_str);
+          params[0] = err_buf;
           _XmWarningMsg((Widget)tf, "Unsupported char", MSG5, params, 1);
-          XmStackFree(err_str, stack_cache);
         }
         curr_str++;
         i++;
@@ -5398,8 +5398,9 @@ static void ValidateString(XmTextFieldWidget tf, char *value, Boolean is_wchar)
         else {
           if (num_conv >= 0) {
             err_str = XtMalloc((4 * num_conv) + 1);
+            err_len = 0;
             for (j = 0; j < num_conv; j++) {
-              sprintf(err_str + (j * 4), "\\%o", (unsigned char)curr_str[j]);
+              err_len += sprintf(err_str + err_len, "\\%o", (unsigned char)curr_str[j]);
             }
           }
           else {
@@ -5470,8 +5471,9 @@ static void ValidateString(XmTextFieldWidget tf, char *value, Boolean is_wchar)
         else {
           if (csize >= 0) {
             err_str = XtMalloc((4 * csize) + 1);
+            err_len = 0;
             for (j = 0; j < csize; j++) {
-              sprintf(err_str + (j * 4), "\\%o", (unsigned char)scratch[j]);
+              err_len += sprintf(err_str + err_len, "\\%o", (unsigned char)scratch[j]);
             }
           }
           else {
@@ -5493,8 +5495,9 @@ static void ValidateString(XmTextFieldWidget tf, char *value, Boolean is_wchar)
           csize = wctomb(scratch, *wcs_curr_str);
           if (csize >= 0) {
             err_str = XtMalloc((4 * csize) + 1);
+            err_len = 0;
             for (j = 0; j < csize; j++) {
-              sprintf(err_str + (j * 4), "\\%o", (unsigned char)scratch[j]);
+              err_len += sprintf(err_str + err_len, "\\%o", (unsigned char)scratch[j]);
             }
           }
           else {
