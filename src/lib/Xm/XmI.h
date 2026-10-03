@@ -168,15 +168,36 @@ extern Pixel _XmAssignInsensitiveColor(Widget w);
 /********    End Private Function Declarations    ********/
 /********    Conditionally defined macros for thread_safe Motif ******/
 #  if defined(XTHREADS) && defined(XUSE_MTSAFE_API)
-#    define _XmWidgetToAppContext(w) XtAppContext app = XtWidgetToApplicationContext(w)
-#    define _XmDisplayToAppContext(d) XtAppContext app = XtDisplayToApplicationContext(d)
-#    define _XmAppLock(app) XtAppLock(app)
-#    define _XmAppUnlock(app) XtAppUnlock(app)
-#    define _XmProcessLock() XtProcessLock()
-#    define _XmProcessUnlock() XtProcessUnlock()
 /* Remove use of _XtProcessLock when Xt provides API to query its MT-status */
 extern void (*_XtProcessLock)();
 #    define _XmIsThreadInitialized() (_XtProcessLock)
+/*
+ * Xt's locks do nothing until XtToolkitThreadInitialize has been called.
+ * Test that here, so that the many lock calls on hot paths cost a load
+ * and a branch, not a call into libXt, in programs that never call it.
+ */
+#    define _XmWidgetToAppContext(w) XtAppContext app = XtWidgetToApplicationContext(w)
+#    define _XmDisplayToAppContext(d) XtAppContext app = XtDisplayToApplicationContext(d)
+#    define _XmAppLock(app) \
+      do { \
+        if (_XmIsThreadInitialized()) \
+          XtAppLock(app); \
+      } while (0)
+#    define _XmAppUnlock(app) \
+      do { \
+        if (_XmIsThreadInitialized()) \
+          XtAppUnlock(app); \
+      } while (0)
+#    define _XmProcessLock() \
+      do { \
+        if (_XmIsThreadInitialized()) \
+          XtProcessLock(); \
+      } while (0)
+#    define _XmProcessUnlock() \
+      do { \
+        if (_XmIsThreadInitialized()) \
+          XtProcessUnlock(); \
+      } while (0)
 #  else
 #    define _XmWidgetToAppContext(w)
 #    define _XmDisplayToAppContext(d)
