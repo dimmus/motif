@@ -54,33 +54,18 @@ void XmDrawBevel(Display *dpy,
                  unsigned int size,
                  XmBevelOption option)
 {
-  static XRectangle saved[STATIC_RECTS], *alloced = NULL;
-  static int numAlloced = 0;
+  /* Not static: XmDrawBevel can be called from several threads. */
+  XRectangle saved[STATIC_RECTS];
   XRectangle *rt;
   int i;
   /*
-   * First lets see if we can get away with using our list rectangles
-   * without allocating any.
+   * Small bevels fit on the stack; allocate the rectangles of larger
+   * ones for this call.
    */
-  if (size < STATIC_RECTS) {
-    /*
-     * OK we don't need to allocate any so lets use the static
-     * array.
-     */
+  if (size < STATIC_RECTS)
     rt = saved;
-  }
-  else {
-    /*
-     * Well we need more than our static array holds so lets see
-     * if we have enough in our alloced array and if no lets
-     * allocate what we need.
-     */
-    if (size > numAlloced) {
-      numAlloced = size;
-      alloced = (XRectangle *)_XmReallocArray((XtPointer)alloced, numAlloced, sizeof(XRectangle));
-    }
-    rt = alloced;
-  }
+  else
+    rt = (XRectangle *)_XmMallocArray(size, sizeof(XRectangle));
   /*
    * Now that we have enough rectangles to fill in an area lets
    * set up the rectangles and pass them off to be drawn.  First the
@@ -110,4 +95,6 @@ void XmDrawBevel(Display *dpy,
     }
     XFillRectangles(dpy, d, bottom_gc, rt, size);
   }
+  if (rt != saved)
+    XtFree((char *)rt);
 }
