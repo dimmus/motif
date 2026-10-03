@@ -1096,16 +1096,22 @@ static void ListCallback(Widget w, XtPointer client_data, XtPointer call_data)
   }
   if (success) {
     if (type == atoms[XmA_MOTIF_COMPOUND_STRING]) {
-      XmString temp;
-      temp = XmCvtByteStreamToXmString((unsigned char *)value);
-      textTrait->setValue(SB_Text(sel), temp, XmFORMAT_XmSTRING);
-      XmStringFree(temp);
+      XmString temp = NULL;
+      /* The byte stream is not NUL terminated: bound it by size. */
+      if ((format == 8) && (_XmStringByteStreamValidLength((unsigned char *)value, size) != 0))
+        temp = XmCvtByteStreamToXmString((unsigned char *)value);
+      if (temp != NULL) {
+        textTrait->setValue(SB_Text(sel), temp, XmFORMAT_XmSTRING);
+        XmStringFree(temp);
+      }
     }
     else if (type == atoms[XmACOMPOUND_TEXT]) {
       XmString temp;
       temp = XmCvtCTToXmString((char *)value);
-      textTrait->setValue(SB_Text(sel), value, XmFORMAT_XmSTRING);
-      XmStringFree(temp);
+      if (temp != NULL) {
+        textTrait->setValue(SB_Text(sel), temp, XmFORMAT_XmSTRING);
+        XmStringFree(temp);
+      }
     }
     else if (type == XA_STRING) {
       textTrait->setValue(SB_Text(sel), value, XmFORMAT_MBYTE);
