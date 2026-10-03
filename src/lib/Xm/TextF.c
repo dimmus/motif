@@ -7337,13 +7337,17 @@ static void PreeditDraw(XIC xic, XPointer client_data, XIMPreeditDrawCallbackStr
     }
     if (tf->text.overstrike && recover_len > 0) {
       char *over_str_mb;
+      size_t mb_size, nbytes;
       int n;
       wc = (wchar_t *)XtRealloc((char *)wc, (wcslen(wc) + recover_len + 1) * sizeof(wchar_t));
-      ptr = over_str_mb = XtMalloc((tf->text.onthespot->over_len + 1) * sizeof(char));
-      if (wcstombs(ptr, (wchar_t *)tf->text.onthespot->over_str, tf->text.onthespot->over_len) ==
-          (size_t)-1)
-        ptr[0] = '\0';
-      ptr[tf->text.onthespot->over_len] = '\0';
+      /* over_str holds over_len wide characters; each can take up to
+       * MB_CUR_MAX bytes, so this always has room for the NUL. */
+      mb_size = tf->text.onthespot->over_len * MB_CUR_MAX + 1;
+      ptr = over_str_mb = XtMalloc(mb_size);
+      nbytes = wcstombs(ptr, (wchar_t *)tf->text.onthespot->over_str, mb_size);
+      if (nbytes == (size_t)-1 || nbytes >= mb_size)
+        nbytes = 0;
+      ptr[nbytes] = '\0';
       for (i = 0; i < tf->text.onthespot->over_maxlen; i++) {
         if ((n = mblen(ptr, MB_CUR_MAX)) <= 0)
           break;
@@ -7453,7 +7457,8 @@ static void TextFieldResetIC(Widget w)
              (char *)&TextF_WcValue(tf)[PreStart(tf)],
              (PreEnd(tf) - PreStart(tf)) * sizeof(wchar_t));
       wc_string[PreEnd(tf) - PreStart(tf)] = (wchar_t)'\0';
-      num_bytes = wcstombs(str, wc_string, (PreEnd(tf) - PreStart(tf) + 1) * sizeof(wchar_t));
+      /* Leave room for the NUL written below. */
+      num_bytes = wcstombs(str, wc_string, (PreEnd(tf) - PreStart(tf) + 1) * sizeof(wchar_t) - 1);
       if (num_bytes < 0)
         num_bytes = 0;
       str[num_bytes] = '\0';
