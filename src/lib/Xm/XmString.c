@@ -1315,9 +1315,10 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
       else
         MergeEnds((_XmStringEntry)a_last, (_XmStringEntry)b_seg);
       _XmEntryTextTypeSet(a_last, (a_type == XmNO_TEXT) ? b_type : a_type);
-      memcpy(((char *)_XmEntryTextGet((_XmStringEntry)a_last)) + a_len,
-             _XmEntryTextGet((_XmStringEntry)b_seg),
-             b_len);
+      if (b_len > 0)
+        memcpy(((char *)_XmEntryTextGet((_XmStringEntry)a_last)) + a_len,
+               _XmEntryTextGet((_XmStringEntry)b_seg),
+               b_len);
       _XmEntryByteCountSet(a_last, a_len + b_len);
       _XmEntryTabsSet(a_last, a_tabs + b_tabs);
       if (last == XmSTRING_DIRECTION_UNSET)
@@ -1588,9 +1589,9 @@ Boolean XmStringCompare(XmString a, XmString b)
               return (FALSE);
             }
           }
-          if (strncmp((char *)_XmEntryTextGet((_XmStringEntry)a_seg),
-                      (char *)_XmEntryTextGet((_XmStringEntry)b_seg),
-                      len) != 0)
+          if ((len > 0) && (strncmp((char *)_XmEntryTextGet((_XmStringEntry)a_seg),
+                                    (char *)_XmEntryTextGet((_XmStringEntry)b_seg),
+                                    len) != 0))
           {
             if (a_unopt)
               XmStringFree(a_unopt);
@@ -1639,9 +1640,9 @@ Boolean XmStringCompare(XmString a, XmString b)
           _XmProcessUnlock();
           return (FALSE);
         }
-        if (strncmp((char *)_XmEntryTextGet(entry_a[i]),
-                    (char *)_XmEntryTextGet(entry_b[i]),
-                    len) != 0)
+        if ((len > 0) && (strncmp((char *)_XmEntryTextGet(entry_a[i]),
+                                  (char *)_XmEntryTextGet(entry_b[i]),
+                                  len) != 0))
         {
           if (a_unopt)
             XmStringFree(a_unopt);
@@ -7013,7 +7014,8 @@ XmString XmStringComponentCreate(XmStringComponentType c_type,
                                        (_XmStrByteCount((_XmString)&opt) - TEXT_BYTES_IN_STRUCT) :
                                        0));
     memcpy(str, &opt, sizeof(_XmStringOptRec) - TEXT_BYTES_IN_STRUCT);
-    memcpy(_XmStrText(str), value, _XmStrByteCount((_XmString)&opt));
+    if (_XmStrByteCount((_XmString)&opt) > 0)
+      memcpy(_XmStrText(str), value, _XmStrByteCount((_XmString)&opt));
     _XmStrRefCountSet(str, 1);
   }
   else {
@@ -7294,7 +7296,8 @@ XmStringComponentType XmeStringGetComponent(_XmStringContext context,
         case XmWIDECHAR_TEXT:
           if (copy_data) {
             char *tmp = XtMalloc(char_count + sizeof(wchar_t));
-            memcpy(tmp, seg_text, char_count);
+            if (char_count > 0)
+              memcpy(tmp, seg_text, char_count);
             bzero(tmp + char_count, sizeof(wchar_t));
             *value = (XtPointer)tmp;
           }
