@@ -58,7 +58,7 @@ static void HandleInsertTargets(Widget w,
                                 unsigned long *length,
                                 int *format);
 /********    End Static Function Declarations    ********/
-extern void _XmDataFieldDeselectSelection(Widget, int, Boolean, Time);
+extern void _XmDataFieldDeselectSelection(Widget, Boolean, Time);
 extern void _XmDataFieldStartSelection(XmDataFieldWidget, XmTextPosition, XmTextPosition, Time);
 extern int _XmDataFieldCountBytes(XmDataFieldWidget, wchar_t *, int);
 extern Boolean _XmDataFielddf_SetDestination(Widget, XmTextPosition, Time);
@@ -660,7 +660,7 @@ void _XmDataFieldLoseSelection(Widget w, Atom *selection)
   /* Losing Primary Selection */
   if (*selection == XA_PRIMARY && XmTextF_has_primary(tf)) {
     XmAnyCallbackStruct cb;
-    _XmDataFieldDeselectSelection(w, False, 0, XtLastTimestampProcessed(XtDisplay(w)));
+    _XmDataFieldDeselectSelection(w, False, XtLastTimestampProcessed(XtDisplay(w)));
     cb.reason = XmCR_LOSE_PRIMARY;
     cb.event = NULL;
     XtCallCallbackList(w, XmTextF_lose_primary_callback(tf), (XtPointer)&cb);
