@@ -116,7 +116,7 @@ int XpmCreateBufferFromXpmImage(char **buffer_return, XpmImage *image, XpmInfo *
   if (cmts)
     cmt_size = CommentsSize(info);
   /* write the header line */
-  used_size = sprintf(buf, "/* XPM */\nstatic char * image_name[] = {\n");
+  used_size = snprintf(buf, sizeof(buf), "/* XPM */\nstatic char * image_name[] = {\n");
   ptr_size = used_size + ext_size + cmt_size + 1; /* ptr_size can't be 0 */
   if (ptr_size <= used_size || ptr_size <= ext_size || ptr_size <= cmt_size) {
     return XpmNoMemory;
@@ -129,14 +129,20 @@ int XpmCreateBufferFromXpmImage(char **buffer_return, XpmImage *image, XpmInfo *
   if (cmts && info->hints_cmt) {
     used_size += snprintf(ptr + used_size, ptr_size - used_size, "/*%s*/\n", info->hints_cmt);
   }
-  l = sprintf(buf, "\"%u %u %u %u", image->width, image->height, image->ncolors, image->cpp);
+  l = snprintf(buf,
+               sizeof(buf),
+               "\"%u %u %u %u",
+               image->width,
+               image->height,
+               image->ncolors,
+               image->cpp);
   if (info && (info->valuemask & XpmHotspot)) {
     l += snprintf(buf + l, sizeof(buf) - l, " %u %u", info->x_hotspot, info->y_hotspot);
   }
   if (extensions) {
-    l += sprintf(buf + l, " XPMEXT");
+    l += snprintf(buf + l, sizeof(buf) - l, " XPMEXT");
   }
-  l += sprintf(buf + l, "\",\n");
+  l += snprintf(buf + l, sizeof(buf) - l, "\",\n");
   ptr_size += l;
   if (ptr_size <= l)
     RETURN(XpmNoMemory);
