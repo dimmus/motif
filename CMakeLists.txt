@@ -647,6 +647,19 @@ endif()
 list(APPEND _pc_libs -lm ${CMAKE_THREAD_LIBS_INIT})
 string(REPLACE ";" " " MOTIF_PC_XM_LIBS_PRIVATE "${_pc_libs}")
 
+# Relative to ${prefix} where possible, so that the files can be relocated
+# (pkgconf --define-prefix); absolute CMAKE_INSTALL_*DIR values are kept.
+foreach(_dir LIBDIR:exec_prefix INCLUDEDIR:prefix)
+  string(REPLACE ":" ";" _dir "${_dir}")
+  list(GET _dir 0 _name)
+  list(GET _dir 1 _base)
+  if(IS_ABSOLUTE "${CMAKE_INSTALL_${_name}}")
+    set(MOTIF_PC_${_name} "${CMAKE_INSTALL_FULL_${_name}}")
+  else()
+    set(MOTIF_PC_${_name} "\${${_base}}/${CMAKE_INSTALL_${_name}}")
+  endif()
+endforeach()
+
 foreach(_pc motif mrm uil)
   configure_file(
     ${CMAKE_SOURCE_DIR}/data/${_pc}.pc.in
