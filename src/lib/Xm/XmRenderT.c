@@ -2440,7 +2440,7 @@ static int XftDisplayClose(Display *display, XExtCodes *codes)
 }
 
 /* Call with the process lock held. */
-static XmXftDisplayRec *GetXftDisplay(Display *display)
+static XmXftDisplayRec *FindXftDisplay(Display *display, Boolean create)
 {
   XmXftDisplayRec **prev, *rec;
   XExtCodes *codes;
@@ -2453,7 +2453,7 @@ static XmXftDisplayRec *GetXftDisplay(Display *display)
       }
       return rec;
     }
-  if ((codes = XAddExtension(display)) == NULL)
+  if (!create || (codes = XAddExtension(display)) == NULL)
     return NULL;
   XESetCloseDisplay(display, codes->extension, XftDisplayClose);
   rec = XtNew(XmXftDisplayRec);
@@ -2464,6 +2464,28 @@ static XmXftDisplayRec *GetXftDisplay(Display *display)
   rec->next = _XmXftDisplays;
   _XmXftDisplays = rec;
   return rec;
+}
+
+/*
+ * Destroy callback of a widget whose window has an XftDraw: destroy the
+ * XftDraw while the window still exists, so that the table does not keep
+ * every window ever drawn into, nor hand a stale XftDraw to a new window
+ * that gets the same XID.
+ */
+static void XftDrawWidgetDestroyed(Widget w, XtPointer client_data, XtPointer call_data)
+{
+  Window window = (Window)client_data;
+  XmXftDisplayRec *rec;
+  XftDraw *draw = NULL;
+  _XmProcessLock();
+  if ((rec = FindXftDisplay(XtDisplay(w), False)) != NULL &&
+      (draw = (XftDraw *)_XmGetHashEntry(rec->draws, (XmHashKey)window)) != NULL)
+    (void)_XmRemoveHashEntry(rec->draws, (XmHashKey)window);
+  _XmProcessUnlock();
+  /* If the widget was unrealized meanwhile, the server has already freed
+   * the window and its Picture: only forget the XftDraw then. */
+  if (draw != NULL && XtWindow(w) == window)
+    XftDrawDestroy(draw);
 }
 
 /* Grow a table once it holds more entries than buckets. */
@@ -2496,7 +2518,7 @@ static XftColor GetXftColor(Display *display, Colormap colormap, Pixel pixel)
   if (display == NULL)
     return key.color;
   _XmProcessLock();
-  rec = GetXftDisplay(display);
+  rec = FindXftDisplay(display, True);
   entry = rec ? (XmXftColorRec *)_XmGetHashEntry(rec->colors, (XmHashKey)&key) : NULL;
   if (entry != NULL) {
     key.color = entry->color;
@@ -2511,7 +2533,7 @@ static XftColor GetXftColor(Display *display, Colormap colormap, Pixel pixel)
   key.color.color.green = xcol.green;
   key.color.color.blue = xcol.blue;
   _XmProcessLock();
-  if ((rec = GetXftDisplay(display)) != NULL &&
+  if ((rec = FindXftDisplay(display, True)) != NULL &&
       _XmGetHashEntry(rec->colors, (XmHashKey)&key) == NULL) {
     entry = XtNew(XmXftColorRec);
     *entry = key;
@@ -2549,8 +2571,9 @@ XftDraw *_XmXftDrawCreate(Display *display, Window window)
 {
   XmXftDisplayRec *rec;
   XftDraw *draw = NULL;
+  Widget widget;
   _XmProcessLock();
-  if ((rec = GetXftDisplay(display)) != NULL)
+  if ((rec = FindXftDisplay(display, True)) != NULL)
     draw = (XftDraw *)_XmGetHashEntry(rec->draws, (XmHashKey)window);
   _XmProcessUnlock();
   if (draw != NULL)
@@ -2563,9 +2586,11 @@ XftDraw *_XmXftDrawCreate(Display *display, Window window)
   if (draw == NULL)
     return NULL;
   _XmProcessLock();
-  if ((rec = GetXftDisplay(display)) != NULL)
+  if ((rec = FindXftDisplay(display, True)) != NULL)
     AddHashEntry(rec->draws, (XmHashKey)window, (XtPointer)draw);
   _XmProcessUnlock();
+  if (rec != NULL && (widget = XtWindowToWidget(display, window)) != NULL)
+    XtAddCallback(widget, XtNdestroyCallback, XftDrawWidgetDestroyed, (XtPointer)window);
   return draw;
 }
 
@@ -2574,7 +2599,7 @@ void _XmXftDrawDestroy(Display *display, Window window, XftDraw *draw)
   XmXftDisplayRec *rec;
   XtPointer found = NULL;
   _XmProcessLock();
-  if ((rec = GetXftDisplay(display)) != NULL &&
+  if ((rec = FindXftDisplay(display, True)) != NULL &&
       (found = _XmGetHashEntry(rec->draws, (XmHashKey)window)) != NULL)
     (void)_XmRemoveHashEntry(rec->draws, (XmHashKey)window);
   _XmProcessUnlock();
