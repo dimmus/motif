@@ -202,8 +202,13 @@ option(WITH_PWC_DEBUG "Enable PWC debug output" OFF)
 find_package(PkgConfig REQUIRED)
 find_package(Threads REQUIRED)
 
-# Parser and scanner generators for the WML tools and the UIL compiler
-motif_find_parser_generators()
+# Parser and scanner generators for the WML tools and the UIL compiler.
+# Only the UIL parser is generated when the WML tools are imported.
+if(MOTIF_HOST_TOOLS)
+  motif_find_parser_generators(NO_LEX)
+else()
+  motif_find_parser_generators()
+endif()
 
 # X11 and Xt are part of the public interface of libXm; the others are only
 # used inside the libraries and programs.  The MOTIF_ prefixes keep the

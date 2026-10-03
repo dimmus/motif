@@ -22,17 +22,23 @@ function(motif_check_c_flags var)
   set(${var} "${_flags}" PARENT_SCOPE)
 endfunction()
 
-# motif_find_parser_generators()
+# motif_find_parser_generators([NO_LEX])
 #
 # Find a yacc-compatible parser generator that understands -d -o (bison or
 # byacc), a lex-compatible scanner generator (flex or lex) and its library,
 # which provides main() for wmluiltok.  Sets the cache variables
 # MOTIF_YACC_EXECUTABLE, MOTIF_LEX_EXECUTABLE and MOTIF_LEX_LIBRARY.
+# The scanners are only needed to build the WML tools; with NO_LEX (the
+# tools are imported, MOTIF_HOST_TOOLS) only the parser generator is looked
+# for.
 function(motif_find_parser_generators)
   find_program(MOTIF_YACC_EXECUTABLE NAMES bison byacc
     DOC "yacc-compatible parser generator that accepts -d -o (bison or byacc)")
   if(NOT MOTIF_YACC_EXECUTABLE)
     message(FATAL_ERROR "Neither bison nor byacc was found; install one of them.")
+  endif()
+  if("NO_LEX" IN_LIST ARGN)
+    return()
   endif()
   find_program(MOTIF_LEX_EXECUTABLE NAMES flex lex
     DOC "lex-compatible scanner generator (flex or lex)")
