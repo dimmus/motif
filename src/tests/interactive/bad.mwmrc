@@ -1,0 +1,17 @@
+!! A deliberately malformed .mwmrc: mwm must report the errors and keep
+!! running on its built-in defaults, not crash.  Unterminated menu,
+!! unknown functions, a function with a missing argument, a bad
+!! accelerator, and a line far longer than any fixed parse buffer.
+Menu BrokenMenu
+{
+	"No closing brace"	f.title
+	"Unknown function"	f.does_not_exist
+	"Missing menu arg"	f.menu
+	"Bad accel"	_B	Frobnicate<Key>Nonsense	f.nop
+
+Keys DefaultKeyBindings
+{
+	<Key>F8		root|icon|window	f.refresh
+	ThisIsAVeryLongModifierThatDoesNotExistAndKeepsGoingAndGoingAndGoingAndGoingAndGoingAndGoingAndGoingAndGoing<Key>F9 window f.minimize
+	Shift<Key>F12	root|icon|window	f.quit_mwm
+}

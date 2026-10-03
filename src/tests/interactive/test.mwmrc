@@ -1,0 +1,45 @@
+!! .mwmrc for the mwm tests.  It binds the window-manager functions the
+!! test drives to plain unmodified keys, so xdotool can trigger them
+!! without a modifier mwm might also use, and keeps the standard window
+!! menu and button bindings.  It also exercises a range of parser
+!! constructs (menus, quoted labels, mnemonics, accelerators, the
+!! include of groups by name).
+
+Menu DefaultRootMenu
+{
+	"Test Root Menu"	f.title
+	no-label		f.separator
+	"Refresh"		f.refresh
+	"Restart"		f.restart
+	"Quit"			f.quit_mwm
+}
+
+Menu DefaultWindowMenu
+{
+	"Restore"	_R	Alt<Key>F5	f.restore
+	"Move"		_M	Alt<Key>F7	f.move
+	"Size"		_S	Alt<Key>F8	f.resize
+	"Minimize"	_n	Alt<Key>F9	f.minimize
+	"Maximize"	_x	Alt<Key>F10	f.maximize
+	no-label				f.separator
+	"Close"		_C	Alt<Key>F4	f.kill
+}
+
+Keys DefaultKeyBindings
+{
+	<Key>F1		root|icon|window	f.menu DefaultRootMenu
+	<Key>F2		window			f.minimize
+	<Key>F3		icon			f.normalize
+	<Key>F4		window			f.maximize
+	<Key>F5		window			f.normalize
+	<Key>F6		window|icon		f.post_wmenu
+	<Key>F8		root|icon|window	f.refresh
+	Shift<Key>F12	root|icon|window	f.quit_mwm
+}
+
+Buttons DefaultButtonBindings
+{
+	<Btn1Down>	frame|icon	f.raise
+	<Btn3Down>	root		f.menu	DefaultRootMenu
+	<Btn3Down>	frame|icon	f.post_wmenu
+}
