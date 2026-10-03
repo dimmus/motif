@@ -550,7 +550,7 @@ void	lst_output_messages(src_message_item_type *az_message_item)
 
 {
     src_message_item_type	*az_msg;
-    char			buffer[132];
+    char			buffer[132 + 32];   /* message plus prefix */
     int				msg_no;
     int				last_pos;
     int				current_pos;
@@ -574,7 +574,7 @@ void	lst_output_messages(src_message_item_type *az_message_item)
 	}
 
 
-	sprintf(buffer, "%s (%d) %s",
+	snprintf(buffer, sizeof(buffer), "%s (%d) %s",
 		diag_get_message_abbrev( az_msg->l_message_number ),
 		msg_no,
 		az_msg->c_text);
@@ -991,7 +991,7 @@ void	lst_debug_output
 	int	count;
 	char	*ptr;
 
-	vsprintf( &(buffer[cur_pos]), format, ap );
+	vsnprintf( &(buffer[cur_pos]), sizeof(buffer) - cur_pos, format, ap );
 
 	for ( ptr=buffer; ptr[0] != '\0'; ptr += (count+1) )
 	{

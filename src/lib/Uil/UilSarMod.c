@@ -360,7 +360,7 @@ void	sar_create_module(yystype *target_frame, yystype *id_frame, yystype *module
     */
 
     if (Uil_cmd_z_command.v_listing_file)
-	sprintf(Uil_lst_c_title2,
+	snprintf(Uil_lst_c_title2, sizeof(Uil_lst_c_title2),
 		"Module: %s",
 		name_entry->c_text );
 
@@ -460,12 +460,12 @@ void	sar_process_module_version(yystype *value_frame, yystype *start_frame)
     if (Uil_cmd_z_command.v_listing_file)
 	{
 	if (value_entry != NULL)
-	    sprintf(Uil_lst_c_title2,
+	    snprintf(Uil_lst_c_title2, sizeof(Uil_lst_c_title2),
 		    "Module: %s \t Version: %s",
 		    sym_az_module_entry->obj_header.az_name->c_text,
 		    value_entry->value.c_value );
 	else
-	    sprintf(Uil_lst_c_title2,
+	    snprintf(Uil_lst_c_title2, sizeof(Uil_lst_c_title2),
 		    "Module: %s",
 		    sym_az_module_entry->obj_header.az_name->c_text );
 	}

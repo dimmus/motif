@@ -1276,7 +1276,8 @@ src_append_machine_code ( src_source_record_type *az_src_rec,
 
     az_code_item -> w_offset = l_offset;
     az_code_item -> w_code_len = l_code_len;
-    memmove( (az_code_item->data.c_data), c_code, l_code_len );
+    if (l_code_len > 0)
+	memmove( (az_code_item->data.c_data), c_code, l_code_len );
     memmove( &(az_code_item->data.c_data [l_code_len]), c_text, l_text_len );
 
     /*
