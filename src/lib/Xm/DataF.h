@@ -64,6 +64,23 @@ Boolean XmDataFieldCopy(Widget, Time);
 Boolean XmDataFieldPaste(Widget);
 void XmDataFieldSetEditable(Widget, Boolean);
 void XmDataFieldSetInsertionPosition(Widget, XmTextPosition);
+Boolean XmDataFieldGetAddMode(Widget);
+Boolean XmDataFieldGetEditable(Widget);
+int XmDataFieldGetMaxLength(Widget);
+void XmDataFieldSetMaxLength(Widget, int);
+XmTextPosition XmDataFieldGetCursorPosition(Widget);
+XmTextPosition XmDataFieldGetInsertionPosition(Widget);
+XmTextPosition XmDataFieldGetLastPosition(Widget);
+int XmDataFieldGetSubstring(Widget, XmTextPosition, int, int, char *);
+int XmDataFieldGetSubstringWcs(Widget, XmTextPosition, int, int, wchar_t *);
+wchar_t *XmDataFieldGetSelectionWcs(Widget);
+void XmDataFieldReplace(Widget, XmTextPosition, XmTextPosition, char *);
+void XmDataFieldReplaceWcs(Widget, XmTextPosition, XmTextPosition, wchar_t *);
+void XmDataFieldInsert(Widget, XmTextPosition, char *);
+void XmDataFieldInsertWcs(Widget, XmTextPosition, wchar_t *);
+Boolean XmDataFieldRemove(Widget);
+Boolean XmDataFieldPosToXY(Widget, XmTextPosition, Position *, Position *);
+int XmDataFieldGetBaseline(Widget);
 extern WidgetClass xmDataFieldWidgetClass;
 
 typedef struct _XmDataFieldCallbackStruct {

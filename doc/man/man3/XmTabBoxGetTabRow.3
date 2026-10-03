@@ -1,0 +1,30 @@
+.TH "XmTabBoxGetTabRow" "library call"
+.SH "NAME"
+\fBXmTabBoxGetTabRow\fP \(em A TabBox function that returns the row of a tab
+.iX "XmTabBoxGetTabRow"
+.iX "TabBox functions" "XmTabBoxGetTabRow"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/TabBox\&.h>
+\fBint \fBXmTabBoxGetTabRow\fP\fR(
+\fBWidget \fBwidget\fR\fR,
+\fBint \fBindex\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fBXmTabBoxGetTabRow\fP returns the row in which the tab at position
+\fIindex\fP of the TabBox is currently displayed\&. Rows are
+numbered from 0\&.
+.IP "\fIwidget\fP" 10
+Specifies the TabBox widget ID\&.
+.IP "\fIindex\fP" 10
+Specifies the position of the tab, from 0 to one less than
+\fBXmTabBoxGetNumTabs\fP(3)\&.
+.SH "RETURN"
+.PP
+Returns the row of the tab, or \-1 if \fIwidget\fP is not a TabBox
+or \fIindex\fP is negative\&.
+.SH "RELATED"
+.PP
+\fBXmTabBoxGetNumRows\fP(3), \fBXmTabStack\fP(3) and \fBXmTabbedStackList\fP(3)\&.

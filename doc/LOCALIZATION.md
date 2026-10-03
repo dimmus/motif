@@ -1,335 +1,124 @@
-# Localization Testing Guide for xde-motif
+# Localization
 
-This document provides comprehensive guidance on how to test that localization works correctly in the xde-motif project.
+Motif has two independent localization mechanisms:
 
-## Overview
+- **Message catalogs** translate the warnings and the default labels that
+  the libraries themselves produce ("Cancel", "Help", "Filter", the
+  messages of Mrm and of the UIL compiler, ...).  They are X/Open
+  catalogs read with `catgets()`, enabled with `WITH_MESSAGE_CATALOG`.
+- **Application resources and UIL** translate an application's own
+  strings, through locale-specific resource files (`XAPPLRESDIR`,
+  `XFILESEARCHPATH`) or locale-specific UID files (`UIDPATH`).  This is
+  plain Xt and Mrm behaviour and needs no build option.
 
-The xde-motif project supports internationalization (i18n) and localization (l10n) through several mechanisms:
+Text input and display in a locale need that locale to be installed
+(`locale -a`) and, for core fonts, fonts covering its characters; with
+Xft (`WITH_XFT`) fontconfig picks the fonts.
 
-- **UIL-based localization**: Different UIL files for different languages
-- **Environment-based locale switching**: Using `LANG` and `XAPPLRESDIR` variables
-- **X11 locale support**: Integration with X11's locale system
-- **Font support**: Character set support for different languages
+## Message catalogs
 
-## Supported Languages
+### Sources
 
-The project includes localization support for:
+| File | Contents |
+|------|----------|
+| `src/lib/Xm/Xm.msg`, `src/lib/Mrm/Mrm.msg`, `src/lib/Uil/Uil.msg` | The English (C) catalogs, with symbolic set and message ids |
+| `localized/<lang>/msg/{Xm,Mrm,Uil}.msg` | Translations: `de`, `es`, `fr`, `it` and `ja` |
 
-- **English** (default/C locale)
-- **French** (`fr_FR.ISO8859-1`)
-- **German** (`de_DE.ISO8859-1`)
-- **Hebrew** (`hebrew`) (in examples)
-- **Japanese** (`ja_JP.eucJP`, `ja_JP.dt-eucJP`)
-- **Swedish** (`sv_SE.ISO8859-1`)
-- **Spanish** (`es_ES.ISO8859-1`)  (in examples)
-- **Italian** (`it_IT.ISO8859-1`)
+All of them are UTF-8.  The translations date from the 1990s; the
+messages added since then carry the English text and a
+`$ TODO: translate` comment line.
 
-## Testing Methods
+### Building and installing
 
-### 1. Using Built-in Demo Programs
+With `-DWITH_MESSAGE_CATALOG=ON` the build:
 
-#### A. Hello World Internationalization Demo (`helloint`)
+1. runs `mkcatdefs` on each English catalog, which writes the header with
+   the numeric ids that the library code uses (`XmMsgCatI.h`, ...) and
+   the numeric catalog `<build>/localized/C/msg/<Name>.msg`;
+2. does the same for each translation, in the C.UTF-8 locale, and checks
+   it against the English catalog: it must define the same sets and
+   message ids in the same order (`mkcatdefs` numbers them by position),
+   and each message must contain the same printf conversions in the same
+   order (the libraries pass the arguments of the English message).  A
+   translation that fails either check fails the build;
+3. when `gencat` was found, compiles every catalog and installs it as
+   `<localedir>/C/LC_MESSAGES/<Name>` and
+   `<localedir>/<lang>/LC_MESSAGES/<Name>` (`<localedir>` is
+   `CMAKE_INSTALL_LOCALEDIR`, `share/locale` by default).
 
-The simplest way to test localization:
+The libraries open the catalogs with `catopen("Xm", NL_CAT_LOCALE)`
+(and `"Mrm"`, `"Uil"`), so the catalog follows `LC_MESSAGES`.  glibc's
+default `NLSPATH` includes `<prefix>/share/locale/%l/LC_MESSAGES/%N`,
+where `%l` is the language part of the locale, so a system install
+(`CMAKE_INSTALL_PREFIX=/usr`) works in every `de_*` locale, and so on.
+For another prefix, or on musl, which has no default path, set
+`NLSPATH`, for example
 
-```bash
-# Navigate to the example directory
-cd examples/programs/hellomotifi18n
-
-# Test different languages
-# English (default)
-./helloint
-
-# French
-LANG=fr_FR.ISO8859-1 XAPPLRESDIR=./french ./helloint
-
-# Hebrew  
-LANG=hebrew XAPPLRESDIR=./hebrew ./helloint
-
-# Japanese
-LANG=ja_JP.eucJP XAPPLRESDIR=./japanese ./helloint
-
-# Swedish
-LANG=sv_SE.ISO8859-1 XAPPLRESDIR=./swedish ./helloint
+```sh
+export NLSPATH=/opt/motif/share/locale/%l/LC_MESSAGES/%N
 ```
 
-**What to verify:**
-- Button labels appear in target language
-- Text displays correctly with proper character encoding
-- Fonts support the required character set
+The catalogs are UTF-8 and display correctly only in UTF-8 locales.
 
-#### B. File Viewer Demo (`fileview`)
+### Trying a translation
 
-A more complex application with full localization:
+The translated catalogs can be tested without installing the locales
+system-wide.  `localedef` can build a locale into a private directory
+that `LOCPATH` points at:
 
-```bash
-cd examples/programs/fileview
+```sh
+cmake -S . -B _build -DWITH_MESSAGE_CATALOG=ON
+cmake --build _build
+DESTDIR=$PWD/_stage cmake --install _build
 
-# Use the provided script for different languages
-./xmfile french    # French interface
-./xmfile english   # English interface  
-./xmfile german    # German interface
+mkdir -p _locales
+localedef -i de_DE -f UTF-8 _locales/de_DE.UTF-8
+
+LOCPATH=$PWD/_locales LANG=de_DE.UTF-8 \
+NLSPATH=$PWD/_stage/usr/local/share/locale/%l/LC_MESSAGES/%N \
+    some-motif-program
 ```
 
-**What to verify:**
-- Menu items are translated
-- Dialog boxes show localized text
-- File operations work with localized text
-- Error messages appear in target language
+The Cancel button of a message box then reads "Abbruch".  A single
+catalog can also be selected directly, whatever the locale, with
+`NLSPATH=$PWD/_build/localized/de/msg/%N.cat`.
 
-### 2. Using Built-in Test Scripts
+### Changing or adding translations
 
-#### A. I18N Test Script
+- Edit the files in UTF-8 and keep the structure of the English catalog:
+  the same `$set` lines and message ids, in the same order.  Keep `%s`,
+  `%d` and the other conversions, in their order; do not translate
+  resource names (`XmN...`), `True` and `False`.
+- When a message is added to an English catalog, add it at the same
+  place in every translation, with the English text quoted (the
+  translations use `$quote "`) and a `$ TODO: translate` line above it.
+- To add a language, copy an existing translation to
+  `localized/<lang>/msg`, translate it and add `<lang>` to
+  `MOTIF_CATALOG_LANGUAGES` in `localized/CMakeLists.txt`.
+- Build with `-DWITH_MESSAGE_CATALOG=ON` to run the checks.
 
-The project includes a comprehensive test script in `.attic/tests/I18N/`:
+## Application localization
 
-```bash
-cd .attic/tests/I18N
+The example programs show the resource and UIL mechanisms:
 
-# Test text display with different locales
-./i18n1 american a    # American locale, test case a
-./i18n1 french a      # French locale, test case a
-./i18n1 hebrew a      # Hebrew locale, test case a
-./i18n1 japanese a    # Japanese locale, test case a
+- `src/examples/programs/hellomotifi18n` (`helloint`) has one UIL file
+  per language (`english`, `french`, `hebrew`, `japanese`, `swedish`)
+  and finds the UID file for `$LANG` through `UIDPATH`; its `README`
+  describes the environment it expects;
+- `src/examples/programs/fileview` has English, French and German UIL
+  files, selected by its `xmfile` script.
 
-# Test text conversion (test case b)
-./i18n1 american b
-./i18n1 french b
-```
+Several of these examples were written for ISO-8859 and EUC locales and
+core fonts, and need such a locale and fonts installed to display
+correctly.  `tools/dev/scripts/localization_test.sh` runs them in several
+locales (`--auto-locales` limits it to the installed ones).
 
-**Test cases:**
-- **Case a**: Basic text display testing
-- **Case b**: Text conversion and wide character handling
+Useful environment variables:
 
-#### B. Input Method Testing
-
-For testing input methods and complex script handling:
-
-```bash
-# Test shared input context
-./InputMethod1 -u a    # OVER_THE_SPOT Input Method
-./InputMethod1 -u b    # OFF_THE_SPOT Input Method
-./InputMethod1 -u c    # ROOT Input Method
-
-# Test per-widget input contexts
-./InputMethod2 -u a
-./InputMethod2 -u b
-./InputMethod2 -u c
-```
-
-### 3. Manual Testing Steps
-
-#### A. Environment Setup
-
-```bash
-# Set locale environment variables
-export LANG=fr_FR.ISO8859-1
-export LC_ALL=fr_FR.ISO8859-1
-export XAPPLRESDIR=/path/to/your/app/resources
-
-# Verify locale support
-locale -a | grep fr_FR
-```
-
-#### B. Font Verification
-
-Check that appropriate fonts are available:
-
-```bash
-# List available fonts
-xlsfonts | grep -i helvetica
-xlsfonts | grep -i times
-xlsfonts | grep -i iso8859
-
-# Check font availability with fontconfig
-fc-list | grep -i helvetica
-fc-list | grep -i iso8859
-```
-
-#### C. X11 Locale Support
-
-```bash
-# Check X11 locale support
-xdpyinfo | grep -i locale
-xlsfonts | grep -i locale
-```
-
-### 4. Automated Testing Script
-
-Create this script to automate localization testing:
-
-```bash
-#!/bin/bash
-# localization_test.sh
-
-echo "Testing xde-motif Localization..."
-
-# Test locales
-LOCALES=("en_US.UTF-8" "fr_FR.ISO8859-1" "de_DE.ISO8859-1" "ja_JP.eucJP")
-
-for locale in "${LOCALES[@]}"; do
-    echo "Testing locale: $locale"
-    
-    # Set environment
-    export LANG=$locale
-    export LC_ALL=$locale
-    
-    # Test helloint example
-    cd examples/programs/hellomotifi18n
-    timeout 10s ./helloint &
-    sleep 2
-    pkill helloint
-    
-    # Test fileview demo  
-    cd ../fileview
-    timeout 10s ./fileview -ok &
-    sleep 2
-    pkill fileview
-    
-    echo "Completed test for $locale"
-    echo "---"
-done
-
-echo "Localization testing complete!"
-```
-
-## What to Look For When Testing
-
-### Text Display
-- **Correct Language**: Verify that text appears in the target language
-- **Character Encoding**: Check that special characters (accents, umlauts, etc.) display correctly
-- **Font Rendering**: Ensure fonts support the required character set
-- **Text Direction**: For RTL languages like Hebrew, verify text flows right-to-left
-
-### User Interface Elements
-- **Menu Items**: All menu text should be translated
-- **Button Labels**: Button text should appear in target language
-- **Dialog Boxes**: All dialog text should be localized
-- **Error Messages**: System messages should appear in target language
-
-### Input Handling
-- **Keyboard Input**: Test typing in the target language
-- **Input Methods**: For complex scripts (Japanese, Chinese), test input methods
-- **Character Conversion**: Verify text conversion between different character sets
-
-## Troubleshooting Common Issues
-
-### Locale Not Supported
-
-```bash
-# Check available locales
-locale -a
-
-# Install additional locales (Ubuntu/Debian)
-sudo locale-gen fr_FR.ISO8859-1
-sudo dpkg-reconfigure locales
-
-# Install additional locales (Red Hat/Fedora)
-sudo localedef -i fr_FR -f ISO8859-1 fr_FR.ISO8859-1
-```
-
-### Font Issues
-
-```bash
-# Install additional fonts
-sudo apt-get install fonts-dejavu fonts-liberation
-
-# Check font availability
-fc-list | grep -i helvetica
-fc-list | grep -i iso8859
-```
-
-### X11 Locale Issues
-
-```bash
-# Check X11 locale support
-xlsfonts | grep -i locale
-xdpyinfo | grep -i locale
-
-# Restart X server if needed
-sudo systemctl restart display-manager
-```
-
-### UIL Compilation Issues
-
-```bash
-# Recompile UIL files for different locales
-cd examples/programs/hellomotifi18n
-make clean
-make
-
-# Check UIL compilation with specific locale
-LANG=fr_FR.ISO8859-1 uil -o test.uid test.uil
-```
-
-## Verification Checklist
-
-- [ ] Text displays in correct language
-- [ ] Special characters render properly
-- [ ] Fonts support required character sets
-- [ ] Menu items are translated
-- [ ] Button labels are localized
-- [ ] Dialog boxes show translated text
-- [ ] Input methods work for complex scripts
-- [ ] Text direction is correct for RTL languages
-- [ ] Error messages appear in target language
-- [ ] Application doesn't crash with different locales
-- [ ] UIL files compile correctly for each locale
-- [ ] Resource files load properly for each language
-
-## File Structure
-
-The localization files are organized as follows:
-
-```
-examples/programs/hellomotifi18n/
-├── C/                    # Default locale (English)
-├── english/              # English localization
-├── french/               # French localization
-├── hebrew/               # Hebrew localization
-├── japanese/             # Japanese localization
-└── swedish/              # Swedish localization
-
-examples/programs/fileview/
-├── English.uil           # English UIL file
-├── French.uil            # French UIL file
-├── German.uil            # German UIL file
-└── xmfile                # Localization test script
-
-localized/
-├── C/                    # Default locale resources
-├── fr_FR.ISO8859-1/      # French resources
-├── de_DE.ISO8859-1/      # German resources
-└── ja_JP.dt-eucJP/       # Japanese resources
-```
-
-## Environment Variables
-
-Key environment variables for localization testing:
-
-- `LANG`: Primary locale setting
-- `LC_ALL`: Override for all locale categories
-- `XAPPLRESDIR`: Directory for application resources
-- `XFILESEARCHPATH`: X11 file search path
-- `XNLSPATH`: X11 NLS (National Language Support) path
-
-## Additional Resources
-
-- [X11 Internationalization](https://www.x.org/releases/X11R7.7/doc/libX11/i18n.html)
-- [Motif Internationalization](https://www.opengroup.org/motif/)
-- [UIL Language Reference](https://www.opengroup.org/motif/uil.html)
-
-## Contributing
-
-When adding new localizations:
-
-1. Create appropriate UIL files for the new language
-2. Add locale-specific resource files
-3. Update the test scripts to include the new locale
-4. Verify font support for the target character set
-5. Test input methods if applicable
-6. Update this documentation
-
----
-
-For questions or issues with localization testing, please refer to the project's issue tracker or documentation.
+| Variable | Used for |
+|----------|----------|
+| `LANG`, `LC_ALL`, `LC_MESSAGES` | The locale, and the message catalog language |
+| `NLSPATH` | Where `catopen()` looks for message catalogs |
+| `XAPPLRESDIR`, `XFILESEARCHPATH`, `XUSERFILESEARCHPATH` | Where Xt looks for application resource files (`%L` and `%l` expand to the locale) |
+| `UIDPATH` | Where Mrm looks for UID files |
+| `XMODIFIERS` | The X input method (`@im=...`) |

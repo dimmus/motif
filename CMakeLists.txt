@@ -771,6 +771,10 @@ add_subdirectory(src/lib)
 add_subdirectory(src/bin)
 add_subdirectory(data)
 
+if(WITH_MESSAGE_CATALOG)
+    add_subdirectory(localized)
+endif()
+
 if(WITH_DEMOS)
     add_subdirectory(src/examples)
 endif()

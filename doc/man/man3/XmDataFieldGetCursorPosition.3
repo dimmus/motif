@@ -1,0 +1,30 @@
+.TH "XmDataFieldGetCursorPosition" "library call"
+.SH "NAME"
+\fBXmDataFieldGetCursorPosition\fP \(em A DataField function that returns the position of the insertion cursor
+.iX "XmDataFieldGetCursorPosition"
+.iX "DataField functions" "XmDataFieldGetCursorPosition"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/DataF\&.h>
+\fBXmTextPosition \fBXmDataFieldGetCursorPosition\fP\fR(
+\fBWidget \fBwidget\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fBXmDataFieldGetCursorPosition\fP returns the position of the
+insertion cursor, the value of the \fBXmNcursorPosition\fP resource,
+as a number of characters from the beginning of the text\&. It is the
+same as \fBXmDataFieldGetInsertionPosition\fP(3)\&.
+.IP "\fIwidget\fP" 10
+Specifies the DataField widget ID
+.PP
+For a complete definition of DataField and its associated resources, see
+\fBXmDataField\fP(3)\&.
+.SH "RETURN"
+.PP
+Returns the position of the insertion cursor; the first position is 0\&.
+.SH "RELATED"
+.PP
+\fBXmDataField\fP(3), \fBXmDataFieldGetInsertionPosition\fP(3) and
+\fBXmDataFieldSetInsertionPosition\fP(3)\&.

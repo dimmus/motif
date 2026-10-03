@@ -1,168 +1,114 @@
-# Build Instructions
+# Building Motif
 
-This document describes the available build targets and optimization options for the XDE Motif project.
+The [README](../README.md) covers the requirements, the common options
+and testing.  This file adds the details for packagers and developers.
 
-## Quick Start
+## CMake
 
-```bash
-# Standard build
-make
+Motif builds with CMake 3.16 or later, out of the source tree:
 
-# Help - show all available targets
-make help
-
-# Optimized release build
-make release
-
-# Development build with debug symbols
-make dev-build
+```sh
+cmake -S . -B _build -G Ninja -DCMAKE_BUILD_TYPE=RelWithDebInfo
+cmake --build _build
+ctest --test-dir _build            # with -DWITH_TESTS=ON
+DESTDIR=/tmp/stage cmake --install _build
 ```
 
-## Build Targets
+- Without `CMAKE_BUILD_TYPE` a single-configuration generator builds
+  `RelWithDebInfo`.  Debug keeps `assert()`; the other types define
+  `NDEBUG`.
+- The code is compiled as C17 with GNU extensions (`-std=gnu17`) and
+  `_GNU_SOURCE`.  GCC older than 11 and Clang older than 8 are rejected.
+- Warnings come from one curated list in `CMakeLists.txt`; a few always
+  indicate bugs and are errors (`-Werror=implicit-function-declaration`,
+  `-Werror=return-type`, `-Werror=vla`).  Set
+  `CMAKE_COMPILE_WARNING_AS_ERROR=ON` to make all warnings errors.
+- The build never writes into the source tree, and configuring in the
+  source directory is refused (`WITH_IN_SOURCE_BUILD=ON` overrides).
+- `cmake -LH _build` lists every option with its help text; the summary
+  printed at the end of the configure run shows the ones in effect.
 
-### Standard Targets
+## Presets
 
-- **`make`** or **`make all`** - Standard build with default settings
-- **`make clean`** - Clean build artifacts
-- **`make distclean`** - Clean everything including configuration
-- **`make install`** - Install the built software
-- **`make uninstall`** - Uninstall the software
+`tools/cmake/config` holds initial caches for common configurations,
+used with `cmake -C`:
 
-### Release Targets
+| Preset | Build type | Notes |
+|--------|------------|-------|
+| `motif_debug.cmake` | Debug | Tests, examples, coverage, all features, UIL debugging |
+| `motif_developer.cmake` | Debug | Tests, examples, coverage, ASan, ccache, Ninja job pools |
+| `motif_release.cmake` | Release | `-O3`, LTO, all features, examples, no tests |
+| `motif_full.cmake` | Release | `-O3`, LTO, `-march=native`, all features, tests |
+| `motif_lite.cmake` | Release | `-Os`, stripped, no optional features, examples or docs |
 
-- **`make release`** - Full optimized release build with CPU-specific optimizations and stripping
-  - Uses `-O3 -march=native -mtune=native -flto` and other aggressive optimizations
-  - Automatically strips debug symbols from binaries
-  - Best performance for the current machine
-
-- **`make release-portable`** - Portable optimized release build
-  - Uses `-O3 -flto` without CPU-specific optimizations
-  - Suitable for distribution packages
-  - Automatically strips debug symbols from binaries
-
-- **`make release-configure`** - Configure for release build only (without building)
-- **`make release-build`** - Build release version (after configure)
-
-### Development Targets
-
-- **`make dev-build`** - Development build with debug symbols
-  - Configures with `--enable-debug`
-  - Includes debug symbols and assertions
-  - Uses `-Og -ggdb` optimization level
-
-### Utility Targets
-
-- **`make help`** - Show all available build targets and their descriptions
-- **`make format`** - Format source code with clang-format
-- **`make deps`** - Check dependencies
-
-### Testing and Coverage Targets
-
-- **`make check`** - Run automated tests (requires `--enable-tests`)
-- **`make gcov`** - Generate code coverage reports (requires `--enable-tests`)
-- **`make clean-gcov`** - Clean up coverage files
-
-## Optimization Details
-
-### Release Build Optimizations
-
-The release builds use the following GCC optimization flags:
-
-- **`-O3`** - Maximum optimization level
-- **`-march=native`** - Optimize for current CPU architecture (release only)
-- **`-mtune=native`** - Tune for current CPU (release only)
-- **`-flto`** - Link-time optimization
-- **`-ffast-math`** - Fast floating-point math operations
-- **`-funroll-loops`** - Unroll loops for better performance
-- **`-fomit-frame-pointer`** - Omit frame pointer for smaller code
-- **`-DNDEBUG`** - Disable debug assertions
-
-### Binary Stripping
-
-Release builds automatically strip debug symbols from:
-- Shared libraries (`*.so*`)
-- Executable files
-- Uses `strip --strip-unneeded` for optimal size reduction
-
-## Configuration Options
-
-The build system supports standard autotools configure options:
-
-```bash
-# Configure manually with custom options
-./configure --enable-debug --with-xft --with-png --with-jpeg
-
-# Or use the predefined build targets
-make dev-build    # Equivalent to: ./configure --enable-debug
-make release      # Equivalent to: CFLAGS="-O3..." ./configure --disable-dependency-tracking
+```sh
+cmake -C tools/cmake/config/motif_release.cmake -S . -B _build-release -G Ninja
 ```
 
-## Examples
+A preset only seeds a new cache; options given with `-D` on the same
+command line win.
 
-```bash
-# Build optimized version for current machine
-make release
+## The GNUmakefile
 
-# Build portable version for distribution
-make release-portable
+`make` in the source directory configures and builds in
+`../build_<os>` (override with `BUILD_DIR=`).  The goals `debug`,
+`release`, `full`, `lite` and `developer` pick the preset of the same
+name and a build directory of their own (`../build_<os>_release`, ...),
+and `ninja` and `ccache` add the Ninja generator and ccache; goals can be
+combined, as in `make release ninja`.  `make install`, `make test`,
+`make clean` (removes the CMake cache), `make clean_all` (removes the
+build directory) and `make help` do what their names say;
+`BUILD_CMAKE_ARGS` passes extra arguments to cmake.
 
-# Build development version for debugging
-make dev-build
+## What is installed
 
-# Clean and rebuild everything
-make distclean
-make release
+With the default `CMAKE_INSTALL_PREFIX` of `/usr/local` and
+GNUInstallDirs:
 
-# Install optimized version
-make release
-sudo make install
+| Path | Contents |
+|------|----------|
+| `lib/libXm.so.5`, `libMrm.so.5`, `libUil.so.5` | The libraries (static with `WITH_SHARED_LIBS=OFF`) |
+| `include/Xm`, `include/Mrm`, `include/uil` | Public and widget-writer headers |
+| `lib/pkgconfig/motif.pc`, `mrm.pc`, `uil.pc` | pkg-config files, relative to `${prefix}` |
+| `lib/cmake/Motif` | The CMake package for `find_package(Motif CONFIG)` |
+| `bin/uil`, `bin/mwm`, `bin/xmbind` | Programs |
+| `etc/X11/system.mwmrc` | mwm's default configuration (`CMAKE_INSTALL_SYSCONFDIR`) |
+| `share/X11/bindings` | Virtual key bindings for xmbind |
+| `include/X11/bitmaps` | Bitmaps used by Motif applications |
+| `share/man/man1`, `man3`, `man4`, `man5` | Manual pages (`WITH_DOCS`) |
+| `share/doc/motif` | `doc/*.md`, `doc/guide`, `AUTHORS`, `CHANGELOG.md`, `SECURITY.md` (`WITH_DOCS`) |
+| `share/locale/<lang>/LC_MESSAGES/{Xm,Mrm,Uil}` | Message catalogs (`WITH_MESSAGE_CATALOG`, needs gencat) |
+| `share/Xm/<example>` | Example programs (`WITH_DEMOS`) |
 
-# Build with tests and generate coverage
-./configure --enable-tests
-make check
-make gcov
-```
+Run-time search paths compiled into the libraries and mwm (for example
+where mwm looks for `system.mwmrc`) are absolute paths below the install
+prefix.  Packagers normally configure with
+`-DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_SYSCONFDIR=/etc` and stage
+with `DESTDIR`.  `tools/dev/env/ci/package-smoke.sh` is the packaging
+check that CI runs on Debian and Fedora: it builds with the
+distribution's flags, checks the staged install (symlinks, RPATH,
+`ldd`), installs it and builds a client through pkg-config and
+through `find_package(Motif)`.
 
-## Performance Notes
+## Cross-compiling
 
-- **`make release`** provides the best performance but binaries only work on similar CPUs
-- **`make release-portable`** provides good performance and works on most x86_64 systems
-- Both release builds are significantly faster than the default build
-- Debug builds (`make dev-build`) are slower but include debugging information
+The build runs `makestrs`, `mkcatdefs`, `wml`, `wmluiltok` and `uil`,
+which must run on the build machine.  Build Motif natively first; that
+build writes `MotifHostTools.cmake` into its build directory.  Then
+configure the cross build with your toolchain file and
+`-DMOTIF_HOST_TOOLS=<native build>/MotifHostTools.cmake`, and the tools
+are imported from the native build instead of being built.
 
-## Code Coverage
+## Static analysis, ABI and reproducibility
 
-When tests are enabled (`--enable-tests`), the build system automatically adds coverage instrumentation:
+The CI scripts in `tools/dev/env/ci` can be run locally from the top of
+the source tree:
 
-### Coverage Features
-
-- **Automatic Compiler Detection**: Automatically uses the correct gcov command for your compiler
-  - **GCC**: Uses `gcov` for coverage analysis
-  - **Clang**: Uses `llvm-cov gcov` for coverage analysis
-
-- **Coverage Instrumentation**: Adds `-fprofile-arcs -ftest-coverage` flags to test builds
-
-- **Coverage Targets**:
-  - `make gcov` - Runs tests and generates coverage reports
-  - `make clean-gcov` - Removes all coverage files
-
-### Coverage Workflow
-
-```bash
-# 1. Configure with tests enabled
-./configure --enable-tests
-
-# 2. Build and run tests
-make check
-
-# 3. Generate coverage reports
-make gcov
-
-# 4. View coverage files (*.gcov)
-ls *.gcov
-
-# 5. Clean up when done
-make clean-gcov
-```
-
-Coverage reports are generated as `.gcov` files in the source directories, showing line-by-line execution counts.
+- `build.sh` configures, builds and tests one profile
+  (`MOTIF_CI_PROFILE=debug`, `debug-asan`, `release` or `release-lto`);
+- `static-analysis.sh clang-tidy|scan-build|cppcheck BUILD_DIR OUT_DIR`
+  runs an analyser and compares its findings with the baselines in
+  `tools/dev/env/ci/baselines`;
+- `abi-check.sh REF...` compares the ABI of libXm and libMrm with older
+  revisions using libabigail;
+- `repro-check.sh DIR` builds twice and compares the results.

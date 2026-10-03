@@ -31,7 +31,7 @@ The SpinBox is a composite widget that combines:
 ```
 
 This reveals the widget's sophisticated feature set:
-- **Accessibility** - Screen reader and keyboard navigation support
+- **Keyboard Operation** - Traversal and keyboard activation support
 - **Drawing System** - Integration with the shadow and rendering system
 - **Navigation** - Keyboard traversal and focus management
 - **Traits** - Extensible behavior through the trait system
@@ -199,14 +199,14 @@ This enables:
 - **Extensible Behavior** - Additional capabilities can be added
 - **Consistent Interfaces** - Standard behavior across different widget types
 
-### 2. Accessibility Support
+### 2. Textual Access and Keyboard Support
 
 ```c
 #include <Xm/AccTextT.h>
 ```
 
 The widget provides:
-- **Screen Reader Support** - Text descriptions for assistive technologies
+- **Access Textual Trait** - Other widgets (a ComboBox, a SelectionBox) can get and set the value as text
 - **Keyboard Navigation** - Full keyboard accessibility
 - **Focus Management** - Proper focus indication and management
 
@@ -303,7 +303,7 @@ The widget properly distributes events:
 ### 3. User Experience
 
 - **Consistent Behavior** - Follow Motif design guidelines
-- **Accessibility** - Full keyboard and screen reader support
+- **Keyboard Operation** - Every function reachable from the keyboard
 - **Visual Feedback** - Clear indication of widget state
 
 ## Real-World Usage Examples

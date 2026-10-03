@@ -1,0 +1,28 @@
+.TH "XmTabBoxGetNumRows" "library call"
+.SH "NAME"
+\fBXmTabBoxGetNumRows\fP \(em A TabBox function that returns the number of rows of tabs
+.iX "XmTabBoxGetNumRows"
+.iX "TabBox functions" "XmTabBoxGetNumRows"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/TabBox\&.h>
+\fBint \fBXmTabBoxGetNumRows\fP\fR(
+\fBWidget \fBwidget\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fBXmTabBoxGetNumRows\fP returns the number of rows in which the TabBox
+currently lays out its tabs\&. Only the stacked tab modes
+(\fBXmTABS_STACKED\fP and \fBXmTABS_STACKED_STATIC\fP) use more
+than one row; the other modes lay the tabs out in one row\&.
+The value reflects the current layout of the TabBox\&.
+.IP "\fIwidget\fP" 10
+Specifies the TabBox widget ID\&.
+.SH "RETURN"
+.PP
+Returns the number of rows, or 0 if \fIwidget\fP is not a TabBox
+or has no tabs\&.
+.SH "RELATED"
+.PP
+\fBXmTabBoxGetTabRow\fP(3), \fBXmTabStack\fP(3) and \fBXmTabbedStackList\fP(3)\&.

@@ -74,7 +74,9 @@ int XmTabbedStackListSimpleAppend(XmTabbedStackList, XmString);
 void XmTabbedStackListSimpleModify(XmTabbedStackList, int, XmString);
 XmString XmTabbedStackListSimpleQuery(XmTabbedStackList, int);
 XmTabResult XmTabbedStackListCompare(XmTabbedStackList, XmTabbedStackList);
-void XmTabAttibutesFree(XmTabAttributes);
+void XmTabAttributesFree(XmTabAttributes);
+/* The misspelt name that earlier releases declared instead */
+#define XmTabAttibutesFree XmTabAttributesFree
 #ifdef __cplusplus
 } /* Closes scope of 'extern "C"' declaration */
 #endif

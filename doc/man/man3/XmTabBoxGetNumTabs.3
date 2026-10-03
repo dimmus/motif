@@ -1,0 +1,25 @@
+.TH "XmTabBoxGetNumTabs" "library call"
+.SH "NAME"
+\fBXmTabBoxGetNumTabs\fP \(em A TabBox function that returns the number of tabs
+.iX "XmTabBoxGetNumTabs"
+.iX "TabBox functions" "XmTabBoxGetNumTabs"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/TabBox\&.h>
+\fBint \fBXmTabBoxGetNumTabs\fP\fR(
+\fBWidget \fBwidget\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fBXmTabBoxGetNumTabs\fP returns the number of tabs in a TabBox\&.
+The TabBox is the row of tabs of a TabStack; its tabs are described
+by its \fBXmNtabList\fP resource (see \fBXmTabbedStackList\fP(3))\&.
+.IP "\fIwidget\fP" 10
+Specifies the TabBox widget ID\&.
+.SH "RETURN"
+.PP
+Returns the number of tabs, or 0 if \fIwidget\fP is not a TabBox\&.
+.SH "RELATED"
+.PP
+\fBXmTabStack\fP(3) and \fBXmTabbedStackList\fP(3)\&.

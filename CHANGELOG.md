@@ -1,0 +1,144 @@
+# Changelog
+
+This file summarises the changes in this tree since Motif 2.3.8, the last
+upstream release (December 2017).  The git history has the details.
+
+## Unreleased
+
+Changes since 2.4.1.  The project version in `CMakeLists.txt` is still
+2.4.1.
+
+### Compatibility
+
+- The libraries keep SONAME 5 (`libXm.so.5`, `libMrm.so.5`, and now
+  `libUil.so.5`, which used to be static only), with file version 5.0.0.
+  abidiff against an upstream 2.3.8 build shows that the ABI is not
+  compatible: `XmPrimitivePart` and `XmGadgetPart` lost the
+  `OM22_COMPATIBILITY` member `tool_tip_string`, so every widget record
+  and subclass part offset moved; the `_XmStrings` tables were re-ordered,
+  so 1624 of the 1692 `XmC*`/`XmR*`/`XmS*` macros compiled into 2.3.8
+  programs name other strings; and `_XmEditResCheckMessages`,
+  `XmDataFielddf_ClearSelection` and `XmDataFielddf_SetCursorPosition` are
+  no longer exported.  Programs and widgets built against 2.3.8 must be
+  rebuilt.
+- New function `MrmOpenHierarchyFromBufferWithSize`, which takes the size
+  of the UID buffer so that it can be validated.
+- `<Xm/DataF.h>` now declares the seventeen exported `XmDataField`
+  functions it lacked, and `<Xm/TabList.h>` declares
+  `XmTabAttributesFree` (it declared the misspelt `XmTabAttibutesFree`,
+  which is kept as a macro).
+
+### Security
+
+A review of the code that parses data from other X clients and from
+files fixed a large number of memory-safety bugs.  See
+[SECURITY.md](SECURITY.md) for the classes of issues.  In summary:
+
+- Drag and drop: the Motif drag protocol messages, drop site and
+  receiver-info properties, the shared atoms and targets tables and
+  XDND data are bounds-checked and byte-swapped correctly; a remote drop
+  site stream can no longer cause a use-after-free.
+- Clipboard and selections: clipboard records, format registrations and
+  item counts read from the root window are validated; selection
+  replies (`TARGETS`, `INSERT_SELECTION`, compound text) are checked
+  for type and length; waits for a foreign clipboard owner are bounded.
+- XmString and render tables: byte streams are validated before use,
+  tag counters and segment counts can no longer overflow, render table
+  properties from other clients are parsed safely, and render table
+  reference counting is fixed.
+- Strings and buffers: fixed-size `strcpy`/`sprintf`/`strcat` buffers
+  across Xm (virtual key bindings, font names, path names, warning
+  texts, colour names, input method modifiers) were replaced or bounded.
+- Images: the bundled XPM code is fixed for CVE-2022-44617,
+  CVE-2022-46285, CVE-2023-43788, CVE-2023-43789 and a buffer writer
+  overflow, and never runs external decompressors (CVE-2022-4883); the PNG, JPEG
+  and SVG loaders check sizes and overflow, and the image cache has no
+  use-after-free or lock imbalance left.
+- Mrm: UID files are validated (record and data entry reads, B-tree
+  indexes, compression tables, widget records, argument lists,
+  literals, icons, compound strings) and cyclic widget trees are
+  rejected.
+- UIL compiler: buffer overflows in the lexer, the listing, file names,
+  the `.wmd` database reader and literal handling were fixed; a
+  robustness test feeds it pathological input.
+- mwm: client-supplied menus (`_MOTIF_WM_MENU`), window manager
+  properties, `WM_NORMAL_HINTS`, session client data and `@file`
+  bitmap labels are no longer trusted; the shell-based `cpp` config
+  file path is gone.
+- Translations: five translated messages had printf conversions that
+  did not match their arguments; the build now rejects such
+  translations.
+- Earlier, fixes for issues reported by Coverity in the UIL compiler,
+  Mrm, DataField, Text, TabStack and the geometry code.
+
+### Build
+
+- CMake is the only build system (3.16 or later).  It honours
+  `CMAKE_BUILD_TYPE`, builds as C17 with GNU extensions, never writes
+  into the source tree, refuses in-source builds and supports
+  cross-compiling (`MOTIF_HOST_TOOLS`).  The `GNUmakefile` is a small
+  wrapper around it.
+- Hardening flags are on by default (`WITH_HARDENING`); new options
+  `WITH_UBSAN`, `WITH_TSAN`, `WITH_MSAN`, `WITH_LTO`, `WITH_CPU_NATIVE`
+  and `WITH_NINJA_POOL_JOBS`; the sanitizer and coverage options work.
+- The install provides `motif.pc`, `mrm.pc` and `uil.pc` and a CMake
+  package (`find_package(Motif CONFIG)` with `Motif::Xm`, `Motif::Mrm`
+  and `Motif::Uil`), installs only what users need, and installs
+  `system.mwmrc` where mwm looks for it.
+- `WITH_MESSAGE_CATALOG=ON` generates the C message catalogs from the
+  symbolic sources and builds, checks and installs the German, Spanish,
+  French, Italian and Japanese translations.  These are now UTF-8 and
+  contain every message id.
+
+### Code
+
+- HP-UX and AIX code removed; `demos` renamed to `src/examples`.
+
+### Tests and CI
+
+- Legacy test trees that no longer built were removed; the old
+  interactive XmString programs remain, unbuilt, in `src/tests/XmString`.
+- The libcheck suite builds with `WITH_TESTS=ON` and runs under CTest,
+  with the X11 suites under xvfb-run.
+- CI covers glibc and musl Linux, 32-bit x86, big-endian s390x and
+  FreeBSD with GCC and Clang, ASan/UBSan builds, packaging on Debian and
+  Fedora, static analysis with ratcheted baselines, ABI comparison and
+  reproducible builds.
+
+### Documentation
+
+- New manual pages for the `XmLog`, `XmeXpm`, TabBox, TabStack,
+  `XmTabbedStackList`, DataField, DropDown, `XmI18List` and creation
+  functions that had none.
+- `CHANGELOG.md`, `CONTRIBUTING.md`, `SECURITY.md` and `AUTHORS`; the
+  README describes the build as it is.
+
+## 2.4.1 (2025-09-03)
+
+- A logging facility, the `XmLog` functions in `<Xm/Log.h>`, always
+  built in, with `LOG_LEVEL` and `LOG_OUTPUT` build options.
+- K&R function definitions converted to prototypes throughout; legacy
+  SVR4/SYSV, VMS, HP-UX and AIX code removed; `NeedFunctionPrototypes`
+  conditionals removed.
+- Builds with current GCC and Clang and on Alpine Linux (musl); many
+  compiler warnings fixed.
+- Documentation of the toolkit architecture in `doc/guide`.
+
+## 2.4.0 (2025-08-23)
+
+The first release of this tree, continuing from the upstream
+repository after 2.3.8.
+
+- Fixes for upstream bugs 1624 to 1708 that were committed upstream
+  after 2.3.8 but never released.
+- The bundled XPM code was updated to libXpm 3.5.12 (upstream, 2023).
+- Fixes from other maintained Motif trees, including MrmOpenHierarchyPerDisplay
+  crashing (bug 1161), `XmList` ringing the bell with
+  `XmQUICK_NAVIGATE` (bug 1210) and `XmTextSetInsertionPosition` in
+  modify/verify callbacks (bug 1366).
+- Motif 2.2 compatibility (`OM22_COMPATIBILITY`) and imake support
+  removed; the autotools build modernised; GCC 15 build errors fixed;
+  unsafe `sprintf`, `tempnam` and `fprintf` uses replaced.
+- The libtool library version became 5:0:0 (`libXm.so.5`).
+- LGPL-2.1 licence text added; a clang-format style; GitHub and
+  GitVerse CI.
