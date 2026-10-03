@@ -856,16 +856,21 @@ int _XmStringIndexCacheTag(XmStringTag tag, int length)
     _tag_cache[_cache_count] = _XmStringGetCurrentCharset();
     _cache_count++;
   }
-  /* Look for an existing cache entry.  A counted tag (from a byte */
-  /* stream) may hold a NUL; it then matches no entry, and comparing */
-  /* it with strncmp must not lead to reading past a shorter entry. */
+  /* A counted tag (from a byte stream) may hold a NUL.  Only the part */
+  /* before it is ever stored, so only that part is compared: then */
+  /* strncmp equality means the entry is at least length long. */
+  if (length != XmSTRING_TAG_STRLEN) {
+    a = memchr(tag, '\0', length);
+    if (a != NULL)
+      length = a - tag;
+  }
+  /* Look for an existing cache entry. */
   for (i = 0; i < _cache_count; i++) {
     if (length == XmSTRING_TAG_STRLEN) {
       if ((tag == _tag_cache[i]) || (strcmp(tag, _tag_cache[i]) == 0))
         break;
     }
-    else if ((strncmp(tag, _tag_cache[i], length) == 0) &&
-             (memchr(tag, '\0', length) == NULL) && (_tag_cache[i][length] == '\0'))
+    else if ((strncmp(tag, _tag_cache[i], length) == 0) && (_tag_cache[i][length] == '\0'))
       break;
   }
   if (i < _cache_count) {
