@@ -485,6 +485,67 @@ static Boolean ContextsMatch(XmStringContext a, XmStringContext b)
 }
 
 /*
+ * Return the component that XmeStringGetComponent() would return from
+ * state in the context's current segment if it is of type want, without
+ * moving the context.
+ */
+static XmString PeekComponent(XmStringContext c, char state, XmStringComponentType want)
+{
+  XmStringComponentType type;
+  unsigned int len;
+  XtPointer val;
+  char saved_state = _XmStrContState(c);
+  _XmStrContState(c) = state;
+  type = XmeStringGetComponent(c, FALSE, FALSE, &len, &val);
+  _XmStrContState(c) = saved_state;
+  if ((type == want) || ((want == XmSTRING_COMPONENT_TAG) && (type == XmSTRING_COMPONENT_LOCALE)))
+    return (XmStringComponentCreate(type, len, val));
+  return (NULL);
+}
+
+/*
+ * XmeStringGetComponent() only returns a tag or direction component when
+ * it differs from the one in the context.  Before building a piece of the
+ * string component by component, forget them, as in a fresh context, so
+ * that the piece states the tag and direction of its own text.  If the
+ * context is already past the tag (or direction) of a segment whose text
+ * is still to come, return those components to start the piece with.
+ */
+static XmString ContextRestart(XmStringContext start)
+{
+  XmString str = NULL;
+  char state = _XmStrContState(start);
+  _XmStrContTag(start) = NULL;
+  _XmStrContTagType(start) = (XmTextType)0;
+  _XmStrContDir(start) = XmSTRING_DIRECTION_UNSET;
+  if ((state > TAG_STATE) && (state <= TEXT_STATE))
+    str = PeekComponent(start, TAG_STATE, XmSTRING_COMPONENT_TAG);
+  if (state == TEXT_STATE)
+    str = XmStringConcatAndFree(str, PeekComponent(start, DIR_STATE, XmSTRING_COMPONENT_DIRECTION));
+  return (str);
+}
+
+/*
+ * Append a component to a piece of the string.  Tag and direction
+ * components only apply to the text after them, and XmeStringGetComponent()
+ * returns a segment's tag before its tabs, so a piece broken at a tab
+ * would otherwise end with the tag of the next piece.  Hold them back in
+ * *held until something else follows.
+ */
+static void AddComponent(XmString *str, XmString *held, XmStringComponentType type, unsigned int len,
+                         XtPointer val)
+{
+  XmString c = XmStringComponentCreate(type, len, val);
+  if ((type == XmSTRING_COMPONENT_TAG) || (type == XmSTRING_COMPONENT_LOCALE) ||
+      (type == XmSTRING_COMPONENT_DIRECTION))
+    *held = XmStringConcatAndFree(*held, c);
+  else {
+    *str = XmStringConcatAndFree(XmStringConcatAndFree(*str, *held), c);
+    *held = NULL;
+  }
+}
+
+/*
  * Return the part of the string between start and end, without the
  * component that took end to its position, and leave start at end.  A
  * NULL end returns the rest of the string.
@@ -495,25 +556,35 @@ static XmString MakeStr(XmStringContext start, XmStringContext end)
   XmStringComponentType type;
   unsigned int len;
   XtPointer val;
-  XmString str;
+  XmString str, held = NULL;
   /* Next component over start until at segment break */
-  str = NULL;
+  str = ContextRestart(start);
   while ((_XmStrContState(start) != PUSH_STATE) && (_XmStrContState(start) != SEP_STATE)) {
     type = XmeStringGetComponent(start, TRUE, FALSE, &len, &val);
-    if ((type == XmSTRING_COMPONENT_END) || ContextsMatch(start, end))
+    if (type == XmSTRING_COMPONENT_END)
+      return (XmStringConcatAndFree(str, held));
+    if (ContextsMatch(start, end)) {
+      XmStringFree(held);
       return (str);
-    str = XmStringConcatAndFree(str, XmStringComponentCreate(type, len, val));
+    }
+    AddComponent(&str, &held, type, len, val);
   }
+  str = XmStringConcatAndFree(str, held);
+  held = NULL;
   /* Next segment over start until the segment holding end's component */
   while (SegBeforeEnd(start, end)) {
     str = XmStringConcatAndFree(str, MakeStrFromSeg(start));
   }
   /* Next component over start until it matches context */
+  str = XmStringConcatAndFree(str, ContextRestart(start));
   type = XmeStringGetComponent(start, TRUE, FALSE, &len, &val);
   while ((type != XmSTRING_COMPONENT_END) && !ContextsMatch(start, end)) {
-    str = XmStringConcatAndFree(str, XmStringComponentCreate(type, len, val));
+    AddComponent(&str, &held, type, len, val);
     type = XmeStringGetComponent(start, TRUE, FALSE, &len, &val);
   }
+  if (type == XmSTRING_COMPONENT_END)
+    return (XmStringConcatAndFree(str, held));
+  XmStringFree(held);
   return (str);
 }
 
