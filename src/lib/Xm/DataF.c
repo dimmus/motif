@@ -3197,7 +3197,7 @@ static Boolean PrintableString(XmDataFieldWidget tf,
       }
     }
     else {
-      char scratch[8];
+      char scratch[MB_LEN_MAX + 1];
       wchar_t *ws = (wchar_t *)str;
       for (i = 0; i < n; i++) {
         if (wctomb(scratch, ws[i]) <= 0)
@@ -3253,7 +3253,7 @@ static Boolean PrintableString(XmDataFieldWidget tf,
       }
     }
     else {
-      char scratch[8];
+      char scratch[MB_LEN_MAX + 1];
       wchar_t *ws = (wchar_t *)str;
       for (i = 0; i < n; i++) {
         if ((csize = wctomb(scratch, ws[i])) <= 0)
@@ -5195,7 +5195,7 @@ static void df_HandleTargets(Widget w,
   int status = 0;
   Atom targets[2];
   XmTextPosition select_pos;
-  int i;
+  unsigned long i, num_atoms;
   if (!length) {
     XtFree((char *)value);
     value = NULL;
@@ -5204,6 +5204,9 @@ static void df_HandleTargets(Widget w,
     return; /* Supports no targets, so don't bother sending anything */
   }
   atom_ptr = (Atom *)value;
+  /* the reply comes from another client: only an atom list is usable */
+  num_atoms = (*type == XA_ATOM && *format == 32) ? *length : 0;
+  tmp_prop.value = NULL;
   status = XmbTextListToTextProperty(
       XtDisplay(w), &tmp_string, 1, (XICCEncodingStyle)XTextStyle, &tmp_prop);
   if (status == Success)
@@ -5215,7 +5218,7 @@ static void df_HandleTargets(Widget w,
                            */
   if (tmp_prop.value != NULL)
     XFree((char *)tmp_prop.value);
-  for (i = 0; i < *length; i++, atom_ptr++) {
+  for (i = 0; i < num_atoms; i++, atom_ptr++) {
     if (*atom_ptr == CS_OF_LOCALE) {
       supports_locale_data = True;
       break;
@@ -5876,8 +5879,8 @@ static void df_ValidateString(XmDataFieldWidget tf, char *value, Boolean is_wcha
           temp_str++;
         }
         else {
-          char warn_str[52];
-          sprintf(warn_str, MSG5, *curr_str);
+          char warn_str[256];
+          snprintf(warn_str, sizeof(warn_str), MSG5, *curr_str);
           XmeWarning((Widget)tf, warn_str);
         }
         curr_str++;
@@ -5896,8 +5899,8 @@ static void df_ValidateString(XmDataFieldWidget tf, char *value, Boolean is_wcha
           }
         }
         else {
-          char warn_str[52];
-          sprintf(warn_str, MSG5, *curr_str);
+          char warn_str[256];
+          snprintf(warn_str, sizeof(warn_str), MSG5, *curr_str);
           XmeWarning((Widget)tf, warn_str);
           curr_str++;
           i++;
@@ -5930,7 +5933,7 @@ static void df_ValidateString(XmDataFieldWidget tf, char *value, Boolean is_wcha
   }
   else { /* pointer passed points to wchar_t* data */
     wchar_t *wc_value, *wcs_temp_str, *wcs_start_temp, *wcs_curr_str;
-    char scratch[8];
+    char scratch[MB_LEN_MAX + 1];
     int new_len = 0;
     int csize = 1;
     wc_value = (wchar_t *)value;
@@ -5948,12 +5951,12 @@ static void df_ValidateString(XmDataFieldWidget tf, char *value, Boolean is_wcha
           new_len++;
         }
         else {
-          char warn_str[52];
+          char warn_str[256];
           if (csize >= 0)
             scratch[csize] = '\0';
           else
             scratch[0] = '\0';
-          sprintf(warn_str, WC_MSG1, scratch);
+          snprintf(warn_str, sizeof(warn_str), WC_MSG1, scratch);
           XmeWarning((Widget)tf, warn_str);
         }
       }
@@ -5964,13 +5967,13 @@ static void df_ValidateString(XmDataFieldWidget tf, char *value, Boolean is_wcha
           new_len++;
         }
         else {
-          char warn_str[52];
+          char warn_str[256];
           csize = wctomb(scratch, *wcs_curr_str);
           if (csize >= 0)
             scratch[csize] = '\0';
           else
             scratch[0] = '\0';
-          sprintf(warn_str, WC_MSG1, scratch);
+          snprintf(warn_str, sizeof(warn_str), WC_MSG1, scratch);
           XmeWarning((Widget)tf, warn_str);
         }
       }

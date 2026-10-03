@@ -303,7 +303,8 @@ static void HandleInsertTargets(Widget w,
   Boolean supports_text = False;
   Boolean supports_utf8_string = False;
   int i;
-  if (0 == *length) {
+  /* a reply that is not an atom list is treated as an empty one */
+  if (0 == *length || *type != XA_ATOM || *format != 32) {
     XtFree((char *)value);
     _insert_select->done_status = True;
     return; /* Supports no targets, so don't bother sending anything */
@@ -1113,8 +1114,8 @@ static void DoStuff(Widget w, XtPointer closure, XmSelectionCallbackStruct *ds)
         if (_prim_select->num_chars > 0 && !tf->text.selection_move) {
           _XmTextFieldSetCursorPosition(tf, NULL, cursorPos, True, True);
           (void)_XmTextFieldSetDestination(w, cursorPos, _prim_select->time);
-          _XmProcessUnlock();
         }
+        _XmProcessUnlock();
       }
       else {
         _XmProcessLock();
@@ -1125,11 +1126,12 @@ static void DoStuff(Widget w, XtPointer closure, XmSelectionCallbackStruct *ds)
       right = tf->text.prim_pos_right;
       if (tf->text.has_primary) {
         if (ds->selection == atoms[XmACLIPBOARD]) {
-          if (left != right && (!dest_disjoint || !tf->text.add_mode))
+          if (left != right && (!dest_disjoint || !tf->text.add_mode)) {
             _XmProcessLock();
-          _XmTextFieldStartSelection(
-              tf, TextF_CursorPosition(tf), TextF_CursorPosition(tf), _prim_select->time);
-          _XmProcessUnlock();
+            _XmTextFieldStartSelection(
+                tf, TextF_CursorPosition(tf), TextF_CursorPosition(tf), _prim_select->time);
+            _XmProcessUnlock();
+          }
         }
         else {
           _XmProcessLock();
@@ -1197,7 +1199,8 @@ static void HandleTargets(Widget w, XtPointer closure, XmSelectionCallbackStruct
   Atom targets[2];
   XmTextPosition select_pos;
   int i;
-  if (!ds->length) {
+  /* a reply that is not an atom list is treated as an empty one */
+  if (!ds->length || ds->type != XA_ATOM || ds->format != 32) {
     XtFree((char *)ds->value);
     ds->value = NULL;
     return; /* Supports no targets, so don't bother sending anything */
