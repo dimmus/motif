@@ -110,3 +110,6 @@ if(XVFB_RUN_EXECUTABLE)
 else()
     message(STATUS "Tests: not using xvfb-run, X11 suites use $DISPLAY or are skipped")
 endif()
+
+# Benchmarks: built and run only by the "bench" target, never by CTest.
+add_subdirectory(bench)
