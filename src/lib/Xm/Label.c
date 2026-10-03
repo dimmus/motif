@@ -2477,9 +2477,11 @@ static void LabelSetValue(Widget w, XtPointer value, int type)
       if (wcstombs(str, str2, (length + 1) * MB_CUR_MAX) == (size_t)-1)
         str[0] = '\0';
       XtFree((char *)value);
-      value = str;
+      temp = XmStringCreateLocalized(str);
+      XtFree(str);
     }
-    temp = XmStringCreateLocalized((char *)value);
+    else
+      temp = XmStringCreateLocalized((char *)value);
   }
   nargs = 0;
   XtSetArg(args[nargs], XmNlabelString, temp), nargs++;

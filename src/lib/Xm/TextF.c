@@ -856,7 +856,8 @@ static void FreeContextData(Widget w, /* unused */
   XmTextContextData ctx_data = (XmTextContextData)clientData;
   Display *display = DisplayOfScreen(ctx_data->screen);
   XtPointer data_ptr;
-  if (XFindContext(display, (Window)ctx_data->screen, ctx_data->context, (char **)&data_ptr)) {
+  /* XFindContext returns 0 when it finds the data */
+  if (!XFindContext(display, (Window)ctx_data->screen, ctx_data->context, (char **)&data_ptr)) {
     if (ctx_data->type != '\0') {
       if (data_ptr)
         XtFree((char *)data_ptr);

@@ -937,7 +937,8 @@ static void df_FreeContextData(Widget w, XtPointer clientData, XtPointer callDat
   XmTextContextData ctx_data = (XmTextContextData)clientData;
   Display *display = DisplayOfScreen(ctx_data->screen);
   XtPointer data_ptr;
-  if (XFindContext(display, (Window)ctx_data->screen, ctx_data->context, (char **)&data_ptr)) {
+  /* XFindContext returns 0 when it finds the data */
+  if (!XFindContext(display, (Window)ctx_data->screen, ctx_data->context, (char **)&data_ptr)) {
     if (ctx_data->type == _XM_IS_PIXMAP_CTX) {
       XFreePixmap(display, (Pixmap)data_ptr);
     }

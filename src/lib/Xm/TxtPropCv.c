@@ -200,8 +200,11 @@ static unsigned char GetTextSegment(Display *display, /* unused */
             bzero(tmp + char_count, sizeof(wchar_t));
             *buffer = tmp;
           }
-          else
+          else {
+            XtFree(encoding);
             return (_INVALID_SEGMENT);
+          }
+          XtFree(encoding); /* XmMapSegmentEncoding returns a copy */
         }
         else
           return (_INVALID_SEGMENT); /* the encoding was unregistered */
