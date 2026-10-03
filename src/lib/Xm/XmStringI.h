@@ -274,8 +274,7 @@ typedef struct __XmStringArraySegHdrRec {
   unsigned int type : 2;            /* XmSTRING_ENTRY_ARRAY */
   unsigned int soft_line_break : 1; /* linebreak before is soft */
   unsigned int pad : 5;
-  unsigned int segment_count : 8; /* 256 segments per line */
-  unsigned char pad2byte[2];
+  unsigned int segment_count : 24; /* holds any entry_count */
 } _XmStringArraySegHdrRec;
 
 typedef struct __XmStringArraySegRec {
