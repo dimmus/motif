@@ -612,6 +612,19 @@ if(WITH_HARDENING AND CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
   endif()
 endif()
 
+# Strict aliasing
+#
+# The sources still hand typed pointers to X functions that take a generic
+# one by address, (XPointer *)&ptr to XFindContext, (unsigned char **)&ptr
+# to XGetWindowProperty and so on, about 90 places in libXm alone, and the
+# value is then written through one type and read through another.  Until
+# they are gone, do not let the optimizer assume that this never happens:
+# it did in 97547c53, and the result was heap corruption.
+
+if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
+  add_compile_options(-fno-strict-aliasing)
+endif()
+
 # Optimization options. These are applied here rather than in the presets in
 # tools/cmake/config, because presets run before the compiler is detected.
 if(WITH_LTO)
