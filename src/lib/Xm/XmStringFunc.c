@@ -200,8 +200,9 @@ XmString XmStringTableToXmString(XmStringTable table, Cardinal count, XmString b
   _XmProcessLock();
   tmp1 = NULL;
   for (i = 0; i < count; i++) {
-    tmp2 = XmStringConcatAndFree(tmp1, XmStringCopy(table[i]));
-    str = XmStringConcatAndFree(tmp2, XmStringCopy(break_comp));
+    /* The break goes between elements, not after the last one. */
+    tmp2 = (i > 0) ? XmStringConcatAndFree(tmp1, XmStringCopy(break_comp)) : tmp1;
+    str = XmStringConcatAndFree(tmp2, XmStringCopy(table[i]));
     tmp1 = str;
   }
   _XmProcessUnlock();
@@ -427,7 +428,7 @@ static XmString MakeStrFromSeg(XmStringContext start)
 /*
  * Return TRUE if the segment or separator that MakeStrFromSeg() would copy
  * next from start lies entirely before the component that took end to its
- * current position.
+ * current position.  A NULL end stands for the end of the string.
  */
 static Boolean SegBeforeEnd(XmStringContext start, XmStringContext end)
 {
@@ -442,6 +443,10 @@ static Boolean SegBeforeEnd(XmStringContext start, XmStringContext end)
   if (_XmStrContState(start) == SEP_STATE)
     seg++;
   is_sep = (seg >= CurrLineSegCount(start));
+  if (end == NULL) {
+    /* Anything but the (nonexistent) separator after the last line. */
+    return (!is_sep || (line + 1 < _XmStrLineCountGet(_XmStrContString(start))));
+  }
   /* Where the last component taken by end was. */
   if (_XmStrContState(end) == PUSH_STATE) {
     /* Only a separator leaves a context at the start of a segment. */
@@ -463,6 +468,8 @@ static Boolean SegBeforeEnd(XmStringContext start, XmStringContext end)
 
 static Boolean ContextsMatch(XmStringContext a, XmStringContext b)
 {
+  if (b == NULL)
+    return (FALSE);
   if ((_XmStrContCurrLine(a) != _XmStrContCurrLine(b)) ||
       (_XmStrContCurrSeg(a) != _XmStrContCurrSeg(b)) || (_XmStrContState(a) != _XmStrContState(b)))
     return (FALSE);
@@ -479,7 +486,8 @@ static Boolean ContextsMatch(XmStringContext a, XmStringContext b)
 
 /*
  * Return the part of the string between start and end, without the
- * component that took end to its position, and leave start at end.
+ * component that took end to its position, and leave start at end.  A
+ * NULL end returns the rest of the string.
  */
 static XmString MakeStr(XmStringContext start, XmStringContext end)
 {
@@ -542,8 +550,8 @@ Cardinal XmStringToXmStringTable(XmString string, XmString break_component, XmSt
     return (0);
   }
   _XmStringContextReInit(&stack_context, string);
-  /* Count number of entries for table */
-  count = 0;
+  /* Count number of entries for table: n breaks delimit n+1 pieces */
+  count = 1;
   while ((type = XmeStringGetComponent(&stack_context, TRUE, FALSE, &len, &val)) !=
          XmSTRING_COMPONENT_END)
   {
@@ -554,20 +562,31 @@ Cardinal XmStringToXmStringTable(XmString string, XmString break_component, XmSt
   /* Allocate table and insert new strings */
   if (table != NULL) {
     *table = (XmStringTable)XtMalloc(count * sizeof(XmString));
-    _XmStringContextReInit(&stack_context, string);
-    _XmStringContextReInit(&stack_start, string);
-    i = 0;
-    while ((type = XmeStringGetComponent(&stack_context, TRUE, FALSE, &len, &val)) !=
-           XmSTRING_COMPONENT_END)
-    {
-      if ((type == b_type) && (len == b_len) &&
-          ((len == 0) || (memcmp(val, b_val, len) == 0))) {
-        /* make XmString from start to end */
-        (*table)[i] = MakeStr(&stack_start, &stack_context);
-        i++;
-      }
+    if (count == 1) {
+      (*table)[0] = XmStringCopy(string);
     }
-    _XmStringContextFree(&stack_start);
+    else {
+      _XmStringContextReInit(&stack_context, string);
+      _XmStringContextReInit(&stack_start, string);
+      i = 0;
+      while ((type = XmeStringGetComponent(&stack_context, TRUE, FALSE, &len, &val)) !=
+             XmSTRING_COMPONENT_END)
+      {
+        if ((type == b_type) && (len == b_len) &&
+            ((len == 0) || (memcmp(val, b_val, len) == 0))) {
+          /* make XmString from start to end */
+          (*table)[i] = MakeStr(&stack_start, &stack_context);
+          i++;
+        }
+      }
+      /* and from the last break to the end */
+      (*table)[i] = MakeStr(&stack_start, NULL);
+      _XmStringContextFree(&stack_start);
+      /* An empty piece is an empty string, not NULL. */
+      for (i = 0; i < count; i++)
+        if ((*table)[i] == NULL)
+          (*table)[i] = XmStringComponentCreate(XmSTRING_COMPONENT_TEXT, 0, NULL);
+    }
   }
   _XmStringContextFree(&stack_context);
   _XmProcessUnlock();
