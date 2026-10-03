@@ -2440,12 +2440,14 @@ static Boolean SetHorizontalScrollbar(XmListWidget lw)
     XtManageChild((Widget)lw->list.hScrollBar);
   is_managed = XtIsManaged((Widget)lw->list.vScrollBar);
   if (lw->list.items && lw->list.itemCount) {
-    if (LayoutIsRtoLP(lw))
-      XtSetArg(hSBArgs[j], XmNprocessingDirection, XmMAX_ON_LEFT), j++;
-    else
-      XtSetArg(hSBArgs[j], XmNprocessingDirection, XmMAX_ON_RIGHT), j++;
-    assert(j <= XtNumber(hSBArgs));
-    XtSetValues((Widget)lw->list.hScrollBar, hSBArgs, j);
+    unsigned char direction = (LayoutIsRtoLP(lw) ? XmMAX_ON_LEFT : XmMAX_ON_RIGHT);
+    /* This runs after every change to the items: only set it when it
+     * changes, the scrollbar does nothing otherwise. */
+    if (lw->list.hScrollBar->scrollBar.processing_direction != direction) {
+      XtSetArg(hSBArgs[j], XmNprocessingDirection, direction), j++;
+      assert(j <= XtNumber(hSBArgs));
+      XtSetValues((Widget)lw->list.hScrollBar, hSBArgs, j);
+    }
     lw->list.hmax = lw->list.MaxWidth + (lw->list.BaseX * 2);
     lw->list.hExtent = lw->core.width;
     ASSIGN_MAX(lw->list.XOrigin, 0);
