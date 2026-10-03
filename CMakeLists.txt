@@ -107,7 +107,6 @@ include(tools/cmake/motif_checks.cmake)
 include(tools/cmake/motif_detect_compilers.cmake)
 include(tools/cmake/motif_detect_cpu.cmake)
 # include(tools/cmake/motif_packaging.cmake)
-include(tools/cmake/motif_testing.cmake)
 include(tools/cmake/motif_git.cmake)
 
 # -----------------------------------------------------------------------------
