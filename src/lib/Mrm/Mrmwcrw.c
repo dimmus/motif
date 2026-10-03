@@ -1013,7 +1013,7 @@ UrmSetWidgetInstance (URMResourceContextPtr	context_id,
     {
       /* Need to add * for ScrolledText and ScrolledList */
       c_name_tmp = (String)ALLOCATE_LOCAL((strlen(c_name) + 2) * sizeof(char));
-      sprintf(c_name_tmp, "*%s", c_name);
+      snprintf(c_name_tmp, strlen(c_name) + 2, "*%s", c_name);
       *w_return = XtNameToWidget(parent, c_name_tmp);
 
       /* Deal with ScrollBars for ScrolledList and ScrolledText subclasses. */
@@ -2143,7 +2143,7 @@ Urm__CW_DisplayToString (char                       *val,
       return (return_val);
     }
 
-  strcat (&return_val[count], add_string);
+  snprintf (&return_val[count], add_string_size, "%s", add_string);
 
   return (return_val);
 
@@ -2883,8 +2883,7 @@ Urm__CW_SafeCopyValue (long				*val,
 
     case MrmRtypeChar8:
       char8_src = (String) *val ;
-      char8_dst = (String) XtMalloc (strlen(char8_src)+1) ;
-      strcpy (char8_dst, char8_src) ;
+      char8_dst = XtNewString (char8_src) ;
       *val = (long) char8_dst ;
       if (cblist != NULL)
 	{

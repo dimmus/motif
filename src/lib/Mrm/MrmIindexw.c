@@ -1228,7 +1228,7 @@ Idb__INX_CollapseLeafRecord (IDBIndexLeafRecordPtr	recptr,
     {
       dstvec[ndx].data = srcvec[ndx].data ;
       ndxstg = (char *) stgbase + srcvec[ndx].index_stg ;
-      strcpy (cur_heap, ndxstg) ;
+      memcpy (cur_heap, ndxstg, strlen(ndxstg) + 1) ;
       dstvec[ndx].index_stg = (MrmOffset) (cur_heap - temp_heap) ;
       stgsiz = strlen(cur_heap) + 1 ;
       stgsiz = _FULLWORD(stgsiz);
@@ -1336,7 +1336,7 @@ Idb__INX_CollapseNodeRecord (IDBIndexNodeRecordPtr	recptr,
       dstvec[ndx].LT_record = srcvec[ndx].LT_record ;
       dstvec[ndx].GT_record = srcvec[ndx].GT_record ;
       ndxstg = (char *) stgbase + srcvec[ndx].index_stg ;
-      strcpy (cur_heap, ndxstg) ;
+      memcpy (cur_heap, ndxstg, strlen(ndxstg) + 1) ;
       dstvec[ndx].index_stg = (MrmOffset) (cur_heap - temp_heap) ;
       stgsiz = strlen(cur_heap) + 1 ;
       stgsiz = _FULLWORD(stgsiz);

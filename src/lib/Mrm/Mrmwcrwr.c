@@ -2215,7 +2215,7 @@ UrmCWR__AppendResource (URMResourceContextPtr	context_id,
       resdesc->res_group = group ;
       resdesc->cvt_type = type ;
       resdesc->annex1 = 0 ;
-      strcpy (resdesc->key.index, index) ;
+      memcpy (resdesc->key.index, index, strlen(index) + 1) ;
       return MrmSUCCESS ;
 
     case URMrRID:
