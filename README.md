@@ -272,7 +272,7 @@ cmake -H. -Bbuild \
 ```bash
 # Configure installation paths
 cmake -H. -Bbuild \
-    -DCMAKE_INSTALL_PREFIX=/usr/local    # Installation prefix
+    -DCMAKE_INSTALL_PREFIX=/usr          # Installation prefix (default: /usr)
     -DCMAKE_INSTALL_SYSCONFDIR=/etc      # Configuration files
     -DCMAKE_INSTALL_LIBDIR=lib64         # Library directory
 ```
@@ -284,7 +284,7 @@ make full release ninja ccache
 
 # Or configure manually with specific features
 cmake -H. -Bbuild \
-    -DCMAKE_INSTALL_PREFIX=/usr/local \
+    -DCMAKE_INSTALL_PREFIX=/usr \
     -DWITH_UTF8=ON \
     -DWITH_DEMOS=ON \
     -DWITH_XFT=ON \
@@ -348,11 +348,12 @@ int main(int argc, char *argv[])
 # Using pkg-config (recommended) - automatically uses C23 standard
 gcc -o myapp myapp.c `pkg-config --cflags --libs motif`
 
-# Manual compilation with C23 standard
-gcc -std=c23 -o myapp myapp.c -I/usr/local/include -L/usr/local/lib -lXm -lXt -lX11
+# Manual compilation with C23 standard (add -I<prefix>/include -L<prefix>/lib
+# if Motif was installed to a non-default prefix)
+gcc -std=c23 -o myapp myapp.c -lXm -lXt -lX11
 
 # For GCC 15 compatibility (automatic fallback to c2x if c23 not supported)
-gcc -std=c2x -o myapp myapp.c -I/usr/local/include -L/usr/local/lib -lXm -lXt -lX11
+gcc -std=c2x -o myapp myapp.c -lXm -lXt -lX11
 ```
 
 ### UIL Development

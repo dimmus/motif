@@ -363,7 +363,7 @@ ccache: build
 install: .FORCE
 	@echo
 	@echo Installing Motif to system with $(SU_CMD)...
-	@echo "This will install to /usr/local (requires superuser privileges)"
+	@echo "This will install to the configured prefix, /usr by default (requires superuser privileges)"
 	@echo
 	$(SU_CMD) $(BUILD_COMMAND) -C "$(BUILD_DIR)" install
 	@echo
@@ -375,7 +375,7 @@ install: .FORCE
 uninstall: .FORCE
 	@echo
 	@echo Uninstalling Motif from system with $(SU_CMD)...
-	@echo "This will remove files from /usr/local (requires superuser privileges)"
+	@echo "This will remove the installed files listed in install_manifest.txt (requires superuser privileges)"
 	@echo
 	@if [ -f "$(BUILD_DIR)/install_manifest.txt" ]; then \
 		$(SU_CMD) xargs rm -f < "$(BUILD_DIR)/install_manifest.txt"; \

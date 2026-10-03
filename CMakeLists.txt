@@ -130,6 +130,13 @@ motif_project_hack_pre()
 project(MOTIF)
 # project(MOTIF LANGUAGES CXX VERSION "2.4.1")
 
+# Install to /usr by default (instead of CMake's /usr/local) so that consumers
+# such as CDE find libXm without extra -L/-I flags or ld.so configuration.
+# Must be set before GNUInstallDirs so it derives /etc and /var for this prefix.
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+  set(CMAKE_INSTALL_PREFIX "/usr" CACHE PATH "Install path prefix" FORCE)
+endif()
+
 # Set install directory variables
 include(GNUInstallDirs)
 
