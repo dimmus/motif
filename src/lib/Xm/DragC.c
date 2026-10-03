@@ -1769,8 +1769,12 @@ static void TopWindowsReceived(Widget w,
      * we make a receiverInfo array one larger than the number of
      * client windows since we keep the root info in array[0].
      */
-    if (dc->drag.numReceiverInfos >= 1)
+    if (dc->drag.numReceiverInfos >= 1) {
       startInfo = dc->drag.receiverInfos;
+      /* only the root entry is kept; drop the others' drop site streams */
+      for (i = 1; i < dc->drag.numReceiverInfos; i++)
+        _XmFreeDragReceiverInfo(startInfo[i].iccInfo);
+    }
     else
       startInfo = NULL;
     dc->drag.numReceiverInfos = dc->drag.maxReceiverInfos = *length + 1;
