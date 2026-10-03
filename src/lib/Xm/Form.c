@@ -60,6 +60,16 @@ static char rcsid[] = "$TOG: Form.c /main/19 1998/03/25 12:24:56 csn $"
 #define BOTTOM _XmFORM_BOTTOM
 #define FIRST_ATTACHMENT LEFT
 #define LAST_ATTACHMENT BOTTOM
+/* Values of the sorted constraint field once the child is in the sorted
+ * list: whether it was managed then.  False means "sort again". */
+#define SORTED_UNMANAGED 1
+#define SORTED_MANAGED 2
+/* Widget -> index hash used by SortChildren */
+typedef struct {
+  Widget *keys;
+  int *vals;
+  unsigned long mask;
+} FormIndexMap;
     /********    Static Function Declarations    ********/
     static void
     FromTopOffset(Widget w, int offset, XtArgVal *value);
@@ -486,6 +496,94 @@ static void MarginHeightOut(Widget wid, int offset, XtArgVal *value)
 static void ClassPartInitialize(WidgetClass wc)
 {
   _XmFastSubclassInit(wc, XmFORM_BIT);
+}
+
+/************************************************************************
+ *
+ *  Index map
+ *	A small open addressing hash from child widget to index.
+ *
+ ************************************************************************/
+static void MapInit(FormIndexMap *map, int count)
+{
+  unsigned long size = 16;
+  while (size < 2 * (unsigned long)count)
+    size <<= 1;
+  map->keys = (Widget *)XtCalloc((Cardinal)size, sizeof(Widget));
+  map->vals = (int *)XtMalloc((Cardinal)(size * sizeof(int)));
+  map->mask = size - 1;
+}
+
+static unsigned long MapSlot(FormIndexMap *map, Widget w)
+{
+  unsigned long h = (unsigned long)w;
+  h ^= h >> 17;
+  h *= 0x9E3779B1UL;
+  h ^= h >> 15;
+  return h & map->mask;
+}
+
+static void MapAdd(FormIndexMap *map, Widget w, int val)
+{
+  unsigned long i = MapSlot(map, w);
+  while (map->keys[i] != NULL && map->keys[i] != w)
+    i = (i + 1) & map->mask;
+  map->keys[i] = w;
+  map->vals[i] = val;
+}
+
+static int MapFind(FormIndexMap *map, Widget w)
+{
+  unsigned long i;
+  if (w == NULL)
+    return -1;
+  for (i = MapSlot(map, w); map->keys[i] != NULL; i = (i + 1) & map->mask)
+    if (map->keys[i] == w)
+      return map->vals[i];
+  return -1;
+}
+
+static void MapFree(FormIndexMap *map)
+{
+  XtFree((char *)map->keys);
+  XtFree((char *)map->vals);
+}
+
+/************************************************************************
+ *
+ *  HeapPush, HeapPop
+ *	A binary min-heap of child indices.  HeapPush grows the array
+ *	when it is full.
+ *
+ ************************************************************************/
+static void HeapPush(int **heap, int *len, int *size, int val)
+{
+  int i, parent;
+  int *h;
+  if (*len == *size) {
+    *size = (*size > 0) ? 2 * *size : 16;
+    *heap = (int *)XtRealloc((char *)*heap, (Cardinal)(*size * sizeof(int)));
+  }
+  h = *heap;
+  for (i = (*len)++; i > 0 && h[parent = (i - 1) / 2] > val; i = parent)
+    h[i] = h[parent];
+  h[i] = val;
+}
+
+static int HeapPop(int *h, int *len)
+{
+  int top = h[0], last = h[--(*len)];
+  int i = 0, child;
+  while ((child = 2 * i + 1) < *len) {
+    if (child + 1 < *len && h[child + 1] < h[child])
+      child++;
+    if (h[child] >= last)
+      break;
+    h[i] = h[child];
+    i = child;
+  }
+  h[i] = last;
+  return top;
 }
 
 /************************************************************************
@@ -1110,6 +1208,7 @@ static void ChangeManaged(Widget wid)
                 break;
             }
             c->att[j].w = NULL;
+            c->sorted = False;
           }
         }
       }
@@ -1230,6 +1329,7 @@ static void ChangeIfNeeded(XmFormWidget fw, Widget w, XtWidgetGeometry *desired)
 static void DeleteChild(Widget child)
 {
   XtWidgetProc delete_child;
+  XmFormWidget fw;
   if (!XtIsRectObj(child))
     return;
   _XmProcessLock();
@@ -1237,7 +1337,12 @@ static void DeleteChild(Widget child)
       ((CompositeWidgetClass)xmFormClassRec.core_class.superclass)->composite_class.delete_child;
   _XmProcessUnlock();
   (*delete_child)(child);
-  SortChildren((XmFormWidget)XtParent(child));
+  fw = (XmFormWidget)XtParent(child);
+  /* The list may hold the deleted child: drop it.  Do not sort again
+   * when the whole form is going away. */
+  fw->form.first_child = NULL;
+  if (!fw->core.being_destroyed)
+    SortChildren(fw);
 }
 
 /************************************************************************
@@ -1342,6 +1447,9 @@ static Boolean ConstraintSetValues(register Widget old,
       }
     }
   }
+  /* The order of the children may change */
+  if (ANY(type) || ANY(w))
+    newc->sorted = False;
   /* Re do the layout only if we have to */
   if ((XtIsRealized((Widget)fw)) && (XtIsManaged(new_w)) &&
       (ANY(type) || ANY(w) || ANY(percent) || ANY(offset)))
@@ -1436,6 +1544,9 @@ static void ConstraintInitialize(Widget req, /* unused */
        always used after the changemanaged is called */
   nc->preferred_width = XmINVALID_DIMENSION;
   nc->preferred_height = XmINVALID_DIMENSION;
+  /* not in the sorted list yet */
+  nc->sorted = False;
+  nc->next_sibling = NULL;
 }
 
 /************************************************************************
@@ -1525,98 +1636,175 @@ static void CheckConstraints(Widget w)
 
 /************************************************************************
  *
+ *  SortedListValid
+ *	Whether the sorted list still holds the num_rect RectObj children
+ *	with the managed ones first and the unmanaged ones last, newest
+ *	first, as SortChildren left it.
+ *
+ ************************************************************************/
+static Boolean SortedListValid(XmFormWidget fw, Cardinal num_rect)
+{
+  Widget child = fw->form.first_child;
+  Cardinal count = 0;
+  int i;
+  while ((child != NULL) && XtIsManaged(child)) {
+    if (++count > num_rect)
+      return False;
+    child = GetFormConstraint(child)->next_sibling;
+  }
+  for (i = (int)fw->composite.num_children - 1; i >= 0; i--) {
+    Widget w = fw->composite.children[i];
+    if (!XtIsRectObj(w) || XtIsManaged(w))
+      continue;
+    if (child != w)
+      return False;
+    count++;
+    child = GetFormConstraint(child)->next_sibling;
+  }
+  return ((child == NULL) && (count == num_rect));
+}
+
+/************************************************************************
+ *
  *  SortChildren
+ *	Link the RectObj children into the list that the layout walks:
+ *	the managed children in an order where each one comes after the
+ *	siblings it is attached to, then the managed children caught in
+ *	an attachment cycle, then the unmanaged children.  Among the
+ *	children that are ready, the one that comes first in the
+ *	children array is taken first.
+ *
+ *	A child's sorted field is cleared when it is created and when its
+ *	attachments change, and records whether it was managed when it
+ *	was sorted.  The list is rebuilt only when one of them is out of
+ *	date or the list does not match the children any more.
  *
  ************************************************************************/
 static void SortChildren(register XmFormWidget fw)
 {
-  int i, j;
-  Widget child = NULL;
-  register XmFormConstraint c = NULL, c1 = NULL;
-  int sortedCount = 0;
-  Widget last_child, att_widget;
-  Boolean sortable;
-  fw->form.first_child = NULL;
-  for (i = 0; i < fw->composite.num_children; i++) {
-    child = fw->composite.children[i];
+  Cardinal num = fw->composite.num_children;
+  WidgetList children = fw->composite.children;
+  Cardinal num_rect = 0;
+  Boolean dirty = False;
+  FormIndexMap map;
+  XmFormConstraint c;
+  Widget child, last_child;
+  int *indeg, *edge_start, *edges, *heap, *order;
+  int heap_len = 0, heap_size, num_order = 0;
+  int i, j, k;
+  for (i = 0; i < (int)num; i++) {
+    child = children[i];
     if (!XtIsRectObj(child))
       continue;
-    c = GetFormConstraint(child);
-    if (XtIsManaged(child)) {
-      c->sorted = False;
-      c->next_sibling = NULL;
-    }
-    else {
-      c->next_sibling = fw->form.first_child;
-      fw->form.first_child = child;
-      c->sorted = True;
-      sortedCount++;
-    }
+    num_rect++;
+    if (GetFormConstraint(child)->sorted !=
+        (XtIsManaged(child) ? SORTED_MANAGED : SORTED_UNMANAGED))
+      dirty = True;
     CheckConstraints(child);
   }
+  if (!dirty && SortedListValid(fw, num_rect))
+    return;
   /* THIS IS PROBABLY WRONG AND SHOULD BE FIXED SOMEDAY             */
   /* WHY SHOULD UNMANAGED CHILDREN BE ALLOWED AS ATTACHMENT POINTS  */
   /* FOR MANAGED CHILDREN???                                        */
-  /* While there are unsorted children, find one with only sorted  */
-  /* predecessors and put it in the list.  This algorithm works    */
-  /* particularly well if the order is already correct             */
-  last_child = NULL;
-  for (; sortedCount != fw->composite.num_children; sortedCount++) {
-    sortable = False;
-    for (i = 0; !sortable && i < fw->composite.num_children; i++) {
-      child = fw->composite.children[i];
-      if (!XtIsRectObj(child))
-        continue;
-      c = GetFormConstraint(child);
-      if (c->sorted)
-        continue;
-      sortable = True;
-      for (j = FIRST_ATTACHMENT; j < (LAST_ATTACHMENT + 1); j++) {
-        if ((c->att[j].type == XmATTACH_WIDGET) || (c->att[j].type == XmATTACH_OPPOSITE_WIDGET)) {
-          att_widget = c->att[j].w;
-          if ((SIBLINGS(att_widget, child)) && (XtIsRectObj(att_widget))) {
-            c1 = GetFormConstraint(att_widget);
-            if (!c1->sorted)
-              sortable = False;
-          }
-        }
-      }
-    }
-    if (sortable) {
-      /*  We have found a sortable child...add to sorted list.  */
-      if (last_child == NULL) {
-        c->next_sibling = fw->form.first_child;
-        fw->form.first_child = child;
-      }
-      else {
-        c1 = GetFormConstraint(last_child);
-        c->next_sibling = c1->next_sibling;
-        c1->next_sibling = child;
-      }
-      last_child = child;
-      c->sorted = True;
-    }
-  }
-  /*Add other children that haven't been sorted*/
-  for (i = 0; i < fw->composite.num_children; i++) {
-    child = fw->composite.children[i];
-    c = GetFormConstraint(child);
-    if (!XtIsRectObj(child) || c->sorted)
+  /* Unmanaged children count as sorted from the start. */
+  MapInit(&map, (int)num);
+  for (i = 0; i < (int)num; i++) {
+    child = children[i];
+    if (!XtIsRectObj(child))
       continue;
-    if (!c->sorted) {
-      if (last_child == NULL) {
-        c->next_sibling = fw->form.first_child;
-        fw->form.first_child = child;
+    MapAdd(&map, child, i);
+    GetFormConstraint(child)->sorted = !XtIsManaged(child);
+  }
+  /* indeg[i]: attachments of managed child i to unsorted siblings,
+   * edges[edge_start[k]..edge_start[k + 1]): the children attached
+   * to child k. */
+  indeg = (int *)XtCalloc((Cardinal)(3 * num + 2), sizeof(int));
+  edge_start = indeg + num;
+  order = edge_start + num + 1;
+  for (i = 0; i < (int)num; i++) {
+    child = children[i];
+    if (!XtIsRectObj(child) || !XtIsManaged(child))
+      continue;
+    c = GetFormConstraint(child);
+    for (j = FIRST_ATTACHMENT; j < (LAST_ATTACHMENT + 1); j++) {
+      if (((c->att[j].type == XmATTACH_WIDGET) || (c->att[j].type == XmATTACH_OPPOSITE_WIDGET)) &&
+          SIBLINGS(c->att[j].w, child) && XtIsRectObj(c->att[j].w) &&
+          ((k = MapFind(&map, c->att[j].w)) >= 0) && !GetFormConstraint(children[k])->sorted)
+      {
+        indeg[i]++;
+        edge_start[k + 1]++;
       }
-      else {
-        c1 = GetFormConstraint(last_child);
-        c->next_sibling = c1->next_sibling;
-        c1->next_sibling = child;
-      }
-      last_child = child;
-      c->sorted = True;
     }
   }
+  for (i = 0; i < (int)num; i++)
+    edge_start[i + 1] += edge_start[i];
+  edges = (int *)XtMalloc((Cardinal)((edge_start[num] + 1) * sizeof(int)));
+  for (i = 0; i < (int)num; i++)
+    order[i] = edge_start[i]; /* fill pointers, for now */
+  for (i = 0; i < (int)num; i++) {
+    child = children[i];
+    if (!XtIsRectObj(child) || !XtIsManaged(child))
+      continue;
+    c = GetFormConstraint(child);
+    for (j = FIRST_ATTACHMENT; j < (LAST_ATTACHMENT + 1); j++) {
+      if (((c->att[j].type == XmATTACH_WIDGET) || (c->att[j].type == XmATTACH_OPPOSITE_WIDGET)) &&
+          SIBLINGS(c->att[j].w, child) && XtIsRectObj(c->att[j].w) &&
+          ((k = MapFind(&map, c->att[j].w)) >= 0) && !GetFormConstraint(children[k])->sorted)
+        edges[order[k]++] = i;
+    }
+  }
+  MapFree(&map);
+  /* Take the ready children lowest index first. */
+  heap_size = (int)num;
+  heap = (int *)XtMalloc((Cardinal)((num + 1) * sizeof(int)));
+  for (i = 0; i < (int)num; i++) {
+    child = children[i];
+    if (XtIsRectObj(child) && XtIsManaged(child) && (indeg[i] == 0))
+      HeapPush(&heap, &heap_len, &heap_size, i);
+  }
+  while (heap_len > 0) {
+    i = HeapPop(heap, &heap_len);
+    order[num_order++] = i;
+    GetFormConstraint(children[i])->sorted = True;
+    for (j = edge_start[i]; j < edge_start[i + 1]; j++) {
+      if (--indeg[edges[j]] == 0)
+        HeapPush(&heap, &heap_len, &heap_size, edges[j]);
+    }
+  }
+  XtFree((char *)heap);
+  XtFree((char *)edges);
+  /* Add other children that haven't been sorted */
+  for (i = 0; i < (int)num; i++) {
+    child = children[i];
+    if (XtIsRectObj(child) && !GetFormConstraint(child)->sorted) {
+      order[num_order++] = i;
+      GetFormConstraint(child)->sorted = True;
+    }
+  }
+  /* Then the unmanaged ones, last first. */
+  for (i = (int)num - 1; i >= 0; i--) {
+    child = children[i];
+    if (XtIsRectObj(child) && !XtIsManaged(child))
+      order[num_order++] = i;
+  }
+  for (i = 0; i < num_order; i++) {
+    child = children[order[i]];
+    GetFormConstraint(child)->sorted = XtIsManaged(child) ? SORTED_MANAGED : SORTED_UNMANAGED;
+  }
+  fw->form.first_child = NULL;
+  last_child = NULL;
+  for (i = 0; i < num_order; i++) {
+    child = children[order[i]];
+    if (last_child == NULL)
+      fw->form.first_child = child;
+    else
+      GetFormConstraint(last_child)->next_sibling = child;
+    last_child = child;
+  }
+  if (last_child != NULL)
+    GetFormConstraint(last_child)->next_sibling = NULL;
+  XtFree((char *)indeg);
 }
 
 /************************************************************************
