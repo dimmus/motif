@@ -23,6 +23,14 @@
 #ifndef MrmDecls_H
 #define MrmDecls_H
 
+/* The types used below.  MrmPublic.h includes this file at its end, after
+ * defining them, so the circular include is harmless either way. */
+#include <Mrm/MrmPublic.h>
+
+#if defined(__cplusplus) || defined(c_plusplus)
+extern "C" {
+#endif
+
 /*----------------------------------*/
 /* Error messages                   */
 /*----------------------------------*/
@@ -167,10 +175,6 @@ externalref _MrmConst char *_MrmMsg_0119;
 /*----------------------------------*/
 #ifndef _ARGUMENTS
 #define _ARGUMENTS(arglist) arglist
-#endif
-
-#if defined(__cplusplus) || defined(c_plusplus)
-extern "C" {
 #endif
 
 /* mrminit.c */
