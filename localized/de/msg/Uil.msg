@@ -9,17 +9,17 @@ UIL_0 "Zweite Version \"%s\" wurde ignoriert."
 
 UIL_1 "Unbekannte Option \"%s\" wurde ignoriert."
 
-UIL_2 "Zusätzliche UIL-Quellendatei: %s wurde ignoriert."
+UIL_2 "ZusÃ¤tzliche UIL-Quellendatei: %s wurde ignoriert."
 
-UIL_3 "Fehler beim Öffnen der Quellendatei: %s"
+UIL_3 "Fehler beim Ã–ffnen der Quellendatei: %s"
 
-UIL_4 "Fehler beim Lesen der nächsten Zeile der Quellendatei: %s"
+UIL_4 "Fehler beim Lesen der nÃ¤chsten Zeile der Quellendatei: %s"
 
 UIL_5 "Interner Fehler: %s"
 
 UIL_6 "Zeile nach %d Zeichen abgeschnitten."
 
-UIL_7 "Wert von %s ist außerhalb des Bereichs %s."
+UIL_7 "Wert von %s ist auÃŸerhalb des Bereichs %s."
 
 UIL_8 "%s nicht abgeschlossene %s."
 
@@ -29,13 +29,13 @@ UIL_10 "Unbekannte Sequenz \"%s\" ignoriert."
 
 UIL_11 "Unbekannte Escape-Sequenz \"\\%c\" - \\ ignoriert."
 
-UIL_12 "Name überschreitet %d Zeichen - abgeschnitten auf: %s"
+UIL_12 "Name Ã¼berschreitet %d Zeichen - abgeschnitten auf: %s"
 
 UIL_13 "Compiler hat keinen virtuellen Speicher mehr."
 
 UIL_14 "Unerwartetes Token %s gefunden - die Analyse wird nach \"%c\" wiederaufgenommen."
 
-UIL_15 "%s %s muß vor dieser Referenz definiert sein."
+UIL_15 "%s %s muÃŸ vor dieser Referenz definiert sein."
 
 UIL_16 "Kontext erfordert die Angabe von %s - %s."
 
@@ -43,23 +43,23 @@ UIL_17 "%s wurde noch nicht implementiert."
 
 UIL_18 "Wert %s gefunden, als Wert %s erwartet wurde."
 
-UIL_19 "%s %s wird für das Objekt %s nicht unterstützt."
+UIL_19 "%s %s wird fÃ¼r das Objekt %s nicht unterstÃ¼tzt."
 
-UIL_20 "Dies %s %s löst eine vorherige Definition in diesem %s %s ab."
+UIL_20 "Dies %s %s lÃ¶st eine vorherige Definition in diesem %s %s ab."
 
 UIL_21 "Der Name %s wurde zuvor als %s definiert."
 
-UIL_22 "Der in diesem Kontext verwendete Wert muß privat sein."
+UIL_22 "Der in diesem Kontext verwendete Wert muÃŸ privat sein."
 
 UIL_23 "Die Prozedur %s wurde zuvor mit den Argumenten %d angegeben."
 
-UIL_24 "Wert %s gefunden - das Argument der Prozedur %s muß der Wert %s sein."
+UIL_24 "Wert %s gefunden - das Argument der Prozedur %s muÃŸ der Wert %s sein."
 
 UIL_25 "%s %s gefunden, als %s %s erwartet wurde."
 
 UIL_26 "%s %s wurde noch nicht definiert."
 
-UIL_27 "%s %s für dieses %s %s bereits angegeben."
+UIL_27 "%s %s fÃ¼r dieses %s %s bereits angegeben."
 
 UIL_28 "Element %s nicht in %s %s erlaubt."
 
@@ -71,47 +71,47 @@ UIL_31
 
 UIL_32 "%s fehlt nach der Option \"%s\"."
 
-UIL_33 "Fehler beim Öffnen der Listing-Datei: %s"
+UIL_33 "Fehler beim Ã–ffnen der Listing-Datei: %s"
 
 UIL_34 "Fehler beim Schreiben in die Listing-Datei: %s"
 
-UIL_35 "Ungültige Modulstruktur- UIL-Modulsyntax überprüfen!"
+UIL_35 "UngÃ¼ltige Modulstruktur- UIL-Modulsyntax Ã¼berprÃ¼fen!"
 
-UIL_36 "Zu viele Quellendateien geöffnet: %s"
+UIL_36 "Zu viele Quellendateien geÃ¶ffnet: %s"
 
-UIL_37 "Quellenzeile enthält ein leeres Zeichen."
+UIL_37 "Quellenzeile enthÃ¤lt ein leeres Zeichen."
 
 UIL_38 "Fehler: %d Warnungen: %d  Informationsmeldungen: %d"
 
-UIL_39 "Fehler beim Öffnen der Datei UID: %s"
+UIL_39 "Fehler beim Ã–ffnen der Datei UID: %s"
 
 UIL_40 "Es wurde keine Datei UID produziert."
 
-UIL_41 "Erstellungsprozedur wird nicht durch das Widget %s unterstützt."
+UIL_41 "Erstellungsprozedur wird nicht durch das Widget %s unterstÃ¼tzt."
 
 UIL_42 "Erstellungsprozedur ist in einer %s Widget-Referenz nicht erlaubt."
 
 UIL_43 "Erstellungsprozedur wird in einer %s Widget-Vereinbarung erfordert."
 
-UIL_44 "Ein NULL-Zeichen wird in einer Zeichenfolge nicht unterstützt."
+UIL_44 "Ein NULL-Zeichen wird in einer Zeichenfolge nicht unterstÃ¼tzt."
 
-UIL_45 "Widget %s ist Teil einer kreisförmigen Definition."
+UIL_45 "Widget %s ist Teil einer kreisfÃ¶rmigen Definition."
 
 UIL_46 "Keine Quellendatei angegeben."
 
-UIL_47 "%s %s unterstützt nur ein einfaches %s %s."
+UIL_47 "%s %s unterstÃ¼tzt nur ein einfaches %s %s."
 
-UIL_48 "Widget %s unterstützt nur ein einzelnes Bedienelement."
+UIL_48 "Widget %s unterstÃ¼tzt nur ein einzelnes Bedienelement."
 
 UIL_49 "Unbekannter Zeichensatz"
 
 UIL_50 "Namen-Aussage vor andere Modul-Aussagen stellen."
 
-UIL_51 "Farbbuchstaben-Zeichenfolge muß ein einzelnes Zeichen sein."
+UIL_51 "Farbbuchstaben-Zeichenfolge muÃŸ ein einzelnes Zeichen sein."
 
-UIL_52 "Farbbuchstabe wurde schon für vorherige Farbe in dieser Tabelle verwendet."
+UIL_52 "Farbbuchstabe wurde schon fÃ¼r vorherige Farbe in dieser Tabelle verwendet."
 
-UIL_53 "Reihe %d muß dieselbe Breite wie Reihe 1 haben."
+UIL_53 "Reihe %d muÃŸ dieselbe Breite wie Reihe 1 haben."
 
 UIL_54 "Reihe %d, Zeile %d: Buchstabe \"%c\" nicht in Farbtabelle."
 
@@ -119,51 +119,51 @@ UIL_55 "Zu viele %ss in %s, die Grenze ist %d."
 
 UIL_56 "Untergeordnete Kennzeichnung ist mit negierter Kennzeichnung nicht erlaubt."
 
-UIL_57 "Gadget %s wird nicht unterstützt - stattdessen wird Widget %s benutzt."
+UIL_57 "Gadget %s wird nicht unterstÃ¼tzt - stattdessen wird Widget %s benutzt."
 
-UIL_58 "Typ %s ist nicht für %s gültig."
+UIL_58 "Typ %s ist nicht fÃ¼r %s gÃ¼ltig."
 
-UIL_59 "Die Unterstützung für diesen Zeichensatz kann in einer zukünftigen Version entfernt werden."
+UIL_59 "Die UnterstÃ¼tzung fÃ¼r diesen Zeichensatz kann in einer zukÃ¼nftigen Version entfernt werden."
 
-UIL_60 "Die Grenze %s wird für %s %s nicht unterstützt."
+UIL_60 "Die Grenze %s wird fÃ¼r %s %s nicht unterstÃ¼tzt."
 
 UIL_61 "Zu viele \"%s\" Optionen, die Grenze ist %d."
 
-UIL_62 "Fehler beim Schließen der Quellendatei: %s"
+UIL_62 "Fehler beim SchlieÃŸen der Quellendatei: %s"
 
-UIL_63 "Der Wert %s ist kreisförmig definiert."
+UIL_63 "Der Wert %s ist kreisfÃ¶rmig definiert."
 
-UIL_64 "Mitgelieferter Name %s wird außer Kraft gesetzt."
+UIL_64 "Mitgelieferter Name %s wird auÃŸer Kraft gesetzt."
 
-UIL_65 "Das Argument %s unterstützt keine Numerierungswerte."
+UIL_65 "Das Argument %s unterstÃ¼tzt keine Numerierungswerte."
 
-UIL_66 "Das Argument %s unterstützt nicht den Numerierungswert %s."
+UIL_66 "Das Argument %s unterstÃ¼tzt nicht den Numerierungswert %s."
 
-UIL_67 "$LANG enthält einen unbekannten Zeichensatz."
+UIL_67 "$LANG enthÃ¤lt einen unbekannten Zeichensatz."
 
-UIL_68 "Die Bedienelement-Hierarchie des Objektes %s enthält eine Referenz auf sich selbst."
+UIL_68 "Die Bedienelement-Hierarchie des Objektes %s enthÃ¤lt eine Referenz auf sich selbst."
 
-UIL_69 "Der Wert %s ist zu groß für den Kontextpuffer."
+UIL_69 "Der Wert %s ist zu groÃŸ fÃ¼r den Kontextpuffer."
 
-UIL_70 "Vorwärtsreferenzieren ist für %s nicht erlaubt."
+UIL_70 "VorwÃ¤rtsreferenzieren ist fÃ¼r %s nicht erlaubt."
 
 UIL_71 "Kann Typ %s nicht in Typ %s umwandeln."
 
-UIL_72 "%s ist ungültig."
+UIL_72 "%s ist ungÃ¼ltig."
 
-UIL_V2_73 "Fehler beim Lesen der binären Datenbank."
+UIL_V2_73 "Fehler beim Lesen der binÃ¤ren Datenbank."
 
-UIL_V2_74 "Binäre Datenbank mit einer zukünftigen Version kompiliert."
+UIL_V2_74 "BinÃ¤re Datenbank mit einer zukÃ¼nftigen Version kompiliert."
 
-UIL_V2_75 "Fehler beim Öffnen der Datenbankdatei: %s"
+UIL_V2_75 "Fehler beim Ã–ffnen der Datenbankdatei: %s"
 
 UIL_V2_76 "Fehler beim Schreiben der UID-Datei: %s"
 
 UIL_V2_77 "'%s' ist ein unbekannter Toolkit Class Record-Name."
 
-UIL_78 "Ungültiger include file??-Name."
+UIL_78 "UngÃ¼ltiger include file??-Name."
 
-UIL_V2_79 "Nicht kompatible Einheitstypen für die arithmetische Operation."
+UIL_V2_79 "Nicht kompatible Einheitstypen fÃ¼r die arithmetische Operation."
 
 UIL_V2_80 "%s als charset-Name benutzt; %s als charset-Komponente benutzt."
 

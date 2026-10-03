@@ -35,108 +35,108 @@ $quote "
 
 $set MS_Mrm
 
-MSG__0000 "FallÛ la asignaciÛn del vector"
+MSG__0000 "Fall√≥ la asignaci√≥n del vector"
 
-MSG__0001 "FallÛ la asignaciÛn de memoria intermedia"
+MSG__0001 "Fall√≥ la asignaci√≥n de memoria intermedia"
 
-MSG__0002 "Memoria intermedia no v·lida"
+MSG__0002 "Memoria intermedia no v√°lida"
 
-MSG__0003 "FallÛ la obtenciÛn del bloque"
+MSG__0003 "Fall√≥ la obtenci√≥n del bloque"
 
-MSG__0004 "FallÛ la colocaciÛn del bloque"
+MSG__0004 "Fall√≥ la colocaci√≥n del bloque"
 
-MSG__0005 "AnotaciÛn de encabezamiento no v·lida"
+MSG__0005 "Anotaci√≥n de encabezamiento no v√°lida"
 
-MSG__0006 "Contexto no v·lido"
+MSG__0006 "Contexto no v√°lido"
 
-MSG__0007 "Datos introducidos no v·lidos"
+MSG__0007 "Datos introducidos no v√°lidos"
 
-MSG__0008 "Segmento introducido no v·lido"
+MSG__0008 "Segmento introducido no v√°lido"
 
-MSG__0009 "Tipo de datos introducidos no v·lidos"
+MSG__0009 "Tipo de datos introducidos no v√°lidos"
 
-MSG__0010 "Tipo de anotaciÛn inesperado"
+MSG__0010 "Tipo de anotaci√≥n inesperado"
 
-MSG__0011 "La versiÛn de archivo %s es mayor que la versiÛn de Mrm %s."
+MSG__0011 "La versi√≥n de archivo %s es mayor que la versi√≥n de Mrm %s."
 
-MSG__0012 "Esta no es la anotaciÛn del encabezamiento."
+MSG__0012 "Esta no es la anotaci√≥n del encabezamiento."
 
-MSG__0013 "El Ìndice de recursos est· fuera de intervalo"
+MSG__0013 "El √≠ndice de recursos est√° fuera de intervalo"
 
 MSG__0014 "Puntero de datos NULL"
 
-MSG__0015 "AnotaciÛn de desbordamiento no v·lida"
+MSG__0015 "Anotaci√≥n de desbordamiento no v√°lida"
 
-MSG__0016 "La anotaciÛn GT no coincide"
+MSG__0016 "La anotaci√≥n GT no coincide"
 
-MSG__0017 "La anotaciÛn LT no coincide"
+MSG__0017 "La anotaci√≥n LT no coincide"
 
-MSG__0018 "Tipo inesperado de anotaciÛn madre"
+MSG__0018 "Tipo inesperado de anotaci√≥n madre"
 
-MSG__0019 "La anotaciÛn se encuentra despuÈs de EOF"
+MSG__0019 "La anotaci√≥n se encuentra despu√©s de EOF"
 
-MSG__0020 "No se puede intercambiar la anotaciÛn #%d de tipo %d"
+MSG__0020 "No se puede intercambiar la anotaci√≥n #%d de tipo %d"
 
-MSG__0021 "Se encontrÛ el tipo %d no implementado en el elemento de devoluciÛn de llamada %d"
+MSG__0021 "Se encontr√≥ el tipo %d no implementado en el elemento de devoluci√≥n de llamada %d"
 
-MSG__0022 "Se encontrÛ un tipo %d de argumento no implementado"
+MSG__0022 "Se encontr√≥ un tipo %d de argumento no implementado"
 
-MSG__0023 "IdentificaciÛn de jerarquÌa NULL"
+MSG__0023 "Identificaci√≥n de jerarqu√≠a NULL"
 
-MSG__0024 "JerarquÌa no v·lida"
+MSG__0024 "Jerarqu√≠a no v√°lida"
 
-MSG__0025 "MÛdulo de interfaz no v·lido"
+MSG__0025 "M√≥dulo de interfaz no v√°lido"
 
-MSG__0026 "AnotaciÛn de widget no v·lida"
+MSG__0026 "Anotaci√≥n de widget no v√°lida"
 
-MSG__0027 "FallÛ la asignaciÛn de contexto"
+MSG__0027 "Fall√≥ la asignaci√≥n de contexto"
 
-MSG__0028 "FallÛ la validaciÛn"
+MSG__0028 "Fall√≥ la validaci√≥n"
 
-MSG__0029 "El tamaÒo del recurso es demasiado grande"
+MSG__0029 "El tama√±o del recurso es demasiado grande"
 
-MSG__0030 "La pantalla no se ha abierto todavÌa"
+MSG__0030 "La pantalla no se ha abierto todav√≠a"
 
 MSG__0031 "No se pudo abrir el archivo %s"
 
-MSG__0032 "No se pudo abrir el archivo %s. La versiÛn del archivo UID no coincide."
+MSG__0032 "No se pudo abrir el archivo %s. La versi√≥n del archivo UID no coincide."
 
-MSG__0033 "XmGetPixmap fallÛ con XmUNSPECIFIED_PIXMAP para %s"
+MSG__0033 "XmGetPixmap fall√≥ con XmUNSPECIFIED_PIXMAP para %s"
 
-MSG__0034 "XCreateImage fallÛ durante la conversiÛn de IconImage"
+MSG__0034 "XCreateImage fall√≥ durante la conversi√≥n de IconImage"
 
-MSG__0035 "XCreatePixmap fallÛ durante la conversiÛn de IconImage"
+MSG__0035 "XCreatePixmap fall√≥ durante la conversi√≥n de IconImage"
 
-MSG__0036 "XCreateGC fallÛ durante la conversiÛn de IconImage"
+MSG__0036 "XCreateGC fall√≥ durante la conversi√≥n de IconImage"
 
-MSG__0037 "XtMalloc fallÛ durante la conversiÛn de IconImage"
+MSG__0037 "XtMalloc fall√≥ durante la conversi√≥n de IconImage"
 
 MSG__0038 "No se ha podido cargar el color '%s'"
 
 MSG__0039 "No se pudo convertir el color o pixel RGB '%d,%d,%d'"
 
-MSG__0040 "Tipo de descriptor de color no v·lido"
+MSG__0040 "Tipo de descriptor de color no v√°lido"
 
-MSG__0041 "Elemento de color no v·lido en el estado monocrom·tico %d"
+MSG__0041 "Elemento de color no v√°lido en el estado monocrom√°tico %d"
 
 MSG__0042 "No se puede encontrar '%s' literal"
 $ literal in this context means a named value.
 
-MSG__0043 "Contexto de recurso no v·lido"
+MSG__0043 "Contexto de recurso no v√°lido"
 
 MSG__0044 "Demasiados widgets"
 
-MSG__0045 "El Ìndice que se encuentra m·s arriba est· fuera de lÌmites"
+MSG__0045 "El √≠ndice que se encuentra m√°s arriba est√° fuera de l√≠mites"
 
-MSG__0046 "FallÛ la asignaciÛn de lista"
+MSG__0046 "Fall√≥ la asignaci√≥n de lista"
 
-MSG__0047 "FallÛ la asignaciÛn del vector de lista"
+MSG__0047 "Fall√≥ la asignaci√≥n del vector de lista"
 
-MSG__0048 "FallÛ la reasignaciÛn del vector"
+MSG__0048 "Fall√≥ la reasignaci√≥n del vector"
 
-MSG__0049 "FallÛ la asignaciÛn de la cadena"
+MSG__0049 "Fall√≥ la asignaci√≥n de la cadena"
 
-MSG__0050 "El archivo UID es obsoleto ya que no contiene ninguna compresiÛn de tabla"
+MSG__0050 "El archivo UID es obsoleto ya que no contiene ninguna compresi√≥n de tabla"
 
 MSG__0051 "No se pudo encontrar el descriptor de la clase %s"
 
@@ -148,31 +148,31 @@ MSG__0054 "?? Tipo de clave UNKNOWN %d"
 
 MSG__0055 "Variedad de widget desconocida"
 
-MSG__0056 "Referencia de widget no resuelta en la creaciÛn de la devoluciÛn de llamada"
+MSG__0056 "Referencia de widget no resuelta en la creaci√≥n de la devoluci√≥n de llamada"
 
-MSG__0057 "No se pudieron reparar las devoluciones de llamada de creaciÛn"
+MSG__0057 "No se pudieron reparar las devoluciones de llamada de creaci√≥n"
 
 MSG__0058 "Tipo de hijo desconocido"
 
-MSG__0059 "No se encontrÛ el hijo del padre"
+MSG__0059 "No se encontr√≥ el hijo del padre"
 
-MSG__0060 "La referencia del widget no est· indexada"
+MSG__0060 "La referencia del widget no est√° indexada"
 
 MSG__0061 "No se pudo convertir el color o pixel '%s'"
 
-MSG__0062 "No se pudo descomprimir el cÛdigo de cadena %d"
+MSG__0062 "No se pudo descomprimir el c√≥digo de cadena %d"
 
 MSG__0063 "Grupo de recursos no manipulado"
 
 MSG__0064 "No se pudo convertir ASCIZ '%s' en cadena compuesta"
 
-MSG__0065 "No se pudo efectuar el an·lisis sint·ctico de la tabla de conversiÛn '%s'"
+MSG__0065 "No se pudo efectuar el an√°lisis sint√°ctico de la tabla de conversi√≥n '%s'"
 
 MSG__0066 "No se pudo convertir el identificador '%s'"
 
-MSG__0067 "Error interno: se encontrÛ el caso MrmRtypeIconImage"
+MSG__0067 "Error interno: se encontr√≥ el caso MrmRtypeIconImage"
 
-MSG__0068 "Error interno: se encontrÛ el caso MrmRtypeXBitmapFile"
+MSG__0068 "Error interno: se encontr√≥ el caso MrmRtypeXBitmapFile"
 
 MSG__0069 "Error interno: no se pudo convertir la pantalla en cadena"
 
@@ -183,11 +183,11 @@ $ please do not translate fontset.
 
 MSG__0072 "No se pudieron abrir fonts del fontset '%s'"
 
-MSG__0073 "No se pudo aÒadir el font '%s' de fontset a la lista"
+MSG__0073 "No se pudo a√±adir el font '%s' de fontset a la lista"
 
-MSG__0074 "No se pudo aÒadir el fontset '%s' de la lista de fonts a la lista"
+MSG__0074 "No se pudo a√±adir el fontset '%s' de la lista de fonts a la lista"
 
-MSG__0075 "No se pudo convertir el nombre de la anotaciÛn de la clase '%s'"
+MSG__0075 "No se pudo convertir el nombre de la anotaci√≥n de la clase '%s'"
 
 MSG__0076 "No se pudo convertir la cadena keysym '%s' en KeySym"
 
@@ -197,17 +197,17 @@ MSG__0078 "No se puede encontrar el RID literal '%x'"
 
 MSG__0079 "Tipo de clave literal %d desconocido"
 
-MSG__0080 "Tipo de ColorTable %d no v·lido"
+MSG__0080 "Tipo de ColorTable %d no v√°lido"
 
-MSG__0081 "CÛdigo de tipo ColorTable %d no v·lido"
+MSG__0081 "C√≥digo de tipo ColorTable %d no v√°lido"
 
-MSG__0082 "Tipo de valor literal de color %d no v·lido"
+MSG__0082 "Tipo de valor literal de color %d no v√°lido"
 
-MSG__0083 "CÛdigo de tipo ColorItem %d no v·lido"
+MSG__0083 "C√≥digo de tipo ColorItem %d no v√°lido"
 
-MSG__0084 "La rutina '%s' de devoluciÛn de llamada no est· registrada"
+MSG__0084 "La rutina '%s' de devoluci√≥n de llamada no est√° registrada"
 
-MSG__0085 "La referencia del widget no est· indexada"
+MSG__0085 "La referencia del widget no est√° indexada"
 
 MSG__0086 "No se puede encontrar el recurso widget '%s' indexado"
 
@@ -215,55 +215,55 @@ MSG__0087 "No se puede encontrar el recurso widget RID '%x'"
 
 MSG__0088 "Tipo de clave de recurso %d desconocido"
 
-MSG__0089 "No se pudieron crear casos del ·rbol de widgets"
+MSG__0089 "No se pudieron crear casos del √°rbol de widgets"
 
 MSG__0090 "Nombre nulo de clase definida por el usuario"
 
-MSG__0091 "CÛdigo de clase no v·lido"
+MSG__0091 "C√≥digo de clase no v√°lido"
 
 MSG__0092 "Demasiados argumentos"
 
-MSG__0093 "CÛdigo de compresiÛn no v·lido"
+MSG__0093 "C√≥digo de compresi√≥n no v√°lido"
 
-MSG__0094 "Tipo no v·lido o no procesado"
+MSG__0094 "Tipo no v√°lido o no procesado"
 
 MSG__0095 "El vector es demasiado grande"
 
-MSG__0096 "Nombre de rutina vacÌo"
+MSG__0096 "Nombre de rutina vac√≠o"
 
-MSG__0097 "Char8Vector todavÌa no est· implementado"
+MSG__0097 "Char8Vector todav√≠a no est√° implementado"
 
-MSG__0098 "CStringVector todavÌa no est· implementado"
+MSG__0098 "CStringVector todav√≠a no est√° implementado"
 
 MSG__0099 "Demasiados hijos"
 
 MSG__0100 "Descriptor de lista de hijos nulo"
 
-MSG__0101 "El Ìndice del hijo est· fuera de lÌmite"
+MSG__0101 "El √≠ndice del hijo est√° fuera de l√≠mite"
 
 MSG__0102 "Indice nulo"
 
-MSG__0103 "Tipo de clave no v·lido"
+MSG__0103 "Tipo de clave no v√°lido"
 
-MSG__0104 "El Ìndice del argumento est· fuera de lÌmite"
+MSG__0104 "El √≠ndice del argumento est√° fuera de l√≠mite"
 
-MSG__0105 "AnotaciÛn de widget/gadget no v·lida"
+MSG__0105 "Anotaci√≥n de widget/gadget no v√°lida"
 
-MSG__0106 "Descriptor de devoluciÛn de llamada no v·lido"
+MSG__0106 "Descriptor de devoluci√≥n de llamada no v√°lido"
 
-MSG__0107 "El Ìndice del elemento de devoluciÛn de llamada est· fuera de lÌmite"
+MSG__0107 "El √≠ndice del elemento de devoluci√≥n de llamada est√° fuera de l√≠mite"
 
-MSG__0108 "No se pudo descomprimir el cÛdigo de cadena %d"
+MSG__0108 "No se pudo descomprimir el c√≥digo de cadena %d"
 
 MSG__0109 "Demasiados elementos"
 
-MSG__0110 "No se pudo convertir la cadena de bites m˙ltiples en una cadena de caracteres anchos "
+MSG__0110 "No se pudo convertir la cadena de bites m√∫ltiples en una cadena de caracteres anchos "
 
-MSG__0111 "No se pudo convertir el n˙mero entero '%d' en una imagen de icono"
+MSG__0111 "No se pudo convertir el n√∫mero entero '%d' en una imagen de icono"
 
 MSG__0112 "No se pudo convertir en imagen de icono"
 
-MSG__0113 "No se pudo abrir la memoria intermedia. La versiÛn de UID no coincide."
+MSG__0113 "No se pudo abrir la memoria intermedia. La versi√≥n de UID no coincide."
 
 MSG__0114 "No se pudo abrir la memoria intermedia"
 
@@ -271,8 +271,8 @@ MSG__0115 "No se pudieron convertir las unidades en XmPIXELS debido a que el for
 
 MSG__0116 "No se pudieron convertir la unidades en XmPIXELS debido a un desbordamiento de coma flotante"
 
-MSG__0117 "El archivo UID contiene la cadena de versiÛn g %s no v·lida. No se puede leer el archivo."
+MSG__0117 "El archivo UID contiene la cadena de versi√≥n g %s no v√°lida. No se puede leer el archivo."
 
-MSG__0118 "La versiÛn %s de Mrm es mayor que la versiÛn del archivo %s.\nPor favor vuelva a compilar el archivo UIL."
+MSG__0118 "La versi√≥n %s de Mrm es mayor que la versi√≥n del archivo %s.\nPor favor vuelva a compilar el archivo UIL."
 
 MSG__0119 "El objeto '%s' se ha declarado como PRIVATE."

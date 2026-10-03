@@ -5,11 +5,11 @@ $quote "
 $set UIL_SET1
 
 
-UIL_0 "l'option en double \"%s\" a été ignorée"
+UIL_0 "l'option en double \"%s\" a Ã©tÃ© ignorÃ©e"
 
-UIL_1 "l'option inconnue \"%s\" a été ignorée"
+UIL_1 "l'option inconnue \"%s\" a Ã©tÃ© ignorÃ©e"
 
-UIL_2 "le fichier source UIL supplémentaire : %s a été ignoré"
+UIL_2 "le fichier source UIL supplÃ©mentaire : %s a Ã©tÃ© ignorÃ©"
 
 UIL_3 "erreur d'ouverture du fichier source: %s"
 
@@ -17,113 +17,113 @@ UIL_4 "erreur de lecture de la ligne suivante du fichier source : %s"
 
 UIL_5 "Erreur interne : %s"
 
-UIL_6 "ligne tronquée aux caractères %d"
+UIL_6 "ligne tronquÃ©e aux caractÃ¨res %d"
 
 UIL_7 "la valeur de %s est hors de la plage %s"
 
-UIL_8 "%s pas terminé %s"
+UIL_8 "%s pas terminÃ© %s"
 
-UIL_9 "le caractère \\%d\\ impossible à imprimer est ignoré"
+UIL_9 "le caractÃ¨re \\%d\\ impossible Ã  imprimer est ignorÃ©"
 
-UIL_10 "la séquence inconnue \"%s\" est ignorée"
+UIL_10 "la sÃ©quence inconnue \"%s\" est ignorÃ©e"
 
-UIL_11 "la séquence d'échappement inconnue \"\\%c\" - \\ est ignorée"
+UIL_11 "la sÃ©quence d'Ã©chappement inconnue \"\\%c\" - \\ est ignorÃ©e"
 
-UIL_12 "le nom a plus de %d caractères - tronqué à: %s"
+UIL_12 "le nom a plus de %d caractÃ¨res - tronquÃ© Ã : %s"
 
-UIL_13 "la mémoire virtuelle du compilateur est épuisée"
+UIL_13 "la mÃ©moire virtuelle du compilateur est Ã©puisÃ©e"
 
-UIL_14 "jeton %s inattendu - analyse recommencée après \"%c\""
+UIL_14 "jeton %s inattendu - analyse recommencÃ©e aprÃ¨s \"%c\""
 
-UIL_15 "%s %s doit être défini avant cette référence"
+UIL_15 "%s %s doit Ãªtre dÃ©fini avant cette rÃ©fÃ©rence"
 
-UIL_16 "le contexte exige un %s - %s a été spécifié"
+UIL_16 "le contexte exige un %s - %s a Ã©tÃ© spÃ©cifiÃ©"
 
 UIL_17 "%s n'est pas encore mis en oeuvre"
 
-UIL_18 "la valeur %s a été trouvée mais la valeur %s était attendue"
+UIL_18 "la valeur %s a Ã©tÃ© trouvÃ©e mais la valeur %s Ã©tait attendue"
 
 UIL_19 "le %s %s n'est pas pris en charge pour l'objet %s"
 
-UIL_20 " %s %s annule la définition précédente dans ce %s %s"
+UIL_20 " %s %s annule la dÃ©finition prÃ©cÃ©dente dans ce %s %s"
 
-UIL_21 "le nom %s a été défini antérieurement par %s"
+UIL_21 "le nom %s a Ã©tÃ© dÃ©fini antÃ©rieurement par %s"
 
-UIL_22 "la valeur utilisée dans ce contexte doit être privée"
+UIL_22 "la valeur utilisÃ©e dans ce contexte doit Ãªtre privÃ©e"
 
-UIL_23 "Vous avez déclaré la procédure %s antérieurement avec les arguments %d"
+UIL_23 "Vous avez dÃ©clarÃ© la procÃ©dure %s antÃ©rieurement avec les arguments %d"
 
-UIL_24 "La valeur trouvée est de %s - les arguments de la procédure %s doivent avoir la valeur de %s"
+UIL_24 "La valeur trouvÃ©e est de %s - les arguments de la procÃ©dure %s doivent avoir la valeur de %s"
 
-UIL_25 " %s %s a été trouvée mais %s %s était attendue"
+UIL_25 " %s %s a Ã©tÃ© trouvÃ©e mais %s %s Ã©tait attendue"
 
-UIL_26 "%s %s pas défini"
+UIL_26 "%s %s pas dÃ©fini"
 
-UIL_27 "%s %s déjà spécifié pour ce %s %s"
+UIL_27 "%s %s dÃ©jÃ  spÃ©cifiÃ© pour ce %s %s"
 
-UIL_28 " l'élément %s n'est pas autorisé dans %s %s"
+UIL_28 " l'Ã©lÃ©ment %s n'est pas autorisÃ© dans %s %s"
 
-UIL_29 "compilation complète - rectifiez les erreurs précédentes"
+UIL_29 "compilation complÃ¨te - rectifiez les erreurs prÃ©cÃ©dentes"
 
-UIL_30 "erreur interne - établissez un rapport des erreurs"
+UIL_30 "erreur interne - Ã©tablissez un rapport des erreurs"
 
 UIL_31
 
-UIL_32 "%s est absent après l'option \"%s\""
+UIL_32 "%s est absent aprÃ¨s l'option \"%s\""
 
 UIL_33 "erreur d'ouverture du fichier de listage : %s"
 
-UIL_34 " erreur d'écriture du fichier de listage: %s"
+UIL_34 " erreur d'Ã©criture du fichier de listage: %s"
 
-UIL_35 "structure de module incorrecte - vérifiez la syntaxe du module UIL"
+UIL_35 "structure de module incorrecte - vÃ©rifiez la syntaxe du module UIL"
 
 UIL_36 "trop de fichiers source ouverts : %s"
 
-UIL_37 "la ligne source contient un caractère null"
+UIL_37 "la ligne source contient un caractÃ¨re null"
 
 UIL_38 "erreurs : %d  avertissements : %d  informationels : %d"
 
 UIL_39 "erreur d'ouverture du fichier UID : %s"
 
-UIL_40 "aucun fichier UID créé"
+UIL_40 "aucun fichier UID crÃ©Ã©"
 
-UIL_41 "la procédure de création n'est pas prise en charge par le widget % "
+UIL_41 "la procÃ©dure de crÃ©ation n'est pas prise en charge par le widget % "
 
-UIL_42 " la procédure de création n'est pas autorisée dans une référence widget %s"
+UIL_42 " la procÃ©dure de crÃ©ation n'est pas autorisÃ©e dans une rÃ©fÃ©rence widget %s"
 
-UIL_43 " la procédure de création est exigée dans une déclaration widget %s"
+UIL_43 " la procÃ©dure de crÃ©ation est exigÃ©e dans une dÃ©claration widget %s"
 
-UIL_44 "un caractère NULL dans une chaîne n'est pas pris en charge"
+UIL_44 "un caractÃ¨re NULL dans une chaÃ®ne n'est pas pris en charge"
 
-UIL_45 "widget %s fait partie d'une définition circulaire"
+UIL_45 "widget %s fait partie d'une dÃ©finition circulaire"
 
-UIL_46 "aucun fichier source spécifié"
+UIL_46 "aucun fichier source spÃ©cifiÃ©"
 
 UIL_47 "%s %s ne prend en charge qu'un seul %s %s"
 
-UIL_48 "widget %s ne prend en charge qu'un seul contrôle"
+UIL_48 "widget %s ne prend en charge qu'un seul contrÃ´le"
 
-UIL_49 "jeu de caractères inconnu"
+UIL_49 "jeu de caractÃ¨res inconnu"
 
 UIL_50 "placez la clause de nom avant les autres clauses de module"
 
-UIL_51 "la chaîne de lettre couleur se compose d'un seul caractère"
+UIL_51 "la chaÃ®ne de lettre couleur se compose d'un seul caractÃ¨re"
 
-UIL_52 "La lettre en couleur a déjà été utilisée dans cette table"
+UIL_52 "La lettre en couleur a dÃ©jÃ  Ã©tÃ© utilisÃ©e dans cette table"
 
-UIL_53 "la ligne %d doit être de la même largeur que la ligne 1"
+UIL_53 "la ligne %d doit Ãªtre de la mÃªme largeur que la ligne 1"
 
 UIL_54 "ligne %d, colonne %d: lettre \"%c\" pas dans la table des couleurs"
 
 UIL_55 "trop de %ss dans %s, la limite est de %d"
 
-UIL_56 "Un sous qualifiant n'est pas autorisé avec un qualifiant négatif"
+UIL_56 "Un sous qualifiant n'est pas autorisÃ© avec un qualifiant nÃ©gatif"
 
 UIL_57 "le gadget %s n'est pas pris en charge - le widget %s le remplace"
 
 UIL_58 "le type %s est incorrect pour %s"
 
-UIL_59 "la prise en charge de ce caractère sera peut-être interrompue dans une version ultérieure"
+UIL_59 "la prise en charge de ce caractÃ¨re sera peut-Ãªtre interrompue dans une version ultÃ©rieure"
 
 UIL_60 "la contrainte %s n'est pas prise en charge dans le %s %s"
 
@@ -133,39 +133,39 @@ UIL_62 "erreur de fermeture du fichier source : %s"
 
 UIL_63 "la valeur %s est une valeur circulaire"
 
-UIL_64 "suppression du nom intégré %s"
+UIL_64 "suppression du nom intÃ©grÃ© %s"
 
-UIL_65 "l'argument %s ne prend pas en charge les valeurs énumérées"
+UIL_65 "l'argument %s ne prend pas en charge les valeurs Ã©numÃ©rÃ©es"
 
-UIL_66 " l'argument %s ne prend pas en charge les valeurs énumérées %s"
+UIL_66 " l'argument %s ne prend pas en charge les valeurs Ã©numÃ©rÃ©es %s"
 
-UIL_67 "$LANG contient un jeu de caractères inconnu"
+UIL_67 "$LANG contient un jeu de caractÃ¨res inconnu"
 
-UIL_68 "la hiérachie des contrôles d'objet %s contient sa propre référence"
+UIL_68 "la hiÃ©rachie des contrÃ´les d'objet %s contient sa propre rÃ©fÃ©rence"
 
 UIL_69 "la valeur %s est trop grande pour le tampon du contexte"
 
-UIL_70 "impossible d'utiliser la référence %s avant de l'avoir définie"
+UIL_70 "impossible d'utiliser la rÃ©fÃ©rence %s avant de l'avoir dÃ©finie"
 
 UIL_71 "impossible de convertir le type %s en %s"
 
 UIL_72 "%s est incorrect"
 
-UIL_V2_73 "erreur de lecture de la base de données binaire"
+UIL_V2_73 "erreur de lecture de la base de donnÃ©es binaire"
 
-UIL_V2_74 "La base de données binaire a été compilée avec une version ultérieure"
+UIL_V2_74 "La base de donnÃ©es binaire a Ã©tÃ© compilÃ©e avec une version ultÃ©rieure"
 
-UIL_V2_75 "erreur d'ouverture du fichier de base de données : %s"
+UIL_V2_75 "erreur d'ouverture du fichier de base de donnÃ©es : %s"
 
-UIL_V2_76 "erreur d'écriture du fichier UID : %s"
+UIL_V2_76 "erreur d'Ã©criture du fichier UID : %s"
 
 UIL_V2_77 "'%s' est un enregistrement de classe Toolkit inconnu"
 
 UIL_78 "nom de fichier d'inclusion incorrect"
 
-UIL_V2_79 "type d'unités incompatibles avec une opération arithmétique"
+UIL_V2_79 "type d'unitÃ©s incompatibles avec une opÃ©ration arithmÃ©tique"
 
-UIL_V2_80 "%s utilisé en tant que nom de charset; %s utilisé en tant que composant de charset"
+UIL_V2_80 "%s utilisÃ© en tant que nom de charset; %s utilisÃ© en tant que composant de charset"
 
 
 $set UIL_VALUES
