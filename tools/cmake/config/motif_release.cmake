@@ -42,7 +42,5 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG" CACHE STRING "Release C++ flags" FORC
 # Enable optimizations
 add_compile_definitions(NDEBUG=1)
 
-# Enable link-time optimization if available
-if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
-    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ON CACHE BOOL "Enable LTO" FORCE)
-endif()
+# Enable link-time optimization (applied in CMakeLists.txt once the compiler is known)
+set(WITH_LTO ON CACHE BOOL "Enable link-time optimization" FORCE)

@@ -230,6 +230,8 @@ set_option(WITH_WML_TOOLS "Enable WML (Widget Meta-Language) tools" ON)
 set_option(WITH_JPEG "Enable JPEG support" ON)
 set_option(WITH_PNG "Enable PNG support" ON)
 set_option(WITH_XFT "Enable Xft support" ON)
+set_option(WITH_LTO "Enable link-time optimization (and -fno-semantic-interposition)" OFF)
+set_option(WITH_CPU_NATIVE "Optimize for the build machine's CPU (-march=native, binaries are not portable)" OFF)
 
 # Library type of the public libraries (Xm, Mrm). Internal helper libraries
 # stay static, built as PIC so they can be linked into the shared ones.
@@ -592,6 +594,30 @@ if(WITH_DEBUG)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Og -ggdb -DDEBUG")
 else()
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2 -DNDEBUG")
+endif()
+
+# Optimization options. These are applied here rather than in the presets in
+# tools/cmake/config, because presets run before the compiler is detected.
+if(WITH_LTO)
+  include(CheckIPOSupported)
+  check_ipo_supported(RESULT _ipo_supported OUTPUT _ipo_output LANGUAGES C)
+  if(_ipo_supported)
+    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)
+  else()
+    message(WARNING "WITH_LTO: link-time optimization not supported: ${_ipo_output}")
+  endif()
+  unset(_ipo_supported)
+  unset(_ipo_output)
+
+  # Exported functions in a -fPIC library are otherwise assumed to be
+  # interposable, which blocks inlining calls between them inside libXm.
+  if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
+    add_compile_options(-fno-semantic-interposition)
+  endif()
+endif()
+
+if(WITH_CPU_NATIVE AND CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
+  add_compile_options(-march=native)
 endif()
 
 # -----------------------------------------------------------------------------

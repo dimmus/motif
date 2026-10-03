@@ -45,13 +45,8 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG" CACHE STRING "Release C++ flags" FORC
 # Enable optimizations
 add_compile_definitions(NDEBUG=1)
 
-# Enable link-time optimization if available
-if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
-    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ON CACHE BOOL "Enable LTO" FORCE)
-endif()
+# Enable link-time optimization (applied in CMakeLists.txt once the compiler is known)
+set(WITH_LTO ON CACHE BOOL "Enable link-time optimization" FORCE)
 
-# Enable all available compiler features
-if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
-    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -march=native" CACHE STRING "Release C flags" FORCE)
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -march=native" CACHE STRING "Release C++ flags" FORCE)
-endif()
+# Optimize for the build machine's CPU (not portable to older CPUs)
+set(WITH_CPU_NATIVE ON CACHE BOOL "Optimize for the build machine's CPU" FORCE)
