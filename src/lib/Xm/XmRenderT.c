@@ -2142,7 +2142,8 @@ static XmConst char *CVTproperties[] = {
 static char CVTtransfervector[256];
 static int CVTtvinited = 0;
 /* Use this macro to encapsulate the code that extends the output
-   buffer as needed */
+   buffer as needed.  srcsize is strlen(src); the buffer always has
+   room for it and the terminating NUL. */
 #define CVTaddString(dest, src, srcsize) \
   { \
     if ((chars_used + (srcsize)) >= allocated_size) { \
@@ -2150,8 +2151,9 @@ static int CVTtvinited = 0;
         allocated_size *= 2; \
       dest = XtRealloc(dest, allocated_size); \
     } \
-    strcpy((dest) + chars_used, src); \
+    memcpy((dest) + chars_used, src, srcsize); \
     chars_used += (srcsize); \
+    (dest)[chars_used] = '\0'; \
   }
 
 unsigned int XmRenderTableCvtToProp(Widget widget, /* unused */
