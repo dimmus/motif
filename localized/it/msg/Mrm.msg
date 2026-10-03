@@ -187,7 +187,7 @@ MSG__0073 "Impossibile aggiungere il font '%s' della fontlist all'elenco"
 
 MSG__0074 "Impossibile aggiungere il fontset '%s' della fontlist all'elenco"
 
-MSG__0075 "Impossibile convertire il nome della classe."
+MSG__0075 "Impossibile convertire il nome della classe '%s'."
 
 MSG__0076 "Impossibile convertire la stringa keysym '%s' in KeySym"
 

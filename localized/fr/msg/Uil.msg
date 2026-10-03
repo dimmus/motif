@@ -87,7 +87,7 @@ UIL_39 "erreur d'ouverture du fichier UID : %s"
 
 UIL_40 "aucun fichier UID créé"
 
-UIL_41 "la procédure de création n'est pas prise en charge par le widget % "
+UIL_41 "la procédure de création n'est pas prise en charge par le widget %s"
 
 UIL_42 " la procédure de création n'est pas autorisée dans une référence widget %s"
 
