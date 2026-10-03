@@ -145,10 +145,7 @@ sudo yum install gcc cmake pkgconfig flex bison ninja-build ccache \
 For convenience, the project includes an automated dependency checker that supports multiple operating systems:
 
 ```bash
-# Automatic dependency checking and installation
-make deps
-
-# Or run the script directly
+# Automatic dependency checking and installation (uses sudo)
 ./tools/dev/scripts/deps_check.sh
 ```
 
@@ -176,7 +173,7 @@ If you encounter issues during the build process:
 **Missing Dependencies**: Ensure all required packages are installed:
 ```bash
 # Check dependencies
-make deps
+./tools/dev/scripts/deps_check.sh
 
 # Or install manually for your OS (see installation commands above)
 ```
@@ -206,7 +203,7 @@ git clone https://github.com/dimmus/motif.git
 cd motif
 
 # Check and install dependencies (recommended)
-make deps
+./tools/dev/scripts/deps_check.sh
 
 # Or manually install dependencies for your OS
 # (see manual installation commands above)
@@ -226,7 +223,7 @@ This project uses **CMake** as the primary build system, providing modern depend
 ```bash
 # Core build targets
 make build          # Configure and build Motif (no installation)
-make all            # Build and install Motif (legacy behavior)
+make all            # Same as "make build"
 make install        # Install (run with sudo for a system prefix; DESTDIR=... stages)
 
 # Build variants
@@ -509,31 +506,26 @@ make build
 
 # Run tests
 make test
-
-# Generate code coverage reports
-make gcov
 ```
 
 ### Code Coverage
 
-When tests are enabled (`-DWITH_TESTS=ON`), you can generate code coverage reports:
+Configure with `-DWITH_COMPILER_CODE_COVERAGE=ON`, build, and run the tests
+or programs to be measured:
+- **GCC**: builds with `--coverage`; the `.gcda` files are written next to
+  the objects in the build directory, for `gcov`, `lcov` or `gcovr`.
+- **Clang**: builds with source-based coverage
+  (`-fprofile-instr-generate -fcoverage-mapping`); set `LLVM_PROFILE_FILE`,
+  then merge with `llvm-profdata merge` and report with `llvm-cov`.
 
-```bash
-# Generate coverage reports
-make gcov
+### Sanitizers
 
-# Clean up coverage files
-make clean-gcov
-
-# View available targets
-make help
-```
-
-The coverage system automatically detects your compiler:
-- **GCC**: Uses `gcov` for coverage analysis
-- **Clang**: Uses `llvm-cov gcov` for coverage analysis
-
-Coverage reports are generated as `.gcov` files in the source directories.
+`-DWITH_COMPILER_ASAN=ON`, `-DWITH_UBSAN=ON`, `-DWITH_TSAN=ON` and
+`-DWITH_MSAN=ON` (Clang only, needs instrumented X libraries) build
+everything, programs and tests included, with the sanitizer.  Hardening
+flags (`-DWITH_HARDENING`, on by default) add `_FORTIFY_SOURCE=3` in
+optimised builds, the stack protector, stack clash protection, CET and
+full RELRO.
 
 ### Additional Build Commands
 
@@ -547,16 +539,8 @@ make clean
 # Clean everything including build directory
 make clean_all
 
-# Package the build
-make package_archive
-
-# Format source code
-make format PATHS="lib/Xm clients"
-
-# Run static analysis
-make check_cppcheck
-make check_clang_array
-make check_struct_comments
+# Create a compressed archive of the sources
+make source_archive
 ```
 
 ## License
