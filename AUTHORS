@@ -1,0 +1,27 @@
+Motif was originally developed by the Open Software Foundation, from
+contributions by Digital Equipment Corporation, Hewlett-Packard and
+others, and is copyright The Open Group.  Integrated Computer Solutions
+(ICS) maintained Motif 2.3 and released it under the LGPL in 2012.  The
+git history records the individual changes since then.
+
+Maintainer:
+Dmitri Chudinov         <dmitri.chudinov@gmail.com>
+
+Motif 2.3 maintainers at ICS:
+Yuriy Syrota            <yura@ics.com>
+Oleksii Chernyavskyi    <ochern@ics.com>
+Mykola Vshyvkov         <mvshyvkov@ics.com>
+Ihor Hayvuk             <ihayvuk@ics.com>
+Rick Scott              <rwscott@omnisig.com>
+James Moss              <moss@ics.com>
+James E Kogler          <jimk@ics.com>
+Robert Hartley          <rhartley@ics.com>
+
+Other Motif trees this one draws on:
+Tim Hentenaar           https://github.com/thentenaar
+Olivier Fourdan         https://github.com/ofourdan
+Alexander Pampuchin     https://github.com/alx210
+
+Bundled code with its own authors:
+XPM library (src/lib/Xm/Xpm*)       Arnaud Le Hors, Groupe Bull
+nanosvg (src/lib/Xm/nanosvg*.h)     Mikko Mononen
