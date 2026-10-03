@@ -9,7 +9,6 @@
 #include <X11/Xlibint.h>
 #include <limits.h>
 #include <png.h>
-#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -70,8 +69,12 @@ int _XmPngGetImage(FILE *fp, XColor *bg, XImage **ximage)
   png_read_update_info(pngp, infop);
   w = png_get_image_width(pngp, infop);
   h = png_get_image_height(pngp, infop);
-  /* The transformations above must have yielded 8-bit ARGB pixels */
-  if (!w || !h || w > INT_MAX / 4 || h > INT_MAX || h > SIZE_MAX / 4 / w ||
+  /**
+   * The transformations above must have yielded 8-bit ARGB pixels, and
+   * the image must stay within INT_MAX bytes, since Xlib indexes XImage
+   * data with int arithmetic (y * bytes_per_line in XGetPixel.)
+   */
+  if (!w || !h || w > INT_MAX / 4 || h > INT_MAX / 4 / w ||
       png_get_rowbytes(pngp, infop) != (size_t)w * 4)
   {
     png_destroy_read_struct(&pngp, &infop, NULL);

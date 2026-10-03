@@ -10,7 +10,6 @@
 #include <X11/Xlibint.h>
 #include <limits.h>
 #include <setjmp.h>
-#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 /* jpeglib.h must come first: jerror.h depends on JPEG_LIB_VERSION */
@@ -87,8 +86,12 @@ int _XmJpegGetImage(FILE *fp, XImage **ximage)
   w = jpeg.output_width;
   h = jpeg.output_height;
   ncomp = jpeg.output_components;
+  /**
+   * Xlib indexes XImage data with int arithmetic (y * bytes_per_line in
+   * XGetPixel and friends), so the image must stay within INT_MAX bytes.
+   */
   if (!w || !h || ncomp != (jpeg.out_color_space == JCS_GRAYSCALE ? 1U : 3U) ||
-      w > INT_MAX / 3 || h > INT_MAX || h > SIZE_MAX / 3 / w)
+      w > INT_MAX / 3 || h > INT_MAX / 3 / w)
   {
     jpeg_destroy_decompress(&jpeg);
     return 2;

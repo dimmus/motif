@@ -242,6 +242,24 @@ START_TEST(load_truncated)
 }
 END_TEST
 
+START_TEST(load_too_large)
+{
+	FILE *fp;
+	XImage *img = NULL;
+	int ret;
+
+	/**
+	 * 23171 * 23171 * 4 bytes exceeds INT_MAX, which Xlib's XGetPixel()
+	 * can't index: it must be rejected before decoding (return 4).
+	 */
+	ck_assert_msg(fp = fopen("png/too_large.png", "rb"), "Failed to open png/too_large.png");
+	ret = _XmPngGetImage(fp, NULL, &img);
+	fclose(fp);
+
+	ck_assert_msg(ret == 4 && !img, "Expected an image over INT_MAX bytes to be rejected");
+}
+END_TEST
+
 void png_suite(SRunner *runner)
 {
 	TCase *t;
@@ -257,6 +275,7 @@ void png_suite(SRunner *runner)
 	tcase_add_test(t, load_gray16);
 	tcase_add_test(t, load_corrupt_idat);
 	tcase_add_test(t, load_truncated);
+	tcase_add_test(t, load_too_large);
 	tcase_set_timeout(t, 1);
 	suite_add_tcase(s, t);
 	srunner_add_suite(runner, s);

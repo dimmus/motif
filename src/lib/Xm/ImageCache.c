@@ -1719,10 +1719,10 @@ static void render_image(Screen *screen,
   /**
    * Let Xlib pick the server's bits per pixel for this depth (e.g. 16
    * for depth 15, which psz would undersize) and size the data from it.
+   * XPutPixel() computes y * bytes_per_line in int, so stay below INT_MAX.
    */
   if (!(dest_image = XCreateImage(display, vis, depth, ZPixmap, 0, NULL, dw, dh, psz, 0)) ||
-      dest_image->bytes_per_line <= 0 ||
-      (size_t)dest_image->bytes_per_line > SIZE_MAX / (size_t)dh ||
+      dest_image->bytes_per_line <= 0 || dest_image->bytes_per_line > INT_MAX / dh ||
       !(data = Xmalloc((size_t)dest_image->bytes_per_line * dh)))
   {
     if (dest_image)
