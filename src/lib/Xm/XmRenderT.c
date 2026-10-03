@@ -2140,12 +2140,13 @@ static int CVTtvinited = 0;
    buffer as needed */
 #define CVTaddString(dest, src, srcsize) \
   { \
-    if ((chars_used + srcsize) > allocated_size) { \
-      allocated_size *= 2; \
-      buffer = XtRealloc(buffer, allocated_size); \
+    if ((chars_used + (srcsize)) >= allocated_size) { \
+      while ((chars_used + (srcsize)) >= allocated_size) \
+        allocated_size *= 2; \
+      dest = XtRealloc(dest, allocated_size); \
     } \
-    strcat(buffer, src); \
-    chars_used += srcsize; \
+    strcpy((dest) + chars_used, src); \
+    chars_used += (srcsize); \
   }
 
 unsigned int XmRenderTableCvtToProp(Widget widget, /* unused */
@@ -2261,7 +2262,7 @@ unsigned int XmRenderTableCvtToProp(Widget widget, /* unused */
     }
     size = strlen(str);
     CVTaddString(buffer, str, size);
-    CVTaddString(buffer, "\n", size);
+    CVTaddString(buffer, "\n", 1);
   }
   /* Return the converted rendertable string */
   *prop_return = buffer;
