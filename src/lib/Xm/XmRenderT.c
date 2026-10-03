@@ -32,6 +32,7 @@ static char rcsid[] = "$TOG: XmRenderT.c /main/14 1998/10/26 20:14:42 samborn $"
 #  endif
 #endif
 #include <ctype.h>
+#include <limits.h>
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
@@ -2271,7 +2272,7 @@ unsigned int XmRenderTableCvtToProp(Widget widget, /* unused */
   return (chars_used + 1);
 }
 
-typedef enum { T_NL, T_INT, T_FLOAT, T_SEP, T_OPEN, T_CLOSE, T_STR, T_EOF } TokenType;
+typedef enum { T_NL, T_INT, T_FLOAT, T_SEP, T_OPEN, T_CLOSE, T_STR, T_EOF, T_ERROR } TokenType;
 
 typedef struct _TokenRec {
   TokenType type;
@@ -2280,13 +2281,19 @@ typedef struct _TokenRec {
   char *string;
 } TokenRec, *Token;
 
+/* Every token but T_EOF consumes at least one character.  A T_STR */
+/* string is owned by the token: callers that keep it must set */
+/* token->string to NULL, otherwise it is freed by the next call. */
 static Token ReadToken(char *string, int *position, Token reusetoken)
 {
   Token new_token = reusetoken;
   int pos = *position;
   int count;
+  if (new_token->type == T_STR)
+    XtFree(new_token->string);
+  new_token->string = NULL;
   /* Skip whitespace but not newlines */
-  while (isspace(string[pos]) && !(string[pos] == '\n'))
+  while (isspace((unsigned char)string[pos]) && !(string[pos] == '\n'))
     pos++;
   /* Select token type */
   switch (string[pos]) {
@@ -2310,23 +2317,21 @@ static Token ReadToken(char *string, int *position, Token reusetoken)
       pos++;
       break;
     case '"': /* String result */
-      count = 1;
-      while (string[pos + count] != '"' && string[pos + count] != '\0')
+      count = 0;
+      while (string[pos + 1 + count] != '"' && string[pos + 1 + count] != '\0')
         count++; /* Scan for end of string */
       new_token->type = T_STR;
-      new_token->string = NULL;
-      count -= 1;
-      if (count > 0) {
-        new_token->string = (char *)XtMalloc(count + 1);
-        strncpy(new_token->string, &string[pos + 1], count);
-        pos += count + 2;             /* Move past end quote */
-        new_token->string[count] = 0; /* Null terminate */
-      }
+      new_token->string = (char *)XtMalloc(count + 1);
+      memcpy(new_token->string, &string[pos + 1], count);
+      new_token->string[count] = 0; /* Null terminate */
+      pos += count + 1;             /* Move past opening quote and text */
+      if (string[pos] == '"')       /* and past the end quote, if any */
+        pos++;
       break;
     default:
-      if (isalpha(string[pos])) /* String result */ {
+      if (isalpha((unsigned char)string[pos])) /* String result */ {
         char temp[80];
-        for (count = 0; isalpha(string[pos + count]) && count < 79; count++)
+        for (count = 0; isalpha((unsigned char)string[pos + count]) && count < 79; count++)
           temp[count] = string[pos + count];
         temp[count] = 0;
         pos += count;
@@ -2337,18 +2342,24 @@ static Token ReadToken(char *string, int *position, Token reusetoken)
         /* start converting a float number.  If it is exactly integer
        then we return an int,  otherwise return a float */
         double result;
-        int intresult;
         char *newpos;
         result = strtod(&(string[pos]), &newpos);
-        intresult = (int)result;
-        pos = newpos - string;
-        if (((double)intresult) == result) /* Integer result */ {
-          new_token->type = T_INT;
-          new_token->integer = intresult;
+        if (newpos == &(string[pos])) {
+          /* Not a number either: consume the offending character. */
+          new_token->type = T_ERROR;
+          pos++;
         }
         else {
-          new_token->type = T_FLOAT;
-          new_token->real = (float)result;
+          pos = newpos - string;
+          if (result >= INT_MIN && result <= INT_MAX && ((double)(int)result) == result) {
+            /* Integer result */
+            new_token->type = T_INT;
+            new_token->integer = (int)result;
+          }
+          else {
+            new_token->type = T_FLOAT;
+            new_token->real = (float)result;
+          }
         }
       }
   }
@@ -2599,13 +2610,15 @@ XmRenderTable XmRenderTableCvtFromProp(Widget w, char *prop, unsigned int len) /
   XmRendition rendition;
   XmRendition *rarray;
   int rarray_count, rarray_max;
-  /* These must both be big enough for the number of passed parameters */
+  /* Header items; columns beyond these are ignored. */
   char *items[20];
+  int nitems;
   char *name;
+  /* Each item adds at most 3 args and 1 string; extra columns that */
+  /* do not fit are rejected. */
   Arg args[20];
-  /* This must be big enough to hold all the strings returned by
-     readtoken */
   char *freelater[5];
+  XmTabList tablist;
   int scanpointer, j, count, freecount, i;
   Token token;
   _XmWidgetToAppContext(w);
@@ -2616,21 +2629,26 @@ XmRenderTable XmRenderTableCvtFromProp(Widget w, char *prop, unsigned int len) /
   rarray_count = 0;
   rarray = (XmRendition *)XtMalloc(sizeof(XmRendition) * rarray_max);
   name = "";
-  for (j = 0; j < 20; j++)
-    items[j] = NULL;
-  /* Read the list of items */
-  for (j = 0; j < 20;) {
-    token = ReadToken(prop, &scanpointer, &reusetoken);
-    if (token->type == T_NL)
-      break;
-    if (token->type == T_STR) {
-      items[j] = token->string;
-      j++;
-    }
-  }
-  j = -1;
+  tablist = NULL;
   count = 0;
   freecount = 0;
+  reusetoken.type = T_EOF;
+  reusetoken.string = NULL;
+  token = &reusetoken;
+  /* Read the list of items */
+  for (nitems = 0; nitems < (int)XtNumber(items);) {
+    token = ReadToken(prop, &scanpointer, &reusetoken);
+    if (token->type == T_NL || token->type == T_EOF)
+      break;
+    if (token->type == T_STR) {
+      items[nitems++] = token->string;
+      token->string = NULL;
+    }
+  }
+  /* Skip any further items */
+  while (token->type != T_NL && token->type != T_EOF)
+    token = ReadToken(prop, &scanpointer, &reusetoken);
+  j = -1;
   while (True) {
     token = ReadToken(prop, &scanpointer, &reusetoken);
     /* We skip the separators */
@@ -2639,7 +2657,7 @@ XmRenderTable XmRenderTableCvtFromProp(Widget w, char *prop, unsigned int len) /
     if (token->type == T_EOF)
       goto finish;
     j++; /* Go to next item in items array */
-    if (items[j] == NULL) {
+    if (j >= nitems) {
       /* End of line processing.  Scan for NewLine */
       while (token->type != T_NL && token->type != T_EOF)
         token = ReadToken(prop, &scanpointer, &reusetoken);
@@ -2653,16 +2671,25 @@ XmRenderTable XmRenderTableCvtFromProp(Widget w, char *prop, unsigned int len) /
       for (i = 0; i < freecount; i++)
         XtFree(freelater[i]);
       freecount = 0;
+      /* The rendition has its own copy of the tab list */
+      if (tablist != NULL) {
+        XmTabListFree(tablist);
+        tablist = NULL;
+      }
       /* Record rendition in array */
       if (rarray_count >= rarray_max) {
         /* Extend array if necessary */
         rarray_max += 10;
         rarray = (XmRendition *)XtRealloc((char *)rarray, sizeof(XmRendition) * rarray_max);
       }
-      if (token->type == T_EOF)
-        goto finish;
       rarray[rarray_count] = rendition;
       rarray_count++;
+      if (token->type == T_EOF)
+        goto finish;
+    }
+    else if ((count + 3 > (int)XtNumber(args)) || (freecount >= (int)XtNumber(freelater))) {
+      /* Too many columns for one rendition */
+      goto finish;
     }
     else if (strcmp(items[j], XmNtag) == 0) {
       /* Next item should be a string with the name of the new
@@ -2671,29 +2698,31 @@ XmRenderTable XmRenderTableCvtFromProp(Widget w, char *prop, unsigned int len) /
         name = token->string;
         freelater[freecount] = token->string;
         freecount++;
+        token->string = NULL;
       }
       else {
-        goto error;
+        goto finish;
       }
     }
     else if (strcmp(items[j], XmNfont) == 0) {
       /* If the next item is a number then we have a font
          id,  otherwise we are reading in a fontset */
       if (token->type != T_INT)
-        goto error;
+        goto finish;
       if (token->integer != -1) { /* AS IS */
         XtSetArg(args[count], XmNfontType, token->integer);
         count++;
         token = ReadToken(prop, &scanpointer, &reusetoken);
         if (token->type != T_STR)
-          goto error;
+          goto finish;
         XtSetArg(args[count], XmNfontName, token->string);
         count++;
         freelater[freecount] = token->string;
         freecount++;
+        token->string = NULL;
         token = ReadToken(prop, &scanpointer, &reusetoken);
         if (token->type != T_INT)
-          goto error;
+          goto finish;
         XtSetArg(args[count], XmNloadModel, token->integer);
         count++;
       }
@@ -2703,95 +2732,99 @@ XmRenderTable XmRenderTableCvtFromProp(Widget w, char *prop, unsigned int len) /
          FLOAT INT INT INT then CLOSE and SEP */
       if (token->type == T_INT) { /* Should be AS IS */
         if (token->integer != -1)
-          goto error;
+          goto finish;
       }
-      else if (token->type == T_OPEN) {
+      else if (token->type == T_OPEN && tablist == NULL) {
         float value;
         int units, align;
         XmOffsetModel model;
-        XmTabList tablist;
         XmTab tabs[1];
-        tablist = NULL;
         token = ReadToken(prop, &scanpointer, &reusetoken);
         while (token->type != T_CLOSE) {
           if (token->type != T_FLOAT && token->type != T_INT)
-            goto error;
+            goto finish;
           if (token->type == T_FLOAT)
             value = token->real;
           else
             value = (float)token->integer;
           token = ReadToken(prop, &scanpointer, &reusetoken);
           if (token->type != T_INT)
-            goto error;
+            goto finish;
           units = token->integer;
           token = ReadToken(prop, &scanpointer, &reusetoken);
           if (token->type != T_INT)
-            goto error;
+            goto finish;
           align = token->integer;
           token = ReadToken(prop, &scanpointer, &reusetoken);
           if (token->type != T_INT)
-            goto error;
+            goto finish;
           model = (XmOffsetModel)token->integer;
           tabs[0] = XmTabCreate(value, units, model, align, NULL);
           tablist = XmTabListInsertTabs(tablist, tabs, 1, 1000);
           XtFree((char *)tabs[0]);
           /* Go to next separator to skip unknown future values */
-          while (token->type != T_SEP)
+          while (token->type != T_SEP) {
+            if (token->type == T_NL || token->type == T_EOF)
+              goto finish;
             token = ReadToken(prop, &scanpointer, &reusetoken);
-          if (token->type == T_SEP)
-            token = ReadToken(prop, &scanpointer, &reusetoken);
+          }
+          token = ReadToken(prop, &scanpointer, &reusetoken);
         }
         XtSetArg(args[count], XmNtabList, tablist);
         count++;
       }
       else
-        goto error;
+        goto finish;
     }
     else if (strcmp(items[j], XmNbackground) == 0) {
       if (token->type != T_INT)
-        goto error;
-      if (token->type != -1) {
+        goto finish;
+      if (token->integer != -1) {
         XtSetArg(args[count], XmNrenditionBackground, token->integer);
         count++;
       }
     }
     else if (strcmp(items[j], XmNforeground) == 0) {
       if (token->type != T_INT)
-        goto error;
-      if (token->type != -1) {
+        goto finish;
+      if (token->integer != -1) {
         XtSetArg(args[count], XmNrenditionForeground, token->integer);
         count++;
       }
     }
     else if (strcmp(items[j], XmNunderlineType) == 0) {
       if (token->type != T_INT)
-        goto error;
-      if (token->type != -1) {
+        goto finish;
+      if (token->integer != -1) {
         XtSetArg(args[count], XmNunderlineType, token->integer);
         count++;
       }
     }
     else if (strcmp(items[j], XmNstrikethruType) == 0) {
       if (token->type != T_INT)
-        goto error;
-      if (token->type != -1) {
+        goto finish;
+      if (token->integer != -1) {
         XtSetArg(args[count], XmNstrikethruType, token->integer);
         count++;
       }
     }
   }
 finish:
+  /* Free what a malformed or truncated last line left behind */
+  for (i = 0; i < freecount; i++)
+    XtFree(freelater[i]);
+  if (tablist != NULL)
+    XmTabListFree(tablist);
+  if (reusetoken.type == T_STR)
+    XtFree(reusetoken.string);
+  for (i = 0; i < nitems; i++)
+    XtFree(items[i]);
   new_rt = XmRenderTableAddRenditions(new_rt, rarray, rarray_count, XmMERGE_REPLACE);
   for (i = 0; i < rarray_count; i++)
     XmRenditionFree(rarray[i]);
+  XtFree((char *)rarray);
   _XmAppUnlock(app);
   return (new_rt);
-error:
-  /* Free temp strings returned by ReadToken */
-  for (i = 0; i < freecount; i++)
-    XtFree((char *)freelater[i]);
-  freecount = 0;
-  goto finish;
 }
 
 void XmRenderTableGetDefaultFontExtents(XmRenderTable rendertable,
