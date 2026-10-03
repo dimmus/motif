@@ -170,6 +170,12 @@ UrmCWRInit (URMResourceContextPtr	context_id,
 					 _FULLWORD(RGMWidgetRecordHdrSize)) ;
       if ( result != MrmSUCCESS ) return result ;
     }
+  /*
+   * Clear the whole buffer: the record is built piecewise with alignment
+   * padding, and is written out as is.
+   */
+  memset (UrmRCBuffer(context_id), 0, UrmRCBufSize(context_id)) ;
+
   widgetrec = (RGMWidgetRecordPtr) UrmRCBuffer(context_id) ;
   widgetrec->validation = URMWidgetRecordValid ;
   widgetrec->size = _FULLWORD (RGMWidgetRecordHdrSize) ;

@@ -49,7 +49,11 @@
 #define		YYDEBUG		1
 #endif
 
-/*   Declare and initialize stack entry for epsilon productions.    */
+/*   Declare and initialize stack entry for epsilon productions.
+**   Every empty production and mid-rule action must set $$ (at least to
+**   gz_yynullval): bison's default $$ for them is a copy of an unused,
+**   uninitialized or stale stack slot, and sem_find_object() walks the
+**   value stack testing b_tag of every frame.    */
 
 YYSTYPE		gz_yynullval = {NULL,0,0,0,0};
 
@@ -241,18 +245,18 @@ int yyerror(char *s);
 
 module_block
     : module_header
-	{ sar_save_module_source (); }
+	{ $$ = gz_yynullval; sar_save_module_source (); }
       module_declaration_list END MODULE SEMICOLON
     ;
 
 module_header
-    : /* empty */				{ sar_create_root ( &$$ ); }
-      MODULE id 				{ sar_create_module( &$$, &$2, &$3 ); }
+    : /* empty */				{ $$ = gz_yynullval; sar_create_root ( &$$ ); }
+      MODULE id 				{ $$ = gz_yynullval; sar_create_module( &$$, &$2, &$3 ); }
 	opt_module_clauses
     ;
 
 opt_module_clauses
-    : /* empty */
+    : /* empty */					{ $$ = gz_yynullval; }
     | module_clauses
     ;
 
@@ -265,7 +269,7 @@ module_clause
     : VERSION EQUAL_SIGN character_8_value		{ sar_process_module_version(  &$3 , &$1 ); }
     | NAMES EQUAL_SIGN sensitivity_value		{ sar_process_module_sensitivity( &$3 , &$1 ); }
     | CHARACTER_SET EQUAL_SIGN valid_charset		{ sar_process_module_charset( &$3 , &$1 ); }
-    | OBJECTS { sar_make_def_obj (&$1); } EQUAL_SIGN variant_spec
+    | OBJECTS { $$ = gz_yynullval; sar_make_def_obj (&$1); } EQUAL_SIGN variant_spec
     ;
 
 sensitivity_value
@@ -276,17 +280,17 @@ sensitivity_value
 variant_spec
     : LEFT_BRACE RIGHT_BRACE
     | LEFT_BRACE variant_list RIGHT_BRACE
-    | error { lex_issue_error (RIGHT_BRACE); } RIGHT_BRACE
+    | error { $$ = gz_yynullval; lex_issue_error (RIGHT_BRACE); } RIGHT_BRACE
     ;
 
 variant_list
     : variant_clause SEMICOLON
     | variant_list variant_clause SEMICOLON
-    | error { lex_issue_error (SEMICOLON); } SEMICOLON
+    | error { $$ = gz_yynullval; lex_issue_error (SEMICOLON); } SEMICOLON
     ;
 
 variant_clause
-    : CLASS_NAME { sar_make_def_obj (&$1); }
+    : CLASS_NAME { $$ = gz_yynullval; sar_make_def_obj (&$1); }
       EQUAL_SIGN variant				{ sar_process_module_variant (&$1, &$4); $$ = gz_yynullval; }
     ;
 
@@ -296,7 +300,7 @@ variant
     ;
 
 module_declaration_list
-    : /* empty */
+    : /* empty */					{ $$ = gz_yynullval; }
     | module_declaration_list module_declaration
     ;
 
@@ -320,7 +324,7 @@ value_declaration
 value_declaration_list
     : value_decl
     | value_declaration_list value_decl
-    | error { lex_issue_error (SEMICOLON); } SEMICOLON
+    | error { $$ = gz_yynullval; lex_issue_error (SEMICOLON); } SEMICOLON
     ;
 
 value_decl
@@ -406,7 +410,7 @@ procedure_declaration
 procedure_declaration_list
     : procedure_decl
     | procedure_declaration_list procedure_decl
-    | error { lex_issue_error (SEMICOLON); } SEMICOLON
+    | error { $$ = gz_yynullval; lex_issue_error (SEMICOLON); } SEMICOLON
     ;
 
 procedure_decl
@@ -434,7 +438,7 @@ sym_k_any_value; }
     ;
 
 opt_class
-    : /* empty */					{ $$.b_flags = sym_m_private; }
+    : /* empty */					{ $$ = gz_yynullval; $$.b_flags = sym_m_private; }
 /*
     | EXPORTED						{ $$.b_flags = sym_m_exported; }
     | PRIVATE						{ $$.b_flags = sym_m_private; }
@@ -453,7 +457,7 @@ identifier_declaration
 identifier_declaration_list
     : identifier_decl
     | identifier_declaration_list identifier_decl
-    | error { lex_issue_error (SEMICOLON); } SEMICOLON
+    | error { $$ = gz_yynullval; lex_issue_error (SEMICOLON); } SEMICOLON
     ;
 
 identifier_decl
@@ -468,7 +472,7 @@ identifier_decl
 
 include_directive
     : INCLUDE UILFILE character_8_value SEMICOLON	{ sar_include_file (&$3, &$1, &$4); }
-    | error { lex_issue_error (SEMICOLON); } SEMICOLON
+    | error { $$ = gz_yynullval; lex_issue_error (SEMICOLON); } SEMICOLON
     ;
 
 
@@ -482,7 +486,7 @@ object_declaration
 object_decl_list
     : object_decl SEMICOLON 				{ $$ = $1; sar_save_src_semicolon_pos (&$2 ); }
     | object_decl_list object_decl SEMICOLON  		{ $$ = $1; sar_save_src_semicolon_pos (&$3 ); }
-    | error { lex_issue_error (SEMICOLON); } SEMICOLON
+    | error { $$ = gz_yynullval; lex_issue_error (SEMICOLON); } SEMICOLON
     ;
 
 object_decl
@@ -495,18 +499,18 @@ object_decl
 
 object_definition
     : EXPORTED
-        { sar_set_object_flags (&$1, sym_m_exported); }
+        { $$ = gz_yynullval; sar_set_object_flags (&$1, sym_m_exported); }
       object_specification
     | PRIVATE
-        { sar_set_object_flags (&$1, sym_m_private); }
+        { $$ = gz_yynullval; sar_set_object_flags (&$1, sym_m_private); }
       object_specification
     | epsilon_production
-        { sar_set_object_flags (&$1, sym_m_exported); }
+        { $$ = gz_yynullval; sar_set_object_flags (&$1, sym_m_exported); }
       object_specification
     | IMPORTED
-        { sar_set_object_flags (&$1, sym_m_imported); }
+        { $$ = gz_yynullval; sar_set_object_flags (&$1, sym_m_imported); }
       CLASS_NAME
-        { sar_set_object_class (&$3); }
+        { $$ = gz_yynullval; sar_set_object_class (&$3); }
 /*
  * Fix for CR 5440 - Call opt_create_proc_ref to check for creation procedures
  *                   for imported user_defined widgets.
@@ -521,31 +525,31 @@ object_definition
 
 control_object_definition
     : EXPORTED
-	{ sar_set_object_flags (&$1, sym_m_exported); }
+	{ $$ = gz_yynullval; sar_set_object_flags (&$1, sym_m_exported); }
       object_specification
     | PRIVATE
-	{ sar_set_object_flags (&$1, sym_m_private); }
+	{ $$ = gz_yynullval; sar_set_object_flags (&$1, sym_m_private); }
       object_specification
     | MANAGED
-	{ sar_set_object_flags (& $1, (sym_m_managed | sym_m_exported)); }
+	{ $$ = gz_yynullval; sar_set_object_flags (& $1, (sym_m_managed | sym_m_exported)); }
       object_specification
     | UNMANAGED
-	{ sar_unset_object_flags (& $1, sym_m_managed), sar_set_object_flags (& $1, sym_m_exported); }
+	{ $$ = gz_yynullval; sar_unset_object_flags (& $1, sym_m_managed), sar_set_object_flags (& $1, sym_m_exported); }
       object_specification
     | epsilon_production
-	{ sar_set_object_flags (&$1, sym_m_exported); }
+	{ $$ = gz_yynullval; sar_set_object_flags (&$1, sym_m_exported); }
       object_specification
     | IMPORTED
-	{ sar_set_object_flags (&$1, sym_m_imported); }
+	{ $$ = gz_yynullval; sar_set_object_flags (&$1, sym_m_imported); }
       CLASS_NAME
-	{ sar_set_object_class (&$3); }
+	{ $$ = gz_yynullval; sar_set_object_class (&$3); }
       epsilon_production
 	{ sar_verify_object (&$1); }
     ;
 
 object_specification
     : CLASS_NAME
-	{ sar_set_object_class (&$1); }
+	{ $$ = gz_yynullval; sar_set_object_class (&$1); }
       opt_create_proc_ref
       opt_variant
       object_spec
@@ -590,7 +594,7 @@ object_spec
 	{ sar_object_reference (&$1); }
     | LEFT_BRACE RIGHT_BRACE
     | LEFT_BRACE object_feature_list RIGHT_BRACE
-    | error { lex_issue_error (RIGHT_BRACE); } RIGHT_BRACE
+    | error { $$ = gz_yynullval; lex_issue_error (RIGHT_BRACE); } RIGHT_BRACE
     ;
 
 control_object_spec
@@ -602,7 +606,7 @@ control_object_spec
     | LEFT_BRACE object_feature_list RIGHT_BRACE
       epsilon_production
 	{ sar_set_object_flags (&$1, sym_m_exported); }
-    | error { lex_issue_error (RIGHT_BRACE); } RIGHT_BRACE
+    | error { $$ = gz_yynullval; lex_issue_error (RIGHT_BRACE); } RIGHT_BRACE
     ;
 
 child_object_spec
@@ -612,7 +616,7 @@ child_object_spec
     | LEFT_BRACE object_feature_list RIGHT_BRACE
       epsilon_production
 	{ sar_set_object_flags (&$1, sym_m_private); }
-    | error { lex_issue_error (RIGHT_BRACE); } RIGHT_BRACE
+    | error { $$ = gz_yynullval; lex_issue_error (RIGHT_BRACE); } RIGHT_BRACE
     ;
 
 object_feature_list
@@ -628,7 +632,7 @@ object_feature
     | control_list_def SEMICOLON
 	{ sar_save_list_end ( &$2); sar_save_feature (&$1); 
 sar_update_parent_list (&$1); $$ = gz_yynullval; }
-    | error { lex_issue_error (SEMICOLON); } SEMICOLON
+    | error { $$ = gz_yynullval; lex_issue_error (SEMICOLON); } SEMICOLON
     ;
 
 epsilon_production
@@ -648,7 +652,7 @@ list_declaration
 list_decl_list
     : list_decl SEMICOLON { $$ = $1; sar_save_src_semicolon_pos (&$2 ); }
     | list_decl_list list_decl SEMICOLON { $$ = $1; sar_save_src_semicolon_pos (&$3 ); }
-    | error { lex_issue_error (SEMICOLON); } SEMICOLON
+    | error { $$ = gz_yynullval; lex_issue_error (SEMICOLON); } SEMICOLON
     ;
 
 list_decl
@@ -717,14 +721,14 @@ argument_list_spec
     : id_ref { sar_object_reference (&$1); }
     | LEFT_BRACE RIGHT_BRACE
     | LEFT_BRACE argument_list_clause_list RIGHT_BRACE
-    | error { lex_issue_error (RIGHT_BRACE); } RIGHT_BRACE
+    | error { $$ = gz_yynullval; lex_issue_error (RIGHT_BRACE); } RIGHT_BRACE
     ;
 
 callback_list_spec
     : id_ref { sar_object_reference (&$1); }
     | LEFT_BRACE RIGHT_BRACE
     | LEFT_BRACE callback_list_clause_list RIGHT_BRACE
-    | error { lex_issue_error (RIGHT_BRACE); } RIGHT_BRACE
+    | error { $$ = gz_yynullval; lex_issue_error (RIGHT_BRACE); } RIGHT_BRACE
     ;
 
 procedure_list_spec
@@ -732,14 +736,14 @@ procedure_list_spec
 	{ sar_object_reference (&$1); }
     | LEFT_BRACE RIGHT_BRACE
     | LEFT_BRACE procedure_list_clause_list RIGHT_BRACE
-    | error { lex_issue_error (RIGHT_BRACE); } RIGHT_BRACE
+    | error { $$ = gz_yynullval; lex_issue_error (RIGHT_BRACE); } RIGHT_BRACE
     ;
 
 control_list_spec
     : id_ref { sar_object_reference (&$1); }
     | LEFT_BRACE RIGHT_BRACE
     | LEFT_BRACE control_list_clause_list RIGHT_BRACE
-    | error { lex_issue_error (RIGHT_BRACE); } RIGHT_BRACE
+    | error { $$ = gz_yynullval; lex_issue_error (RIGHT_BRACE); } RIGHT_BRACE
     ;
 
 argument_list_clause_list
@@ -767,7 +771,7 @@ argument_list_clause
 	{ sar_save_src_entry_end (&$2, &$1); sar_add_list_entry (&$1); $$ = gz_yynullval; }
     | argument_list_item SEMICOLON
 	{ sar_save_src_entry_end (&$2, &$1); sar_add_list_entry (&$1); $$ = gz_yynullval; }
-    | error { lex_issue_error (SEMICOLON); } SEMICOLON
+    | error { $$ = gz_yynullval; lex_issue_error (SEMICOLON); } SEMICOLON
     ;
 
 callback_list_clause
@@ -775,7 +779,7 @@ callback_list_clause
 	{ sar_save_src_entry_end (&$2, &$1); sar_add_list_entry (&$1); $$ = gz_yynullval; }
     | callback_list_item SEMICOLON
 	{ sar_save_src_entry_end (&$2, &$1); sar_add_list_entry (&$1); $$ = gz_yynullval; }
-    | error { lex_issue_error (SEMICOLON); } SEMICOLON
+    | error { $$ = gz_yynullval; lex_issue_error (SEMICOLON); } SEMICOLON
     ;
 
 procedure_list_clause
@@ -783,7 +787,7 @@ procedure_list_clause
 	{ sar_save_src_entry_end (&$2, &$1); sar_add_list_entry (&$1); $$ = gz_yynullval; }
     | procedure_list_def_ref SEMICOLON
 	{ sar_save_src_entry_end (&$2, &$1); sar_add_list_entry (&$1); $$ = gz_yynullval; }
-    | error { lex_issue_error (SEMICOLON); } SEMICOLON
+    | error { $$ = gz_yynullval; lex_issue_error (SEMICOLON); } SEMICOLON
     ;
 
 control_list_clause
@@ -791,7 +795,7 @@ control_list_clause
 	{ sar_save_src_entry_end (&$2, &$1); sar_add_list_entry (&$1); $$ = gz_yynullval; }
     | control_list_item SEMICOLON
 	{ sar_save_src_entry_end (&$2, &$1); sar_add_list_entry (&$1); $$ = gz_yynullval; }
-    | error { lex_issue_error (SEMICOLON); } SEMICOLON
+    | error { $$ = gz_yynullval; lex_issue_error (SEMICOLON); } SEMICOLON
     ;
 
 control_list_def

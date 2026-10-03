@@ -172,6 +172,7 @@ UrmIFMInitModule (URMResourceContextPtr		context_id,
   result = UrmResizeResourceContext (context_id, descsiz) ;
   if ( result != MrmSUCCESS ) return result ;
 
+  memset (UrmRCBuffer(context_id), 0, UrmRCBufSize(context_id)) ;
   ifmodptr = (RGMModuleDescPtr) UrmRCBuffer(context_id) ;
   ifmodptr->validation = URMInterfaceModuleValid ;
   ifmodptr->count = num_widget ;
@@ -179,8 +180,10 @@ UrmIFMInitModule (URMResourceContextPtr		context_id,
   ifmodptr->annex2 = 0 ;
 
   for ( ndx=0 ; ndx<num_widget ; ndx++ )
-    strncpy (ifmodptr->topmost[ndx].index, "", URMMaxIndexLen) ;
-    ifmodptr->topmost[ndx].index[0] = '\0' ;
+    {
+      strncpy (ifmodptr->topmost[ndx].index, "", URMMaxIndexLen) ;
+      ifmodptr->topmost[ndx].index[0] = '\0' ;
+    }
 
   /*
    * Set context parameters

@@ -143,6 +143,7 @@ UrmGetResourceContext (char			*((*alloc_func) (size_t)),
 	  return Urm__UT_Error ("UrmGetResourceContext", _MrmMMsg_0001,
 				NULL, *context_id_return, MrmFAILURE) ;
         }
+      memset ((*context_id_return)->data_buffer, 0, size) ;
     }
 
   (*context_id_return)->buffer_size = size ;
@@ -206,6 +207,7 @@ UrmResizeResourceContext (URMResourceContextPtr	context_id,
    *  Local variables
    */
   char			*newbuf ;	/* new buffer */
+  int			old_size ;	/* bytes of old buffer to keep */
 
 
   if ( ! UrmRCValid(context_id) )
@@ -232,8 +234,10 @@ UrmResizeResourceContext (URMResourceContextPtr	context_id,
 
   /*
    * Allocate the new buffer, copy the old buffer contents, and
-   * update the context.
+   * update the context. The added space is zeroed so that padding in
+   * records built in the context is never uninitialized.
    */
+  old_size = (context_id->data_buffer != NULL) ? context_id->buffer_size : 0 ;
   if ( context_id->alloc_func == (char *(*)(size_t))XtMalloc )
     {
       context_id->data_buffer = XtRealloc (context_id->data_buffer, size) ;
@@ -253,6 +257,7 @@ UrmResizeResourceContext (URMResourceContextPtr	context_id,
       context_id->data_buffer = newbuf ;
       context_id->buffer_size = size ;
     }
+  memset (context_id->data_buffer + old_size, 0, size - old_size) ;
 
   /*
    * Resize succeeded

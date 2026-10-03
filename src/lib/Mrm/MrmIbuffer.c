@@ -579,6 +579,14 @@ Idb__BM_InitRecord (IDBFile                     file_id,
   if (record > file_id->last_record)
     file_id->last_record = record;
 
+  /*
+   * Start the new record from zeroes. The buffer holds either freshly
+   * allocated memory or the contents of the record it last held, and the
+   * writers fill in only the parts of the record they use, so any leftover
+   * bytes would otherwise end up in the file.
+   */
+  memset ((*buffer_return)->IDB_record, 0, sizeof(IDBDummyRecord)) ;
+
   (*buffer_return)->IDB_record->header.validation = IDBRecordHeaderValid ;
   (*buffer_return)->IDB_record->header.record_num = record ;
   (*buffer_return)->IDB_record->header.record_type = type ;
