@@ -762,11 +762,11 @@ static void SliderMove(Widget w, XtPointer closure, XtPointer cd)
 static void ClassPartInitialize(WidgetClass wc)
 {
   char *xlats;
+  size_t size;
   _XmFastSubclassInit(wc, XmLIST_BIT);
-  xlats = (char *)ALLOCATE_LOCAL(strlen(ListXlations1) + strlen(ListXlations2) + 1);
-  strncpy(xlats, ListXlations1, strlen(ListXlations1));
-  xlats[strlen(ListXlations1)] = '\0';
-  strcat(xlats, ListXlations2);
+  size = strlen(ListXlations1) + strlen(ListXlations2) + 1;
+  xlats = (char *)ALLOCATE_LOCAL(size);
+  snprintf(xlats, size, "%s%s", ListXlations1, ListXlations2);
   wc->core_class.tm_table = (String)XtParseTranslationTable(xlats);
   DEALLOCATE_LOCAL((char *)xlats);
   /* Install transfer trait */
@@ -7709,20 +7709,13 @@ Widget XmCreateScrolledList(Widget parent, char *name, ArgList args, Cardinal ar
 {
   Widget sw, lw;
   char *s;
+  size_t size;
   ArgList Args;
   Arg my_args[4];
   Cardinal nargs;
-  s = (char *)ALLOCATE_LOCAL(XmStrlen(name) + 3); /* Name+"SW"+NULL */
-  if (name) {
-    strncpy(s, name, XmStrlen(name));
-    s[XmStrlen(name)] = '\0';
-    strcat(s, "SW");
-  }
-  else {
-    s[0] = 'S';
-    s[1] = 'W';
-    s[2] = '\0';
-  }
+  size = XmStrlen(name) + 3; /* Name+"SW"+NULL */
+  s = XtMalloc(size);
+  snprintf(s, size, "%sSW", name ? name : "");
   nargs = 0;
   XtSetArg(my_args[nargs], XmNscrollingPolicy, XmAPPLICATION_DEFINED), nargs++;
   XtSetArg(my_args[nargs], XmNvisualPolicy, XmVARIABLE), nargs++;
@@ -7731,7 +7724,7 @@ Widget XmCreateScrolledList(Widget parent, char *name, ArgList args, Cardinal ar
   assert(nargs <= XtNumber(my_args));
   Args = XtMergeArgLists(args, argCount, my_args, nargs);
   sw = XtCreateManagedWidget(s, xmScrolledWindowWidgetClass, parent, Args, argCount + nargs);
-  DEALLOCATE_LOCAL(s);
+  XtFree(s);
   XtFree((char *)Args);
   lw = XtCreateWidget(name, xmListWidgetClass, sw, args, argCount);
   XtAddCallback(lw, XmNdestroyCallback, _XmDestroyParentCallback, NULL);
