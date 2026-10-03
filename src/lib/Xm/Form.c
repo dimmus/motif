@@ -813,8 +813,10 @@ static void LayoutSizeChanged(FormLayout *l, int axis, Boolean shrunk)
     return;
   }
   /* All its readers are dirty now; those after the current child
-   * are recomputed in this pass. */
-  l->epoch[axis]++;
+   * are recomputed in this pass.  Should the epoch wrap around, a
+   * reader last computed long ago would look clean: recompute all. */
+  if (++l->epoch[axis] == 0)
+    l->all_dirty = True;
   l->cursor[axis] = LowerBound(l->readers[axis], l->num_readers[axis], l->pos + 1);
 }
 
