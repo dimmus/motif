@@ -582,17 +582,41 @@ if(WITH_DOCS)
     add_subdirectory(doc)
 endif()
 
-# Create pkg-config file
-configure_file(
-    ${CMAKE_SOURCE_DIR}/data/motif.pc.in
-    ${CMAKE_BINARY_DIR}/motif.pc
-    @ONLY
-)
+# -----------------------------------------------------------------------------
+# pkg-config files: motif.pc (libXm), mrm.pc and uil.pc
 
-# Install pkg-config file
-install(FILES ${CMAKE_BINARY_DIR}/motif.pc
+set(_pc_requires xext xmu xpm fontconfig)
+if(MOTIF_XFT_FOUND)
+  list(APPEND _pc_requires xft)
+endif()
+if(MOTIF_JPEG_FOUND)
+  list(APPEND _pc_requires libjpeg)
+endif()
+if(MOTIF_PNG_FOUND)
+  list(APPEND _pc_requires libpng)
+endif()
+if(WITH_PRINTING)
+  list(APPEND _pc_requires xp)
+endif()
+string(REPLACE ";" " " MOTIF_PC_XM_REQUIRES_PRIVATE "${_pc_requires}")
+
+set(_pc_libs)
+if(ICONV_LIBRARY)
+  list(APPEND _pc_libs -liconv)
+endif()
+list(APPEND _pc_libs -lm ${CMAKE_THREAD_LIBS_INIT})
+string(REPLACE ";" " " MOTIF_PC_XM_LIBS_PRIVATE "${_pc_libs}")
+
+foreach(_pc motif mrm uil)
+  configure_file(
+    ${CMAKE_SOURCE_DIR}/data/${_pc}.pc.in
+    ${CMAKE_BINARY_DIR}/${_pc}.pc
+    @ONLY
+  )
+  install(FILES ${CMAKE_BINARY_DIR}/${_pc}.pc
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
-)
+  )
+endforeach()
 
 # Install README
 install(FILES README.md

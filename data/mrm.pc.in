@@ -1,0 +1,11 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=${prefix}
+libdir=@CMAKE_INSTALL_FULL_LIBDIR@
+includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
+
+Name: mrm
+Description: Motif Resource Manager, loads UID files compiled by uil
+Version: @PROJECT_VERSION@
+Requires: motif
+Cflags: -I${includedir}
+Libs: -L${libdir} -lMrm
