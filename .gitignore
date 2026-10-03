@@ -39,3 +39,6 @@ build
 .cache
 TODO
 build.log
+
+# Generated in the build tree; never write it into src/lib/Xm
+/src/lib/Xm/Xm.h

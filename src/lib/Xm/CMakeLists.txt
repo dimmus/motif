@@ -306,17 +306,6 @@ endif()
 # Create a custom target to ensure string files are generated
 add_custom_target(xm_strings ALL DEPENDS ${XM_STRING_FILES} ${XM_INCLUDE_FILES})
 
-# Create symlink for Xm.h in lib/Xm directory so ToolTipI.h can find it
-add_custom_command(
-    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/Xm.h
-    COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_BINARY_DIR}/include/Xm/Xm.h ${CMAKE_CURRENT_SOURCE_DIR}/Xm.h
-    DEPENDS ${CMAKE_BINARY_DIR}/include/Xm/Xm.h xm_strings
-    COMMENT "Creating symlink for Xm.h in lib/Xm directory"
-)
-
-# Create a target for the Xm.h symlink
-add_custom_target(xm_h_symlink ALL DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/Xm.h)
-
 # All sources
 set(XM_ALL_SRCS
     ${XM_SRCS1}
@@ -681,8 +670,8 @@ list(APPEND XM_INTERNAL_HEADERS ToolTipI.h)
 # Create the library
 add_library(Xm ${MOTIF_LIB_TYPE} ${XM_ALL_SRCS} ${CMAKE_BINARY_DIR}/src/lib/Xm/XmStrDefs.c)
 
-# Ensure message catalog header, string files, and Xm.h symlink are generated before building this target
-add_dependencies(Xm xm_msgcat_header xm_strings xm_h_symlink)
+# Ensure message catalog header and string files are generated before building this target
+add_dependencies(Xm xm_msgcat_header xm_strings)
 
 # XM_MSGCAT is now defined globally in the main CMakeLists.txt
 
@@ -706,6 +695,8 @@ target_include_directories(Xm
         ${CMAKE_SOURCE_DIR}/src/lib/Xm
         ${CMAKE_BINARY_DIR}/src/lib/Xm
         ${CMAKE_BINARY_DIR}/include
+        # ToolTipI.h includes "Xm.h", which is generated (from Xm.h.in)
+        ${CMAKE_BINARY_DIR}/include/Xm
         ${X_INCLUDE_DIRS}
 )
 
