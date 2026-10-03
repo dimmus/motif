@@ -32,12 +32,4 @@ target_include_directories(WsmDemo PUBLIC
 )
 target_link_libraries(WsmDemo PUBLIC motif_build_flags PkgConfig::MOTIF_XT)
 
-# Install the library (for development)
-install(TARGETS WsmDemo
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-)
-
-# Install headers (for development)
-install(FILES ${WSM_HEADERS}
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Wsm
-)
+# Only the example programs use this library; it is not installed.

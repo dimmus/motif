@@ -40,12 +40,4 @@ add_dependencies(Xmd xm_strings)
 add_executable(onHelp onHelp.c)
 target_link_libraries(onHelp PRIVATE Xmd)
 
-# Install the library (for development)
-install(TARGETS Xmd
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-)
-
-# Install headers (for development)
-install(FILES ${XMD_HEADERS}
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Xmd
-)
+# Only the example programs use this library; it is not installed.

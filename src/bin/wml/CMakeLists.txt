@@ -182,20 +182,8 @@ add_dependencies(wml wmlparse_target)
 add_dependencies(wmldbcreate wml_generated_files)
 add_dependencies(libwml wmlparse_target)
 
-# Install headers
-install(FILES ${CMAKE_SOURCE_DIR}/src/lib/Uil/UilDBDef.h
-    DESTINATION include/uil
-)
-
-# Install programs
-install(TARGETS wml wmluiltok wmldbcreate
-    RUNTIME DESTINATION bin
-)
-
-# Install library
-install(TARGETS libwml
-    ARCHIVE DESTINATION lib
-)
+# The WML tools only generate the UIL compiler tables at build time and
+# are not installed.  UilDBDef.h is installed with the Uil headers.
 
 # Clean up generated files
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY

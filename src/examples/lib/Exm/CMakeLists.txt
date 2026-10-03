@@ -69,12 +69,4 @@ if(EXISTS "${CMAKE_SOURCE_DIR}/src/examples/lib/Exm/wml/CMakeLists.txt")
     add_subdirectory(wml)
 endif()
 
-# Install the libraries (for development)
-install(TARGETS Exm ExmMrm
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-)
-
-# Install headers (for development)
-install(FILES ${EXM_HEADERS}
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Exm
-)
+# Only the example programs use these libraries; they are not installed.

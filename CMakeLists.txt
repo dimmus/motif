@@ -42,14 +42,9 @@ else()
     message(STATUS "ccache not found - install ccache for faster builds")
 endif()
 
-# Install to /usr by default (instead of CMake's /usr/local) so that consumers
-# such as CDE find libXm without extra -L/-I flags or ld.so configuration.
-# Must be set before GNUInstallDirs so it derives /etc and /var for this prefix.
-if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-  set(CMAKE_INSTALL_PREFIX "/usr" CACHE PATH "Install path prefix" FORCE)
-endif()
-
-# Set install directory variables
+# Standard installation directories (lib or lib64, etc.) below
+# CMAKE_INSTALL_PREFIX, which keeps CMake's default of /usr/local; packagers
+# and system installs pass -DCMAKE_INSTALL_PREFIX=/usr.
 include(GNUInstallDirs)
 
 enable_testing()

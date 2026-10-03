@@ -18,16 +18,4 @@ add_dependencies(Wsm xm_strings)
 
 target_link_libraries(Wsm PRIVATE motif_build_flags PkgConfig::MOTIF_XT)
 
-# Install library
-install(TARGETS Wsm
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-)
-
-# Install headers
-install(FILES
-    wsm_funcs.h
-    wsm_proto.h
-    utm_send.h
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/wsm
-)
+# libWsm is linked into mwm and is not installed.

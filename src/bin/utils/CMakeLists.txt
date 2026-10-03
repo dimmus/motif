@@ -11,7 +11,4 @@ foreach(_tool makestrs mkcatdefs mkmsgcat)
     target_link_libraries(${_tool} motif_build_flags)
 endforeach()
 
-# Install utilities
-install(TARGETS makestrs mkcatdefs mkmsgcat
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-)
+# These are build-time generators and are not installed.
