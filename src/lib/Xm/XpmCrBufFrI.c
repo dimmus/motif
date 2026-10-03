@@ -184,9 +184,8 @@ int XpmCreateBufferFromXpmImage(char **buffer_return, XpmImage *image, XpmInfo *
   if (extensions)
     WriteExtensions(
         ptr + used_size, ptr_size - used_size, &used_size, info->extensions, info->nextensions);
-  /* close the array */
-  strncpy(ptr + used_size, "};\n", 4);
-  ptr[used_size + 4] = '\0';
+  /* close the array (the 4 bytes left for "};\n" and its NUL) */
+  memcpy(ptr + used_size, "};\n", 4);
   *buffer_return = ptr;
   return (XpmSuccess);
 /* exit point in case of error, free only locally allocated variables */
@@ -235,8 +234,8 @@ static int WriteColors(char **dataptr,
     if (!s)
       return (XpmNoMemory);
     *data_size += l;
-    strncpy(s + *used_size, buf, l - 1);
-    s[*used_size + l - 1] = '\0';
+    /* all l bytes, including the newline (the NUL comes at the end) */
+    memcpy(s + *used_size, buf, l);
     *used_size += l;
     *dataptr = s;
   }
