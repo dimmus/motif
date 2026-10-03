@@ -141,6 +141,7 @@ static void SetNewSize(XmListWidget lw,
                        Boolean reset_max_height,
                        Dimension old_max_height);
 static void ResetExtents(XmListWidget lw, Boolean recache_extents);
+static Boolean ExtentsAreMax(XmListWidget lw, int start);
 static void FixStartEnd(XmListWidget lw, int pos, int count, int *start, int *end);
 static int AddInternalElements(
     XmListWidget lw, XmString *items, int nitems, int position, Boolean selectable);
@@ -2071,7 +2072,7 @@ static void SetDefaultSize(XmListWidget lw,
       lw->list.MaxItemHeight = 1;
 #endif
   }
-  else if (reset_max_width || reset_max_height) {
+  else if ((reset_max_width || reset_max_height) && !ExtentsAreMax(lw, 0)) {
     ResetExtents(lw, False);
   }
   if (viz > 0)
@@ -2392,6 +2393,35 @@ static void ResetExtents(XmListWidget lw, Boolean recache_extents)
 
 /************************************************************************
  *									*
+ * ExtentsAreMax - whether ResetExtents(lw, False) would leave		*
+ *	MaxWidth and MaxItemHeight as they are: no item is wider or	*
+ *	taller than those, so it does when some items reach them.	*
+ *	The search starts at item start, where they are likely to be	*
+ *	found after a deletion.						*
+ *									*
+ ************************************************************************/
+static Boolean ExtentsAreMax(XmListWidget lw, int start)
+{
+  int count = lw->list.itemCount;
+  Boolean width_found = FALSE, height_found = FALSE;
+  ElementPtr item;
+  int i, n;
+  if ((count <= 0) || !lw->list.InternalList)
+    return FALSE;
+  if ((start < 0) || (start >= count))
+    start = 0;
+  for (n = 0, i = start; n < count; n++, i = ((i + 1 < count) ? i + 1 : 0)) {
+    item = lw->list.InternalList[i];
+    width_found |= (item->width >= lw->list.MaxWidth);
+    height_found |= (item->height >= lw->list.MaxItemHeight);
+    if (width_found && height_found)
+      return TRUE;
+  }
+  return FALSE;
+}
+
+/************************************************************************
+ *									*
  * Item/Element Manupulation routines					*
  *									*
  ************************************************************************/
@@ -2564,6 +2594,7 @@ static int DeleteInternalElementPositions(XmListWidget lw,
   Boolean reset_width = FALSE;
   Boolean reset_height = FALSE;
   int nsel = 0;
+  int first = oldItemCount;
   /* See what caller can do to flag errors, if necessary,
    * when this information is not present. */
   if (!position_list || !position_count)
@@ -2590,6 +2621,7 @@ static int DeleteInternalElementPositions(XmListWidget lw,
         XtFree((char *)ptr);
         lw->list.InternalList[item_pos] = NULL;
         lw->list.LastItem--;
+        ASSIGN_MIN(first, item_pos);
         /* BEGIN OSF Fix CR 4656 */
         /* Fix selection delimiters. */
         FixStartEnd(lw, item_pos, 1, &lw->list.StartItem, &lw->list.EndItem);
@@ -2615,9 +2647,9 @@ static int DeleteInternalElementPositions(XmListWidget lw,
                 &lw->list.OldStartItem,
                 &lw->list.OldEndItem);
   }
-  /* Re-pack InternalList in place. */
-  jx = 0;
-  for (ix = 0; ix < oldItemCount; ix++) {
+  /* Re-pack InternalList in place; there is no hole before first. */
+  jx = first;
+  for (ix = first; ix < oldItemCount; ix++) {
     if (lw->list.InternalList[ix] != NULL) {
       lw->list.InternalList[jx] = lw->list.InternalList[ix];
       jx++;
@@ -2637,7 +2669,7 @@ static int DeleteInternalElementPositions(XmListWidget lw,
   if (reset_height && lw->list.itemCount &&
       (lw->list.InternalList[0]->height >= lw->list.MaxItemHeight))
     reset_height = FALSE;
-  if (reset_width || reset_height)
+  if ((reset_width || reset_height) && !ExtentsAreMax(lw, first))
     ResetExtents(lw, False);
   return nsel;
 }
@@ -2780,7 +2812,8 @@ static void DeleteItemPositions(XmListWidget lw,
   jx = 0;
   for (ix = 0; ix < lw->list.itemCount; ix++) {
     if (lw->list.items[ix] != NULL) {
-      lw->list.items[jx] = lw->list.items[ix];
+      if (jx != ix)
+        lw->list.items[jx] = lw->list.items[ix];
       jx++;
     }
   }
