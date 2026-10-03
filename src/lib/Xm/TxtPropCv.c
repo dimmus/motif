@@ -390,7 +390,7 @@ int XmCvtXmStringTableToTextProperty(Display *display,
       /* Allocate that amount of space and convert the compound strings
      to ASN1 strings, putting them directly into the buffer. */
       text_prop_return->value = ubufptr = (unsigned char *)XtMalloc(sizeof(unsigned char) *
-                                                                    total_size);
+                                                                    (total_size + 1));
       for (i = 0; i < count; ++i) {
         int size;
         size = XmCvtXmStringToByteStream(string_table[i], &bufptr);
@@ -398,7 +398,7 @@ int XmCvtXmStringTableToTextProperty(Display *display,
         XtFree((char *)bufptr);
         ubufptr += size;
       }
-      *(++ubufptr) = '\0';
+      *ubufptr = '\0';
       text_prop_return->nitems = total_size;
       text_prop_return->format = 8;
       text_prop_return->encoding = XInternAtom(display, XmS_MOTIF_COMPOUND_STRING, False);
@@ -553,20 +553,31 @@ int XmCvtTextPropertyToXmStringTable(Display *display,
   }
   else if (text_prop->encoding == atoms[XmA_MOTIF_COMPOUND_STRING]) {
     unsigned char *asn1_head;
-    /* First calculate how many elements there are */
+    unsigned long left;
+    unsigned int asn1_len;
+    /* First calculate how many elements there are, checking that */
+    /* each one is well formed and lies within the property. */
     asn1_head = text_prop->value;
-    for (elements = 0; *asn1_head != '\0'; ++elements)
-      asn1_head += XmStringByteStreamLength(asn1_head);
+    left = (asn1_head != NULL) ? text_prop->nitems : 0;
+    for (elements = 0; (left > 0) && (*asn1_head != '\0'); ++elements) {
+      asn1_len = _XmStringByteStreamValidLength(asn1_head, left);
+      if (asn1_len == 0) {
+        _XmAppUnlock(app);
+        return (XConverterNotFound);
+      }
+      asn1_head += asn1_len;
+      left -= asn1_len;
+    }
     /* Now allocate a string table to put them in */
     string_table = (XmStringTable)XtMalloc(sizeof(XmString) * elements);
     /* Run through again, converting the strings. */
     asn1_head = text_prop->value;
-    for (elements = 0; *asn1_head != '\0'; ++elements) {
-      string_table[elements] = XmCvtByteStreamToXmString(asn1_head);
+    for (i = 0; i < elements; ++i) {
+      string_table[i] = XmCvtByteStreamToXmString(asn1_head);
       /* If the string is NULL, then we don't know what to do */
-      if (string_table[elements] == (XmString)NULL) {
-        while (elements > 0)
-          XtFree((char *)string_table[--elements]);
+      if (string_table[i] == (XmString)NULL) {
+        while (i > 0)
+          XmStringFree(string_table[--i]);
         XtFree((char *)string_table);
         _XmAppUnlock(app);
         return (XConverterNotFound);
