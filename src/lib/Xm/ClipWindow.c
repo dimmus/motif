@@ -241,8 +241,10 @@ static String GetRealTranslations(Display *dpy,
     num_vkeys = XmeVirtualToActualKeysyms(dpy, keysym, &vkeys);
     while (--num_vkeys >= 0) {
       keystring = XKeysymToString(vkeys[num_vkeys].keysym);
+      /* Skip keysyms without a name (e.g. NoSymbol from a binding to
+       * a key that does not exist) rather than dropping the rest. */
       if (!keystring)
-        break;
+        continue;
       /* this is why the struct is simpler than a pure translation parser,
            we have to merge the modifiers */
       mods = vkeys[num_vkeys].modifiers | keys[i].mod;
