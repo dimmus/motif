@@ -1659,6 +1659,9 @@ void _XmCleanPixmapCache(Screen *screen, Widget shell)
  */
 static unsigned int ctz(unsigned long n)
 {
+  /* e.g. the (empty) color masks of a PseudoColor visual */
+  if (!n)
+    return 0;
 #if defined(__has_builtin) && __has_builtin(__builtin_ctzl)
   return __builtin_ctzl(n);
 #else
