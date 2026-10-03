@@ -805,9 +805,10 @@ XmDragReceiverInfo _XmAllocReceiverInfo(XmDragContext dc)
   }
   if (dc->drag.numReceiverInfos == dc->drag.maxReceiverInfos) {
     dc->drag.maxReceiverInfos = dc->drag.maxReceiverInfos * 2 + 2;
-    dc->drag.receiverInfos = (XmDragReceiverInfoStruct *)XtRealloc(
-        (char *)dc->drag.receiverInfos,
-        dc->drag.maxReceiverInfos * sizeof(XmDragReceiverInfoStruct));
+    dc->drag.receiverInfos =
+        (XmDragReceiverInfoStruct *)_XmReallocArray((char *)dc->drag.receiverInfos,
+                                                    dc->drag.maxReceiverInfos,
+                                                    sizeof(XmDragReceiverInfoStruct));
   }
   if (dc->drag.currReceiverInfo)
     dc->drag.currReceiverInfo = &(dc->drag.receiverInfos[offset]);

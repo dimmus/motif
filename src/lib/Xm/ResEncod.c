@@ -230,8 +230,9 @@ static XmConst char UTF8_R_TO_L[] = "\342\200\217";
 #define _PushDir(ctx, dir) \
   if ((ctx)->dirsp == ((ctx)->dirstacksize - 1)) { \
     (ctx)->dirstacksize += 8; \
-    (ctx)->dirstack = (ct_Direction *)XtRealloc((char *)(ctx)->dirstack, \
-                                                (ctx)->dirstacksize * sizeof(ct_Direction)); \
+    (ctx)->dirstack = (ct_Direction *)_XmReallocArray((char *)(ctx)->dirstack, \
+                                                      (ctx)->dirstacksize, \
+                                                      sizeof(ct_Direction)); \
   } \
   (ctx)->dirstack[++((ctx)->dirsp)] = dir; \
   (ctx)->flags.dircs = True
@@ -427,7 +428,7 @@ XtPointer _XmGetEncodingRegistryTarget(int *length)
   *length = total_size;
   /* Create output buffer large enough for all the
      pairs of tags and encodings */
-  rval = XtMalloc(sizeof(char) * total_size);
+  rval = _XmMallocArray(total_size, sizeof(char));
   i = 0;
   current = _encoding_registry_ptr;
   while (current != NULL) {
@@ -489,7 +490,7 @@ XmString XmCvtCTToXmString(char *text)
   ctx->flags.gl = False;
   ctx->flags.text = False;
   ctx->dirstacksize = 8;
-  ctx->dirstack = (ct_Direction *)XtMalloc(ctx->dirstacksize * sizeof(ct_Direction));
+  ctx->dirstack = (ct_Direction *)_XmMallocArray(ctx->dirstacksize, sizeof(ct_Direction));
 /*
  * Define XLIB_HANDLES_DIRECTION if vendor's X library knows how
  * to deal with direction control sequences in CT. Otherwise
@@ -879,7 +880,7 @@ static Boolean cvtTextToXmString(XrmValue *from, XrmValue *to)
   ctx->flags.gl = False;
   ctx->flags.text = False;
   ctx->dirstacksize = 8;
-  ctx->dirstack = (ct_Direction *)XtMalloc(ctx->dirstacksize * sizeof(ct_Direction));
+  ctx->dirstack = (ct_Direction *)_XmMallocArray(ctx->dirstacksize, sizeof(ct_Direction));
 /*
  * Define XLIB_HANDLES_DIRECTION if vendor's X library knows how
  * to deal with direction control sequences in CT. Otherwise
@@ -1106,7 +1107,7 @@ static char **cvtCTsegment(ct_context *ctx, OctetPtr item, unsigned int length)
   char **strings = NULL;
   if (ctx->encoding) {
     if (ctx->encoding + ctx->encodinglen != item) {
-      octets = (OctetPtr)XtMalloc((ctx->encodinglen + length) * sizeof(Octet));
+      octets = (OctetPtr)_XmMallocArray(ctx->encodinglen + length, sizeof(Octet));
       memcpy((char *)octets, (char *)ctx->encoding, ctx->encodinglen);
       memcpy((char *)(octets + ctx->encodinglen), (char *)item, length);
       free_octets = True;

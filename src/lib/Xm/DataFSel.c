@@ -26,6 +26,7 @@
 static char rcsid[] = "$RCSfile: DataFSel.c,v $ $Revision: 1.6 $ $Date: 2003/10/06 10:10:23 $"
 #  endif
 #endif
+#include "XmI.h"
 #include <X11/Xatom.h>
 #include <Xm/AtomMgr.h>
 #include <Xm/DataFP.h>
@@ -166,7 +167,7 @@ static void InsertSelection(Widget w,
     if (num_vals && (status == Success || status > 0)) {
       for (i = 0; i < num_vals; i++)
         malloc_size += strlen(tmp_value[i]);
-      total_tmp_value = XtMalloc((unsigned)malloc_size + 1);
+      total_tmp_value = _XmMallocArray(malloc_size + 1, sizeof(char));
       total_tmp_value[0] = '\0';
       for (i = 0; i < num_vals; i++)
         strcat(total_tmp_value, tmp_value[i]);
@@ -181,7 +182,7 @@ static void InsertSelection(Widget w,
           tf, (XEvent *)insert_select->event, left, right, total_tmp_value, malloc_size, True);
     }
     else { /* must convert to wchar_t before passing to Replace */
-      wc_value = (wchar_t *)XtMalloc((unsigned)(1 + malloc_size) * sizeof(wchar_t));
+      wc_value = (wchar_t *)_XmMallocArray(1 + malloc_size, sizeof(wchar_t));
       num_chars = mbstowcs(wc_value, total_tmp_value, 1 + malloc_size);
       if (num_chars < 0)
         num_chars = 0;
@@ -199,11 +200,11 @@ static void InsertSelection(Widget w,
           tf, (XEvent *)insert_select->event, left, right, (char *)value, (unsigned)*length, True);
     }
     else {
-      temp = XtMalloc((unsigned)*length + 1);
+      temp = _XmMallocArray(*length + 1, sizeof(char));
       /* NOTE: casting *length could result in a truncated long. */
       (void)memcpy((void *)temp, (void *)value, (unsigned)*length);
       temp[*length] = '\0';
-      wc_value = (wchar_t *)XtMalloc((unsigned)(*length + 1) * sizeof(wchar_t));
+      wc_value = (wchar_t *)_XmMallocArray(*length + 1, sizeof(wchar_t));
       /* NOTE: casting *length could result in a truncated long. */
       num_chars = mbstowcs(wc_value, temp, (unsigned)*length + 1);
       /* the data comes from another client and need not be valid */
@@ -563,7 +564,7 @@ Boolean _XmDataFieldConvert(Widget w,
       int stat;
       /* NOTE: casting (right - left) could result in a truncated long. */
       *length = _XmDataFieldCountBytes(tf, TextF_WcValue(tf) + left, (int)(right - left));
-      tmp_value = XtMalloc((unsigned)*length + 1);
+      tmp_value = _XmMallocArray(*length + 1, sizeof(char));
       stat = wcstombs(tmp_value, TextF_WcValue(tf) + left, (unsigned)*length); /* NOTE: casting
                                         *length could result in a truncated long. */
       if (stat < 0) /* wcstombs will return neg value on conv failure */
@@ -573,7 +574,7 @@ Boolean _XmDataFieldConvert(Widget w,
     }
     else {
       *length = right - left;
-      tmp_value = XtMalloc((unsigned)*length + 1);
+      tmp_value = _XmMallocArray(*length + 1, sizeof(char));
       /* get the selection value */
       (void)memcpy((void *)tmp_value, (void *)(TextF_Value(tf) + left), (unsigned)*length); /* NOTE:
                                              casting *length could result in a truncated long. */
@@ -602,7 +603,7 @@ Boolean _XmDataFieldConvert(Widget w,
       int stat;
       /* NOTE: casting (right - left) could result in a truncated long. */
       *length = _XmDataFieldCountBytes(tf, TextF_WcValue(tf) + left, (int)(right - left));
-      *value = XtMalloc((unsigned)*length + 1);
+      *value = _XmMallocArray(*length + 1, sizeof(char));
       stat = wcstombs((char *)*value, TextF_WcValue(tf) + left, (unsigned)*length); /* NOTE:
                                            casting *length could result in a truncated long */
       if (stat < 0) /* wcstombs return neg value on conv failure */
@@ -612,7 +613,7 @@ Boolean _XmDataFieldConvert(Widget w,
     }
     else {
       *length = right - left;
-      *value = XtMalloc((unsigned)*length + 1);
+      *value = _XmMallocArray(*length + 1, sizeof(char));
       /* get the selection value */
       (void)memcpy((void *)*value, (void *)(TextF_Value(tf) + left), (unsigned)*length); /* NOTE:
                                              casting *length could result in a truncated long. */
@@ -630,7 +631,7 @@ Boolean _XmDataFieldConvert(Widget w,
        * (right - left) could result in a truncated long.
        */
       *length = _XmDataFieldCountBytes(tf, TextF_WcValue(tf) + left, (int)(right - left));
-      tmp_value = XtMalloc((unsigned)*length + 1);
+      tmp_value = _XmMallocArray(*length + 1, sizeof(char));
       stat = wcstombs(tmp_value, TextF_WcValue(tf) + left, (unsigned)*length); /* NOTE: casting
                                         *length could result in a truncated long. */
       if (stat < 0) /* wcstombs will return neg value on conv failure */
@@ -640,7 +641,7 @@ Boolean _XmDataFieldConvert(Widget w,
     }
     else { /* malloc the space and copy the data to be converted */
       *length = right - left;
-      tmp_value = XtMalloc((unsigned)*length + 1);
+      tmp_value = _XmMallocArray(*length + 1, sizeof(char));
       /* get the selection value */
       (void)memcpy((void *)tmp_value, (void *)(TextF_Value(tf) + left), (unsigned)*length); /* NOTE:
                                              casting *length could result in a truncated long. */

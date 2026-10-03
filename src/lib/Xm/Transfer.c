@@ -557,8 +557,9 @@ void XmeTransferAddDoneProc(XtPointer id, XmSelectionFinishedProc done_proc)
   if (tid->numDoneProcs == 1)
     tid->doneProcs = (XmSelectionFinishedProc *)XtMalloc(sizeof(XmSelectionFinishedProc *));
   else
-    tid->doneProcs = (XmSelectionFinishedProc *)XtRealloc(
-        (char *)tid->doneProcs, sizeof(XmSelectionFinishedProc *) * tid->numDoneProcs);
+    tid->doneProcs = (XmSelectionFinishedProc *)_XmReallocArray((char *)tid->doneProcs,
+                                                                tid->numDoneProcs,
+                                                                sizeof(XmSelectionFinishedProc *));
   tid->doneProcs[tid->numDoneProcs - 1] = done_proc;
   _XmProcessUnlock();
 }
@@ -948,7 +949,7 @@ Widget XmeDragSource(
   XInternAtoms(XtDisplay(w), atom_names, XtNumber(atom_names), False, atoms);
   /* merge and copy arg list */
   arg_count = in_arg_count + 10;
-  args = (Arg *)XtMalloc(sizeof(Arg) * arg_count);
+  args = (Arg *)_XmMallocArray(arg_count, sizeof(Arg));
   for (arg_count = 0; arg_count < in_arg_count; arg_count++)
     args[arg_count] = in_args[arg_count];
   arg_count = in_arg_count;
@@ -1265,7 +1266,7 @@ void XmeDropSink(Widget w, ArgList in_args, Cardinal in_arg_count)
   _XmAppLock(app);
   /* merge and copy arg list */
   arg_count = in_arg_count + 2;
-  args = (Arg *)XtMalloc(sizeof(Arg) * arg_count);
+  args = (Arg *)_XmMallocArray(arg_count, sizeof(Arg));
   for (arg_count = 0; arg_count < in_arg_count; arg_count++)
     args[arg_count] = in_args[arg_count];
   arg_count = in_arg_count;
@@ -1829,7 +1830,7 @@ Atom *XmeStandardTargets(Widget w, int count, int *tcount)
   targets[i] = atoms[XmA_MOTIF_ENCODING_REGISTRY];
   i++;
   /* Realloc the full size now */
-  targets = (Atom *)XtRealloc((char *)targets, sizeof(Atom) * (count + i));
+  targets = (Atom *)_XmReallocArray((char *)targets, count + i, sizeof(Atom));
   *tcount = i; /* Return the builtin target count */
   _XmAppUnlock(app);
   return (targets);
@@ -2079,7 +2080,7 @@ char *_XmTextToLocaleText(
     if (num_values) {
       for (i = 0; i < num_values; i++)
         malloc_size += strlen(values[i]);
-      total_value = XtMalloc((unsigned)malloc_size + 1);
+      total_value = _XmMallocArray(malloc_size + 1, sizeof(char));
       total_value[0] = '\0';
       for (i = 0; i < num_values; i++)
         strcat(total_value, values[i]);

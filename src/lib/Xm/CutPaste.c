@@ -530,7 +530,7 @@ static Boolean ClipboardConvertProc(Widget wid,
     }
     /* allocate storage for list of target atoms,
          plus the necessary */
-    ptr = (Atom *)XtMalloc((Cardinal)(sizeof(Atom) * (count + 2)));
+    ptr = (Atom *)_XmMallocArray(count + 2, sizeof(Atom));
     save_ptr = ptr;
     /* Put required ICCCM targets which are supported */
     *ptr = atoms[XmA_TARGETS];
@@ -1019,7 +1019,7 @@ static int ClipboardRetrieveItem(Display *display,
     *outlength = loclength + add_length;
   }
   /* get local memory for the item */
-  clipboard_pointer = (ClipboardPointer)XtMalloc((Cardinal)*outlength);
+  clipboard_pointer = (ClipboardPointer)_XmMallocArray(*outlength, 1);
   if (ret_value == ClipboardSuccess) {
     /* copy the item into the local memory */
     memcpy(clipboard_pointer, pointer, (size_t)loclength);
@@ -2354,9 +2354,10 @@ int XmClipboardStartCopy(Display *display, /* display id for application passing
       int oldLimit = maxCbProcs;
       maxCbProcs += 20;
       /* Need to extend tables */
-      cbProcTable = (XmCutPasteProc *)XtRealloc((char *)cbProcTable,
-                                                sizeof(XmCutPasteProc) * maxCbProcs);
-      cbIdTable = (long *)XtRealloc((char *)cbIdTable, sizeof(long) * maxCbProcs);
+      cbProcTable = (XmCutPasteProc *)_XmReallocArray((char *)cbProcTable,
+                                                      maxCbProcs,
+                                                      sizeof(XmCutPasteProc));
+      cbIdTable = (long *)_XmReallocArray((char *)cbIdTable, maxCbProcs, sizeof(long));
       for (i = oldLimit; i < maxCbProcs; i++) {
         cbProcTable[i] = NULL;
         cbIdTable[i] = 0;
@@ -3481,8 +3482,7 @@ int XmClipboardInquirePendingItems(Display *display, /* Display id of applicatio
   nitems = header->currItems;
   if (nitems > (Cardinal)~0 / sizeof(XmClipboardPendingRec))
     nitems = 0;
-  itemlist = (XmClipboardPendingList)XtMalloc(
-      (Cardinal)(nitems * sizeof(XmClipboardPendingRec)));
+  itemlist = (XmClipboardPendingList)_XmMallocArray(nitems, sizeof(XmClipboardPendingRec));
   nextlistptr = itemlist;
   /* run through all the items in the clipboard looking
        for matching formats */

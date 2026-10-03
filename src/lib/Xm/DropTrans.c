@@ -159,8 +159,8 @@ static void Initialize(Widget rw, Widget nw, ArgList args, Cardinal *num_args)
   XmDropTransferPart *dtp = (XmDropTransferPart *)&(new_w->dropTransfer);
   if (dtp->num_drop_transfers != 0) {
     dtp->num_drop_transfer_lists = 1;
-    dtp->drop_transfer_lists = (XmDropTransferList)XtMalloc(sizeof(XmDropTransferListRec) *
-                                                            dtp->num_drop_transfer_lists);
+    dtp->drop_transfer_lists = (XmDropTransferList)_XmMallocArray(dtp->num_drop_transfer_lists,
+                                                                  sizeof(XmDropTransferListRec));
     dtp->drop_transfer_lists[0].transfer_list = (XmDropTransferEntry)_XmAllocAndCopy(
         dtp->drop_transfers, sizeof(XmDropTransferEntryRec) * dtp->num_drop_transfers);
     dtp->drop_transfer_lists[0].num_transfers = dtp->num_drop_transfers;
@@ -250,8 +250,8 @@ static void ProcessTransferEntry(XmDropTransferObject dt, Cardinal which)
   Arg args[1];
   Atom real_selection_atom;
   dtp->cur_drop_transfer_list = which;
-  dtp->cur_targets = (Atom *)XtMalloc((tl->num_transfers * sizeof(Atom)));
-  dtp->cur_client_data = (XtPointer *)XtMalloc((tl->num_transfers * sizeof(XtPointer)));
+  dtp->cur_targets = (Atom *)_XmMallocArray(tl->num_transfers, sizeof(Atom));
+  dtp->cur_client_data = (XtPointer *)_XmMallocArray(tl->num_transfers, sizeof(XtPointer));
   i = 0;
   XtSetArg(args[i], XmNiccHandle, &real_selection_atom);
   i++;
@@ -464,9 +464,9 @@ static void AddDropTransfer(Widget widget, XmDropTransferEntry transfers, Cardin
   XmDropTransferObject dto = (XmDropTransferObject)widget;
   XmDropTransferPart *dtp = (XmDropTransferPart *)&(dto->dropTransfer);
   Cardinal index = dtp->num_drop_transfer_lists++;
-  dtp->drop_transfer_lists = (XmDropTransferList)XtRealloc((char *)dtp->drop_transfer_lists,
-                                                           sizeof(XmDropTransferListRec) *
-                                                               dtp->num_drop_transfer_lists);
+  dtp->drop_transfer_lists = (XmDropTransferList)_XmReallocArray((char *)dtp->drop_transfer_lists,
+                                                                 dtp->num_drop_transfer_lists,
+                                                                 sizeof(XmDropTransferListRec));
   dtp->drop_transfer_lists[index].transfer_list = (XmDropTransferEntry)_XmAllocAndCopy(
       transfers, sizeof(XmDropTransferEntryRec) * num_transfers);
   dtp->drop_transfer_lists[index].num_transfers = num_transfers;

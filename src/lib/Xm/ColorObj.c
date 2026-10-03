@@ -536,7 +536,7 @@ static Boolean FetchPixelData(Widget w, char *value, unsigned long length, int s
   if (value == NULL || length == 0 || length > 4096)
     return False;
   /* the data need not be NUL terminated */
-  copy = XtMalloc((Cardinal)length + 1);
+  copy = _XmMallocArray(length + 1, 1);
   memcpy(copy, value, (size_t)length);
   copy[length] = '\0';
   cursor = copy;

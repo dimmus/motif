@@ -641,8 +641,9 @@ static Boolean ReadAtomsTable(Display *display, xmAtomsTable atomsTable)
       /*
        *  expand the atoms table
        */
-      atomsTable->entries = (xmAtomsTableEntry)XtRealloc((char *)atomsTable->entries, /* NULL ok */
-                                                         sizeof(xmAtomsTableEntryRec) * num_atoms);
+      atomsTable->entries = (xmAtomsTableEntry)_XmReallocArray((char *)atomsTable->entries,
+                                                               num_atoms,
+                                                               sizeof(xmAtomsTableEntryRec));
     }
     /*
      *  Read the atom table entries.
@@ -838,9 +839,10 @@ static Boolean ReadTargetsTable(Display *display, xmTargetsTable targetsTable)
       /*
        *  expand the target table
        */
-      targetsTable->entries = (xmTargetsTableEntry)XtRealloc(
-          (char *)targetsTable->entries, /* NULL ok */
-          sizeof(xmTargetsTableEntryRec) * propertyRecPtr->info.num_target_lists);
+      targetsTable->entries =
+          (xmTargetsTableEntry)_XmReallocArray((char *)targetsTable->entries,
+                                               propertyRecPtr->info.num_target_lists,
+                                               sizeof(xmTargetsTableEntryRec));
       /*
        *  read the new entries.  The property can be written by any
        *  client, so every list is checked against the end of the data
@@ -864,7 +866,7 @@ static Boolean ReadTargetsTable(Display *display, xmTargetsTable targetsTable)
           if (!num_targets)
             targets = NULL;
           else
-            targets = (Atom *)XtMalloc(sizeof(Atom) * num_targets);
+            targets = (Atom *)_XmMallocArray(num_targets, sizeof(Atom));
           /*
            *  Read each Atom in one at a time.
            */
@@ -1132,9 +1134,9 @@ Cardinal _XmTargetsToIndex(Widget shell, Atom *targets, Cardinal numTargets)
   }
   if (i == targetsTable->numEntries) {
     targetsTable->numEntries++;
-    targetsTable->entries = (xmTargetsTableEntry)XtRealloc(
-        (char *)targetsTable->entries, /* NULL ok */
-        sizeof(xmTargetsTableEntryRec) * (targetsTable->numEntries));
+    targetsTable->entries = (xmTargetsTableEntry)_XmReallocArray((char *)targetsTable->entries,
+                                                                 targetsTable->numEntries,
+                                                                 sizeof(xmTargetsTableEntryRec));
     targetsTable->entries[i].numTargets = numTargets;
     targetsTable->entries[i].targets = newTargets;
     WriteTargetsTable(display, targetsTable);
@@ -1187,9 +1189,9 @@ Atom _XmAllocMotifAtom(Widget shell, Time time)
   }
   if (atomReturn == None) {
     i = atomsTable->numEntries++;
-    atomsTable->entries = (xmAtomsTableEntry)XtRealloc(
-        (char *)atomsTable->entries, /* NULL ok */
-        (atomsTable->numEntries * sizeof(xmAtomsTableEntryRec)));
+    atomsTable->entries = (xmAtomsTableEntry)_XmReallocArray((char *)atomsTable->entries,
+                                                             atomsTable->numEntries,
+                                                             sizeof(xmAtomsTableEntryRec));
     sprintf(atomname, "%s%u", "_MOTIF_ATOM_", i);
     atomsTable->entries[i].atom = XInternAtom(display, atomname, False);
     atomsTable->entries[i].time = time;
