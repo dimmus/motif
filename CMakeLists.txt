@@ -106,6 +106,11 @@ motif_option(WITH_PNG "Enable PNG support" ON)
 motif_option(WITH_XFT "Enable Xft support" ON)
 motif_option(WITH_LTO "Enable link-time optimization (and -fno-semantic-interposition)" OFF)
 motif_option(WITH_CPU_NATIVE "Optimize for the build machine's CPU (-march=native, binaries are not portable)" OFF)
+set(WITH_PGO OFF CACHE STRING
+  "Profile-guided optimization: OFF, GENERATE (instrumented build for the pgo-train target) or USE (build with the profiles in MOTIF_PGO_DIR)")
+set_property(CACHE WITH_PGO PROPERTY STRINGS OFF GENERATE USE)
+set(MOTIF_PGO_DIR "${CMAKE_BINARY_DIR}/pgo" CACHE PATH
+  "Directory of the profiles that WITH_PGO=GENERATE writes and WITH_PGO=USE reads")
 
 # Library type of the public libraries (Xm, Mrm, Uil). Internal helper
 # libraries stay static, built as PIC so they can be linked into the shared
@@ -642,6 +647,46 @@ if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
   unset(_motif_opt_flags)
 endif()
 
+# Profile-guided optimization.  Build with WITH_PGO=GENERATE, run the
+# training workload (the pgo-train target), then reconfigure the same
+# build directory with WITH_PGO=USE and rebuild.  With Clang, merge the raw
+# profiles first: llvm-profdata merge -o ${MOTIF_PGO_DIR}/default.profdata
+# ${MOTIF_PGO_DIR}/*.profraw
+if(WITH_PGO)
+  if(NOT CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
+    message(FATAL_ERROR "WITH_PGO is only supported with GCC and Clang")
+  endif()
+  if(WITH_PGO STREQUAL "GENERATE")
+    file(MAKE_DIRECTORY ${MOTIF_PGO_DIR})
+    if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
+      # The libraries are used by several threads in some programs
+      set(_motif_pgo_flags -fprofile-generate=${MOTIF_PGO_DIR} -fprofile-update=prefer-atomic)
+    else()
+      set(_motif_pgo_flags -fprofile-generate=${MOTIF_PGO_DIR})
+    endif()
+    add_compile_options(${_motif_pgo_flags})
+    add_link_options(${_motif_pgo_flags})
+    unset(_motif_pgo_flags)
+  elseif(WITH_PGO STREQUAL "USE")
+    if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
+      # Code the training did not run is optimized as usual rather than for
+      # size, and sources without a profile are not an error.
+      add_compile_options(-fprofile-use=${MOTIF_PGO_DIR} -fprofile-partial-training
+        -Wno-missing-profile)
+    else()
+      if(NOT EXISTS ${MOTIF_PGO_DIR}/default.profdata)
+        message(FATAL_ERROR "WITH_PGO=USE: ${MOTIF_PGO_DIR}/default.profdata not found; "
+          "merge the raw profiles with llvm-profdata first")
+      endif()
+      add_compile_options(-fprofile-use=${MOTIF_PGO_DIR}/default.profdata
+        -Wno-profile-instr-unprofiled -Wno-profile-instr-out-of-date)
+    endif()
+  else()
+    message(FATAL_ERROR "WITH_PGO must be OFF, GENERATE or USE, not '${WITH_PGO}'")
+  endif()
+  message(STATUS "Profile-guided optimization: ${WITH_PGO} (${MOTIF_PGO_DIR})")
+endif()
+
 # Exported symbols.  The shared libraries export only what their version
 # scripts (src/lib/*/lib*.map) list, in a version node; everything else is
 # bound inside the library at link time, which needs neither a PLT entry
@@ -736,6 +781,33 @@ endif()
 
 if(WITH_DOCS)
     add_subdirectory(doc)
+endif()
+
+# The training workload of WITH_PGO=GENERATE: the test suite (WITH_TESTS),
+# whose X tests run under xvfb-run, and MOTIF_PGO_TRAINING_COMMAND, e.g. a
+# benchmark run under xvfb-run.
+if(WITH_PGO STREQUAL "GENERATE")
+  set(MOTIF_PGO_TRAINING_COMMAND "" CACHE STRING
+    "Additional PGO training command (a ;-list), run by the pgo-train target")
+  set(_motif_pgo_commands)
+  if(MOTIF_PGO_TRAINING_COMMAND)
+    list(APPEND _motif_pgo_commands COMMAND ${MOTIF_PGO_TRAINING_COMMAND})
+  endif()
+  if(WITH_TESTS)
+    list(APPEND _motif_pgo_commands
+      COMMAND ${CMAKE_CTEST_COMMAND} -C $<CONFIG>)
+  endif()
+  if(_motif_pgo_commands)
+    add_custom_target(pgo-train ${_motif_pgo_commands}
+      WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+      COMMENT "Running the PGO training workload (profiles in ${MOTIF_PGO_DIR})"
+      USES_TERMINAL)
+  else()
+    message(WARNING "WITH_PGO=GENERATE: no training workload; enable WITH_TESTS, "
+      "set MOTIF_PGO_TRAINING_COMMAND or run programs of this build to collect "
+      "the profiles")
+  endif()
+  unset(_motif_pgo_commands)
 endif()
 
 # Let a cross build import the build-time tools of this one.
