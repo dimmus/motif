@@ -737,17 +737,15 @@ static Window GetClientWindow(Display *dpy, Window win, Atom atom)
   Window *children;
   unsigned int nchildren;
   int i;
-  Atom type = None;
-  int format;
-  unsigned long nitems, after;
-  unsigned char *data = NULL;
+  unsigned long nitems;
+  unsigned char *data;
   Window inf = 0;
-  XGetWindowProperty(
-      dpy, win, atom, 0, 0, False, AnyPropertyType, &type, &format, &nitems, &after, &data);
-  if (data)
+  if (_XmGetWindowPropertyChecked(
+          dpy, win, atom, 0, AnyPropertyType, 0, 0, NULL, NULL, &nitems, NULL, &data))
+  {
     XFree(data);
-  if (type)
     return win;
+  }
   else {
     if (!XQueryTree(dpy, win, &root, &parent, &children, &nchildren) || (nchildren == 0))
       return 0;
