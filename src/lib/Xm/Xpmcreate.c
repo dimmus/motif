@@ -2073,6 +2073,7 @@ static int ParseAndPutPixels(
     Pixel *shape_pixels)
 {
   unsigned int a, x, y;
+  int ErrorStatus;
   switch (cpp) {
     case (1): /* Optimize for single character
                * colors */
@@ -2096,7 +2097,8 @@ static int ParseAndPutPixels(
       for (a = 0; a < ncolors; a++)
         colidx[(unsigned char)colorTable[a].string[0]] = a + 1;
       for (y = 0; y < height; y++) {
-        xpmNextString(data);
+        if ((ErrorStatus = xpmNextString(data)) != XpmSuccess)
+          return (ErrorStatus);
         for (x = 0; x < width; x++) {
           int c = xpmGetC(data);
           if (c > 0 && c < 256 && colidx[c] != 0) {
@@ -2150,7 +2152,10 @@ static int ParseAndPutPixels(
         cidx[char1][(unsigned char)colorTable[a].string[1]] = a + 1;
       }
       for (y = 0; y < height; y++) {
-        xpmNextString(data);
+        if ((ErrorStatus = xpmNextString(data)) != XpmSuccess) {
+          FREE_CIDX;
+          return (ErrorStatus);
+        }
         for (x = 0; x < width; x++) {
           int cc1 = xpmGetC(data);
           if (cc1 > 0 && cc1 < 256) {
@@ -2193,10 +2198,15 @@ static int ParseAndPutPixels(
       if (USE_HASHTABLE) {
         xpmHashAtom *slot;
         for (y = 0; y < height; y++) {
-          xpmNextString(data);
+          if ((ErrorStatus = xpmNextString(data)) != XpmSuccess)
+            return (ErrorStatus);
           for (x = 0; x < width; x++) {
-            for (a = 0, s = buf; a < cpp; a++, s++)
-              *s = xpmGetC(data);
+            for (a = 0, s = buf; a < cpp; a++, s++) {
+              int c = xpmGetC(data);
+              if (c < 0)
+                return (XpmFileInvalid);
+              *s = (char)c;
+            }
             slot = xpmHashSlot(hashtable, buf);
             if (!*slot) /* no color matches */
               return (XpmFileInvalid);
@@ -2217,10 +2227,15 @@ static int ParseAndPutPixels(
       }
       else {
         for (y = 0; y < height; y++) {
-          xpmNextString(data);
+          if ((ErrorStatus = xpmNextString(data)) != XpmSuccess)
+            return (ErrorStatus);
           for (x = 0; x < width; x++) {
-            for (a = 0, s = buf; a < cpp; a++, s++)
-              *s = xpmGetC(data);
+            for (a = 0, s = buf; a < cpp; a++, s++) {
+              int c = xpmGetC(data);
+              if (c < 0)
+                return (XpmFileInvalid);
+              *s = (char)c;
+            }
             for (a = 0; a < ncolors; a++)
               if (!strcmp(colorTable[a].string, buf))
                 break;

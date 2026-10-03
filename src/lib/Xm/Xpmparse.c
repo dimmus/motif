@@ -223,7 +223,10 @@ int xpmParseColors(xpmData *data,
     return (XpmNoMemory);
   if (!data->format) { /* XPM 2 or 3 */
     for (a = 0, color = colorTable; a < ncolors; a++, color++) {
-      xpmNextString(data); /* skip the line */
+      if ((ErrorStatus = xpmNextString(data)) != XpmSuccess) { /* skip the line */
+        xpmFreeColorTable(colorTable, ncolors);
+        return (ErrorStatus);
+      }
       /*
        * read pixel value
        */
@@ -385,6 +388,7 @@ static int ParsePixels(xpmData *data,
 {
   unsigned int *iptr, *iptr2 = NULL; /* found by Egbert Eich */
   unsigned int a, x, y;
+  int ErrorStatus;
   if ((height > 0 && width >= UINT_MAX / height) ||
       width * height >= UINT_MAX / sizeof(unsigned int))
     return XpmNoMemory;
@@ -413,7 +417,10 @@ static int ParsePixels(xpmData *data,
       for (a = 0; a < ncolors; a++)
         colidx[(unsigned char)colorTable[a].string[0]] = a + 1;
       for (y = 0; y < height; y++) {
-        xpmNextString(data);
+        if ((ErrorStatus = xpmNextString(data)) != XpmSuccess) {
+          XpmFree(iptr2);
+          return (ErrorStatus);
+        }
         for (x = 0; x < width; x++, iptr++) {
           int c = xpmGetC(data);
           if (c > 0 && c < 256 && colidx[c] != 0)
@@ -453,7 +460,11 @@ static int ParsePixels(xpmData *data,
         cidx[char1][(unsigned char)colorTable[a].string[1]] = a + 1;
       }
       for (y = 0; y < height; y++) {
-        xpmNextString(data);
+        if ((ErrorStatus = xpmNextString(data)) != XpmSuccess) {
+          FREE_CIDX;
+          XpmFree(iptr2);
+          return (ErrorStatus);
+        }
         for (x = 0; x < width; x++, iptr++) {
           int cc1 = xpmGetC(data);
           if (cc1 > 0 && cc1 < 256) {
@@ -488,7 +499,10 @@ static int ParsePixels(xpmData *data,
       if (USE_HASHTABLE) {
         xpmHashAtom *slot;
         for (y = 0; y < height; y++) {
-          xpmNextString(data);
+          if ((ErrorStatus = xpmNextString(data)) != XpmSuccess) {
+            XpmFree(iptr2);
+            return (ErrorStatus);
+          }
           for (x = 0; x < width; x++, iptr++) {
             for (a = 0, s = buf; a < cpp; a++, s++) {
               int c = xpmGetC(data);
@@ -509,7 +523,10 @@ static int ParsePixels(xpmData *data,
       }
       else {
         for (y = 0; y < height; y++) {
-          xpmNextString(data);
+          if ((ErrorStatus = xpmNextString(data)) != XpmSuccess) {
+            XpmFree(iptr2);
+            return (ErrorStatus);
+          }
           for (x = 0; x < width; x++, iptr++) {
             for (a = 0, s = buf; a < cpp; a++, s++) {
               int c = xpmGetC(data);
