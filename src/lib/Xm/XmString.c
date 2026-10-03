@@ -379,6 +379,14 @@ static XmString StringEmptyCreate(void);
 static int _get_generate_parse_table(XmParseTable *gen_table);
 static Boolean CurrentCharsetIsUTF8(void);
 /********    End Static Function Declarations    ********/
+/*
+ * Strings converted from UTF-8 to UCS-2 for core fonts fit on the stack
+ * when they are short, which is nearly always; at most one UCS-2
+ * character comes out of each byte.
+ */
+#define UCS2_LOCAL_LEN 256
+#define Ucs2Buffer(len, local) \
+  ((len) <= UCS2_LOCAL_LEN ? (local) : (XChar2b *)XtMalloc((len) * sizeof(XChar2b)))
 static struct __Xmlocale locale;
 static char **_tag_cache;
 static int _cache_count = 0;
@@ -3302,13 +3310,12 @@ extern void _XmStringDrawSegment(Display *d,
       if (image) {
         if (text16)
           if (utf8) {
-            size_t ucs_str_len;
-            XChar2b *ucs_str;
-            /* TODO: it is very unoptimized convert the same sting
-             * twice - for getting extents and drawing */
-            ucs_str = _XmUtf8ToUcs2(draw_text, seg_len, &ucs_str_len);
+            XChar2b ucs_local[UCS2_LOCAL_LEN];
+            XChar2b *ucs_str = Ucs2Buffer(seg_len, ucs_local);
+            size_t ucs_str_len = _XmUtf8ToUcs2Buf(draw_text, seg_len, ucs_str);
             XDrawImageString16(d, w, gc, x, y, ucs_str, ucs_str_len);
-            XFree(ucs_str);
+            if (ucs_str != ucs_local)
+              XtFree((char *)ucs_str);
           }
           else
             XDrawImageString16(d, w, gc, x, y, (XChar2b *)draw_text, Half(seg_len));
@@ -3333,13 +3340,12 @@ extern void _XmStringDrawSegment(Display *d,
       else {
         if (text16) {
           if (utf8) {
-            size_t ucs_str_len;
-            XChar2b *ucs_str;
-            /* TODO: it is very unoptimized convert the same sting
-             * twice - for getting extents and drawing */
-            ucs_str = _XmUtf8ToUcs2(draw_text, seg_len, &ucs_str_len);
+            XChar2b ucs_local[UCS2_LOCAL_LEN];
+            XChar2b *ucs_str = Ucs2Buffer(seg_len, ucs_local);
+            size_t ucs_str_len = _XmUtf8ToUcs2Buf(draw_text, seg_len, ucs_str);
             XDrawString16(d, w, gc, x, y, ucs_str, ucs_str_len);
-            XFree(ucs_str);
+            if (ucs_str != ucs_local)
+              XtFree((char *)ucs_str);
           }
           else
             XDrawString16(d, w, gc, x, y, (XChar2b *)draw_text, Half(seg_len));
@@ -5082,12 +5088,12 @@ static void ComputeMetrics(XmRendition rend,
       if (two_byte_font(font_struct)) {
         if (byte_count >= 2 || utf8) {
           if (utf8) {
-            /* TODO: it is very unoptimized convert the same sting
-             * twice - for getting extents and drawing */
-            size_t str_len = 0;
-            XChar2b *str = _XmUtf8ToUcs2(text, byte_count, &str_len);
+            XChar2b ucs_local[UCS2_LOCAL_LEN];
+            XChar2b *str = Ucs2Buffer(byte_count, ucs_local);
+            size_t str_len = _XmUtf8ToUcs2Buf(text, byte_count, str);
             XTextExtents16(font_struct, str, str_len, &dir, &asc, &desc, &char_ret);
-            XFree(str);
+            if (str != ucs_local)
+              XtFree((char *)str);
           }
           else
             XTextExtents16(
