@@ -1538,8 +1538,9 @@ Boolean XmStringCompare(XmString a, XmString b)
       entry_b = _XmStrEntry(b);
     }
     for (i = 0; i < _XmStrEntryCountGet(a); i++) {
-      if (_XmEntryMultiple(entry_a[i]) && _XmEntryMultiple(entry_b[i])) {
-        if (_XmEntrySegmentCount(entry_a[i]) != _XmEntrySegmentCount(entry_b[i])) {
+      /* A line that is a single segment equals an array line holding it. */
+      if (_XmEntryMultiple(entry_a[i]) || _XmEntryMultiple(entry_b[i])) {
+        if (_XmEntrySegmentCountGet(entry_a[i]) != _XmEntrySegmentCountGet(entry_b[i])) {
           if (a_unopt)
             XmStringFree(a_unopt);
           if (b_unopt)
@@ -1547,9 +1548,11 @@ Boolean XmStringCompare(XmString a, XmString b)
           _XmProcessUnlock();
           return (FALSE);
         }
-        for (j = 0; j < _XmEntrySegmentCount(entry_a[i]); j++) {
-          _XmStringNREntry a_seg = _XmEntrySegment(entry_a[i])[j];
-          _XmStringNREntry b_seg = _XmEntrySegment(entry_b[i])[j];
+        for (j = 0; j < _XmEntrySegmentCountGet(entry_a[i]); j++) {
+          _XmStringNREntry a_seg = (_XmEntryMultiple(entry_a[i]) ? _XmEntrySegment(entry_a[i])[j] :
+                                                                   (_XmStringNREntry)entry_a[i]);
+          _XmStringNREntry b_seg = (_XmEntryMultiple(entry_b[i]) ? _XmEntrySegment(entry_b[i])[j] :
+                                                                   (_XmStringNREntry)entry_b[i]);
           unsigned int len;
           XmStringTag a_tag = _XmEntryTag((_XmStringEntry)a_seg);
           XmStringTag b_tag = _XmEntryTag((_XmStringEntry)b_seg);
@@ -1603,7 +1606,7 @@ Boolean XmStringCompare(XmString a, XmString b)
           }
         }
       }
-      else if (!_XmEntryMultiple(entry_a[i]) && !_XmEntryMultiple(entry_b[i])) {
+      else {
         unsigned int len;
         if (!((_XmEntryTag(entry_a[i]) == _XmEntryTag(entry_b[i])) ||
               (_XmEntryTag(entry_a[i]) == NULL) || (_XmEntryTag(entry_b[i]) == NULL) ||
@@ -1652,14 +1655,6 @@ Boolean XmStringCompare(XmString a, XmString b)
           _XmProcessUnlock();
           return (FALSE);
         }
-      }
-      else {
-        if (a_unopt)
-          XmStringFree(a_unopt);
-        if (b_unopt)
-          XmStringFree(b_unopt);
-        _XmProcessUnlock();
-        return (FALSE);
       }
     }
     if (a_unopt)
