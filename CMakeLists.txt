@@ -30,18 +30,6 @@ if(NOT _motif_multi_config AND NOT CMAKE_BUILD_TYPE)
     Debug Release RelWithDebInfo MinSizeRel)
 endif()
 
-# -----------------------------------------------------------------------------
-# Check for ccache and use it if available
-
-find_program(CCACHE_FOUND ccache)
-if(CCACHE_FOUND)
-    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
-    set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
-    message(STATUS "Using ccache for faster builds")
-else()
-    message(STATUS "ccache not found - install ccache for faster builds")
-endif()
-
 # Standard installation directories (lib or lib64, etc.) below
 # CMAKE_INSTALL_PREFIX, which keeps CMake's default of /usr/local; packagers
 # and system installs pass -DCMAKE_INSTALL_PREFIX=/usr.
@@ -90,8 +78,7 @@ set(MOTIF_LIBRARY_VERSION 4.0.5)
 # -----------------------------------------------------------------------------
 # Declare Options
 
-motif_option(WITH_SHARED_LIBS "Build shared libraries" ON)
-motif_option(WITH_STATIC_LIBS "Build static libraries" OFF)
+motif_option(WITH_SHARED_LIBS "Build shared libraries (static libraries if OFF)" ON)
 motif_option(WITH_DEMOS "Build examples" ON)
 motif_option(WITH_TESTS "Build tests" OFF)
 motif_option(WITH_UTF8 "Enable UTF-8 support" ON)
@@ -99,7 +86,6 @@ motif_option(WITH_MESSAGE_CATALOG "Enable X/Open message catalog support" OFF)
 motif_option(WITH_PRINTING "Enable printing support" OFF)
 motif_option(WITH_UIL_DEBUG "Enable UIL compiler debugging support" OFF)
 motif_option(WITH_DOCS "Enable documentation installation" ON)
-motif_option(WITH_WML_TOOLS "Enable WML (Widget Meta-Language) tools" ON)
 motif_option(WITH_JPEG "Enable JPEG support" ON)
 motif_option(WITH_PNG "Enable PNG support" ON)
 motif_option(WITH_XFT "Enable Xft support" ON)
@@ -131,8 +117,18 @@ motif_option(WITH_COMPILER_CODE_COVERAGE
 mark_as_advanced(WITH_COMPILER_ASAN WITH_UBSAN WITH_TSAN WITH_MSAN
   WITH_COMPILER_CODE_COVERAGE)
 
+# Compiler launcher; an explicit CMAKE_C_COMPILER_LAUNCHER takes precedence.
 option(WITH_COMPILER_CCACHE "Use ccache to improve rebuild times" OFF)
 mark_as_advanced(WITH_COMPILER_CCACHE)
+if(WITH_COMPILER_CCACHE AND NOT CMAKE_C_COMPILER_LAUNCHER)
+  find_program(CCACHE_PROGRAM ccache)
+  mark_as_advanced(CCACHE_PROGRAM)
+  if(CCACHE_PROGRAM)
+    set(CMAKE_C_COMPILER_LAUNCHER ${CCACHE_PROGRAM})
+  else()
+    message(WARNING "WITH_COMPILER_CCACHE: ccache not found")
+  endif()
+endif()
 
 # The following only works with the Ninja generator in CMake >= 3.0.
 if("${CMAKE_GENERATOR}" MATCHES "Ninja")

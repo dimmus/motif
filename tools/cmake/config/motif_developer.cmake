@@ -24,13 +24,11 @@ set(WITH_JPEG ON CACHE BOOL "Enable JPEG support")
 set(WITH_PNG ON CACHE BOOL "Enable PNG support")
 set(WITH_XFT ON CACHE BOOL "Enable Xft support")
 
-# Enable documentation and tools
+# Enable documentation
 set(WITH_DOCS ON CACHE BOOL "Enable documentation installation")
-set(WITH_WML_TOOLS ON CACHE BOOL "Enable WML tools")
 
-# Build both shared and static libraries for testing
+# Build shared libraries
 set(WITH_SHARED_LIBS ON CACHE BOOL "Build shared libraries")
-set(WITH_STATIC_LIBS ON CACHE BOOL "Build static libraries")
 
 # Enable developer tools
 set(WITH_COMPILER_CCACHE ON CACHE BOOL "Enable ccache")

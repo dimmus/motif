@@ -26,11 +26,9 @@ set(WITH_XFT OFF CACHE BOOL "Enable Xft support")
 
 # Disable documentation
 set(WITH_DOCS OFF CACHE BOOL "Enable documentation installation")
-set(WITH_WML_TOOLS OFF CACHE BOOL "Enable WML tools")
 
-# Build only shared libraries
+# Build shared libraries
 set(WITH_SHARED_LIBS ON CACHE BOOL "Build shared libraries")
-set(WITH_STATIC_LIBS OFF CACHE BOOL "Build static libraries")
 
 # Optimize for size
 set(CMAKE_C_FLAGS_RELEASE "-Os -DNDEBUG" CACHE STRING "Release C flags")
