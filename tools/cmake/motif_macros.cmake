@@ -1700,3 +1700,47 @@ function(motif_print_summary)
 #  endif()
 endfunction()
 
+
+# Generate the message catalog header <header> (symbolic set and message ids,
+# e.g. XmMsgCatI.h) from the symbolic source catalog <source> with mkcatdefs.
+# This also writes the numeric catalog to localized/C/msg/<name>.msg in the
+# build tree and, when gencat was found, compiles it to <name>.cat next to it.
+# Adds the target <target> that builds them all.
+#
+# The .cat is installed as ${CMAKE_INSTALL_LOCALEDIR}/C/LC_MESSAGES/<name>,
+# without the suffix: catopen("<name>", NL_CAT_LOCALE) expands %N in NLSPATH
+# to the bare name, and glibc's built-in search path includes
+# /usr/share/locale/%L/LC_MESSAGES/%N. musl has no built-in path, so set
+# NLSPATH=<localedir>/%L/LC_MESSAGES/%N there (and for other prefixes).
+function(motif_add_message_catalog target name source header)
+  set(_catalog_source ${CMAKE_BINARY_DIR}/localized/C/msg/${name}.msg)
+  set(_outputs ${header} ${_catalog_source})
+  set(_gencat_args)
+  if(GENCAT_EXECUTABLE)
+    set(_catalog ${CMAKE_BINARY_DIR}/localized/C/msg/${name}.cat)
+    list(APPEND _outputs ${_catalog})
+    set(_gencat_args -DGENCAT=${GENCAT_EXECUTABLE} -DCATALOG=${_catalog})
+  endif()
+
+  add_custom_command(
+    OUTPUT ${_outputs}
+    COMMAND ${CMAKE_COMMAND}
+      -DMKCATDEFS=$<TARGET_FILE:mkcatdefs>
+      -DSOURCE=${source}
+      -DHEADER=${header}
+      -DCATALOG_SOURCE=${_catalog_source}
+      ${_gencat_args}
+      -P ${CMAKE_SOURCE_DIR}/tools/cmake/scripts/generate_msgcat.cmake
+    DEPENDS mkcatdefs ${source} ${CMAKE_SOURCE_DIR}/tools/cmake/scripts/generate_msgcat.cmake
+    COMMENT "Generating ${name} message catalog"
+    VERBATIM
+  )
+  add_custom_target(${target} ALL DEPENDS ${_outputs})
+
+  if(GENCAT_EXECUTABLE)
+    install(FILES ${_catalog}
+      DESTINATION ${CMAKE_INSTALL_LOCALEDIR}/C/LC_MESSAGES
+      RENAME ${name}
+    )
+  endif()
+endfunction()

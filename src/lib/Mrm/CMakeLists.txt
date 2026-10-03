@@ -52,15 +52,9 @@ set(MRM_INTERNAL_HEADERS
 
 # Generate message catalog header file
 if(WITH_MESSAGE_CATALOG)
-    add_custom_command(
-        OUTPUT ${CMAKE_BINARY_DIR}/include/Mrm/MrmMsgCatI.h
-        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/include/Mrm
-        COMMAND ${CMAKE_BINARY_DIR}/src/bin/utils/mkcatdefs
-            ${CMAKE_BINARY_DIR}/include/Mrm/MrmMsgCatI.h
-            ${CMAKE_SOURCE_DIR}/localized/C/msg/Mrm.msg
-            > /dev/null 2>&1
-        DEPENDS ${CMAKE_BINARY_DIR}/src/bin/utils/mkcatdefs ${CMAKE_SOURCE_DIR}/localized/C/msg/Mrm.msg
-        COMMENT "Generating Mrm message catalog header"
+    motif_add_message_catalog(mrm_msgcat_header Mrm
+        ${CMAKE_CURRENT_SOURCE_DIR}/Mrm.msg
+        ${CMAKE_BINARY_DIR}/include/Mrm/MrmMsgCatI.h
     )
 else()
     add_custom_command(
@@ -71,10 +65,8 @@ else()
             ${CMAKE_BINARY_DIR}/include/Mrm/MrmMsgCatI.h
         COMMENT "Copying Mrm message catalog stub"
     )
+    add_custom_target(mrm_msgcat_header ALL DEPENDS ${CMAKE_BINARY_DIR}/include/Mrm/MrmMsgCatI.h)
 endif()
-
-# Create a custom target for the message catalog header
-add_custom_target(mrm_msgcat_header ALL DEPENDS ${CMAKE_BINARY_DIR}/include/Mrm/MrmMsgCatI.h)
 
 # Create the library
 add_library(Mrm ${MRM_SRCS})

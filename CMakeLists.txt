@@ -1405,6 +1405,12 @@ endif()
 # Check for message catalog support
 if(WITH_MESSAGE_CATALOG)
     add_compile_definitions(XM_MSGCAT=1)
+    # Compiles the generated numeric catalogs to .cat files (optional: the
+    # libraries only need the generated *MsgCatI.h headers to build).
+    find_program(GENCAT_EXECUTABLE gencat)
+    if(NOT GENCAT_EXECUTABLE)
+        message(STATUS "gencat not found: message catalogs (.cat) will not be compiled")
+    endif()
 else()
     # Define XM_MSGCAT as 0 when message catalog is disabled to avoid warnings
     add_compile_definitions(XM_MSGCAT=0)
@@ -1471,8 +1477,12 @@ file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/include/Xm)
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/include/Mrm)
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/include/Dt)
 
-# Copy Xm headers (excluding symlinks)
+# Copy Xm headers (excluding symlinks). XmMsgCatI.h is left out: the
+# xm_msgcat_header target writes it (generated, or the stub without message
+# catalogs), and copying the stub here on every reconfigure would overwrite
+# the generated header.
 file(GLOB XM_HEADER_FILES "${CMAKE_SOURCE_DIR}/src/lib/Xm/*.h")
+list(REMOVE_ITEM XM_HEADER_FILES "${CMAKE_SOURCE_DIR}/src/lib/Xm/XmMsgCatI.h")
 foreach(header ${XM_HEADER_FILES})
     get_filename_component(filename ${header} NAME)
     # Skip symlinks to avoid circular dependencies
@@ -1497,8 +1507,9 @@ add_custom_target(copy_version_header ALL
     DEPENDS ${CMAKE_BINARY_DIR}/include/Xm/version.h
 )
 
-# Copy Mrm headers
+# Copy Mrm headers (MrmMsgCatI.h is written by mrm_msgcat_header, as for Xm)
 file(GLOB MRM_HEADER_FILES "${CMAKE_SOURCE_DIR}/src/lib/Mrm/*.h")
+list(REMOVE_ITEM MRM_HEADER_FILES "${CMAKE_SOURCE_DIR}/src/lib/Mrm/MrmMsgCatI.h")
 foreach(header ${MRM_HEADER_FILES})
     get_filename_component(filename ${header} NAME)
     configure_file(${header} ${CMAKE_BINARY_DIR}/include/Mrm/${filename} COPYONLY)

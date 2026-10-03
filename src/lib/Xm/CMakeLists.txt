@@ -264,7 +264,6 @@ set(XM_INCLUDE_FILES
     ${CMAKE_BINARY_DIR}/include/Xm/XmStrDefs22.h
     ${CMAKE_BINARY_DIR}/include/Xm/XmStrDefs23.h
     ${CMAKE_BINARY_DIR}/include/Xm/XmStrDefsI.h
-    ${CMAKE_BINARY_DIR}/include/Xm/XmMsgCatI.h
 )
 
 # Generate xmstring.list from xmstring.list.in (equivalent to AC_CONFIG_FILES)
@@ -281,21 +280,16 @@ add_custom_command(
         ${CMAKE_SOURCE_DIR}
         ${CMAKE_BINARY_DIR}
         ${CMAKE_BINARY_DIR}/src/bin/utils/makestrs
-    DEPENDS ${CMAKE_BINARY_DIR}/src/bin/utils/makestrs ${CMAKE_BINARY_DIR}/src/bin/utils/mkcatdefs ${CMAKE_BINARY_DIR}/src/lib/Xm/xmstring.list
+    DEPENDS ${CMAKE_BINARY_DIR}/src/bin/utils/makestrs ${CMAKE_BINARY_DIR}/src/lib/Xm/xmstring.list
     COMMENT "Generating Xm string definition files"
 )
 
-# Generate message catalog header file
+# Generate the message catalog header (XmMsgCatI.h) from the symbolic source
+# catalog, or copy the stub when message catalogs are disabled
 if(WITH_MESSAGE_CATALOG)
-    add_custom_command(
-        OUTPUT ${CMAKE_BINARY_DIR}/include/Xm/XmMsgCatI.h
-        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/include/Xm
-        COMMAND ${CMAKE_BINARY_DIR}/src/bin/utils/mkcatdefs
-            ${CMAKE_BINARY_DIR}/include/Xm/XmMsgCatI.h
-            ${CMAKE_SOURCE_DIR}/localized/C/msg/Xm.msg
-            > /dev/null 2>&1
-        DEPENDS ${CMAKE_BINARY_DIR}/src/bin/utils/mkcatdefs ${CMAKE_SOURCE_DIR}/localized/C/msg/Xm.msg
-        COMMENT "Generating Xm message catalog header"
+    motif_add_message_catalog(xm_msgcat_header Xm
+        ${CMAKE_CURRENT_SOURCE_DIR}/Xm.msg
+        ${CMAKE_BINARY_DIR}/include/Xm/XmMsgCatI.h
     )
 else()
     add_custom_command(
@@ -306,10 +300,8 @@ else()
             ${CMAKE_BINARY_DIR}/include/Xm/XmMsgCatI.h
         COMMENT "Copying Xm message catalog stub"
     )
+    add_custom_target(xm_msgcat_header ALL DEPENDS ${CMAKE_BINARY_DIR}/include/Xm/XmMsgCatI.h)
 endif()
-
-# Create a custom target for the message catalog header
-add_custom_target(xm_msgcat_header ALL DEPENDS ${CMAKE_BINARY_DIR}/include/Xm/XmMsgCatI.h)
 
 # Create a custom target to ensure string files are generated
 add_custom_target(xm_strings ALL DEPENDS ${XM_STRING_FILES} ${XM_INCLUDE_FILES})

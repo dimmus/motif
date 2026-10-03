@@ -445,6 +445,6 @@ externalref nl_catd Xm_catd;
 #define _XmMMsgDataF_0005 _XmCatgets(Xm_catd, MS_DataF, MSG_DataF_0005, _XmMsgDataF_0005)
 #define _XmMMsgDataF_0006 _XmCatgets(Xm_catd, MS_DataF, MSG_DataF_0006, _XmMsgDataF_0006)
 #define _XmMMsgDataFWcs_0000 \
-  _XmCatgets(Xm_catd, MS_DataFWcs, MSG_DatFWcs_0000, _XmMsgDataFWcs_0000)
+  _XmCatgets(Xm_catd, MS_DataFWcs, MSG_DataFWcs_0000, _XmMsgDataFWcs_0000)
 #define _XmMMsgDataFWcs_0001 \
   _XmCatgets(Xm_catd, MS_DataFWcs, MSG_DataFWcs_0001, _XmMsgDataFWcs_0001)

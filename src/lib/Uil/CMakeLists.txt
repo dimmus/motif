@@ -52,15 +52,9 @@ list(APPEND UIL_LIB_SRCS ${UIL_LEXPARS_C} ${UIL_PARSER_C} ${UIL_PARSER_H})
 
 # Generate message catalog header file
 if(WITH_MESSAGE_CATALOG)
-    add_custom_command(
-        OUTPUT ${CMAKE_BINARY_DIR}/include/uil/UilMsgCatI.h
-        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/include/uil
-        COMMAND ${CMAKE_BINARY_DIR}/src/bin/utils/mkcatdefs
-            ${CMAKE_BINARY_DIR}/include/uil/UilMsgCatI.h
-            ${CMAKE_SOURCE_DIR}/localized/C/msg/Uil.msg
-            > /dev/null 2>&1
-        DEPENDS ${CMAKE_BINARY_DIR}/src/bin/utils/mkcatdefs ${CMAKE_SOURCE_DIR}/localized/C/msg/Uil.msg
-        COMMENT "Generating Uil message catalog header"
+    motif_add_message_catalog(uil_msgcat_header Uil
+        ${CMAKE_CURRENT_SOURCE_DIR}/Uil.msg
+        ${CMAKE_BINARY_DIR}/include/uil/UilMsgCatI.h
     )
 else()
     add_custom_command(
@@ -72,10 +66,8 @@ else()
         COMMAND ${CMAKE_COMMAND} -E echo "#endif /* _UilMsgCatI_h */" >> ${CMAKE_BINARY_DIR}/include/uil/UilMsgCatI.h
         COMMENT "Creating Uil message catalog stub"
     )
+    add_custom_target(uil_msgcat_header ALL DEPENDS ${CMAKE_BINARY_DIR}/include/uil/UilMsgCatI.h)
 endif()
-
-# Create a custom target for the message catalog header
-add_custom_target(uil_msgcat_header ALL DEPENDS ${CMAKE_BINARY_DIR}/include/uil/UilMsgCatI.h)
 
 # Generate Uil.c and Uil.h from Uil.y using detected parser
 if(USING_YACC OR USING_BYACC)

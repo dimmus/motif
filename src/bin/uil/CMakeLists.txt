@@ -25,29 +25,7 @@ set(UIL_PARSER_H ${CMAKE_BINARY_DIR}/src/lib/Uil/Uil.h)
 # Add the copied file to sources
 # set(UIL_LEXPARS_C ${CMAKE_CURRENT_BINARY_DIR}/UilLexPars.c)
 
-# Generate message catalog header file
-if(WITH_MESSAGE_CATALOG)
-    add_custom_command(
-        OUTPUT ${CMAKE_BINARY_DIR}/include/uil/UilMsgCatI.h
-        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/include/uil
-        COMMAND ${CMAKE_BINARY_DIR}/src/bin/utils/mkcatdefs
-            ${CMAKE_BINARY_DIR}/include/uil/UilMsgCatI.h
-            ${CMAKE_SOURCE_DIR}/localized/C/msg/Uil.msg
-            > /dev/null 2>&1
-        DEPENDS ${CMAKE_BINARY_DIR}/src/bin/utils/mkcatdefs ${CMAKE_SOURCE_DIR}/localized/C/msg/Uil.msg
-        COMMENT "Generating Uil message catalog header"
-    )
-else()
-    add_custom_command(
-        OUTPUT ${CMAKE_BINARY_DIR}/include/uil/UilMsgCatI.h
-        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/include/uil
-        COMMAND ${CMAKE_COMMAND} -E echo "/* UilMsgCatI.h - Generated stub */" > ${CMAKE_BINARY_DIR}/include/uil/UilMsgCatI.h
-        COMMAND ${CMAKE_COMMAND} -E echo "#ifndef _UilMsgCatI_h" >> ${CMAKE_BINARY_DIR}/include/uil/UilMsgCatI.h
-        COMMAND ${CMAKE_COMMAND} -E echo "#define _UilMsgCatI_h" >> ${CMAKE_BINARY_DIR}/include/uil/UilMsgCatI.h
-        COMMAND ${CMAKE_COMMAND} -E echo "#endif /* _UilMsgCatI_h */" >> ${CMAKE_BINARY_DIR}/include/uil/UilMsgCatI.h
-        COMMENT "Creating Uil message catalog stub"
-    )
-endif()
+# UilMsgCatI.h is generated in src/lib/Uil (uil_msgcat_header target)
 
 # Create uil executable
 add_executable(uil UilMain.c)
