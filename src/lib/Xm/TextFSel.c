@@ -1114,8 +1114,8 @@ static void DoStuff(Widget w, XtPointer closure, XmSelectionCallbackStruct *ds)
         if (_prim_select->num_chars > 0 && !tf->text.selection_move) {
           _XmTextFieldSetCursorPosition(tf, NULL, cursorPos, True, True);
           (void)_XmTextFieldSetDestination(w, cursorPos, _prim_select->time);
-          _XmProcessUnlock();
         }
+        _XmProcessUnlock();
       }
       else {
         _XmProcessLock();
@@ -1126,11 +1126,12 @@ static void DoStuff(Widget w, XtPointer closure, XmSelectionCallbackStruct *ds)
       right = tf->text.prim_pos_right;
       if (tf->text.has_primary) {
         if (ds->selection == atoms[XmACLIPBOARD]) {
-          if (left != right && (!dest_disjoint || !tf->text.add_mode))
+          if (left != right && (!dest_disjoint || !tf->text.add_mode)) {
             _XmProcessLock();
-          _XmTextFieldStartSelection(
-              tf, TextF_CursorPosition(tf), TextF_CursorPosition(tf), _prim_select->time);
-          _XmProcessUnlock();
+            _XmTextFieldStartSelection(
+                tf, TextF_CursorPosition(tf), TextF_CursorPosition(tf), _prim_select->time);
+            _XmProcessUnlock();
+          }
         }
         else {
           _XmProcessLock();
