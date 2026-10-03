@@ -84,7 +84,7 @@ externalref int                                Uil_characters_read;
 /*
  * Defined in UilLstLst
  */
-externalref char				Uil_lst_c_title2[];
+externalref char				Uil_lst_c_title2[132];
 
 /*
  * Defined in UilP2Out

@@ -400,8 +400,15 @@ typedef struct
 
 /*
  * Binary Data Base Work
+ *
+ * Version 3 stores _DB_BIT_VECTOR_SIZE bytes for each bit vector of the
+ * Allowed_*_Table tables, enough for object classes 0..uil_max_object.
+ * Earlier versions stored (uil_max_object + 7) / 8 bytes, which leaves
+ * out sym_k_user_defined_object (== uil_max_object) when uil_max_object
+ * is a multiple of 8.
  */
-#define DB_Compiled_Version 2
+#define DB_Compiled_Version 3
+#define _DB_BIT_VECTOR_SIZE(max_object) ((max_object) / 8 + 1)
 
 typedef struct _db_globals_struct
 {

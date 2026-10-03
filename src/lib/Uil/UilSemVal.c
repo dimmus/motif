@@ -4057,7 +4057,13 @@ int validate_arg(sym_value_entry_type *operand_entry, int operator)
     if (operand_type == sym_k_error_value )
         return error_arg_type;
 
-    if ((( 1 << operand_type ) & legal_operand_type[ operator ]) == 0)
+    /*
+    ** The masks have a bit for each type below 32.  The other types are
+    ** legal only for the operators that take any type.
+    */
+    if (operand_type >= 32
+	? legal_operand_type[ operator ] != 0xFFFFFFFF
+	: (( 1u << operand_type ) & legal_operand_type[ operator ]) == 0)
     {
 	diag_issue_diagnostic
 	    ( d_operand_type,

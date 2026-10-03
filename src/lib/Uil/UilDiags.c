@@ -189,8 +189,9 @@ void	diag_issue_diagnostic
     int		severity;		/* severity of message */
     int		message_number;		/* message number */
     char	msg_buffer[132];	/* buffer to construct message */
-    char	ptr_buffer[buf_size];	/* buffer to construct pointer */
-    char	loc_buffer[132];	/* buffer to construct location */
+    char	ptr_buffer[buf_size+1];	/* buffer to construct pointer */
+    char	loc_buffer[132+256];	/* buffer to construct location */
+					/* (file names are up to 255) */
     char	src_buffer[buf_size];	/* buffer to hold source line */
 
     /*
@@ -298,13 +299,13 @@ void	diag_issue_diagnostic
 	    */
 
 #if XM_MSGCAT
-	    sprintf( loc_buffer,
+	    snprintf( loc_buffer, sizeof(loc_buffer),
 		     catgets(uil_catd, UIL_SET_MISC,
 			     UIL_MISC_0, "\t\t line: %d  file: %s"),
 		     az_src_rec->w_line_number,
 		     src_get_file_name( az_src_rec ) );
 #else
-	    sprintf( loc_buffer,
+	    snprintf( loc_buffer, sizeof(loc_buffer),
 		     "\t\t line: %d  file: %s",
 		     az_src_rec->w_line_number,
 		     src_get_file_name( az_src_rec ) );
@@ -328,7 +329,13 @@ void	diag_issue_diagnostic
 	    **	create the column pointer if a source position was given
 	    */
 
-	    if (l_start_column != diag_k_no_column)
+	    /*
+	    **	the pointer takes l_start_column+1 blanks or tabs (the
+	    **	source line starts with a tab), the '*' and a null
+	    */
+
+	    if (l_start_column != diag_k_no_column &&
+		l_start_column + 2 < (int)sizeof(ptr_buffer))
 	    {
 		int	i;
 
@@ -352,7 +359,7 @@ void	diag_issue_diagnostic
 
 	    if (l_start_column != diag_k_no_column)
 #if XM_MSGCAT
-	      sprintf(loc_buffer,
+	      snprintf(loc_buffer, sizeof(loc_buffer),
 		      catgets(uil_catd, UIL_SET_MISC,
 			      UIL_MISC_1,
 			      "\t\t line: %d  position: %d  file: %s"),
@@ -360,7 +367,7 @@ void	diag_issue_diagnostic
 		      l_start_column + 1,
 		      src_get_file_name( az_src_rec ) );
 #else
-	      sprintf(loc_buffer,
+	      snprintf(loc_buffer, sizeof(loc_buffer),
 		      "\t\t line: %d  position: %d  file: %s",
 		      az_src_rec->w_line_number,
 		      l_start_column + 1,
@@ -368,13 +375,14 @@ void	diag_issue_diagnostic
 #endif
 	    else
 #if XM_MSGCAT
-		sprintf( loc_buffer, catgets(uil_catd, UIL_SET_MISC,
-					     UIL_MISC_0,
-					     "\t\t line: %d  file: %s"),
+		snprintf( loc_buffer, sizeof(loc_buffer),
+			  catgets(uil_catd, UIL_SET_MISC,
+				  UIL_MISC_0,
+				  "\t\t line: %d  file: %s"),
 			 az_src_rec->w_line_number,
 			 src_get_file_name( az_src_rec ) );
 #else
-		sprintf( loc_buffer,
+		snprintf( loc_buffer, sizeof(loc_buffer),
 			 "\t\t line: %d  file: %s",
 			 az_src_rec->w_line_number,
 			 src_get_file_name( az_src_rec ) );

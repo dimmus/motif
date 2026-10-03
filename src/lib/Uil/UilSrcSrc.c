@@ -182,7 +182,7 @@ src_initialize_source(void)
 			       diag_k_no_source, diag_k_no_column,
 			       "<null file name>");
 
-    src_open_file ( Uil_cmd_z_command.ac_source_file, NULL );
+    src_open_file ( Uil_cmd_z_command.ac_source_file, NULL, 0 );
 
     /* fixes initial filename is NULL bug in callable UIL */
     Uil_current_file = Uil_cmd_z_command.ac_source_file;
@@ -308,6 +308,9 @@ Uil_src_cleanup_source(void)
 **  FORMAL PARAMETERS:
 **
 **      c_file_name	    file to open
+**	full_file_name	    if not NULL, receives the name of the opened
+**			    file, truncated to full_file_name_size bytes
+**	full_file_name_size size of full_file_name
 **
 **  IMPLICIT INPUTS:
 **
@@ -338,7 +341,8 @@ Uil_src_cleanup_source(void)
 
 void
 src_open_file (XmConst char *c_file_name,
-               char         *full_file_name)
+               char         *full_file_name,
+               size_t        full_file_name_size)
 {
     uil_fcb_type		*az_fcb;	    /* file control block ptr */
     status			l_open_status;	    /* status variable */
@@ -407,8 +411,11 @@ src_open_file (XmConst char *c_file_name,
 
     Uil_file_size = stbuf.st_size;
 
-    if (full_file_name != NULL)
-	strcpy (full_file_name, az_fcb->expanded_name);
+    if (full_file_name != NULL && full_file_name_size > 0) {
+	strncpy (full_file_name, az_fcb->expanded_name,
+		 full_file_name_size - 1);
+	full_file_name[full_file_name_size - 1] = '\0';
+    }
 
     az_fcb->v_position_before_get = FALSE;
 
@@ -611,13 +618,17 @@ open_source_file( XmConst char           *c_file_name,
 
     boolean			main_file;
     int				i;  /* loop index through include files */
-    char			buffer[256];
+    char			buffer[sizeof(az_fcb->expanded_name)];
+    size_t			name_len;
 
+    /*
+    ** The name of the file that is opened is kept in expanded_name, so
+    ** a name that does not fit there cannot be used.  This includes the
+    ** name of an include file after a directory has been prepended.
+    */
 
-    /* place the file name in the expanded_name buffer */
-
-    strncpy(buffer, c_file_name, sizeof(buffer));
-    buffer[sizeof(buffer)-1] = '\0';
+    name_len = strlen (c_file_name);
+    az_fcb->az_file_ptr = NULL;
 
 /*    Determine if this is the main file or an include file.  */
 
@@ -628,9 +639,13 @@ open_source_file( XmConst char           *c_file_name,
 	char XmConst		* ptr;
 	unsigned short		len;
 
+	if (name_len >= sizeof (buffer))
+	    return src_k_open_error;
+	strcpy (buffer, c_file_name);
+
 /*    Save the directory info for the main file.    */
 
-	for (len = strlen (c_file_name),
+	for (len = name_len,
 	     ptr = & c_file_name [len - 1];
 	     len > 0; len--, ptr--) {
 	    if ((* ptr) == '/') {
@@ -659,16 +674,19 @@ open_source_file( XmConst char           *c_file_name,
 	    }
 
 	if (!specific_directory) {
-	    memmove (buffer, main_fcb -> expanded_name, main_dir_len);
-	    memmove (& buffer [main_dir_len],
-		   c_file_name, strlen (c_file_name) + 1);  /* + NULL */
-	} else {
-	    strcpy (buffer, c_file_name);
-	}
+	    if (main_dir_len + name_len < sizeof (buffer)) {
+		memmove (buffer, main_fcb -> expanded_name, main_dir_len);
+		memmove (& buffer [main_dir_len],
+		       c_file_name, name_len + 1);  /* + NULL */
 
 /*    Open the include file.    */
 
-	az_fcb->az_file_ptr = fopen (buffer, "r");
+		az_fcb->az_file_ptr = fopen (buffer, "r");
+	    }
+	} else if (name_len < sizeof (buffer)) {
+	    strcpy (buffer, c_file_name);
+	    az_fcb->az_file_ptr = fopen (buffer, "r");
+	}
 
 /*    If a specific directory was specified, or if the file was found,
       then we are done.	*/
@@ -680,23 +698,31 @@ open_source_file( XmConst char           *c_file_name,
 /*    Look in the command line specified include directories, if any.    */
 
 	for (i = 0; i < Uil_cmd_z_command.include_dir_count; i++) {
-	    int		inc_dir_len;
+	    size_t	inc_dir_len;
+	    boolean	add_slash;
 
 	    inc_dir_len = strlen (Uil_cmd_z_command.ac_include_dir[i]);
 	    if (inc_dir_len == 0) {
 		search_user_include = False;
 		}
-	    memmove (buffer, Uil_cmd_z_command.ac_include_dir[i], inc_dir_len);
 
 	/*  Add '/' if not specified at end of directory  */
 
-	    if (Uil_cmd_z_command.ac_include_dir[i][inc_dir_len - 1] != '/') {
+	    add_slash = (inc_dir_len == 0 ||
+		Uil_cmd_z_command.ac_include_dir[i][inc_dir_len - 1] != '/');
+
+	    if (inc_dir_len + add_slash + name_len >= sizeof (buffer))
+		continue;
+
+	    memmove (buffer, Uil_cmd_z_command.ac_include_dir[i], inc_dir_len);
+
+	    if (add_slash) {
 		buffer [inc_dir_len] = '/';
 		inc_dir_len++;
 	    };
 
 	    memmove (& buffer [inc_dir_len],
-		   c_file_name, strlen (c_file_name) + 1);  /* + NULL */
+		   c_file_name, name_len + 1);  /* + NULL */
 
 	/*    Open the include file.  If found, we are done.    */
 
@@ -708,10 +734,11 @@ open_source_file( XmConst char           *c_file_name,
 	}
 
 /*    Look in the default include directory.    */
-	if (search_user_include) {
+	if (search_user_include &&
+	    sizeof c_include_dir - 1 + name_len < sizeof (buffer)) {
 	  memmove(buffer, c_include_dir, sizeof c_include_dir - 1); /* no NULL */
 	  memmove(&buffer[sizeof c_include_dir - 1],
-		c_file_name, strlen (c_file_name) + 1);  /* + NULL */
+		c_file_name, name_len + 1);  /* + NULL */
 
 /*    Open the include file.    */
 	  az_fcb->az_file_ptr = fopen (buffer, "r");
@@ -1249,7 +1276,8 @@ src_append_machine_code ( src_source_record_type *az_src_rec,
 
     az_code_item -> w_offset = l_offset;
     az_code_item -> w_code_len = l_code_len;
-    memmove( (az_code_item->data.c_data), c_code, l_code_len );
+    if (l_code_len > 0)
+	memmove( (az_code_item->data.c_data), c_code, l_code_len );
     memmove( &(az_code_item->data.c_data [l_code_len]), c_text, l_text_len );
 
     /*
