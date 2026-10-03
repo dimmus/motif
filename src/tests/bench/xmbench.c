@@ -5,7 +5,10 @@
  *
  * xmbench: micro- and macro-benchmarks for libXm.
  *
- *   xmbench [-r REPEAT] [-s SCALE] [-j FILE] [-l] [CASE|GROUP ...]
+ *   xmbench [-r REPEAT] [-s SCALE] [-j FILE] [-t] [-l] [CASE|GROUP ...]
+ *
+ * -t calls XtToolkitThreadInitialize first, so that Xt's (and Motif's)
+ * locks are live, as in a multithreaded program.
  *
  * Each case reports, per operation:
  *   - ns       median wall time over REPEAT runs (default 5)
@@ -38,6 +41,7 @@
 
 #include <X11/Intrinsic.h>
 #include <X11/StringDefs.h>
+#include <X11/Shell.h>
 #include <Xm/Xm.h>
 #include <Xm/BulletinB.h>
 #include <Xm/Container.h>
@@ -53,6 +57,7 @@
 #include <Xm/ScrollBarP.h>
 #include <Xm/Separator.h>
 #include <Xm/Text.h>
+#include <Xm/ToggleBG.h>
 #include <Xm/TraitP.h>
 #include <Xm/AccTextT.h>
 #include <Xm/ActivatableT.h>
@@ -285,14 +290,47 @@ static long trait_run(long n)
 
 static Widget gadget;
 
+static void gadget_new(WidgetClass wc)
+{
+	work = XtVaCreateManagedWidget("rc", xmRowColumnWidgetClass, root,
+				       NULL);
+	gadget = XtVaCreateManagedWidget("gadget", wc, work, NULL);
+	drain();
+}
+
 static void gadget_init(long n)
 {
 	(void)n;
-	work = XtVaCreateManagedWidget("rc", xmRowColumnWidgetClass, root,
-				       NULL);
-	gadget = XtVaCreateManagedWidget("gadget", xmLabelGadgetClass, work,
-					 NULL);
-	drain();
+	gadget_new(xmLabelGadgetClass);
+}
+
+static void toggle_init(long n)
+{
+	(void)n;
+	gadget_new(xmToggleButtonGadgetClass);
+}
+
+/* 1000 shells, each with its extension data, as in a big application. */
+#define N_SHELLS 1000
+static Widget shells[N_SHELLS];
+
+static void shells_init(long n)
+{
+	int i;
+
+	gadget_init(n);
+	for (i = 0; i < N_SHELLS; i++)
+		shells[i] = XtCreatePopupShell("shell", topLevelShellWidgetClass,
+					       top, NULL, 0);
+}
+
+static void shells_fini(void)
+{
+	int i;
+
+	for (i = 0; i < N_SHELLS; i++)
+		XtDestroyWidget(shells[i]);
+	destroy_work();
 }
 
 static long gadget_get_run(long n)
@@ -1047,6 +1085,12 @@ static const struct bench_case cases[] = {
 	  1, 100000, gadget_init, NULL, gadget_get_run, NULL, destroy_work },
 	{ "gadget-set", "micro", "XtSetValues of a cached LabelGadget resource",
 	  1, 10000, gadget_init, NULL, gadget_set_run, NULL, destroy_work },
+	{ "gadget-get-shells", "micro", "XtGetValues on a LabelGadget, 1000 shells",
+	  1, 100000, shells_init, NULL, gadget_get_run, NULL, shells_fini },
+	{ "toggle-get", "micro", "XtGetValues on a ToggleButtonGadget",
+	  1, 100000, toggle_init, NULL, gadget_get_run, NULL, destroy_work },
+	{ "toggle-set", "micro", "XtSetValues of a cached ToggleButtonGadget resource",
+	  1, 10000, toggle_init, NULL, gadget_set_run, NULL, destroy_work },
 	{ "gadget-cache", "micro", "create LabelGadgets, 200 distinct cache parts",
 	  1, 10000, NULL, cache_setup, cache_run, destroy_work, NULL },
 	{ "xmstring-create", "micro", "XmStringCreateLocalized + XmStringFree",
@@ -1117,7 +1161,7 @@ static const struct bench_case cases[] = {
 
 static void usage(FILE *f)
 {
-	fprintf(f, "usage: xmbench [-r REPEAT] [-s SCALE] [-j FILE] [-l] "
+	fprintf(f, "usage: xmbench [-r REPEAT] [-s SCALE] [-j FILE] [-t] [-l] "
 		   "[CASE|micro|macro|all ...]\n");
 }
 
@@ -1153,13 +1197,14 @@ static void open_display(int *argc, char **argv)
 int main(int argc, char **argv)
 {
 	int repeat = 5, opt, first, ran = 0, skipped = 0, want_x = 0;
+	int threads = 0;
 	double scale = 1.0;
 	const char *json = NULL;
 	FILE *jf = NULL;
 	size_t i;
 
 	preload_self(argv);
-	while ((opt = getopt(argc, argv, "r:s:j:lh")) != -1) {
+	while ((opt = getopt(argc, argv, "r:s:j:tlh")) != -1) {
 		switch (opt) {
 		case 'r':
 			repeat = atoi(optarg);
@@ -1177,6 +1222,9 @@ int main(int argc, char **argv)
 			break;
 		case 'j':
 			json = optarg;
+			break;
+		case 't':
+			threads = 1;
 			break;
 		case 'l':
 			for (i = 0; i < N_CASES; i++)
@@ -1216,6 +1264,10 @@ int main(int argc, char **argv)
 	for (i = 0; i < N_CASES; i++)
 		if (cases[i].needs_x && selected(&cases[i], argc, argv, first))
 			want_x = 1;
+	if (threads && !XtToolkitThreadInitialize()) {
+		fprintf(stderr, "xmbench: Xt has no thread support\n");
+		return 1;
+	}
 	XtToolkitInitialize();
 	if (want_x && getenv("DISPLAY") && *getenv("DISPLAY")) {
 		int xargc = 1;
@@ -1232,7 +1284,9 @@ int main(int argc, char **argv)
 		}
 		fprintf(jf, "{\n  \"bench\": \"xmbench\",\n  \"version\": 1,\n"
 			"  \"repeat\": %d,\n  \"scale\": %g,\n"
+			"  \"threads\": %s,\n"
 			"  \"counters\": %s,\n  \"cases\": [", repeat, scale,
+			threads ? "true" : "false",
 			c_mallocs ? "true" : "false");
 	}
 	printf("%-22s %9s %12s %9s %9s %8s %8s\n", "case", "n", "ns/op",
