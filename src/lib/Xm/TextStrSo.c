@@ -76,6 +76,30 @@ static void SetSelection(XmTextSource source,
 #define TEXT_INCREMENT 1024
 #define TEXT_INITIAL_INCREM 64
 
+/*
+ * Return a buffer length, in characters, of at least needed + 1 (one
+ * slot is reserved), growing from len: small buffers double, larger ones
+ * grow by half, so that a run of inserts costs amortised O(1) per
+ * character.  Return 0 if no buffer of char_size characters that large
+ * can be allocated.
+ */
+static int BufferLength(int len, long needed, int char_size)
+{
+  long limit = INT_MAX / char_size;
+  long l = len < TEXT_INITIAL_INCREM ? TEXT_INITIAL_INCREM : len;
+  if (needed < 0 || needed >= limit)
+    return 0;
+  while (l <= needed) {
+    if (l < TEXT_INCREMENT)
+      l *= 2;
+    else if (l > limit - l / 2)
+      l = limit;
+    else
+      l += l / 2;
+  }
+  return (int)l;
+}
+
 /* Convert a stream of bytes into a char*, BITS16*, or wchar_t* array.
  * Return number of characters created.
  *
@@ -808,7 +832,7 @@ static XmTextStatus Replace(XmTextWidget initiator,
   register long delta;
   register int block_num_chars; /* number of characters in the block */
   int gap_size;
-  int old_maxlength;
+  int old_maxlength, new_maxlength;
   int char_size = (initiator->text.char_size < 3 ? (int)initiator->text.char_size :
                                                    sizeof(wchar_t));
   if (*start == *end && block->length == 0)
@@ -819,6 +843,12 @@ static XmTextStatus Replace(XmTextWidget initiator,
   if (!data->editable ||
       (delta > 0 && data->length + delta > data->maxallowed && (!UnderVerifyPreedit(initiator))))
     return EditError;
+  new_maxlength = data->maxlength;
+  if (data->length + delta >= data->maxlength) {
+    new_maxlength = BufferLength(data->maxlength, data->length + delta, char_size);
+    if (!new_maxlength)
+      return EditError;
+  }
   /**********************************************************************/
   initiator->text.output->DrawInsertionPoint(initiator, initiator->text.cursor_position, off);
   /* Move the gap to the editing position (*start). */
@@ -829,14 +859,9 @@ static XmTextStatus Replace(XmTextWidget initiator,
       _XmTextSetHighlight((Widget)data->widgets[i], data->left, data->right, XmHIGHLIGHT_NORMAL);
   }
   old_maxlength = data->maxlength;
-  if (data->length + delta >= data->maxlength) {
+  if (new_maxlength != old_maxlength) {
     int gap_start_offset, gap_end_offset;
-    while (data->length + delta >= data->maxlength) {
-      if (data->maxlength < TEXT_INCREMENT)
-        data->maxlength *= 2;
-      else
-        data->maxlength += TEXT_INCREMENT;
-    }
+    data->maxlength = new_maxlength;
     gap_start_offset = data->gap_start - data->ptr;
     gap_end_offset = data->gap_end - data->ptr;
     data->ptr = XtRealloc(data->ptr, (unsigned)((data->maxlength) * char_size));
@@ -908,19 +933,15 @@ static XmTextStatus Replace(XmTextWidget initiator,
     _XmTextEnableRedisplay(data->widgets[i]);
   }
   initiator->text.output->DrawInsertionPoint(initiator, initiator->text.cursor_position, on);
-  if (data->maxlength != TEXT_INITIAL_INCREM &&
-      ((data->maxlength > TEXT_INCREMENT && data->length <= data->maxlength - TEXT_INCREMENT) ||
-       data->length <= data->maxlength >> 1))
-  {
+  /*
+   * Give memory back only once most of the buffer is unused, so that
+   * edits around a size boundary do not reallocate (and move the gap
+   * to the end) every time.  The new buffer still has room to grow.
+   */
+  if (data->maxlength > TEXT_INCREMENT && data->length < data->maxlength / 4) {
     /* Move the gap to the last position. */
     _XmStringSourceSetGappedBuffer(data, data->length);
-    data->maxlength = TEXT_INITIAL_INCREM;
-    while (data->length >= data->maxlength) {
-      if (data->maxlength < TEXT_INCREMENT)
-        data->maxlength *= 2;
-      else
-        data->maxlength += TEXT_INCREMENT;
-    }
+    data->maxlength = BufferLength(TEXT_INITIAL_INCREM, data->length, char_size);
     data->ptr = XtRealloc(data->ptr, (unsigned)((data->maxlength) * char_size));
     data->gap_start = data->ptr + (data->length * char_size);
     data->gap_end = data->ptr + ((data->maxlength - 1) * char_size);
