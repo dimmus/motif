@@ -702,6 +702,9 @@ void _XmImRealize(Widget vw)
     if (!icp->xic)
       continue;
     XSetICValues(icp->xic, XNClientWindow, XtWindow(vw), NULL);
+    /* Without a focus window the spot is relative to this one. */
+    if (!icp->focus_window)
+      icp->spot_valid = False;
   }
   extData = _XmGetWidgetExtData((Widget)vw, XmSHELL_EXTENSION);
   if (extData)
@@ -1070,8 +1073,9 @@ static void set_values(Widget w, ArgList args, Cardinal num_args, XmInputPolicy 
     if (xic_vlist.args)
       XtFree((char *)xic_vlist.args);
     if (spot_set) {
+      /* If any value was refused, the spot may not have been set. */
       icp->spot = spot;
-      icp->spot_valid = True;
+      icp->spot_valid = (ret == NULL);
     }
     /* ??? Both a write-once and an unrecognized arg might be present. */
     if ((ret != NULL) && unrecognized) {
