@@ -668,7 +668,7 @@ static void SwapMessageData(xmICCMessageStruct *xmessage)
 {
   swap2bytes(xmessage->any.flags);
   swap4bytes(xmessage->any.time);
-  switch (xmessage->any.message_type) {
+  switch (xmessage->any.message_type & CLEAR_ICC_EVENT_TYPE) {
     case XmTOP_LEVEL_ENTER: {
       swap4bytes(xmessage->topLevelEnter.src_window);
       swap4bytes(xmessage->topLevelEnter.icc_handle);
