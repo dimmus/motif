@@ -7,7 +7,8 @@
  */
 #include "SvgI.h"
 #include <X11/Xlibint.h>
-#include <errno.h>
+#include <limits.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #define NANOSVG_IMPLEMENTATION
@@ -15,10 +16,16 @@
 #define NANOSVGRAST_IMPLEMENTATION
 #include "nanosvgrast.h"
 
+/* Largest width / height we accept for an SVG image or rasterization */
+#define SVG_MAX_DIM 65535
+
 /* same as xlib's _XDestroyImage */
 static int destroy(XImage *image)
 {
   nsvgDelete((NSVGimage *)image->obdata);
+  if (image->data)
+    XFree(image->data);
+  XFree(image);
   return 1;
 }
 
@@ -33,9 +40,11 @@ static XImage *rasterize(XImage *src, int x, int y, unsigned int w, unsigned int
   NSVGrasterizer *rast;
   (void)x;
   (void)y;
-  if (!w || !h || !(rast = nsvgCreateRasterizer()))
+  /* nanosvgrast indexes the bitmap with int (y * stride), so w * h * 4 must fit */
+  if (!w || !h || w > SVG_MAX_DIM || h > SVG_MAX_DIM || (size_t)w * h > INT_MAX / 4 ||
+      !(rast = nsvgCreateRasterizer()))
     return NULL;
-  if (!(data = Xcalloc(4, w * h))) {
+  if (!(data = Xcalloc((size_t)w * h, 4))) {
     nsvgDeleteRasterizer(rast);
     return NULL;
   }
@@ -63,7 +72,11 @@ static XImage *rasterize(XImage *src, int x, int y, unsigned int w, unsigned int
   img->bitmap_pad = 32;
   img->bits_per_pixel = 32;
   img->depth = 32;
-  XInitImage(img);
+  if (!XInitImage(img)) {
+    XFree(data);
+    XFree(img);
+    return NULL;
+  }
   return img;
 }
 
@@ -97,14 +110,13 @@ int _XmSvgGetImage(FILE *fp, XImage **out)
   long size;
   XImage *img;
   NSVGimage *svg;
-  *out = NULL;
-  errno = 0;
-  fseek(fp, 0, SEEK_END);
-  size = ftell(fp);
-  rewind(fp);
-  if (errno || !(data = Xmalloc((size_t)size + 1)))
+  if (!fp || !out)
     return 1;
-  if (!fread(data, 1, (size_t)size, fp)) {
+  *out = NULL;
+  if (fseek(fp, 0, SEEK_END) || (size = ftell(fp)) <= 0 || fseek(fp, 0, SEEK_SET) ||
+      (unsigned long)size >= SIZE_MAX || !(data = Xmalloc((size_t)size + 1)))
+    return 1;
+  if (fread(data, 1, (size_t)size, fp) != (size_t)size) {
     XFree(data);
     return 1;
   }
@@ -113,7 +125,10 @@ int _XmSvgGetImage(FILE *fp, XImage **out)
   XFree(data);
   if (!svg)
     return 1;
-  if (!svg->width || !svg->height) {
+  /* Also rejects NaN, and keeps the (int) conversions below defined */
+  if (!(svg->width >= 1 && svg->width <= SVG_MAX_DIM && svg->height >= 1 &&
+        svg->height <= SVG_MAX_DIM))
+  {
     nsvgDelete(svg);
     return 1;
   }

@@ -24,6 +24,14 @@
 #define _XpmI_h
 /* Define HAVE_STRDUP since string.h is included */
 #define HAVE_STRDUP 1
+/*
+ * Never pipe files named *.Z / *.gz through external (de)compressors.
+ * The commands were looked up in $PATH (CVE-2022-4883), and a toolkit
+ * loading icons should not run programs in the first place.
+ */
+#ifndef NO_ZPIPE
+#  define NO_ZPIPE 1
+#endif
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -272,8 +280,14 @@ FUNC(xpmHashIntern, int, (xpmHashTable * table, char *tag, void *data));
 FUNC(xpmNextString, int, (xpmData * mdata));
 FUNC(xpmNextUI, int, (xpmData * mdata, unsigned int *ui_return));
 FUNC(xpmGetString, int, (xpmData * mdata, char **sptr, unsigned int *l));
+/*
+ * Like getc(): returns an unsigned char, or EOF at the end of a string /
+ * buffer, in which case it never moves past the terminating NUL.
+ */
 #  define xpmGetC(mdata) \
-    ((!mdata->type || mdata->type == XPMBUFFER) ? (*mdata->cptr++) : (getc(mdata->stream.file)))
+    ((!mdata->type || mdata->type == XPMBUFFER) ? \
+         (*mdata->cptr ? (int)(unsigned char)*mdata->cptr++ : EOF) : \
+         (getc(mdata->stream.file)))
 FUNC(xpmNextWord, unsigned int, (xpmData * mdata, char *buf, unsigned int buflen));
 FUNC(xpmGetCmt, int, (xpmData * mdata, char **cmt));
 FUNC(xpmParseHeader, int, (xpmData * mdata));

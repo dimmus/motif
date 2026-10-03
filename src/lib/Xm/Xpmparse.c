@@ -196,6 +196,13 @@ int xpmParseValues(xpmData *data,
     *hotspot = 0;
     *extensions = 0;
   }
+  /*
+   * Every pixel takes at least one character. With none, the pixel
+   * loops consume no input, so a tiny file could still claim a huge
+   * width and keep them running (the CVE-2022-44617 runaway again).
+   */
+  if (*cpp == 0)
+    return (XpmFileInvalid);
   return (XpmSuccess);
 }
 
@@ -223,7 +230,10 @@ int xpmParseColors(xpmData *data,
     return (XpmNoMemory);
   if (!data->format) { /* XPM 2 or 3 */
     for (a = 0, color = colorTable; a < ncolors; a++, color++) {
-      xpmNextString(data); /* skip the line */
+      if ((ErrorStatus = xpmNextString(data)) != XpmSuccess) { /* skip the line */
+        xpmFreeColorTable(colorTable, ncolors);
+        return (ErrorStatus);
+      }
       /*
        * read pixel value
        */
@@ -276,6 +286,7 @@ int xpmParseColors(xpmData *data,
               xpmFreeColorTable(colorTable, ncolors);
               return (XpmNoMemory);
             }
+            XpmFree(defaults[curkey]); /* the key may be repeated */
             defaults[curkey] = s;
             memcpy(s, curbuf, len);
           }
@@ -300,11 +311,13 @@ int xpmParseColors(xpmData *data,
         return (XpmFileInvalid);
       }
       len = strlen(curbuf) + 1; /* integer overflow just theoretically possible */
-      s = defaults[curkey] = (char *)XpmMalloc(len);
+      s = (char *)XpmMalloc(len);
       if (!s) {
         xpmFreeColorTable(colorTable, ncolors);
         return (XpmNoMemory);
       }
+      XpmFree(defaults[curkey]); /* the key may be repeated */
+      defaults[curkey] = s;
       memcpy(s, curbuf, len);
     }
   }
@@ -385,6 +398,7 @@ static int ParsePixels(xpmData *data,
 {
   unsigned int *iptr, *iptr2 = NULL; /* found by Egbert Eich */
   unsigned int a, x, y;
+  int ErrorStatus;
   if ((height > 0 && width >= UINT_MAX / height) ||
       width * height >= UINT_MAX / sizeof(unsigned int))
     return XpmNoMemory;
@@ -413,7 +427,10 @@ static int ParsePixels(xpmData *data,
       for (a = 0; a < ncolors; a++)
         colidx[(unsigned char)colorTable[a].string[0]] = a + 1;
       for (y = 0; y < height; y++) {
-        xpmNextString(data);
+        if ((ErrorStatus = xpmNextString(data)) != XpmSuccess) {
+          XpmFree(iptr2);
+          return (ErrorStatus);
+        }
         for (x = 0; x < width; x++, iptr++) {
           int c = xpmGetC(data);
           if (c > 0 && c < 256 && colidx[c] != 0)
@@ -453,7 +470,11 @@ static int ParsePixels(xpmData *data,
         cidx[char1][(unsigned char)colorTable[a].string[1]] = a + 1;
       }
       for (y = 0; y < height; y++) {
-        xpmNextString(data);
+        if ((ErrorStatus = xpmNextString(data)) != XpmSuccess) {
+          FREE_CIDX;
+          XpmFree(iptr2);
+          return (ErrorStatus);
+        }
         for (x = 0; x < width; x++, iptr++) {
           int cc1 = xpmGetC(data);
           if (cc1 > 0 && cc1 < 256) {
@@ -488,7 +509,10 @@ static int ParsePixels(xpmData *data,
       if (USE_HASHTABLE) {
         xpmHashAtom *slot;
         for (y = 0; y < height; y++) {
-          xpmNextString(data);
+          if ((ErrorStatus = xpmNextString(data)) != XpmSuccess) {
+            XpmFree(iptr2);
+            return (ErrorStatus);
+          }
           for (x = 0; x < width; x++, iptr++) {
             for (a = 0, s = buf; a < cpp; a++, s++) {
               int c = xpmGetC(data);
@@ -509,7 +533,10 @@ static int ParsePixels(xpmData *data,
       }
       else {
         for (y = 0; y < height; y++) {
-          xpmNextString(data);
+          if ((ErrorStatus = xpmNextString(data)) != XpmSuccess) {
+            XpmFree(iptr2);
+            return (ErrorStatus);
+          }
           for (x = 0; x < width; x++, iptr++) {
             for (a = 0, s = buf; a < cpp; a++, s++) {
               int c = xpmGetC(data);
@@ -543,7 +570,13 @@ int xpmParseExtensions(xpmData *data, XpmExtension **extensions, unsigned int *n
   unsigned int nlines, a, l, notstart, notend = 0;
   int status;
   char *string, *s, *s2, **sp;
-  xpmNextString(data);
+  /*
+   * xpmNextString() fails at the end of the data. Check it everywhere, or
+   * an unterminated extension (no XPMENDEXT) loops forever on empty
+   * strings in buffer mode, appending lines until memory runs out.
+   */
+  if ((status = xpmNextString(data)) != XpmSuccess)
+    return (status);
   exts = (XpmExtension *)XpmMalloc(sizeof(XpmExtension));
   /* get the whole string */
   status = xpmGetString(data, &string, &l);
@@ -554,8 +587,8 @@ int xpmParseExtensions(xpmData *data, XpmExtension **extensions, unsigned int *n
   /* look for the key word XPMEXT, skip lines before this */
   while ((notstart = strncmp("XPMEXT", string, 6)) && (notend = strncmp("XPMENDEXT", string, 9))) {
     XpmFree(string);
-    xpmNextString(data);
-    status = xpmGetString(data, &string, &l);
+    if ((status = xpmNextString(data)) == XpmSuccess)
+      status = xpmGetString(data, &string, &l);
     if (status != XpmSuccess) {
       XpmFree(exts);
       return (status);
@@ -592,8 +625,8 @@ int xpmParseExtensions(xpmData *data, XpmExtension **extensions, unsigned int *n
     strncpy(ext->name, s + a, l - a - 6);
     XpmFree(string);
     /* now store the related lines */
-    xpmNextString(data);
-    status = xpmGetString(data, &string, &l);
+    if ((status = xpmNextString(data)) == XpmSuccess)
+      status = xpmGetString(data, &string, &l);
     if (status != XpmSuccess) {
       ext->lines = NULL;
       ext->nlines = 0;
@@ -615,8 +648,8 @@ int xpmParseExtensions(xpmData *data, XpmExtension **extensions, unsigned int *n
       ext->lines = sp;
       ext->lines[nlines] = string;
       nlines++;
-      xpmNextString(data);
-      status = xpmGetString(data, &string, &l);
+      if ((status = xpmNextString(data)) == XpmSuccess)
+        status = xpmGetString(data, &string, &l);
       if (status != XpmSuccess) {
         ext->nlines = nlines;
         XpmFreeExtensions(exts, num + 1);

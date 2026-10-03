@@ -138,6 +138,128 @@ START_TEST(load_rgba32_bgcolor)
 }
 END_TEST
 
+/* Fetch the 32-bit ARGB pixel at (x, y) */
+static unsigned long argb(XImage *img, int x, int y)
+{
+	unsigned char *p = (unsigned char *)img->data + y * img->bytes_per_line + x * 4;
+
+	return ((unsigned long)p[0] << 24) | (p[1] << 16) | (p[2] << 8) | p[3];
+}
+
+START_TEST(load_palette_trns)
+{
+	FILE *fp;
+	XImage *img = NULL;
+	int ret;
+
+	ck_assert_msg(fp = fopen("png/palette_trns_2x2.png", "rb"), "Failed to open png/palette_trns_2x2.png");
+	ret = _XmPngGetImage(fp, NULL, &img);
+	fclose(fp);
+
+	ck_assert_msg(!ret && img, "Failed to load palette test image");
+	ck_assert_msg(img->width == 2 && img->height == 2, "Expected 2x2 image");
+	ck_assert_msg(img->bytes_per_line == 8, "Expected 8 bytes per line");
+	ck_assert_msg(argb(img, 0, 0) == 0xffff0000, "Expected (0,0) to be opaque red");
+	ck_assert_msg(argb(img, 1, 0) == 0xff00ff00, "Expected (1,0) to be opaque green");
+	ck_assert_msg(argb(img, 0, 1) == 0xff0000ff, "Expected (0,1) to be opaque blue");
+	ck_assert_msg(argb(img, 1, 1) == 0x00000000, "Expected (1,1) to be transparent");
+	XDestroyImage(img);
+}
+END_TEST
+
+START_TEST(load_interlaced)
+{
+	FILE *fp;
+	XImage *img = NULL;
+	int ret;
+
+	ck_assert_msg(fp = fopen("png/interlaced_2x2.png", "rb"), "Failed to open png/interlaced_2x2.png");
+	ret = _XmPngGetImage(fp, NULL, &img);
+	fclose(fp);
+
+	ck_assert_msg(!ret && img, "Failed to load interlaced test image");
+	ck_assert_msg(img->width == 2 && img->height == 2, "Expected 2x2 image");
+	ck_assert_msg(argb(img, 0, 0) == 0xffff0000, "Expected (0,0) to be red");
+	ck_assert_msg(argb(img, 1, 0) == 0xff00ff00, "Expected (1,0) to be green");
+	ck_assert_msg(argb(img, 0, 1) == 0xff0000ff, "Expected (0,1) to be blue");
+	ck_assert_msg(argb(img, 1, 1) == 0xffffffff, "Expected (1,1) to be white");
+	XDestroyImage(img);
+}
+END_TEST
+
+START_TEST(load_gray16)
+{
+	FILE *fp;
+	XImage *img = NULL;
+	unsigned long p;
+	int ret;
+
+	ck_assert_msg(fp = fopen("png/gray16_2x2.png", "rb"), "Failed to open png/gray16_2x2.png");
+	ret = _XmPngGetImage(fp, NULL, &img);
+	fclose(fp);
+
+	ck_assert_msg(!ret && img, "Failed to load 16-bit grayscale test image");
+	ck_assert_msg(img->width == 2 && img->height == 2, "Expected 2x2 image");
+	ck_assert_msg(img->bytes_per_line == 8, "Expected 8 bytes per line");
+	ck_assert_msg(argb(img, 0, 0) == 0xff000000, "Expected (0,0) to be black");
+	ck_assert_msg(argb(img, 1, 0) == 0xffffffff, "Expected (1,0) to be white");
+	p = argb(img, 0, 1);
+	ck_assert_msg((p >> 24) == 0xff && ((p >> 16) & 0xff) == (p & 0xff) &&
+	              ((p >> 8) & 0xff) == (p & 0xff), "Expected (0,1) to be opaque gray");
+	p = argb(img, 1, 1);
+	ck_assert_msg((p >> 24) == 0xff && ((p >> 16) & 0xff) == (p & 0xff) &&
+	              ((p >> 8) & 0xff) == (p & 0xff), "Expected (1,1) to be opaque gray");
+	XDestroyImage(img);
+}
+END_TEST
+
+START_TEST(load_corrupt_idat)
+{
+	FILE *fp;
+	XImage *img = NULL;
+	int ret;
+
+	/* libpng errors out while decoding the rows */
+	ck_assert_msg(fp = fopen("png/corrupt_idat.png", "rb"), "Failed to open png/corrupt_idat.png");
+	ret = _XmPngGetImage(fp, NULL, &img);
+	fclose(fp);
+
+	ck_assert_msg(ret && !img, "Expected a corrupt image data stream to fail");
+}
+END_TEST
+
+START_TEST(load_truncated)
+{
+	FILE *fp;
+	XImage *img = NULL;
+	int ret;
+
+	ck_assert_msg(fp = fopen("png/truncated.png", "rb"), "Failed to open png/truncated.png");
+	ret = _XmPngGetImage(fp, NULL, &img);
+	fclose(fp);
+
+	ck_assert_msg(ret && !img, "Expected a truncated image to fail");
+}
+END_TEST
+
+START_TEST(load_too_large)
+{
+	FILE *fp;
+	XImage *img = NULL;
+	int ret;
+
+	/**
+	 * 23171 * 23171 * 4 bytes exceeds INT_MAX, which Xlib's XGetPixel()
+	 * can't index: it must be rejected before decoding (return 4).
+	 */
+	ck_assert_msg(fp = fopen("png/too_large.png", "rb"), "Failed to open png/too_large.png");
+	ret = _XmPngGetImage(fp, NULL, &img);
+	fclose(fp);
+
+	ck_assert_msg(ret == 4 && !img, "Expected an image over INT_MAX bytes to be rejected");
+}
+END_TEST
+
 void png_suite(SRunner *runner)
 {
 	TCase *t;
@@ -148,6 +270,12 @@ void png_suite(SRunner *runner)
 	tcase_add_test(t, load_rgb24);
 	tcase_add_test(t, load_rgba32);
 	tcase_add_test(t, load_rgba32_bgcolor);
+	tcase_add_test(t, load_palette_trns);
+	tcase_add_test(t, load_interlaced);
+	tcase_add_test(t, load_gray16);
+	tcase_add_test(t, load_corrupt_idat);
+	tcase_add_test(t, load_truncated);
+	tcase_add_test(t, load_too_large);
 	tcase_set_timeout(t, 1);
 	suite_add_tcase(s, t);
 	srunner_add_suite(runner, s);

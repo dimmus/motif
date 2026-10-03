@@ -128,13 +128,18 @@ static int HashTableGrows(xpmHashTable *table)
   unsigned int oldSize = size;
   t = atomTable;
   HASH_TABLE_GROWS
-  table->size = size;
-  table->limit = size / 3;
-  if (size >= UINT_MAX / sizeof(*atomTable))
+  /*
+   * Only update the table once the new storage is allocated: on failure
+   * the old atomTable must remain consistent with table->size, since
+   * the caller still looks it up and xpmHashTableFree() walks it.
+   */
+  if (size <= oldSize || size >= UINT_MAX / sizeof(*atomTable))
     return (XpmNoMemory);
   atomTable = (xpmHashAtom *)XpmMalloc(size * sizeof(*atomTable));
   if (!atomTable)
     return (XpmNoMemory);
+  table->size = size;
+  table->limit = size / 3;
   table->atomTable = atomTable;
   for (p = atomTable + size; p > atomTable;)
     *--p = NULL;
