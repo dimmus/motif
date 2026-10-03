@@ -64,15 +64,30 @@ set(XM_VERSION "${PROJECT_VERSION}")
 # Shared library versions of libXm, libMrm and libUil.
 #
 # Upstream Motif 2.3 ships libXm.so.4, libMrm.so.4 and libUil.so.4 (2.3.8:
-# libXm.so.4.0.4), and every existing Motif program (CDE, nedit, xpdf, ...)
-# is linked against SONAME 4.  This tree adds interfaces but keeps the
-# existing ones, so it stays at SONAME 4 and continues the upstream version
-# numbering.  The earlier libtool-style 5:0:0 ("libXm.so.5.0.0") changed
-# nothing in the ABI apart from the SONAME: abidiff of the two builds reports
-# only the SONAME change.  Bump MOTIF_SOVERSION only for a real ABI break,
-# and record it in the release notes.
-set(MOTIF_SOVERSION 4)
-set(MOTIF_LIBRARY_VERSION 4.0.5)
+# libXm.so.4.0.4).  This tree is NOT binary compatible with them, so it must
+# not reuse SONAME 4.  abidiff of an upstream 2.3.8 build (default configure,
+# which defines OM22_COMPATIBILITY in the installed Xm.h) against this one
+# shows:
+#
+#   - XmPrimitivePart and XmGadgetPart (PrimitiveP.h, GadgetP.h) no longer
+#     have the OM22_COMPATIBILITY member tool_tip_string, so the instance
+#     records of every widget and gadget, and the part offsets of every
+#     subclass compiled against the 2.3.8 headers, are 8 bytes off;
+#   - the string tables _XmStrings and _XmStrings22 were re-ordered (entries
+#     removed and inserted), so 1624 of the 1692 XmC* / XmR* / XmS* macros
+#     that a 2.3.8 program compiled in as offsets into them
+#     ("(char*)&_XmStrings[N]") now name a different string;
+#   - _XmEditResCheckMessages, XmDataFielddf_ClearSelection and
+#     XmDataFielddf_SetCursorPosition are no longer exported.
+#
+# Programs built against 2.3.8 therefore have to be rebuilt.  libMrm and
+# libUil link libXm, so they change SONAME together with it: a program
+# loading an old libMrm.so.4 next to a new libXm would get two copies of
+# Xm.  Bump MOTIF_SOVERSION again for any further ABI break (compare with
+# abidiff against the previous release), and record it in the release
+# notes.
+set(MOTIF_SOVERSION 5)
+set(MOTIF_LIBRARY_VERSION 5.0.0)
 
 
 # -----------------------------------------------------------------------------
