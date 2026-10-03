@@ -1,12 +1,6 @@
 # Demo programs
 # Individual demo programs that showcase Motif widgets
 
-# Copy pixmaps to build directory for compilation
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/pixmaps")
-    file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/pixmaps 
-         DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/pixmaps)
-endif()
-
 # Find all demo program directories
 file(GLOB DEMO_DIRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/*)
 
@@ -105,8 +99,8 @@ foreach(DEMO_DIR ${DEMO_DIRS})
             target_include_directories(${DEMO_NAME} PRIVATE
                 ${CMAKE_SOURCE_DIR}/src/examples/lib
                 ${CMAKE_CURRENT_SOURCE_DIR}/${DEMO_DIR}
-                ${CMAKE_CURRENT_SOURCE_DIR}/pixmaps
-                ${CMAKE_CURRENT_BINARY_DIR}/pixmaps
+                # <pixmaps/...>
+                ${CMAKE_CURRENT_SOURCE_DIR}
             )
             
             
