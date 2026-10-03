@@ -1,64 +1,313 @@
 name: Build
+
+# Every push and every pull request event (opened, synchronize, reopened)
+# is built, so that later pushes to a pull request are tested too.
 on:
   push:
-    branches:
-      - master
   pull_request:
-    types:
-      - opened
-    branches:
-      - master
+  workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  CCACHE_DIR: ${{ github.workspace }}/.ccache
+  CCACHE_MAXSIZE: 400M
+  CCACHE_COMPRESS: "true"
+
+# The build, test, install and analysis logic lives in tools/dev/env/ci/
+# so that every job can be reproduced locally with the same script.
 jobs:
-  build:
+  ubuntu:
+    name: Ubuntu ${{ matrix.cc }} ${{ matrix.profile }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
     strategy:
+      fail-fast: false
       matrix:
-        arch: [x86_64, x86]
-        compiler: [gcc, clang]
-    runs-on: ubuntu-latest
+        cc: [gcc, clang]
+        profile: [debug-asan, release-lto]
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install dependencies
+        run: tools/dev/env/ci/deps.sh
+      - name: Allow ASan shadow memory
+        if: matrix.profile == 'debug-asan'
+        # Recent runner kernels randomise mmap() over more bits than the
+        # ASan runtime of the distribution compilers can cope with.
+        run: sudo sysctl vm.mmap_rnd_bits=28
+      - uses: actions/cache@v4
+        with:
+          path: .ccache
+          key: ccache-ubuntu-${{ matrix.cc }}-${{ matrix.profile }}-${{ github.sha }}
+          restore-keys: ccache-ubuntu-${{ matrix.cc }}-${{ matrix.profile }}-
+      - name: Build and test
+        env:
+          CC: ${{ matrix.cc }}
+          MOTIF_CI_PROFILE: ${{ matrix.profile }}
+          MOTIF_CI_NO_SKIP: "1"
+        run: tools/dev/env/ci/build.sh
+      - name: Upload test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-logs-ubuntu-${{ matrix.cc }}-${{ matrix.profile }}
+          path: |
+            _build/ctest-output.log
+            _build/Testing/Temporary/
+          if-no-files-found: ignore
+
+  alpine:
+    # musl.  The x86 entries are the 32-bit jobs.  There is no ASan on
+    # musl, so the Alpine jobs build Debug without sanitizers instead.
+    name: Alpine ${{ matrix.arch }} ${{ matrix.cc }} ${{ matrix.profile }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { arch: x86_64, cc: gcc, profile: debug }
+          - { arch: x86_64, cc: clang, profile: debug }
+          - { arch: x86_64, cc: gcc, profile: release-lto }
+          - { arch: x86_64, cc: clang, profile: release-lto }
+          - { arch: x86, cc: gcc, profile: debug }
+          - { arch: x86, cc: clang, profile: debug }
     steps:
       - uses: actions/checkout@v5
       - name: Setup Alpine
-        id:   alpine
         uses: jirutka/setup-alpine@v1
         with:
           arch: ${{ matrix.arch }}
           branch: v3.22
-          packages: >
-            libx11-dev
-            libxpm-dev
-            libxt-dev
-            libxmu-dev
-            libxext-dev
-            libxft-dev
-            libjpeg-turbo-dev
-            libpng-dev
-            linux-headers
-            alpine-sdk
-            cmake
-            ninja
-            pkgconfig
-            flex-dev
-            flex
-            byacc
-            xvfb
-            xbitmaps
-            check-dev
-            clang
-            clang-dev
-      - name: Build with CMake
+      - name: Install dependencies
         run: |
-          cd /home/runner/work/motif/motif
-          make clean || true
-          CC=${{ matrix.compiler }} make build ninja
+          cd "${{ github.workspace }}"
+          tools/dev/env/ci/deps.sh
+        shell: alpine.sh --root {0}
+      - uses: actions/cache@v4
+        with:
+          path: .ccache
+          key: ccache-alpine-${{ matrix.arch }}-${{ matrix.cc }}-${{ matrix.profile }}-${{ github.sha }}
+          restore-keys: ccache-alpine-${{ matrix.arch }}-${{ matrix.cc }}-${{ matrix.profile }}-
+      - name: Build and test
+        run: |
+          cd "${{ github.workspace }}"
+          CCACHE_DIR="${{ github.workspace }}/.ccache" CC=${{ matrix.cc }} \
+            MOTIF_CI_PROFILE=${{ matrix.profile }} MOTIF_CI_NO_SKIP=1 \
+            tools/dev/env/ci/build.sh
         shell: alpine.sh {0}
-      # - name: Test
-      #   run: |
-      #     cd /home/runner/work/motif/motif
-      #     Xvfb :0 &>/dev/null &
-      #     DISPLAY=:0 make test
-      #     kill -TERM %1
-      #   shell: alpine.sh {0}
+      - name: Upload test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-logs-alpine-${{ matrix.arch }}-${{ matrix.cc }}-${{ matrix.profile }}
+          path: |
+            _build/ctest-output.log
+            _build/Testing/Temporary/
+          if-no-files-found: ignore
+
+  s390x:
+    # Big-endian: the byte-order paths in DnD, the clipboard and Mrm are
+    # not exercised anywhere else.  Emulated with qemu, hence slow.
+    name: Debian s390x (big-endian, qemu)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v5
+      - uses: docker/setup-qemu-action@v3
+        with:
+          platforms: s390x
+      - uses: actions/cache@v4
+        with:
+          path: .ccache
+          key: ccache-s390x-${{ github.sha }}
+          restore-keys: ccache-s390x-
+      - name: Build and test
+        run: |
+          docker run --rm --platform linux/s390x \
+            -v "$PWD:/src" -w /src \
+            -e CCACHE_DIR=/src/.ccache -e CCACHE_MAXSIZE \
+            -e CC=gcc -e MOTIF_CI_PROFILE=debug -e MOTIF_CI_NO_SKIP=1 \
+            -e MOTIF_CI_TEST_TIMEOUT=1800 \
+            debian:stable \
+            sh -c 'tools/dev/env/ci/deps.sh && tools/dev/env/ci/build.sh'
+      - name: Upload test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-logs-s390x
+          path: |
+            _build/ctest-output.log
+            _build/Testing/Temporary/
+          if-no-files-found: ignore
+
+  freebsd:
+    name: FreeBSD clang
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v5
+      - name: Build and test in a FreeBSD VM
+        uses: vmactions/freebsd-vm@v1
+        with:
+          usesh: true
+          sync: rsync
+          copyback: true
+          prepare: sh tools/dev/env/ci/deps.sh
+          run: |
+            CC=cc MOTIF_CI_PROFILE=debug MOTIF_CI_NO_SKIP=1 sh tools/dev/env/ci/build.sh
+      - name: Upload test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-logs-freebsd
+          path: |
+            _build/ctest-output.log
+            _build/Testing/Temporary/
+          if-no-files-found: ignore
+
+  werror:
+    # Informational until the warning list is curated (TODO.md 2.3).
+    name: Warnings as errors (${{ matrix.cc }}, non-blocking)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        cc: [gcc, clang]
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install dependencies
+        run: tools/dev/env/ci/deps.sh
+      - uses: actions/cache@v4
+        with:
+          path: .ccache
+          key: ccache-werror-${{ matrix.cc }}-${{ github.sha }}
+          restore-keys: ccache-werror-${{ matrix.cc }}-
+      - name: Build with -Werror
+        env:
+          CC: ${{ matrix.cc }}
+          MOTIF_CI_PROFILE: debug
+          MOTIF_CI_TESTS: "0"
+          CMAKE_ARGS: -DCMAKE_COMPILE_WARNING_AS_ERROR=ON
+        run: tools/dev/env/ci/build.sh
+
+  package:
+    # Distribution packaging smoke test plus install-and-consume: build
+    # with the distribution's flags and libdir, check the staged install
+    # (symlinks, RPATH, ldd), install into /usr and build a client through
+    # pkg-config and through find_package(Motif).
+    name: Package and consume (${{ matrix.image }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    container: ${{ matrix.image }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { image: "debian:stable", extra: dpkg-dev }
+          - { image: "fedora:latest", extra: redhat-rpm-config }
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install dependencies
+        run: tools/dev/env/ci/deps.sh ${{ matrix.extra }}
+      - name: Build, install and consume
+        env:
+          CC: gcc
+          MOTIF_CI_NO_SKIP: "1"
+        run: tools/dev/env/ci/package-smoke.sh _build _stage
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: package-logs-${{ strategy.job-index }}
+          path: |
+            _build/ctest-output.log
+            _build/Testing/Temporary/
+            _build/install_manifest.txt
+          if-no-files-found: ignore
+
+  static-analysis:
+    # Ratchet mode: findings are compared per file and check with the
+    # baselines in tools/dev/env/ci/baselines/.  Arch Linux has the newest
+    # clang, which is what the committed baselines were generated with.
+    name: Static analysis (${{ matrix.tool }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 150
+    container: archlinux:latest
+    strategy:
+      fail-fast: false
+      matrix:
+        tool: [scan-build, clang-tidy, cppcheck]
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install dependencies
+        run: tools/dev/env/ci/deps.sh python cppcheck
+      - name: Run ${{ matrix.tool }}
+        run: tools/dev/env/ci/static-analysis.sh ${{ matrix.tool }} _build-analysis _analysis
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: static-analysis-${{ matrix.tool }}
+          path: _analysis/
+          if-no-files-found: ignore
+
+  abi:
+    # Informational: report ABI changes of libXm and libMrm against the
+    # previous release tag and, for pull requests, against the base.
+    name: ABI check (non-blocking)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Install dependencies
+        run: tools/dev/env/ci/deps.sh abigail-tools autoconf automake libtool
+      - name: Compare ABI
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          set -- "$(git describe --tags --abbrev=0 "$(git rev-parse HEAD)^")"
+          if [ -n "$BASE_SHA" ]; then
+            set -- "$@" "$BASE_SHA"
+          fi
+          echo "Comparing with: $*"
+          tools/dev/env/ci/abi-check.sh "$@"
+      - name: Upload ABI dumps and reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: abi
+          path: |
+            _abi/*.txt
+            _abi/*/*.abi
+          if-no-files-found: ignore
+
+  reproducible:
+    name: Reproducible build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install dependencies
+        run: tools/dev/env/ci/deps.sh diffoscope-minimal
+      - name: Build twice and compare
+        run: tools/dev/env/ci/repro-check.sh _repro
+      - name: Upload diffoscope report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: diffoscope
+          path: |
+            _repro/diffoscope.txt
+            _repro/diffoscope.html
+          if-no-files-found: ignore

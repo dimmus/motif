@@ -19,6 +19,7 @@ tools/dev/env/
 ├── README.md                # This documentation
 ├── test-motif.sh            # Main test runner script
 ├── add-os.sh                # Script to add new OS environments
+├── ci/                      # Scripts run by the CI workflows
 ├── containers/              # Container definitions
 │   ├── Dockerfile.archlinux # Arch Linux container
 │   └── Dockerfile.debian    # Debian container
@@ -343,7 +344,27 @@ podman system prune                 # Clean unused images
 
 ### Continuous Integration
 
-The environment can be integrated into CI/CD pipelines:
+The CI workflows (`.github/workflows/build.yml`, `codeql.yml` and the
+GitVerse mirror `.gitverse/workflows/build.yaml`) keep their logic in
+`tools/dev/env/ci/`, so every job can be repeated locally from the top of
+the source tree:
+
+| Script | What it does |
+|---|---|
+| `deps.sh [pkg...]` | Install the build and test dependencies (apt, dnf, apk, pacman, pkg) |
+| `build.sh` | Configure, build and run `ctest --no-tests=error`; `MOTIF_CI_PROFILE` is `debug`, `debug-asan`, `release` or `release-lto`, `CC` picks the compiler |
+| `package-smoke.sh` | Build with the Debian/Fedora packaging flags and libdir, then run `install-check.sh` |
+| `install-check.sh BUILD STAGE` | Check a staged install (symlinks, RPATH, `ldd`), install it for real and build and run `consumer/hello.c` through `pkg-config motif` and `find_package(Motif)` |
+| `static-analysis.sh TOOL BUILD OUT` | Run `scan-build`, `clang-tidy` (with the top-level `.clang-tidy`) or `cppcheck` and ratchet the findings against `ci/baselines/TOOL.txt` |
+| `abi-check.sh REF...` | Compare the libXm/libMrm ABI with older revisions using libabigail |
+| `repro-check.sh WORK` | Build twice with `SOURCE_DATE_EPOCH` and compare the installs with diffoscope |
+
+For example, `CC=clang MOTIF_CI_PROFILE=debug-asan tools/dev/env/ci/build.sh`
+is the "Ubuntu clang debug-asan" job.  The static-analysis ratchet fails
+on any new finding; after fixing findings, regenerate the baseline with
+`UPDATE_BASELINE=1 tools/dev/env/ci/static-analysis.sh TOOL BUILD OUT`.
+
+The container environment below can also be used from a CI pipeline:
 
 ```bash
 # Test all supported platforms
