@@ -2540,7 +2540,7 @@ potential_overflow:
 
     l_value = (l_value * 10) + c_text[ pos ] - '0';
 
-    if (l_value > k_max_int)
+    if (l_value > k_max_int || c_text[ pos + 1 ] != 0)
     {
 	errno = ERANGE;
 	return k_max_int;
