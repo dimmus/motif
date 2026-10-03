@@ -5247,7 +5247,7 @@ GetNextLine (void)
 	chlen = mblen((char *)parseP, MB_CUR_MAX);
 	if(chlen==-1) string = NULL;
 
-	while ((*parseP != '\0') &&
+	while ((string != NULL) && (*parseP != '\0') &&
                ((chlen = mblen ((char *)parseP, MB_CUR_MAX)) > 0) &&
 	       (*parseP != '\n'))
 	/* copy all but NULL and newlines to line buffer */
