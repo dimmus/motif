@@ -59,7 +59,6 @@ extern unsigned char * GetNextLine (void);
 #endif /* not WSM */
 #ifdef WSM
 extern unsigned char * GetStringC (unsigned char **linePP, Boolean SmBehavior);
-extern void SystemCmd (char *pchCmd);
 #else /* WSM */
 extern unsigned char * GetString (unsigned char **linePP);
 #endif /* WSM */
