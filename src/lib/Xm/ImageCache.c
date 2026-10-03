@@ -664,11 +664,8 @@ static XtEnum LoadImage(Screen *screen,
   rewind(fp);
   switch (header[0]) {
     case '<': /* SVG */
-      if (!_XmSvgGetImage(fp, image)) {
-        fclose(fp);
-        XtFree(fname);
-        return True;
-      }
+      /* Not installed in the image cache: destroy it once it's used */
+      ret = !_XmSvgGetImage(fp, image) ? NOT_CACHED : False;
       break;
     case 0xff: /* 0xff 0xd8 - JPEG/Exif SOI */
 #if XM_WITH_JPEG
@@ -1123,8 +1120,6 @@ Pixmap _XmGetScaledPixmap(Screen *screen,
           for (byte = 0; byte < nbytes; byte++)
             image->data[byte] = ~old_image_data[byte];
         }
-        if (ret != NOT_CACHED)
-          _XmProcessUnlock();
         /* In this depth-1 case the image formats are equivalent. */
         image->format = XYBitmap;
         break;
@@ -1210,9 +1205,12 @@ Pixmap _XmGetScaledPixmap(Screen *screen,
                     pix_entry->height);
   /* Destroy non-cached XImage now that we've cached the pixmap. */
   if (ret == NOT_CACHED) {
-    XDestroyImage(image);
-    if (old_image_data)
+    /* Give the image back its own data, then destroy both */
+    if (old_image_data) {
       XtFree(image->data);
+      image->data = old_image_data;
+    }
+    XDestroyImage(image);
   }
   else if (image->format != old_image_format) {
     /* Undo the XYPixmap to XYBitmap conversion done earlier. */
@@ -1689,7 +1687,11 @@ static void render_image(Screen *screen,
   XGCValues gcv;
   int psz, x, y, ox, oy, r, g, b, a;
   psz = depth > 16 ? 32 : depth < 16 ? 8 : 16;
-  if (!(data = Xmalloc(dw * dh * (psz >> 3)))) {
+  if (dw <= 0 || dh <= 0)
+    return;
+  if ((size_t)dw > SIZE_MAX / (size_t)dh / (psz >> 3) ||
+      !(data = Xmalloc((size_t)dw * dh * (psz >> 3))))
+  {
     XmeWarning(NULL, "render_image: Out of memory");
     return;
   }
@@ -1704,7 +1706,12 @@ static void render_image(Screen *screen,
   }
   bg.pixel = gcv.background;
   XQueryColor(display, screen->cmap, &bg);
-  dest_image = XCreateImage(display, vis, depth, ZPixmap, 0, data, dw, dh, psz, 0);
+  if (!(dest_image = XCreateImage(display, vis, depth, ZPixmap, 0, data, dw, dh, psz, 0))) {
+    XFree(data);
+    XmeWarning(NULL, "render_image: Out of memory");
+    return;
+  }
+  /* dest_image only covers the destination rectangle at (dx, dy) */
   for (y = 0; y < dh; y++) {
     for (x = 0; x < dw; x++) {
       r = g = b = 0;
@@ -1712,7 +1719,7 @@ static void render_image(Screen *screen,
       oy = sy + (int)(y / (double)dh * sh);
       /* Anything out of bounds is background */
       if (ox < sx || oy < sy || ox > sx + sw || oy > sy + sh) {
-        XPutPixel(dest_image, dx + x, dy + y, gcv.background);
+        XPutPixel(dest_image, x, y, gcv.background);
         continue;
       }
       /* Extract the color components */
@@ -1762,11 +1769,11 @@ static void render_image(Screen *screen,
           }
       }
       if (src->depth == 1 || vis->class == TrueColor || vis->class == DirectColor) {
-        XPutPixel(dest_image, dx + x, dy + y, pixel);
+        XPutPixel(dest_image, x, y, pixel);
         continue;
       }
       if (depth == 1 || vis->map_entries <= 2) {
-        XPutPixel(dest_image, dx + x, dy + y, (r | g | b) ? gcv.foreground : gcv.background);
+        XPutPixel(dest_image, x, y, (r | g | b) ? gcv.foreground : gcv.background);
         continue;
       }
       /* Colormap time */
@@ -1778,7 +1785,7 @@ static void render_image(Screen *screen,
       /* Slowly interrogate the colormap for Pixel values */
       if (XAllocColor(display, screen->cmap, &xc))
         pixel = xc.pixel;
-      XPutPixel(dest_image, dx + x, dy + y, pixel);
+      XPutPixel(dest_image, x, y, pixel);
     }
   }
   XPutImage(display, d, gc, dest_image, 0, 0, dx, dy, dw, dh);
@@ -1804,8 +1811,13 @@ void _XmPutScaledImage(Screen *screen,
   Visual *vis = DefaultVisualOfScreen(screen);
   /* svg: Rasterize to the given size */
   if (XImageIsSVG(src)) {
+    if (dw <= 0 || dh <= 0)
+      return;
     ++free_src;
-    src = src->f.sub_image(src, sx, sy, dw, dh);
+    if (!(src = src->f.sub_image(src, sx, sy, dw, dh))) {
+      XmeWarning(NULL, "_XmPutScaledImage: Unable to rasterize SVG image");
+      return;
+    }
     sx = 0;
     sy = 0;
     sw = dw;
