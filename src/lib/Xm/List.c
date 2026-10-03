@@ -99,7 +99,7 @@ static char rcsid[] = "$TOG: List.c /main/47 1999/10/12 16:58:17 mgreess $"
 #define DrawnXOrigin(lw) ((lw)->list.vmax)
 #define DrawnVizCount(lw) ((lw)->list.FontHeight)
 #define DrawnItemHeight(lw) ((lw)->list.CharWidth)
-#define RowsChanged(lw) (ListGen(lw)++)
+#define RowsChanged(lw) (ListGen(lw) = (int)((unsigned int)ListGen(lw) + 1)) /* may wrap */
 /****************
  *
  * List Error Messages
