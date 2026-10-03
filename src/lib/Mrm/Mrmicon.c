@@ -61,6 +61,41 @@ static char rcsid[] = "$XConsortium: Mrmicon.c /main/14 1996/11/13 14:01:43 drk 
 
 
 /*
+ * Check that the icon has a size and that every pixel in it is an index
+ * into its color table. The mapping routines look each pixel up in the
+ * table without checking.
+ */
+static Boolean
+Urm__IconIndicesValid (RGMIconImagePtr		icon,
+		       int			srcpix,
+		       RGMColorTablePtr		ctable)
+{
+  int			linebyt;	/* # bytes per icon line */
+  unsigned char		*bytptr;	/* image byte pointer */
+  int			lin;		/* icon line number */
+  int			byt;		/* line byte number */
+  int			bit;		/* bit in byte */
+  int			pix;		/* line pixel number */
+  unsigned int		mask;		/* pixel mask */
+
+  if ( icon->width <= 0 || icon->height <= 0 ||
+       ctable->count < URMColorTableUserMin )
+    return FALSE;
+
+  linebyt = (icon->width*srcpix+7) / 8;
+  mask = (1 << srcpix) - 1;
+  bytptr = (unsigned char *) icon->pixel_data.pdptr;
+  for ( lin=0 ; lin<icon->height ; lin++ )
+    for ( byt=0,pix=0 ; byt<linebyt ; byt++,bytptr++ )
+      for ( bit=0 ; bit<8 && pix<icon->width ; bit+=srcpix,pix++ )
+	if ( ((*bytptr >> bit) & mask) >= (unsigned int) ctable->count )
+	  return FALSE;
+  return TRUE;
+}
+
+
+
+/*
  *++
  *
  *  PROCEDURE DESCRIPTION:
@@ -111,9 +146,33 @@ UrmCreatePixmap (RGMIconImagePtr	icon,
   int			dds ;
 
   /*
+   * Compute the number of bits available in the icon pixmap
+   */
+  switch ( icon->pixel_size )
+    {
+    case URMPixelSize1Bit:
+      srcpix = 1;
+      break;
+    case URMPixelSize2Bit:
+      srcpix = 2;
+      break;
+    case URMPixelSize4Bit:
+      srcpix = 4;
+      break;
+    case URMPixelSize8Bit:
+      srcpix = 8;
+      break;
+    default:
+      return MrmNOT_VALID;
+    }
+
+  ctable = icon->color_table.ctptr;
+  if ( ! Urm__IconIndicesValid (icon, srcpix, ctable) )
+    return MrmNOT_VALID;
+
+  /*
    * Convert the color table colors to pixels.
    */
-  ctable = icon->color_table.ctptr;
   result =
     Urm__RealizeColorTable (screen, display, fgpix, bgpix, ctable, parent);
   if ( result != MrmSUCCESS ) return result;
@@ -141,28 +200,6 @@ UrmCreatePixmap (RGMIconImagePtr	icon,
    * color table has only FG/BG entries, or uses only those entries.
    */
   if ( ctable->count <= 2 ) maxbits = 1;
-
-
-  /*
-   * Compute the number of bits available in the icon pixmap
-   */
-  switch ( icon->pixel_size )
-    {
-    case URMPixelSize1Bit:
-      srcpix = 1;
-      break;
-    case URMPixelSize2Bit:
-      srcpix = 2;
-      break;
-    case URMPixelSize4Bit:
-      srcpix = 4;
-      break;
-    case URMPixelSize8Bit:
-      srcpix = 8;
-      break;
-    default:
-      return MrmNOT_VALID;
-    }
 
   /*
    * Map the icon image pixmap from color table indices to Pixel values.
@@ -241,6 +278,8 @@ UrmCreateBitmap (RGMIconImagePtr	icon,
     default:
       return MrmNOT_VALID;
     }
+  if ( icon->width <= 0 || icon->height <= 0 )
+    return MrmNOT_VALID;
 
   return Urm__MapIconBitmapDepth1 (icon, srcpix, screen, display, pixmap);
 
@@ -936,7 +975,12 @@ Urm__MapIconAllocate (RGMIconImagePtr		icon,
   else if (dstpix <= 16) dstpix = 16;
   else dstpix = 32;
   dstbytsize = dstpix / 8;
-  alloc_pixmap = (char *) XtMalloc (iconwid * iconhgt * dstbytsize);
+  if ( iconwid <= 0 || iconhgt <= 0 ||
+       (size_t) iconwid > ((size_t) -1 / dstbytsize) / (size_t) iconhgt )
+    return Urm__UT_Error ("Urm__MapIconAllocate", _MrmMMsg_0037,
+			  NULL, NULL, MrmFAILURE);
+  alloc_pixmap =
+    (char *) XtMalloc ((size_t) iconwid * (size_t) iconhgt * dstbytsize);
   if (alloc_pixmap == NULL)
     return Urm__UT_Error ("Urm__MapIconAllocate", _MrmMMsg_0037,
 			  NULL, NULL, MrmFAILURE);
@@ -1099,6 +1143,8 @@ Urm__RealizeColorTable (Screen			*screen,
   /*
    * Load the foreground and background pixel values.
    */
+  if ( ctable->count < URMColorTableUserMin )
+    return MrmNOT_VALID;
   ctable->item[URMColorTableFG].color_pixel = fgpix;
   ctable->item[URMColorTableBG].color_pixel = bgpix;
 
@@ -1155,8 +1201,10 @@ Urm__RealizeColorTable (Screen			*screen,
 		     want a warning, though */
 		  if (result == MrmPARTIAL_SUCCESS) {
 		    result = MrmSUCCESS;
-		    snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0038,
-			     citem->color_item.cptr->desc.name);
+		    snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0039,
+			     citem->color_item.cptr->desc.rgb.red,
+			     citem->color_item.cptr->desc.rgb.green,
+			     citem->color_item.cptr->desc.rgb.blue) ;
 		    return Urm__UT_Error ("Urm__RealizeColorTable",
 					  err_msg, NULL, NULL, result);
 		  } else {
@@ -1230,8 +1278,10 @@ Urm__RealizeColorTable (Screen			*screen,
 		   want a warning, though */
 		if (result == MrmPARTIAL_SUCCESS) {
 		  result = MrmSUCCESS;
-		  snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0038,
-			   citem->color_item.cptr->desc.name);
+		  snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0039,
+			   citem->color_item.cptr->desc.rgb.red,
+			   citem->color_item.cptr->desc.rgb.green,
+			   citem->color_item.cptr->desc.rgb.blue) ;
 		  return Urm__UT_Error ("Urm__RealizeColorTable",
 					err_msg, NULL, NULL, result);
 		} else {
