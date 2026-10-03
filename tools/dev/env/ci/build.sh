@@ -31,15 +31,7 @@ set -eu
 if [ -z "${JOBS:-}" ]; then
   JOBS=$(getconf _NPROCESSORS_ONLN 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 2)
 fi
-# CMake still enables C++ for the project; use the matching C++ compiler.
-if [ -z "${CXX:-}" ]; then
-  case "$CC" in
-    *clang*) CXX=$(echo "$CC" | sed 's/clang/clang++/') ;;
-    *gcc*) CXX=$(echo "$CC" | sed 's/gcc/g++/') ;;
-    *) CXX=c++ ;;
-  esac
-fi
-export CC CXX
+export CC
 
 die() {
   echo "build.sh: $*" >&2
