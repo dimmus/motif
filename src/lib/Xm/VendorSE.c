@@ -831,9 +831,7 @@ static void GetMWMFunctionsFromProperty(Widget wid,
                                         int resource_offset, /* unused */
                                         XtArgVal *value)
 {
-  Atom actual_type;
-  int actual_format;
-  unsigned long num_items, bytes_after;
+  unsigned long num_items;
   PropMwmHints *prop = NULL;
   XmVendorShellExtObject ve = (XmVendorShellExtObject)wid;
   Widget shell = ve->ext.logicalParent;
@@ -843,24 +841,19 @@ static void GetMWMFunctionsFromProperty(Widget wid,
     return;
   }
   mwm_hints_atom = XInternAtom(XtDisplay(shell), _XA_MWM_HINTS, FALSE);
-  XGetWindowProperty(XtDisplay(shell),
-                     XtWindow(shell),
-                     mwm_hints_atom,
-                     0,
-                     (long)PROP_MWM_HINTS_ELEMENTS,
-                     FALSE,
-                     mwm_hints_atom,
-                     &actual_type,
-                     &actual_format,
-                     &num_items,
-                     &bytes_after,
-                     (unsigned char **)&prop);
-  if ((actual_type != mwm_hints_atom) || (actual_format != 32) ||
-      (num_items < PROP_MWM_HINTS_ELEMENTS) || (prop == NULL))
+  if (!_XmGetWindowPropertyChecked(XtDisplay(shell),
+                                   XtWindow(shell),
+                                   mwm_hints_atom,
+                                   (long)PROP_MWM_HINTS_ELEMENTS,
+                                   mwm_hints_atom,
+                                   32,
+                                   PROP_MWM_HINTS_ELEMENTS,
+                                   NULL,
+                                   NULL,
+                                   &num_items,
+                                   NULL,
+                                   (unsigned char **)&prop))
   {
-    if (prop != NULL) {
-      XFree((char *)prop);
-    }
     *value = (XtArgVal)ve->vendor.mwm_hints.functions;
     return;
   }

@@ -40,33 +40,28 @@
 Boolean XmIsMotifWMRunning(Widget shell)
 {
   Atom motif_wm_info_atom;
-  Atom actual_type;
-  int actual_format;
-  unsigned long num_items, bytes_after;
+  unsigned long num_items;
   PropMotifWmInfo *prop = 0;
+  Boolean found;
   Window root = RootWindowOfScreen(XtScreen(shell));
   _XmWidgetToAppContext(shell);
   _XmAppLock(app);
   motif_wm_info_atom = XInternAtom(XtDisplay(shell), _XA_MOTIF_WM_INFO, FALSE);
   _XmProcessLock();
-  XGetWindowProperty(XtDisplay(shell),
-                     root,
-                     motif_wm_info_atom,
-                     0,
-                     (long)PROP_MOTIF_WM_INFO_ELEMENTS,
-                     FALSE,
-                     motif_wm_info_atom,
-                     &actual_type,
-                     &actual_format,
-                     &num_items,
-                     &bytes_after,
-                     (unsigned char **)&prop);
+  found = _XmGetWindowPropertyChecked(XtDisplay(shell),
+                                      root,
+                                      motif_wm_info_atom,
+                                      (long)PROP_MOTIF_WM_INFO_ELEMENTS,
+                                      motif_wm_info_atom,
+                                      32,
+                                      PROP_MOTIF_WM_INFO_ELEMENTS,
+                                      NULL,
+                                      NULL,
+                                      &num_items,
+                                      NULL,
+                                      (unsigned char **)&prop);
   _XmProcessUnlock();
-  if ((actual_type != motif_wm_info_atom) || (actual_format != 32) ||
-      (num_items < PROP_MOTIF_WM_INFO_ELEMENTS))
-  {
-    if (prop != 0)
-      XFree((char *)prop);
+  if (!found) {
     _XmAppUnlock(app);
     return (FALSE);
   }
