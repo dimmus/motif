@@ -654,6 +654,8 @@ set(XM_INTERNAL_HEADERS
     XmTabListI.h
     XmosI.h
     XpmI.h
+    # Included by XmMsgI.h; generated, or the stub without message catalogs
+    ${CMAKE_BINARY_DIR}/include/Xm/XmMsgCatI.h
 )
 
 # Add conditional internal headers

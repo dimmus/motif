@@ -48,6 +48,8 @@ set(MRM_INTERNAL_HEADERS
     Mrm.h
     MrmMsgI.h
     MrmWidget.h
+    # Included by MrmMsgI.h; generated, or the stub without message catalogs
+    ${CMAKE_BINARY_DIR}/include/Mrm/MrmMsgCatI.h
 )
 
 # Generate message catalog header file

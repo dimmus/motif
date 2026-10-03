@@ -1,8 +1,4 @@
-# Install Xm headers from src/lib/Xm directory
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/lib/Xm/
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Xm
-    FILES_MATCHING PATTERN "*.h"
-)
+# The Xm headers are installed from the explicit lists in src/lib/Xm.
 
 # Install Dt headers
 install(DIRECTORY Dt/
