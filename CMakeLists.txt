@@ -106,6 +106,11 @@ motif_option(WITH_PNG "Enable PNG support" ON)
 motif_option(WITH_XFT "Enable Xft support" ON)
 motif_option(WITH_LTO "Enable link-time optimization (and -fno-semantic-interposition)" OFF)
 motif_option(WITH_CPU_NATIVE "Optimize for the build machine's CPU (-march=native, binaries are not portable)" OFF)
+set(WITH_PGO OFF CACHE STRING
+  "Profile-guided optimization: OFF, GENERATE (instrumented build for the pgo-train target) or USE (build with the profiles in MOTIF_PGO_DIR)")
+set_property(CACHE WITH_PGO PROPERTY STRINGS OFF GENERATE USE)
+set(MOTIF_PGO_DIR "${CMAKE_BINARY_DIR}/pgo" CACHE PATH
+  "Directory of the profiles that WITH_PGO=GENERATE writes and WITH_PGO=USE reads")
 
 # Library type of the public libraries (Xm, Mrm, Uil). Internal helper
 # libraries stay static, built as PIC so they can be linked into the shared
@@ -621,6 +626,139 @@ if(WITH_CPU_NATIVE AND CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
   add_compile_options(-march=native)
 endif()
 
+# Optimized builds (Release, RelWithDebInfo, MinSizeRel):
+#   -fno-semantic-interposition lets the compiler inline and call directly
+#     the exported functions of a library from inside it, as LD_PRELOAD
+#     interposition of calls internal to libXm is not supported anyway;
+#   -fno-plt calls the functions of other libraries through the GOT rather
+#     than a PLT stub.  Only with immediate binding (-z now, WITH_HARDENING):
+#     with lazy binding it would resolve every imported function at load
+#     time instead of on first call.
+if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
+  set(_motif_optimized "$<OR:$<CONFIG:Release>,$<CONFIG:RelWithDebInfo>,$<CONFIG:MinSizeRel>>")
+  set(_motif_opt_flags)
+  motif_check_c_flags(_motif_opt_flags -fno-semantic-interposition)
+  if(MOTIF_HAVE_LDFLAG_RELRO_NOW AND WITH_HARDENING)
+    motif_check_c_flags(_motif_opt_flags -fno-plt)
+  endif()
+  foreach(_flag IN LISTS _motif_opt_flags)
+    add_compile_options("$<${_motif_optimized}:${_flag}>")
+  endforeach()
+  unset(_motif_opt_flags)
+endif()
+
+# Profile-guided optimization.  Build with WITH_PGO=GENERATE, run the
+# training workload (the pgo-train target), then reconfigure the same
+# build directory with WITH_PGO=USE and rebuild.  With Clang, merge the raw
+# profiles first: llvm-profdata merge -o ${MOTIF_PGO_DIR}/default.profdata
+# ${MOTIF_PGO_DIR}/*.profraw
+if(WITH_PGO)
+  if(NOT CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
+    message(FATAL_ERROR "WITH_PGO is only supported with GCC and Clang")
+  endif()
+  if(WITH_PGO STREQUAL "GENERATE")
+    file(MAKE_DIRECTORY ${MOTIF_PGO_DIR})
+    if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
+      # The libraries are used by several threads in some programs
+      set(_motif_pgo_flags -fprofile-generate=${MOTIF_PGO_DIR} -fprofile-update=prefer-atomic)
+    else()
+      set(_motif_pgo_flags -fprofile-generate=${MOTIF_PGO_DIR})
+    endif()
+    add_compile_options(${_motif_pgo_flags})
+    add_link_options(${_motif_pgo_flags})
+    unset(_motif_pgo_flags)
+  elseif(WITH_PGO STREQUAL "USE")
+    if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
+      # Code the training did not run is optimized as usual rather than for
+      # size, and sources without a profile are not an error.
+      add_compile_options(-fprofile-use=${MOTIF_PGO_DIR} -fprofile-partial-training
+        -Wno-missing-profile)
+    else()
+      if(NOT EXISTS ${MOTIF_PGO_DIR}/default.profdata)
+        message(FATAL_ERROR "WITH_PGO=USE: ${MOTIF_PGO_DIR}/default.profdata not found; "
+          "merge the raw profiles with llvm-profdata first")
+      endif()
+      add_compile_options(-fprofile-use=${MOTIF_PGO_DIR}/default.profdata
+        -Wno-profile-instr-unprofiled -Wno-profile-instr-out-of-date)
+    endif()
+  else()
+    message(FATAL_ERROR "WITH_PGO must be OFF, GENERATE or USE, not '${WITH_PGO}'")
+  endif()
+  message(STATUS "Profile-guided optimization: ${WITH_PGO} (${MOTIF_PGO_DIR})")
+endif()
+
+# Exported symbols.  The shared libraries export only what their version
+# scripts (src/lib/*/lib*.map) list, in a version node; everything else is
+# bound inside the library at link time, which needs neither a PLT entry
+# nor a symbolic relocation.  See doc/abi-policy.md.
+set(MOTIF_HAVE_VERSION_SCRIPT OFF)
+if(WITH_SHARED_LIBS AND CMAKE_C_COMPILER_ID MATCHES "GNU|Clang" AND NOT APPLE AND NOT WIN32)
+  set(_map ${CMAKE_BINARY_DIR}/CMakeFiles/motif_version_test.map)
+  file(WRITE ${_map} "MOTIF_TEST { global: main; local: *; };\n")
+  set(CMAKE_REQUIRED_LINK_OPTIONS -Wl,--version-script=${_map})
+  check_c_source_compiles("int main(void) { return 0; }" MOTIF_HAVE_LDFLAG_VERSION_SCRIPT)
+  # The scripts also list the symbols of optional features (printing, JPEG,
+  # PNG), which lld rejects unless told otherwise when they are left out.
+  set(CMAKE_REQUIRED_LINK_OPTIONS -Wl,--version-script=${_map} -Wl,--undefined-version)
+  check_c_source_compiles("int main(void) { return 0; }" MOTIF_HAVE_LDFLAG_UNDEFINED_VERSION)
+  unset(CMAKE_REQUIRED_LINK_OPTIONS)
+  unset(_map)
+  if(MOTIF_HAVE_LDFLAG_VERSION_SCRIPT)
+    set(MOTIF_HAVE_VERSION_SCRIPT ON)
+  else()
+    message(WARNING "The linker does not support --version-script: the "
+      "libraries will export all their symbols")
+  endif()
+endif()
+
+# motif_version_script(<target> <script>)
+#
+# Link the shared library <target> with the version script <script>.
+function(motif_version_script target script)
+  if(MOTIF_HAVE_VERSION_SCRIPT)
+    target_link_options(${target} PRIVATE -Wl,--version-script=${script})
+    if(MOTIF_HAVE_LDFLAG_UNDEFINED_VERSION)
+      target_link_options(${target} PRIVATE -Wl,--undefined-version)
+    endif()
+    set_property(TARGET ${target} APPEND PROPERTY LINK_DEPENDS ${script})
+  endif()
+endfunction()
+
+# motif_exports_test(<target> <script> HEADERS <header>...
+#                    [OBJECTS_OF <object library>...])
+#
+# With WITH_TESTS, add the test abi.exports.<target>: the shared library
+# <target> must export every symbol that the installed <header>s declare,
+# that is <script> must not leave one out.  The objects of <target> and of
+# the OBJECTS_OF libraries are the symbols looked for.
+function(motif_exports_test target script)
+  cmake_parse_arguments(E "" "" "HEADERS;OBJECTS_OF" ${ARGN})
+  if(NOT WITH_TESTS OR NOT MOTIF_HAVE_VERSION_SCRIPT OR NOT CMAKE_NM)
+    return()
+  endif()
+  set(_headers)
+  foreach(_h IN LISTS E_HEADERS)
+    get_filename_component(_h ${_h} ABSOLUTE)
+    list(APPEND _headers ${_h})
+  endforeach()
+  set(_objects "$<TARGET_OBJECTS:${target}>")
+  foreach(_lib IN LISTS E_OBJECTS_OF)
+    string(APPEND _objects ";$<TARGET_OBJECTS:${_lib}>")
+  endforeach()
+  set(_args ${CMAKE_CURRENT_BINARY_DIR}/${target}_exports_test.cmake)
+  file(GENERATE OUTPUT ${_args} CONTENT
+"set(NM \"${CMAKE_NM}\")
+set(LIBRARY \"$<TARGET_FILE:${target}>\")
+set(MAP \"${script}\")
+set(OBJECTS \"${_objects}\")
+set(HEADERS \"${_headers}\")
+")
+  add_test(NAME abi.exports.${target}
+    COMMAND ${CMAKE_COMMAND} -DARGS=${_args}
+      -P ${CMAKE_SOURCE_DIR}/tools/cmake/scripts/check_exports.cmake)
+  set_tests_properties(abi.exports.${target} PROPERTIES LABELS ABI)
+endfunction()
+
 # C17 with GNU extensions (-std=gnu17).  C23 needs the remaining
 # unprototyped () function declarations fixed first.
 set(CMAKE_C_STANDARD 17)
@@ -643,6 +781,33 @@ endif()
 
 if(WITH_DOCS)
     add_subdirectory(doc)
+endif()
+
+# The training workload of WITH_PGO=GENERATE: the test suite (WITH_TESTS),
+# whose X tests run under xvfb-run, and MOTIF_PGO_TRAINING_COMMAND, e.g. a
+# benchmark run under xvfb-run.
+if(WITH_PGO STREQUAL "GENERATE")
+  set(MOTIF_PGO_TRAINING_COMMAND "" CACHE STRING
+    "Additional PGO training command (a ;-list), run by the pgo-train target")
+  set(_motif_pgo_commands)
+  if(MOTIF_PGO_TRAINING_COMMAND)
+    list(APPEND _motif_pgo_commands COMMAND ${MOTIF_PGO_TRAINING_COMMAND})
+  endif()
+  if(WITH_TESTS)
+    list(APPEND _motif_pgo_commands
+      COMMAND ${CMAKE_CTEST_COMMAND} -C $<CONFIG>)
+  endif()
+  if(_motif_pgo_commands)
+    add_custom_target(pgo-train ${_motif_pgo_commands}
+      WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+      COMMENT "Running the PGO training workload (profiles in ${MOTIF_PGO_DIR})"
+      USES_TERMINAL)
+  else()
+    message(WARNING "WITH_PGO=GENERATE: no training workload; enable WITH_TESTS, "
+      "set MOTIF_PGO_TRAINING_COMMAND or run programs of this build to collect "
+      "the profiles")
+  endif()
+  unset(_motif_pgo_commands)
 endif()
 
 # Let a cross build import the build-time tools of this one.

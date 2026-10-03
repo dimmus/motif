@@ -627,11 +627,11 @@ unsigned int _XmStringByteStreamValidLength(unsigned char *stream, unsigned long
 }
 
 /* Create a new XmString */
-XmString XmStringCreate(char *text, XmStringTag tag)
+XmString XmStringCreate(const char *text, XmStringTag tag)
 {
   XmString ret_val;
   _XmProcessLock();
-  ret_val = _XmStringNCreate(text, tag, -1);
+  ret_val = _XmStringNCreate((char *)text, tag, -1);
   _XmProcessUnlock();
   return ret_val;
 }
@@ -686,9 +686,9 @@ XmString _XmStringNCreate(char *text, XmStringTag tag, int len)
 /*
  * Convenience routine creating localized XmString from NULL terminated string.
  */
-XmString XmStringCreateLocalized(String text)
+XmString XmStringCreateLocalized(const char *text)
 {
-  return (XmStringGenerate(text, NULL, XmCHARSET_TEXT, NULL));
+  return (XmStringGenerate((XtPointer)text, NULL, XmCHARSET_TEXT, NULL));
 }
 
 /* Create an optimized _XmString with only direction set. */

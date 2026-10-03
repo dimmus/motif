@@ -935,7 +935,7 @@ typedef enum { XmPARSE_ERROR, XmPARSE_NO_UNITS, XmPARSE_UNITS_OK } XmParseResult
 
 /********    Function Declarations for Xme        ********/
 /* GadgetUtil.c */
-extern void XmeRedisplayGadgets(Widget w, register XEvent *event, Region region);
+extern void XmeRedisplayGadgets(Widget w, XEvent *event, Region region);
 extern void XmeConfigureObject(
     Widget g, Position x, Position y, Dimension width, Dimension height, Dimension border_width);
 /* Traversal.c */
@@ -977,7 +977,7 @@ extern void XmeQueryBestCursorSize(Widget w, Dimension *width, Dimension *height
 extern void XmeWarning(Widget w, char *message);
 /* ResConvert.c */
 extern XmFontList XmeGetDefaultRenderTable(Widget w, unsigned char fontListType);
-extern Boolean XmeNamesAreEqual(register char *in_str, register char *test_str);
+extern Boolean XmeNamesAreEqual(char *in_str, char *test_str);
 /* Primitive.c */
 extern void XmeResolvePartOffsets(WidgetClass w_class,
                                   XmOffsetPtr *offset,

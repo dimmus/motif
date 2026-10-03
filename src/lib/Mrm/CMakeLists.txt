@@ -35,22 +35,14 @@ set(MRM_SRCS
     MrmMessages.c
 )
 
-# Mrm headers
+# Mrm headers.  The internal ones (IDB.h, Mrm.h, MrmMsgI.h, MrmWidget.h)
+# are not installed.  MrmosI.h is, as in Motif 2.3: it declares the
+# exported _MrmOS functions that the UIL compiler uses.
 set(MRM_HEADERS
     MrmDecls.h
     MrmPublic.h
     MrmAppl.h
     MrmosI.h
-)
-
-# Internal headers
-set(MRM_INTERNAL_HEADERS
-    IDB.h
-    Mrm.h
-    MrmMsgI.h
-    MrmWidget.h
-    # Included by MrmMsgI.h; generated, or the stub without message catalogs
-    ${CMAKE_BINARY_DIR}/include/Mrm/MrmMsgCatI.h
 )
 
 # Generate message catalog header file
@@ -75,6 +67,9 @@ endif()
 add_library(Mrm ${MOTIF_LIB_TYPE} ${MRM_SRCS})
 
 add_library(Motif::Mrm ALIAS Mrm)
+
+# Export only the symbols of libMrm.map (see doc/abi-policy.md)
+motif_version_script(Mrm ${CMAKE_CURRENT_SOURCE_DIR}/libMrm.map)
 
 # Ensure message catalog header is generated before building this target
 add_dependencies(Mrm mrm_msgcat_header)
@@ -114,8 +109,7 @@ install(FILES ${MRM_HEADERS}
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Mrm
 )
 
-# Install internal headers (for development)
-install(FILES ${MRM_INTERNAL_HEADERS}
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Mrm
+# abi.exports.Mrm: libMrm.map must list what the installed headers declare
+motif_exports_test(Mrm ${CMAKE_CURRENT_SOURCE_DIR}/libMrm.map
+    HEADERS ${MRM_HEADERS}
 )
-
