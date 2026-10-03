@@ -1494,14 +1494,13 @@ char *_XmCharsetCanonicalize(String charset)
   int len;
   /* ASCII -> ISO8859-1 */
   if (!strcmp(charset, "ASCII")) {
-    len = strlen(XmSTRING_ISO8859_1);
-    new_s = XtMalloc(len + 1);
-    strcpy(new_s, XmSTRING_ISO8859_1);
+    new_s = XtNewString(XmSTRING_ISO8859_1);
   }
   else if (_isISO(charset)) {
     /* "ISO####-#" */
-    new_s = XtMalloc(3 + 4 + 1 + 1 + 1);
-    sprintf(new_s, "ISO%s", charset);
+    len = 3 + 4 + 1 + 1 + 1;
+    new_s = XtMalloc(len);
+    snprintf(new_s, len, "ISO%s", charset);
     new_s[7] = '-';
     new_s[8] = charset[4];
     new_s[9] = '\0';
@@ -1619,8 +1618,7 @@ void _XmRC_GetMenuAccelerator(XmRowColumnWidget rc,
 {
   String data;
   if (rc->row_column.menu_accelerator != NULL) {
-    data = (String)XtMalloc(strlen(RC_MenuAccelerator(rc)) + 1);
-    strcpy(data, RC_MenuAccelerator(rc));
+    data = XtNewString(RC_MenuAccelerator(rc));
     *value = (XtArgVal)data;
   }
   else

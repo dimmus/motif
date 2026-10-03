@@ -2496,6 +2496,7 @@ static Widget create(Widget p, /* parent widget */
     /* No shell - create a new one */
     if (pop == NULL) {
       char *b;
+      size_t size;
       /* should pass in the old al */
       for (i = 0; i < old_ac; i++)
         s_al[s_ac++] = old_al[i];
@@ -2509,8 +2510,9 @@ static Widget create(Widget p, /* parent widget */
       s_ac++;
       XtSetArg(s_al[s_ac], XtNancestorSensitive, TRUE);
       s_ac++;
-      b = XtMalloc(strlen(POPUP_PREFIX) + strlen(name) + 1);
-      sprintf(b, POPUP_PREFIX, name);
+      size = strlen(POPUP_PREFIX) + strlen(name) + 1;
+      b = XtMalloc(size);
+      snprintf(b, size, POPUP_PREFIX, name);
       pop = (XmMenuShellWidget)XtCreatePopupShell(b, xmMenuShellWidgetClass, pw, s_al, s_ac);
       /* Mark the shell as having been created by us */
       pop->menu_shell.private_shell = True;
@@ -3131,8 +3133,7 @@ static void GetMenuAccelerator(Widget wid,
   String data;
   XmRowColumnWidget rc = (XmRowColumnWidget)wid;
   if (rc->row_column.menu_accelerator != NULL) {
-    data = (String)XtMalloc(strlen(RC_MenuAccelerator(rc)) + 1);
-    strcpy(data, RC_MenuAccelerator(rc));
+    data = XtNewString(RC_MenuAccelerator(rc));
     *value = (XtArgVal)data;
   }
   else

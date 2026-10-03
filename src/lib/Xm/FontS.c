@@ -1497,7 +1497,7 @@ static void UpdateSizes(XmFontSelectorWidget fsw)
     LongFlag flag = ((LongFlag)1) << i;
     if (!CheckLongFlag(size_flag, flag) && !IsScaled(fsw, family))
       continue;
-    sprintf(buf, "%d", GValidSizes[i]);
+    snprintf(buf, sizeof(buf), "%d", GValidSizes[i]);
     strs[count++] = XmStringCreateLocalized(buf);
     match |= (SizeMapping(cf->point_size) == flag);
   }
@@ -1690,7 +1690,7 @@ static void SetDisplayedFont(XmFontSelectorWidget fsw, String new_font)
   num_largs++;
   XtSetValues(XmFontS_bold_toggle(fsw), largs, num_largs);
   SetComboValue(XmFontS_family_box(fsw), XrmQuarkToString(cf->familyq));
-  sprintf(buf, "%d", cf->point_size / POINT_DIVIDE);
+  snprintf(buf, sizeof(buf), "%d", cf->point_size / POINT_DIVIDE);
   SetComboValue(XmFontS_size_box(fsw), buf);
   SetResolution(fsw, cf);
   XmCopyISOLatin1Lowered(buf, cf->spacing);
@@ -2476,7 +2476,7 @@ static Widget CreateEncodingMenu(XmFontSelectorWidget fsw,
     char name[BUFSIZ];
     XmString label = XmStringCreateLocalized(*encodings);
     margs[button_label].value = (XtArgVal)label;
-    sprintf(name, "button_%d", i);
+    snprintf(name, sizeof(name), "button_%d", i);
     button = XtCreateManagedWidget(
         name, xmPushButtonWidgetClass, pulldownMenu, margs, num_args + num_largs);
     XmStringFree(label);
@@ -3211,7 +3211,7 @@ static Boolean SetValues(Widget old, Widget request, Widget set, ArgList args, C
       if (strcmp(*encodings, ENCODING_STRING(set_fsw)) == 0)
         current = i;
     }
-    sprintf(buf, "*button_%d", current);
+    snprintf(buf, sizeof(buf), "*button_%d", current);
     if ((button = XtNameToWidget(XtParent(XmFontS_option_menu(set_fsw)), buf)) != NULL) {
       num_largs = 0;
       XtSetArg(largs[num_largs], XmNmenuHistory, button);

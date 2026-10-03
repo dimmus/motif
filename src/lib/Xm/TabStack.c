@@ -3723,7 +3723,7 @@ static Boolean TabConvertProc(Widget widget,
 static Atom TabAtom(Widget widget)
 {
   char pid_buf[64];
-  sprintf(pid_buf, "ICS_TAB_PID_%d\n", (int)getpid());
+  snprintf(pid_buf, sizeof(pid_buf), "ICS_TAB_PID_%d\n", (int)getpid());
   return (XmInternAtom(XtDisplay(widget), pid_buf, False));
 }
 

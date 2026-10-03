@@ -665,13 +665,14 @@ Widget XmeCreateClassDialog(
   Widget ds;       /*  DialogShell		*/
   ArgList ds_args; /*  arglist for shell	*/
   char *ds_name;
+  size_t size;
   if (!name)
     name = "";
   /*	Create DialogShell parent.
    */
-  ds_name = _XmMallocArray(strlen(name) + XmDIALOG_SUFFIX_SIZE + 1, sizeof(char));
-  strcpy(ds_name, name);
-  strcat(ds_name, XmDIALOG_SUFFIX);
+  size = strlen(name) + XmDIALOG_SUFFIX_SIZE + 1;
+  ds_name = _XmMallocArray(size, sizeof(char));
+  snprintf(ds_name, size, "%s%s", name, XmDIALOG_SUFFIX);
   ds_args = (ArgList)_XmMallocArray(bb_n + 1, sizeof(Arg));
   memcpy(ds_args, bb_args, (sizeof(Arg) * bb_n));
   XtSetArg(ds_args[bb_n], XmNallowShellResize, True);

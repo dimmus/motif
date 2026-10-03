@@ -1203,7 +1203,7 @@ Widget XmGetXmScreen(Screen *screen)
     if (scr == screen)
       break;
   }
-  sprintf(name, "screen%d", i);
+  snprintf(name, sizeof(name), "screen%d", i);
   i = 0;
   XtSetArg(args[i], XmNscreen, screen);
   i++;
