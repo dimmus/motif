@@ -734,6 +734,22 @@ function(motif_version_script target script)
   endif()
 endfunction()
 
+# motif_ban_unsafe_string_functions(<target>...)
+#
+# Compile the sources of the library <target>s with src/lib/XmBannedI.h
+# force-included, so that a call of sprintf, vsprintf, strcpy or strcat
+# fails to compile (GCC and Clang).
+function(motif_ban_unsafe_string_functions)
+  if(NOT CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
+    return()
+  endif()
+  foreach(_target IN LISTS ARGN)
+    target_compile_options(${_target} PRIVATE
+      "SHELL:-include ${CMAKE_SOURCE_DIR}/src/lib/XmBannedI.h"
+      -Werror=deprecated-declarations)
+  endforeach()
+endfunction()
+
 # motif_exports_test(<target> <script> HEADERS <header>...
 #                    [OBJECTS_OF <object library>...])
 #
