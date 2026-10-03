@@ -1228,8 +1228,17 @@ Boolean _XmReadDSFromStream(XmDropSiteManagerObject dsm,
       }
       info->animation_data.borderWidth = (Dimension)dsNone.borderWidth;
     } break;
-    default:
-      break;
+    default: {
+      /*
+       * Unknown style, which has no animation data on the wire.  Don't
+       * pass it on: the drop site manager keeps the style in a 3-bit
+       * field, so it could alias a style whose animation data is
+       * larger than the record allocated for it.
+       */
+      XmICCDropSiteNone info = (XmICCDropSiteNone)dropSiteInfoRtn;
+      dropSiteInfoRtn->header.animationStyle = XmDRAG_UNDER_NONE;
+      info->animation_data.borderWidth = 0;
+    } break;
   }
   /*
    *  Read the region, byte swapping if necessary.  The box count is
