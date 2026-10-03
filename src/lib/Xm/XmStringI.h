@@ -161,7 +161,8 @@ typedef struct __XmStringOpt {
  ****************************************************************/
 /* Forward definitions */
 typedef union __XmStringEntryRec *_XmStringEntry;
-typedef union __XmStringNREntryRec *_XmStringNREntry;
+/* Same type as _XmStringEntry; see _XmStringNREntryRec below. */
+typedef union __XmStringEntryRec *_XmStringNREntry;
 
 typedef struct __XmStringMultiHeader {
   unsigned int type : 2;          /* XmSTRING_MULTIPLE_ENTRY */
@@ -339,14 +340,14 @@ typedef union __XmStringEntryRec {
 
 /***************************************************************
   _XmStringNREntry:
-  Used in the XmStringArraySeg, to prevent recursive
-  definitions of XmStrings.
+  Used in the XmStringArraySeg for entries that are never themselves
+  arrays (no recursive XmStrings).  This is a convention only: it is the
+  same type as _XmStringEntry.  It used to point to a separate union
+  without the 'multiple' member, but the code freely reuses arrays of
+  entries as arrays of segments (and vice versa), and reading pointers
+  of one type through lvalues of the other violates strict aliasing.
  ****************************************************************/
-typedef union __XmStringNREntryRec {
-  _XmStringEmptyHeader empty;
-  _XmStringOptSegHdrRec single;         /* XmSTRING_ENTRY_OPTIMIZED */
-  _XmStringUnoptSegHdrRec unopt_single; /* XmSTRING_ENTRY_UNOPTIMIZED */
-} _XmStringNREntryRec;
+typedef _XmStringEntryRec _XmStringNREntryRec;
 /****************************************************************
  *
  * Typedefs for old structures

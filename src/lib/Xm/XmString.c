@@ -1022,6 +1022,7 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
   XmTextType a_type, b_type;
   XmString a_str, b_str;
   _XmStringMultiRec b_tmp;
+  _XmStringEntry b_entry; /* the single entry of b_tmp */
   _XmStringEntry a_line, b_line, tmp_line, *segs = NULL;
   _XmStringNREntry a_last, b_seg = NULL, tmp_seg;
   String a_tag;
@@ -1197,7 +1198,8 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
         b = (XmString)XtRealloc((char *)b, size);
         memmove(_XmEntryTextGet((_XmStringEntry)b), _XmStrText(b), _XmStrByteCount(b));
       }
-      _XmStrEntry(b_str) = (_XmStringEntry *)&b;
+      b_entry = (_XmStringEntry)b;
+      _XmStrEntry(b_str) = &b_entry;
       free_b = False;
     }
     else {
@@ -1388,7 +1390,7 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
       _XmEntrySegment(a_line)[i + a_sc] = b_seg;
     }
     if (free_b_line) {
-      if (_XmEntrySegment(b_line) != (_XmStringNREntry *)&b &&
+      if (_XmEntrySegment(b_line) != &b_entry &&
           _XmEntrySegment(b_line) != (_XmStringNREntry *)_XmStrEntry(b_str))
         XtFree((char *)_XmEntrySegment(b_line));
       if (b_line != (_XmStringEntry)&array_seg)
