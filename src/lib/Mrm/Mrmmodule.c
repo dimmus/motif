@@ -335,6 +335,39 @@ UrmIFMPutModule (IDBFile		file_id ,
 
 
 /*
+ * Check an interface module read from a UID file into context_id: its
+ * topmost widget descriptors must lie within the module, and each index
+ * must be NUL-terminated.
+ */
+static Cardinal
+Urm__ValidModule (URMResourceContextPtr		context_id)
+{
+  RGMModuleDescPtr	ifmodptr ;	/* IF module in context */
+  size_t		size ;		/* bytes in the module */
+  int			ndx ;		/* loop index */
+
+  ifmodptr = (RGMModuleDescPtr) UrmRCBuffer(context_id) ;
+  size = UrmRCSize(context_id) ;
+  if ( ifmodptr == NULL || size < XtOffsetOf (RGMModuleDesc, topmost) ||
+       ifmodptr->validation != URMInterfaceModuleValid ||
+       ifmodptr->count < 0 ||
+       ! _UrmInBuffer (XtOffsetOf (RGMModuleDesc, topmost),
+		       (size_t) ifmodptr->count * sizeof (RGMTopmostDesc),
+		       size) )
+    return Urm__UT_Error ("UrmIFMGetModule", _MrmMMsg_0025,
+			  NULL, context_id, MrmBAD_IF_MODULE) ;
+
+  for ( ndx=0 ; ndx<ifmodptr->count ; ndx++ )
+    if ( memchr (ifmodptr->topmost[ndx].index, '\0', URMMaxIndexLen1) == NULL )
+      return Urm__UT_Error ("UrmIFMGetModule", _MrmMMsg_0025,
+			    NULL, context_id, MrmBAD_IF_MODULE) ;
+
+  return MrmSUCCESS ;
+}
+
+
+
+/*
  *++
  *
  *  PROCEDURE DESCRIPTION:
@@ -384,8 +417,9 @@ UrmIFMHGetModule (MrmHierarchy		hierarchy_id ,
   result = UrmHGetIndexedResource
     (hierarchy_id, index, URMgResourceSet, URMrsInterfaceModule,
      context_id, file_id_return) ;
+  if ( result != MrmSUCCESS ) return result ;
 
-  return result ;
+  return Urm__ValidModule (context_id) ;
 
 }
 
@@ -431,7 +465,6 @@ UrmIFMGetModule (IDBFile		file_id ,
    *  Local variables
    */
   Cardinal		result ;	/* function results */
-  RGMModuleDescPtr	ifmodptr ;	/* IF module in context */
 
 
   /*
@@ -448,14 +481,6 @@ UrmIFMGetModule (IDBFile		file_id ,
   /*
    * validate the interface module
    */
-  ifmodptr = (RGMModuleDescPtr) UrmRCBuffer(context_id) ;
-  if ( ifmodptr->validation != URMInterfaceModuleValid )
-    return Urm__UT_Error ("UrmIFMPutModule", _MrmMMsg_0025,
-			  NULL, context_id, MrmBAD_IF_MODULE) ;
-
-  /*
-   * Successfully retrieved
-   */
-  return MrmSUCCESS ;
+  return Urm__ValidModule (context_id) ;
 
 }

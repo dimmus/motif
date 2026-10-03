@@ -355,11 +355,12 @@ Urm__OpenHierarchyInternal (MrmCount			num_files,
       result = UrmGetResourceContext ((char *(*)(size_t))NULL, (void(*)(void *))NULL,
 				      0, &resource_ctx);
       if ( result != MrmSUCCESS ) return result;
-      result = UrmGetIndexedLiteral (cur_file, UilMrmClassTableIndex,
-				     class_ctx);
+      result = UrmIdbGetIndexedResource (cur_file, UilMrmClassTableIndex,
+					 URMgLiteral, URMtNul, class_ctx);
       if ( result == MrmSUCCESS )
-	result = UrmGetIndexedLiteral (cur_file, UilMrmResourceTableIndex,
-				       resource_ctx);
+	result = UrmIdbGetIndexedResource (cur_file,
+					   UilMrmResourceTableIndex,
+					   URMgLiteral, URMtNul, resource_ctx);
       if ( result != MrmSUCCESS )
 	{
 	  UrmFreeResourceContext (class_ctx);

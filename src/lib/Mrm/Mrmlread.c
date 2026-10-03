@@ -770,6 +770,7 @@ UrmGetIndexedLiteral (IDBFile			file_id ,
    *  Local variables
    */
   MrmType		lit_type ;	/* the type of the literal */
+  Cardinal		result ;	/* function results */
 
 
   /*
@@ -780,8 +781,10 @@ UrmGetIndexedLiteral (IDBFile			file_id ,
 			  file_id, context_id, MrmBAD_CONTEXT) ;
 
   lit_type = UrmRCType (context_id) ;
-  return UrmIdbGetIndexedResource
+  result = UrmIdbGetIndexedResource
     (file_id, index, URMgLiteral, lit_type, context_id) ;
+  if ( result != MrmSUCCESS ) return result ;
+  return Urm__ValidLiteral (file_id, context_id) ;
 
 }
 
@@ -825,6 +828,7 @@ UrmGetRIDLiteral (IDBFile			file_id ,
    *  Local variables
    */
   MrmType		lit_type ;	/* the type of the literal */
+  Cardinal		result ;	/* function results */
 
 
   /*
@@ -835,8 +839,10 @@ UrmGetRIDLiteral (IDBFile			file_id ,
 			  file_id, context_id, MrmBAD_CONTEXT) ;
 
   lit_type = UrmRCType (context_id) ;
-  return UrmIdbGetRIDResource
+  result = UrmIdbGetRIDResource
     (file_id, resource_id, URMgLiteral, lit_type, context_id) ;
+  if ( result != MrmSUCCESS ) return result ;
+  return Urm__ValidLiteral (file_id, context_id) ;
 
 }
 
@@ -883,6 +889,7 @@ Urm__HGetIndexedLiteral (MrmHierarchy		hierarchy_id ,
    *  Local variables
    */
   MrmType			lit_type ;	/* the type of the literal */
+  Cardinal			result ;	/* function results */
 
   /*
    * Validate hierarchy and context, then attempt the read.
@@ -898,8 +905,10 @@ Urm__HGetIndexedLiteral (MrmHierarchy		hierarchy_id ,
 			  NULL, context_id, MrmBAD_CONTEXT) ;
 
   lit_type = UrmRCType (context_id) ;
-  return UrmHGetIndexedResource
+  result = UrmHGetIndexedResource
     (hierarchy_id, index, URMgLiteral, lit_type, context_id, file_id_return) ;
+  if ( result != MrmSUCCESS ) return result ;
+  return Urm__ValidLiteral (*file_id_return, context_id) ;
 
 }
 

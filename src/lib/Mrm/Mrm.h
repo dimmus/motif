@@ -1991,6 +1991,12 @@ extern Cardinal UrmPutRIDWidget  _ARGUMENTS(( IDBFile file_id ,
 
 /* mrmiswap.c */
 extern Cardinal Idb__BM_SwapRecordBytes _ARGUMENTS(( IDBRecordBufferPtr	buffer ));
+/* mrmvalid.c */
+extern Cardinal Urm__ValidWidgetRecord _ARGUMENTS(( IDBFile file_id ,
+					URMResourceContextPtr context_id ));
+extern Cardinal Urm__ValidLiteral _ARGUMENTS(( IDBFile file_id ,
+					URMResourceContextPtr context_id ));
+
 extern unsigned Urm__SwapValidation _ARGUMENTS(( unsigned validation ));
 extern Cardinal Urm__SwapRGMResourceDesc _ARGUMENTS(( RGMResourceDescPtr res_desc ));
 extern Cardinal Urm__SwapRGMCallbackDesc _ARGUMENTS(( RGMCallbackDescPtr callb_desc,

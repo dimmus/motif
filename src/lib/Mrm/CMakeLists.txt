@@ -23,6 +23,7 @@ set(MRM_SRCS
     Mrmptrlist.c
     Mrmtable.c
     Mrmtime.c
+    Mrmvalid.c
     Mrmvm.c
     Mrmwci.c
     Mrmwcrw.c
