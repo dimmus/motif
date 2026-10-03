@@ -67,7 +67,9 @@ install(TARGETS mwm
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
-# Install system.mwmrc
+# Install system.mwmrc where mwm looks for it (MWMRCDIR above).  The full
+# path matters: GNUInstallDirs maps the sysconfdir of the /usr prefix to /etc,
+# not /usr/etc.
 install(FILES system.mwmrc
-    DESTINATION ${CMAKE_INSTALL_SYSCONFDIR}/X11
+    DESTINATION ${CMAKE_INSTALL_FULL_SYSCONFDIR}/X11
 )
