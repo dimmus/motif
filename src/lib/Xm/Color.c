@@ -848,6 +848,20 @@ void _XmSelectColorDefault(Widget widget, int offset, XrmValue *value)
   XmeGetDefaultPixel(widget, XmSELECT, offset, value);
 }
 
+/* The colours XpmCreateXpmImageFromPixmap writes: "#rrrrggggbbbb" */
+#define RGB16_LEN 13
+static Boolean IsRGB16(const char *col)
+{
+  return col[0] == '#' && strlen(col) == RGB16_LEN;
+}
+
+/* Rewrite such a colour as the grey of intensity bw */
+static void SetGray(char *col, unsigned int bw)
+{
+  bw &= 0xffff;
+  snprintf(col, RGB16_LEN + 1, "#%04x%04x%04x", bw, bw, bw);
+}
+
 static unsigned int FromColorToBlackAndWhite(char *col)
 {
   unsigned long r, g, b, bw;
@@ -878,9 +892,9 @@ Pixmap _XmConvertToBW(Widget w, Pixmap pm)
     if (im.ncolors <= 2) {
       if (im.ncolors == 1) {
         col = strdup(im.colorTable[0].c_color);
-        if (col[0] == '#') {
+        if (col && IsRGB16(col)) {
           bw = (FromColorToBlackAndWhite(col + 1) * 0.65);
-          sprintf(im.colorTable[0].c_color, "#%04x%04x%04x", bw, bw, bw);
+          SetGray(im.colorTable[0].c_color, bw);
         }
         if (col)
           free(col);
@@ -888,16 +902,16 @@ Pixmap _XmConvertToBW(Widget w, Pixmap pm)
       else {
         col = im.colorTable[0].c_color;
         col2 = im.colorTable[1].c_color;
-        if ((col[0] == '#') && (col2[0] == '#')) {
+        if (IsRGB16(col) && IsRGB16(col2)) {
           bw = FromColorToBlackAndWhite(col + 1);
           bw2 = FromColorToBlackAndWhite(col2 + 1);
           if (bw >= bw2) {
             bw2 = bw2 + ((bw - bw2) * 0.65);
-            sprintf(im.colorTable[1].c_color, "#%04x%04x%04x", bw2, bw2, bw2);
+            SetGray(im.colorTable[1].c_color, bw2);
           }
           else {
             bw = bw + ((bw2 - bw) * 0.65);
-            sprintf(im.colorTable[0].c_color, "#%04x%04x%04x", bw, bw, bw);
+            SetGray(im.colorTable[0].c_color, bw);
           }
         }
       }
@@ -906,12 +920,12 @@ Pixmap _XmConvertToBW(Widget w, Pixmap pm)
       char e[5];
       for (i = 0; i < im.ncolors; i++) {
         col = im.colorTable[i].c_color;
-        if (col[0] == '#') {
+        if (IsRGB16(col)) {
           bw = FromColorToBlackAndWhite(col + 1);
           /* could be
                                         sprintf(im.colorTable[i].c_color, "#%04x%04x%04x", bw, bw,
              bw); Four lower lines is sprintf optimized version */
-          sprintf(e, "%04x", bw);
+          snprintf(e, sizeof(e), "%04x", bw);
           memcpy(col + 1, e, 4);
           memcpy(col + 5, e, 4);
           memcpy(col + 9, e, 4);
