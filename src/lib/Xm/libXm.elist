@@ -1673,6 +1673,7 @@ internal _XmSetFocusFlag
 internal _XmSetFocusResetFlag
 internal _XmSetInitialOfTabGraph
 internal _XmSetThicknessDefault0
+internal _XmStringByteStreamValidLength
 internal _XmStringCacheFree
 internal _XmStringCacheGet
 internal _XmStringCacheTag
