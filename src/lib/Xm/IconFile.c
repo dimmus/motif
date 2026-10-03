@@ -270,10 +270,6 @@ void XmeFlushIconFileCache(String path)
   /* don't free the dirList itself */
   _XmProcessUnlock();
 }
-#ifndef XTHREADS
-static String GdirName;
-static String GleafName;
-#endif
 static int CheckDirCache(String path)
 {
   String dirName;
@@ -293,12 +289,6 @@ static int CheckDirCache(String path)
     dirNameLen = filePtr - path - 1;
     fileNameLen = strlen(path) - dirNameLen - 1;
   }
-  /*
-   * set global variable for later use
-   */
-#ifndef XTHREADS
-  GleafName = filePtr;
-#endif
   if (dirNameLen == 0) {
     return DtINVALID_CACHED_DIR;
   }
@@ -327,12 +317,6 @@ static int CheckDirCache(String path)
       cacheList.dirs[cacheList.numDirs++] = MakeCachedDirEntry(dirName);
     }
     currDir = (DtValidCachedDir)cacheList.dirs[i];
-    /*
-     * set global variable
-     */
-#ifndef XTHREADS
-    GdirName = currDir->dirName;
-#endif
     if ((currDir->dirNameLen == dirNameLen) && (strncmp(currDir->dirName, path, dirNameLen) == 0))
     {
       switch (currDir->cachedDirType) {
@@ -392,10 +376,6 @@ static Boolean TestIconFile(String path)
        a local file, check here or CheckDirCache will fail */
   if (!find_slash(path)) {
     dirCacheType = DtUNCACHED_DIR;
-#ifndef XTHREADS
-    GleafName = path;
-    GdirName = ".";
-#endif
   }
   else
     dirCacheType = CheckDirCache(path);
@@ -658,13 +638,9 @@ String XmGetIconFileName(Screen *screen,
     /** alloc a icon cache entry **/
     iNameEntry = (DtIconNameEntry)XtMalloc(sizeof(DtIconNameEntryRec));
     iNameEntry->key_name = XtNewString(name_used);
-#ifndef XTHREADS
-    if (useIconFileCache) {
-      iNameEntry->dirName = XtNewString(GdirName);
-      iNameEntry->leafName = XtNewString(GleafName);
-    }
-    else
-#endif
+    /* Always derive the directory and leaf from the name we found;
+     * TestIconFile() used to leave them in globals that pointed into
+     * dead stack frames and into flushable cache entries. */
     {
       String dirName;
       String filePtr;
