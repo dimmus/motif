@@ -181,14 +181,33 @@ MrmRegisterClassWithCleanup (
 
 
   _MrmProcessLock();
-  /*
-   * Allocate and fill in a new descriptor
-   */
   if (create_name == NULL)
     {
       _MrmProcessUnlock();
       return MrmFAILURE;
     }
+
+  /*
+   * Registering a name again replaces its creator. Update the existing
+   * descriptor in place: it is linked into wci_cldesc_list and may be
+   * cached in the class tables of open hierarchies, so it must not be
+   * freed.
+   */
+  hash_initialize (cldesc_hash_table, &cldesc_hash_inited);
+  hash_entry = hash_find_name (cldesc_hash_table, create_name);
+  if ( hash_entry != NULL && hash_entry->az_value != NULL )
+    {
+      cldesc = (WCIClassDescPtr) hash_entry->az_value;
+      cldesc->creator = creator;
+      cldesc->class_record = class_record;
+      cldesc->cleanup = cleanup;
+      _MrmProcessUnlock();
+      return MrmSUCCESS;
+    }
+
+  /*
+   * Allocate and fill in a new descriptor
+   */
   cldesc = (WCIClassDescPtr) XtMalloc (sizeof(WCIClassDesc) +
 				       strlen(create_name) + 1);
   if ( cldesc == NULL )
@@ -208,13 +227,8 @@ MrmRegisterClassWithCleanup (
   /*
    * Enter the descriptor in the descriptor hash table
    */
-  hash_initialize (cldesc_hash_table, &cldesc_hash_inited);
   hash_entry = (URMHashTableEntryPtr)
     hash_insert_name (cldesc_hash_table, cldesc->creator_name);
-  /* Begin fixing CR 5573 */
-  if (hash_entry->az_value != NULL)
-    XtFree ((char *) hash_entry->az_value);
-  /* End fixing CR 5573 */
   hash_entry->az_value = (char *) cldesc;
 
   _MrmProcessUnlock();
