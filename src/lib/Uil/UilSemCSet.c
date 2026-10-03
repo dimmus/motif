@@ -257,21 +257,30 @@ int sem_charset_lang_name(char *lang_charset)
 
 {
 
-char		uname[200];	/* upper-case character set name */
 int		ndx;		/* loop index */
+char		*name;		/* character set name */
+char		*entry;		/* table entry */
 
 
 /*
- * Convert name to upper case, then search table (which is already in
- * upper case).
+ * Compare the name converted to upper case against each table entry
+ * (which is already in upper case).  The name comes from $LANG and may
+ * be arbitrarily long, so it is not copied.
  */
-strcpy (uname, lang_charset);
-for ( ndx=0 ; ndx<(int)strlen(uname) ; ndx++ )
-    uname[ndx] = _upper (uname[ndx]);
-
 for ( ndx=0 ; ndx<(int)charset_lang_table_max ; ndx++ )
-    if ( strcmp(uname,charset_lang_names_table[ndx]) == 0 )
+    {
+    name = lang_charset;
+    entry = charset_lang_names_table[ndx];
+    if ( entry == NULL )
+	continue;
+    while ( *name != 0 && _upper (*name) == *entry )
+	{
+	name++;
+	entry++;
+	}
+    if ( *name == 0 && *entry == 0 )
 	return (int)charset_lang_codes_table[ndx];
+    }
 return 0;
 
 }
