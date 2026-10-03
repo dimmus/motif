@@ -23,8 +23,18 @@ work=$(mktemp -d "${TMPDIR:-/tmp}/mwm_xdotool.XXXXXX") || exit 1
 HOME=$work; export HOME
 pids=""
 nested=""
+xephyr_pid=""
+# Stop the clients and mwm before the X server.  With the server gone
+# first, mwm can be left blocked or spinning on the dead connection, and
+# it does not exit on SIGTERM alone while showFeedback includes "kill"
+# (it posts a "Quit Mwm?" dialog instead), so escalate to SIGKILL.
 cleanup() {
-	for p in $pids; do kill "$p" 2>/dev/null; done
+	_rest=""
+	for p in $pids; do
+		[ "$p" = "$xephyr_pid" ] || _rest="$_rest $p"
+	done
+	stop $_rest
+	stop "$xephyr_pid"
 	rm -rf "$work"
 }
 trap cleanup EXIT
@@ -71,6 +81,7 @@ start_xephyr() {
 start_mwm() {
 	cp "$1" "$work/.mwmrc"
 	DISPLAY=$nested "$mwm" -xrm "Mwm*useIconBox: False" \
+		-xrm "Mwm*showFeedback: -kill" \
 		> "$work/mwm.log" 2>&1 &
 	mwm_pid=$!
 	pids="$pids $!"

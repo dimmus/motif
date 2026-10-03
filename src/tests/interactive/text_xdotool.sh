@@ -19,6 +19,8 @@ work=$(mktemp -d "${TMPDIR:-/tmp}/text_xdotool.XXXXXX") || exit 1
 pids=""
 cleanup() {
 	for p in $pids; do kill "$p" 2>/dev/null; done
+	sleep 0.5
+	for p in $pids; do kill -9 "$p" 2>/dev/null; done
 	rm -rf "$work"
 }
 trap cleanup EXIT
