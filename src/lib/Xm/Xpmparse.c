@@ -279,6 +279,7 @@ int xpmParseColors(xpmData *data,
               xpmFreeColorTable(colorTable, ncolors);
               return (XpmNoMemory);
             }
+            XpmFree(defaults[curkey]); /* the key may be repeated */
             defaults[curkey] = s;
             memcpy(s, curbuf, len);
           }
@@ -303,11 +304,13 @@ int xpmParseColors(xpmData *data,
         return (XpmFileInvalid);
       }
       len = strlen(curbuf) + 1; /* integer overflow just theoretically possible */
-      s = defaults[curkey] = (char *)XpmMalloc(len);
+      s = (char *)XpmMalloc(len);
       if (!s) {
         xpmFreeColorTable(colorTable, ncolors);
         return (XpmNoMemory);
       }
+      XpmFree(defaults[curkey]); /* the key may be repeated */
+      defaults[curkey] = s;
       memcpy(s, curbuf, len);
     }
   }
