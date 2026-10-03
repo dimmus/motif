@@ -621,6 +621,27 @@ if(WITH_CPU_NATIVE AND CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
   add_compile_options(-march=native)
 endif()
 
+# Optimized builds (Release, RelWithDebInfo, MinSizeRel):
+#   -fno-semantic-interposition lets the compiler inline and call directly
+#     the exported functions of a library from inside it, as LD_PRELOAD
+#     interposition of calls internal to libXm is not supported anyway;
+#   -fno-plt calls the functions of other libraries through the GOT rather
+#     than a PLT stub.  Only with immediate binding (-z now, WITH_HARDENING):
+#     with lazy binding it would resolve every imported function at load
+#     time instead of on first call.
+if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
+  set(_motif_optimized "$<OR:$<CONFIG:Release>,$<CONFIG:RelWithDebInfo>,$<CONFIG:MinSizeRel>>")
+  set(_motif_opt_flags)
+  motif_check_c_flags(_motif_opt_flags -fno-semantic-interposition)
+  if(MOTIF_HAVE_LDFLAG_RELRO_NOW AND WITH_HARDENING)
+    motif_check_c_flags(_motif_opt_flags -fno-plt)
+  endif()
+  foreach(_flag IN LISTS _motif_opt_flags)
+    add_compile_options("$<${_motif_optimized}:${_flag}>")
+  endforeach()
+  unset(_motif_opt_flags)
+endif()
+
 # Exported symbols.  The shared libraries export only what their version
 # scripts (src/lib/*/lib*.map) list, in a version node; everything else is
 # bound inside the library at link time, which needs neither a PLT entry
