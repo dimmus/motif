@@ -1,0 +1,25 @@
+.TH "XmDropDownGetValue" "library call"
+.SH "NAME"
+\fBXmDropDownGetValue\fP \(em A DropDown function that returns the text of the DropDown
+.iX "XmDropDownGetValue"
+.iX "DropDown functions" "XmDropDownGetValue"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/DropDown\&.h>
+\fBString \fBXmDropDownGetValue\fP\fR(
+\fBWidget \fBwidget\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fBXmDropDownGetValue\fP returns a copy of the text in the text field
+of a DropDown, as \fBXmTextFieldGetString\fP(3) does\&.
+.IP "\fIwidget\fP" 10
+Specifies the DropDown widget ID\&.
+.SH "RETURN"
+.PP
+Returns the text\&. The application frees it with \fBXtFree\fP\&.
+.SH "RELATED"
+.PP
+\fBXmDropDown\fP(3), \fBXmDropDownGetText\fP(3) and
+\fBXmTextFieldGetString\fP(3)\&.

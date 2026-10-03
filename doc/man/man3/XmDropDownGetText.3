@@ -1,0 +1,27 @@
+.TH "XmDropDownGetText" "library call"
+.SH "NAME"
+\fBXmDropDownGetText\fP \(em A DropDown function that returns its text field child
+.iX "XmDropDownGetText"
+.iX "DropDown functions" "XmDropDownGetText"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/DropDown\&.h>
+\fBWidget \fBXmDropDownGetText\fP\fR(
+\fBWidget \fBwidget\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fBXmDropDownGetText\fP returns the text field child of a DropDown\&. It is
+equivalent to \fBXmDropDownGetChild\fP(\fIwidget\fP,
+\fBXmDROPDOWN_TEXT\fP)\&.
+.IP "\fIwidget\fP" 10
+Specifies the DropDown widget ID\&.
+.SH "RETURN"
+.PP
+Returns the widget ID of the text field, or NULL if \fIwidget\fP is not a
+DropDown\&. An application should not assume that the returned
+widget is of any particular class\&.
+.SH "RELATED"
+.PP
+\fBXmDropDown\fP(3) and \fBXmDropDownGetChild\fP(3)\&.

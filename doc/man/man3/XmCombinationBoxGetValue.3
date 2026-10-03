@@ -1,0 +1,27 @@
+.TH "XmCombinationBoxGetValue" "library call"
+.SH "NAME"
+\fBXmCombinationBoxGetValue\fP \(em A ComboBox function that returns the text of the edit box
+.iX "XmCombinationBoxGetValue"
+.iX "ComboBox functions" "XmCombinationBoxGetValue"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/ComboBox\&.h>
+\fBXmString \fBXmCombinationBoxGetValue\fP\fR(
+\fBWidget \fBwidget\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fBXmCombinationBoxGetValue\fP returns the text of the text field of
+a ComboBox as a compound string\&. Despite its name it is a ComboBox
+function: it has nothing to do with the CombinationBox2\&. It
+does not check that \fIwidget\fP is a ComboBox\&.
+.IP "\fIwidget\fP" 10
+Specifies the ComboBox widget ID\&.
+.SH "RETURN"
+.PP
+Returns a new compound string, which the application frees with
+\fBXmStringFree\fP(3)\&.
+.SH "RELATED"
+.PP
+\fBXmComboBox\fP(3) and \fBXmComboBoxUpdate\fP(3)\&.

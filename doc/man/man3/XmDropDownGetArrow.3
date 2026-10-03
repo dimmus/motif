@@ -1,0 +1,27 @@
+.TH "XmDropDownGetArrow" "library call"
+.SH "NAME"
+\fBXmDropDownGetArrow\fP \(em A DropDown function that returns its arrow button child
+.iX "XmDropDownGetArrow"
+.iX "DropDown functions" "XmDropDownGetArrow"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/DropDown\&.h>
+\fBWidget \fBXmDropDownGetArrow\fP\fR(
+\fBWidget \fBwidget\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fBXmDropDownGetArrow\fP returns the arrow button child of a DropDown\&. It is
+equivalent to \fBXmDropDownGetChild\fP(\fIwidget\fP,
+\fBXmDROPDOWN_ARROW_BUTTON\fP)\&.
+.IP "\fIwidget\fP" 10
+Specifies the DropDown widget ID\&.
+.SH "RETURN"
+.PP
+Returns the widget ID of the arrow button, or NULL if \fIwidget\fP is not a
+DropDown\&. An application should not assume that the returned
+widget is of any particular class\&.
+.SH "RELATED"
+.PP
+\fBXmDropDown\fP(3) and \fBXmDropDownGetChild\fP(3)\&.
