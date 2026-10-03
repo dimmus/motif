@@ -88,8 +88,8 @@ endif()
 add_custom_command(
     OUTPUT ${WML_TARGETS}
     COMMAND ${CMAKE_COMMAND} -E remove -f ${WML_TARGETS} wml.report wml-uil.mm
-    COMMAND $<TARGET_FILE:${MOTIF_HOST_TOOL_PREFIX}wmluiltok> < ${CMAKE_SOURCE_DIR}/src/lib/Uil/Uil.y > tokens.dat
-    COMMAND $<TARGET_FILE:${MOTIF_HOST_TOOL_PREFIX}wml> ${CMAKE_CURRENT_SOURCE_DIR}/motif.wml
+    COMMAND ${MOTIF_TOOL_ENV} $<TARGET_FILE:${MOTIF_HOST_TOOL_PREFIX}wmluiltok> < ${CMAKE_SOURCE_DIR}/src/lib/Uil/Uil.y > tokens.dat
+    COMMAND ${MOTIF_TOOL_ENV} $<TARGET_FILE:${MOTIF_HOST_TOOL_PREFIX}wml> ${CMAKE_CURRENT_SOURCE_DIR}/motif.wml
     COMMAND ${CMAKE_COMMAND} -E remove -f tokens.dat
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     DEPENDS
@@ -122,7 +122,7 @@ add_dependencies(wmldbcreate uil_parser_target wml_generated_files)
 # motif.wmd database (not built by default)
 add_custom_command(
     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/motif.wmd
-    COMMAND $<TARGET_FILE:wmldbcreate> -o motif.wmd
+    COMMAND ${MOTIF_TOOL_ENV} $<TARGET_FILE:wmldbcreate> -o motif.wmd
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     DEPENDS wmldbcreate ${WML_TARGETS}
     COMMENT "Generating motif.wmd database"

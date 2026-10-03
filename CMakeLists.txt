@@ -515,6 +515,16 @@ if(MOTIF_SANITIZE_FLAGS)
   add_link_options(${MOTIF_SANITIZE_FLAGS})
 endif()
 
+# The build runs some of the programs it builds (makestrs, mkcatdefs, wml,
+# wmluiltok, uil).  These short-lived generators do not free all their
+# memory, so keep LeakSanitizer from failing the build because of them;
+# memory errors are still reported.  Prefix such commands with
+# ${MOTIF_TOOL_ENV}.
+set(MOTIF_TOOL_ENV)
+if(WITH_COMPILER_ASAN)
+  set(MOTIF_TOOL_ENV ${CMAKE_COMMAND} -E env ASAN_OPTIONS=detect_leaks=0)
+endif()
+
 if(WITH_COMPILER_CODE_COVERAGE)
   if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
     set(_coverage_flags --coverage)

@@ -71,7 +71,7 @@ function(motif_add_message_catalog target name source header)
 
   add_custom_command(
     OUTPUT ${_outputs}
-    COMMAND ${CMAKE_COMMAND}
+    COMMAND ${MOTIF_TOOL_ENV} ${CMAKE_COMMAND}
       -DMKCATDEFS=$<TARGET_FILE:${MOTIF_HOST_TOOL_PREFIX}mkcatdefs>
       -DSOURCE=${source}
       -DHEADER=${header}
