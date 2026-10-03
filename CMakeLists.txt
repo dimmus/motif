@@ -231,6 +231,15 @@ set_option(WITH_JPEG "Enable JPEG support" ON)
 set_option(WITH_PNG "Enable PNG support" ON)
 set_option(WITH_XFT "Enable Xft support" ON)
 
+# Library type of the public libraries (Xm, Mrm). Internal helper libraries
+# stay static, built as PIC so they can be linked into the shared ones.
+if(WITH_SHARED_LIBS)
+  set(MOTIF_LIB_TYPE SHARED)
+  set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+else()
+  set(MOTIF_LIB_TYPE STATIC)
+endif()
+
 set(MOTIF_VENDOR_INFO "" CACHE STRING "Vendor name and/or version to add to MOTIF_REVISION")
 
 set_option(WITH_COMPILER_CODE_COVERAGE "\

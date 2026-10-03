@@ -46,9 +46,9 @@ set(UIL_PARSER_H ${CMAKE_BINARY_DIR}/src/lib/Uil/Uil.h)
 #     COMMENT "Copying Uil.h for UIL library build"
 # )
 
-# Add the copied file to sources
-set(UIL_LEXPARS_C ${CMAKE_CURRENT_BINARY_DIR}/UilLexPars.c)
-list(APPEND UIL_LIB_SRCS ${UIL_LEXPARS_C} ${UIL_PARSER_C} ${UIL_PARSER_H})
+# UilLexPars.c is a symlink to the generated Uil.c, so only compile Uil.c:
+# building both defines the parser twice, which a shared libUil rejects.
+list(APPEND UIL_LIB_SRCS ${UIL_PARSER_C} ${UIL_PARSER_H})
 
 # Generate message catalog header file
 if(WITH_MESSAGE_CATALOG)
@@ -111,7 +111,7 @@ add_custom_target(uil_parser_target
 )
 
 # Create libUil library
-add_library(Uil ${UIL_LIB_SRCS})
+add_library(Uil STATIC ${UIL_LIB_SRCS})
 
 # Ensure message catalog header is generated before building this target
 add_dependencies(Uil uil_msgcat_header)

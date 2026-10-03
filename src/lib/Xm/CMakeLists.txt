@@ -679,7 +679,7 @@ endif()
 list(APPEND XM_INTERNAL_HEADERS ToolTipI.h)
 
 # Create the library
-add_library(Xm ${XM_ALL_SRCS} ${CMAKE_BINARY_DIR}/src/lib/Xm/XmStrDefs.c)
+add_library(Xm ${MOTIF_LIB_TYPE} ${XM_ALL_SRCS} ${CMAKE_BINARY_DIR}/src/lib/Xm/XmStrDefs.c)
 
 # Ensure message catalog header, string files, and Xm.h symlink are generated before building this target
 add_dependencies(Xm xm_msgcat_header xm_strings xm_h_symlink)

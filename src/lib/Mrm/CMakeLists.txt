@@ -69,7 +69,7 @@ else()
 endif()
 
 # Create the library
-add_library(Mrm ${MRM_SRCS})
+add_library(Mrm ${MOTIF_LIB_TYPE} ${MRM_SRCS})
 
 # Ensure message catalog header is generated before building this target
 add_dependencies(Mrm mrm_msgcat_header)
