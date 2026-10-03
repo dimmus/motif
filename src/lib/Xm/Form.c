@@ -148,6 +148,7 @@ static void PlaceChild(XmFormWidget fw,
                        Widget instigator,
                        XtWidgetGeometry *inst_geometry);
 static void PlaceChildren(XmFormWidget fw, Widget instigator, XtWidgetGeometry *inst_geometry);
+static void DetachFrom(XmFormWidget fw, Widget child);
 static void ChangeManaged(Widget wid);
 static void GetSize(XmFormWidget fw, XtWidgetGeometry *g, Widget w, XtWidgetGeometry *desired);
 static void ChangeIfNeeded(XmFormWidget fw, Widget w, XtWidgetGeometry *desired);
@@ -1535,6 +1536,46 @@ static void PlaceChild(XmFormWidget fw,
 
 /************************************************************************
  *
+ *  DetachFrom
+ *	The child is going away: if anyone depends on it, make that a
+ *	dependency on the form.
+ *
+ ************************************************************************/
+static void DetachFrom(XmFormWidget fw, Widget child)
+{
+  XmFormConstraint c;
+  Widget w;
+  Cardinal i;
+  int j;
+  for (i = 0; i < fw->composite.num_children; i++) {
+    w = fw->composite.children[i];
+    c = GetFormConstraint(w);
+    for (j = FIRST_ATTACHMENT; j < (LAST_ATTACHMENT + 1); j++) {
+      if (((c->att[j].type == XmATTACH_WIDGET) && (c->att[j].w == child)) ||
+          ((c->att[j].type == XmATTACH_OPPOSITE_WIDGET) && (c->att[j].w == child)))
+      {
+        switch (j) {
+          case LEFT:
+            c->att[j].type = XmATTACH_FORM;
+            c->att[j].offset = w->core.x;
+            break;
+          case TOP:
+            c->att[j].type = XmATTACH_FORM;
+            c->att[j].offset = w->core.y;
+            break;
+          default:
+            c->att[j].type = XmATTACH_NONE;
+            break;
+        }
+        c->att[j].w = NULL;
+        c->sorted = False;
+      }
+    }
+  }
+}
+
+/************************************************************************
+ *
  *  ChangeManaged
  *	Something changed in the set of managed children, so place
  *	the children and change the form widget size to reflect new size,
@@ -1556,35 +1597,8 @@ static void ChangeManaged(Widget wid)
    */
   for (k = 0; k < fw->composite.num_children; k++) {
     child = fw->composite.children[k];
-    if (child->core.being_destroyed) {
-      /*  If anyone depends on this child,
-                make into a dependency on form  */
-      for (i = 0; i < fw->composite.num_children; i++) {
-        w = fw->composite.children[i];
-        c = GetFormConstraint(w);
-        for (j = FIRST_ATTACHMENT; j < (LAST_ATTACHMENT + 1); j++) {
-          if (((c->att[j].type == XmATTACH_WIDGET) && (c->att[j].w == child)) ||
-              ((c->att[j].type == XmATTACH_OPPOSITE_WIDGET) && (c->att[j].w == child)))
-          {
-            switch (j) {
-              case LEFT:
-                c->att[j].type = XmATTACH_FORM;
-                c->att[j].offset = w->core.x;
-                break;
-              case TOP:
-                c->att[j].type = XmATTACH_FORM;
-                c->att[j].offset = w->core.y;
-                break;
-              default:
-                c->att[j].type = XmATTACH_NONE;
-                break;
-            }
-            c->att[j].w = NULL;
-            c->sorted = False;
-          }
-        }
-      }
-    }
+    if (child->core.being_destroyed)
+      DetachFrom(fw, child);
   }
   SortChildren(fw);
   /* Don't use XtRealizedWidget(form) as a test to initialize the
@@ -1713,8 +1727,12 @@ static void DeleteChild(Widget child)
   /* The list may hold the deleted child: drop it.  Do not sort again
    * when the whole form is going away. */
   fw->form.first_child = NULL;
-  if (!fw->core.being_destroyed)
+  if (!fw->core.being_destroyed) {
+    /* ChangeManaged has done this if the child was managed; do not
+     * leave the others pointing at a destroyed widget either. */
+    DetachFrom(fw, child);
     SortChildren(fw);
+  }
 }
 
 /************************************************************************
