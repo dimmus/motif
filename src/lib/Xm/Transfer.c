@@ -48,7 +48,7 @@ typedef enum { DoXFree, DoFree } FreeType;
     if (DoXFree == how) \
       XFree(val); \
     else \
-      free(val); \
+      XtFree(val); \
   }
 static ConvertContext LookupContextBlock(Display *, Atom);
 static void ClearContextBlock(Display *, Atom);
@@ -1942,11 +1942,11 @@ void XmeStandardConvert(Widget w,
   else if (atoms[XmANAME] == cs->target) {
     Widget current;
     unsigned long bytesAfter;
-    Atom type;
-    int format;
+    Atom type = None;
+    int format = 8;
     unsigned char *value = NULL;
-    char *total_value;
-    unsigned long length;
+    char *total_value = NULL;
+    unsigned long length = 0;
     for (current = w; current != (Widget)NULL; current = XtParent(current)) {
       if (XtIsShell(current)) {
         XGetWindowProperty(XtDisplay(current),
@@ -1965,7 +1965,10 @@ void XmeStandardConvert(Widget w,
           break;
       }
     }
-    total_value = _XmTextToLocaleText(w, (XtPointer)value, type, format, length, NULL);
+    if (value != NULL) {
+      total_value = _XmTextToLocaleText(w, (XtPointer)value, type, format, length, NULL);
+      XFree((char *)value);
+    }
     cs->value = (XtPointer)total_value;
     cs->format = 8;
     cs->length = total_value != NULL ? strlen(total_value) : 0;
@@ -2154,8 +2157,8 @@ static char *GetSafeAtomName(Display *display, Atom a, FreeType *howFree)
   XSetErrorHandler(old_Handler);
   _XmProcessLock();
   if (SIF_ErrorFlag != 0) {
-    returnvalue = (char *)malloc(1);
-    returnvalue[0] = 0; /* Create empty string to return */
+    returnvalue = XtMalloc(1); /* does not return NULL */
+    returnvalue[0] = 0;        /* Create empty string to return */
     *howFree = DoFree;
     TransferWarning(NULL, ATOM, ARG, BAD_ATOM_MESSAGE);
   }
