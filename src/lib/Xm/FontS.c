@@ -1077,7 +1077,7 @@ static void DisplayCurrentFont(XmFontSelectorWidget fsw, String font)
   char buf[BUFSIZ * 2];
   Boolean err = False;
   if ((fontdata = XLoadQueryFont(XtDisplay((Widget)fsw), font)) == NULL) {
-    sprintf(buf, "Font '%s'\nis not availiable on this machine", font);
+    snprintf(buf, sizeof(buf), "Font '%s'\nis not availiable on this machine", font);
     DisplayUserError(fsw, buf);
     err = True;
   }
@@ -1095,7 +1095,8 @@ static void DisplayCurrentFont(XmFontSelectorWidget fsw, String font)
      */
     if ((fontdata->ascent + fontdata->descent) == 0) {
       if (IsXlfdFont(font)) {
-        char *ptr, left_buf[BUFSIZ >> 2], right_buf[BUFSIZ >> 2], fbuf[BUFSIZ];
+        char *ptr, *fbuf;
+        size_t fbuf_len;
         register int i, count;
         /*
          * This is a poorly formatted Sun Scaled font,
@@ -1109,21 +1110,26 @@ static void DisplayCurrentFont(XmFontSelectorWidget fsw, String font)
           if (count == 8)
             break;
         }
+        /* IsXlfdFont() guarantees 14 dashes, so ptr is at the 8th one
+         * (font[i]) and the 9th one is found below. */
         ptr = (char *)strchr(ptr + 1, '-');
-        strncpy(right_buf, ptr, (BUFSIZ >> 2) - 1);
-        right_buf[(BUFSIZ >> 2) - 1] = '\0';
-        strncpy(left_buf, font, (BUFSIZ >> 2) - 1);
-        left_buf[(BUFSIZ >> 2) - 1] = '\0';
-        left_buf[i] = '\0';
-        snprintf(fbuf, sizeof fbuf, "%s-140%s", left_buf, right_buf);
-        if ((fontdata = XLoadQueryFont(XtDisplay((Widget)fsw), fbuf)) == NULL) {
-          sprintf(buf, "Font '%s'\nis not availiable on this machine", font);
+        fbuf_len = i + sizeof("-140") + strlen(ptr);
+        fbuf = XtMalloc(fbuf_len);
+        snprintf(fbuf, fbuf_len, "%.*s-140%s", i, font, ptr);
+        fontdata = XLoadQueryFont(XtDisplay((Widget)fsw), fbuf);
+        XtFree(fbuf);
+        if (fontdata == NULL) {
+          snprintf(buf, sizeof(buf), "Font '%s'\nis not availiable on this machine", font);
           DisplayUserError(fsw, buf);
           err = True;
         }
       }
       else {
-        sprintf(buf, "Font '%s'\n%s", font, "is is zero pixels high and cannot be displayed.");
+        snprintf(buf,
+                 sizeof(buf),
+                 "Font '%s'\n%s",
+                 font,
+                 "is is zero pixels high and cannot be displayed.");
         DisplayUserError(fsw, buf);
         err = True;
       }
@@ -1179,7 +1185,7 @@ static String BuildFontString(XmFontSelectorWidget fsw, FontData *cf, String buf
 {
   static XrmQuark anyquark2, anyquark = NULLQUARK;
   String family, encoding;
-  char res_x[BUFSIZ], res_y[BUFSIZ], point_size[BUFSIZ];
+  char res_x[16], res_y[16], point_size[16]; /* "*" or an int */
   if (anyquark == NULLQUARK) {
     String temp1 = _XmGetMBStringFromXmString(ANY_STRING(fsw));
     String temp2 = _XmGetMBStringFromXmString(LOWER_ANY_STRING(fsw));
@@ -1193,38 +1199,36 @@ static String BuildFontString(XmFontSelectorWidget fsw, FontData *cf, String buf
   else
     family = XrmQuarkToString(cf->familyq);
   if (cf->point_size == 0) {
-    strncpy(point_size, STAR_STRING, BUFSIZ - 1);
-    point_size[BUFSIZ - 1] = '\0';
+    strcpy(point_size, STAR_STRING);
   }
   else
-    sprintf(point_size, "%d", cf->point_size);
+    snprintf(point_size, sizeof(point_size), "%d", cf->point_size);
   if (cf->resolution_x == 0) {
-    strncpy(res_x, STAR_STRING, BUFSIZ - 1);
-    res_x[BUFSIZ - 1] = '\0';
+    strcpy(res_x, STAR_STRING);
   }
   else
-    sprintf(res_x, "%d", (int)cf->resolution_x);
+    snprintf(res_x, sizeof(res_x), "%d", (int)cf->resolution_x);
   if (cf->resolution_y == 0) {
-    strncpy(res_y, STAR_STRING, BUFSIZ - 1);
-    res_y[BUFSIZ - 1] = '\0';
+    strcpy(res_y, STAR_STRING);
   }
   else
-    sprintf(res_y, "%d", (int)cf->resolution_y);
+    snprintf(res_y, sizeof(res_y), "%d", (int)cf->resolution_y);
   encoding = ENCODING_STRING(fsw);
   /*
-   * I should really check to see that the string fits, but
-   * What would I do it I failed?
+   * The family, weight and encoding come from font names and resources
+   * and can be arbitrarily long; a name that does not fit is truncated.
    */
-  sprintf(buf,
-          "-*-%s-%s-%s-*-*-*-%s-%s-%s-%s-*-%s",
-          family,
-          XrmQuarkToString(cf->weightq),
-          cf->slant,
-          point_size,
-          res_x,
-          res_y,
-          cf->spacing,
-          encoding);
+  snprintf(buf,
+           size,
+           "-*-%s-%s-%s-*-*-*-%s-%s-%s-%s-*-%s",
+           family,
+           XrmQuarkToString(cf->weightq),
+           cf->slant,
+           point_size,
+           res_x,
+           res_y,
+           cf->spacing,
+           encoding);
   return (buf);
 }
 
@@ -1322,7 +1326,9 @@ static void UpdateFixedProportional(XmFontSelectorWidget fsw)
     }
   }
   else if (CheckFlag(XmFontS_user_state(fsw), USER_FIXED)) {
-    strncpy(cf->spacing, fam->fixed_spacing, SPACING_LEN);
+    /* Both are SPACING_LEN + 1 arrays and fixed_spacing is always
+     * NUL-terminated. */
+    memcpy(cf->spacing, fam->fixed_spacing, sizeof(cf->spacing));
     cf->spacing[SPACING_LEN] = '\0';
     setMono = True;
     setProp = False;
@@ -1635,14 +1641,15 @@ static void SetDisplayedFont(XmFontSelectorWidget fsw, String new_font)
   Cardinal num_largs;
   FontData *cf = XmFontS_font_info(fsw)->current_font;
   char buf[BUFSIZ];
-  sprintf(buf,
-          "--%s-%s-%s----0-%d-%d-*--%s",
-          STAR_STRING,
-          DEFAULT_WEIGHT,
-          DEFAULT_SLANT,
-          XmFontS_font_info(fsw)->resolution,
-          XmFontS_font_info(fsw)->resolution,
-          ENCODING_STRING(fsw));
+  snprintf(buf,
+           sizeof(buf),
+           "--%s-%s-%s----0-%d-%d-*--%s",
+           STAR_STRING,
+           DEFAULT_WEIGHT,
+           DEFAULT_SLANT,
+           XmFontS_font_info(fsw)->resolution,
+           XmFontS_font_info(fsw)->resolution,
+           ENCODING_STRING(fsw));
   FillData(fsw, cf, buf); /* Put in default data. */
   if (new_font != NULL) {
     if (IsXlfdFont(new_font))
