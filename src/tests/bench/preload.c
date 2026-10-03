@@ -84,7 +84,8 @@ int _XReply(Display *dpy, void *rep, int extra, int discard)
 		void *bt[32];
 
 		backtrace_symbols_fd(bt, backtrace(bt, 32), 2);
-		write(2, "--\n", 3);
+		if (write(2, "--\n", 3) < 0)
+			trace = 0;
 	}
 	xmbench_replies++;
 	return real(dpy, rep, extra, discard);
