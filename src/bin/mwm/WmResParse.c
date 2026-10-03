@@ -3224,9 +3224,9 @@ static Boolean ParseClientCommand (unsigned char **linePP, MenuSpec *menuSpec,
 				  command was parsed to be an exclusion
 				  command. */
 
-    /* Construct one input stream out of the string and the linePP that
-       we were given. */
-    linelen = strlen((char *)string) + strlen((char *)*linePP) + 1;
+    /* Construct one input stream out of the string, a space and the
+       linePP that we were given. */
+    linelen = strlen((char *)string) + 1 + strlen((char *)*linePP) + 1;
     if ((unchanged_stream = stream = (String)
 	 XtMalloc((unsigned int)(sizeof(unsigned char) * linelen))) == NULL)
     {
