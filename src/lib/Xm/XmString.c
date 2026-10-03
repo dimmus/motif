@@ -6324,9 +6324,12 @@ XmIncludeStatus XmeGetDirection(XtPointer *in_out,
                                 XmString *str_include,
                                 XtPointer call_data) /* unused */
 {
-  XmCharDirectionProc char_proc = _XmOSGetCharDirection;
+  XtPointer method = (XtPointer)_XmOSGetCharDirection;
+  XmCharDirectionProc char_proc;
   XmStringDirection dir;
-  (void)XmOSGetMethod(NULL, XmMCharDirection, (XtPointer *)&char_proc, NULL);
+  /* Not through (XtPointer *)&char_proc, which breaks strict aliasing */
+  (void)XmOSGetMethod(NULL, XmMCharDirection, &method, NULL);
+  char_proc = (XmCharDirectionProc)method;
   /* Create a component for the new direction. */
   dir = XmDirectionToStringDirection((*char_proc)(*in_out, type, tag));
   *str_include = XmStringComponentCreate(
@@ -6492,7 +6495,8 @@ XmString XmStringParseText(XtPointer text,
   unsigned int index;
   char *dir_ptr;
   XmStringComponentType tag_type;
-  XmInitialDirectionProc init_char_proc = _XmOSGetInitialCharsDirection;
+  XmInitialDirectionProc init_char_proc;
+  XtPointer method = (XtPointer)_XmOSGetInitialCharsDirection;
   _XmProcessLock();
   /* Check some error conditions. */
   if (parse_count && !parse_table) {
@@ -6548,7 +6552,8 @@ XmString XmStringParseText(XtPointer text,
   /* Process characters until text has been consumed. */
   dir_ptr = NULL;
   (void)mblen((char *)NULL, MB_CUR_MAX);
-  (void)XmOSGetMethod(NULL, XmMInitialCharsDirection, (XtPointer *)&init_char_proc, NULL);
+  (void)XmOSGetMethod(NULL, XmMInitialCharsDirection, &method, NULL);
+  init_char_proc = (XmInitialDirectionProc)method;
   halt = (end_ptr && (ptr >= (char *)end_ptr));
   while (!halt && (wide_char ? *((wchar_t *)ptr) : *ptr)) {
     int len = (wide_char ? sizeof(wchar_t) : mblen(ptr, MB_CUR_MAX));
@@ -7381,8 +7386,10 @@ XmStringComponentType XmeStringGetComponent(_XmStringContext context,
         /* Try to resolve unset directions. */
         if (dir == XmSTRING_DIRECTION_UNSET) {
           if ((char_count > 0) || (_XmStrContDir(context) == XmSTRING_DIRECTION_UNSET)) {
-            XmCharDirectionProc char_proc = _XmOSGetCharDirection;
-            (void)XmOSGetMethod(NULL, XmMCharDirection, (XtPointer *)&char_proc, NULL);
+            XtPointer method = (XtPointer)_XmOSGetCharDirection;
+            XmCharDirectionProc char_proc;
+            (void)XmOSGetMethod(NULL, XmMCharDirection, &method, NULL);
+            char_proc = (XmCharDirectionProc)method;
             if (state > TAG_STATE)
               tag = (optimized ? _XmStrTagGet(opt) : _XmEntryTag(seg));
             dir = XmDirectionToStringDirection((*char_proc)(seg_text, text_type, tag));

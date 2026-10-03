@@ -666,7 +666,7 @@ static void SecondaryDone(Widget wid,
   /* Call the convertCallback with target DELETE if successful */
   if (success && cc->op == XmMOVE) {
     _XmConvertHandlerSetLocal();
-    _XmConvertHandler(wid, &convert_selection, &DELETE, type, (XtPointer *)&value, length, format);
+    _XmConvertHandler(wid, &convert_selection, &DELETE, type, &value, length, format);
     XtFree((char *)value);
   }
   XtDisownSelection(wid, convert_selection, XtLastTimestampProcessed(XtDisplay(wid)));
