@@ -2231,7 +2231,7 @@ unsigned int XmRenderTableCvtToProp(Widget widget, /* unused */
     }
     size = strlen(str);
     CVTaddString(buffer, str, size);
-    if (_XmRendBG(rendition) == XmAS_IS)
+    if (_XmRendBG(rendition) == XmUNSPECIFIED_PIXEL)
       str = "-1, ";
     else {
       sprintf(temp, "%lu, ", _XmRendBG(rendition));
@@ -2239,7 +2239,7 @@ unsigned int XmRenderTableCvtToProp(Widget widget, /* unused */
     }
     size = strlen(str);
     CVTaddString(buffer, str, size);
-    if (_XmRendFG(rendition) == XmAS_IS)
+    if (_XmRendFG(rendition) == XmUNSPECIFIED_PIXEL)
       str = "-1, ";
     else {
       sprintf(temp, "%lu, ", _XmRendFG(rendition));
