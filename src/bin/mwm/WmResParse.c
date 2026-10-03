@@ -3501,7 +3501,12 @@ static Boolean ParseWmLabel (WmScreenData *pSD, MenuItem *menuItem,
     strcpy (menuItem->label, (char *)string);
     menuItem->labelType = XmSTRING;
 
-    if (*string == '@')
+    /*
+     * A client menu must not make the window manager open files on its
+     * host (the name could be any file, or a FIFO that blocks forever),
+     * so "@<bitmap file>" is only honoured in the configuration file.
+     */
+    if ((*string == '@') && !parseClientMenu)
     /*
      * Here:  string  = "@<bitmap file>"
      * Try to find the label bitmap in the bitmap cache or read the label
