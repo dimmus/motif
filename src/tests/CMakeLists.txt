@@ -137,6 +137,8 @@ function(motif_x_test name)
     set_tests_properties(${name} PROPERTIES LABELS X11 SKIP_RETURN_CODE 77)
 endfunction()
 
+add_subdirectory(uil)
+
 foreach(suite IN LISTS MOTIF_TEST_SUITES)
     add_test(NAME Xm.${suite}
         COMMAND motif_tests ${suite}
