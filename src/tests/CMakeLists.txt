@@ -17,7 +17,9 @@ option(WITH_FUZZERS "Build the libFuzzer targets in src/tests/fuzz (Clang only)"
 
 find_program(XVFB_RUN_EXECUTABLE xvfb-run
     DOC "xvfb-run used for the tests that need an X server (OFF: use $DISPLAY)")
-set(XVFB_RUN_ARGS -a -s "-screen 0 1280x1024x24 +extension RENDER"
+# -noreset: the suites fork a client per test case, and a client that
+# connects while Xvfb resets after the previous one left can be refused.
+set(XVFB_RUN_ARGS -a -s "-screen 0 1280x1024x24 +extension RENDER -noreset"
     CACHE STRING "Arguments passed to xvfb-run")
 mark_as_advanced(XVFB_RUN_EXECUTABLE XVFB_RUN_ARGS)
 
