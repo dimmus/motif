@@ -179,9 +179,10 @@ The print callbacks \fBXmLogPrintCbStdErr\fP and
 .fi
 .PP
 to standard error or standard output, where \fILVL\fP is one of
-\fBCRI\fP, \fBERR\fP, \fBWRN\fP, \fBINF\fP and \fBDBG\fP\&. The level,
-and the domain when it has a color, are wrapped in terminal color
-escape sequences\&. \fBXmLogPrintCbFile\fP writes the same line to the
+\fBCRI\fP, \fBERR\fP, \fBWRN\fP, \fBINF\fP and \fBDBG\fP\&. The level
+is printed in the color of its level, and the part from \fI<pid>\fP to
+\fIfunction\fP() in the color of the domain, if it has one, each
+followed by a terminal color reset sequence\&. \fBXmLogPrintCbFile\fP writes the same line to the
 file whose name is its \fIdata\fP argument: it opens the file for
 appending, writes, and closes it again for every message\&.
 .PP
