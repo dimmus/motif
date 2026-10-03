@@ -220,6 +220,7 @@ static Widget GetRealIconHeader(Widget wid);
 static void UpdateIconHeader(Widget wid, Boolean count_only);
 static void ChangeView(Widget wid, unsigned char view);
 static CwidNode NewNode(Widget cwid);
+static CwidNode FindLevelTail(XmContainerWidget cw, CwidNode node, CwidNode parent_node);
 static void InsertNode(CwidNode node);
 static void SeverNode(CwidNode node);
 static void DeleteNode(Widget cwid);
@@ -2442,8 +2443,13 @@ static Boolean ConstraintSetValues(Widget ccwid,
   /*
    * SetValues called from inside Container - let's get out of here!
    */
-  if (cw->container.self)
+  if (cw->container.self) {
+    /* The node stays where it is, so its index may not match its
+     * position any more: InsertNode cannot trust the indices. */
+    if (nc->position_index != cc->position_index)
+      cw->container.dynamic_resource |= STALE_POSITIONS;
     return (False);
+  }
   if (!CtrICON(ncwid))
     return (False);
   /*
@@ -5485,6 +5491,36 @@ static CwidNode NewNode(Widget cwid)
 }
 
 /************************************************************************
+ * FindLevelTail (Private Function)
+ *	The last node of the level below parent_node (the top level when
+ *	NULL), found from the most recently created child without walking
+ *	the level, or NULL.
+ ************************************************************************/
+static CwidNode FindLevelTail(XmContainerWidget cw, CwidNode node, CwidNode parent_node)
+{
+  Cardinal i, last = cw->composite.num_children;
+  Widget kid = NULL;
+  CwidNode n;
+  /* look at a few children only: there may be many outline buttons */
+  for (i = last; (kid == NULL) && (i > 0) && (last - i < 8); i--) {
+    if ((cw->composite.children[i - 1] != node->widget_ptr) &&
+        CtrICON(cw->composite.children[i - 1]))
+      kid = cw->composite.children[i - 1];
+  }
+  if (kid == NULL)
+    return NULL;
+  /* Children are usually added in order, so the last one created, or
+   * its ancestor on the level we insert into, ends that level. */
+  for (n = GetContainerConstraint(kid)->node_ptr; n != NULL; n = n->parent_ptr) {
+    if (n == node)
+      return NULL;
+    if (n->parent_ptr == parent_node)
+      return (n->next_ptr == NULL) ? n : NULL;
+  }
+  return NULL;
+}
+
+/************************************************************************
  * InsertNode (Private Function)
  ************************************************************************/
 static void InsertNode(CwidNode node)
@@ -5519,6 +5555,29 @@ static void InsertNode(CwidNode node)
     pc = GetContainerConstraint(c->entry_parent);
     parent_node = pc->node_ptr;
     prev_node = parent_node->child_ptr;
+  }
+  /*
+   * Appending: link the node after the last one of its level directly.
+   * The loop below would also leave the indices of the others as they
+   * are, since they are already 0, 1, 2...; except that a lone node
+   * may have been given any XmNpositionIndex (see ConstraintSetValues).
+   */
+  if ((prev_node != NULL) && !CtrIsDynamic(cw, STALE_POSITIONS) &&
+      ((next_node = FindLevelTail(cw, node, parent_node)) != NULL))
+  {
+    sc = GetContainerConstraint(next_node->widget_ptr);
+    if ((c->position_index == XmLAST_POSITION) || (c->position_index > sc->position_index)) {
+      if (next_node->prev_ptr == NULL)
+        sc->position_index = 0;
+      c->position_index = sc->position_index + 1;
+      node->parent_ptr = parent_node;
+      node->prev_ptr = next_node;
+      node->next_ptr = NULL;
+      next_node->next_ptr = node;
+      if (node->next_ptr == cw->container.first_node)
+        cw->container.first_node = node;
+      return;
+    }
   }
   if (prev_node == NULL) {
     /*

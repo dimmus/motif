@@ -243,6 +243,7 @@ enum { CONTAINER_ICON, CONTAINER_OUTLINE_BUTTON, CONTAINER_HEADER };
 
 #  define TABLIST (1L << 0)
 #  define FIRSTCW (1L << 1)
+#  define STALE_POSITIONS (1L << 2) /* some XmNpositionIndex may be out of order */
 #  define CtrIsDynamic(w, mask) (((XmContainerWidget)(w))->container.dynamic_resource & mask)
 #  define CtrDynamicSmallCellHeight(w) (((XmContainerWidget)(w))->container.small_cell_height == 0)
 #  define CtrDynamicSmallCellWidth(w) (((XmContainerWidget)(w))->container.small_cell_width == 0)
