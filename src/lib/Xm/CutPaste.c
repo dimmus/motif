@@ -2069,7 +2069,7 @@ static int ClipboardLock(Display *display, Window window)
       /* Drop the selection if a Motif client owns it */
       header = ClipboardOpen(display, 0);
       if (header->ownSelection == owner) {
-        XSetSelectionOwner(display, XmA_CLIPBOARD, None, timestamp);
+        XSetSelectionOwner(display, atoms[XmA_CLIPBOARD], None, timestamp);
       }
       ClipboardClose(display, header);
       /* Reset the header property */
