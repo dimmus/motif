@@ -200,10 +200,12 @@ Cardinal _XmDSIGetChildPosition(XmDSInfo parentInfo, XmDSInfo childInfo)
   num_children = GetDSNumChildren(parentInfo);
   if (GetDSParent(childInfo) != (XtPointer)parentInfo) {
     char buf[256];
-    sprintf(buf,
-            MESSAGE3,
-            XrmQuarkToString(GetDSWidget(childInfo)->core.xrm_name),
-            XrmQuarkToString(GetDSWidget(parentInfo)->core.xrm_name));
+    /* Widget names can be arbitrarily long. */
+    snprintf(buf,
+             sizeof(buf),
+             MESSAGE3,
+             XrmQuarkToString(GetDSWidget(childInfo)->core.xrm_name),
+             XrmQuarkToString(GetDSWidget(parentInfo)->core.xrm_name));
     XmeWarning(GetDSWidget(parentInfo), buf);
     return (num_children);
   }
@@ -212,10 +214,12 @@ Cardinal _XmDSIGetChildPosition(XmDSInfo parentInfo, XmDSInfo childInfo)
       break;
   if (i == num_children) {
     char buf[256];
-    sprintf(buf,
-            MESSAGE3,
-            XrmQuarkToString(GetDSWidget(childInfo)->core.xrm_name),
-            XrmQuarkToString(GetDSWidget(parentInfo)->core.xrm_name));
+    /* Widget names can be arbitrarily long. */
+    snprintf(buf,
+             sizeof(buf),
+             MESSAGE3,
+             XrmQuarkToString(GetDSWidget(childInfo)->core.xrm_name),
+             XrmQuarkToString(GetDSWidget(parentInfo)->core.xrm_name));
     XmeWarning(GetDSWidget(parentInfo), buf);
   }
   return (i);
