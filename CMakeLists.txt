@@ -621,6 +621,43 @@ if(WITH_CPU_NATIVE AND CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
   add_compile_options(-march=native)
 endif()
 
+# Exported symbols.  The shared libraries export only what their version
+# scripts (src/lib/*/lib*.map) list, in a version node; everything else is
+# bound inside the library at link time, which needs neither a PLT entry
+# nor a symbolic relocation.  See doc/abi-policy.md.
+set(MOTIF_HAVE_VERSION_SCRIPT OFF)
+if(WITH_SHARED_LIBS AND CMAKE_C_COMPILER_ID MATCHES "GNU|Clang" AND NOT APPLE AND NOT WIN32)
+  set(_map ${CMAKE_BINARY_DIR}/CMakeFiles/motif_version_test.map)
+  file(WRITE ${_map} "MOTIF_TEST { global: main; local: *; };\n")
+  set(CMAKE_REQUIRED_LINK_OPTIONS -Wl,--version-script=${_map})
+  check_c_source_compiles("int main(void) { return 0; }" MOTIF_HAVE_LDFLAG_VERSION_SCRIPT)
+  # The scripts also list the symbols of optional features (printing, JPEG,
+  # PNG), which lld rejects unless told otherwise when they are left out.
+  set(CMAKE_REQUIRED_LINK_OPTIONS -Wl,--version-script=${_map} -Wl,--undefined-version)
+  check_c_source_compiles("int main(void) { return 0; }" MOTIF_HAVE_LDFLAG_UNDEFINED_VERSION)
+  unset(CMAKE_REQUIRED_LINK_OPTIONS)
+  unset(_map)
+  if(MOTIF_HAVE_LDFLAG_VERSION_SCRIPT)
+    set(MOTIF_HAVE_VERSION_SCRIPT ON)
+  else()
+    message(WARNING "The linker does not support --version-script: the "
+      "libraries will export all their symbols")
+  endif()
+endif()
+
+# motif_version_script(<target> <script>)
+#
+# Link the shared library <target> with the version script <script>.
+function(motif_version_script target script)
+  if(MOTIF_HAVE_VERSION_SCRIPT)
+    target_link_options(${target} PRIVATE -Wl,--version-script=${script})
+    if(MOTIF_HAVE_LDFLAG_UNDEFINED_VERSION)
+      target_link_options(${target} PRIVATE -Wl,--undefined-version)
+    endif()
+    set_property(TARGET ${target} APPEND PROPERTY LINK_DEPENDS ${script})
+  endif()
+endfunction()
+
 # C17 with GNU extensions (-std=gnu17).  C23 needs the remaining
 # unprototyped () function declarations fixed first.
 set(CMAKE_C_STANDARD 17)

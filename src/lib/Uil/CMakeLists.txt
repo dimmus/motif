@@ -126,6 +126,10 @@ set_target_properties(Uil PROPERTIES
     SOVERSION ${MOTIF_SOVERSION}
 )
 add_library(Motif::Uil ALIAS Uil)
+
+# Export only the symbols of libUil.map (see doc/abi-policy.md)
+motif_version_script(Uil ${CMAKE_CURRENT_SOURCE_DIR}/libUil.map)
+
 add_dependencies(Uil UilCompiler)
 motif_uil_compiler_setup(Uil)
 target_compile_definitions(Uil PRIVATE CALLABLE)

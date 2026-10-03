@@ -1,0 +1,64 @@
+/*
+ * Version script of libUil: the symbols it exports.  Everything else is
+ * local to the library.  See doc/abi-policy.md before changing it:
+ * never remove or move a symbol, add new ones in a new version node.
+ */
+
+UIL_2.4 {
+  global:
+
+    /* The public API: Uil() and the WML tables of UilSymGl.h. */
+    Uil;
+    UilDumpSymbolTable;
+    allowed_argument_table;
+    allowed_child_table;
+    allowed_control_table;
+    allowed_reason_table;
+    argument_enumset_table;
+    argument_type_table;
+    charset_character_size_table;
+    charset_lang_codes_table;
+    charset_lang_names_table;
+    charset_lang_table_max;
+    charset_parsing_direction_table;
+    charset_writing_direction_table;
+    charset_xmstring_names_table;
+    child_class_table;
+    constraint_tab;
+    enum_set_table;
+    enumval_values_table;
+    key_k_keyword_count;
+    key_k_keyword_max_length;
+    key_table;
+    key_table_case_ins;
+    related_argument_table;
+    tok_num_tokens;
+    tok_token_name_table;
+    uil_argument_names;
+    uil_argument_toolkit_names;
+    uil_charset_names;
+    uil_child_names;
+    uil_datatype_names;
+    uil_enumval_names;
+    uil_gadget_variants;
+    uil_max_arg;
+    uil_max_charset;
+    uil_max_child;
+    uil_max_enumset;
+    uil_max_enumval;
+    uil_max_object;
+    uil_max_reason;
+    uil_max_value;
+    uil_reason_names;
+    uil_reason_toolkit_names;
+    uil_sym_default_charset;
+    uil_sym_isolatin1_charset;
+    uil_sym_user_defined_object;
+    uil_urm_nondialog_class;
+    uil_urm_subtree_resource;
+    uil_widget_funcs;
+    uil_widget_names;
+
+  local:
+    *;
+};

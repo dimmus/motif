@@ -76,6 +76,9 @@ add_library(Mrm ${MOTIF_LIB_TYPE} ${MRM_SRCS})
 
 add_library(Motif::Mrm ALIAS Mrm)
 
+# Export only the symbols of libMrm.map (see doc/abi-policy.md)
+motif_version_script(Mrm ${CMAKE_CURRENT_SOURCE_DIR}/libMrm.map)
+
 # Ensure message catalog header is generated before building this target
 add_dependencies(Mrm mrm_msgcat_header)
 
