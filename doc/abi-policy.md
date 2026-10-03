@@ -1,0 +1,239 @@
+# API and ABI policy
+
+This document says what the Motif libraries promise to programs built
+against them, how that promise is enforced, and what to do when a change
+has to break it.  It covers `libXm`, `libMrm` and `libUil`.
+
+## Libraries and SONAMEs
+
+| Library | SONAME        | Version node | File version |
+|---------|---------------|--------------|--------------|
+| libXm   | `libXm.so.5`  | `XM_2.4`     | 5.0.0        |
+| libMrm  | `libMrm.so.5` | `MRM_2.4`    | 5.0.0        |
+| libUil  | `libUil.so.5` | `UIL_2.4`    | 5.0.0        |
+
+Upstream Motif 2.3 ships SONAME 4.  This tree is not binary compatible
+with it, so it uses SONAME 5; the reasons are listed next to
+`MOTIF_SOVERSION` in the top-level `CMakeLists.txt`.  In short, the
+instance records of every widget and gadget changed size, and the
+`_XmStrings` tables were re-ordered.  Programs and widgets built against
+2.3.x must be rebuilt.  libMrm and libUil link libXm, so all three
+change SONAME together.
+
+## What is the API
+
+The API is what the **installed headers** declare:
+
+- `<Xm/*.h>`: the public headers (`Xm.h`, `PushB.h`, ...), the widget
+  writer's headers (`*P.h`, which declare the instance and class
+  records and the `Xme*` functions) and the trait headers (`*T.h`).
+- `<Mrm/MrmPublic.h>`, `<Mrm/MrmAppl.h>` and `<Mrm/MrmDecls.h>`.
+- `<uil/UilDef.h>` and the headers it includes (`UilAPI.h`,
+  `UilDBDef.h`, `UilSymDef.h`, `UilSymGl.h`), and `<uil/Uil.h>`, the
+  token values of the UIL parser.
+
+Every installed header compiles on its own, as C and as C++ (C++17 with
+g++ and clang++), and gives its functions C linkage.
+
+The internal headers (`*I.h` in `src/lib/Xm`, and `IDB.h`, `Mrm.h`,
+`MrmMsgI.h`, `MrmosI.h` and `MrmWidget.h` in `src/lib/Mrm`) are **not**
+installed and are not part of the API.
+
+Some functions in the `*P.h` headers start with `_Xm`.  They are
+undocumented, but exported, because widgets outside this tree (CDE's
+among them) use them.  They get the same ABI guarantee as the rest, but
+new code should use the `Xme*` functions where one exists.
+
+## What is exported
+
+Each library is linked with a version script that lists the symbols it
+exports, in one version node; everything else is local to the library:
+
+- `src/lib/Xm/libXm.map`
+- `src/lib/Mrm/libMrm.map`
+- `src/lib/Uil/libUil.map`
+
+The scripts replace the `libXm.elist`, `libMrm.elist` and `libUil.elist`
+export lists of the original Motif build, which the CMake build never
+used.  They were generated from the symbols of a full build
+(`WITH_PRINTING`, JPEG, PNG, message catalogs), keeping a symbol when
+any of these holds:
+
+1. an installed header names it (comments aside), including through a
+   macro: `XmIsPrimitive()` expands to `_XmIsFastSubclass()`, and the
+   `XmN*`, `XmC*` and `XmR*` names to offsets into `_XmStrings`;
+2. the `.elist` files listed it as `public` or as `private`
+   ("undocumented APIs that are exported for backward compatibility");
+3. libMrm, libUil, uil, wml, mwm, the examples and demos in
+   `src/examples` (built or not), or the tests use it;
+4. CDE uses it (its sources declare some `_Xm` functions by hand, in
+   `include/Xm/XmPrivate.h`);
+5. its name is in the public namespace (`Xm*`, `xm*`).
+
+`libXm.map` also has a short section of internal functions that only
+the unit tests and fuzzers in `src/tests` call.  They are not API.
+
+The result:
+
+| Library | Exported before | Exported now | `_Xm*` before | `_Xm*` now |
+|---------|----------------:|-------------:|--------------:|-----------:|
+| libXm   | 3224            | 1742         | 2150          | 694        |
+| libMrm  | 336             | 218          | 0             | 0          |
+| libUil  | 433             | 50           | 0             | 0          |
+
+What libXm no longer exports:
+
+- 1417 symbols that `libXm.elist` already marked "internal -- not to be
+  used outside the library", among them 251 `_XmMsg*` message strings;
+- 65 symbols added since then, all internal: the vendored nanosvg
+  parser (`nsvg*`), the `_XmXft*`, `_XmTabBox*`, `_XmTabbedStackList*`,
+  `_XmDataF*` and `_XmToolTip*` helpers, `_XmMsgDataF*`, `NumLockMask`,
+  `ScrollLockMask`, `_init_modifiers` and the ICS `Xi*`/`_Xi*`
+  utilities.
+
+libMrm no longer exports its `Idb__*`, `Urm__*`, `hash_*`, `urm__*` and
+`idb__*` internals (113 marked internal in `libMrm.elist`, plus 5 newer
+ones); the `Urm*` functions that the UIL compiler uses are still
+exported.  libUil exports `Uil()`, `UilDumpSymbolTable()` and the
+tables of `UilSymGl.h`; it no longer exports the compiler internals or
+its yacc parser (`yyparse`, `yylex`, `yylval`, ...), which a program with
+a parser of its own could pick up by accident.
+
+abidiff against the master build reports only removed symbols: no
+changed function, variable or type.
+
+If a program needs a symbol that is no longer exported, open an issue.
+Re-exporting an internal symbol is cheap, but it then becomes API.
+
+## Rules for changes
+
+Within a SONAME, a program built against an older release must keep
+working with a newer one.  So:
+
+- **Never remove an exported symbol** and never move it to another
+  version node.
+- **Add new symbols in a new version node** that inherits from the
+  previous one, named after the release that adds them:
+
+  ```
+  XM_2.5 {
+    global:
+      XmNewFunction;
+  } XM_2.4;
+  ```
+
+  Every function or variable that an installed header declares must be
+  in the version script.  The `abi.exports.Xm`, `abi.exports.Mrm` and
+  `abi.exports.Uil` tests (`ctest -L ABI`) fail when one is missing.
+- **Do not change** the signature of an exported function, the layout
+  of a structure that an installed header defines (the instance and
+  class records in the `*P.h` headers are compiled into every subclass),
+  the value of an enumeration constant or macro, or the order of the
+  string tables generated from `xmstring.list` (programs compile the
+  `XmN*` macros in as offsets into them).
+- Changes that are **ABI-neutral** and allowed: adding `const` to the
+  target of a pointer parameter that the function only reads, removing
+  `register` or other storage-class noise from prototypes, adding new
+  functions, headers, resources or enumeration values at the end.
+  Adding `const` is source compatible for callers; only code that
+  stores the function in a pointer of the old type has to adjust.
+  `XmStringCreate`, `XmStringCreateLocalized`, `XmStringLtoRCreate`,
+  `XmStringCreateSimple` and `XmStringCreateLtoR` take `const char *`
+  text for that reason.  The `XmText`/`XmTextField` setters do not: their
+  `modifyVerify` callbacks may change the caller's text in place.
+
+A change that has to break one of these rules is an ABI break: bump
+`MOTIF_SOVERSION` (all three libraries), reset the version nodes, and
+record it in the release notes.
+
+### Checking a change
+
+Compare the libraries with those of the previous release, built with
+debug information:
+
+```sh
+abidw --out-file libXm-old.abi old/libXm.so.5
+abidiff --no-added-syms libXm-old.abi _build/src/lib/Xm/libXm.so.5
+```
+
+`abidiff` must report no removed or changed symbols and no changed
+types.  With `--no-added-syms` left out it also lists what was added,
+which should be what the new version node lists.  Run `ctest -L ABI`
+for the version scripts.
+
+## Toolchain settings
+
+The version scripts make internal calls and references bind inside the
+library at link time.  On top of that, optimized builds (Release,
+RelWithDebInfo, MinSizeRel) with GCC or Clang use:
+
+- `-fno-semantic-interposition`, so that the compiler may inline and call
+  directly the exported functions of a library from inside it.
+  Interposing calls internal to libXm with `LD_PRELOAD` is therefore not
+  supported.
+- `-fno-plt` when the libraries are linked with `-z now`
+  (`WITH_HARDENING`, the default): imported functions are called
+  through their GOT entry.
+
+The release preset (`cmake -C tools/cmake/config/motif_release.cmake`)
+enables `WITH_LTO`.  `WITH_PGO` builds with profile-guided
+optimization:
+
+```sh
+cmake -S . -B _build -DCMAKE_BUILD_TYPE=Release -DWITH_TESTS=ON -DWITH_PGO=GENERATE
+ninja -C _build && ninja -C _build pgo-train     # the test suite, plus
+                                                 # MOTIF_PGO_TRAINING_COMMAND
+cmake -B _build -DWITH_PGO=USE && ninja -C _build
+```
+
+With Clang, merge the raw profiles first:
+`llvm-profdata merge -o _build/pgo/default.profdata _build/pgo/*.profraw`.
+
+### Measurements
+
+Measured on x86-64 with GCC and GNU ld 2.47, before (the tree just
+before the version scripts) and after.  The relocation counts are from
+`readelf -r`, the exported symbols from `nm -D --defined-only`.
+
+Debug build (`-O0 -g`, no `-fno-semantic-interposition`), libXm:
+
+|                                      | Before | After |
+|--------------------------------------|-------:|------:|
+| Exported symbols                     | 3224   | 1742  |
+| `.dynsym` + `.dynstr` + `.gnu.hash` (bytes) | 191019 | 114499 |
+| `R_X86_64_GLOB_DAT`                  | 518    | 234   |
+| `R_X86_64_JUMP_SLOT` (PLT)           | 1594   | 1324  |
+| `R_X86_64_64`                        | 7460   | 7381  |
+| `R_X86_64_RELATIVE`                  | 3983   | 4062  |
+
+Release preset (`-O3`, LTO, `-z now`; `-fno-semantic-interposition` was
+already used with LTO before, `-fno-plt` is new):
+
+|                                      | libXm before | libXm after | libMrm before | libMrm after | libUil before | libUil after |
+|--------------------------------------|-------:|------:|------:|------:|------:|------:|
+| File size (bytes)                    | 4532384 | 4296032 | 265048 | 231504 | 681624 | 630472 |
+| `.text` (bytes)                      | 2987342 | 2955214 | 144568 | 132497 | 191505 | 186671 |
+| `R_X86_64_GLOB_DAT`                  | 511    | 770   | 262   | 341   | 112   | 155   |
+| `R_X86_64_JUMP_SLOT` (PLT)           | 543    | 0     | 87    | 0     | 102   | 0     |
+| `R_X86_64_64`                        | 7459   | 7370  | 0     | 0     | 764   | 675   |
+| `R_X86_64_RELATIVE`                  | 4031   | 3897  | 187   | 187   | 5854  | 5943  |
+
+With `-fno-plt` the imported functions moved from `JUMP_SLOT` to
+`GLOB_DAT`; the `GLOB_DAT` relocations against libXm's own symbols went
+from 483 to 206.
+
+Startup of a small program (an application shell with a RowColumn, a
+Label, a PushButton and a Text, realized, then exit) under Xvfb, from
+`LD_DEBUG=statistics`: the dynamic loader's symbol lookups went from
+4688 to 4380 (Release) and from 5746 to 5167 (Debug).  The loader time
+(about 3 million cycles) and the wall time (about 100 ms, dominated by
+the X server round trips) did not change measurably on the shared test
+machine; `perf` was not available.
+
+Most of the remaining `R_X86_64_64` relocations of libXm are pointers in
+the resource and class tables to the exported string tables: 3114 to
+`_XmStrings`, 375 to `_XmStrings22`, and 2466 to libXt's `XtStrings`.
+Because `_XmStrings` is exported, they stay symbolic.  Binding the
+library's own references to a hidden alias of `_XmStrings` (from the
+headers that `makestrs` generates) would turn the first two groups into
+relative relocations.
