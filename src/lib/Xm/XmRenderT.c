@@ -2346,9 +2346,12 @@ static Token ReadToken(char *string, int *position, Token reusetoken)
  * does not scan a list or ask the server for the colour of a pixel.  A
  * record lives until its display is closed.
  *
- * The colour of a pixel is assumed not to change, as it already was for
- * the colours of renditions; an application that stores new colours into
- * a read/write colour cell while drawing with Xft will see the old one.
+ * The colour of a pixel is remembered only where it cannot change: in the
+ * default colormap of a screen whose default visual has a static class.
+ * In any other colormap a cell may be stored into, or freed and allocated
+ * again, so the colour of the pixel of a GC is asked for at every draw.
+ * The colours of renditions are remembered in the default colormap, as
+ * they always have been.
  */
 typedef struct _XmXftColorRec {
   Colormap colormap;
@@ -2592,8 +2595,24 @@ static Colormap WindowColormap(Display *display, Window window)
   return DefaultColormap(display, DefaultScreen(display));
 }
 
-/* The XftColor for pixel in colormap, asking the server only once. */
-static XftColor GetXftColor(Display *display, Colormap colormap, Pixel pixel)
+/*
+ * Whether the colours of colormap cannot change: it is the default
+ * colormap of a screen whose default visual is StaticGray, StaticColor
+ * or TrueColor.  The visual of another colormap is not known here.
+ */
+static Boolean ColormapIsStatic(Display *display, Colormap colormap)
+{
+  int i, c;
+  for (i = 0; i < ScreenCount(display); i++)
+    if (colormap == DefaultColormap(display, i)) {
+      c = DefaultVisual(display, i)->class;
+      return (c == StaticGray || c == StaticColor || c == TrueColor);
+    }
+  return False;
+}
+
+/* The XftColor for pixel in colormap, asking the server once if cache. */
+static XftColor GetXftColor(Display *display, Colormap colormap, Pixel pixel, Boolean cache)
 {
   XmXftDisplayRec *rec;
   XmXftColorRec key, *entry;
@@ -2604,6 +2623,15 @@ static XftColor GetXftColor(Display *display, Colormap colormap, Pixel pixel)
   key.color.color.alpha = 0xFFFF;
   if (display == NULL)
     return key.color;
+  if (!cache) {
+    memset(&xcol, 0, sizeof(xcol));
+    xcol.pixel = pixel;
+    XQueryColor(display, colormap, &xcol);
+    key.color.color.red = xcol.red;
+    key.color.color.green = xcol.green;
+    key.color.color.blue = xcol.blue;
+    return key.color;
+  }
   _XmProcessLock();
   rec = FindXftDisplay(display, True);
   entry = rec ? (XmXftColorRec *)_XmGetHashEntry(rec->colors, (XmHashKey)&key) : NULL;
@@ -2633,8 +2661,15 @@ static XftColor GetXftColor(Display *display, Colormap colormap, Pixel pixel)
 static XftColor GetCachedXftColor(Display *display, Pixel color)
 {
   if (display == NULL)
-    return GetXftColor(NULL, None, color);
-  return GetXftColor(display, DefaultColormap(display, DefaultScreen(display)), color);
+    return GetXftColor(NULL, None, color, True);
+  return GetXftColor(display, DefaultColormap(display, DefaultScreen(display)), color, True);
+}
+
+/* The XftColor to draw pixel with into window. */
+static XftColor GetDrawXftColor(Display *display, Window window, Pixel pixel)
+{
+  Colormap colormap = WindowColormap(display, window);
+  return GetXftColor(display, colormap, pixel, ColormapIsStatic(display, colormap));
 }
 
 static XErrorHandler oldErrorHandler __attribute__((unused));
@@ -2712,7 +2747,7 @@ void _XmXftDrawString2(Display *display,
   XftColor xftcol;
   /* XGetGCValues reads Xlib's copy of the GC; it is not a round trip. */
   XGetGCValues(display, gc, GCForeground, &gc_val);
-  xftcol = GetXftColor(display, WindowColormap(display, window), gc_val.foreground);
+  xftcol = GetDrawXftColor(display, window, gc_val.foreground);
   switch (bpc) {
     case 1:
       XftDrawStringUtf8(draw, &xftcol, font, x, y, (XftChar8 *)s, len);
@@ -2758,7 +2793,7 @@ void _XmXftDrawString(Display *display,
     if (_XmRendBG(rend) == XmUNSPECIFIED_PIXEL) {
       XGCValues gc_val;
       XGetGCValues(display, _XmRendGC(rend), GCBackground, &gc_val);
-      bg_color = GetXftColor(display, WindowColormap(display, window), gc_val.background);
+      bg_color = GetDrawXftColor(display, window, gc_val.background);
     }
     XftDrawRect(draw,
                 &bg_color,
@@ -2770,7 +2805,7 @@ void _XmXftDrawString(Display *display,
   if (_XmRendFG(rend) == XmUNSPECIFIED_PIXEL) {
     XGCValues gc_val;
     XGetGCValues(display, _XmRendGC(rend), GCForeground, &gc_val);
-    fg_color = GetXftColor(display, WindowColormap(display, window), gc_val.foreground);
+    fg_color = GetDrawXftColor(display, window, gc_val.foreground);
   }
   switch (bpc) {
     case 1:
