@@ -28,6 +28,7 @@ public MrmFetchWidgetOverride
 public MrmInitialize
 public MrmOpenHierarchy
 public MrmOpenHierarchyFromBuffer
+public MrmOpenHierarchyFromBufferWithSize
 public MrmOpenHierarchyPerDisplay
 public MrmRegisterClass
 public MrmRegisterClassWithCleanup
