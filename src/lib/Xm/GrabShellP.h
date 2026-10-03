@@ -26,6 +26,7 @@
  */
 #ifndef _XmGrabShellP_h
 #  define _XmGrabShellP_h
+#  include <X11/IntrinsicP.h> /* before ShellP.h */
 #  include <X11/ShellP.h>
 #  include <Xm/GrabShell.h>
 #  include <Xm/XmP.h>

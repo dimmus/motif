@@ -22,6 +22,7 @@
  */
 #ifndef _XmPrintShellP_h
 #  define _XmPrintShellP_h
+#  include <X11/IntrinsicP.h> /* before ShellP.h */
 #  include <X11/ShellP.h>
 #  include <Xm/Print.h>
 #  include <Xm/XmP.h>
