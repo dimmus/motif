@@ -782,9 +782,9 @@ static Boolean processExtendedSegmentsHack(ct_context *ctx, Octet final)
       case 0x32: /* 2 octets per char */
         /* scan for STX separator between charset and text */
         len = 0;
-        while (esptr[len] != STX)
+        while ((len < seglen) && (esptr[len] != STX))
           len++;
-        if (len > ctx->itemlen) { /* if we ran off the end, error */
+        if (len >= seglen) { /* no STX inside the segment, error */
           ok = False;
           break;
         }
@@ -1403,9 +1403,9 @@ static Boolean processExtendedSegments(ct_context *ctx, Octet final)
       case 0x32: /* 2 octets per char */
         /* scan for STX separator between charset and text */
         len = 0;
-        while (esptr[len] != STX)
+        while ((len < seglen) && (esptr[len] != STX))
           len++;
-        if (len > ctx->itemlen) { /* if we ran off the end, error */
+        if (len >= seglen) { /* no STX inside the segment, error */
           ok = False;
           break;
         }
