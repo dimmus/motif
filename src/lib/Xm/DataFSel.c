@@ -172,15 +172,22 @@ static void InsertSelection(Widget w,
         strcat(total_tmp_value, tmp_value[i]);
       XFreeStringList(tmp_value);
     }
-    if (XmTextF_max_char_size(tf) == 1) {
+    if (total_tmp_value == NULL) {
+      /* nothing could be converted */
+      replace_res = False;
+    }
+    else if (XmTextF_max_char_size(tf) == 1) {
       replace_res = _XmDataFieldReplaceText(
           tf, (XEvent *)insert_select->event, left, right, total_tmp_value, malloc_size, True);
     }
     else { /* must convert to wchar_t before passing to Replace */
       wc_value = (wchar_t *)XtMalloc((unsigned)(1 + malloc_size) * sizeof(wchar_t));
       num_chars = mbstowcs(wc_value, total_tmp_value, 1 + malloc_size);
-      replace_res = _XmDataFieldReplaceText(
-          tf, (XEvent *)insert_select->event, left, right, (char *)wc_value, num_chars, True);
+      if (num_chars < 0)
+        num_chars = 0;
+      else
+        replace_res = _XmDataFieldReplaceText(
+            tf, (XEvent *)insert_select->event, left, right, (char *)wc_value, num_chars, True);
       XtFree((char *)wc_value);
     }
     XtFree(total_tmp_value);
@@ -199,8 +206,12 @@ static void InsertSelection(Widget w,
       wc_value = (wchar_t *)XtMalloc((unsigned)(*length + 1) * sizeof(wchar_t));
       /* NOTE: casting *length could result in a truncated long. */
       num_chars = mbstowcs(wc_value, temp, (unsigned)*length + 1);
-      replace_res = _XmDataFieldReplaceText(
-          tf, (XEvent *)insert_select->event, left, right, (char *)wc_value, num_chars, True);
+      /* the data comes from another client and need not be valid */
+      if (num_chars < 0)
+        num_chars = 0;
+      else
+        replace_res = _XmDataFieldReplaceText(
+            tf, (XEvent *)insert_select->event, left, right, (char *)wc_value, num_chars, True);
       XtFree(temp);
       XtFree((char *)wc_value);
     }
