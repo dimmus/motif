@@ -196,7 +196,10 @@ void db_incorporate()
     key_k_keyword_count = globals.key_k_keyword_count ;
     key_k_keyword_max_length = globals.key_k_keyword_max_length ;
     uil_max_child = globals.uil_max_child;
-    num_bits = (uil_max_object +7) / 8;
+    if (globals.version >= 3)
+	num_bits = _DB_BIT_VECTOR_SIZE (uil_max_object);
+    else
+	num_bits = (uil_max_object +7) / 8;
 
     if (globals.version > DB_Compiled_Version)
 	diag_issue_diagnostic( d_future_version, diag_k_no_source, diag_k_no_column );
@@ -539,6 +542,7 @@ void db_read_char_table(_db_header_ptr header)
 	unsigned char	**ptr = NULL;
 	int		return_num_items, i;
 	unsigned char	*table;
+	int		vec_size;
 
 	switch (header->table_id)
 	    {
@@ -568,8 +572,12 @@ void db_read_char_table(_db_header_ptr header)
 	}
 
 	/*
-	 * Read in the entire table contents in one whack.
-	 * Then go through the table and set the addresses
+	 * Read the bit vectors one by one and set the addresses.
+	 *
+	 * The vectors are indexed by object class, 0..uil_max_object.  A
+	 * database older than version 3 holds one bit less than that when
+	 * uil_max_object is a multiple of 8, so each vector is given the
+	 * full size and any bits missing from the file are clear.
 	 */
 	if (ptr == NULL) {
 	    diag_issue_internal_error("Table not initialized in db_read_char_table");
@@ -579,20 +587,14 @@ void db_read_char_table(_db_header_ptr header)
 	/* ptr[1..num_items] are set below; ptr[0] is not used */
 	db_check_table_size (header, 1, sizeof (unsigned char *));
 
-	table = (unsigned char *) XtMalloc (sizeof (unsigned char) * header->num_items * num_bits);
-	if (table == NULL) {
-	    diag_issue_internal_error("Memory allocation failed in db_read_char_table");
-	    return;
-	}
-
-	return_num_items = fread(table,
-				    sizeof(char) * num_bits * header->num_items,
-				    1, dbfile);
-	_check_read (return_num_items);
+	vec_size = _DB_BIT_VECTOR_SIZE (uil_max_object);
+	table = (unsigned char *) XtCalloc (header->num_items, vec_size);
 	for ( i=1 ; i<=header->num_items; i++ )
 	    {
+	    return_num_items = fread(table, sizeof(char) * num_bits, 1, dbfile);
+	    _check_read (return_num_items);
 	    ptr[i] = table;
-	    table += num_bits;
+	    table += vec_size;
 	    };
 
 	return;

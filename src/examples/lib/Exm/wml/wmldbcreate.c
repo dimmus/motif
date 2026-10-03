@@ -365,7 +365,7 @@ void emit_char_table(int table_id)
     _db_header header;
     unsigned char *entry_vec;
     int i, j;
-    int num_bits = (uil_max_object + 7) / 8;
+    int num_bits = _DB_BIT_VECTOR_SIZE (uil_max_object);
 
     switch (table_id)
 	{
