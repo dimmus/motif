@@ -161,7 +161,7 @@ void	sem_output_uid_file()
     int				topmost_index;
     struct
     {   MrmOsOpenParam	os_param;
-	char		result_file[256];
+	char		*result_file;
     } uid_fcb;
 
 
@@ -200,6 +200,10 @@ void	sem_output_uid_file()
     /* clobber flag lets a.uid replace an existing a.uid */
     uid_fcb.os_param.nam_flg.clobber_flg = TRUE;
 
+    /* UrmIdbOpenFileWrite copies the file name into result_file */
+    uid_fcb.result_file =
+	XtMalloc (strlen (Uil_cmd_z_command.ac_resource_file) + 1);
+
     module_version = "";
     module_name = sym_az_module_entry->obj_header.az_name->c_text;
 
@@ -224,6 +228,7 @@ void	sem_output_uid_file()
 	    diag_k_no_column,
 	    uid_fcb.result_file );
 
+	XtFree (uid_fcb.result_file);
 	return;
     }
 
@@ -453,6 +458,9 @@ void	sem_output_uid_file()
     UrmFreeResourceContext( out_az_context );
     if( urm_status != MrmSUCCESS)
 	issue_urm_error( "freeing context" );
+
+    Uil_current_file = "";
+    XtFree (uid_fcb.result_file);
 
 }
 
@@ -2891,7 +2899,7 @@ void	issue_urm_error(char *problem)
 {
     char    buffer[132];
 
-    sprintf(buffer, "while %s encountered %s",
+    snprintf(buffer, sizeof(buffer), "while %s encountered %s",
 	    problem,
 	    Urm__UT_LatestErrorMessage());
 
