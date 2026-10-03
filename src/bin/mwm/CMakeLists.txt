@@ -41,10 +41,7 @@ set(MWM_SRCS
 add_executable(mwm ${MWM_SRCS})
 
 target_include_directories(mwm PRIVATE
-    ${CMAKE_BINARY_DIR}/src/lib
-    ${CMAKE_SOURCE_DIR}/src/lib
     ${CMAKE_SOURCE_DIR}/src/lib/Wsm
-    ${X_INCLUDE_DIRS}
 )
 
 target_compile_definitions(mwm PRIVATE
@@ -60,7 +57,7 @@ target_compile_definitions(mwm PRIVATE
 target_link_libraries(mwm
     Wsm
     Xm
-    ${X_LIBRARIES}
+    PkgConfig::MOTIF_XEXT
 )
 
 install(TARGETS mwm

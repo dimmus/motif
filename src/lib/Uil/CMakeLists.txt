@@ -100,7 +100,6 @@ target_include_directories(Uil PRIVATE
     ${CMAKE_BINARY_DIR}/src/lib/Uil
     ${CMAKE_BINARY_DIR}/src/bin/uil
     ${CMAKE_BINARY_DIR}/src/bin/wml
-    ${X_INCLUDE_DIRS}
 )
 
 target_compile_definitions(Uil PRIVATE
@@ -108,21 +107,16 @@ target_compile_definitions(Uil PRIVATE
     LIBDIR="${CMAKE_INSTALL_LIBDIR}/X11"
 )
 
-if(ENABLE_UIL_DEBUG)
+if(WITH_UIL_DEBUG)
     target_compile_definitions(Uil PRIVATE XM_UIL_DEBUG)
 endif()
 
 target_link_libraries(Uil
-    Mrm
-    Xm
-    ${X_LIBRARIES}
-    m
-    pthread
-)
-
-# Add system includes
-target_compile_options(Uil PRIVATE
-    -include ${CMAKE_SOURCE_DIR}/include/motif_system.h
+    PUBLIC
+        Mrm
+        Xm
+    PRIVATE
+        m
 )
 
 # Install library

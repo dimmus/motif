@@ -34,34 +34,20 @@ foreach(DEMO_DIR ${DEMO_DIRS})
                 "${CMAKE_CURRENT_SOURCE_DIR}/${DEMO_DIR}/DNDDraw.c"
             )
             add_executable(DNDDemo ${DNDDEMO_SOURCES})
-            target_link_libraries(DNDDemo Xm Mrm ${X_LIBRARIES} m)
+            target_link_libraries(DNDDemo Xm Mrm ${MOTIF_X11_TARGETS} m)
             target_include_directories(DNDDemo PRIVATE
-                ${CMAKE_SOURCE_DIR}/src/lib
-                ${CMAKE_SOURCE_DIR}/include
-                ${CMAKE_BINARY_DIR}/include
                 ${CMAKE_CURRENT_SOURCE_DIR}/${DEMO_DIR}
                 ${CMAKE_SOURCE_DIR}/src/examples/lib
-                ${X_INCLUDE_DIRS}
-            )
-            target_compile_options(DNDDemo PRIVATE
-                -include ${CMAKE_SOURCE_DIR}/include/motif_system.h
             )
             install(TARGETS DNDDemo RUNTIME DESTINATION ${CMAKE_INSTALL_DATADIR}/Xm/${DEMO_DIR})
             
             # Build simpledrop
             set(SIMPLEDROP_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/${DEMO_DIR}/simpledrop.c")
             add_executable(simpledrop ${SIMPLEDROP_SOURCES})
-            target_link_libraries(simpledrop Xm Mrm ${X_LIBRARIES} m)
+            target_link_libraries(simpledrop Xm Mrm ${MOTIF_X11_TARGETS} m)
             target_include_directories(simpledrop PRIVATE
-                ${CMAKE_SOURCE_DIR}/src/lib
-                ${CMAKE_SOURCE_DIR}/include
-                ${CMAKE_BINARY_DIR}/include
                 ${CMAKE_CURRENT_SOURCE_DIR}/${DEMO_DIR}
                 ${CMAKE_SOURCE_DIR}/src/examples/lib
-                ${X_INCLUDE_DIRS}
-            )
-            target_compile_options(simpledrop PRIVATE
-                -include ${CMAKE_SOURCE_DIR}/include/motif_system.h
             )
             install(TARGETS simpledrop RUNTIME DESTINATION ${CMAKE_INSTALL_DATADIR}/Xm/${DEMO_DIR})
             
@@ -92,7 +78,7 @@ foreach(DEMO_DIR ${DEMO_DIRS})
             target_link_libraries(${DEMO_NAME}
                 Xm
                 Mrm
-                ${X_LIBRARIES}
+                ${MOTIF_X11_TARGETS}
                 m
             )
             
@@ -118,19 +104,11 @@ foreach(DEMO_DIR ${DEMO_DIRS})
             # Set include directories
             target_include_directories(${DEMO_NAME} PRIVATE
                 ${CMAKE_SOURCE_DIR}/src/examples/lib
-                ${CMAKE_SOURCE_DIR}/src/lib
-                ${CMAKE_SOURCE_DIR}/include
-                ${CMAKE_BINARY_DIR}/include
                 ${CMAKE_CURRENT_SOURCE_DIR}/${DEMO_DIR}
                 ${CMAKE_CURRENT_SOURCE_DIR}/pixmaps
                 ${CMAKE_CURRENT_BINARY_DIR}/pixmaps
-                ${X_INCLUDE_DIRS}
             )
             
-            # Add system includes and force-include motif_system.h
-            target_compile_options(${DEMO_NAME} PRIVATE
-                -include ${CMAKE_SOURCE_DIR}/include/motif_system.h
-            )
             
             # Check for UIL files and process them
             file(GLOB UIL_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${DEMO_DIR}/*.uil")

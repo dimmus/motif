@@ -51,28 +51,18 @@ add_dependencies(ExmMrm xm_strings)
 
 # Set include directories for both libraries
 target_include_directories(Exm PUBLIC
-    ${CMAKE_SOURCE_DIR}/src/lib
-    ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_BINARY_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/src/examples/lib
-    ${X_INCLUDE_DIRS}
 )
+target_link_libraries(Exm PUBLIC motif_build_flags PkgConfig::MOTIF_XT)
 
 target_include_directories(ExmMrm PUBLIC
-    ${CMAKE_SOURCE_DIR}/src/lib
-    ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_BINARY_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/src/examples/lib
-    ${X_INCLUDE_DIRS}
 )
 
 # Link ExmMrm with Mrm library
-target_link_libraries(ExmMrm
-    Mrm
-    ${X_LIBRARIES}
-)
+target_link_libraries(ExmMrm PUBLIC Mrm)
 
 # Add wml subdirectory if it exists
 if(EXISTS "${CMAKE_SOURCE_DIR}/src/examples/lib/Exm/wml/CMakeLists.txt")

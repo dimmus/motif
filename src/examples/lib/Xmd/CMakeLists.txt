@@ -27,25 +27,18 @@ add_library(Xmd STATIC ${XMD_SRCS})
 
 # Set include directories
 target_include_directories(Xmd PUBLIC
-    ${CMAKE_SOURCE_DIR}/src/lib
-    ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_BINARY_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${X_INCLUDE_DIRS}
 )
 
 # Link with Motif libraries
-target_link_libraries(Xmd
-    Xm
-    ${X_LIBRARIES}
-)
+target_link_libraries(Xmd PUBLIC Xm)
 
 # Ensure string generation happens before building Xmd
 add_dependencies(Xmd xm_strings)
 
 # Create onHelp utility program
 add_executable(onHelp onHelp.c)
-target_link_libraries(onHelp Xmd)
+target_link_libraries(onHelp PRIVATE Xmd)
 
 # Install the library (for development)
 install(TARGETS Xmd

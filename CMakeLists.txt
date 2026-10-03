@@ -147,185 +147,268 @@ endif()
 set(LOG_LEVEL "INFO" CACHE STRING "Default logging level (DEBUG, INFO, WARN, ERROR, CRITICAL)")
 set(LOG_OUTPUT "stderr" CACHE STRING "Default log output destination (stderr, stdout, file)")
 
-# Set feature test macros for compatibility
-add_compile_definitions(
-    _GNU_SOURCE
-    _DEFAULT_SOURCE
-    _POSIX_C_SOURCE=200809L
-    _BSD_SOURCE
-    _XOPEN_SOURCE=600
-    _XOPEN_SOURCE_EXTENDED=1
-    _SVID_SOURCE
-    _ATFILE_SOURCE
+# PWC_DEBUG is a project-specific debug flag (DataF.c)
+option(WITH_PWC_DEBUG "Enable PWC debug output" OFF)
+
+# -----------------------------------------------------------------------------
+# Dependencies
+
+find_package(PkgConfig REQUIRED)
+find_package(Threads REQUIRED)
+
+# Parser and scanner generators for the WML tools and the UIL compiler
+motif_find_parser_generators()
+
+# X11 and Xt are part of the public interface of libXm; the others are only
+# used inside the libraries and programs.  The MOTIF_ prefixes keep the
+# PkgConfig:: target names from clashing with those of a consuming project,
+# which recreates them in MotifConfig.cmake.
+pkg_check_modules(MOTIF_XT REQUIRED IMPORTED_TARGET x11 xt)
+pkg_check_modules(MOTIF_XEXT REQUIRED IMPORTED_TARGET xext xmu xpm)
+set(MOTIF_X11_TARGETS PkgConfig::MOTIF_XT PkgConfig::MOTIF_XEXT)
+
+# Required by the font code even without Xft
+pkg_check_modules(MOTIF_FONTCONFIG REQUIRED IMPORTED_TARGET fontconfig)
+
+if(WITH_XFT)
+  pkg_check_modules(MOTIF_XFT IMPORTED_TARGET xft>=2)
+endif()
+if(WITH_JPEG)
+  pkg_check_modules(MOTIF_JPEG IMPORTED_TARGET libjpeg)
+endif()
+if(WITH_PNG)
+  pkg_check_modules(MOTIF_PNG IMPORTED_TARGET libpng)
+endif()
+if(WITH_PRINTING)
+  pkg_check_modules(MOTIF_XP IMPORTED_TARGET xp)
+  if(NOT MOTIF_XP_FOUND)
+    message(WARNING "libXp not found - disabling printing support")
+    set(WITH_PRINTING OFF CACHE BOOL "Enable printing support" FORCE)
+  endif()
+endif()
+
+if(WITH_UTF8)
+  # iconv is part of the C library on glibc and musl
+  find_library(ICONV_LIBRARY iconv)
+  mark_as_advanced(ICONV_LIBRARY)
+endif()
+
+if(WITH_MESSAGE_CATALOG)
+  # Compiles the generated numeric catalogs to .cat files (optional: the
+  # libraries only need the generated *MsgCatI.h headers to build).
+  find_program(GENCAT_EXECUTABLE gencat)
+  if(NOT GENCAT_EXECUTABLE)
+    message(STATUS "gencat not found: message catalogs (.cat) will not be compiled")
+  endif()
+endif()
+
+# -----------------------------------------------------------------------------
+# System checks
+#
+# Their results go into MOTIF_CONFIG_DEFINITIONS, which motif_build_flags
+# below passes to every target built here.
+
+set(MOTIF_CONFIG_DEFINITIONS)
+
+set(CMAKE_REQUIRED_INCLUDES ${MOTIF_XT_INCLUDE_DIRS})
+foreach(_header
+    alloca.h iconv.h wctype.h fcntl.h sys/poll.h sys/time.h stdint.h
+    inttypes.h X11/Xos_r.h X11/Xpoll.h)
+  string(MAKE_C_IDENTIFIER "HAVE_${_header}" _var)
+  string(TOUPPER "${_var}" _var)
+  check_include_file("${_header}" ${_var})
+  if(${_var})
+    list(APPEND MOTIF_CONFIG_DEFINITIONS ${_var})
+  endif()
+endforeach()
+
+foreach(_func
+    getcwd getwd iconv nanosleep putenv regcomp strcasecmp strdup strlcat
+    getpwnam getpwuid re_comp re_exec)
+  string(TOUPPER "HAVE_${_func}" _var)
+  check_function_exists(${_func} ${_var})
+  if(${_var})
+    list(APPEND MOTIF_CONFIG_DEFINITIONS ${_var})
+  endif()
+endforeach()
+check_function_exists(regexec HAVE_REGEX)
+if(HAVE_REGEX)
+  list(APPEND MOTIF_CONFIG_DEFINITIONS HAVE_REGEX)
+endif()
+
+# Always defined, to 0 or 1, as the sources test it with #if
+check_symbol_exists(XICProc "X11/Xlib.h" HAVE_XICPROC)
+if(HAVE_XICPROC)
+  list(APPEND MOTIF_CONFIG_DEFINITIONS HAVE_XICPROC=1)
+else()
+  list(APPEND MOTIF_CONFIG_DEFINITIONS HAVE_XICPROC=0)
+endif()
+unset(CMAKE_REQUIRED_INCLUDES)
+
+# XtAppLock() and XtAppUnlock() indicate a thread-aware libXt
+set(CMAKE_REQUIRED_INCLUDES ${MOTIF_XT_INCLUDE_DIRS})
+set(CMAKE_REQUIRED_LIBRARIES ${MOTIF_XT_LINK_LIBRARIES})
+check_c_source_compiles("
+#include <X11/Intrinsic.h>
+int main(void) {
+    XtAppContext app_context = 0;
+    XtAppLock(app_context);
+    XtAppUnlock(app_context);
+    return 0;
+}" HAVE_XTHREADS)
+unset(CMAKE_REQUIRED_INCLUDES)
+unset(CMAKE_REQUIRED_LIBRARIES)
+if(HAVE_XTHREADS)
+  list(APPEND MOTIF_CONFIG_DEFINITIONS XTHREADS=1)
+endif()
+
+# Configuration of the libraries
+list(APPEND MOTIF_CONFIG_DEFINITIONS
+  HAVE_LIBXMU
+  NO_OL_COMPAT=1
+  _Xos_processLock=XtProcessLock
+  _Xos_processUnlock=XtProcessUnlock
+)
+if(WITH_PWC_DEBUG)
+  list(APPEND MOTIF_CONFIG_DEFINITIONS PWC_DEBUG=1)
+else()
+  list(APPEND MOTIF_CONFIG_DEFINITIONS PWC_DEBUG=0)
+endif()
+
+# The XM_* values are also written into the generated Xm/Xm.h.
+if(MOTIF_XFT_FOUND)
+  list(APPEND MOTIF_CONFIG_DEFINITIONS USE_XFT)
+endif()
+if(MOTIF_JPEG_FOUND)
+  set(XM_WITH_JPEG "#define XM_WITH_JPEG 1")
+  list(APPEND MOTIF_CONFIG_DEFINITIONS XM_WITH_JPEG)
+else()
+  set(XM_WITH_JPEG "#define XM_WITH_JPEG 0")
+endif()
+if(MOTIF_PNG_FOUND)
+  set(XM_WITH_PNG "#define XM_WITH_PNG 1")
+  list(APPEND MOTIF_CONFIG_DEFINITIONS XM_WITH_PNG)
+else()
+  set(XM_WITH_PNG "#define XM_WITH_PNG 0")
+endif()
+if(WITH_PRINTING)
+  set(XM_PRINTING "#define XM_PRINTING 1")
+  list(APPEND MOTIF_CONFIG_DEFINITIONS XM_PRINTING)
+else()
+  set(XM_PRINTING "#define XM_PRINTING 0")
+endif()
+if(WITH_UTF8)
+  set(XM_UTF8 "#define XM_UTF8 1")
+  list(APPEND MOTIF_CONFIG_DEFINITIONS XM_UTF8)
+else()
+  set(XM_UTF8 "#define XM_UTF8 0")
+endif()
+if(WITH_MESSAGE_CATALOG)
+  list(APPEND MOTIF_CONFIG_DEFINITIONS XM_MSGCAT=1)
+else()
+  list(APPEND MOTIF_CONFIG_DEFINITIONS XM_MSGCAT=0)
+endif()
+
+if(LOG_LEVEL STREQUAL "DEBUG")
+  set(_level DBG)
+elseif(LOG_LEVEL STREQUAL "WARN")
+  set(_level WARN)
+elseif(LOG_LEVEL STREQUAL "ERROR")
+  set(_level ERR)
+elseif(LOG_LEVEL STREQUAL "CRITICAL")
+  set(_level CRITICAL)
+else()
+  set(_level INFO)
+endif()
+list(APPEND MOTIF_CONFIG_DEFINITIONS
+  XM_DEFAULT_LOG_LEVEL=XM_LOG_LEVEL_${_level}
+  XM_DEFAULT_LOG_OUTPUT="${LOG_OUTPUT}"
 )
 
-# Add necessary includes for system functions
-include(CheckIncludeFile)
-include(CheckFunctionExists)
+# -----------------------------------------------------------------------------
+# Warnings
+#
+# One curated list.  These are not enabled yet because the code still
+# triggers them; fix and enable them in this order:
+#   -Wimplicit-fallthrough, -Wstrict-prototypes, -Wmissing-prototypes,
+#   -Wdiscarded-qualifiers, -Wstringop-overflow, -Wsign-compare.
+# The compiler enables -Wdiscarded-qualifiers and -Wstringop-overflow by
+# default, so they are switched off explicitly until then.  Warnings are not
+# errors (set CMAKE_COMPILE_WARNING_AS_ERROR to make them so), apart from the
+# few -Werror= below that always indicate a bug.
 
-check_include_file("alloca.h" HAVE_ALLOCA_H)
-check_include_file("iconv.h" HAVE_ICONV_H)
-check_include_file("wctype.h" HAVE_WCTYPE_H)
-check_include_file("fcntl.h" HAVE_FCNTL_H)
-check_include_file("sys/poll.h" HAVE_SYS_POLL_H)
-check_include_file("sys/time.h" HAVE_SYS_TIME_H)
-check_include_file("X11/Xos_r.h" HAVE_X11_XOS_R_H)
-check_include_file("X11/Xpoll.h" HAVE_X11_XPOLL_H)
-check_include_file("stdint.h" HAVE_STDINT_H)
-check_include_file("inttypes.h" HAVE_INTTYPES_H)
-
-check_function_exists(getcwd HAVE_GETCWD)
-check_function_exists(getwd HAVE_GETWD)
-check_function_exists(iconv HAVE_ICONV)
-check_function_exists(nanosleep HAVE_NANOSLEEP)
-check_function_exists(putenv HAVE_PUTENV)
-check_function_exists(regcomp HAVE_REGCOMP)
-check_function_exists(regexec HAVE_REGEX)
-if(NOT HAVE_REGEX)
-    set(HAVE_REGEX 0)
-endif()
-check_function_exists(strcasecmp HAVE_STRCASECMP)
-check_function_exists(strdup HAVE_STRDUP)
-check_function_exists(strlcat HAVE_STRLCAT)
-check_function_exists(getpwnam HAVE_GETPWNAM)
-check_function_exists(getpwuid HAVE_GETPWUID)
-check_function_exists(re_comp HAVE_RE_COMP)
-check_function_exists(re_exec HAVE_RE_EXEC)
-
-# Check for X11-specific functions
-include(CheckSymbolExists)
-find_package(X11 REQUIRED)
-check_symbol_exists(XICProc "X11/Xlib.h" HAVE_XICPROC)
-if(NOT HAVE_XICPROC)
-    set(HAVE_XICPROC 0)
-endif()
-# Always define HAVE_XICPROC to avoid -Wundef warnings
-if(NOT DEFINED HAVE_XICPROC)
-    set(HAVE_XICPROC 0)
-endif()
-
-# Check if compiler supports ANSI C (__STDC__)
-# Modern compilers should define __STDC__ by default
-check_c_source_compiles("
-#ifdef __STDC__
-int main() { return 0; }
-#else
-#error __STDC__ not defined
-#endif
-" HAVE_STDC)
-
-if(HAVE_STDC)
-    set(__STDC__ 1)
-    message(STATUS "Compiler supports ANSI C (__STDC__ defined)")
-else()
-    set(__STDC__ 0)
-    message(STATUS "Compiler does not support ANSI C (__STDC__ not defined)")
+set(MOTIF_C_WARNINGS)
+if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
+  motif_check_c_flags(MOTIF_C_WARNINGS
+    -Wall
+    -Wpointer-arith
+    -Wlogical-op
+    -Wundef
+    -Winit-self
+    -Wmissing-include-dirs
+    -Wformat-signedness
+    -Wrestrict
+    -Wabsolute-value
+    -Wshadow
+    -Werror=implicit-function-declaration
+    -Werror=return-type
+    -Werror=vla
+    # To be fixed, see above
+    -Wno-discarded-qualifiers
+    -Wno-incompatible-pointer-types-discards-qualifiers
+    -Wno-stringop-overflow
+    # Legacy code patterns that are not worth the churn
+    -Wno-char-subscripts
+    -Wno-unknown-pragmas
+    -Wno-div-by-zero
+    -Wno-stringop-overread
+    -Wno-misleading-indentation
+    -Wno-unused-function
+    -Wno-unused-variable
+    -Wno-unused-but-set-variable
+    -Wno-unused-value
+  )
+  if(CMAKE_C_COMPILER_ID STREQUAL "Clang")
+    motif_check_c_flags(MOTIF_C_WARNINGS -Wno-tautological-compare)
+  endif()
 endif()
 
-# Check for Xmu library
-find_library(XMU_LIBRARY Xmu)
-if(XMU_LIBRARY)
-    set(HAVE_LIBXMU TRUE)
-else()
-    set(HAVE_LIBXMU FALSE)
-endif()
+# -----------------------------------------------------------------------------
+# Build flags shared by every target built here
+#
+# motif_build_flags carries the feature macros, the configuration defines,
+# the include directories and the warnings.  Xm links it as
+# PUBLIC $<BUILD_INTERFACE:...>, so everything in the tree that links Xm gets
+# it as well; the build tools and static helper libraries that do not link
+# Xm link it directly.  It is never exported or installed.
 
-# PWC_DEBUG is a project-specific debug flag
-option(WITH_PWC_DEBUG "Enable PWC debug output" OFF)
-if(WITH_PWC_DEBUG)
-    set(HAVE_PWC_DEBUG TRUE)
-else()
-    set(HAVE_PWC_DEBUG FALSE)
+add_library(motif_build_flags INTERFACE)
+target_include_directories(motif_build_flags INTERFACE
+  # Generated headers (Xm/Xm.h, Xm/XmStrDefs*.h, Xm/version.h, the message
+  # catalog headers, config.h) come first, so that they win over the stubs
+  # of the same name in the source tree.
+  ${CMAKE_BINARY_DIR}/include
+  # <Xm/...> and <Mrm/...> from the sources
+  ${CMAKE_SOURCE_DIR}/src/lib
+  # <Dt/...>
+  ${CMAKE_SOURCE_DIR}/include
+)
+if(MOTIF_XFT_FOUND)
+  # With USE_XFT, internal and widget headers include <X11/Xft/Xft.h>.
+  target_include_directories(motif_build_flags INTERFACE
+    $<TARGET_PROPERTY:PkgConfig::MOTIF_XFT,INTERFACE_INCLUDE_DIRECTORIES>)
 endif()
+target_compile_definitions(motif_build_flags INTERFACE
+  # glibc and musl expose all of POSIX, XSI, BSD and GNU with _GNU_SOURCE,
+  # and the BSDs and macOS do so by default.  Requesting a _POSIX_C_SOURCE
+  # or _XOPEN_SOURCE level on top would only hide interfaces again there.
+  _GNU_SOURCE
+  $<$<PLATFORM_ID:SunOS>:__EXTENSIONS__>
+  ${MOTIF_CONFIG_DEFINITIONS}
+)
+target_compile_options(motif_build_flags INTERFACE ${MOTIF_C_WARNINGS})
 
-# Add compile definitions based on checks
-if(HAVE_ALLOCA_H)
-    add_compile_definitions(HAVE_ALLOCA_H)
-endif()
-if(HAVE_ICONV_H)
-    add_compile_definitions(HAVE_ICONV_H)
-endif()
-if(HAVE_WCTYPE_H)
-    add_compile_definitions(HAVE_WCTYPE_H)
-endif()
-if(HAVE_FCNTL_H)
-    add_compile_definitions(HAVE_FCNTL_H)
-endif()
-if(HAVE_SYS_POLL_H)
-    add_compile_definitions(HAVE_SYS_POLL_H)
-endif()
-if(HAVE_SYS_TIME_H)
-    add_compile_definitions(HAVE_SYS_TIME_H)
-endif()
-if(HAVE_X11_XOS_R_H)
-    add_compile_definitions(HAVE_X11_XOS_R_H)
-endif()
-if(HAVE_X11_XPOLL_H)
-    add_compile_definitions(HAVE_X11_XPOLL_H)
-endif()
-if(HAVE_GETCWD)
-    add_compile_definitions(HAVE_GETCWD)
-endif()
-if(HAVE_GETWD)
-    add_compile_definitions(HAVE_GETWD)
-endif()
-if(HAVE_ICONV)
-    add_compile_definitions(HAVE_ICONV)
-endif()
-if(HAVE_NANOSLEEP)
-    add_compile_definitions(HAVE_NANOSLEEP)
-endif()
-if(HAVE_PUTENV)
-    add_compile_definitions(HAVE_PUTENV)
-endif()
-if(HAVE_REGCOMP)
-    add_compile_definitions(HAVE_REGCOMP)
-endif()
-if(HAVE_REGEX)
-    add_compile_definitions(HAVE_REGEX)
-endif()
-if(HAVE_STRCASECMP)
-    add_compile_definitions(HAVE_STRCASECMP)
-endif()
-if(HAVE_STRDUP)
-    add_compile_definitions(HAVE_STRDUP)
-endif()
-if(HAVE_STRLCAT)
-    add_compile_definitions(HAVE_STRLCAT)
-endif()
-if(HAVE_GETPWNAM)
-    add_compile_definitions(HAVE_GETPWNAM)
-endif()
-if(HAVE_GETPWUID)
-    add_compile_definitions(HAVE_GETPWUID)
-endif()
-if(HAVE_RE_COMP)
-    add_compile_definitions(HAVE_RE_COMP)
-endif()
-if(HAVE_RE_EXEC)
-    add_compile_definitions(HAVE_RE_EXEC)
-endif()
-
-# Add definitions for new checks
-if(HAVE_STDINT_H)
-    add_compile_definitions(HAVE_STDINT_H)
-endif()
-if(HAVE_INTTYPES_H)
-    add_compile_definitions(HAVE_INTTYPES_H)
-endif()
-if(HAVE_XICPROC)
-    add_compile_definitions(HAVE_XICPROC=1)
-else()
-    add_compile_definitions(HAVE_XICPROC=0)
-endif()
-if(HAVE_LIBXMU)
-    add_compile_definitions(HAVE_LIBXMU)
-endif()
-if(HAVE_PWC_DEBUG)
-    add_compile_definitions(PWC_DEBUG=1)
-else()
-    add_compile_definitions(PWC_DEBUG=0)
-endif()
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/include/Xm ${CMAKE_BINARY_DIR}/include/Mrm)
 
 # Optimization options. These are applied here rather than in the presets in
 # tools/cmake/config, because presets run before the compiler is detected.
@@ -351,297 +434,11 @@ if(WITH_CPU_NATIVE AND CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
   add_compile_options(-march=native)
 endif()
 
-
-# -----------------------------------------------------------------------------
-# Warnings
-
-set(C_WARNINGS)
-if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
-  motif_check_c_flags(C_WARNINGS
-    -Wall
-    -Werror=implicit-function-declaration
-    -Werror=return-type
-    -Werror=vla
-    -Wpointer-arith
-    -Wwrite-strings
-    -Wlogical-op
-    -Wundef
-    -Winit-self
-    -Wmissing-include-dirs
-    -Wformat-signedness
-    -Wrestrict
-    -Wnonnull
-    -Wabsolute-value
-    -Wuninitialized
-    -Wshadow
-    -Wno-char-subscripts
-    -Wno-unknown-pragmas
-    -Wno-div-by-zero
-    -Wno-stringop-overread
-    -Wno-stringop-overflow
-    -Wno-unused-function
-    -Wno-unused-variable
-    -Wno-unused-but-set-variable
-    -Wno-unused-value
-    -Wno-unused-parameter
-    -Wno-discarded-qualifiers
-    -Wno-missing-prototypes
-    -Wno-redundant-decls
-    -Wno-strict-prototypes
-    -Wno-implicit-fallthrough
-    -Wno-misleading-indentation
-    -Wno-type-limits
-    -Wno-tautological-compare
-  )
-endif()
-string(REPLACE ";" " " C_WARNINGS "${C_WARNINGS}")
-
 # C17 with GNU extensions (-std=gnu17).  C23 needs the remaining
 # unprototyped () function declarations fixed first.
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS ON)
-
-# Include warnings first, so its possible to disable them with user defined flags
-# eg: -Wno-uninitialized
-set(CMAKE_C_FLAGS "${C_WARNINGS} ${CMAKE_C_FLAGS}")
-
-
-# -----------------------------------------------------------------------------
-# Find and check
-
-# Find required packages
-find_package(PkgConfig REQUIRED)
-
-# Detect YACC/LEX tools (used in multiple parts of the codebase)
-motif_find_parser_generators()
-
-# Find X11 and related libraries
-pkg_check_modules(X REQUIRED x11 xpm xt xmu xext)
-
-# Check for XTHREADS support
-include(CheckCCompilerFlag)
-include(CheckCSourceCompiles)
-
-# Test if XtAppLock and XtAppUnlock are available (indicates XTHREADS support)
-# We need to link with Xt library to properly test these functions
-set(CMAKE_REQUIRED_LIBRARIES ${X_LIBRARIES})
-set(CMAKE_REQUIRED_INCLUDES ${X_INCLUDE_DIRS})
-set(CMAKE_REQUIRED_FLAGS ${X_CFLAGS})
-
-check_c_source_compiles("
-#include <X11/Intrinsic.h>
-#include <X11/StringDefs.h>
-int main() {
-    XtAppContext app_context;
-    XtAppLock(app_context);
-    XtAppUnlock(app_context);
-    return 0;
-}" HAVE_XTHREADS)
-
-set(CMAKE_REQUIRED_LIBRARIES)
-set(CMAKE_REQUIRED_INCLUDES)
-set(CMAKE_REQUIRED_FLAGS)
-
-if(HAVE_XTHREADS)
-    add_compile_definitions(XTHREADS=1)
-    message(STATUS "XTHREADS support detected")
-else()
-    message(STATUS "No XTHREADS support detected")
-endif()
-
-# Always define X11 compatibility macros for all targets
-add_compile_definitions(
-    _Xos_processLock=XtProcessLock
-    _Xos_processUnlock=XtProcessUnlock
-)
-
-# Check for Xft
-if(WITH_XFT)
-    pkg_check_modules(XFT xft>=2)
-    if(XFT_FOUND)
-        add_compile_definitions(USE_XFT)
-    endif()
-endif()
-
-# Check for FontConfig support (required by Xft)
-pkg_check_modules(FONTCONFIG REQUIRED fontconfig)
-
-# Check for JPEG support
-if(WITH_JPEG)
-    pkg_check_modules(JPEG libjpeg)
-    if(JPEG_FOUND)
-        set(XM_WITH_JPEG "#define XM_WITH_JPEG 1")
-        add_compile_definitions(XM_WITH_JPEG)
-    else()
-        set(XM_WITH_JPEG "#define XM_WITH_JPEG 0")
-    endif()
-else()
-    set(XM_WITH_JPEG "#define XM_WITH_JPEG 0")
-endif()
-
-# Check for PNG support
-if(WITH_PNG)
-    pkg_check_modules(PNG libpng)
-    if(PNG_FOUND)
-        set(XM_WITH_PNG "#define XM_WITH_PNG 1")
-        add_compile_definitions(XM_WITH_PNG)
-    else()
-        set(XM_WITH_PNG "#define XM_WITH_PNG 0")
-    endif()
-else()
-    set(XM_WITH_PNG "#define XM_WITH_PNG 0")
-endif()
-
-# Check for printing support
-if(WITH_PRINTING)
-    pkg_check_modules(XP xp)
-    if(XP_FOUND)
-        set(XM_PRINTING "#define XM_PRINTING 1")
-        add_compile_definitions(XM_PRINTING)
-        message(STATUS "Printing support enabled (libXp found)")
-    else()
-        message(WARNING "libXp not found - disabling printing support")
-        set(WITH_PRINTING OFF CACHE BOOL "Enable printing support" FORCE)
-        set(XM_PRINTING "#define XM_PRINTING 0")
-    endif()
-else()
-    set(XM_PRINTING "#define XM_PRINTING 0")
-endif()
-
-# Check for UTF-8 support
-if(WITH_UTF8)
-    set(XM_UTF8 "#define XM_UTF8 1")
-    add_compile_definitions(XM_UTF8)
-    find_library(ICONV_LIBRARY iconv)
-    if(ICONV_LIBRARY)
-        set(ICONV_LIBRARIES ${ICONV_LIBRARY})
-    endif()
-else()
-    set(XM_UTF8 "#define XM_UTF8 0")
-endif()
-
-# Check for message catalog support
-if(WITH_MESSAGE_CATALOG)
-    add_compile_definitions(XM_MSGCAT=1)
-    # Compiles the generated numeric catalogs to .cat files (optional: the
-    # libraries only need the generated *MsgCatI.h headers to build).
-    find_program(GENCAT_EXECUTABLE gencat)
-    if(NOT GENCAT_EXECUTABLE)
-        message(STATUS "gencat not found: message catalogs (.cat) will not be compiled")
-    endif()
-else()
-    # Define XM_MSGCAT as 0 when message catalog is disabled to avoid warnings
-    add_compile_definitions(XM_MSGCAT=0)
-endif()
-
-# Check for UIL debug support
-if(WITH_UIL_DEBUG)
-    add_compile_definitions(XM_UIL_DEBUG)
-endif()
-
-# Set logging level
-if(LOG_LEVEL STREQUAL "DEBUG")
-    set(XM_DEFAULT_LOG_LEVEL_VAL "XM_LOG_LEVEL_DBG")
-elseif(LOG_LEVEL STREQUAL "INFO")
-    set(XM_DEFAULT_LOG_LEVEL_VAL "XM_LOG_LEVEL_INFO")
-elseif(LOG_LEVEL STREQUAL "WARN")
-    set(XM_DEFAULT_LOG_LEVEL_VAL "XM_LOG_LEVEL_WARN")
-elseif(LOG_LEVEL STREQUAL "ERROR")
-    set(XM_DEFAULT_LOG_LEVEL_VAL "XM_LOG_LEVEL_ERR")
-elseif(LOG_LEVEL STREQUAL "CRITICAL")
-    set(XM_DEFAULT_LOG_LEVEL_VAL "XM_LOG_LEVEL_CRITICAL")
-else()
-    set(XM_DEFAULT_LOG_LEVEL_VAL "XM_LOG_LEVEL_INFO")
-endif()
-
-add_compile_definitions(
-    XM_DEFAULT_LOG_LEVEL=${XM_DEFAULT_LOG_LEVEL_VAL}
-    XM_DEFAULT_LOG_OUTPUT="${LOG_OUTPUT}"
-)
-
-# Additional defines
-add_compile_definitions(
-    NO_OL_COMPAT=1
-    HAVE_SYS_POLL_H
-    HAVE_SYS_TIME_H
-)
-
-# Include directories
-include_directories(include)
-include_directories(${X_INCLUDE_DIRS})
-
-# Add system includes header to all targets
-add_compile_definitions(MOTIF_SYSTEM_H="${CMAKE_SOURCE_DIR}/include/motif_system.h")
-
-# Add conditional include directories
-if(XFT_FOUND)
-    include_directories(${XFT_INCLUDE_DIRS})
-endif()
-
-if(JPEG_FOUND)
-    include_directories(${JPEG_INCLUDE_DIRS})
-endif()
-
-if(PNG_FOUND)
-    include_directories(${PNG_INCLUDE_DIRS})
-endif()
-
-if(XP_FOUND)
-    include_directories(${XP_INCLUDE_DIRS})
-endif()
-
-# Copy headers to build directory for compilation
-file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/include/Xm)
-file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/include/Mrm)
-file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/include/Dt)
-
-# Copy Xm headers (excluding symlinks). XmMsgCatI.h is left out: the
-# xm_msgcat_header target writes it (generated, or the stub without message
-# catalogs), and copying the stub here on every reconfigure would overwrite
-# the generated header.
-file(GLOB XM_HEADER_FILES "${CMAKE_SOURCE_DIR}/src/lib/Xm/*.h")
-list(REMOVE_ITEM XM_HEADER_FILES "${CMAKE_SOURCE_DIR}/src/lib/Xm/XmMsgCatI.h")
-foreach(header ${XM_HEADER_FILES})
-    get_filename_component(filename ${header} NAME)
-    # Skip symlinks to avoid circular dependencies
-    if(NOT IS_SYMLINK ${header})
-        configure_file(${header} ${CMAKE_BINARY_DIR}/include/Xm/${filename} COPYONLY)
-    endif()
-endforeach()
-
-# Copy generated version.h to include directory (as a custom command)
-add_custom_command(
-    OUTPUT ${CMAKE_BINARY_DIR}/include/Xm/version.h
-    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/include/Xm
-    COMMAND ${CMAKE_COMMAND} -E copy
-        ${CMAKE_BINARY_DIR}/src/lib/Xm/version.h
-        ${CMAKE_BINARY_DIR}/include/Xm/version.h
-    DEPENDS ${CMAKE_BINARY_DIR}/src/lib/Xm/version.h
-    COMMENT "Copying version.h to include directory"
-)
-
-# Create a target that depends on the version header copy
-add_custom_target(copy_version_header ALL
-    DEPENDS ${CMAKE_BINARY_DIR}/include/Xm/version.h
-)
-
-# Copy Mrm headers (MrmMsgCatI.h is written by mrm_msgcat_header, as for Xm)
-file(GLOB MRM_HEADER_FILES "${CMAKE_SOURCE_DIR}/src/lib/Mrm/*.h")
-list(REMOVE_ITEM MRM_HEADER_FILES "${CMAKE_SOURCE_DIR}/src/lib/Mrm/MrmMsgCatI.h")
-foreach(header ${MRM_HEADER_FILES})
-    get_filename_component(filename ${header} NAME)
-    configure_file(${header} ${CMAKE_BINARY_DIR}/include/Mrm/${filename} COPYONLY)
-endforeach()
-
-# Copy Dt headers if they exist
-if(EXISTS "${CMAKE_SOURCE_DIR}/include/Dt")
-    file(GLOB DT_HEADER_FILES "${CMAKE_SOURCE_DIR}/include/Dt/*.h")
-    foreach(header ${DT_HEADER_FILES})
-        get_filename_component(filename ${header} NAME)
-        configure_file(${header} ${CMAKE_BINARY_DIR}/include/Dt/${filename} COPYONLY)
-    endforeach()
-endif()
 
 # Add subdirectories
 add_subdirectory(include)

@@ -237,15 +237,15 @@ set(XM_JPEG_SRCS "")
 set(XM_PNG_SRCS "")
 set(XM_PRINTS_SRC "")
 
-if(WITH_JPEG AND JPEG_FOUND)
+if(MOTIF_JPEG_FOUND)
     list(APPEND XM_JPEG_SRCS Jpeg.c)
 endif()
 
-if(WITH_PNG AND PNG_FOUND)
+if(MOTIF_PNG_FOUND)
     list(APPEND XM_PNG_SRCS Png.c)
 endif()
 
-if(WITH_PRINTING AND XP_FOUND)
+if(WITH_PRINTING)
     list(APPEND XM_PRINTS_SRC PrintS.c)
 endif()
 
@@ -501,7 +501,7 @@ set(XM_HEADERS
     Xmfuncs.h
     deprecated.h
     obsolete.h
-    ${CMAKE_BINARY_DIR}/src/lib/Xm/version.h
+    ${CMAKE_BINARY_DIR}/include/Xm/version.h
 )
 
 # Extra headers
@@ -659,11 +659,11 @@ set(XM_INTERNAL_HEADERS
 )
 
 # Add conditional internal headers
-if(WITH_JPEG AND JPEG_FOUND)
+if(MOTIF_JPEG_FOUND)
     list(APPEND XM_INTERNAL_HEADERS JpegI.h)
 endif()
 
-if(WITH_PNG AND PNG_FOUND)
+if(MOTIF_PNG_FOUND)
     list(APPEND XM_INTERNAL_HEADERS PngI.h)
 endif()
 
@@ -675,8 +675,6 @@ add_library(Xm ${MOTIF_LIB_TYPE} ${XM_ALL_SRCS} ${CMAKE_BINARY_DIR}/src/lib/Xm/X
 # Ensure message catalog header and string files are generated before building this target
 add_dependencies(Xm xm_msgcat_header xm_strings)
 
-# XM_MSGCAT is now defined globally in the main CMakeLists.txt
-
 # Set library properties
 set_target_properties(Xm PROPERTIES
     VERSION ${ABI_CURRENT}.${ABI_REVISION}.${ABI_AGE}
@@ -685,38 +683,17 @@ set_target_properties(Xm PROPERTIES
 )
 
 # Include directories
+# Include directories.  In the build tree, the generated headers in
+# ${CMAKE_BINARY_DIR}/include and the sources in src/lib come from
+# motif_build_flags; src/lib/Xm is kept for in-tree users of the internal
+# headers.
 target_include_directories(Xm
     PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/lib/Xm>
-        $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
-        $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/src/lib>
-        $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/src/lib/Xm>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
     PRIVATE
-        ${CMAKE_SOURCE_DIR}/src/lib/Xm
-        ${CMAKE_BINARY_DIR}/src/lib/Xm
-        ${CMAKE_BINARY_DIR}/include
         # ToolTipI.h includes "Xm.h", which is generated (from Xm.h.in)
         ${CMAKE_BINARY_DIR}/include/Xm
-        ${X_INCLUDE_DIRS}
-)
-
-# Add system includes for compilation
-target_compile_definitions(Xm PRIVATE
-    _GNU_SOURCE
-    _DEFAULT_SOURCE
-    _POSIX_C_SOURCE=200809L
-    _BSD_SOURCE
-    _XOPEN_SOURCE=600
-    _XOPEN_SOURCE_EXTENDED=1
-    _SVID_SOURCE
-    _ATFILE_SOURCE
-)
-
-# Add system includes
-target_compile_options(Xm PRIVATE
-    -include ${CMAKE_SOURCE_DIR}/include/motif_system.h
 )
 
 # Compile definitions
@@ -728,14 +705,21 @@ target_compile_definitions(Xm
         DATADIR="${CMAKE_INSTALL_DATADIR}"
 )
 
-# Link libraries
+# Link libraries.  X11 and Xt are part of the interface of libXm.
 target_link_libraries(Xm
     PUBLIC
-        ${X_LIBRARIES}
+        PkgConfig::MOTIF_XT
+        $<BUILD_INTERFACE:motif_build_flags>
     PRIVATE
-        ${ICONV_LIBRARIES}
+        PkgConfig::MOTIF_XEXT
+        PkgConfig::MOTIF_FONTCONFIG
+        $<$<BOOL:${MOTIF_XFT_FOUND}>:PkgConfig::MOTIF_XFT>
+        $<$<BOOL:${MOTIF_JPEG_FOUND}>:PkgConfig::MOTIF_JPEG>
+        $<$<BOOL:${MOTIF_PNG_FOUND}>:PkgConfig::MOTIF_PNG>
+        $<$<BOOL:${WITH_PRINTING}>:PkgConfig::MOTIF_XP>
+        $<$<BOOL:${ICONV_LIBRARY}>:${ICONV_LIBRARY}>
         m
-        pthread
+        Threads::Threads
 )
 
 # Add system libraries for missing functions
@@ -751,33 +735,6 @@ if(NOT REGEX_COMP_LIB)
 endif()
 if(REGEX_COMP_LIB)
     target_link_libraries(Xm PRIVATE ${REGEX_COMP_LIB})
-endif()
-
-# Add conditional libraries
-if(XFT_FOUND)
-    target_link_libraries(Xm PRIVATE ${XFT_LIBRARIES})
-    target_include_directories(Xm PRIVATE ${XFT_INCLUDE_DIRS})
-endif()
-
-# Add FontConfig library (required by Xft)
-if(FONTCONFIG_FOUND)
-    target_link_libraries(Xm PRIVATE ${FONTCONFIG_LIBRARIES})
-    target_include_directories(Xm PRIVATE ${FONTCONFIG_INCLUDE_DIRS})
-endif()
-
-if(JPEG_FOUND)
-    target_link_libraries(Xm PRIVATE ${JPEG_LIBRARIES})
-    target_include_directories(Xm PRIVATE ${JPEG_INCLUDE_DIRS})
-endif()
-
-if(PNG_FOUND)
-    target_link_libraries(Xm PRIVATE ${PNG_LIBRARIES})
-    target_include_directories(Xm PRIVATE ${PNG_INCLUDE_DIRS})
-endif()
-
-if(XP_FOUND)
-    target_link_libraries(Xm PRIVATE ${XP_LIBRARIES})
-    target_include_directories(Xm PRIVATE ${XP_INCLUDE_DIRS})
 endif()
 
 # Install the library
@@ -810,16 +767,11 @@ install(FILES ${CMAKE_BINARY_DIR}/include/Xm/Xm.h
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Xm
 )
 
-# Generate version.h
+# Generate version.h (installed with XM_HEADERS)
 configure_file(
     ${CMAKE_SOURCE_DIR}/src/lib/Xm/version.h.in
-    ${CMAKE_BINARY_DIR}/src/lib/Xm/version.h
+    ${CMAKE_BINARY_DIR}/include/Xm/version.h
     @ONLY
-)
-
-# Install version.h
-install(FILES ${CMAKE_BINARY_DIR}/src/lib/Xm/version.h
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Xm
 )
 
 # Export targets

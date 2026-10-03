@@ -86,30 +86,17 @@ set_target_properties(Mrm PROPERTIES
 # Include directories
 target_include_directories(Mrm
     PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/lib/Mrm>
-        $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
     PRIVATE
-        ${CMAKE_SOURCE_DIR}/src/lib/Mrm
         ${CMAKE_SOURCE_DIR}/src/lib/Xm
-        ${CMAKE_BINARY_DIR}/include
-        ${CMAKE_BINARY_DIR}/include/Mrm
-        ${X_INCLUDE_DIRS}
 )
 
 # Link libraries
 target_link_libraries(Mrm
     PUBLIC
         Xm
-        ${X_LIBRARIES}
 )
-
-# Add conditional libraries
-if(XFT_FOUND)
-    target_link_libraries(Mrm PRIVATE ${XFT_LIBRARIES})
-    target_include_directories(Mrm PRIVATE ${XFT_INCLUDE_DIRS})
-endif()
 
 # Install the library
 install(TARGETS Mrm

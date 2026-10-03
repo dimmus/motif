@@ -24,16 +24,13 @@ set(WSM_HEADERS
 add_library(WsmDemo STATIC ${WSM_SRCS})
 
 # Make WsmDemo depend on the version header being copied and string generation
-add_dependencies(WsmDemo copy_version_header xm_strings)
+add_dependencies(WsmDemo xm_strings)
 
 # Set include directories
 target_include_directories(WsmDemo PUBLIC
-    ${CMAKE_SOURCE_DIR}/src/lib
-    ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_BINARY_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${X_INCLUDE_DIRS}
 )
+target_link_libraries(WsmDemo PUBLIC motif_build_flags PkgConfig::MOTIF_XT)
 
 # Install the library (for development)
 install(TARGETS WsmDemo
