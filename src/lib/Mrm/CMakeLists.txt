@@ -35,22 +35,12 @@ set(MRM_SRCS
     MrmMessages.c
 )
 
-# Mrm headers
+# Mrm headers.  The internal ones (IDB.h, Mrm.h, MrmMsgI.h, MrmosI.h,
+# MrmWidget.h) are not installed.
 set(MRM_HEADERS
     MrmDecls.h
     MrmPublic.h
     MrmAppl.h
-    MrmosI.h
-)
-
-# Internal headers
-set(MRM_INTERNAL_HEADERS
-    IDB.h
-    Mrm.h
-    MrmMsgI.h
-    MrmWidget.h
-    # Included by MrmMsgI.h; generated, or the stub without message catalogs
-    ${CMAKE_BINARY_DIR}/include/Mrm/MrmMsgCatI.h
 )
 
 # Generate message catalog header file
@@ -114,11 +104,6 @@ install(TARGETS Mrm
 
 # Install headers
 install(FILES ${MRM_HEADERS}
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Mrm
-)
-
-# Install internal headers (for development)
-install(FILES ${MRM_INTERNAL_HEADERS}
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Mrm
 )
 

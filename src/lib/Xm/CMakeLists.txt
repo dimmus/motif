@@ -552,116 +552,8 @@ set(XM_SLIDE_HEADERS
     SlideCP.h
 )
 
-# Internal headers
-set(XM_INTERNAL_HEADERS
-    BaseClassI.h
-    BitmapsI.h
-    BulletinBI.h
-    CacheI.h
-    CallbackI.h
-    CareVisualTI.h
-    CascadeBGI.h
-    CascadeBI.h
-    ClipWindTI.h
-    CntrbmI.h
-    ColorI.h
-    ColorObjI.h
-    CommandI.h
-    CutPasteI.h
-    DestI.h
-    DisplayI.h
-    DragBSI.h
-    DragCI.h
-    DragICCI.h
-    DragIconI.h
-    DragOverSI.h
-    DragUnderI.h
-    DrawI.h
-    DrawingAI.h
-    DropSMgrI.h
-    ExtObjectI.h
-    GMUtilsI.h
-    GadgetI.h
-    GadgetUtiI.h
-    GeoUtilsI.h
-    HashI.h
-    IconGI.h
-    ImageCachI.h
-    LabelGI.h
-    LabelI.h
-    ManagerI.h
-    MapEventsI.h
-    MenuProcI.h
-    MenuShellI.h
-    MenuStateI.h
-    MenuUtilI.h
-    MessageBI.h
-    MessagesI.h
-    nanosvg.h
-    nanosvgrast.h
-    PixConvI.h
-    PrimitiveI.h
-    PrintSI.h
-    ProtocolsI.h
-    RCHookI.h
-    RCLayoutI.h
-    RCMenuI.h
-    ReadImageI.h
-    RegionI.h
-    RepTypeI.h
-    ResConverI.h
-    ResEncodI.h
-    ResIndI.h
-    RowColumnI.h
-    ScreenI.h
-    ScrollFramTI.h
-    ScrolledWI.h
-    SelectioBI.h
-    SeparatoGI.h
-    SvgI.h
-    SyntheticI.h
-    TearOffI.h
-    TextDIconI.h
-    TextFI.h
-    TextFSelI.h
-    TextI.h
-    TextInI.h
-    TextOutI.h
-    TextSelI.h
-    TextStrSoI.h
-    ToggleBGI.h
-    TraitI.h
-    TransferI.h
-    TravActI.h
-    TraversalI.h
-    UniqueEvnI.h
-    VaSimpleI.h
-    VendorSEI.h
-    VendorSI.h
-    VirtKeysI.h
-    XmI.h
-    XmImI.h
-    XmMsgI.h
-    XmRenderTI.h
-    ${CMAKE_BINARY_DIR}/include/Xm/XmStrDefsI.h
-    XmStringI.h
-    XmTabListI.h
-    XmosI.h
-    XpmI.h
-    # Included by XmMsgI.h; generated, or the stub without message catalogs
-    ${CMAKE_BINARY_DIR}/include/Xm/XmMsgCatI.h
-)
-
-# Add conditional internal headers
-if(MOTIF_JPEG_FOUND)
-    list(APPEND XM_INTERNAL_HEADERS JpegI.h)
-endif()
-
-if(MOTIF_PNG_FOUND)
-    list(APPEND XM_INTERNAL_HEADERS PngI.h)
-endif()
-
-list(APPEND XM_INTERNAL_HEADERS ToolTipI.h)
+# The internal headers (*I.h, nanosvg*.h) are not installed: no installed
+# header includes them, and what they declare is not exported (libXm.map).
 
 # Create the library
 add_library(Xm ${MOTIF_LIB_TYPE} ${XM_ALL_SRCS} ${CMAKE_CURRENT_BINARY_DIR}/XmStrDefs.c)
@@ -760,11 +652,6 @@ install(TARGETS Xm
 
 # Install headers
 install(FILES ${XM_HEADERS} ${XM_EXTRA_HEADERS} ${XM_SLIDE_HEADERS}
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Xm
-)
-
-# Install internal headers (for development)
-install(FILES ${XM_INTERNAL_HEADERS}
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Xm
 )
 
