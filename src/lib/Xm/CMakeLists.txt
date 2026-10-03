@@ -263,14 +263,14 @@ set(XM_INCLUDE_FILES
 add_custom_command(
     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/XmStrDefs.c ${XM_INCLUDE_FILES}
     COMMAND ${CMAKE_COMMAND}
-        -DMAKESTRS=$<TARGET_FILE:makestrs>
+        -DMAKESTRS=$<TARGET_FILE:${MOTIF_HOST_TOOL_PREFIX}makestrs>
         -DSOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}
         -DLIST=${CMAKE_CURRENT_SOURCE_DIR}/xmstring.list.in
         -DWORK_DIR=${CMAKE_CURRENT_BINARY_DIR}
         -DHEADER_DIR=${CMAKE_BINARY_DIR}/include/Xm
         -P ${CMAKE_SOURCE_DIR}/tools/cmake/scripts/generate_xm_strings.cmake
     DEPENDS
-        makestrs
+        ${MOTIF_HOST_TOOL_PREFIX}makestrs
         ${CMAKE_CURRENT_SOURCE_DIR}/xmstring.list.in
         ${XM_STRING_TEMPLATES}
         ${CMAKE_SOURCE_DIR}/tools/cmake/scripts/generate_xm_strings.cmake

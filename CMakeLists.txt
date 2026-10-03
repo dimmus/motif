@@ -148,6 +148,33 @@ Enable Ninja pools of jobs, to try to ease building on machines with 16GB of RAM
 endif()
 
 # -----------------------------------------------------------------------------
+# Build-time tools
+#
+# makestrs, mkcatdefs, wml and wmluiltok run during the build.  When
+# cross-compiling, build Motif natively first and point MOTIF_HOST_TOOLS at
+# the MotifHostTools.cmake that the native build writes to its build
+# directory; the tools are then imported from there instead of being built.
+
+set(MOTIF_HOST_TOOLS "" CACHE FILEPATH
+  "MotifHostTools.cmake of a native Motif build, for cross-compiling")
+set(MOTIF_HOST_TOOL_NAMES makestrs mkcatdefs wml wmluiltok)
+if(MOTIF_HOST_TOOLS)
+  include("${MOTIF_HOST_TOOLS}")
+  foreach(_tool IN LISTS MOTIF_HOST_TOOL_NAMES)
+    if(NOT TARGET MotifHost::${_tool})
+      message(FATAL_ERROR "${MOTIF_HOST_TOOLS} does not provide MotifHost::${_tool}")
+    endif()
+  endforeach()
+  set(MOTIF_HOST_TOOL_PREFIX MotifHost::)
+elseif(CMAKE_CROSSCOMPILING)
+  message(FATAL_ERROR
+    "Cross-compiling Motif needs build tools that run on the build machine: "
+    "build Motif natively and pass -DMOTIF_HOST_TOOLS=<native build>/MotifHostTools.cmake")
+else()
+  set(MOTIF_HOST_TOOL_PREFIX "")
+endif()
+
+# -----------------------------------------------------------------------------
 # Logging options
 set(LOG_LEVEL "INFO" CACHE STRING "Default logging level (DEBUG, INFO, WARN, ERROR, CRITICAL)")
 set(LOG_OUTPUT "stderr" CACHE STRING "Default log output destination (stderr, stdout, file)")
@@ -571,6 +598,14 @@ endif()
 
 if(WITH_DOCS)
     add_subdirectory(doc)
+endif()
+
+# Let a cross build import the build-time tools of this one.
+if(NOT MOTIF_HOST_TOOLS)
+  export(TARGETS ${MOTIF_HOST_TOOL_NAMES}
+    NAMESPACE MotifHost::
+    FILE ${CMAKE_BINARY_DIR}/MotifHostTools.cmake
+  )
 endif()
 
 # -----------------------------------------------------------------------------

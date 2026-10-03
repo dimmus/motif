@@ -25,6 +25,10 @@ set(WML_TARGETS
 )
 list(TRANSFORM WML_TARGETS PREPEND ${CMAKE_CURRENT_BINARY_DIR}/)
 
+# The tools that generate the tables (wml, wmluiltok) are imported from a
+# native build when cross-compiling (MOTIF_HOST_TOOLS).
+if(NOT MOTIF_HOST_TOOLS)
+
 # Scanners.  wmlparse.y includes the generated wmllex.c.
 add_custom_command(
     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/wmllex.c
@@ -77,18 +81,20 @@ target_link_libraries(wml PRIVATE libwml motif_build_flags)
 add_executable(wmluiltok ${CMAKE_CURRENT_BINARY_DIR}/wmluiltok.c)
 target_link_libraries(wmluiltok PRIVATE ${MOTIF_LEX_LIBRARY} motif_build_flags)
 
+endif()
+
 # Generate the UIL tables.  wmluiltok extracts the token list (tokens.dat)
 # from the UIL grammar, which wml reads together with motif.wml.
 add_custom_command(
     OUTPUT ${WML_TARGETS}
     COMMAND ${CMAKE_COMMAND} -E remove -f ${WML_TARGETS} wml.report wml-uil.mm
-    COMMAND $<TARGET_FILE:wmluiltok> < ${CMAKE_SOURCE_DIR}/src/lib/Uil/Uil.y > tokens.dat
-    COMMAND $<TARGET_FILE:wml> ${CMAKE_CURRENT_SOURCE_DIR}/motif.wml
+    COMMAND $<TARGET_FILE:${MOTIF_HOST_TOOL_PREFIX}wmluiltok> < ${CMAKE_SOURCE_DIR}/src/lib/Uil/Uil.y > tokens.dat
+    COMMAND $<TARGET_FILE:${MOTIF_HOST_TOOL_PREFIX}wml> ${CMAKE_CURRENT_SOURCE_DIR}/motif.wml
     COMMAND ${CMAKE_COMMAND} -E remove -f tokens.dat
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     DEPENDS
-        wmluiltok
-        wml
+        ${MOTIF_HOST_TOOL_PREFIX}wmluiltok
+        ${MOTIF_HOST_TOOL_PREFIX}wml
         ${CMAKE_CURRENT_SOURCE_DIR}/motif.wml
         ${CMAKE_SOURCE_DIR}/src/lib/Uil/Uil.y
     COMMENT "Generating WML target files"

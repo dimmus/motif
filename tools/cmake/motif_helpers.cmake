@@ -72,13 +72,13 @@ function(motif_add_message_catalog target name source header)
   add_custom_command(
     OUTPUT ${_outputs}
     COMMAND ${CMAKE_COMMAND}
-      -DMKCATDEFS=$<TARGET_FILE:mkcatdefs>
+      -DMKCATDEFS=$<TARGET_FILE:${MOTIF_HOST_TOOL_PREFIX}mkcatdefs>
       -DSOURCE=${source}
       -DHEADER=${header}
       -DCATALOG_SOURCE=${_catalog_source}
       ${_gencat_args}
       -P ${CMAKE_SOURCE_DIR}/tools/cmake/scripts/generate_msgcat.cmake
-    DEPENDS mkcatdefs ${source} ${CMAKE_SOURCE_DIR}/tools/cmake/scripts/generate_msgcat.cmake
+    DEPENDS ${MOTIF_HOST_TOOL_PREFIX}mkcatdefs ${source} ${CMAKE_SOURCE_DIR}/tools/cmake/scripts/generate_msgcat.cmake
     COMMENT "Generating ${name} message catalog"
     VERBATIM
   )
