@@ -577,8 +577,9 @@ ValidCallbackDesc (UrmValidBuffer	*vb,
   MrmType		reptype ;	/* tag value type */
   RGMdatum		datum ;		/* tag value */
   int			ndx ;		/* loop index */
+  Boolean		old = vb->old ;	/* 1.1 format */
 
-  if ( vb->old )
+  if ( old )
     {
       if ( ! _InBuf (vb, offs, XtOffsetOf (OldRGMCallbackDesc, item)) )
 	return FALSE ;
@@ -608,7 +609,7 @@ ValidCallbackDesc (UrmValidBuffer	*vb,
 
   for ( ndx=0 ; ndx<count ; ndx++ )
     {
-      if ( vb->old )
+      if ( old )
 	{
 	  routine = oldptr->item[ndx].cb_item.routine ;
 	  reptype = oldptr->item[ndx].cb_item.rep_type ;

@@ -407,6 +407,7 @@ Idb__INX_SearchIndex (IDBFile			file_id,
   /*
    * Set up search pointers based on the record type
    */
+  *index_return = 0 ;
   buftyp = _IdbBufferRecordType (buffer) ;
   switch ( buftyp )
     {
