@@ -201,7 +201,8 @@
 .fi
 .SH "DESCRIPTION"
 .PP
-\fBlibXm\fP contains its own copy of the XPM library, version 3\&.4k,
+\fBlibXm\fP contains its own copy of the XPM library (the code of
+libXpm 3\&.5\&.12, which implements version 3\&.4k of the XPM interface),
 which it uses to read the XPM pixmaps and icons named in resources and
 by \fBXmGetPixmap\fP(3)\&. Its functions are exported with an
 \fBXme\fP prefix so that they do not clash with a system \fBlibXpm\fP
@@ -239,7 +240,7 @@ returns \fBsizeof(XpmAttributes)\fP as compiled into the library\&.
 returns a static string describing a status code\&.
 .IP "\fBXmeXpmLibraryVersion\fP" 10
 returns the version of the XPM code, \fBXpmIncludeVersion\fP, which
-is 30411 for 3\&.4k\&.
+is 30411 (3\&.4k)\&.
 .PP
 This copy differs from \fBlibXpm\fP in two ways\&. It never runs
 external programs: a file whose name ends in \fB\&.Z\fP or \fB\&.gz\fP
