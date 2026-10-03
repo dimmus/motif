@@ -169,6 +169,9 @@ unsigned char _XmReasonToMessageType(int reason)
  ***********************************************************************/
 unsigned int _XmMessageTypeToReason(unsigned char messageType)
 {
+  /* messageType may come straight off the wire */
+  if (messageType >= XtNumber(messageTable))
+    return _XmNUMBER_DND_CB_REASONS;
   return (messageTable[messageType]);
 }
 
@@ -707,6 +710,8 @@ Boolean _XmICCEventToICCCallback(XClientMessageEvent *msgEv,
   if (msgEv->format == 8) {
     motif_dnd_message_atom = XInternAtom(msgEv->display, _Xm_MOTIF_DRAG_AND_DROP_MESSAGE, False);
     if (msgEv->message_type != motif_dnd_message_atom)
+      return False;
+    if ((xmessage->any.message_type & CLEAR_ICC_EVENT_TYPE) >= XtNumber(messageTable))
       return False;
     if (xmessage->any.byte_order != _XmByteOrderChar) {
       /*
