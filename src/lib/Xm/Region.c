@@ -133,9 +133,19 @@ static void ShrinkRegion(XmRegion r, XmRegion s, XmRegion t, int dx, int dy);
 XmRegion _XmRegionCreateSize(long size)
 {
   XmRegion temp;
+  /*
+   * size may come from another client (drop site regions), so compute
+   * the allocation in size_t and refuse anything XtMalloc() cannot
+   * represent.  Keep at least one box: MEMCHECK cannot grow a region
+   * of size 0.
+   */
+  if (size < 1)
+    size = 1;
+  if ((unsigned long)size > (Cardinal)~0 / sizeof(XmRegionBox))
+    return (XmRegion)NULL;
   if (!(temp = (XmRegion)XtMalloc(sizeof(XmRegionRec))))
     return (XmRegion)NULL;
-  if (!(temp->rects = (XmRegionBox *)XtMalloc((Cardinal)(sizeof(XmRegionBox) * size)))) {
+  if (!(temp->rects = (XmRegionBox *)XtMalloc((Cardinal)(sizeof(XmRegionBox) * (size_t)size)))) {
     XtFree((char *)temp);
     return (XmRegion)NULL;
   }
