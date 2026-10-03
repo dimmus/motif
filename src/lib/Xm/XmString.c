@@ -1060,7 +1060,8 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
          ((_XmStrDirection(a) == XmSTRING_DIRECTION_UNSET) && (a_len == 0))) &&
         (a_type == b_type || a_type == XmNO_TEXT || b_type == XmNO_TEXT) &&
         ((a_len + b_len) < (1 << BYTE_COUNT_BITS)) &&
-        ((_XmStrText(a) && b_tabs == 0) || (a_tabs + b_tabs <= 3)))
+        /* Tabs precede the text: b's tabs can't follow a's text. */
+        (((a_len != 0) && b_tabs == 0) || ((a_len == 0) && (a_tabs + b_tabs <= 3))))
     {
       /* Compatible strings.  Make an optimized string. */
       if ((b_len == 0) && (_XmStrRefCountGet(a) == 1))
