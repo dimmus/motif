@@ -855,7 +855,11 @@ static Boolean UpdateColorWindow(XmColorSelectorWidget csw, Boolean use_name)
       XtFree(XmColorS_color_name(csw));
       XmColorS_color_name(csw) = XtNewString(XmColorS_colors(csw)[index].name);
     }
-    sprintf(buf, "#%02x%02x%02x", color.red / 256, color.green / 256, color.blue / 256);
+    sprintf(buf,
+            "#%02x%02x%02x",
+            (unsigned int)color.red / 256,
+            (unsigned int)color.green / 256,
+            (unsigned int)color.blue / 256);
     sprintf(new_label, "%s (%s)", XmColorS_color_name(csw), buf);
   }
   {
@@ -1091,8 +1095,10 @@ static void read_rgb_file(XmColorSelectorWidget csw,
       if ((color_name = find_name(buf)) == NULL)
         continue;
       len = strlen(color_name);
-      if (len > XmColorSelector_COLOR_NAME_SIZE) {
-        color_name[XmColorSelector_COLOR_NAME_SIZE - 1] = '\0';
+      if (len >= XmColorSelector_COLOR_NAME_SIZE) {
+        /* Both name buffers hold COLOR_NAME_SIZE bytes with the NUL. */
+        len = XmColorSelector_COLOR_NAME_SIZE - 1;
+        color_name[len] = '\0';
         snprintf(string_buffer, sizeof string_buffer, XmNcolorNameTooLongMsg, buf, color_name);
         XmeWarning((Widget)csw, string_buffer);
       }
@@ -1104,6 +1110,7 @@ static void read_rgb_file(XmColorSelectorWidget csw,
          */
         if (!(c >= 0 && c <= 127))
           continue;
+        /* NOLINTNEXTLINE(clang-analyzer-security.ArrayBound): 0 <= c <= 127 */
         if (!isspace(c))
           *name++ = tolower(c);
       }
@@ -1117,6 +1124,7 @@ static void read_rgb_file(XmColorSelectorWidget csw,
          */
         if (!(c >= 0 && c <= 127))
           continue;
+        /* NOLINTNEXTLINE(clang-analyzer-security.ArrayBound): 0 <= c <= 127 */
         if (isspace(c) && ((i + 1) < len)) {
           color_name[i + 1] = toupper(color_name[i + 1]);
         }
@@ -1214,10 +1222,13 @@ static char *find_name(char *buffer)
     /*
      * Look for first non number, non space or tab.
      */
+    /* NOLINTNEXTLINE(clang-analyzer-security.ArrayBound): 0 <= *curr <= 127 */
     if ((*curr >= 0 && *curr <= 127) && (isdigit(*curr) || isspace(*curr)))
       continue;
-    temp = (char *)strchr(curr, '\n');
-    *temp = '\0';
+    /* The last line of the file, or a line longer than the
+     * buffer, has no newline. */
+    if ((temp = (char *)strchr(curr, '\n')) != NULL)
+      *temp = '\0';
     return (curr);
   }
   return (NULL);
