@@ -867,20 +867,20 @@ void _XmReadInitiatorInfo(Widget dc)
                          &format,
                          &lengthRtn,
                          &bytesafter,
-                         (unsigned char **)&info) == Success)
+                         (unsigned char **)&info) == Success &&
+      type == initiatorAtom && format == 8 && lengthRtn >= sizeof(xmDragInitiatorInfoStruct))
   {
-    if (lengthRtn >= sizeof(xmDragInitiatorInfoStruct)) {
-      if (info->byte_order != _XmByteOrderChar) {
-        swap2bytes(info->targets_index);
-        swap4bytes(info->icc_handle);
-      }
-      ++set_exports;
-      numExportTargets = _XmIndexToTargets(dc, info->targets_index, &exportTargets);
+    if (info->byte_order != _XmByteOrderChar) {
+      swap2bytes(info->targets_index);
+      swap4bytes(info->icc_handle);
     }
+    ++set_exports;
+    numExportTargets = _XmIndexToTargets(dc, info->targets_index, &exportTargets);
   }
-  else {
+  if (!set_exports) {
     /**
-     * Get the Xdnd type list, if the receiver has published it
+     * No Motif initiator info: get the Xdnd type list, if the source
+     * has published it
      */
     xdndTypeList = XInternAtom(XtDisplayOfObject(dc), "XdndTypeList", False);
     if (XGetWindowProperty(XtDisplayOfObject(dc),
