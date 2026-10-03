@@ -513,6 +513,10 @@ static Boolean _XdndToMotifEvent(XClientMessageEvent *msgEv, XmICCCallbackStruct
       te->n_targets = (te->targets[0] != None) + (te->targets[1] != None) +
                       (te->targets[2] != None);
     }
+    else {
+      /* more than 3 types: they are read from XdndTypeList later */
+      te->n_targets = 0;
+    }
   }
   else if (msgEv->message_type == xdndLeave) {
 #ifdef DEBUG_XDND
@@ -593,6 +597,12 @@ static XmICCEventType GetMessageData(Display *display,
       register XmTopLevelEnterCallback cb = (XmTopLevelEnterCallback)callback;
       cb->window = (Window)xmessage->topLevelEnter.src_window;
       cb->iccHandle = (Atom)xmessage->topLevelEnter.icc_handle;
+      /*
+       * The Motif message carries no targets; the receiver reads them
+       * from the initiator info later.
+       */
+      cb->dragProtocolStyle = XmDRAG_NONE;
+      cb->n_targets = 0;
     } break;
     case XmTOP_LEVEL_LEAVE: {
       register XmTopLevelLeaveCallback cb = (XmTopLevelLeaveCallback)callback;
