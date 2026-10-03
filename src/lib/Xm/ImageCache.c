@@ -638,18 +638,13 @@ static XtEnum GetXpmImage(Screen *screen,
            for we don't want to keep them in the image
            cache, since they need color lookup,
            which is done one level up in the pixmap cache */
+    if (xpmStatus >= 0)
+      XmeXpmFreeAttributes(&attrib);
     if (((*image)->depth == 1) && acc_color && (acc_color->foreground == 1) &&
-        (acc_color->background == 0))
-    {
-      _XmInstallImage(*image, image_name, hot_x, hot_y);
+        (acc_color->background == 0) && _XmInstallImage(*image, image_name, hot_x, hot_y))
       return TRUE;
-    }
-    else {
-      if (xpmStatus >= 0)
-        XmeXpmFreeAttributes(&attrib);
-      return NOT_CACHED; /* mean the image can be destroyed
-                                   after it is used */
-    }
+    return NOT_CACHED; /* mean the image can be destroyed
+                                 after it is used */
   }
   if (xpmStatus >= 0)
     XmeXpmFreeAttributes(&attrib);
