@@ -1104,7 +1104,7 @@ static Atom ClipboardGetAtomFromId(Display *display, itemId itemid)
       item = XmS_MOTIF_CLIP_NEXT_ID;
       break;
     default:
-      sprintf(atomname, "_MOTIF_CLIP_ITEM_%ld", itemid);
+      snprintf(atomname, sizeof(atomname), "_MOTIF_CLIP_ITEM_%ld", itemid);
       item = atomname;
       break;
   }
@@ -1116,9 +1116,11 @@ static Atom ClipboardGetAtomFromFormat(Display *display, char *format_name)
 {
   char *atomname_format = "_MOTIF_CLIP_FORMAT_%s";
   char *item;
+  size_t size;
   Atom ret_value;
-  item = XtMalloc(strlen(format_name) + strlen(atomname_format) + 1);
-  sprintf(item, atomname_format, format_name);
+  size = strlen(format_name) + strlen(atomname_format) + 1;
+  item = _XmMallocArray(size, 1);
+  snprintf(item, size, atomname_format, format_name);
   ret_value = XInternAtom(display, item, False);
   XtFree((char *)item);
   return ret_value;

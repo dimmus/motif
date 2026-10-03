@@ -683,11 +683,13 @@ static void LoadVendorBindings(Display *display, char *path, FILE *fp, String *b
   char *bindFile;
   char *vendor;
   char *vendorV;
+  size_t size;
   char *ptr;
   char *start;
   vendor = ServerVendor(display);
-  vendorV = XtMalloc(strlen(vendor) + 20); /* assume rel.# is < 19 digits */
-  sprintf(vendorV, "%s %d", vendor, VendorRelease(display));
+  size = strlen(vendor) + 20; /* assume rel.# is < 19 digits */
+  vendorV = XtMalloc(size);
+  snprintf(vendorV, size, "%s %d", vendor, VendorRelease(display));
   while (fgets(buffer, MAXLINE, fp) != NULL) {
     ptr = buffer;
     while (*ptr != '"' && *ptr != '!' && *ptr != '\0')
@@ -780,16 +782,14 @@ int _XmVirtKeysLoadFallbackBindings(Display *display, String *binding)
          i++, currDefault++)
     {
       if (strcmp(currDefault->vendorName, ServerVendor(display)) == 0) {
-        *binding = XtMalloc(strlen(currDefault->defaults) + 1);
-        strcpy(*binding, currDefault->defaults);
+        *binding = XtNewString(currDefault->defaults);
         break;
       }
     }
   }
   /* Use generic fallback bindings */
   if (*binding == NULL) {
-    *binding = XtMalloc(strlen(defaultFallbackBindings) + 1);
-    strcpy(*binding, defaultFallbackBindings);
+    *binding = XtNewString(defaultFallbackBindings);
   }
   /* Set the fallback property for future Xm applications */
   XChangeProperty(display,

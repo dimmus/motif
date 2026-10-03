@@ -426,7 +426,7 @@ static void Initialize(Widget rq, /* unused */
       for (i = 0; i < nscreens; i++) {
         names[i] = ((nscreens <= MAX_SCREENS) ? &buf[i * MAX_ATOM_LENGTH] :
                                                 XtMalloc(MAX_ATOM_LENGTH));
-        sprintf(names[i], "%s%d", XmSCUSTOMIZE_DATA, i);
+        snprintf(names[i], MAX_ATOM_LENGTH, "%s%d", XmSCUSTOMIZE_DATA, i);
       }
       XInternAtoms(new_obj->color_obj.display, names, nscreens, FALSE, new_obj->color_obj.atoms);
       if (nscreens > MAX_SCREENS)

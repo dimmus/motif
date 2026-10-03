@@ -1628,14 +1628,15 @@ static Boolean CvtStringToCharSetTable(Display *display,   /* unused */
                                                 sizeof(XmStringCharSet) * (numCharsets + 1));
   charsetTable[numCharsets] = (XmStringCharSet)NULL;
   dataPtr = (char *)&charsetTable[numCharsets + 1];
-  strcpy(work_str, in_str);
+  memcpy(work_str, in_str, strlen(in_str) + 1);
   for (i = 0, cs_str = _XStrtok(work_str, ",", strtok_buf); cs_str;
        cs_str = _XStrtok(NULL, ",", strtok_buf), ++i)
   {
     if (*cs_str) {
+      size_t len = strlen(cs_str) + 1;
       charsetTable[i] = dataPtr;
-      strcpy(dataPtr, cs_str);
-      dataPtr += strlen(cs_str) + 1;
+      memcpy(dataPtr, cs_str, len);
+      dataPtr += len;
     }
     else {
       charsetTable[i] = NULL;

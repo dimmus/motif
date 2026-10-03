@@ -406,7 +406,7 @@ static Widget StartDropTransfer(Widget refWidget, ArgList args, Cardinal argCoun
   char buf[30];
   XtIntervalId timer;
   _XmProcessLock();
-  sprintf(buf, "Transfer%d", which++);
+  snprintf(buf, sizeof(buf), "Transfer%d", which++);
   _XmProcessUnlock();
   dt = (XmDropTransferObject)XtCreateWidget(buf,
                                             xmDropTransferObjectClass,

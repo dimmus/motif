@@ -2060,7 +2060,6 @@ char *_XmTextToLocaleText(
   char **values;
   int num_values = 0;
   char *total_value = NULL;
-  int malloc_size = 0;
   int i;
   if (type == XA_STRING || type == COMPOUND_TEXT
 #if XM_UTF8
@@ -2080,12 +2079,7 @@ char *_XmTextToLocaleText(
         *success = False;
     }
     if (num_values) {
-      for (i = 0; i < num_values; i++)
-        malloc_size += strlen(values[i]);
-      total_value = _XmMallocArray(malloc_size + 1, sizeof(char));
-      total_value[0] = '\0';
-      for (i = 0; i < num_values; i++)
-        strcat(total_value, values[i]);
+      total_value = _XmConcatStrings(values, num_values);
       XFreeStringList(values);
     }
   }

@@ -2146,13 +2146,15 @@ unsigned int XmRenderTableCvtToProp(Widget widget, /* unused */
   _XmProcessLock();
   if (CVTtvinited == 0) {
     CVTtvinited = 1;
-    strncpy(CVTtransfervector, "", 255);
+    size_t len = 0;
     CVTtransfervector[0] = '\0';
-    for (i = 0; CVTproperties[i] != NULL; i++) {
-      strcat(CVTtransfervector, CVTproperties[i]);
-      strcat(CVTtransfervector, ",");
-    }
-    strcat(CVTtransfervector, "\n");
+    for (i = 0; CVTproperties[i] != NULL && len < sizeof(CVTtransfervector); i++)
+      len += snprintf(CVTtransfervector + len,
+                      sizeof(CVTtransfervector) - len,
+                      "%s,",
+                      CVTproperties[i]);
+    if (len < sizeof(CVTtransfervector))
+      snprintf(CVTtransfervector + len, sizeof(CVTtransfervector) - len, "\n");
   }
   /* Copy the transfer vector into the output buffer. */
   strncpy(buffer, CVTtransfervector, allocated_size - 1);
@@ -2171,10 +2173,10 @@ unsigned int XmRenderTableCvtToProp(Widget widget, /* unused */
       CVTaddString(buffer, "-1, ", 4);
     }
     else {
-      sprintf(temp, "%u \"", _XmRendFontType(rendition));
+      snprintf(temp, sizeof(temp), "%u \"", _XmRendFontType(rendition));
       CVTaddString(buffer, temp, strlen(temp));
       CVTaddString(buffer, _XmRendFontName(rendition), strlen(_XmRendFontName(rendition)));
-      sprintf(temp, "\" %u,", _XmRendLoadModel(rendition));
+      snprintf(temp, sizeof(temp), "\" %u,", _XmRendLoadModel(rendition));
       CVTaddString(buffer, temp, strlen(temp));
     }
     if ((unsigned int)(unsigned long)_XmRendTabs(rendition) == XmAS_IS ||
@@ -2206,7 +2208,7 @@ unsigned int XmRenderTableCvtToProp(Widget widget, /* unused */
     if (_XmRendBG(rendition) == XmUNSPECIFIED_PIXEL)
       str = "-1, ";
     else {
-      sprintf(temp, "%lu, ", _XmRendBG(rendition));
+      snprintf(temp, sizeof(temp), "%lu, ", _XmRendBG(rendition));
       str = temp;
     }
     size = strlen(str);
@@ -2214,7 +2216,7 @@ unsigned int XmRenderTableCvtToProp(Widget widget, /* unused */
     if (_XmRendFG(rendition) == XmUNSPECIFIED_PIXEL)
       str = "-1, ";
     else {
-      sprintf(temp, "%lu, ", _XmRendFG(rendition));
+      snprintf(temp, sizeof(temp), "%lu, ", _XmRendFG(rendition));
       str = temp;
     }
     size = strlen(str);
@@ -2222,7 +2224,7 @@ unsigned int XmRenderTableCvtToProp(Widget widget, /* unused */
     if (_XmRendUnderlineType(rendition) == XmAS_IS)
       str = "-1, ";
     else {
-      sprintf(temp, "%d, ", _XmRendUnderlineType(rendition));
+      snprintf(temp, sizeof(temp), "%d, ", _XmRendUnderlineType(rendition));
       str = temp;
     }
     size = strlen(str);
@@ -2230,7 +2232,7 @@ unsigned int XmRenderTableCvtToProp(Widget widget, /* unused */
     if (_XmRendStrikethruType(rendition) == XmAS_IS)
       str = "-1, ";
     else {
-      sprintf(temp, "%d, ", _XmRendStrikethruType(rendition));
+      snprintf(temp, sizeof(temp), "%d, ", _XmRendStrikethruType(rendition));
       str = temp;
     }
     size = strlen(str);

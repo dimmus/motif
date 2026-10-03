@@ -298,6 +298,7 @@ String _XmGetMBStringFromXmString(XmString xmstr)
   XmStringContext context;    /* context for conversion	*/
   char *newText;              /* new text string        	*/
   int length;                 /* length of string		*/
+  int used, n;                /* filled in so far, piece	*/
   unsigned int u_length;      /* length from XmStringGetNextTriple		*/
   XmStringComponentType type; /* type			*/
   Boolean done;               /* done with it	*/
@@ -355,7 +356,7 @@ String _XmGetMBStringFromXmString(XmString xmstr)
     return (NULL);
   XmStringFreeContext(context);
   text = XtMalloc(length + 1);
-  text[0] = '\0';
+  used = 0;
   /*
    * Fill in the string.
    */
@@ -366,10 +367,15 @@ String _XmGetMBStringFromXmString(XmString xmstr)
     switch (type) {
       case XmSTRING_COMPONENT_TEXT:
       case XmSTRING_COMPONENT_LOCALE_TEXT:
-        strcat(text, newText);
+        n = strlen(newText);
+        if (n > length - used) /* the first pass counted less */
+          n = length - used;
+        memcpy(text + used, newText, n);
+        used += n;
         break;
       case XmSTRING_COMPONENT_SEPARATOR:
-        strcat(text, "\n");
+        if (used < length)
+          text[used++] = '\n';
         break;
       case XmSTRING_COMPONENT_USER_BEGIN:
       case XmSTRING_COMPONENT_USER_END:
@@ -382,6 +388,7 @@ String _XmGetMBStringFromXmString(XmString xmstr)
     }
     XtFree((XtPointer)newText);
   }
+  text[used] = '\0';
   XmStringFreeContext(context);
   return (text);
 }

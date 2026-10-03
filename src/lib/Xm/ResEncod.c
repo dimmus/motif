@@ -432,14 +432,12 @@ XtPointer _XmGetEncodingRegistryTarget(int *length)
   i = 0;
   current = _encoding_registry_ptr;
   while (current != NULL) {
-    count = strlen(EncodingRegistryTag(current));
-    strcpy(&rval[i], EncodingRegistryTag(current));
+    count = strlen(EncodingRegistryTag(current)) + 1;
+    memcpy(&rval[i], EncodingRegistryTag(current), count);
     i += count;
-    i++;
-    count = strlen(EncodingRegistryEncoding(current));
-    strcpy(&rval[i], EncodingRegistryEncoding(current));
+    count = strlen(EncodingRegistryEncoding(current)) + 1;
+    memcpy(&rval[i], EncodingRegistryEncoding(current), count);
     i += count;
-    i++;
     current = EncodingRegistryNext(current);
   }
   _XmProcessUnlock();
