@@ -1635,11 +1635,14 @@ static void ValidateTag(XmRendition rend, XmStringTag dflt)
   }
 }
 #if USE_XFT
-static int GetSameRenditions(XmRendition *rend_cache, XmRendition rend, int count_rend)
+static int GetSameRenditions(XmRendition *rend_cache,
+                             XmRendition rend,
+                             int count_rend,
+                             Display *display)
 {
   int i;
   for (i = 0; i < count_rend; i++) {
-    if (rend_cache && (rend_cache[i]) &&
+    if (rend_cache && (rend_cache[i]) && (_XmRendDisplay(rend_cache[i]) == display) &&
         ((((_XmRendFontName(rend) && _XmRendFontName(rend_cache[i])) &&
            !strcmp(_XmRendFontName(rend_cache[i]), _XmRendFontName(rend))) ||
           (!_XmRendFontName(rend) && !_XmRendFontName(rend_cache[i]))) &&
@@ -1719,10 +1722,13 @@ static void ValidateAndLoadFont(XmRendition rend, Display *display)
             FcResult res;
             FcPattern *p;
             static XmRendition *rend_cache;
-            static int count_rend = 0, num_rend;
-            num_rend = GetSameRenditions(rend_cache, rend, count_rend);
-            if (num_rend >= 0 && (display == _XmRendDisplay(rend_cache[num_rend]))) {
+            static int count_rend = 0, size_rend = 0, num_rend;
+            num_rend = GetSameRenditions(rend_cache, rend, count_rend, display);
+            if (num_rend >= 0) {
+              /* FreeRendition closes the font, so take a reference. */
               _XmRendXftFont(rend) = _XmRendXftFont(rend_cache[num_rend]);
+              if (_XmRendXftFont(rend) != NULL)
+                _XmRendXftFont(rend) = XftFontCopy(display, _XmRendXftFont(rend));
             }
             else {
               _XmRendPattern(rend) = FcPatternCreate();
@@ -1750,8 +1756,11 @@ static void ValidateAndLoadFont(XmRendition rend, Display *display)
                 FcPatternAddInteger(_XmRendPattern(rend), FC_SPACING, _XmRendFontSpacing(rend));
               p = XftFontMatch(display, 0, _XmRendPattern(rend), &res);
               _XmRendXftFont(rend) = XftFontOpenPattern(display, p);
-              rend_cache = (XmRendition *)XtRealloc(
-                  (char *)rend_cache, (Cardinal)(sizeof(XmRendition) * (count_rend + 1)));
+              if (count_rend == size_rend) {
+                size_rend = size_rend ? 2 * size_rend : 8;
+                rend_cache = (XmRendition *)XtRealloc(
+                    (char *)rend_cache, (Cardinal)(sizeof(XmRendition) * size_rend));
+              }
               rend_cache[count_rend] = _XmRenditionCopy(rend, TRUE);
               count_rend++;
             }
