@@ -2401,6 +2401,23 @@ static void ConstraintDestroy(Widget cwid)
   if (!CtrICON(cwid))
     return;
   cw->container.icon_header = NULL;
+  if (cw->core.being_destroyed) {
+    /*
+     * The whole container is going away with all its children, so
+     * nobody looks at the positions, the outline or the selection any
+     * more.  Do not move the children up and renumber the remaining
+     * ones for each child destroyed: unlink and free the node, and
+     * leave the nodes below it as a detached list.
+     */
+    CwidNode node = c->node_ptr, child;
+    for (child = node->child_ptr; child != NULL; child = child->next_ptr)
+      child->parent_ptr = NULL;
+    node->child_ptr = NULL;
+    SeverNode(node);
+    XtFree((char *)node);
+    c->node_ptr = NULL;
+    return;
+  }
   {
     CwidNode node = c->node_ptr->child_ptr;
     while (node) {
