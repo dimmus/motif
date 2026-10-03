@@ -45,6 +45,7 @@ static char rcsid[] = "$TOG: ImageCache.c /main/44 1998/10/06 17:26:25 samborn $
 #include <X11/Xlibint.h>
 #include <X11/Xresource.h>
 #include <Xm/XpmP.h>
+#include <strings.h>
 #if XM_WITH_JPEG
 #  include "JpegI.h"
 #endif
@@ -142,6 +143,7 @@ static void InitializeImageSet(void);
 static void InitializePixmapSets(void);
 static Boolean UninstallImageMapProc(XmHashKey key, XtPointer value, XtPointer image);
 static Boolean SymbolicColorUsed(String color_name, XpmColor *xpm_colors, unsigned int ncolors);
+static Boolean TransparentColorUsed(XpmColor *xpm_colors, unsigned int ncolors);
 static void CompleteUnspecColors(Screen *screen, XpmColorSymbol *override_colors);
 static int GetOverrideColors(Screen *screen,
                              XmAccessColorData acc_color,
@@ -332,10 +334,29 @@ static Boolean SymbolicColorUsed(String color_name, XpmColor *xpm_colors, unsign
        colorTable */
   for (i = 0; i < ncolors; i++, xpm_colors++) {
     if (xpm_colors->symbolic && !strcmp(xpm_colors->symbolic, color_name))
-      break;
+      return True;
   }
-  if (i == ncolors)
-    return False;
+  return False;
+}
+
+/************************************************************************
+ *
+ * TransparentColorUsed
+ *  Used to determine if an Xpm image has a "None" color. Like the
+ *   symbolic background, this is replaced by the background pixel
+ *   (see GetOverrideColors), so the background matters for caching.
+ *
+ ************************************************************************/
+static Boolean TransparentColorUsed(XpmColor *xpm_colors, unsigned int ncolors)
+{
+  Cardinal i;
+  for (i = 0; i < ncolors; i++, xpm_colors++) {
+    if ((xpm_colors->m_color && !strcasecmp(xpm_colors->m_color, "None")) ||
+        (xpm_colors->g4_color && !strcasecmp(xpm_colors->g4_color, "None")) ||
+        (xpm_colors->g_color && !strcasecmp(xpm_colors->g_color, "None")) ||
+        (xpm_colors->c_color && !strcasecmp(xpm_colors->c_color, "None")))
+      return True;
+  }
   return False;
 }
 
@@ -597,7 +618,8 @@ static XtEnum GetXpmImage(Screen *screen,
                    colors were actually used during the read,
                    we don't want to remember the unused one
                    for the pixmap caching */
-        if (!SymbolicColorUsed(XmNbackground, attrib.colorTable, attrib.ncolors))
+        if (!SymbolicColorUsed(XmNbackground, attrib.colorTable, attrib.ncolors) &&
+            !TransparentColorUsed(attrib.colorTable, attrib.ncolors))
           acc_color->background = XmUNSPECIFIED_PIXEL;
         if (!SymbolicColorUsed(XmNforeground, attrib.colorTable, attrib.ncolors))
           acc_color->foreground = XmUNSPECIFIED_PIXEL;
