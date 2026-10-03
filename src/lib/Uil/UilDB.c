@@ -1029,6 +1029,7 @@ void db_open_file ()
 	char			*resolvedname;		/* current resolved name */
 	SubstitutionRec		subs[3];
 	char			*wmdPath;
+	size_t			len;
 
 	/*
 	 * Use XtFindFile instead of XtResolvePathName. XtResolvePathName requires a
@@ -1062,7 +1063,9 @@ void db_open_file ()
 	 * resolve the pathname with .wmd suffix first. If that fails or the suffix is
 	 * already on the file then just try to resolve the pathname.
 	 */
-	if ( strcmp (&Uil_cmd_z_command.ac_database[strlen(Uil_cmd_z_command.ac_database)-4],".wmd") != 0 )
+	len = strlen (Uil_cmd_z_command.ac_database);
+	if ( len < 4 ||
+	     strcmp (&Uil_cmd_z_command.ac_database[len - 4], ".wmd") != 0 )
 		resolvedname = XtFindFile(wmdPath,
 					      subs,
 					      XtNumber(subs),
@@ -1198,7 +1201,7 @@ String init_wmd_path(String filename)
 
     if (filename[0] == '/')
 	{
-	wmd_path = XtMalloc(strlen(ABSOLUTE_PATH));
+	wmd_path = XtMalloc(strlen(ABSOLUTE_PATH) + 1);
 	strcpy (wmd_path, ABSOLUTE_PATH);
 	}
     else
@@ -1231,7 +1234,6 @@ String init_wmd_path(String filename)
 	    {
 	    wmd_path = XtMalloc(strlen(path) + 1);
 	    strcpy (wmd_path, path);
-	    free (path);
 	    }
 	}
     return (wmd_path);
