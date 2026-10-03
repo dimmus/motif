@@ -78,8 +78,8 @@ add_dependencies(Mrm mrm_msgcat_header)
 
 # Set library properties
 set_target_properties(Mrm PROPERTIES
-    VERSION ${ABI_CURRENT}.${ABI_REVISION}.${ABI_AGE}
-    SOVERSION ${ABI_CURRENT}
+    VERSION ${MOTIF_LIBRARY_VERSION}
+    SOVERSION ${MOTIF_SOVERSION}
     OUTPUT_NAME "Mrm"
 )
 

@@ -78,11 +78,18 @@ set(XM_MINOR ${PROJECT_VERSION_MINOR})
 set(XM_PATCH ${PROJECT_VERSION_PATCH})
 set(XM_VERSION "${PROJECT_VERSION}")
 
-# ABI version for shared libraries
-set(ABI_CURRENT 5)
-set(ABI_REVISION 0)
-set(ABI_AGE 0)
-set(ABI_VERSION "${ABI_CURRENT}:${ABI_REVISION}:${ABI_AGE}")
+# Shared library versions of libXm, libMrm and libUil.
+#
+# Upstream Motif 2.3 ships libXm.so.4, libMrm.so.4 and libUil.so.4 (2.3.8:
+# libXm.so.4.0.4), and every existing Motif program (CDE, nedit, xpdf, ...)
+# is linked against SONAME 4.  This tree adds interfaces but keeps the
+# existing ones, so it stays at SONAME 4 and continues the upstream version
+# numbering.  The earlier libtool-style 5:0:0 ("libXm.so.5.0.0") changed
+# nothing in the ABI apart from the SONAME: abidiff of the two builds reports
+# only the SONAME change.  Bump MOTIF_SOVERSION only for a real ABI break,
+# and record it in the release notes.
+set(MOTIF_SOVERSION 4)
+set(MOTIF_LIBRARY_VERSION 4.0.5)
 
 
 # -----------------------------------------------------------------------------
@@ -104,8 +111,9 @@ motif_option(WITH_XFT "Enable Xft support" ON)
 motif_option(WITH_LTO "Enable link-time optimization (and -fno-semantic-interposition)" OFF)
 motif_option(WITH_CPU_NATIVE "Optimize for the build machine's CPU (-march=native, binaries are not portable)" OFF)
 
-# Library type of the public libraries (Xm, Mrm). Internal helper libraries
-# stay static, built as PIC so they can be linked into the shared ones.
+# Library type of the public libraries (Xm, Mrm, Uil). Internal helper
+# libraries stay static, built as PIC so they can be linked into the shared
+# ones.
 if(WITH_SHARED_LIBS)
   set(MOTIF_LIB_TYPE SHARED)
   set(CMAKE_POSITION_INDEPENDENT_CODE ON)

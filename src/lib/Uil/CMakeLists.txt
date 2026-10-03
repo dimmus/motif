@@ -76,8 +76,12 @@ add_custom_target(uil_parser_target
     COMMENT "UIL parser generation target"
 )
 
-# Create libUil library
-add_library(Uil STATIC ${UIL_LIB_SRCS})
+# Create libUil library (shared, like libXm and libMrm, as upstream ships it)
+add_library(Uil ${MOTIF_LIB_TYPE} ${UIL_LIB_SRCS})
+set_target_properties(Uil PROPERTIES
+    VERSION ${MOTIF_LIBRARY_VERSION}
+    SOVERSION ${MOTIF_SOVERSION}
+)
 
 # Ensure message catalog header is generated before building this target
 add_dependencies(Uil uil_msgcat_header)

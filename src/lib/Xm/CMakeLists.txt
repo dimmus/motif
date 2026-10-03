@@ -677,8 +677,8 @@ add_dependencies(Xm xm_msgcat_header xm_strings)
 
 # Set library properties
 set_target_properties(Xm PROPERTIES
-    VERSION ${ABI_CURRENT}.${ABI_REVISION}.${ABI_AGE}
-    SOVERSION ${ABI_CURRENT}
+    VERSION ${MOTIF_LIBRARY_VERSION}
+    SOVERSION ${MOTIF_SOVERSION}
     OUTPUT_NAME "Xm"
 )
 
