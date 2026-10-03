@@ -5176,12 +5176,11 @@ static void TextLeave(Widget w, XEvent *event, String *params, Cardinal *num_par
 static void ClassPartInitialize(WidgetClass w_class)
 {
   char *event_bindings;
+  size_t size;
   _XmFastSubclassInit(w_class, XmTEXT_FIELD_BIT);
-  event_bindings = (char *)XtMalloc(
-      (unsigned)(strlen(EventBindings1) + strlen(EventBindings2) + strlen(EventBindings3) + 1));
-  strcpy(event_bindings, EventBindings1);
-  strcat(event_bindings, EventBindings2);
-  strcat(event_bindings, EventBindings3);
+  size = strlen(EventBindings1) + strlen(EventBindings2) + strlen(EventBindings3) + 1;
+  event_bindings = (char *)XtMalloc(size);
+  snprintf(event_bindings, size, "%s%s%s", EventBindings1, EventBindings2, EventBindings3);
   w_class->core_class.tm_table = (String)XtParseTranslationTable(event_bindings);
   XtFree(event_bindings);
 }
@@ -5334,6 +5333,18 @@ static Boolean LoadFontMetrics(XmTextFieldWidget tf)
   return True;
 }
 
+/* "\ooo" for each of the n bytes of s, for the warnings of ValidateString */
+static char *OctalEscapes(const char *s, int n)
+{
+  size_t size = 4 * (size_t)n + 1, len = 0;
+  char *buf = _XmMallocArray(size, 1);
+  int i;
+  buf[0] = '\0';
+  for (i = 0; i < n; i++)
+    len += snprintf(buf + len, size - len, "\\%o", (unsigned char)s[i]);
+  return buf;
+}
+
 /* ValidateString makes the following assumption:  if MB_CUR_MAX == 1, value
  * is a char*, otherwise value is a wchar_t*.  The Boolean "is_wchar" indicates
  * if value points to char* or wchar_t* data.
@@ -5352,7 +5363,6 @@ static void ValidateString(XmTextFieldWidget tf, char *value, Boolean is_wchar)
   int i, j;
   char stack_cache[400];
   char *params[1], *err_str, err_buf[8];
-  int err_len;
   char *temp_str, *curr_str, *start_temp;
   wchar_t tmp;
   int num_conv;
@@ -5398,16 +5408,10 @@ static void ValidateString(XmTextFieldWidget tf, char *value, Boolean is_wchar)
           }
         }
         else {
-          if (num_conv >= 0) {
-            err_str = XtMalloc((4 * num_conv) + 1);
-            err_len = 0;
-            for (j = 0; j < num_conv; j++) {
-              err_len += sprintf(err_str + err_len, "\\%o", (unsigned char)curr_str[j]);
-            }
-          }
+          if (num_conv >= 0)
+            err_str = OctalEscapes(curr_str, num_conv);
           else {
-            err_str = XtMalloc(5);
-            sprintf(err_str, "\\%o", (unsigned char)*curr_str);
+            err_str = OctalEscapes(curr_str, 1);
             num_conv = 1;
           }
           params[0] = err_str;
@@ -5471,17 +5475,7 @@ static void ValidateString(XmTextFieldWidget tf, char *value, Boolean is_wchar)
           new_len++;
         }
         else {
-          if (csize >= 0) {
-            err_str = XtMalloc((4 * csize) + 1);
-            err_len = 0;
-            for (j = 0; j < csize; j++) {
-              err_len += sprintf(err_str + err_len, "\\%o", (unsigned char)scratch[j]);
-            }
-          }
-          else {
-            err_str = XtMalloc(1);
-            err_str[0] = '\0';
-          }
+          err_str = OctalEscapes(scratch, csize >= 0 ? csize : 0);
           params[0] = err_str;
           _XmWarningMsg((Widget)tf, "Unsupported wchar", WC_MSG1, params, 1);
           XtFree(err_str);
@@ -5495,17 +5489,7 @@ static void ValidateString(XmTextFieldWidget tf, char *value, Boolean is_wchar)
         }
         else {
           csize = wctomb(scratch, *wcs_curr_str);
-          if (csize >= 0) {
-            err_str = XtMalloc((4 * csize) + 1);
-            err_len = 0;
-            for (j = 0; j < csize; j++) {
-              err_len += sprintf(err_str + err_len, "\\%o", (unsigned char)scratch[j]);
-            }
-          }
-          else {
-            err_str = XtMalloc(1);
-            err_str[0] = '\0';
-          }
+          err_str = OctalEscapes(scratch, csize >= 0 ? csize : 0);
           params[0] = err_str;
           _XmWarningMsg((Widget)tf, "Unsupported wchar", WC_MSG1, params, 1);
           XtFree(err_str);
@@ -5768,7 +5752,7 @@ static void MakeIBeamStencil(XmTextFieldWidget tf, int line_width)
   char pixmap_name[64];
   XGCValues values;
   unsigned long valueMask;
-  sprintf(pixmap_name, "_XmText_%d_%d", tf->text.cursor_height, line_width);
+  snprintf(pixmap_name, sizeof(pixmap_name), "_XmText_%d_%d", tf->text.cursor_height, line_width);
   tf->text.cursor = FindPixmap(screen, pixmap_name, 1, 0, 1);
   if (tf->text.cursor == XmUNSPECIFIED_PIXMAP) {
     Display *dpy = XtDisplay(tf);
@@ -5844,7 +5828,11 @@ static void MakeAddModeCursor(XmTextFieldWidget tf, int line_width)
 {
   Screen *screen = XtScreen(tf);
   char pixmap_name[64];
-  sprintf(pixmap_name, "_XmText_AddMode_%d_%d", tf->text.cursor_height, line_width);
+  snprintf(pixmap_name,
+           sizeof(pixmap_name),
+           "_XmText_AddMode_%d_%d",
+           tf->text.cursor_height,
+           line_width);
   tf->text.add_mode_cursor = FindPixmap(screen, pixmap_name, 1, 0, 1);
   if (tf->text.add_mode_cursor == XmUNSPECIFIED_PIXMAP) {
     XtGCMask valueMask;
@@ -7292,8 +7280,9 @@ static void PreeditDraw(XIC xic, XPointer client_data, XIMPreeditDrawCallbackStr
       }
     }
     if (tf->text.overstrike && rest_len) {
-      mb = XtRealloc(mb, strlen(mb) + strlen(over_mb) + 1);
-      strcat(mb, over_mb);
+      size_t len = mb ? strlen(mb) : 0, over_len = strlen(over_mb);
+      mb = XtRealloc(mb, len + over_len + 1);
+      memcpy(mb + len, over_mb, over_len + 1);
       XtFree(over_mb);
     }
     if (tf->text.overstrike && recover_len > 0) {

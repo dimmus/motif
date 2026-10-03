@@ -577,6 +577,7 @@ static void ClassPartInitialize(WidgetClass wc)
   WidgetClass super;
   XmPrimitiveClassExt *wcePtr, *scePtr;
   char *event_bindings;
+  size_t size;
   _XmProcessLock();
   super = twc->core_class.superclass;
   wcePtr = _XmGetPrimitiveClassExtPtr(wc, NULLQUARK);
@@ -585,11 +586,15 @@ static void ClassPartInitialize(WidgetClass wc)
     (*wcePtr)->widget_baseline = (*scePtr)->widget_baseline;
   if ((*wcePtr)->widget_display_rect == XmInheritDisplayRectProc)
     (*wcePtr)->widget_display_rect = (*scePtr)->widget_display_rect;
-  event_bindings = (char *)XtMalloc(strlen(_XmTextEventBindings1) + strlen(_XmTextEventBindings2) +
-                                    strlen(_XmTextEventBindings3) + 1);
-  strcpy(event_bindings, _XmTextEventBindings1);
-  strcat(event_bindings, _XmTextEventBindings2);
-  strcat(event_bindings, _XmTextEventBindings3);
+  size = strlen(_XmTextEventBindings1) + strlen(_XmTextEventBindings2) +
+         strlen(_XmTextEventBindings3) + 1;
+  event_bindings = (char *)XtMalloc(size);
+  snprintf(event_bindings,
+           size,
+           "%s%s%s",
+           _XmTextEventBindings1,
+           _XmTextEventBindings2,
+           _XmTextEventBindings3);
   xmTextClassRec.core_class.tm_table = (String)XtParseTranslationTable(event_bindings);
   XtFree(event_bindings);
   _XmFastSubclassInit(wc, XmTEXT_BIT);
@@ -1915,8 +1920,7 @@ static void InitializeHook(Widget wid, ArgList args, Cardinal *num_args_ptr)
   /* Translation table overwrite */
   if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
     char *vevent_bindings;
-    vevent_bindings = (String)XtMalloc(strlen(_XmTextIn_XmTextVEventBindings) + 1);
-    strcpy(vevent_bindings, _XmTextIn_XmTextVEventBindings);
+    vevent_bindings = XtNewString(_XmTextIn_XmTextVEventBindings);
     tw->text.tm_table = (XtTranslations)XtParseTranslationTable(vevent_bindings);
     XtFree(vevent_bindings);
     XtOverrideTranslations(wid, tw->text.tm_table);
@@ -3017,8 +3021,9 @@ static void PreeditDraw(XIC xic, XPointer client_data, XIMPreeditDrawCallbackStr
           (XmTextPosition)(PreStartTW(tw) + call_data->chg_first + call_data->chg_length),
           PreEndTW(tw),
           False);
-      mb = XtRealloc(mb, strlen(mb) + strlen(over_mb) + 1);
-      strcat(mb, over_mb);
+      size_t len = mb ? strlen(mb) : 0, over_len = strlen(over_mb);
+      mb = XtRealloc(mb, len + over_len + 1);
+      memcpy(mb + len, over_mb, over_len + 1);
       XtFree(over_mb);
     }
     if (recover_len > 0) {
@@ -3455,16 +3460,7 @@ Widget XmCreateScrolledText(Widget parent, char *name, ArgList arglist, Cardinal
   _XmAppLock(app);
   s_size = ((name) ? strlen(name) : 0) + 3;
   s = (char *)XmStackAlloc(s_size, s_cache); /* Name + NULL + "SW" */
-  if (name) {
-    strncpy(s, name, strlen(name));
-    s[strlen(name)] = '\0';
-    strcat(s, "SW");
-  }
-  else {
-    s[0] = 'S';
-    s[1] = 'W';
-    s[2] = '\0';
-  }
+  snprintf(s, s_size, "%sSW", name ? name : "");
   /*
    * merge the application arglist with the required preset arglist, for
    * creating the scrolled window portion of the scroll text.
