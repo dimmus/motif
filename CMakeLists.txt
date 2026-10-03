@@ -504,6 +504,16 @@ if(WITH_UBSAN)
     -fsanitize=float-cast-overflow
     -fno-sanitize=alignment
   )
+  # Clang 17 and later also check, as part of -fsanitize=undefined, that
+  # a function is called through a pointer of its own type.  The trait
+  # records, converters and callbacks take handlers defined with the
+  # widget's own record type (XmRowColumnWidget, ...) through a cast to
+  # the Widget-typed slot all over libXm and mwm, so this too is left
+  # out until those are fixed.
+  check_c_compiler_flag(-fno-sanitize=function MOTIF_HAVE_NO_SANITIZE_FUNCTION)
+  if(MOTIF_HAVE_NO_SANITIZE_FUNCTION)
+    list(APPEND MOTIF_SANITIZE_FLAGS -fno-sanitize=function)
+  endif()
 endif()
 if(WITH_TSAN)
   if(WITH_COMPILER_ASAN OR WITH_MSAN)
