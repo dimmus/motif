@@ -3221,11 +3221,15 @@ extern void _XmStringDrawSegment(Display *d,
          */
         Boolean imm;
         _XmStringOptSegRec under_seg;
-        if (_XmStrText(*underline) != (char *)_XmEntryTextGet((_XmStringEntry)*underline))
+        if (_XmStrText(*underline) != (char *)((_XmStringOptSeg)*underline)->data.chars)
         /* If XtPointer in union in optimized segment leads to
          * padding in struct between header and text data
          * (on some 64-bit architectures) we have to move
          * text data, since optimized string does not have padding.
+         * Compare addresses only: _XmEntryTextGet would read the
+         * segment's text pointer, which lies past the end of a short
+         * optimized string, whenever the bit that overlays the
+         * segment's "immediate" flag is clear.
          */
         {
           bzero((char *)&under_seg, sizeof(_XmStringOptSegRec));
