@@ -301,11 +301,13 @@ Urm__CW_CreateWidgetTreeBody (URMResourceContextPtr	context_id,
 	      result = UrmGetRIDWidget (file_id, childptr->key.id,
 					child_ctx) ;
 	      if ( result != MrmSUCCESS )
-		snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0053, childptr->key.id) ;
+		snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0053,
+			  childptr->key.id) ;
 	      break ;
 	    default:
 	      result = MrmFAILURE ;
-	      snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0054, childptr->type) ;
+	      snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0054,
+			childptr->type) ;
 	      break ;
 	    }
 	  if ( result != MrmSUCCESS )
@@ -1693,7 +1695,8 @@ Urm__CW_CreateArglist (Widget			parent,
 	    *num_used += 1 ;
 	  else
 	    {
-	      snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0062, argptr->tag_code) ;
+	      snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0062,
+			argptr->tag_code) ;
 	      Urm__UT_Error ("Urm__CW_CreateArglist", err_msg,
 			     NULL, NULL, uncmp_res) ;
 	    }
@@ -1742,7 +1745,8 @@ Urm__CW_CreateArglist (Widget			parent,
 	      *num_used += 1;
 	    else
 	      {
-		snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0062, argptr->tag_code) ;
+		snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0062,
+			  argptr->tag_code) ;
 		Urm__UT_Error ("Urm__CW_CreateArglist", err_msg,
 			       NULL, NULL, uncmp_res) ;
 	      }
@@ -2261,7 +2265,8 @@ Urm__CW_ConvertValue (Widget			parent,
 				    XmCHARSET_TEXT, NULL);
 	    if ( cstg == NULL )
 	      {
-		snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0064, (String)(*val)) ;
+		snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0064,
+			  (String)(*val)) ;
 		return Urm__UT_Error ("Urm__CW_ConvertValue",
 				      err_msg, NULL, NULL, MrmFAILURE) ;
 	      }
@@ -2282,7 +2287,8 @@ Urm__CW_ConvertValue (Widget			parent,
 	    trans = XtParseTranslationTable ((String)(*val)) ;
 	    if ( trans == NULL )
 	      {
-		snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0065, (String)(*val)) ;
+		snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0065,
+			  (String)(*val)) ;
 		return Urm__UT_Error ("Urm__CW_ConvertValue",
 				      err_msg, NULL, NULL, MrmFAILURE) ;
 	      }
@@ -2478,7 +2484,8 @@ Urm__CW_ConvertValue (Widget			parent,
 		  font = XLoadQueryFont (display, fontstg);
 		  if ( font == NULL )
 		    {
-		      snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0070, fontstg);
+		      snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0070,
+				fontstg);
 		      return Urm__UT_Error ("Urm__CW_ConvertValue",
 					    err_msg, NULL, NULL, MrmNOT_FOUND) ;
 		    }
@@ -2502,14 +2509,16 @@ Urm__CW_ConvertValue (Widget			parent,
 					   &missing_cset_cnt, &def_string);
 		  if (fontset == NULL)
 		    {
-		      snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0071, fontstg);
+		      snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0071,
+				fontstg);
 		      return Urm__UT_Error ("Urm__CW_ConvertValue",
 					    err_msg, NULL, NULL, MrmNOT_FOUND) ;
 		    }
 
 		  if (missing_csets != NULL)
 		    {
-		      snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0072, fontstg);
+		      snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0072,
+				fontstg);
 		      XFreeStringList(missing_csets);
 		    }
 		  Urm__WCI_RegisterNames(&dpyandfontstr,
@@ -3110,7 +3119,8 @@ Urm__CW_ReadLiteral (RGMResourceDescPtr		resptr ,
       if ( result != MrmSUCCESS )
 	{
 	  UrmFreeResourceContext (context_id) ;
-	  snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0077, resptr->key.index) ;
+	  snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0077,
+		    resptr->key.index) ;
 	  return Urm__UT_Error ("Urm__CW_ReadLiteral", err_msg,
 				NULL, NULL, result) ;
 	}
