@@ -918,6 +918,46 @@ ProcessWmClass (ClientData *pCD)
 
 /*************************************<->*************************************
  *
+ *  IsValidSmClientID (clientID, len)
+ *
+ *
+ *  Description:
+ *  -----------
+ *  SM_CLIENT_ID is set by the client and is later used as a resource name
+ *  component in the client database (.mwmclientdb).  XSMP client IDs only
+ *  contain letters and digits, so reject anything that is overlong or
+ *  contains characters that are special in a resource file (newline, ':',
+ *  '.', '*', '!', whitespace, ...).
+ *
+ *************************************<->***********************************/
+
+static Boolean
+IsValidSmClientID (const char *clientID, unsigned long len)
+{
+    unsigned long i;
+
+    if ((len == 0) || (len > MAX_SM_CLIENT_ID_LEN))
+	return (False);
+
+    for (i = 0; i < len; i++)
+    {
+	unsigned char c = (unsigned char) clientID[i];
+
+	if (!(((c >= '0') && (c <= '9')) ||
+	      ((c >= 'A') && (c <= 'Z')) ||
+	      ((c >= 'a') && (c <= 'z')) ||
+	      (c == '-') || (c == '_')))
+	    return (False);
+    }
+
+    return (True);
+
+} /* END OF FUNCTION IsValidSmClientID */
+
+
+
+/*************************************<->*************************************
+ *
  *  ProcessSmClientID (pCD)
  *
  *
@@ -955,15 +995,21 @@ ProcessSmClientID (ClientData *pCD)
 	pCD->smClientID = (String)NULL;
     }
 
+    clientID = NULL;
     if ((XGetWindowProperty(DISPLAY, pCD->client, wmGD.xa_SM_CLIENT_ID,
-			    0L, (long)1000000, False, AnyPropertyType,
-			    &actualType, &actualFormat, &nitems,
-			    &leftover, (unsigned char **)&clientID)
+			    0L, (long)((MAX_SM_CLIENT_ID_LEN + 3) / 4), False,
+			    AnyPropertyType, &actualType, &actualFormat,
+			    &nitems, &leftover, (unsigned char **)&clientID)
 	 == Success) &&
-	(actualType != None) && (actualFormat == 8))
+	(actualType != None) && (actualFormat == 8) && (leftover == 0) &&
+	IsValidSmClientID (clientID, nitems))
     {
 	/* the SM_CLIENT_ID property exists for the client window */
 	pCD->smClientID = clientID;
+    }
+    else if (clientID != NULL)
+    {
+	XFree (clientID);
     }
 
 } /* END OF FUNCTION ProcessSmClientID */
