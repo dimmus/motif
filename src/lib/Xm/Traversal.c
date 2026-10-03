@@ -1091,6 +1091,34 @@ Boolean XmIsTraversable(Widget wid)
   return traversable;
 }
 
+/*
+ * Get the geometry and map state of a sibling window for XmGetVisibility.
+ * For a widget's window, Xt knows the geometry, and a realized widget that
+ * is mapped when managed is mapped exactly when it is managed (the same
+ * assumption _XmIsViewable makes); only other windows need a round trip.
+ */
+static Boolean SiblingGeometry(Display *dpy, Window window, XRectangle *rect)
+{
+  XWindowAttributes xwa;
+  Widget sib = XtWindowToWidget(dpy, window);
+  if (sib && XtIsRealized(sib) && sib->core.mapped_when_managed && !sib->core.being_destroyed) {
+    if (!XtIsManaged(sib))
+      return False;
+    rect->x = sib->core.x + sib->core.border_width;
+    rect->y = sib->core.y + sib->core.border_width;
+    rect->width = sib->core.width;
+    rect->height = sib->core.height;
+    return True;
+  }
+  if (!XGetWindowAttributes(dpy, window, &xwa) || xwa.map_state != IsViewable)
+    return False;
+  rect->x = xwa.x + xwa.border_width;
+  rect->y = xwa.y + xwa.border_width;
+  rect->width = xwa.width;
+  rect->height = xwa.height;
+  return True;
+}
+
 XmVisibility XmGetVisibility(Widget wid)
 {
   XRectangle rect;
@@ -1132,22 +1160,16 @@ XmVisibility XmGetVisibility(Widget wid)
   /* process windows above the window of interest */
   if (i < numchildren) {
     XRectangle parent_rect, srcRectB, intersect_rect;
-    XWindowAttributes window_attributes_return;
     Region region = XCreateRegion();
     Region tmp_region = XCreateRegion();
     Region left_region = XCreateRegion();
     XmVisibility value;
     XUnionRectWithRegion(&rect, region, region);
+    _XmSetRect(&parent_rect, XtParent(wid));
     while (i < numchildren) {
-      XGetWindowAttributes(XtDisplay(wid), *windowptr, &window_attributes_return);
-      if (window_attributes_return.map_state == IsViewable) {
-        _XmSetRect(&parent_rect, XtParent(wid));
-        srcRectB.x = parent_rect.x + window_attributes_return.x +
-                     window_attributes_return.border_width;
-        srcRectB.y = parent_rect.y + window_attributes_return.y +
-                     window_attributes_return.border_width;
-        srcRectB.width = window_attributes_return.width;
-        srcRectB.height = window_attributes_return.height;
+      if (SiblingGeometry(XtDisplay(wid), *windowptr, &srcRectB)) {
+        srcRectB.x += parent_rect.x;
+        srcRectB.y += parent_rect.y;
         /* accumulate all the region covered by siblings */
         if (_XmIntersectionOf(&rect, &srcRectB, &intersect_rect)) {
           XUnionRectWithRegion(&intersect_rect, tmp_region, tmp_region);
