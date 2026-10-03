@@ -16,6 +16,7 @@
 #define EXIT_SKIP 77
 
 XtAppContext app;
+static Widget app_shell;
 
 static const struct suite_entry {
 	const char *name;
@@ -49,11 +50,17 @@ Widget init_xt(const char *klass)
 	XtToolkitInitialize();
 	shell = XtAppInitialize(&app, klass, NULL, 0, &argc, NULL, NULL, NULL, 0);
 	ck_assert_msg(app, "Failed to initialize app context");
+	app_shell = shell;
 	return shell;
 }
 
 void uninit_xt(void)
 {
+	/* Destroy the shell first: closing the display does not destroy
+	 * widgets, so whatever they keep would show up as leaks. */
+	if (app_shell)
+		XtDestroyWidget(app_shell);
+	app_shell = NULL;
 	if (app)
 		XtDestroyApplicationContext(app);
 	app = NULL;
