@@ -723,7 +723,7 @@ static void shadow_fini(void)
 /* XmString                                                            */
 /* ------------------------------------------------------------------ */
 
-static XmRenderTable str_rt, str_rt_xft;
+static XmRenderTable str_rt, str_rt_xft, str_rt_fs;
 static XmString str_one, str_multi;
 static Widget str_label;
 
@@ -765,6 +765,11 @@ static void xs_init(long n)
 	rend = XmRenditionCreate(str_label, XmFONTLIST_DEFAULT_TAG, args, 2);
 	str_rt_xft = XmRenderTableAddRenditions(NULL, &rend, 1, XmMERGE_NEW);
 	XmRenditionFree(rend);
+	XtSetArg(args[0], XmNfontName, "fixed");
+	XtSetArg(args[1], XmNfontType, XmFONT_IS_FONTSET);
+	rend = XmRenditionCreate(str_label, XmFONTLIST_DEFAULT_TAG, args, 2);
+	str_rt_fs = XmRenderTableAddRenditions(NULL, &rend, 1, XmMERGE_NEW);
+	XmRenditionFree(rend);
 	str_one = XmStringCreateLocalized("The quick brown fox");
 	str_multi = XmStringGenerate("The quick\tbrown fox\njumps over\n"
 				     "the lazy dog", NULL, XmCHARSET_TEXT,
@@ -786,6 +791,7 @@ static long xs_extent(long n, XmRenderTable rt, XmString s)
 static long xs_extent_run(long n) { return xs_extent(n, str_rt, str_one); }
 static long xs_extent_multi_run(long n) { return xs_extent(n, str_rt, str_multi); }
 static long xs_extent_xft_run(long n) { return xs_extent(n, str_rt_xft, str_one); }
+static long xs_extent_fs_run(long n) { return xs_extent(n, str_rt_fs, str_one); }
 
 static long xs_draw(long n, XmRenderTable rt)
 {
@@ -802,6 +808,7 @@ static long xs_draw(long n, XmRenderTable rt)
 
 static long xs_draw_run(long n) { return xs_draw(n, str_rt); }
 static long xs_draw_xft_run(long n) { return xs_draw(n, str_rt_xft); }
+static long xs_draw_fs_run(long n) { return xs_draw(n, str_rt_fs); }
 
 static void xs_fini(void)
 {
@@ -809,6 +816,7 @@ static void xs_fini(void)
 	XmStringFree(str_multi);
 	XmRenderTableFree(str_rt);
 	XmRenderTableFree(str_rt_xft);
+	XmRenderTableFree(str_rt_fs);
 	destroy_work();
 }
 
@@ -1114,10 +1122,14 @@ static const struct bench_case cases[] = {
 	  1, 100000, xs_init, NULL, xs_extent_multi_run, NULL, xs_fini },
 	{ "xmstring-extent-xft", "micro", "XmStringExtent, one segment, Xft",
 	  1, 100000, xs_init, NULL, xs_extent_xft_run, NULL, xs_fini },
+	{ "xmstring-extent-fontset", "micro", "XmStringExtent, one segment, font set",
+	  1, 100000, xs_init, NULL, xs_extent_fs_run, NULL, xs_fini },
 	{ "xmstring-draw", "micro", "XmStringDraw, core font",
 	  1, 20000, xs_init, NULL, xs_draw_run, NULL, xs_fini },
 	{ "xmstring-draw-xft", "micro", "XmStringDraw, Xft",
 	  1, 20000, xs_init, NULL, xs_draw_xft_run, NULL, xs_fini },
+	{ "xmstring-draw-fontset", "micro", "XmStringDraw, font set",
+	  1, 20000, xs_init, NULL, xs_draw_fs_run, NULL, xs_fini },
 	{ "rendertable-cvt", "micro", "create Labels with a String render table",
 	  1, 1000, NULL, rt_setup, rt_run, destroy_work, NULL },
 	{ "shadow-2", "micro", "XmeDrawShadows, thickness 2",
@@ -1239,7 +1251,7 @@ int main(int argc, char **argv)
 			break;
 		case 'l':
 			for (i = 0; i < N_CASES; i++)
-				printf("%-22s %-6s %s\n", cases[i].name,
+				printf("%-24s %-6s %s\n", cases[i].name,
 				       cases[i].group, cases[i].desc);
 			return 0;
 		case 'h':
@@ -1300,7 +1312,7 @@ int main(int argc, char **argv)
 			threads ? "true" : "false",
 			c_mallocs ? "true" : "false");
 	}
-	printf("%-22s %9s %12s %12s %9s %9s %8s %8s\n", "case", "n", "ns/op",
+	printf("%-24s %9s %12s %12s %9s %9s %8s %8s\n", "case", "n", "ns/op",
 	       "cpu-ns/op", "mallocs", "requests", "rtrips", "icvalues");
 	for (i = 0; i < N_CASES; i++) {
 		const struct bench_case *bc = &cases[i];
@@ -1313,12 +1325,12 @@ int main(int argc, char **argv)
 		if (n < 1)
 			n = 1;
 		if (bc->needs_x && !dpy) {
-			printf("%-22s %9s\n", bc->name, "skipped (no display)");
+			printf("%-24s %9s\n", bc->name, "skipped (no display)");
 			skipped++;
 			continue;
 		}
 		run_case(bc, n, repeat, &res);
-		printf("%-22s %9ld %12.1f %12.1f %9.3f %9.3f %8.3f %8.3f\n",
+		printf("%-24s %9ld %12.1f %12.1f %9.3f %9.3f %8.3f %8.3f\n",
 		       bc->name, n, res.ns, res.cpu, res.mallocs, res.requests,
 		       res.rtrips, res.icvalues);
 		fflush(stdout);
