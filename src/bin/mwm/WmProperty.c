@@ -165,13 +165,17 @@ GetNormalHints(
 	sizeHints.max_aspect.y = (int)property->maxAspectY;
 
 
-	if (nitems == (PROP_SIZE_HINTS_ELEMENTS - 3))
+	if (nitems < PROP_SIZE_HINTS_ELEMENTS)
 	{
 	    /*
-	     *  This is ICCC_R2.
+	     *  This is ICCC_R2.  (A property with 16 or 17 elements is
+	     *  treated the same way.)  The base size and gravity fields
+	     *  are missing or incomplete: do not read them, and drop the
+	     *  flags so that stale values are never used.
 	     */
 
 	    sizeHints.icccVersion = ICCC_R2;
+	    sizeHints.flags &= ~(P_BASE_SIZE | P_WIN_GRAVITY);
 	}
 	else
 	{
