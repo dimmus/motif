@@ -1400,8 +1400,9 @@ static void VendorExtInitialize(Widget req,
 static void MotifWarningHandler(
     String name, String type, String s_class, String message, String *params, Cardinal *num_params)
 {
-  char buf[1024], buf2[1024], header[200], *bp, *newline_pos;
-  int pos;
+  char buf[1024], buf2[1024], header[200], *bp;
+  size_t pos, n;
+  int ret;
   if (!(params && num_params && (*num_params > 0) && (params[*num_params - 1] == XME_WARNING)) &&
       previousWarningHandler)
   {
@@ -1410,9 +1411,20 @@ static void MotifWarningHandler(
     (*previousWarningHandler)(name, type, s_class, message, params, num_params);
     return;
   }
-  XtGetErrorDatabaseText(name, type, s_class, message, buf2, 1024);
-  XtGetErrorDatabaseText("motif", "header", "Motif", _XmMMsgMotif_0000, header, 200);
-  sprintf(buf, header, name, s_class);
+  XtGetErrorDatabaseText(name, type, s_class, message, buf2, sizeof(buf2));
+  XtGetErrorDatabaseText("motif", "header", "Motif", _XmMMsgMotif_0000, header, sizeof(header));
+  /* Widget names, font names and message parameters can be arbitrarily
+   * long, so every write below is bounded and long messages are
+   * truncated. */
+  ret = snprintf(buf, sizeof(buf), header, name, s_class);
+  if (ret < 0) {
+    buf[0] = '\0';
+    pos = 0;
+  }
+  else if ((size_t)ret >= sizeof(buf))
+    pos = sizeof(buf) - 1;
+  else
+    pos = (size_t)ret;
   if (num_params && *num_params > 1) {
     int i = *num_params - 1;
     char *par[10];
@@ -1420,40 +1432,38 @@ static void MotifWarningHandler(
       i = 10;
     memcpy((char *)par, (char *)params, i * sizeof(String));
     bzero((char *)&par[i], (10 - i) * sizeof(String));
-    (void)sprintf(&buf[strlen(buf)],
-                  buf2,
-                  par[0],
-                  par[1],
-                  par[2],
-                  par[3],
-                  par[4],
-                  par[5],
-                  par[6],
-                  par[7],
-                  par[8],
-                  par[9]);
+    if (snprintf(&buf[pos],
+                 sizeof(buf) - pos,
+                 buf2,
+                 par[0],
+                 par[1],
+                 par[2],
+                 par[3],
+                 par[4],
+                 par[5],
+                 par[6],
+                 par[7],
+                 par[8],
+                 par[9]) < 0)
+      buf[pos] = '\0';
   }
   else
-    strcat(buf, buf2);
+    (void)snprintf(&buf[pos], sizeof(buf) - pos, "%s", buf2);
+  /* Copy into buf2, indenting every line after the first by four spaces
+   * and keeping room for the trailing newline and NUL. */
   pos = 0;
-  bp = buf;
-  do {
-    newline_pos = strchr(bp, '\n');
-    if (newline_pos == NULL) {
-      strncpy(&buf2[pos], bp, 1024 - pos - 1);
-      buf2[1024 - 1] = '\0';
-      pos += strlen(bp);
+  for (bp = buf; *bp != '\0' && pos < sizeof(buf2) - 2; bp++) {
+    buf2[pos++] = *bp;
+    if (*bp == '\n') {
+      n = sizeof(buf2) - 2 - pos;
+      if (n > 4)
+        n = 4;
+      memcpy(&buf2[pos], "    ", n);
+      pos += n;
     }
-    else {
-      strncpy(&buf2[pos], bp, (int)(newline_pos - bp + 1));
-      pos += (int)(newline_pos - bp + 1);
-      bp += (int)(newline_pos - bp + 1);
-      strncpy(&buf2[pos], "    ", 5);
-      pos += 4;
-    }
-  } while (newline_pos != NULL);
-  buf2[pos] = '\n';
-  buf2[++pos] = '\0';
+  }
+  buf2[pos++] = '\n';
+  buf2[pos] = '\0';
   XtWarning(buf2);
 }
 

@@ -251,7 +251,7 @@ static Boolean CvtStringToSelectColor(Display *disp,
                                       XtPointer *converter_data);
 static void CvtStringToXmTabListDestroy(
     XtAppContext app, XrmValue *to, XtPointer converter_data, XrmValue *args, Cardinal *num_args);
-static Boolean GetNextTab(char **s, float *value, char *unitType, XmOffsetModel *offsetModel);
+static int GetNextTab(char **s, float *value, char *unitType, XmOffsetModel *offsetModel);
 static Boolean CvtStringToXmTabList(Display *dpy,
                                     XrmValue *args,
                                     Cardinal *num_args,
@@ -1720,6 +1720,10 @@ static Boolean CvtStringToAtomList(Display *dpy,
   for (atom_name = GetNextToken((char *)from->addr, ",", &context_string); atom_name != NULL;
        atom_name = GetNextToken(NULL, ",", &context_string))
   {
+    if (*atom_name == '\0') {
+      XtFree(atom_name);
+      continue;
+    }
     if (atom_count == max_atoms) {
       max_atoms *= 2;
       if (name_list == stack_names) {
@@ -1812,35 +1816,31 @@ static char *GetNextToken(char *src, char *delim, char **context)
 {
   Boolean terminated = False;
   char *s, *e, *p;
-  char *next_context;
-  char *buf = NULL;
-  int len;
+  char *buf;
   if (src != NULL)
     *context = src;
   if (*context == NULL)
     return (NULL);
-  s = *context;
-  /* find the end of the token */
-  for (e = s; (!terminated) && (*s != '\0'); e = s++) {
-    if ((*s == '\\') && (*(s + 1) != '\0'))
-      s++;
-    else if (OneOf(*s, delim))
+  /* Find the end of the token: e stops on the terminating delimiter or
+   * on the final NUL. A backslash quotes the next character. */
+  for (e = *context; *e != '\0'; e++) {
+    if ((*e == '\\') && (*(e + 1) != '\0'))
+      e++;
+    else if (OneOf(*e, delim)) {
       terminated = True;
+      break;
+    }
   }
-  /* assert (OneOf(*e,delim) || (*e == '\0')) */
-  if (terminated) {
-    next_context = (e + 1);
-    e--;
-  }
-  else
-    next_context = NULL;
-  /* Strip out non-backslashed leading and trailing whitespace */
+  /* The token is [s, e). Always advance the context, even past an
+   * empty token, so that callers looping until NULL terminate. */
   s = *context;
-  while ((s != e) && isspace((unsigned char)*s))
+  *context = terminated ? (e + 1) : NULL;
+  /* Strip out non-backslashed leading and trailing whitespace */
+  while ((s < e) && isspace((unsigned char)*s))
     s++;
-  while ((e != s) && isspace((unsigned char)*e) && ((*e - 1) != '\\'))
+  while ((e - s > 1) && isspace((unsigned char)*(e - 1)) && (*(e - 2) != '\\'))
     e--;
-  if (e == s) {
+  if (s == e) {
     /*
      * Only white-space between the delimiters,
      * if we're at the end of the string anyway, indicate
@@ -1859,16 +1859,14 @@ static char *GetNextToken(char *src, char *delim, char **context)
    * delimiter characters or spaces.  It would be great if we had
    * time to implement full C style backslash processing...
    */
-  len = (e - s) + 1;
-  p = buf = XtMalloc(len + 1);
-  while (s != e) {
-    if ((*s == '\\') && (OneOf(*(s + 1), delim) || isspace((unsigned char)*(s + 1))))
+  p = buf = XtMalloc((e - s) + 1);
+  while (s < e) {
+    if ((*s == '\\') && (s + 1 < e) &&
+        (OneOf(*(s + 1), delim) || isspace((unsigned char)*(s + 1))))
       s++;
     *(p++) = *(s++);
   }
-  *(p++) = *(s++);
   *p = '\0';
-  *context = next_context;
   return (buf);
 }
 
@@ -2073,22 +2071,39 @@ static Boolean CvtStringToSelectColor(Display *disp,
  *  GetNextTab
  *
  ************************************************************************/
-static Boolean GetNextTab(char **s, float *value, char *unitType, XmOffsetModel *offsetModel)
+/*
+ * Returns 1 and the tab in *value, unitType and *offsetModel, 0 at the
+ * end of the list, or -1 on a malformed tab. unitType must hold
+ * UNIT_TYPE_LEN + 1 characters.
+ */
+#define UNIT_TYPE_LEN 31
+#define UNIT_TYPE_LEN_STR "31"
+static int GetNextTab(char **s, float *value, char *unitType, XmOffsetModel *offsetModel)
 {
-  int ret_val;
+  int ret_val, need;
   char sign[3];
   char *tmp;
   bzero(sign, sizeof(sign));
   unitType[0] = '\0';
-  if (sscanf(*s, " %2[+]", sign) == 1)
-    ret_val = sscanf(*s, " %2[+] %f %12[^ \t\r\n\v\f,] ", sign, value, unitType);
-  else
-    ret_val = sscanf(*s, " %f %12[^ \t\r\n\v\f,] ", value, unitType);
+  /* The unit width is larger than any valid unit name, so a truncated
+   * unit never parses as a valid one. */
+  if (sscanf(*s, " %2[+]", sign) == 1) {
+    need = 2;
+    ret_val = sscanf(
+        *s, " %2[+] %f %" UNIT_TYPE_LEN_STR "[^ \t\r\n\v\f,] ", sign, value, unitType);
+  }
+  else {
+    need = 1;
+    ret_val = sscanf(*s, " %f %" UNIT_TYPE_LEN_STR "[^ \t\r\n\v\f,] ", value, unitType);
+  }
   if (ret_val == EOF)
-    return (FALSE);
+    return (0);
+  /* No number: *value was not set. */
+  if (ret_val < need)
+    return (-1);
   if (sign[1] != '\0') {
     /* Error message */
-    return (FALSE);
+    return (-1);
   }
   switch (sign[0]) {
     case '\0':
@@ -2103,7 +2118,7 @@ static Boolean GetNextTab(char **s, float *value, char *unitType, XmOffsetModel 
     *s += strlen(*s);
   else
     *s = (tmp + 1);
-  return (TRUE);
+  return (1);
 }
 
 static void CvtStringToXmTabListDestroy(XtAppContext app, /* unused */
@@ -2140,16 +2155,16 @@ static Boolean CvtStringToXmTabList(Display *dpy,
   Boolean got_one = FALSE;
   char *s;
   float value;
-  char unitType[12]; /* longest unit name is "millimeters"  */
+  char unitType[UNIT_TYPE_LEN + 1];
   XmOffsetModel offsetModel = XmABSOLUTE;
-  int units;
+  int units, ret;
   XmParseResult result;
   XmTab tab;
   XmTabList tl = NULL;
   if (from->addr) {
     s = (char *)from->addr;
     /* Parse the tabs */
-    while (GetNextTab(&s, &value, unitType, &offsetModel)) {
+    while ((ret = GetNextTab(&s, &value, unitType, &offsetModel)) > 0) {
       got_one = TRUE;
       result = XmeParseUnits(unitType, &units);
       if (result == XmPARSE_ERROR) {
@@ -2163,9 +2178,14 @@ static Boolean CvtStringToXmTabList(Display *dpy,
       tl = XmTabListInsertTabs(tl, &tab, 1, -1);
       XmTabFree(tab);
     }
+    if (ret < 0)
+      got_one = FALSE;
   }
   if (got_one)
     _XM_CONVERTER_DONE(to, XmTabList, tl, XmTabListFree(tl);)
+  /* The tabs parsed before a malformed one are not returned. */
+  if (tl != NULL)
+    XmTabListFree(tl);
   XtDisplayStringConversionWarning(dpy, (char *)from->addr, XmRTabList);
   return (FALSE);
 }

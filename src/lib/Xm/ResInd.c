@@ -314,6 +314,10 @@ int _XmConvertUnits(Screen *screen,
     else
       mm_per_pixel = (HeightMMOfScreen(screen) * 1000) / HeightOfScreen(screen);
   }
+  /* Some servers report a physical size of 0 mm; assume 96 dpi rather
+   * than dividing by zero below. */
+  if (mm_per_pixel <= 0)
+    mm_per_pixel = 25400 / 96;
   if (from_type == XmPIXELS)
     from_val_in_mm = from_val * mm_per_pixel;
   else if (from_type == Xm100TH_POINTS)
@@ -356,10 +360,14 @@ int _XmConvertUnits(Screen *screen,
     return (from_val_in_mm / 10000);
   else if (to_type == Xm100TH_FONT_UNITS) {
     font_unit = _XmGetFontUnit(screen, dimension);
+    if (font_unit <= 0)
+      return (0);
     return ((from_val_in_mm * 100) / (mm_per_pixel * font_unit));
   }
   else /* to_type == XmFONT_UNITS */ {
     font_unit = _XmGetFontUnit(screen, dimension);
+    if (font_unit <= 0)
+      return (0);
     return ((from_val_in_mm) / (mm_per_pixel * font_unit));
   }
 }

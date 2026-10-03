@@ -787,7 +787,7 @@ void _XmTearOffInitiate(Widget wid, XEvent *event)
                      &bytes_after,
                      (unsigned char **)&rprop);
   if ((actual_type != atoms[XmA_MOTIF_WM_HINTS]) || (actual_format != 32) ||
-      (num_items < PROP_MOTIF_WM_INFO_ELEMENTS))
+      (num_items < PROP_MWM_HINTS_ELEMENTS))
   {
     if (rprop != NULL)
       XFree((char *)rprop);

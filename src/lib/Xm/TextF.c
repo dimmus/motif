@@ -2938,8 +2938,10 @@ static Boolean PrintableString(XmTextFieldWidget tf,
         buf_size -= ret_val;
         tmp_str++;
       } while ((ret_val > 0) && (buf_size >= MB_CUR_MAX) && (count < n));
-      if (ret_val == -1) /* bad character */
+      if (ret_val == -1) { /* bad character */
+        XmStackFree(cache_ptr, cache);
         return (False);
+      }
       is_printable = XTextWidth(TextF_Font(tf), cache_ptr, tmp - cache_ptr);
       XmStackFree(cache_ptr, cache);
       return (is_printable);
@@ -5349,7 +5351,8 @@ static void ValidateString(XmTextFieldWidget tf, char *value, Boolean is_wchar)
   int str_len = 0;
   int i, j;
   char stack_cache[400];
-  char *params[1], *err_str;
+  char *params[1], *err_str, err_buf[8];
+  int err_len;
   char *temp_str, *curr_str, *start_temp;
   wchar_t tmp;
   int num_conv;
@@ -5366,11 +5369,10 @@ static void ValidateString(XmTextFieldWidget tf, char *value, Boolean is_wchar)
           temp_str++;
         }
         else {
-          err_str = XmStackAlloc(6, stack_cache);
-          sprintf(err_str, "\\%o", (unsigned char)*curr_str);
-          params[0] = err_str;
+          /* Not XmStackAlloc(stack_cache): temp_str may live there. */
+          snprintf(err_buf, sizeof(err_buf), "\\%o", (unsigned char)*curr_str);
+          params[0] = err_buf;
           _XmWarningMsg((Widget)tf, "Unsupported char", MSG5, params, 1);
-          XmStackFree(err_str, stack_cache);
         }
         curr_str++;
         i++;
@@ -5398,8 +5400,9 @@ static void ValidateString(XmTextFieldWidget tf, char *value, Boolean is_wchar)
         else {
           if (num_conv >= 0) {
             err_str = XtMalloc((4 * num_conv) + 1);
+            err_len = 0;
             for (j = 0; j < num_conv; j++) {
-              sprintf(err_str + (j * 4), "\\%o", (unsigned char)curr_str[j]);
+              err_len += sprintf(err_str + err_len, "\\%o", (unsigned char)curr_str[j]);
             }
           }
           else {
@@ -5470,8 +5473,9 @@ static void ValidateString(XmTextFieldWidget tf, char *value, Boolean is_wchar)
         else {
           if (csize >= 0) {
             err_str = XtMalloc((4 * csize) + 1);
+            err_len = 0;
             for (j = 0; j < csize; j++) {
-              sprintf(err_str + (j * 4), "\\%o", (unsigned char)scratch[j]);
+              err_len += sprintf(err_str + err_len, "\\%o", (unsigned char)scratch[j]);
             }
           }
           else {
@@ -5493,8 +5497,9 @@ static void ValidateString(XmTextFieldWidget tf, char *value, Boolean is_wchar)
           csize = wctomb(scratch, *wcs_curr_str);
           if (csize >= 0) {
             err_str = XtMalloc((4 * csize) + 1);
+            err_len = 0;
             for (j = 0; j < csize; j++) {
-              sprintf(err_str + (j * 4), "\\%o", (unsigned char)scratch[j]);
+              err_len += sprintf(err_str + err_len, "\\%o", (unsigned char)scratch[j]);
             }
           }
           else {
@@ -7052,14 +7057,14 @@ static int PreeditStart(XIC xic, XPointer client_data, XPointer call_data)
     tf->text.onthespot->over_len = lastPos - PreCursor(tf);
     if (tf->text.max_char_size == 1) {
       mb = XtMalloc(tf->text.onthespot->over_len + 1);
-      memcpy(&tf->text.value[PreStart(tf)], mb, tf->text.onthespot->over_len);
+      memcpy(mb, &tf->text.value[PreStart(tf)], tf->text.onthespot->over_len);
       mb[tf->text.onthespot->over_len] = '\0';
       tf->text.onthespot->over_str = mb;
     }
     else {
       wc = (wchar_t *)XtMalloc((tf->text.onthespot->over_len + 1) * sizeof(wchar_t));
-      memcpy((char *)&tf->text.wc_value[PreStart(tf)],
-             (char *)wc,
+      memcpy((char *)wc,
+             (char *)&tf->text.wc_value[PreStart(tf)],
              tf->text.onthespot->over_len * sizeof(wchar_t));
       wc[tf->text.onthespot->over_len] = (wchar_t)'\0';
       tf->text.onthespot->over_str = (char *)wc;
@@ -7206,12 +7211,12 @@ static void PreeditDraw(XIC xic, XPointer client_data, XIMPreeditDrawCallbackStr
         strncpy(mb, call_data->text->string.multi_byte, insert_length * tf->text.max_char_size);
         mb[insert_length * tf->text.max_char_size] = '\0';
         escapement = XmbTextExtents((XFontSet)TextF_Font(tf), mb, strlen(mb), &overall_ink, NULL);
+        XtFree(mb);
+        mb = NULL;
         if (escapement == 0 && overall_ink.width == 0 &&
             strchr(call_data->text->string.multi_byte, '\t') == 0)
         {
           /* cursor on */
-          if (mb)
-            XtFree(mb);
           return;
         }
       }
@@ -7250,16 +7255,16 @@ static void PreeditDraw(XIC xic, XPointer client_data, XIMPreeditDrawCallbackStr
     if (rest_len) {
       if (tf->text.max_char_size == 1) {
         over_mb = XtMalloc(rest_len + 1);
-        memcpy(&tf->text.value[PreStart(tf) + call_data->chg_first + call_data->chg_length],
-               over_mb,
+        memcpy(over_mb,
+               &tf->text.value[PreStart(tf) + call_data->chg_first + call_data->chg_length],
                rest_len);
         over_mb[rest_len] = '\0';
       }
       else {
         over_wc = (wchar_t *)XtMalloc((rest_len + 1) * sizeof(wchar_t));
-        memcpy((char *)&tf->text
+        memcpy((char *)over_wc,
+               (char *)&tf->text
                    .wc_value[PreStart(tf) + call_data->chg_first + call_data->chg_length],
-               (char *)over_wc,
                rest_len * sizeof(wchar_t));
         over_wc[rest_len] = (wchar_t)'\0';
       }
@@ -7274,6 +7279,7 @@ static void PreeditDraw(XIC xic, XPointer client_data, XIMPreeditDrawCallbackStr
   PreCursor(tf) = PreStart(tf) + call_data->caret;
   if (tf->text.max_char_size == 1) {
     if (call_data->text) {
+      XtFree(mb);
       if (call_data->text->encoding_is_wchar) {
         mb = XtMalloc((insert_length + 1) * sizeof(char));
         wcstombs(mb, call_data->text->string.wide_char, insert_length);
@@ -7301,6 +7307,8 @@ static void PreeditDraw(XIC xic, XPointer client_data, XIMPreeditDrawCallbackStr
       PreeditVerifyReplace(tf, startPos, endPos, mb, strlen(mb), PreCursor(tf), &end_preedit);
       if (end_preedit) {
         _XmTextFieldDrawInsertionPoint(tf, True);
+        XtFree(mb);
+        XtFree((char *)wc);
         return;
       }
     }
@@ -7311,13 +7319,14 @@ static void PreeditDraw(XIC xic, XPointer client_data, XIMPreeditDrawCallbackStr
   }
   else {
     if (call_data->text) {
+      XtFree((char *)wc);
       if (!call_data->text->encoding_is_wchar) {
         wc = (wchar_t *)XtMalloc((unsigned)(insert_length + 1) * sizeof(wchar_t));
         mbstowcs(wc, call_data->text->string.multi_byte, insert_length);
       }
       else {
         wc = (wchar_t *)XtMalloc((unsigned)(insert_length + 1) * sizeof(wchar_t));
-        wcscpy(wc, call_data->text->string.wide_char);
+        wcsncpy(wc, call_data->text->string.wide_char, insert_length);
       }
       wc[insert_length] = (wchar_t)'\0';
     }
@@ -7327,27 +7336,38 @@ static void PreeditDraw(XIC xic, XPointer client_data, XIMPreeditDrawCallbackStr
       XtFree((char *)over_wc);
     }
     if (tf->text.overstrike && recover_len > 0) {
-      wc = (wchar_t *)XtRealloc((char *)wc, wcslen(wc) + (recover_len + 1) * sizeof(wchar_t));
-      ptr = XtMalloc((tf->text.onthespot->over_len + 1) * sizeof(char));
-      wcstombs(ptr, (wchar_t *)tf->text.onthespot->over_str, tf->text.onthespot->over_len);
-      ptr[tf->text.onthespot->over_len] = '\0';
+      char *over_str_mb;
+      size_t mb_size, nbytes;
+      int n;
+      wc = (wchar_t *)XtRealloc((char *)wc, (wcslen(wc) + recover_len + 1) * sizeof(wchar_t));
+      /* over_str holds over_len wide characters; each can take up to
+       * MB_CUR_MAX bytes, so this always has room for the NUL. */
+      mb_size = tf->text.onthespot->over_len * MB_CUR_MAX + 1;
+      ptr = over_str_mb = XtMalloc(mb_size);
+      nbytes = wcstombs(ptr, (wchar_t *)tf->text.onthespot->over_str, mb_size);
+      if (nbytes == (size_t)-1 || nbytes >= mb_size)
+        nbytes = 0;
+      ptr[nbytes] = '\0';
       for (i = 0; i < tf->text.onthespot->over_maxlen; i++) {
-        ptr += mblen(ptr, 4);
+        if ((n = mblen(ptr, MB_CUR_MAX)) <= 0)
+          break;
+        ptr += n;
       }
       recover_wc = (wchar_t *)XtMalloc((unsigned)(recover_len + 1) * sizeof(wchar_t));
-      mbstowcs(recover_wc, ptr, recover_len);
-      i = wcslen(wc);
+      if (mbstowcs(recover_wc, ptr, recover_len) == (size_t)-1)
+        recover_wc[0] = (wchar_t)'\0';
+      recover_wc[recover_len] = (wchar_t)'\0';
       wcsncat(wc, recover_wc, recover_len);
-      wc[i + recover_len] = (wchar_t)'\0';
       XtFree((char *)recover_wc);
-      if (ptr)
-        XtFree(ptr);
+      XtFree(over_str_mb);
     }
     if (need_verify) {
       PreeditVerifyReplace(
           tf, startPos, endPos, (char *)wc, wcslen(wc), PreCursor(tf), &end_preedit);
       if (end_preedit) {
         _XmTextFieldDrawInsertionPoint(tf, True);
+        XtFree(mb);
+        XtFree((char *)wc);
         return;
       }
     }
@@ -7426,22 +7446,27 @@ static void TextFieldResetIC(Widget w)
     FVerifyCommitNeeded(tf) = False;
     str = XtMalloc((PreEnd(tf) - PreStart(tf) + 1) * sizeof(wchar_t));
     if (tf->text.max_char_size == 1) {
-      memcpy(&TextF_Value(tf)[PreStart(tf)], str, PreEnd(tf) - PreStart(tf));
+      memcpy(str, &TextF_Value(tf)[PreStart(tf)], PreEnd(tf) - PreStart(tf));
       str[PreEnd(tf) - PreStart(tf)] = '\0';
     }
     else {
       int num_bytes;
       wchar_t *wc_string;
       wc_string = (wchar_t *)XtMalloc((PreEnd(tf) - PreStart(tf) + 1) * sizeof(wchar_t));
-      memcpy((char *)&TextF_WcValue(tf)[PreStart(tf)],
-             (char *)wc_string,
+      memcpy((char *)wc_string,
+             (char *)&TextF_WcValue(tf)[PreStart(tf)],
              (PreEnd(tf) - PreStart(tf)) * sizeof(wchar_t));
       wc_string[PreEnd(tf) - PreStart(tf)] = (wchar_t)'\0';
-      num_bytes = wcstombs(str, wc_string, (PreEnd(tf) - PreStart(tf) + 1) * sizeof(wchar_t));
+      /* Leave room for the NUL written below. */
+      num_bytes = wcstombs(str, wc_string, (PreEnd(tf) - PreStart(tf) + 1) * sizeof(wchar_t) - 1);
+      if (num_bytes < 0)
+        num_bytes = 0;
       str[num_bytes] = '\0';
       XtFree((char *)wc_string);
     }
     XmImMbResetIC(w, &mb);
+    if (mb)
+      XFree(mb);
     mb = str;
   }
   else
@@ -7454,16 +7479,13 @@ static void TextFieldResetIC(Widget w)
     if (tf->text.verify_bell)
       XBell(XtDisplay((Widget)tf), 0);
   }
-  if ((insert_length = strlen(mb)) > TEXT_MAX_INSERT_SIZE) {
-    ResetUnder(tf);
-    return;
-  }
+  if ((insert_length = strlen(mb)) > TEXT_MAX_INSERT_SIZE)
+    goto done;
   if (insert_length > 0) {
     if (TextF_UseFontSet(tf)) {
       escapement = XmbTextExtents((XFontSet)TextF_Font(tf), mb, insert_length, &overall_ink, NULL);
       if (escapement == 0 && overall_ink.width == 0) {
-        ResetUnder(tf);
-        return;
+        goto done;
       }
 #if USE_XFT
     }
@@ -7472,15 +7494,13 @@ static void TextFieldResetIC(Widget w)
       XftTextExtentsUtf8(
           XtDisplay((Widget)tf), TextF_XftFont(tf), (FcChar8 *)mb, insert_length, &ext);
       if (!ext.xOff) {
-        ResetUnder(tf);
-        return;
+        goto done;
       }
 #endif
     }
     else {
       if (!XTextWidth(TextF_Font(tf), mb, insert_length)) {
-        ResetUnder(tf);
-        return;
+        goto done;
       }
     }
   }
@@ -7496,6 +7516,8 @@ static void TextFieldResetIC(Widget w)
     mb[insert_length] = '\0';
     wc_insert_string = (wchar_t *)XtMalloc((unsigned)(insert_length + 1) * sizeof(wchar_t));
     num_chars = mbstowcs(wc_insert_string, mb, insert_length + 1);
+    if (num_chars < 0)
+      num_chars = 0;
     replace_res = _XmTextFieldReplaceText(
         tf, NULL, cursorPos, nextPos, (char *)wc_insert_string, num_chars, True);
     XtFree((char *)wc_insert_string);
@@ -7503,8 +7525,11 @@ static void TextFieldResetIC(Widget w)
   if (replace_res)
     _XmTextFieldSetCursorPosition(tf, NULL, TextF_CursorPosition(tf), False, True);
   _XmTextFieldDrawInsertionPoint(tf, True);
-  if (str)
+done:
+  if (mb == str)
     XtFree(str);
+  else
+    XFree(mb);
   ResetUnder(tf);
 }
 

@@ -1860,42 +1860,36 @@ static char *GetRealKey(XmRowColumnWidget rc, char *str)
 {
   KeySym keysym;
   Modifiers mods;
-  char buf[1000];
-  char *tmp = buf;
+  char *buf = NULL;
+  size_t len = 0, size = 0, need;
   char *ks;
   int num_keys;
   XmKeyBinding keys;
   keysym = XStringToKeysym(str);
   if (keysym == NoSymbol)
     return (NULL);
-  *tmp = '\0';
+  /* The bindings come from the root window _MOTIF_BINDINGS property,
+   * which any client can set, so the result can be arbitrarily long. */
   num_keys = XmeVirtualToActualKeysyms(XtDisplay(rc), keysym, &keys);
   while (--num_keys >= 0)
     if ((ks = XKeysymToString(keys[num_keys].keysym)) != NULL) {
       mods = keys[num_keys].modifiers;
-      if (mods & ControlMask) {
-        tmp[0] = 'C';
-        tmp[1] = 't';
-        tmp[2] = 'r';
-        tmp[3] = 'l';
-        tmp[4] = ' ';
-        tmp[5] = '\0';
+      need = len + sizeof(", Ctrl Shift Alt <KeyUp>") + strlen(ks);
+      if (need > size) {
+        size = 2 * need;
+        buf = XtRealloc(buf, size);
       }
-      if (mods & ShiftMask)
-        strcat(tmp, "Shift ");
-      if (mods & Mod1Mask)
-        strcat(tmp, "Alt ");
-      strcat(tmp, "<KeyUp>");
-      strcat(tmp, ks);
-      if (num_keys > 0)
-        strcat(tmp, ", ");
-      tmp += strlen(tmp);
+      len += snprintf(buf + len,
+                      size - len,
+                      "%s%s%s%s<KeyUp>%s",
+                      len ? ", " : "",
+                      (mods & ControlMask) ? "Ctrl " : "",
+                      (mods & ShiftMask) ? "Shift " : "",
+                      (mods & Mod1Mask) ? "Alt " : "",
+                      ks);
     }
   XtFree((char *)keys);
-  if (tmp != buf)
-    return XtNewString(buf);
-  else
-    return NULL;
+  return buf;
 }
 
 static void MenuBarInitialize(XmRowColumnWidget bar)

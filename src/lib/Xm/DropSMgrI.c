@@ -200,6 +200,7 @@ Cardinal _XmDSIGetChildPosition(XmDSInfo parentInfo, XmDSInfo childInfo)
   num_children = GetDSNumChildren(parentInfo);
   if (GetDSParent(childInfo) != (XtPointer)parentInfo) {
     char buf[256];
+    /* Widget names can be arbitrarily long. */
     snprintf(buf,
              sizeof(buf),
              MESSAGE3,
@@ -213,6 +214,7 @@ Cardinal _XmDSIGetChildPosition(XmDSInfo parentInfo, XmDSInfo childInfo)
       break;
   if (i == num_children) {
     char buf[256];
+    /* Widget names can be arbitrarily long. */
     snprintf(buf,
              sizeof(buf),
              MESSAGE3,

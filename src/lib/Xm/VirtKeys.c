@@ -642,50 +642,47 @@ int XmeVirtualToActualKeysyms(Display *dpy, KeySym virtKeysym, XmKeyBinding *act
 Boolean _XmVirtKeysLoadFileBindings(char *fileName, String *binding)
 {
   FILE *fileP;
-  int buffersize;
-  int count;
-  int firsttime;
+  size_t buffersize;
+  size_t count;
+  size_t len;
   char line[256];
   Boolean skip;
-  if ((fileP = fopen(fileName, "r")) != NULL) {
-    skip = False;
-    count = 0;
-    buffersize = 1;
-    firsttime = 1;
-    while (fgets(line, sizeof(line), fileP) != NULL) {
-      /* handle '!' comments; they can extend across mutliple reads */
-      if (skip) {
-        if (line[strlen(line) - 1] == '\n')
-          skip = False;
-        continue;
-      }
-      if (line[0] == '!') {
-        if (line[strlen(line) - 1] == '\n')
-          continue;
-        else {
-          skip = True;
-          continue;
-        }
-      }
-      /* must be >=, because buffersize is always 1 bigger for '\0' */
-      if (count + strlen(line) >= buffersize) {
-        buffersize += BUFFERSIZE;
-        *binding = XtRealloc(*binding, buffersize);
-        /* always make sure that the end of *binding is null terminated */
-        if (firsttime) {
-          *binding[0] = '\0';
-          firsttime = 0;
-        }
-      }
-      count += strlen(line);
-      strcat(*binding, line);
+  if ((fileP = fopen(fileName, "r")) == NULL)
+    return False;
+  skip = False;
+  count = 0;
+  /* Always start from a NUL-terminated buffer, so that an empty file
+   * (or one holding only comments) yields "" rather than garbage. */
+  buffersize = BUFFERSIZE;
+  *binding = XtRealloc(*binding, buffersize);
+  (*binding)[0] = '\0';
+  while (fgets(line, sizeof(line), fileP) != NULL) {
+    /* A line starting with a NUL byte has length 0. */
+    if ((len = strlen(line)) == 0)
+      continue;
+    /* handle '!' comments; they can extend across mutliple reads */
+    if (skip) {
+      if (line[len - 1] == '\n')
+        skip = False;
+      continue;
     }
-    /* trim unused buffer space */
-    *binding = XtRealloc(*binding, count + 1);
-    fclose(fileP);
-    return True;
+    if (line[0] == '!') {
+      if (line[len - 1] != '\n')
+        skip = True;
+      continue;
+    }
+    /* must be >=, because buffersize is always 1 bigger for '\0' */
+    if (count + len >= buffersize) {
+      buffersize += BUFFERSIZE;
+      *binding = XtRealloc(*binding, buffersize);
+    }
+    memcpy(*binding + count, line, len + 1);
+    count += len;
   }
-  return False;
+  /* trim unused buffer space */
+  *binding = XtRealloc(*binding, count + 1);
+  fclose(fileP);
+  return True;
 }
 
 static void LoadVendorBindings(Display *display, char *path, FILE *fp, String *binding)
