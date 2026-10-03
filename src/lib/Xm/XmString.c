@@ -64,6 +64,7 @@ struct __Xmlocale {
   char *tag;
   int taglen;
   Boolean inited;
+  Boolean is_utf8; /* tag is "UTF-8" */
 };
 
 /* enums for which_seg for calculating widths */
@@ -376,6 +377,7 @@ static _XmStringEntry EntryCvtToUnopt(_XmStringEntry entry);
 static XmString StringTabCreate(void);
 static XmString StringEmptyCreate(void);
 static int _get_generate_parse_table(XmParseTable *gen_table);
+static Boolean CurrentCharsetIsUTF8(void);
 /********    End Static Function Declarations    ********/
 static struct __Xmlocale locale;
 static char **_tag_cache;
@@ -1975,7 +1977,7 @@ static void OptLineMetrics(XmRenderTable r,
         descent,
 #if XM_UTF8
         (_XmStrTextType(opt) == XmCHARSET_TEXT || _XmStrTextType(opt) == XmMULTIBYTE_TEXT) &&
-            ((_XmStrTagGet(opt) == XmFONTLIST_DEFAULT_TAG && _XmStringIsCurrentCharset("UTF-8")) ||
+            ((_XmStrTagGet(opt) == XmFONTLIST_DEFAULT_TAG && CurrentCharsetIsUTF8()) ||
              (_XmStrTagGet(opt) &&
               strcmp(_XmStringIndexGetTag(_XmStrTagIndex(opt)), "UTF-8") == 0))
 #else
@@ -2935,7 +2937,7 @@ static void SubStringPosition(Boolean one_byte,
 #if XM_UTF8
         Boolean utf8 = ((_XmEntryTextTypeGet(seg) == XmCHARSET_TEXT) &&
                         (((_XmEntryTag((_XmStringEntry)seg) == XmFONTLIST_DEFAULT_TAG) &&
-                          _XmStringIsCurrentCharset("UTF-8")) ||
+                          CurrentCharsetIsUTF8()) ||
                          (strcmp(seg_tag, "UTF-8") == 0)));
 #else
         Boolean utf8 = False;
@@ -3142,7 +3144,7 @@ extern void _XmStringDrawSegment(Display *d,
             (font_type == XmFONT_IS_FONTSET || font_type == XmFONT_IS_XFT ||
              (font_type == XmFONT_IS_FONT && _XmIsISO10646(d, _XmRendFont(rend)))) &&
             (((_XmEntryTag((_XmStringEntry)seg) == XmFONTLIST_DEFAULT_TAG &&
-               (_XmStringIsCurrentCharset("UTF-8"))) ||
+               (CurrentCharsetIsUTF8())) ||
               ((_XmEntryTagIndex(seg) != TAG_INDEX_UNSET &&
                 strcmp(_XmEntryTag((_XmStringEntry)seg), "UTF-8") == 0)))));
 #else
@@ -5422,8 +5424,8 @@ static Boolean SpecifiedSegmentExtents(_XmStringEntry entry,
 #if XM_UTF8
         _XmEntryType(entry) == XmCHARSET_TEXT &&
             (_XmEntryTag(entry) == XmFONTLIST_DEFAULT_TAG &&
-             (_XmStringIsCurrentCharset("UTF-8") || (_XmEntryTagIndex(entry) != TAG_INDEX_UNSET &&
-                                                     strcmp(_XmEntryTag(entry), "UTF-8") == 0)))
+             (CurrentCharsetIsUTF8() || (_XmEntryTagIndex(entry) != TAG_INDEX_UNSET &&
+                                         strcmp(_XmEntryTag(entry), "UTF-8") == 0)))
 #else
         False
 #endif
@@ -5542,6 +5544,7 @@ char *_XmStringGetCurrentCharset(void)
   strncpy(locale.tag, ptr, len);
   locale.tag[len] = '\0';
   locale.taglen = len;
+  locale.is_utf8 = (strcmp(locale.tag, "UTF-8") == 0);
   /* Register XmSTRING_DEFAULT_CHARSET for compound text conversion. */
   XmRegisterSegmentEncoding(XmSTRING_DEFAULT_CHARSET, XmFONTLIST_DEFAULT_TAG);
   locale.inited = TRUE;
@@ -5557,6 +5560,18 @@ out:
 Boolean _XmStringIsCurrentCharset(XmStringCharSet c)
 {
   return (strcmp(c, _XmStringGetCurrentCharset()) == 0);
+}
+
+/* _XmStringIsCurrentCharset("UTF-8"), without comparing strings. */
+static Boolean CurrentCharsetIsUTF8(void)
+{
+  Boolean is_utf8;
+  _XmProcessLock();
+  if (!locale.inited)
+    (void)_XmStringGetCurrentCharset();
+  is_utf8 = locale.is_utf8;
+  _XmProcessUnlock();
+  return is_utf8;
 }
 
 /*
