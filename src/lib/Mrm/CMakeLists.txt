@@ -35,12 +35,14 @@ set(MRM_SRCS
     MrmMessages.c
 )
 
-# Mrm headers.  The internal ones (IDB.h, Mrm.h, MrmMsgI.h, MrmosI.h,
-# MrmWidget.h) are not installed.
+# Mrm headers.  The internal ones (IDB.h, Mrm.h, MrmMsgI.h, MrmWidget.h)
+# are not installed.  MrmosI.h is, as in Motif 2.3: it declares the
+# exported _MrmOS functions that the UIL compiler uses.
 set(MRM_HEADERS
     MrmDecls.h
     MrmPublic.h
     MrmAppl.h
+    MrmosI.h
 )
 
 # Generate message catalog header file
