@@ -1260,7 +1260,11 @@ Boolean _XmReadDSFromStream(XmDropSiteManagerObject dsm,
   if ((region = _XmRegionCreateSize((long)dsHeader.dsRegionNumBoxes)) == NULL)
     return False;
   for (i = 0; i < dsHeader.dsRegionNumBoxes; i++) {
-    _XmReadDragBuffer(propBuf, BUFFER_DATA, (BYTE *)&box, sizeof(xmICCRegBoxRec));
+    /* Cannot fail after the check above, but never use a short read. */
+    if (!READ_DS_DATA(propBuf, &box)) {
+      _XmRegionDestroy(region);
+      return False;
+    }
     if (dsmInfo->byteOrder != _XmByteOrderChar) {
       swap2bytes(box.x1);
       swap2bytes(box.x2);
