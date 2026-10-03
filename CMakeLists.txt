@@ -113,14 +113,17 @@ else()
   set(MOTIF_LIB_TYPE STATIC)
 endif()
 
-# These were computed but never applied to the build; see the sanitizer
-# section below.
-motif_option(WITH_COMPILER_CODE_COVERAGE
-  "Build and link with code coverage instrumentation" OFF)
-mark_as_advanced(WITH_COMPILER_CODE_COVERAGE)
+# Sanitizers and coverage, see "Sanitizers and coverage" below
 motif_option(WITH_COMPILER_ASAN
-  "Build and link with the address sanitizer" OFF)
-mark_as_advanced(WITH_COMPILER_ASAN)
+  "Build with AddressSanitizer (includes LeakSanitizer where supported)" OFF)
+motif_option(WITH_UBSAN "Build with UndefinedBehaviorSanitizer" OFF)
+motif_option(WITH_TSAN "Build with ThreadSanitizer" OFF)
+motif_option(WITH_MSAN
+  "Build with MemorySanitizer (Clang only; all linked libraries must be instrumented too)" OFF)
+motif_option(WITH_COMPILER_CODE_COVERAGE
+  "Build with code coverage instrumentation (gcov for GCC, source-based for Clang)" OFF)
+mark_as_advanced(WITH_COMPILER_ASAN WITH_UBSAN WITH_TSAN WITH_MSAN
+  WITH_COMPILER_CODE_COVERAGE)
 
 option(WITH_COMPILER_CCACHE "Use ccache to improve rebuild times" OFF)
 mark_as_advanced(WITH_COMPILER_CCACHE)
@@ -409,6 +412,80 @@ target_compile_definitions(motif_build_flags INTERFACE
 target_compile_options(motif_build_flags INTERFACE ${MOTIF_C_WARNINGS})
 
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/include/Xm ${CMAKE_BINARY_DIR}/include/Mrm)
+
+# -----------------------------------------------------------------------------
+# Sanitizers and coverage
+#
+# These are global compile and link options rather than part of
+# motif_build_flags: every program, tests included, has to be built and
+# linked with the same instrumentation as the libraries it loads.
+
+set(MOTIF_SANITIZE_FLAGS)
+if(WITH_COMPILER_ASAN)
+  list(APPEND MOTIF_SANITIZE_FLAGS -fsanitize=address)
+endif()
+if(WITH_UBSAN)
+  # Unaligned accesses are deliberately left out: the byte stream, property
+  # and .uid readers do them everywhere, which would drown the other
+  # reports.  Errors are reported and execution continues; for a hard stop
+  # add -fno-sanitize-recover=undefined to CMAKE_C_FLAGS.
+  list(APPEND MOTIF_SANITIZE_FLAGS
+    -fsanitize=undefined
+    -fsanitize=float-divide-by-zero
+    -fsanitize=float-cast-overflow
+    -fno-sanitize=alignment
+  )
+endif()
+if(WITH_TSAN)
+  if(WITH_COMPILER_ASAN OR WITH_MSAN)
+    message(FATAL_ERROR "WITH_TSAN cannot be combined with WITH_COMPILER_ASAN or WITH_MSAN")
+  endif()
+  list(APPEND MOTIF_SANITIZE_FLAGS -fsanitize=thread)
+endif()
+if(WITH_MSAN)
+  if(NOT CMAKE_C_COMPILER_ID STREQUAL "Clang")
+    message(FATAL_ERROR "WITH_MSAN requires Clang")
+  endif()
+  if(WITH_COMPILER_ASAN)
+    message(FATAL_ERROR "WITH_MSAN cannot be combined with WITH_COMPILER_ASAN")
+  endif()
+  # Reports are false positives unless libX11, libXt and every other linked
+  # library are built with MemorySanitizer as well.
+  list(APPEND MOTIF_SANITIZE_FLAGS -fsanitize=memory -fsanitize-memory-track-origins)
+endif()
+
+if(MOTIF_SANITIZE_FLAGS)
+  if(NOT CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
+    message(FATAL_ERROR "Sanitizers are only supported with GCC and Clang")
+  endif()
+  string(REPLACE ";" " " CMAKE_REQUIRED_FLAGS "${MOTIF_SANITIZE_FLAGS}")
+  set(CMAKE_REQUIRED_LINK_OPTIONS ${MOTIF_SANITIZE_FLAGS})
+  string(MAKE_C_IDENTIFIER "MOTIF_SANITIZERS_WORK${CMAKE_REQUIRED_FLAGS}" _var)
+  check_c_source_compiles("int main(void) { return 0; }" ${_var})
+  unset(CMAKE_REQUIRED_FLAGS)
+  unset(CMAKE_REQUIRED_LINK_OPTIONS)
+  if(NOT ${_var})
+    message(FATAL_ERROR
+      "The C compiler cannot build and link with ${MOTIF_SANITIZE_FLAGS}")
+  endif()
+  add_compile_options(${MOTIF_SANITIZE_FLAGS} -fno-omit-frame-pointer)
+  add_link_options(${MOTIF_SANITIZE_FLAGS})
+endif()
+
+if(WITH_COMPILER_CODE_COVERAGE)
+  if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
+    set(_coverage_flags --coverage)
+  elseif(CMAKE_C_COMPILER_ID STREQUAL "Clang")
+    # Write the raw profiles with LLVM_PROFILE_FILE, then merge them with
+    # llvm-profdata and report with llvm-cov.
+    set(_coverage_flags -fprofile-instr-generate -fcoverage-mapping)
+  else()
+    message(FATAL_ERROR
+      "WITH_COMPILER_CODE_COVERAGE is not supported with ${CMAKE_C_COMPILER_ID}")
+  endif()
+  add_compile_options(${_coverage_flags})
+  add_link_options(${_coverage_flags})
+endif()
 
 # Optimization options. These are applied here rather than in the presets in
 # tools/cmake/config, because presets run before the compiler is detected.
