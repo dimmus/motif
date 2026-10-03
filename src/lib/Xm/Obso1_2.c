@@ -199,6 +199,8 @@ void _XmDrawShadow(Display *display,
     size = height / 2;
   if (size <= 0)
     return;
+  /* rects is shared by every call */
+  _XmProcessLock();
   if (rect_count == 0) {
     rects = (XRectangle *)_XmMallocArray(size, 4 * sizeof(XRectangle));
     rect_count = size;
@@ -233,6 +235,7 @@ void _XmDrawShadow(Display *display,
   }
   XFillRectangles(display, d, top_GC, &rects[0], size2);
   XFillRectangles(display, d, bottom_GC, &rects[size2], size2);
+  _XmProcessUnlock();
 }
 
 /************************************************************************
@@ -840,6 +843,8 @@ static void XmDrawEtchedShadow(Display *display,
   half_size = size / 2;
   size2 = size + size;
   size3 = size2 + size;
+  /* rects is shared by every call */
+  _XmProcessLock();
   if (rect_count == 0) {
     rects = (XRectangle *)_XmMallocArray(size, 4 * sizeof(XRectangle));
     rect_count = size;
@@ -860,6 +865,7 @@ static void XmDrawEtchedShadow(Display *display,
   get_rects(half_size, half_size, x, y, width, height, pos_top, pos_left, pos_bottom, pos_right);
   XFillRectangles(display, d, bottom_GC, &rects[size2], size2);
   XFillRectangles(display, d, top_GC, &rects[0], size2);
+  _XmProcessUnlock();
 }
 
 /*****************************************************************
