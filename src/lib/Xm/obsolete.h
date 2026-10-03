@@ -58,9 +58,9 @@ extern void XmCvtStringToUnitType(XrmValuePtr args,
                                   XrmValue *from_val,
                                   XrmValue *to_val);
 XM_ALTERNATIVE(Use XmStringCreateLocalized instead)
-extern XmString XmStringCreateSimple(char *text);
+extern XmString XmStringCreateSimple(const char *text);
 XM_ALTERNATIVE(Use XmStringLtoRCreate instead)
-extern XmString XmStringCreateLtoR(char *text, XmStringCharSet charset);
+extern XmString XmStringCreateLtoR(const char *text, XmStringCharSet charset);
 XM_ALTERNATIVE(Use XmStringComponentCreate and XmStringConcat instead)
 extern XmString XmStringSegmentCreate(char *text,
                                       XmStringCharSet charset,

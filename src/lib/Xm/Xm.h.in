@@ -1483,11 +1483,11 @@ extern void XmChangeColor(Widget widget, Pixel background);
 
 /********    Public Function Declarations for XmString.c    ********/
 
-extern XmString XmStringCreate(char *text, XmStringCharSet charset);
-extern XmString XmStringCreateLocalized(String text);
+extern XmString XmStringCreate(const char *text, XmStringCharSet charset);
+extern XmString XmStringCreateLocalized(const char *text);
 extern XmString XmStringDirectionCreate(XmStringDirection direction);
 extern XmString XmStringSeparatorCreate(void);
-extern XmString XmStringLtoRCreate(char *text, XmStringCharSet charset);
+extern XmString XmStringLtoRCreate(const char *text, XmStringCharSet charset);
 extern Boolean XmStringInitContext(XmStringContext *context, XmString string);
 extern void XmStringFreeContext(XmStringContext context);
 extern XmFontListEntry XmFontListEntryCreate(char *tag, XmFontType type, XtPointer font);

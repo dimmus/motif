@@ -47,9 +47,9 @@ static char rcsid[] = "$XConsortium: XmStringObso.c /main/6 1995/09/19 23:13:52 
      * Latin1.  This imposes the semantic of \n meaning separator.
      */
     XmString
-    XmStringLtoRCreate(char *text, XmStringTag tag)
+    XmStringLtoRCreate(const char *text, XmStringTag tag)
 {
-  char *start, *end;
+  const char *start, *end;
   Boolean done;
   XmString string;
   _XmProcessLock();
@@ -70,7 +70,7 @@ static char rcsid[] = "$XConsortium: XmStringObso.c /main/6 1995/09/19 23:13:52 
     /* Don't convert empty string unless it's an initial newline. */
     /* Done so StringHeight has clue to size of empty lines. */
     if ((start != end) || (start == text))
-      string = XmStringConcatAndFree(string, _XmStringNCreate(start, tag, end - start));
+      string = XmStringConcatAndFree(string, _XmStringNCreate((char *)start, tag, end - start));
     /* Make a separator if this isn't the last segment. */
     if (!done) {
       string = XmStringConcatAndFree(string, XmStringSeparatorCreate());
@@ -81,7 +81,7 @@ static char rcsid[] = "$XConsortium: XmStringObso.c /main/6 1995/09/19 23:13:52 
   return (string);
 }
 
-XmString XmStringCreateLtoR(char *text, XmStringTag tag)
+XmString XmStringCreateLtoR(const char *text, XmStringTag tag)
 {
   return (XmStringLtoRCreate(text, tag));
 }
@@ -104,7 +104,7 @@ XmString XmStringSegmentCreate(char *text,
 /*
  * Convenience routine to create an XmString from a NULL terminated string.
  */
-XmString XmStringCreateSimple(char *text)
+XmString XmStringCreateSimple(const char *text)
 {
   return (XmStringCreate(text, XmSTRING_DEFAULT_CHARSET));
 }
