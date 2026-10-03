@@ -2938,8 +2938,10 @@ static Boolean PrintableString(XmTextFieldWidget tf,
         buf_size -= ret_val;
         tmp_str++;
       } while ((ret_val > 0) && (buf_size >= MB_CUR_MAX) && (count < n));
-      if (ret_val == -1) /* bad character */
+      if (ret_val == -1) { /* bad character */
+        XmStackFree(cache_ptr, cache);
         return (False);
+      }
       is_printable = XTextWidth(TextF_Font(tf), cache_ptr, tmp - cache_ptr);
       XmStackFree(cache_ptr, cache);
       return (is_printable);
