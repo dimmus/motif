@@ -74,6 +74,8 @@ extern void            ParseKeyStr (WmScreenData *pSD, unsigned char *keyStr);
 extern Boolean ParseKeyEvent (unsigned char **linePP, unsigned int *eventType,
 		       KeyCode *keyCode,  unsigned int *state);
 extern MenuItem      * ParseMwmMenuStr (WmScreenData *pSD, unsigned char *menuStr);
+extern MenuItem      * ParseClientMwmMenuStr (WmScreenData *pSD,
+					       unsigned char *menuStr);
 #ifdef WSM
 extern void ParseSessionClientState (WmScreenData *pSD, int count,
 			      unsigned char *string);

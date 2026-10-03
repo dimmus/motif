@@ -140,6 +140,9 @@ static int   linec = 0;       /* line counter for parser */
 static unsigned char *parseP = NULL;   /* pointer to parse string */
 #endif /* WSM */
 
+/* True while parsing a menu supplied by a client (_MOTIF_WM_MENU). */
+static Boolean parseClientMenu = False;
+
 
 typedef struct {
    char         *name;
@@ -224,6 +227,8 @@ FILE *FopenConfigFile (void);
 void SaveMenuAccelerators (WmScreenData *pSD, MenuSpec *newMenuSpec);
 static void ParseMenuSet (WmScreenData *pSD, unsigned char *lineP);
 MenuItem *ParseMwmMenuStr (WmScreenData *pSD, unsigned char *menuStr);
+MenuItem *ParseClientMwmMenuStr (WmScreenData *pSD, unsigned char *menuStr);
+static Boolean IsClientMenuFunction (WmFunction wmFunction);
 static MenuItem *ParseMenuItems (WmScreenData *pSD
 #if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
 				 , MenuSpec *menuSpec
@@ -2711,6 +2716,69 @@ MenuItem *ParseMwmMenuStr (WmScreenData *pSD, unsigned char *menuStr)
 
 /*************************************<->*************************************
  *
+ *  MenuItem *
+ *  ParseClientMwmMenuStr (pSD, menuStr)
+ *
+ *
+ *  Description:
+ *  -----------
+ *  Like ParseMwmMenuStr, but for a menu string supplied by a client in
+ *  its _MOTIF_WM_MENU property.  Clients are not trusted by the window
+ *  manager (they may even run on another host), so only items that send
+ *  a message back to the client (f.send_msg), titles, separators and
+ *  inert entries (f.nop) are accepted.  Any other item, including client
+ *  command entries, is dropped with a warning.
+ *
+ *
+ *  Inputs:
+ *  ------
+ *  pSD = pointer to screen data
+ *  menuStr = menu string from the client
+ *
+ *
+ *  Outputs:
+ *  -------
+ *  Return = list of MenuItem structures or NULL
+ *
+ *************************************<->***********************************/
+
+MenuItem *ParseClientMwmMenuStr (WmScreenData *pSD, unsigned char *menuStr)
+{
+    MenuItem *menuItems;
+
+    parseClientMenu = True;
+    menuItems = ParseMwmMenuStr (pSD, menuStr);
+    parseClientMenu = False;
+
+    return (menuItems);
+
+} /* END OF FUNCTION ParseClientMwmMenuStr */
+
+
+/*************************************<->*************************************
+ *
+ *  IsClientMenuFunction (wmFunction)
+ *
+ *
+ *  Description:
+ *  -----------
+ *  Returns True if wmFunction may be used in a menu item that comes from
+ *  a client's _MOTIF_WM_MENU property.
+ *
+ *************************************<->***********************************/
+
+static Boolean IsClientMenuFunction (WmFunction wmFunction)
+{
+    return ((wmFunction == F_Send_Msg) ||
+	    (wmFunction == F_Separator) ||
+	    (wmFunction == F_Title) ||
+	    (wmFunction == F_Nop));
+
+} /* END OF FUNCTION IsClientMenuFunction */
+
+
+/*************************************<->*************************************
+ *
  *  static MenuItem *
  *  ParseMenuItems (pSD, menuSpec)
  *
@@ -2812,6 +2880,13 @@ static MenuItem *ParseMenuItems (WmScreenData *pSD
 
 	if (IsClientCommand((String) string))
 	{
+	    if (parseClientMenu)
+	    {
+		/* not allowed in a client-supplied menu */
+		PWarning (((char *)GETMESSAGE(60, 43, "Menu item function not allowed in a client menu")));
+		XtFree ((char *)menuItem);
+		continue;
+	    }
 	    if (!ParseClientCommand(&lineP, menuSpec, menuItem, string,
 				    &use_separators))
 	    {
@@ -2871,6 +2946,13 @@ static MenuItem *ParseMenuItems (WmScreenData *pSD
 	else
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
 	  ix = ParseWmFunction (&lineP, CRS_MENU, &menuItem->wmFunction);
+
+	if (parseClientMenu && !IsClientMenuFunction (menuItem->wmFunction))
+	{
+	    PWarning (((char *)GETMESSAGE(60, 43, "Menu item function not allowed in a client menu")));
+	    FreeMenuItem (menuItem);
+	    continue;
+	}
 
 	/*
 	 * Determine context sensitivity and applicability mask.
