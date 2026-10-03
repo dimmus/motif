@@ -338,6 +338,80 @@ char *_XmReallocArray(char *ptr, size_t num, size_t size)
   return XtRealloc(ptr, (Cardinal)(num * size));
 }
 
+/************************************************************************
+ *
+ *  _XmGetWindowPropertyChecked
+ *	Read the first long_length 32-bit units of a window property and
+ *	check what came back.
+ *
+ *	Any client can write a property on any window, so its type,
+ *	format and length must be checked before the data is used.  This
+ *	returns True only when XGetWindowProperty succeeded, the property
+ *	exists, its type is req_type (any type for AnyPropertyType), its
+ *	format is format (8, 16 or 32 for 0) and it holds at least
+ *	min_items items.  The data is then in *prop_return, to be freed
+ *	with XFree.  Otherwise anything read is freed, *prop_return is
+ *	NULL, *nitems_return is 0 and the other results are None or 0;
+ *	unlike XGetWindowProperty, none of them is left unset when the
+ *	request fails.  actual_type_return, actual_format_return and
+ *	bytes_after_return may be NULL.
+ *
+ *	Remember that Xlib returns format 32 data as an array of long.
+ *
+ ************************************************************************/
+Boolean _XmGetWindowPropertyChecked(Display *display,
+                                    Window w,
+                                    Atom property,
+                                    long long_length,
+                                    Atom req_type,
+                                    int format,
+                                    unsigned long min_items,
+                                    Atom *actual_type_return,
+                                    int *actual_format_return,
+                                    unsigned long *nitems_return,
+                                    unsigned long *bytes_after_return,
+                                    unsigned char **prop_return)
+{
+  Atom type = None;
+  int actual_format = 0;
+  unsigned long nitems = 0, bytes_after = 0;
+  unsigned char *data = NULL;
+  Boolean ok;
+  ok = XGetWindowProperty(display,
+                          w,
+                          property,
+                          0L,
+                          long_length,
+                          False,
+                          req_type,
+                          &type,
+                          &actual_format,
+                          &nitems,
+                          &bytes_after,
+                          &data) == Success &&
+       data != NULL && type != None && (req_type == AnyPropertyType || type == req_type) &&
+       (format == 0 ? (actual_format == 8 || actual_format == 16 || actual_format == 32) :
+                      actual_format == format) &&
+       nitems >= min_items;
+  if (!ok) {
+    if (data != NULL)
+      XFree(data);
+    data = NULL;
+    type = None;
+    actual_format = 0;
+    nitems = bytes_after = 0;
+  }
+  if (actual_type_return != NULL)
+    *actual_type_return = type;
+  if (actual_format_return != NULL)
+    *actual_format_return = actual_format;
+  if (bytes_after_return != NULL)
+    *bytes_after_return = bytes_after;
+  *nitems_return = nitems;
+  *prop_return = data;
+  return ok;
+}
+
 /*
  * The atoms _XmIsISO10646 compares a font's CHARSET_REGISTRY property
  * with, interned once per display.  Comparing atoms is the same as

@@ -168,6 +168,18 @@ extern size_t _XmUtf8ToUcs2Buf(char *draw_text, size_t seg_len, XChar2b *buf);
 extern Pixel _XmAssignInsensitiveColor(Widget w);
 extern char *_XmMallocArray(size_t num, size_t size);
 extern char *_XmReallocArray(char *ptr, size_t num, size_t size);
+extern Boolean _XmGetWindowPropertyChecked(Display *display,
+                                           Window w,
+                                           Atom property,
+                                           long long_length,
+                                           Atom req_type,
+                                           int format,
+                                           unsigned long min_items,
+                                           Atom *actual_type_return,
+                                           int *actual_format_return,
+                                           unsigned long *nitems_return,
+                                           unsigned long *bytes_after_return,
+                                           unsigned char **prop_return);
 /********    End Private Function Declarations    ********/
 /********    Conditionally defined macros for thread_safe Motif ******/
 #  if defined(XTHREADS) && defined(XUSE_MTSAFE_API)
