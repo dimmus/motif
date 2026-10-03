@@ -845,8 +845,13 @@ void ProcessWmColormapWindows (ClientData *pCD)
 	 * WM_COLORMAP_WINDOWS exists and is a valid type.
 	 */
 
-        if (!(pWindows = (Window *)XtMalloc ((nitems * sizeof (Window)) + 1)) ||
-            !(pColormaps = (Colormap *)XtMalloc ((nitems*sizeof(Colormap)) + 1)))
+	/*
+	 * Allocate one extra element: the top-level client window is put at
+	 * the head of the list if the client did not include it.
+	 */
+
+        if (!(pWindows = (Window *)XtMalloc ((nitems + 1) * sizeof (Window))) ||
+            !(pColormaps = (Colormap *)XtMalloc ((nitems + 1) * sizeof (Colormap))))
         {
 	    /* unable to allocate space */
 	    Warning (((char *)GETMESSAGE(54, 3, "Insufficient memory for window management data")));
@@ -856,8 +861,6 @@ void ProcessWmColormapWindows (ClientData *pCD)
 	    }
         }
 #ifndef OLD_COLORMAP /* colormap */
-	/* Is the above OSF code a bug -- allocates one extra byte, rather */
-	/* than one extra element, for the top window if needed? */
 	else if ( ! (pCmapFlags = (int *)XtCalloc(nitems+1,sizeof(int)))) {
 			/* unable to allocate space */
 			Warning (((char *)GETMESSAGE(54, 4, "Insufficient memory for window manager flags")));
