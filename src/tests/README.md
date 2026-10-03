@@ -14,11 +14,11 @@ named ones.  The suites open the fixtures in `png/`, `jpeg/` and `svg/` by
 relative path, so CTest runs them from a copy of those directories in the
 build tree (`<build>/src/tests/fixtures`).
 
-Suites labelled `X11` (`FontList`, `FontListEntry`) need an X server.  When
-`xvfb-run` is found at configure time, CTest starts each of them under its
-own Xvfb; configure with `-DXVFB_RUN_EXECUTABLE=OFF` to use `$DISPLAY`
-instead.  Without `DISPLAY` these suites exit with status 77 and CTest
-reports them as skipped.
+Suites labelled `X11` (`FontList`, `FontListEntry`, `Layout`) need an X
+server.  When `xvfb-run` is found at configure time, CTest starts each of
+them under its own Xvfb; configure with `-DXVFB_RUN_EXECUTABLE=OFF` to use
+`$DISPLAY` instead.  Without `DISPLAY` these suites exit with status 77 and
+CTest reports them as skipped.
 
 Test cases tagged `xfail` document known library bugs.  They are left out
 of normal runs and checked by `Xm.<suite>.xfail` (`motif_tests --xfail
