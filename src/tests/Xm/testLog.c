@@ -5,7 +5,9 @@
 #include <string.h>
 #include <time.h>
 #include <check.h>
+#ifdef HAVE_CONFIG_H
 #include "config.h"
+#endif
 #include "Log.h"
 #include "suites.h"
 
