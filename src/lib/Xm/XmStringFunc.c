@@ -349,81 +349,138 @@ static void new_line(_XmString string)
   _XmStrEntryCount(string)++;
 }
 
+/*
+ * MakeStr() walks a context over the string with XmeStringGetComponent()
+ * and so has to use the same convention for where the context is:
+ *   (line, seg, PUSH_STATE)  segment 'seg' has not been started;
+ *   (line, seg, SEP_STATE)   segment 'seg' has been fully consumed, what
+ *                            follows is segment seg+1 or, after the last
+ *                            segment of a line, a separator.
+ * On an array line with segments, 'seg' must be less than the segment count.
+ * An empty line (an array line with no segments) only holds a separator.
+ * A string without implicit lines is one line whose segments are the
+ * entries of the string.
+ */
+
+/* Number of segments in the context's current line. */
+static int CurrLineSegCount(XmStringContext c)
+{
+  _XmString str = _XmStrContString(c);
+  if (!_XmStrImplicitLine(str))
+    return (_XmStrEntryCount(str));
+  return (_XmEntrySegmentCountGet(_XmStrEntry(str)[_XmStrContCurrLine(c)]));
+}
+
+/* Segment 'seg' of the context's current line. */
+static _XmStringEntry CurrLineSeg(XmStringContext c, int seg)
+{
+  _XmString str = _XmStrContString(c);
+  _XmStringEntry line;
+  if (!_XmStrImplicitLine(str))
+    return (_XmStrEntry(str)[seg]);
+  line = _XmStrEntry(str)[_XmStrContCurrLine(c)];
+  if (_XmEntryMultiple(line))
+    return ((_XmStringEntry)_XmEntrySegment(line)[seg]);
+  return (line);
+}
+
+/*
+ * Copy the whole segment that follows a context at a segment boundary
+ * (see above), or the separator if the current line is finished, and
+ * advance the context past it.
+ */
 static XmString MakeStrFromSeg(XmStringContext start)
 {
-  _XmStringEntry *line;
-  _XmStringEntry *segs, seg;
+  _XmStringEntry seg;
   _XmString str;
+  int seg_index;
   if (_XmStrContOpt(start)) {
     _XmStrContError(start) = TRUE;
     return (XmStringCopy(_XmStrContString(start)));
   }
+  assert((_XmStrContState(start) == PUSH_STATE) || (_XmStrContState(start) == SEP_STATE));
+  seg_index = _XmStrContCurrSeg(start);
+  if (_XmStrContState(start) == SEP_STATE)
+    seg_index++;
+  /* Create XmString structure */
+  _XmStrCreate(str, XmSTRING_MULTIPLE_ENTRY, 0);
+  if (seg_index < CurrLineSegCount(start)) {
+    seg = CurrLineSeg(start, seg_index);
+    _XmStringSegmentNew(str, 0, seg, True);
+    _XmStrContCurrSeg(start) = seg_index;
+    _XmStrContState(start) = SEP_STATE;
+    _XmStrContDir(start) = _XmEntryDirectionGet(seg);
+    _XmStrContTag(start) = _XmEntryTag(seg);
+    _XmStrContTagType(start) = (XmTextType)_XmEntryTextTypeGet(seg);
+  }
   else {
-    /* get segment */
-    line = _XmStrEntry(_XmStrContString(start));
-    /* Create XmString structure */
-    _XmStrCreate(str, XmSTRING_MULTIPLE_ENTRY, 0);
-    if (_XmEntryMultiple(line[_XmStrContCurrLine(start)])) {
-      segs = (_XmStringEntry *)_XmEntrySegment(line[_XmStrContCurrLine(start)]);
-      new_line(str);
-      if (_XmStrContCurrSeg(start) < _XmEntrySegmentCount(line)) {
-        seg = segs[_XmStrContCurrSeg(start)];
-        _XmStringSegmentNew(str, 0, seg, True);
-        _XmStrContCurrSeg(start)++;
-        _XmStrContDir(start) = _XmEntryDirectionGet(seg);
-        _XmStrContTag(start) = _XmEntryTag(seg);
-        _XmStrContTagType(start) = (XmTextType)_XmEntryTextTypeGet(seg);
-      }
-      else {
-        new_line(str);
-        _XmStrContCurrSeg(start) = 0;
-        _XmStrContCurrLine(start)++;
-      }
-    }
-    else {
-      seg = line[_XmStrContCurrLine(start)];
-      _XmStringSegmentNew(str, 0, seg, True);
-      _XmStrContCurrSeg(start) = 0;
-      _XmStrContCurrLine(start)++;
-      _XmStrContDir(start) = _XmEntryDirectionGet(seg);
-      _XmStrContTag(start) = _XmEntryTag(seg);
-      _XmStrContTagType(start) = (XmTextType)_XmEntryTextTypeGet(seg);
-    }
+    /* End of line: two empty lines make a separator. */
+    new_line(str);
+    new_line(str);
+    _XmStrContCurrSeg(start) = 0;
+    _XmStrContCurrLine(start)++;
     _XmStrContState(start) = PUSH_STATE;
   }
   return (str);
 }
 
-static Boolean LastSeg(XmStringContext start)
+/*
+ * Return TRUE if the segment or separator that MakeStrFromSeg() would copy
+ * next from start lies entirely before the component that took end to its
+ * current position.
+ */
+static Boolean SegBeforeEnd(XmStringContext start, XmStringContext end)
 {
-  _XmStringEntry *line;
+  int seg, line, end_seg, end_line;
+  Boolean is_sep, end_is_sep;
   if (_XmStrContOpt(start)) {
-    return (TRUE);
+    return (FALSE);
+  }
+  /* What MakeStrFromSeg() would copy: a segment or a separator. */
+  line = _XmStrContCurrLine(start);
+  seg = _XmStrContCurrSeg(start);
+  if (_XmStrContState(start) == SEP_STATE)
+    seg++;
+  is_sep = (seg >= CurrLineSegCount(start));
+  /* Where the last component taken by end was. */
+  if (_XmStrContState(end) == PUSH_STATE) {
+    /* Only a separator leaves a context at the start of a segment. */
+    end_line = _XmStrContCurrLine(end) - 1;
+    end_seg = 0;
+    end_is_sep = TRUE;
   }
   else {
-    line = _XmStrEntry(_XmStrContString(start));
-    if (_XmEntryMultiple(line[_XmStrContCurrLine(start)]))
-      return (_XmStrContCurrSeg(start) == _XmEntrySegmentCount(line));
-    else
-      return (TRUE);
+    end_line = _XmStrContCurrLine(end);
+    end_seg = _XmStrContCurrSeg(end);
+    end_is_sep = FALSE;
   }
+  if (line != end_line)
+    return (line < end_line);
+  if (is_sep)
+    return (FALSE);
+  return (end_is_sep || (seg < end_seg));
 }
 
 static Boolean ContextsMatch(XmStringContext a, XmStringContext b)
 {
-  if ((_XmStrContCurrLine(a) == _XmStrContCurrLine(b)) &&
-      (_XmStrContCurrSeg(a) == _XmStrContCurrSeg(b)) && (_XmStrContState(a) == _XmStrContState(b)))
-    if (((_XmStrContState(a) == BEGIN_REND_STATE) || (_XmStrContState(a) == END_REND_STATE)))
-      if (_XmStrContRendIndex(a) == _XmStrContRendIndex(b))
-        return (TRUE);
-      else
-        return (FALSE);
-    else
-      return (TRUE);
-  else
+  if ((_XmStrContCurrLine(a) != _XmStrContCurrLine(b)) ||
+      (_XmStrContCurrSeg(a) != _XmStrContCurrSeg(b)) || (_XmStrContState(a) != _XmStrContState(b)))
     return (FALSE);
+  switch (_XmStrContState(a)) {
+    case BEGIN_REND_STATE:
+    case END_REND_STATE:
+      return (_XmStrContRendIndex(a) == _XmStrContRendIndex(b));
+    case TAB_STATE:
+      return (_XmStrContTabCount(a) == _XmStrContTabCount(b));
+    default:
+      return (TRUE);
+  }
 }
 
+/*
+ * Return the part of the string between start and end, without the
+ * component that took end to its position, and leave start at end.
+ */
 static XmString MakeStr(XmStringContext start, XmStringContext end)
 {
   /* This is quick and dirty, need to be smarter about it before Beta. */
@@ -433,23 +490,19 @@ static XmString MakeStr(XmStringContext start, XmStringContext end)
   XmString str;
   /* Next component over start until at segment break */
   str = NULL;
-  while (_XmStrContState(start) != PUSH_STATE) {
+  while ((_XmStrContState(start) != PUSH_STATE) && (_XmStrContState(start) != SEP_STATE)) {
     type = XmeStringGetComponent(start, TRUE, FALSE, &len, &val);
-    if (ContextsMatch(start, end))
+    if ((type == XmSTRING_COMPONENT_END) || ContextsMatch(start, end))
       return (str);
     str = XmStringConcatAndFree(str, XmStringComponentCreate(type, len, val));
   }
-  /* Next segment over start incrementing until one segment before context */
-  while ((_XmStrContCurrLine(start) < (_XmStrContCurrLine(end) - 1)) ||
-         ((_XmStrContCurrLine(start) == _XmStrContCurrLine(end)) &&
-          (_XmStrContCurrSeg(start) < _XmStrContCurrSeg(end))) ||
-         !LastSeg(start))
-  {
+  /* Next segment over start until the segment holding end's component */
+  while (SegBeforeEnd(start, end)) {
     str = XmStringConcatAndFree(str, MakeStrFromSeg(start));
   }
   /* Next component over start until it matches context */
   type = XmeStringGetComponent(start, TRUE, FALSE, &len, &val);
-  while (!ContextsMatch(start, end)) {
+  while ((type != XmSTRING_COMPONENT_END) && !ContextsMatch(start, end)) {
     str = XmStringConcatAndFree(str, XmStringComponentCreate(type, len, val));
     type = XmeStringGetComponent(start, TRUE, FALSE, &len, &val);
   }
@@ -494,7 +547,8 @@ Cardinal XmStringToXmStringTable(XmString string, XmString break_component, XmSt
   while ((type = XmeStringGetComponent(&stack_context, TRUE, FALSE, &len, &val)) !=
          XmSTRING_COMPONENT_END)
   {
-    if ((type == b_type) && (len == b_len) && (memcmp(val, b_val, len) == 0))
+    if ((type == b_type) && (len == b_len) &&
+        ((len == 0) || (memcmp(val, b_val, len) == 0)))
       count++;
   }
   /* Allocate table and insert new strings */
@@ -506,7 +560,8 @@ Cardinal XmStringToXmStringTable(XmString string, XmString break_component, XmSt
     while ((type = XmeStringGetComponent(&stack_context, TRUE, FALSE, &len, &val)) !=
            XmSTRING_COMPONENT_END)
     {
-      if ((type == b_type) && (len == b_len) && (memcmp(val, b_val, len) == 0)) {
+      if ((type == b_type) && (len == b_len) &&
+          ((len == 0) || (memcmp(val, b_val, len) == 0))) {
         /* make XmString from start to end */
         (*table)[i] = MakeStr(&stack_start, &stack_context);
         i++;
