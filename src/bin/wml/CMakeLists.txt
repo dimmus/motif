@@ -1,37 +1,20 @@
 # CMakeLists.txt for tools/wml
 # Widget MetaLanguage (WML) facility for generating UIL compiler language description
 
-cmake_minimum_required(VERSION 3.16)
-
-# Find required packages
-find_package(PkgConfig REQUIRED)
-find_package(BISON REQUIRED)
-find_package(FLEX REQUIRED)
-
-# Use global YACC/LEX detection from main CMakeLists.txt
-set(BISON_EXECUTABLE ${MOTIF_BISON_EXECUTABLE})
-set(FLEX_EXECUTABLE ${MOTIF_FLEX_EXECUTABLE})
-set(FLEX_LIBRARY ${MOTIF_FLEX_LIBRARY})
-set(USING_YACC ${MOTIF_USING_YACC})
-set(USING_BYACC ${MOTIF_USING_BYACC})
-set(USING_LEX ${MOTIF_USING_LEX})
+# The parser and scanner generators are found by the top-level
+# motif_find_parser_generators().
+set(BISON_EXECUTABLE ${MOTIF_YACC_EXECUTABLE})
+set(FLEX_EXECUTABLE ${MOTIF_LEX_EXECUTABLE})
 
 # Set up bison/flex variables for compatibility
 set(BISON_TARGET wmlparse)
 set(FLEX_TARGET wmllex)
 
-# Find X11 and Motif libraries
-pkg_check_modules(X11 REQUIRED x11)
-pkg_check_modules(XT REQUIRED xt)
-pkg_check_modules(XMU REQUIRED xmu)
-
 # Include directories
 include_directories(
     ${CMAKE_SOURCE_DIR}/src/lib
     ${CMAKE_SOURCE_DIR}/include
-    ${X11_INCLUDE_DIRS}
-    ${XT_INCLUDE_DIRS}
-    ${XMU_INCLUDE_DIRS}
+    ${X_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
@@ -94,57 +77,20 @@ add_custom_command(
     COMMENT "Adding feature test macros to wmluiltok.c"
 )
 
-# Generate wmlparse.c and wmlparse.h from wmlparse.y using detected parser
-if(USING_YACC OR USING_BYACC)
-    # Use yacc/byacc - they generate y.tab.c and y.tab.h
-    add_custom_command(
-        OUTPUT wmlparse.c wmlparse.h
-        COMMAND ${BISON_EXECUTABLE} -d -o wmlparse.c ${CMAKE_CURRENT_SOURCE_DIR}/wmlparse.y
-        DEPENDS wmlparse.y
-        COMMENT "Generating wmlparse.c and wmlparse.h from wmlparse.y using ${BISON_EXECUTABLE}"
-    )
-    set(BISON_wmlparse_OUTPUTS wmlparse.c wmlparse.h)
-else()
-    # Use bison - generate in binary directory
-    add_custom_command(
-        OUTPUT wmlparse.c wmlparse.h
-        COMMAND ${BISON_EXECUTABLE} -d -o ${CMAKE_CURRENT_BINARY_DIR}/wmlparse.c ${CMAKE_CURRENT_SOURCE_DIR}/wmlparse.y
-        DEPENDS wmlparse.y wmllex.c
-        COMMENT "Generating wmlparse.c and wmlparse.h from wmlparse.y using bison"
-    )
-    
-    # Bison already includes lexer code, so no need to combine files
-    set(BISON_wmlparse_OUTPUTS ${CMAKE_CURRENT_BINARY_DIR}/wmlparse.c ${CMAKE_CURRENT_BINARY_DIR}/wmlparse.h)
-endif()
+# Generate wmlparse.c and wmlparse.h from wmlparse.y.  wmlparse.y includes
+# the generated scanner wmllex.c.
+add_custom_command(
+    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/wmlparse.c ${CMAKE_CURRENT_BINARY_DIR}/wmlparse.h
+    COMMAND ${BISON_EXECUTABLE} -d -o ${CMAKE_CURRENT_BINARY_DIR}/wmlparse.c ${CMAKE_CURRENT_SOURCE_DIR}/wmlparse.y
+    DEPENDS wmlparse.y ${CMAKE_CURRENT_BINARY_DIR}/wmllex.c
+    COMMENT "Generating wmlparse.c and wmlparse.h from wmlparse.y"
+)
 
 # Create a target for the parser generation
 add_custom_target(wmlparse_target
-    DEPENDS ${BISON_wmlparse_OUTPUTS}
+    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/wmlparse.c ${CMAKE_CURRENT_BINARY_DIR}/wmlparse.h
     COMMENT "Parser generation target"
 )
-
-# Create wmlparse.h in source directory (for compatibility)
-if(USING_YACC OR USING_BYACC)
-    # For yacc/byacc, wmlparse.h is already created in the source directory
-    add_custom_target(wmlparse_h_target
-        DEPENDS wmlparse.h
-        COMMENT "wmlparse.h target"
-    )
-    set(WMLPARSE_H_TARGET wmlparse_h_target)
-else()
-    # For bison, copy from binary directory
-    add_custom_command(
-        OUTPUT wmlparse.h
-        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/wmlparse.h wmlparse.h
-        DEPENDS wmlparse_target
-        COMMENT "Creating wmlparse.h in source directory"
-    )
-    add_custom_target(wmlparse_h_target
-        DEPENDS wmlparse.h
-        COMMENT "wmlparse.h target"
-    )
-    set(WMLPARSE_H_TARGET wmlparse_h_target)
-endif()
 
 # Create a target for the symlinks (now handled by parser generation)
 add_custom_target(uil_lexpars_symlinks
@@ -166,13 +112,8 @@ add_library(libwml STATIC
 # Add include directory for generated headers
 target_include_directories(libwml PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
 
-# Add the generated parser files to the library
-if(USING_YACC OR USING_BYACC)
-    target_sources(libwml PRIVATE wmlparse.c)
-else()
-    # For bison, use the parser file directly (it already includes lexer code)
-    target_sources(libwml PRIVATE wmlparse.c)
-endif()
+# Add the generated parser to the library (it includes the scanner)
+target_sources(libwml PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/wmlparse.c)
 
 # Set properties for the library
 set_target_properties(libwml PROPERTIES
@@ -185,10 +126,8 @@ set_target_properties(libwml PROPERTIES
 # Build wmluiltok executable
 add_executable(wmluiltok wmluiltok_processed.c)
 
-# Link with flex library if available (equivalent to LEXLIB from configure.ac)
-if(FLEX_LIBRARY)
-    target_link_libraries(wmluiltok ${FLEX_LIBRARY})
-endif()
+# wmluiltok.l has no main(); it comes from the lex library.
+target_link_libraries(wmluiltok ${MOTIF_LEX_LIBRARY})
 
 # Build wml executable
 add_executable(wml wml.c)
@@ -196,11 +135,9 @@ target_link_libraries(wml libwml)
 
 # Build wmldbcreate executable
 add_executable(wmldbcreate wmldbcreate.c)
-target_link_libraries(wmldbcreate 
-    ${X11_LIBRARIES}
-    ${XT_LIBRARIES}
-    ${XMU_LIBRARIES}
+target_link_libraries(wmldbcreate
     Xm
+    ${X_LIBRARIES}
 )
 
 # Ensure UIL parser files and Xm strings are generated before building wmldbcreate
@@ -248,9 +185,9 @@ add_custom_target(wml_all
 )
 
 # Set up dependencies
-add_dependencies(wml wmlparse_target ${WMLPARSE_H_TARGET})
+add_dependencies(wml wmlparse_target)
 add_dependencies(wmldbcreate wml_generated_files)
-add_dependencies(libwml wmlparse_target ${WMLPARSE_H_TARGET})
+add_dependencies(libwml wmlparse_target)
 
 # Install headers
 install(FILES ${CMAKE_SOURCE_DIR}/src/lib/Uil/UilDBDef.h

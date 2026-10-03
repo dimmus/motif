@@ -119,7 +119,6 @@ Documentation Targets
 Information
 
    * help:              This help message.
-   * help_features:     Show a list of optional features when building.
 
 endef
 # HELP_TEXT (end)
@@ -550,8 +549,6 @@ doc_doxy: .FORCE
 doc_man: .FORCE
 	@$(PYTHON) doc/manpage/motif.1.py --motif="$(MOTIF_BIN)" --output=motif.1 --verbose
 
-help_features: .FORCE
-	@$(PYTHON) "$(MOTIF_DIR)/tools/cmake/cmake_print_build_options.py" $(MOTIF_DIR)"/CMakeLists.txt"
 
 clean: .FORCE
 	@echo Cleaning build directory...
