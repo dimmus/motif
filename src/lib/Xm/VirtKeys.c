@@ -313,33 +313,24 @@ static void FillBindingsFromDB(Display *dpy,
 static Boolean GetBindingsProperty(Display *display, String property, String *binding)
 {
   char *prop = NULL;
-  Atom actual_type;
-  int actual_format;
   unsigned long num_items;
-  unsigned long bytes_after;
   if (binding == NULL)
     return False;
-  XGetWindowProperty(display,
-                     RootWindow(display, 0),
-                     XInternAtom(display, property, FALSE),
-                     0,
-                     (long)1000000,
-                     FALSE,
-                     XA_STRING,
-                     &actual_type,
-                     &actual_format,
-                     &num_items,
-                     &bytes_after,
-                     (unsigned char **)&prop);
-  if ((actual_type != XA_STRING) || (actual_format != 8) || (num_items == 0)) {
-    if (prop != NULL)
-      XFree(prop);
+  if (!_XmGetWindowPropertyChecked(display,
+                                   RootWindow(display, 0),
+                                   XInternAtom(display, property, FALSE),
+                                   (long)1000000,
+                                   XA_STRING,
+                                   8,
+                                   1,
+                                   NULL,
+                                   NULL,
+                                   &num_items,
+                                   NULL,
+                                   (unsigned char **)&prop))
     return False;
-  }
-  else {
-    *binding = prop;
-    return True;
-  }
+  *binding = prop;
+  return True;
 }
 
 /*
