@@ -82,6 +82,7 @@ set_target_properties(Uil PROPERTIES
     VERSION ${MOTIF_LIBRARY_VERSION}
     SOVERSION ${MOTIF_SOVERSION}
 )
+add_library(Motif::Uil ALIAS Uil)
 
 # Ensure message catalog header is generated before building this target
 add_dependencies(Uil uil_msgcat_header)
@@ -126,8 +127,10 @@ target_link_libraries(Uil
 
 # Install library
 install(TARGETS Uil
+    EXPORT MotifTargets
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
 # Install headers

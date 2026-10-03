@@ -73,6 +73,8 @@ endif()
 # Create the library
 add_library(Mrm ${MOTIF_LIB_TYPE} ${MRM_SRCS})
 
+add_library(Motif::Mrm ALIAS Mrm)
+
 # Ensure message catalog header is generated before building this target
 add_dependencies(Mrm mrm_msgcat_header)
 
@@ -100,7 +102,7 @@ target_link_libraries(Mrm
 
 # Install the library
 install(TARGETS Mrm
-    EXPORT MrmTargets
+    EXPORT MotifTargets
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
@@ -116,9 +118,3 @@ install(FILES ${MRM_INTERNAL_HEADERS}
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Mrm
 )
 
-# Export targets
-install(EXPORT MrmTargets
-    FILE MrmTargets.cmake
-    NAMESPACE Mrm::
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Mrm
-)

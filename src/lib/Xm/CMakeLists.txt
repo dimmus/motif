@@ -672,6 +672,8 @@ list(APPEND XM_INTERNAL_HEADERS ToolTipI.h)
 # Create the library
 add_library(Xm ${MOTIF_LIB_TYPE} ${XM_ALL_SRCS} ${CMAKE_BINARY_DIR}/src/lib/Xm/XmStrDefs.c)
 
+add_library(Motif::Xm ALIAS Xm)
+
 # Ensure message catalog header and string files are generated before building this target
 add_dependencies(Xm xm_msgcat_header xm_strings)
 
@@ -741,7 +743,7 @@ endif()
 
 # Install the library
 install(TARGETS Xm
-    EXPORT XmTargets
+    EXPORT MotifTargets
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
@@ -776,9 +778,3 @@ configure_file(
     @ONLY
 )
 
-# Export targets
-install(EXPORT XmTargets
-    FILE XmTargets.cmake
-    NAMESPACE Xm::
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Xm
-)

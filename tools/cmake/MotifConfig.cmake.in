@@ -1,0 +1,56 @@
+# CMake package configuration file for Motif.
+#
+#   find_package(Motif 2.4 REQUIRED [COMPONENTS Xm Mrm Uil])
+#   target_link_libraries(app PRIVATE Motif::Xm)    # or Motif::Mrm, Motif::Uil
+#
+# Motif::Xm brings in X11 and Xt; Motif::Mrm and Motif::Uil bring in
+# Motif::Xm.
+#
+# SPDX-License-Identifier: LGPL-2.1-or-later
+
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+
+# The X11 libraries (and, for static libraries, every private dependency)
+# are found with pkg-config, under the same PkgConfig:: target names that
+# the Motif build used.
+find_dependency(PkgConfig)
+find_dependency(Threads)
+
+set(_motif_pkg_deps "@MOTIF_CONFIG_PKG_DEPS@")
+foreach(_motif_dep IN LISTS _motif_pkg_deps)
+  string(REPLACE "|" ";" _motif_dep "${_motif_dep}")
+  list(GET _motif_dep 0 _motif_prefix)
+  list(GET _motif_dep 1 _motif_modules)
+  separate_arguments(_motif_modules UNIX_COMMAND "${_motif_modules}")
+  if(NOT TARGET PkgConfig::${_motif_prefix})
+    pkg_check_modules(${_motif_prefix} QUIET IMPORTED_TARGET ${_motif_modules})
+    if(NOT ${_motif_prefix}_FOUND)
+      set(Motif_FOUND FALSE)
+      set(Motif_NOT_FOUND_MESSAGE
+        "Motif requires the pkg-config modules: ${_motif_modules}")
+      unset(_motif_pkg_deps)
+      unset(_motif_dep)
+      unset(_motif_prefix)
+      unset(_motif_modules)
+      return()
+    endif()
+  endif()
+endforeach()
+unset(_motif_pkg_deps)
+unset(_motif_dep)
+unset(_motif_prefix)
+unset(_motif_modules)
+
+include("${CMAKE_CURRENT_LIST_DIR}/MotifTargets.cmake")
+
+# Components: Xm, Mrm, Uil
+foreach(_motif_comp Xm Mrm Uil)
+  if(TARGET Motif::${_motif_comp})
+    set(Motif_${_motif_comp}_FOUND TRUE)
+  endif()
+endforeach()
+unset(_motif_comp)
+
+check_required_components(Motif)

@@ -618,6 +618,56 @@ foreach(_pc motif mrm uil)
   )
 endforeach()
 
+# -----------------------------------------------------------------------------
+# CMake package: find_package(Motif) provides Motif::Xm, Motif::Mrm and
+# Motif::Uil.
+
+include(CMakePackageConfigHelpers)
+set(MOTIF_CMAKE_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/cmake/Motif)
+
+# pkg-config modules that MotifConfig.cmake looks up as PkgConfig::<prefix>,
+# as "<prefix>|<modules>".  Static libraries also need their private
+# dependencies.
+set(MOTIF_CONFIG_PKG_DEPS "MOTIF_XT|x11 xt")
+if(NOT WITH_SHARED_LIBS)
+  list(APPEND MOTIF_CONFIG_PKG_DEPS
+    "MOTIF_XEXT|xext xmu xpm"
+    "MOTIF_FONTCONFIG|fontconfig"
+  )
+  if(MOTIF_XFT_FOUND)
+    list(APPEND MOTIF_CONFIG_PKG_DEPS "MOTIF_XFT|xft>=2")
+  endif()
+  if(MOTIF_JPEG_FOUND)
+    list(APPEND MOTIF_CONFIG_PKG_DEPS "MOTIF_JPEG|libjpeg")
+  endif()
+  if(MOTIF_PNG_FOUND)
+    list(APPEND MOTIF_CONFIG_PKG_DEPS "MOTIF_PNG|libpng")
+  endif()
+  if(WITH_PRINTING)
+    list(APPEND MOTIF_CONFIG_PKG_DEPS "MOTIF_XP|xp")
+  endif()
+endif()
+
+configure_package_config_file(
+  ${CMAKE_SOURCE_DIR}/tools/cmake/MotifConfig.cmake.in
+  ${CMAKE_BINARY_DIR}/MotifConfig.cmake
+  INSTALL_DESTINATION ${MOTIF_CMAKE_INSTALL_DIR}
+)
+write_basic_package_version_file(
+  ${CMAKE_BINARY_DIR}/MotifConfigVersion.cmake
+  VERSION ${PROJECT_VERSION}
+  COMPATIBILITY SameMajorVersion
+)
+install(EXPORT MotifTargets
+  NAMESPACE Motif::
+  DESTINATION ${MOTIF_CMAKE_INSTALL_DIR}
+)
+install(FILES
+  ${CMAKE_BINARY_DIR}/MotifConfig.cmake
+  ${CMAKE_BINARY_DIR}/MotifConfigVersion.cmake
+  DESTINATION ${MOTIF_CMAKE_INSTALL_DIR}
+)
+
 # Install README
 install(FILES README.md
     DESTINATION ${CMAKE_INSTALL_DATADIR}/Xm/doc
