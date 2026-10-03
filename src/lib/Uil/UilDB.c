@@ -69,6 +69,7 @@ static char rcsid[] = "$XConsortium: UilDB.c /main/11 1996/11/21 20:03:11 drk $"
 
 #include <stdio.h>
 #include <stdint.h>
+#include <limits.h>
 
 /*
  *
@@ -86,6 +87,20 @@ static char rcsid[] = "$XConsortium: UilDB.c /main/11 1996/11/21 20:03:11 drk $"
 #define _check_read( __number_returned ) \
 	if (( (__number_returned) != 1) || (feof(dbfile)) || (ferror(dbfile)) ) \
 	{  diag_issue_diagnostic( d_bad_database, diag_k_no_source, diag_k_no_column ); }
+
+/*
+ * A table read from the database must have room for every item the header
+ * claims it holds, plus 'extra' items for tables indexed 0..num_items.
+ * A database that fails this check is corrupt, which is a fatal error.
+ */
+static void
+db_check_table_size (_db_header_ptr header, int extra, size_t item_size)
+{
+    if (header->num_items < 0 || header->table_size < 0 ||
+	(size_t) header->num_items + extra >
+	(size_t) header->table_size / item_size)
+	diag_issue_diagnostic (d_bad_database, diag_k_no_source, diag_k_no_column);
+}
 
 
 
@@ -154,18 +169,19 @@ void db_incorporate()
     /*
      * Some heuristics to see if this is a reasonable database.
      * The magic numbers are about 10 times as big as the DXm database
-     * for DECWindows V3. The diagnostic does a fatal exit.
+     * for DECWindows V3. The casts reject negative values as well.
+     * The diagnostic does a fatal exit.
      */
-    if ( globals.uil_max_arg>5000 ||
-	 globals.uil_max_charset>200 ||
-	 globals.charset_lang_table_max>1000 ||
-	 globals.uil_max_object>500 ||
-	 globals.uil_max_reason>1000 ||
-	 globals.uil_max_enumval>3000 ||
-	 globals.uil_max_enumset>1000 ||
-	 globals.key_k_keyword_count>10000 ||
-	 globals.key_k_keyword_max_length>200 ||
-	 globals.uil_max_child>250)
+    if ( (unsigned) globals.uil_max_arg>5000 ||
+	 (unsigned) globals.uil_max_charset>200 ||
+	 (unsigned) globals.charset_lang_table_max>1000 ||
+	 (unsigned) globals.uil_max_object>500 ||
+	 (unsigned) globals.uil_max_reason>1000 ||
+	 (unsigned) globals.uil_max_enumval>3000 ||
+	 (unsigned) globals.uil_max_enumset>1000 ||
+	 (unsigned) globals.key_k_keyword_count>10000 ||
+	 (unsigned) globals.key_k_keyword_max_length>200 ||
+	 (unsigned) globals.uil_max_child>250)
 	diag_issue_diagnostic (d_bad_database,
 			       diag_k_no_source,
 			       diag_k_no_column);
@@ -203,12 +219,8 @@ void db_incorporate()
 	switch (header.table_id)
 	    {
 	    case Constraint_Tab:
+		db_check_table_size (&header, 0, sizeof (unsigned char));
 		constraint_tab = (unsigned char *) XtMalloc (header.table_size);
-		/* Validate calculation to prevent overflow */
-		if (header.num_items > SIZE_MAX / sizeof(unsigned char)) {
-		    diag_issue_diagnostic( d_bad_database, diag_k_no_source, diag_k_no_column );
-		    break;
-		}
 		return_num_items = fread (constraint_tab,
 					     sizeof(unsigned char) * header.num_items,
 					     1, dbfile);
@@ -218,12 +230,8 @@ void db_incorporate()
 		/*
 		 * NOTE: The first entry is not used but we copy it anyway
 		 */
+		db_check_table_size (&header, 0, sizeof (unsigned char));
 		argument_type_table = (unsigned char *) XtMalloc (header.table_size);
-		/* Validate calculation to prevent overflow */
-		if (header.num_items > SIZE_MAX / sizeof(unsigned char)) {
-		    diag_issue_diagnostic( d_bad_database, diag_k_no_source, diag_k_no_column );
-		    break;
-		}
 		return_num_items = fread (argument_type_table,
 					     sizeof(unsigned char) * header.num_items,
 					     1, dbfile);
@@ -233,49 +241,33 @@ void db_incorporate()
 		/*
 		 * NOTE: The first entry is not used but we copy it anyway
 		 */
+		db_check_table_size (&header, 0, sizeof (unsigned char));
 		child_class_table =
 		  (unsigned char *) XtMalloc (header.table_size);
-		/* Validate calculation to prevent overflow */
-		if (header.num_items > SIZE_MAX / sizeof(unsigned char)) {
-		    diag_issue_diagnostic( d_bad_database, diag_k_no_source, diag_k_no_column );
-		    break;
-		}
 		return_num_items =
 		  fread (child_class_table,
 			 sizeof(unsigned char) * header.num_items, 1, dbfile);
 		_check_read (return_num_items);
 		break;
 	    case Charset_Wrdirection_Table:
+		db_check_table_size (&header, 0, sizeof (unsigned char));
 		charset_writing_direction_table = (unsigned char *) XtMalloc (header.table_size);
-		/* Validate calculation to prevent overflow */
-		if (header.num_items > SIZE_MAX / sizeof(unsigned char)) {
-		    diag_issue_diagnostic( d_bad_database, diag_k_no_source, diag_k_no_column );
-		    break;
-		}
 		return_num_items = fread (charset_writing_direction_table,
 					     sizeof(unsigned char) * header.num_items,
 					     1, dbfile);
 		_check_read (return_num_items);
 		break;
 	    case Charset_Parsdirection_Table:
+		db_check_table_size (&header, 0, sizeof (unsigned char));
 		charset_parsing_direction_table = (unsigned char *) XtMalloc (header.table_size);
-		/* Validate calculation to prevent overflow */
-		if (header.num_items > SIZE_MAX / sizeof(unsigned char)) {
-		    diag_issue_diagnostic( d_bad_database, diag_k_no_source, diag_k_no_column );
-		    break;
-		}
 		return_num_items = fread (charset_parsing_direction_table,
 					     sizeof(unsigned char) * header.num_items,
 					     1, dbfile);
 		_check_read (return_num_items);
 		break;
 	    case Charset_Charsize_Table:
+		db_check_table_size (&header, 0, sizeof (unsigned char));
 		charset_character_size_table = (unsigned char *) XtMalloc (header.table_size);
-		/* Validate calculation to prevent overflow */
-		if (header.num_items > SIZE_MAX / sizeof(unsigned char)) {
-		    diag_issue_diagnostic( d_bad_database, diag_k_no_source, diag_k_no_column );
-		    break;
-		}
 		return_num_items = fread (charset_character_size_table,
 					     sizeof(unsigned char) * header.num_items,
 					     1, dbfile);
@@ -474,42 +466,20 @@ void db_read_ints_and_string(_db_header_ptr header)
 	return_num_items = fread(table, header->table_size, 1, dbfile);
 	_check_read (return_num_items);
 
-	/* Validate tainted header->num_items to prevent exploitation */
-	if (header->num_items < 0 || header->num_items > SIZE_MAX / 4) {
-	    diag_issue_internal_error("Invalid num_items in db_read_ints_and_string");
-	    return;
-	}
-	
+	db_check_table_size (header, 0, sizeof (key_keytable_entry_type));
+
 	for ( i=0 ; i<header->num_items; i++)
 	    {
 	    /*
 	     * Add one for the null character on the string
 	     */
-	    /* Validate tainted data from file to prevent exploitation */
-	    if (table[i].b_length < 0 || table[i].b_length > 255) {
-		diag_issue_internal_error("Invalid b_length in db_read_ints_and_string");
-		return;
-	    }
-	    /* Check for potential integer overflow in string_size calculation */
-	    if (string_size > SIZE_MAX - table[i].b_length - 1) {
-		diag_issue_internal_error("String size overflow in db_read_ints_and_string");
-		return;
-	    }
+	    if (table[i].b_length >= INT_MAX - string_size)
+		diag_issue_diagnostic (d_bad_database,
+				       diag_k_no_source, diag_k_no_column);
 	    string_size += table[i].b_length + 1;
 	    };
 
-	/* Check for potential integer overflow in size calculation */
-	if (string_size < 0 || string_size > SIZE_MAX / sizeof(char)) {
-	    diag_issue_internal_error("String size overflow in db_read_ints_and_string");
-	    return;
-	}
-	
 	string_table = XtMalloc (sizeof (char) * string_size);
-	if (string_table == NULL) {
-	    diag_issue_internal_error("Memory allocation failed in db_read_ints_and_string");
-	    return;
-	}
-	
 	return_num_items = fread(string_table,
 				    sizeof(unsigned char) * string_size,
 				    1, dbfile);
@@ -517,12 +487,8 @@ void db_read_ints_and_string(_db_header_ptr header)
 
 	for ( i=0 ; i<header->num_items; i++)
 	    {
-	    /* Validate tainted data from file to prevent exploitation */
-	    if (table[i].b_length < 0 || table[i].b_length > 255) {
-		diag_issue_internal_error("Invalid b_length in db_read_ints_and_string");
-		return;
-	    }
 	    table[i].at_name = string_table;
+	    string_table[table[i].b_length] = '\0';
 	    string_table +=  table[i].b_length + 1;
 	    };
 
@@ -609,25 +575,16 @@ void db_read_char_table(_db_header_ptr header)
 	    diag_issue_internal_error("Table not initialized in db_read_char_table");
 	    return;
 	}
-	
-	/* Validate tainted header->num_items to prevent exploitation */
-	if (header->num_items < 0 || header->num_items > SIZE_MAX / 4) {
-	    diag_issue_internal_error("Invalid num_items in db_read_char_table");
-	    return;
-	}
-	
-	/* Check for potential integer overflow in size calculation */
-	if (header->num_items > SIZE_MAX / num_bits) {
-	    diag_issue_internal_error("Table size overflow in db_read_char_table");
-	    return;
-	}
-	
+
+	/* ptr[1..num_items] are set below; ptr[0] is not used */
+	db_check_table_size (header, 1, sizeof (unsigned char *));
+
 	table = (unsigned char *) XtMalloc (sizeof (unsigned char) * header->num_items * num_bits);
 	if (table == NULL) {
 	    diag_issue_internal_error("Memory allocation failed in db_read_char_table");
 	    return;
 	}
-	
+
 	return_num_items = fread(table,
 				    sizeof(char) * num_bits * header->num_items,
 				    1, dbfile);
@@ -761,15 +718,17 @@ void db_read_length_and_string(_db_header_ptr header)
 	 *	 have to be carefull.
 	 */
 
-	/* Validate tainted header->num_items to prevent exploitation */
-	if (header->num_items < 0 || header->num_items > SIZE_MAX / 4) {
-	    diag_issue_internal_error("Invalid num_items in db_read_length_and_string");
+	if (table == NULL) {
+	    diag_issue_internal_error("Table not initialized in db_read_length_and_string");
 	    return;
 	}
-	
-	lengths = (int *) XtMalloc (sizeof (int) * (header->num_items + 1));
+
+	/* table[0..num_items] are set below */
+	db_check_table_size (header, 1, sizeof (char *));
+
+	lengths = (int *) XtMalloc (sizeof (int) * ((size_t) header->num_items + 1));
 	return_num_items = fread(lengths,
-				    sizeof(int) * (header->num_items + 1),
+				    sizeof(int) * ((size_t) header->num_items + 1),
 				    1, dbfile);
 	_check_read (return_num_items);
 	for ( i=0 ; i<=header->num_items; i++)
@@ -777,66 +736,21 @@ void db_read_length_and_string(_db_header_ptr header)
 	    /*
 	     * Add one for the null terminator
 	     */
-	    /* Validate tainted data from file to prevent exploitation */
-	    if (lengths[i] < 0 || lengths[i] > SIZE_MAX / 4) {
-		diag_issue_internal_error("Invalid length in db_read_length_and_string");
-		XtFree((char *)lengths);
-		return;
-	    }
+	    if (lengths[i] < 0 || lengths[i] >= INT_MAX - string_size)
+		diag_issue_diagnostic (d_bad_database,
+				       diag_k_no_source, diag_k_no_column);
 	    if (lengths[i] > 0)
-		{
-		/* Check for potential integer overflow in string_size calculation */
-		if (string_size > SIZE_MAX - lengths[i] - 1) {
-		    diag_issue_internal_error("String size overflow in db_read_length_and_string");
-		    XtFree((char *)lengths);
-		    return;
-		}
 		string_size += lengths[i] + 1;
-		}
 	    }
 
-	/* Check for potential integer overflow in size calculation */
-	if (string_size < 0 || string_size > SIZE_MAX / sizeof(unsigned char)) {
-	    diag_issue_internal_error("String size overflow in db_read_length_and_string");
-	    XtFree((char *)lengths);
-	    return;
-	}
-	
 	string_table = XtMalloc (sizeof (unsigned char) * string_size);
-	if (string_table == NULL) {
-	    diag_issue_internal_error("Memory allocation failed in db_read_length_and_string");
-	    XtFree((char *)lengths);
-	    return;
-	}
-	
 	return_num_items = fread(string_table,
 				    sizeof(unsigned char) * string_size,
 				    1, dbfile);
 	_check_read (return_num_items);
-	if (table == NULL) {
-	    diag_issue_internal_error("Table not initialized in db_read_length_and_string");
-	    XtFree((char *)lengths);
-	    XtFree((char *)string_table);
-	    return;
-	}
-
-	/* Validate tainted header->num_items to prevent exploitation */
-	if (header->num_items < 0 || header->num_items > SIZE_MAX / 4) {
-	    diag_issue_internal_error("Invalid num_items in db_read_length_and_string");
-	    XtFree((char *)lengths);
-	    XtFree((char *)string_table);
-	    return;
-	}
 
 	for ( i=0 ; i<=header->num_items; i++)
 	    {
-	    /* Validate tainted data from file to prevent exploitation */
-	    if (lengths[i] < 0 || lengths[i] > SIZE_MAX / 4) {
-		diag_issue_internal_error("Invalid length in db_read_length_and_string");
-		XtFree((char *)lengths);
-		XtFree((char *)string_table);
-		return;
-	    }
 	    if (lengths[i] > 0)
 		{
 		/* Ensure string is null-terminated */
@@ -923,57 +837,29 @@ void db_read_int_and_shorts(_db_header_ptr header)
 	return_num_items = fread(table, header->table_size, 1, dbfile);
 	_check_read (return_num_items);
 	
-	/* Validate tainted header->num_items to prevent exploitation */
-	if (header->num_items < 0 || header->num_items > SIZE_MAX / 4) {
-	    diag_issue_internal_error("Invalid num_items in db_read_int_and_shorts");
-	    return;
-	}
-	
+	/* table[0..num_items] are used below */
+	db_check_table_size (header, 1, sizeof (UilEnumSetDescDef));
+
 	for ( i=0 ; i<=header->num_items; i++)
 	    {
-	    /* Validate tainted data from file to prevent exploitation */
-	    if (table[i].values_cnt < 0 || table[i].values_cnt > SIZE_MAX / 4) {
-		diag_issue_internal_error("Invalid values_cnt in db_read_int_and_shorts");
-		return;
-	    }
-	    /* Check for potential integer overflow in int_table_size calculation */
-	    if (int_table_size > SIZE_MAX - table[i].values_cnt) {
-		diag_issue_internal_error("Integer table size overflow in db_read_int_and_shorts");
-		return;
-	    }
+	    if (table[i].values_cnt < 0 ||
+		(size_t) table[i].values_cnt >
+		INT_MAX / sizeof (short) - (size_t) int_table_size)
+		diag_issue_diagnostic (d_bad_database,
+				       diag_k_no_source, diag_k_no_column);
 	    int_table_size += table[i].values_cnt;
 	    }
 
-	/* Check for potential integer overflow in size calculation */
-	if (int_table_size < 0 || int_table_size > SIZE_MAX / sizeof(short)) {
-	    diag_issue_internal_error("Integer table size overflow in db_read_int_and_shorts");
-	    return;
-	}
-	
 	int_table = (unsigned short int *) XtCalloc (1, sizeof (short) * int_table_size);
-	if (int_table == NULL) {
-	    diag_issue_internal_error("Memory allocation failed in db_read_int_and_shorts");
-	    return;
-	}
-	
 	return_num_items = fread(int_table,
 				    sizeof(short) * int_table_size,
 				    1, dbfile);
 	_check_read (return_num_items);
-	
-	/* Validate tainted header->num_items to prevent exploitation */
-	if (header->num_items < 0 || header->num_items > SIZE_MAX / 4) {
-	    diag_issue_internal_error("Invalid num_items in db_read_int_and_shorts");
-	    return;
-	}
-	
+
 	for ( i=0 ; i<=header->num_items; i++)
 	    {
-	    /* Validate tainted data from file to prevent exploitation */
-	    if (table[i].values_cnt < 0 || table[i].values_cnt > SIZE_MAX / 4) {
-		diag_issue_internal_error("Invalid values_cnt in db_read_int_and_shorts");
-		return;
-	    }
+	    /* the pointer read from the file is meaningless */
+	    table[i].values = NULL;
 	    if (table[i].values_cnt)
 		{
 		table[i].values = int_table;
