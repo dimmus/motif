@@ -1,0 +1,22 @@
+# LeakSanitizer suppressions for known leaks.
+#
+# CTest passes this file to the tests in builds with
+# WITH_COMPILER_ASAN=ON (LSAN_OPTIONS=suppressions=...).  Remove an
+# entry when its bug is fixed.  Suppressions match function names, so
+# they need a symbolizer (llvm-symbolizer, or addr2line through
+# ASAN_SYMBOLIZER_PATH, which CTest sets up when there is no
+# llvm-symbolizer).
+
+# Text widgets taking the MOTIF_DESTINATION selection: memory that libXt
+# allocates in XtOwnSelection(), and in XtDisownSelection() when the
+# widget is destroyed (Transfer.c, DisownCallback), is never freed.
+# Seen with TextField (XmeSecondarySink), DataField (df_SetDestination)
+# and the SelectionBox family through their TextField.  Not yet known
+# whether libXt or the way Motif hands over the selection is at fault.
+leak:XmeSecondarySink
+leak:df_SetDestination
+leak:DisownCallback
+
+# Notebook.c, Destroy: frees the scroll frame data but not its navigator
+# list (ScrollFrameT.c, _XmSFAddNavigator).
+leak:_XmSFAddNavigator
