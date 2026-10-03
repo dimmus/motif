@@ -72,6 +72,19 @@
 
 
 /*
+ * A part of the resource which has been checked. The code which uses a
+ * resource rewrites some structures in place (offsets become pointers,
+ * fields are swapped, pixels are stored in color tables, icons are mapped
+ * in place). Such a structure is only safe if nothing else that was
+ * checked lies in the same bytes, since that would change after the check.
+ */
+typedef struct {
+  size_t	start ;		/* offset of the first byte */
+  size_t	end ;		/* offset past the last byte */
+  Boolean	rewritten ;	/* rewritten in place when used */
+} UrmValidRegion ;
+
+/*
  * The resource being checked.
  */
 typedef struct {
@@ -83,13 +96,107 @@ typedef struct {
   Boolean	old ;		/* resource is in the Motif 1.1 format */
   Boolean	literal ;	/* resource is a literal (else a widget
 				   record) */
+  UrmValidRegion *regions ;	/* the parts checked so far */
+  int		num_regions ;	/* # entries used in regions */
+  int		max_regions ;	/* # entries allocated in regions */
 } UrmValidBuffer ;
 
 #define	_InBuf(vb,offs,len)	_UrmInBuffer(offs,len,(vb)->size)
-#define	_StrAt(vb,offs)		_UrmStringInBuffer((vb)->base,offs,(vb)->size)
+#define	_StrAt(vb,offs)		ValidString(vb,offs)
 #define	_At(vb,type,offs)	((type) ((vb)->base + (offs)))
 
 static Boolean ValidValue (UrmValidBuffer *vb, MrmType reptype, size_t offs);
+
+
+/*
+ * Record the len bytes at offs, which have been checked to lie within the
+ * resource, as used by the resource. rewritten tells whether they are
+ * rewritten in place when the resource is used.
+ */
+static void
+AddRegion (UrmValidBuffer	*vb,
+	   size_t		offs,
+	   size_t		len,
+	   Boolean		rewritten)
+{
+  if ( len == 0 ) return ;
+  if ( vb->num_regions == vb->max_regions )
+    {
+      vb->max_regions = (vb->max_regions == 0) ? 32 : 2 * vb->max_regions ;
+      vb->regions = (UrmValidRegion *)
+	XtRealloc ((char *) vb->regions,
+		   vb->max_regions * sizeof (UrmValidRegion)) ;
+    }
+  vb->regions[vb->num_regions].start = offs ;
+  vb->regions[vb->num_regions].end = offs + len ;
+  vb->regions[vb->num_regions].rewritten = rewritten ;
+  vb->num_regions++ ;
+}
+
+
+static int
+CompareRegions (const void	*a,
+		const void	*b)
+{
+  const UrmValidRegion	*ra = (const UrmValidRegion *) a ;
+  const UrmValidRegion	*rb = (const UrmValidRegion *) b ;
+
+  if ( ra->start != rb->start ) return (ra->start < rb->start) ? -1 : 1 ;
+  if ( ra->end != rb->end ) return (ra->end < rb->end) ? -1 : 1 ;
+  return 0 ;
+}
+
+
+/*
+ * Check that no region which is rewritten in place shares a byte with
+ * any other region (including another reference to the same structure).
+ * Regions which are only read, such as strings, may be shared. Frees the
+ * region list.
+ */
+static Boolean
+RegionsDisjoint (UrmValidBuffer		*vb)
+{
+  size_t		end_all = 0 ;	/* furthest end of earlier regions */
+  size_t		end_rw = 0 ;	/* same, of rewritten regions */
+  UrmValidRegion	*rp ;		/* current region */
+  Boolean		ok = TRUE ;
+  int			ndx ;
+
+  if ( vb->num_regions > 1 )
+    qsort (vb->regions, vb->num_regions, sizeof (UrmValidRegion),
+	   CompareRegions) ;
+
+  /*
+   * In start order, a region overlaps an earlier one iff it starts before
+   * that region's end.
+   */
+  for ( ndx=0 ; ndx<vb->num_regions && ok ; ndx++ )
+    {
+      rp = &vb->regions[ndx] ;
+      if ( rp->start < end_rw || (rp->rewritten && rp->start < end_all) )
+	ok = FALSE ;
+      if ( rp->end > end_all ) end_all = rp->end ;
+      if ( rp->rewritten && rp->end > end_rw ) end_rw = rp->end ;
+    }
+
+  XtFree ((char *) vb->regions) ;
+  vb->regions = NULL ;
+  vb->num_regions = vb->max_regions = 0 ;
+  return ok ;
+}
+
+
+/*
+ * A NUL-terminated string at offs, which is only read.
+ */
+static Boolean
+ValidString (UrmValidBuffer	*vb,
+	     size_t		offs)
+{
+  if ( ! _UrmStringInBuffer (vb->base, offs, vb->size) ) return FALSE ;
+  AddRegion (vb, offs, strlen (vb->base + offs) + 1, FALSE) ;
+  return TRUE ;
+}
 
 
 /*
@@ -170,23 +277,37 @@ ValidCString (UrmValidBuffer	*vb,
 	return FALSE ;
       pos += 1 + lensize + len ;
     }
+  AddRegion (vb, offs, end, FALSE) ;
   return TRUE ;
 }
 
 
 /*
  * A resource descriptor. Index references are NUL-terminated strings.
+ * Descriptors in a byte swapped icon or color table are swapped in place
+ * when they are used.
  */
 static Boolean
 ValidResourceDesc (UrmValidBuffer	*vb,
-		   size_t		offs)
+		   size_t		offs,
+		   Boolean		rewritten)
 {
   RGMResourceDescPtr	resptr ;	/* the descriptor */
+  size_t		len ;		/* bytes used */
 
   if ( ! _InBuf (vb, offs, sizeof (RGMResourceDesc)) ) return FALSE ;
   resptr = _At (vb, RGMResourceDescPtr, offs) ;
+  len = sizeof (RGMResourceDesc) ;
   if ( resptr->type == URMrIndex )
-    return _StrAt (vb, offs + XtOffsetOf (RGMResourceDesc, key.index)) ;
+    {
+      if ( ! _UrmStringInBuffer (vb->base,
+				 offs + XtOffsetOf (RGMResourceDesc, key.index),
+				 vb->size) )
+	return FALSE ;
+      len = MAX (len, XtOffsetOf (RGMResourceDesc, key.index) +
+		 strlen (resptr->key.index) + 1) ;
+    }
+  AddRegion (vb, offs, len, rewritten) ;
   return TRUE ;
 }
 
@@ -202,13 +323,18 @@ ValidColorDesc (UrmValidBuffer	*vb,
 
   if ( ! _InBuf (vb, offs, XtOffsetOf (RGMColorDesc, desc)) ) return FALSE ;
   colorptr = _At (vb, RGMColorDescPtr, offs) ;
+  AddRegion (vb, offs, XtOffsetOf (RGMColorDesc, desc), FALSE) ;
   switch ( colorptr->desc_type )
     {
     case URMColorDescTypeName:
       return _StrAt (vb, offs + XtOffsetOf (RGMColorDesc, desc.name)) ;
     case URMColorDescTypeRGB:
-      return _InBuf (vb, offs + XtOffsetOf (RGMColorDesc, desc.rgb),
-		     sizeof (RGBColor)) ;
+      if ( ! _InBuf (vb, offs + XtOffsetOf (RGMColorDesc, desc.rgb),
+		     sizeof (RGBColor)) )
+	return FALSE ;
+      AddRegion (vb, offs + XtOffsetOf (RGMColorDesc, desc.rgb),
+		 sizeof (RGBColor), FALSE) ;
+      return TRUE ;
     default:
       return TRUE ;
     }
@@ -247,6 +373,8 @@ ValidColorTable (UrmValidBuffer		*vb,
        ! _InBuf (vb, offs + XtOffsetOf (RGMColorTable, item),
 		 (size_t) count * sizeof (RGMColorTableEntry)) )
     return FALSE ;
+  AddRegion (vb, offs, XtOffsetOf (RGMColorTable, item) +
+	     (size_t) count * sizeof (RGMColorTableEntry), TRUE) ;
 
   for ( ndx=URMColorTableUserMin ; ndx<count ; ndx++ )
     {
@@ -264,7 +392,7 @@ ValidColorTable (UrmValidBuffer		*vb,
 	  if ( ! ValidColorDesc (vb, coffs) ) return FALSE ;
 	  break ;
 	case MrmRtypeResource:
-	  if ( ! ValidResourceDesc (vb, coffs) ) return FALSE ;
+	  if ( ! ValidResourceDesc (vb, coffs, swapped) ) return FALSE ;
 	  break ;
 	default:
 	  return FALSE ;
@@ -327,12 +455,19 @@ ValidIconImage (UrmValidBuffer	*vb,
        ! _InBuf (vb, pdoff, ((width * bits + 7) / 8) * (size_t) height) )
     return FALSE ;
 
+  /*
+   * The icon is swapped and fixed up in place, and its pixels may be
+   * mapped in place.
+   */
+  AddRegion (vb, offs, sizeof (RGMIconImage), TRUE) ;
+  AddRegion (vb, pdoff, ((width * bits + 7) / 8) * (size_t) height, TRUE) ;
+
   switch ( ct_type )
     {
     case MrmRtypeColorTable:
       return ValidColorTable (vb, ctoff) ;
     case MrmRtypeResource:
-      return ValidResourceDesc (vb, ctoff) ;
+      return ValidResourceDesc (vb, ctoff, swapped) ;
     default:
       return FALSE ;
     }
@@ -361,6 +496,8 @@ ValidTextVector (UrmValidBuffer		*vb,
        ! _InBuf (vb, offs + XtOffsetOf (RGMTextVector, item),
 		 (size_t) count * sizeof (RGMTextEntry)) )
     return FALSE ;
+  AddRegion (vb, offs, XtOffsetOf (RGMTextVector, item) +
+	     (size_t) count * sizeof (RGMTextEntry), TRUE) ;
 
   for ( ndx=0 ; ndx<count ; ndx++ )
     {
@@ -399,6 +536,8 @@ ValidFontList (UrmValidBuffer	*vb,
 	   ! _InBuf (vb, offs + XtOffsetOf (OldRGMFontList, item),
 		     (size_t) count * sizeof (OldRGMFontItem)) )
 	return FALSE ;
+      AddRegion (vb, offs, XtOffsetOf (OldRGMFontList, item) +
+		 (size_t) count * sizeof (OldRGMFontItem), FALSE) ;
       for ( ndx=0 ; ndx<count ; ndx++ )
 	if ( ! _StrAt (vb, oldlist->item[ndx].cset.cs_offs) ||
 	     ! _StrAt (vb, oldlist->item[ndx].font.font_offs) )
@@ -413,6 +552,8 @@ ValidFontList (UrmValidBuffer	*vb,
        ! _InBuf (vb, offs + XtOffsetOf (RGMFontList, item),
 		 (size_t) count * sizeof (RGMFontItem)) )
     return FALSE ;
+  AddRegion (vb, offs, XtOffsetOf (RGMFontList, item) +
+	     (size_t) count * sizeof (RGMFontItem), TRUE) ;
   for ( ndx=0 ; ndx<count ; ndx++ )
     if ( ! _StrAt (vb, SwappedOffset (vb, fontlist->item[ndx].cset.cs_offs)) ||
 	 ! _StrAt (vb, SwappedOffset (vb, fontlist->item[ndx].font.font_offs)) )
@@ -447,6 +588,9 @@ ValidCallbackDesc (UrmValidBuffer	*vb,
 	   ! _InBuf (vb, offs + XtOffsetOf (OldRGMCallbackDesc, item),
 		     ((size_t) count + 1) * sizeof (OldRGMCallbackItem)) )
 	return FALSE ;
+      /* translated into a new list before it is used */
+      AddRegion (vb, offs, XtOffsetOf (OldRGMCallbackDesc, item) +
+		 ((size_t) count + 1) * sizeof (OldRGMCallbackItem), FALSE) ;
     }
   else
     {
@@ -458,6 +602,8 @@ ValidCallbackDesc (UrmValidBuffer	*vb,
 	   ! _InBuf (vb, offs + XtOffsetOf (RGMCallbackDesc, item),
 		     ((size_t) count + 1) * sizeof (RGMCallbackItem)) )
 	return FALSE ;
+      AddRegion (vb, offs, XtOffsetOf (RGMCallbackDesc, item) +
+		 ((size_t) count + 1) * sizeof (RGMCallbackItem), TRUE) ;
     }
 
   for ( ndx=0 ; ndx<count ; ndx++ )
@@ -541,9 +687,13 @@ ValidValue (UrmValidBuffer	*vb,
 	return FALSE ;
       intvec = _At (vb, RGMIntegerVectorPtr, offs) ;
       count = intvec->count ;
-      return ( count >= 0 &&
-	       _InBuf (vb, offs + XtOffsetOf (RGMIntegerVector, item),
-		       (size_t) count * sizeof (int)) ) ;
+      if ( count < 0 ||
+	   ! _InBuf (vb, offs + XtOffsetOf (RGMIntegerVector, item),
+		     (size_t) count * sizeof (int)) )
+	return FALSE ;
+      AddRegion (vb, offs, XtOffsetOf (RGMIntegerVector, item) +
+		 (size_t) count * sizeof (int), FALSE) ;
+      return TRUE ;
 
     case MrmRtypeWideCharacter:
       /*
@@ -555,13 +705,24 @@ ValidValue (UrmValidBuffer	*vb,
 	return FALSE ;
       wcharentry = _At (vb, RGMWCharEntryPtr, offs) ;
       count = SwappedCount (vb, wcharentry->wchar_item.count) ;
-      return ( count >= 0 &&
-	       _StrAt (vb, offs + XtOffsetOf (RGMWCharEntry, wchar_item.bytes)) ) ;
+      if ( count < 0 ||
+	   ! _UrmStringInBuffer (vb->base,
+				 offs + XtOffsetOf (RGMWCharEntry,
+						    wchar_item.bytes),
+				 vb->size) )
+	return FALSE ;
+      /* the converted string is stored over the entry */
+      AddRegion (vb, offs,
+		 MAX (sizeof (RGMWCharEntry),
+		      XtOffsetOf (RGMWCharEntry, wchar_item.bytes) +
+		      strlen (wcharentry->wchar_item.bytes) + 1), TRUE) ;
+      return TRUE ;
 
     case MrmRtypeFont:
     case MrmRtypeFontSet:
       if ( ! _InBuf (vb, offs, sizeof (RGMFontItem)) ) return FALSE ;
       fontitem = _At (vb, RGMFontItemPtr, offs) ;
+      AddRegion (vb, offs, sizeof (RGMFontItem), TRUE) ;
       return ( _StrAt (vb, SwappedOffset (vb, fontitem->cset.cs_offs)) &&
 	       _StrAt (vb, SwappedOffset (vb, fontitem->font.font_offs)) ) ;
 
@@ -569,15 +730,21 @@ ValidValue (UrmValidBuffer	*vb,
       return ValidFontList (vb, offs) ;
 
     case MrmRtypeFloat:
-      return _InBuf (vb, offs, sizeof (double)) ;
+      if ( ! _InBuf (vb, offs, sizeof (double)) ) return FALSE ;
+      AddRegion (vb, offs, sizeof (double), TRUE) ;
+      return TRUE ;
 
     case MrmRtypeHorizontalInteger:
     case MrmRtypeVerticalInteger:
-      return _InBuf (vb, offs, sizeof (RGMUnitsInteger)) ;
+      if ( ! _InBuf (vb, offs, sizeof (RGMUnitsInteger)) ) return FALSE ;
+      AddRegion (vb, offs, sizeof (RGMUnitsInteger), TRUE) ;
+      return TRUE ;
 
     case MrmRtypeHorizontalFloat:
     case MrmRtypeVerticalFloat:
-      return _InBuf (vb, offs, sizeof (RGMUnitsFloat)) ;
+      if ( ! _InBuf (vb, offs, sizeof (RGMUnitsFloat)) ) return FALSE ;
+      AddRegion (vb, offs, sizeof (RGMUnitsFloat), TRUE) ;
+      return TRUE ;
 
     case MrmRtypeColor:
       return ValidColorDesc (vb, offs) ;
@@ -589,7 +756,7 @@ ValidValue (UrmValidBuffer	*vb,
       return ValidIconImage (vb, offs) ;
 
     case MrmRtypeResource:
-      return ValidResourceDesc (vb, offs) ;
+      return ValidResourceDesc (vb, offs, FALSE) ;
 
     case MrmRtypeCallback:
       return ValidCallbackDesc (vb, offs) ;
@@ -655,12 +822,15 @@ Urm__ValidWidgetRecord (IDBFile			file_id,
   vb.swapped = FALSE ;
   vb.old = strcmp (file_id->db_version, URM1_1version) <= 0 ;
   vb.literal = FALSE ;
+  vb.regions = NULL ;
+  vb.num_regions = vb.max_regions = 0 ;
 
   if ( vb.base == NULL || vb.size < sizeof (RGMWidgetRecord) )
     goto bad_record ;
   widgetrec = (RGMWidgetRecordPtr) vb.base ;
   if ( widgetrec->size > vb.size )
     goto bad_record ;
+  AddRegion (&vb, 0, sizeof (RGMWidgetRecord), FALSE) ;
 
   if ( ! _StrAt (&vb, widgetrec->name_offs) )
     goto bad_record ;
@@ -679,6 +849,9 @@ Urm__ValidWidgetRecord (IDBFile			file_id,
 		     XtOffsetOf (RGMArgListDesc, args),
 		     (size_t) argdesc->count * sizeof (RGMArgument)) )
 	goto bad_record ;
+      AddRegion (&vb, widgetrec->arglist_offs,
+		 XtOffsetOf (RGMArgListDesc, args) +
+		 (size_t) argdesc->count * sizeof (RGMArgument), FALSE) ;
       for ( ndx=0 ; ndx<argdesc->count ; ndx++ )
 	{
 	  argptr = &argdesc->args[ndx] ;
@@ -702,6 +875,9 @@ Urm__ValidWidgetRecord (IDBFile			file_id,
 		     XtOffsetOf (RGMChildrenDesc, child),
 		     (size_t) childrendesc->count * sizeof (RGMChildDesc)) )
 	goto bad_record ;
+      AddRegion (&vb, widgetrec->children_offs,
+		 XtOffsetOf (RGMChildrenDesc, child) +
+		 (size_t) childrendesc->count * sizeof (RGMChildDesc), FALSE) ;
       for ( ndx=0 ; ndx<childrendesc->count ; ndx++ )
 	{
 	  childptr = &childrendesc->child[ndx] ;
@@ -716,9 +892,15 @@ Urm__ValidWidgetRecord (IDBFile			file_id,
        ! ValidCallbackDesc (&vb, widgetrec->creation_offs) )
     goto bad_record ;
 
-  return MrmSUCCESS ;
+  /*
+   * Nothing may share the bytes of a structure that is rewritten while the
+   * widget is created.
+   */
+  if ( RegionsDisjoint (&vb) )
+    return MrmSUCCESS ;
 
  bad_record:
+  XtFree ((char *) vb.regions) ;
   return Urm__UT_Error ("Urm__ValidWidgetRecord", _MrmMMsg_0026,
 			NULL, context_id, MrmBAD_WIDGET_REC) ;
 
@@ -770,10 +952,14 @@ Urm__ValidLiteral (IDBFile			file_id,
   vb.swapped = UrmRCByteSwap (context_id) ;
   vb.old = strcmp (file_id->db_version, URM1_1version) <= 0 ;
   vb.literal = TRUE ;
+  vb.regions = NULL ;
+  vb.num_regions = vb.max_regions = 0 ;
 
-  if ( vb.base != NULL && ValidValue (&vb, UrmRCType (context_id), 0) )
+  if ( vb.base != NULL && ValidValue (&vb, UrmRCType (context_id), 0) &&
+       RegionsDisjoint (&vb) )
     return MrmSUCCESS ;
 
+  XtFree ((char *) vb.regions) ;
   return Urm__UT_Error ("Urm__ValidLiteral", _MrmMMsg_0028,
 			NULL, context_id, MrmNOT_VALID) ;
 
