@@ -534,6 +534,8 @@ typedef struct {
 	  					   opposite-endian machine */
 	MrmFlag		in_memory ;		/* for memory mapped files */
 	unsigned char 	*uid_buffer ;		/* pointer to memory buffer */
+	size_t		uid_buffer_size ;	/* bytes in uid_buffer, 0 if
+						   unknown */
 } IDBOpenFile, *IDBFile ;
 
 
@@ -1296,6 +1298,10 @@ extern Cardinal Urm__OpenHierarchy  _ARGUMENTS(( MrmCount num_files ,
 						 MrmHierarchy *hierarchy_id_return,
 						 MrmFlag in_memory,
 						 unsigned char *uid_buffer));
+extern Cardinal Urm__OpenHierarchyFromBuffer  _ARGUMENTS((
+						 unsigned char *uid_buffer,
+						 size_t uid_buffer_size,
+						 MrmHierarchy *hierarchy_id_return));
 extern Cardinal Urm__CloseHierarchy  _ARGUMENTS(( MrmHierarchy hierarchy_id ));
 extern Cardinal UrmHGetIndexedResource  _ARGUMENTS(( MrmHierarchy hierarchy_id ,
 						String index ,
@@ -1542,6 +1548,10 @@ extern Cardinal UrmIdbOpenFileRead  _ARGUMENTS(( String name ,
 						    char *fname_return ));
 extern Cardinal UrmIdbOpenBuffer  _ARGUMENTS(( unsigned char *uid_buffer ,
 						    IDBFile *file_id_return ));
+extern Cardinal UrmIdbOpenBufferWithSize  _ARGUMENTS((
+						unsigned char *uid_buffer ,
+						size_t uid_buffer_size ,
+						IDBFile *file_id_return ));
 extern Cardinal UrmIdbCloseFile  _ARGUMENTS(( IDBFile file_id ,
 						Boolean keep_new_file ));
 extern Cardinal UrmIdbGetIndexedResource  _ARGUMENTS(( IDBFile file_id ,

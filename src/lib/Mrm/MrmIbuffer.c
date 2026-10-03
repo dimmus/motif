@@ -461,6 +461,18 @@ Idb__BM_GetRecord (IDBFile                     file_id,
 			  file_id, NULL, MrmNOT_FOUND) ;
 
   /*
+   * A memory buffer must contain the record. If its size is unknown
+   * (MrmOpenHierarchyFromBuffer), the record count in the file header is
+   * all there is to go by once the header has been read.
+   */
+  if ( file_id->in_memory &&
+       ( (file_id->uid_buffer_size != 0) ?
+	 ((size_t) record > file_id->uid_buffer_size / IDBRecordSize) :
+	 (file_id->last_record > 0 && record > file_id->last_record) ) )
+    return Urm__UT_Error ("Idb__BM_GetRecord", _MrmMMsg_0019,
+			  file_id, NULL, MrmNOT_FOUND) ;
+
+  /*
    * If buffer pool is unallocated, get a buffer (which WILL allocate it),
    * and read the record into that. Else see if the record is already in
    * memory, and return it if so. If the record is not found, get a buffer

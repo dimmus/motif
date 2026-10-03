@@ -161,6 +161,7 @@ UrmIdbOpenFileWrite (String			name ,
   filedesc->byte_swapped = FALSE ;
   filedesc->in_memory = FALSE ;
   filedesc->uid_buffer = NULL ;
+  filedesc->uid_buffer_size = 0 ;
   for ( ndx=IDBrtMin ; ndx<=IDBrtMax ; ndx++ )
     filedesc->rt_counts[ndx] = 0 ;
 

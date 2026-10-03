@@ -123,6 +123,11 @@ static SubstitutionRec	uidSubs[1];
  *				structures corresponding to the files.
  *				This parameter may be NULL.
  *	hierarchy_id_return	To return the hierarchy id
+ *	in_memory		TRUE to open the single memory buffer
+ *				uid_buffer instead of the named files
+ *	uid_buffer		The memory buffer
+ *	uid_buffer_size		The size of the memory buffer in bytes,
+ *				or 0 if it is not known
  *
  *  IMPLICIT INPUTS:
  *
@@ -140,13 +145,14 @@ static SubstitutionRec	uidSubs[1];
  *--
  */
 
-Cardinal
-Urm__OpenHierarchy (MrmCount			num_files,
-		    String			*name_list,
-		    MrmOsOpenParamPtr		*os_ext_list,
-		    MrmHierarchy		*hierarchy_id_return,
-		    MrmFlag			in_memory,
-		    unsigned char		*uid_buffer)
+static Cardinal
+Urm__OpenHierarchyInternal (MrmCount			num_files,
+			    String			*name_list,
+			    MrmOsOpenParamPtr		*os_ext_list,
+			    MrmHierarchy		*hierarchy_id_return,
+			    MrmFlag			in_memory,
+			    unsigned char		*uid_buffer,
+			    size_t			uid_buffer_size)
 {
 
   /*
@@ -253,7 +259,8 @@ Urm__OpenHierarchy (MrmCount			num_files,
     {
       if ( in_memory == TRUE )
 	{
-	  result = UrmIdbOpenBuffer(uid_buffer, &cur_file) ;
+	  result = UrmIdbOpenBufferWithSize(uid_buffer, uid_buffer_size,
+					    &cur_file) ;
 	  switch ( result )
 	    {
 	    case MrmSUCCESS:
@@ -338,6 +345,40 @@ Urm__OpenHierarchy (MrmCount			num_files,
 
 
 
+Cardinal
+Urm__OpenHierarchy (MrmCount			num_files,
+		    String			*name_list,
+		    MrmOsOpenParamPtr		*os_ext_list,
+		    MrmHierarchy		*hierarchy_id_return,
+		    MrmFlag			in_memory,
+		    unsigned char		*uid_buffer)
+{
+
+  return Urm__OpenHierarchyInternal (num_files, name_list, os_ext_list,
+				     hierarchy_id_return, in_memory,
+				     uid_buffer, 0) ;
+
+}
+
+
+/*
+ * Open a hierarchy on a memory buffer of uid_buffer_size bytes (0 if the
+ * size is not known) holding the image of a UID file.
+ */
+Cardinal
+Urm__OpenHierarchyFromBuffer (unsigned char		*uid_buffer,
+			      size_t			uid_buffer_size,
+			      MrmHierarchy		*hierarchy_id_return)
+{
+
+  return Urm__OpenHierarchyInternal ((MrmCount) 1, NULL, NULL,
+				     hierarchy_id_return, TRUE,
+				     uid_buffer, uid_buffer_size) ;
+
+}
+
+
+
 /*
  *++
  *
@@ -386,8 +427,7 @@ Urm__CloseHierarchy (MrmHierarchy	hierarchy_id)
 			  NULL, NULL, MrmBAD_HIERARCHY) ;
 
   for ( ndx=0 ; ndx<hierarchy_id->num_file ; ndx++ )
-    if (hierarchy_id->file_list[ndx]->in_memory == FALSE )
-      UrmIdbCloseFile (hierarchy_id->file_list[ndx], FALSE) ;
+    UrmIdbCloseFile (hierarchy_id->file_list[ndx], FALSE) ;
 
   /* Begin fixing DTS 7303 */
   if(hierarchy_id->name_registry){

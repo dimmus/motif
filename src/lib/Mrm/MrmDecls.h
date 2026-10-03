@@ -210,6 +210,8 @@ extern Cardinal MrmRegisterClassWithCleanup  _ARGUMENTS(( MrmType class_code , S
 
 #endif
 
+extern Cardinal MrmOpenHierarchyFromBuffer  _ARGUMENTS(( unsigned char *uid_buffer , MrmHierarchy *hierarchy_id_return ));
+extern Cardinal MrmOpenHierarchyFromBufferWithSize  _ARGUMENTS(( unsigned char *uid_buffer , size_t uid_buffer_size , MrmHierarchy *hierarchy_id_return ));
 extern Cardinal MrmCloseHierarchy  _ARGUMENTS(( MrmHierarchy hierarchy_id ));
 extern Cardinal MrmFetchInterfaceModule  _ARGUMENTS(( MrmHierarchy hierarchy_id , char *module_name , Widget parent , Widget *w_return ));
 extern Cardinal MrmFetchWidget  _ARGUMENTS(( MrmHierarchy hierarchy_id , String index , Widget parent , Widget *w_return , MrmType *class_return ));
