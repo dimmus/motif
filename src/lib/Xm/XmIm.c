@@ -1716,7 +1716,6 @@ static XFontSet extract_fontset(XmFontList fl)
 static XmImDisplayInfo get_xim_info(Widget widget)
 {
   XmDisplay xmDisplay;
-  char tmp[BUFSIZ];
   char *cp = NULL;
   XmImDisplayInfo xim_info;
   String name, w_class;
@@ -1741,11 +1740,13 @@ static XmImDisplayInfo get_xim_info(Widget widget)
   /* Setup any specified locale modifiers. */
   XtVaGetValues(shell, XmNinputMethod, &cp, NULL);
   if (cp != NULL) {
-    strncpy(tmp, "@im=", 4);
-    tmp[4] = '\0';
-    strcat(tmp, cp);
-    assert(strlen(tmp) < BUFSIZ);
-    XSetLocaleModifiers(tmp);
+    /* XmNinputMethod is an arbitrary string resource; size the buffer
+     * for it. XSetLocaleModifiers copies its argument. */
+    size_t len = strlen(cp) + sizeof("@im=");
+    char *modifiers = XtMalloc(len);
+    snprintf(modifiers, len, "@im=%s", cp);
+    XSetLocaleModifiers(modifiers);
+    XtFree(modifiers);
   }
   XtGetApplicationNameAndClass(dpy, &name, &w_class);
   /* Try to open the input method. */
