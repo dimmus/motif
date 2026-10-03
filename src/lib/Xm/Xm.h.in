@@ -1409,13 +1409,13 @@ extern int XmConvertStringToUnits(
     Screen *screen, String spec, int orientation, int to_type, XtEnum *parse_error);
 extern int XmConvertUnits(Widget widget,
                           int dimension,
-                          register int from_type,
-                          register int from_val,
-                          register int to_type);
-extern int XmCvtToHorizontalPixels(Screen *screen, register int from_val, register int from_type);
-extern int XmCvtToVerticalPixels(Screen *screen, register int from_val, register int from_type);
-extern int XmCvtFromHorizontalPixels(Screen *screen, register int from_val, register int to_type);
-extern int XmCvtFromVerticalPixels(Screen *screen, register int from_val, register int to_type);
+                          int from_type,
+                          int from_val,
+                          int to_type);
+extern int XmCvtToHorizontalPixels(Screen *screen, int from_val, int from_type);
+extern int XmCvtToVerticalPixels(Screen *screen, int from_val, int from_type);
+extern int XmCvtFromHorizontalPixels(Screen *screen, int from_val, int to_type);
+extern int XmCvtFromVerticalPixels(Screen *screen, int from_val, int to_type);
 
 /********    End Public Function Declarations    ********/
 
