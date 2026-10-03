@@ -992,13 +992,21 @@ static int CreateXImage(Display *display,
   *image_return = XCreateImage(display, visual, depth, format, 0, 0, width, height, bitmap_pad, 0);
   if (!*image_return)
     return (XpmNoMemory);
+  /*
+   * On failure, destroy the image and clear *image_return, so that our
+   * callers' error paths don't destroy it a second time.
+   */
   if (height != 0 && (*image_return)->bytes_per_line >= INT_MAX / height) {
     XDestroyImage(*image_return);
+    *image_return = NULL;
     return XpmNoMemory;
   }
   /* now that bytes_per_line must have been set properly alloc data */
-  if ((*image_return)->bytes_per_line == 0 || height == 0)
+  if ((*image_return)->bytes_per_line == 0 || height == 0) {
+    XDestroyImage(*image_return);
+    *image_return = NULL;
     return XpmNoMemory;
+  }
   (*image_return)->data = (char *)XpmMalloc((*image_return)->bytes_per_line * height);
   if (!(*image_return)->data) {
     XDestroyImage(*image_return);
