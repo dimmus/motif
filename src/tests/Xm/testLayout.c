@@ -235,7 +235,7 @@ static Widget make_list(int count, int spacing, int highlight)
  * Scrolling with the scrollbar copies the rows that stay visible: the
  * result must be what a full redraw gives.
  */
-static void check_scrolling(int spacing, int highlight)
+static void check_scrolling(int spacing, int highlight, Boolean tiled)
 {
 	static const int moves[] = { 1, 1, 3, -2, 9, -1, -9, 5, 2, -4, 30, -12 };
 	Widget list, vsb = NULL;
@@ -243,6 +243,18 @@ static void check_scrolling(int spacing, int highlight)
 	XImage *scrolled, *redrawn;
 
 	list = make_list(200, spacing, highlight);
+	if (tiled) {
+		/* the gaps between the rows show the tile, which stays put */
+		static char bits[] = { 0x05, 0x02, 0x07, 0x01, 0x06 };
+		Display *dpy = XtDisplay(shell);
+		int scr = DefaultScreen(dpy);
+		Pixmap tile = XCreatePixmapFromBitmapData(dpy, RootWindow(dpy, scr), bits, 3, 5,
+							  BlackPixel(dpy, scr),
+							  WhitePixel(dpy, scr),
+							  DefaultDepth(dpy, scr));
+
+		XtVaSetValues(list, XmNbackgroundPixmap, tile, NULL);
+	}
 	XtRealizeWidget(shell);
 	settle();
 	for (i = 1; i <= 200; i += 13)
@@ -266,19 +278,25 @@ static void check_scrolling(int spacing, int highlight)
 
 START_TEST(list_scroll_by_copy)
 {
-	check_scrolling(0, 2);
+	check_scrolling(0, 2, False);
 }
 END_TEST
 
 START_TEST(list_scroll_by_copy_spaced)
 {
-	check_scrolling(3, 1);
+	check_scrolling(3, 1, False);
+}
+END_TEST
+
+START_TEST(list_scroll_tiled_background)
+{
+	check_scrolling(3, 1, True);
 }
 END_TEST
 
 START_TEST(list_scroll_no_spacing)
 {
-	check_scrolling(0, 0);
+	check_scrolling(0, 0, False);
 }
 END_TEST
 
@@ -395,6 +413,7 @@ void layout_suite(SRunner *runner)
 	t = tcase_create("List");
 	tcase_add_test(t, list_scroll_by_copy);
 	tcase_add_test(t, list_scroll_by_copy_spaced);
+	tcase_add_test(t, list_scroll_tiled_background);
 	tcase_add_test(t, list_scroll_no_spacing);
 	tcase_add_test(t, list_selected_items_missing);
 	tcase_add_test(t, list_select_and_find);
