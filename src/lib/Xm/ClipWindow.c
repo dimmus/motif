@@ -216,21 +216,23 @@ static XmConst _XmBuildVirtualKeyStruct ClipWindowKeys[] = {
     {ControlMask, XmVosfPageDown, "ActionGrab(SWRightPage)\n"},
     {0, XmVosfPageUp, "ActionGrab(SWUpPage)\n"},
     {0, XmVosfPageDown, "ActionGrab(SWDownPage)\n"}};
-#define MAX_CLIPWINDOW_TM_SIZE 1000 /* roughly 10lines * 100chars */
-
 static String GetRealTranslations(Display *dpy,
                                   XmConst _XmBuildVirtualKeyStruct *keys,
                                   int num_keys)
 {
-  static char buf[MAX_CLIPWINDOW_TM_SIZE]; /* memory used externally */
-  char *tmp = buf;
+  /* The result can be arbitrarily long: the virtual key bindings come
+   * from the root window _MOTIF_BINDINGS property, which any client can
+   * set. Returns an XtMalloc'ed string the caller must XtFree. */
+  char *buf;
+  size_t len = 0, size = 256, need;
   char *keystring;
   Cardinal i;
   int num_vkeys;
   XmKeyBinding vkeys;
   KeySym keysym;
   Modifiers mods;
-  *tmp = '\0';
+  buf = XtMalloc(size);
+  *buf = '\0';
   for (i = 0; i < num_keys; i++) {
     keysym = XStringToKeysym(keys[i].key);
     if (keysym == NoSymbol)
@@ -244,18 +246,22 @@ static String GetRealTranslations(Display *dpy,
       /* this is why the struct is simpler than a pure translation parser,
            we have to merge the modifiers */
       mods = vkeys[num_vkeys].modifiers | keys[i].mod;
-      if (mods & ControlMask)
-        strcat(tmp, "Ctrl ");
-      if (mods & ShiftMask)
-        strcat(tmp, "Shift ");
-      if (mods & Mod1Mask)
-        strcat(tmp, "Mod1 "); /* "Alt" may not be always right */
-      strcat(tmp, "<Key>");
-      strcat(tmp, keystring);
-      strcat(tmp, ": ");
-      strcat(tmp, keys[i].action); /* actions contain line separators. */
-      tmp += strlen(tmp);
-      assert((tmp - buf) < MAX_CLIPWINDOW_TM_SIZE);
+      need = len + sizeof("Ctrl Shift Mod1 <Key>: ") + strlen(keystring) +
+             strlen(keys[i].action);
+      if (need > size) {
+        size = 2 * need;
+        buf = XtRealloc(buf, size);
+      }
+      /* "Alt" may not be always right, hence Mod1;
+         actions contain line separators. */
+      len += snprintf(buf + len,
+                      size - len,
+                      "%s%s%s<Key>%s: %s",
+                      (mods & ControlMask) ? "Ctrl " : "",
+                      (mods & ShiftMask) ? "Shift " : "",
+                      (mods & Mod1Mask) ? "Mod1 " : "",
+                      keystring,
+                      keys[i].action);
     }
     XtFree((char *)vkeys);
   }
@@ -317,10 +323,14 @@ static void Initialize(Widget rw, Widget nw, ArgList args, Cardinal *num_args)
        display of the widget, not a default display (which is available
        in ClassInitialize) */
   /* do the parsing only once */
+  _XmProcessLock();
   if (!ClipWindowXlations) {
-    ClipWindowXlations = XtParseTranslationTable(
-        GetRealTranslations(XtDisplay(nw), ClipWindowKeys, XtNumber(ClipWindowKeys)));
+    String table =
+        GetRealTranslations(XtDisplay(nw), ClipWindowKeys, XtNumber(ClipWindowKeys));
+    ClipWindowXlations = XtParseTranslationTable(table);
+    XtFree(table);
   }
+  _XmProcessUnlock();
   XtOverrideTranslations(nw, ClipWindowXlations);
   /* need for the RtoL win gravity resize support */
   cw->clip_window.old_width = cw->core.width;
