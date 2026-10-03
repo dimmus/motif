@@ -937,6 +937,13 @@ IsValidSmClientID (const char *clientID, unsigned long len)
 {
     unsigned long i;
 
+    /*
+     * The ID is used as a C string, so a terminating NUL that the client
+     * stored as part of the property is harmless.
+     */
+    while ((len > 0) && (clientID[len - 1] == '\0'))
+	len--;
+
     if ((len == 0) || (len > MAX_SM_CLIENT_ID_LEN))
 	return (False);
 
@@ -996,9 +1003,10 @@ ProcessSmClientID (ClientData *pCD)
 	pCD->smClientID = (String)NULL;
     }
 
+    /* Read up to MAX_SM_CLIENT_ID_LEN bytes plus a terminating NUL. */
     clientID = NULL;
     if ((XGetWindowProperty(DISPLAY, pCD->client, wmGD.xa_SM_CLIENT_ID,
-			    0L, (long)((MAX_SM_CLIENT_ID_LEN + 3) / 4), False,
+			    0L, (long)((MAX_SM_CLIENT_ID_LEN + 1 + 3) / 4), False,
 			    AnyPropertyType, &actualType, &actualFormat,
 			    &nitems, &leftover, (unsigned char **)&clientID)
 	 == Success) &&
