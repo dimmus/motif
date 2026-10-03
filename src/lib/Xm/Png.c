@@ -7,7 +7,9 @@
  */
 #include "PngI.h"
 #include <X11/Xlibint.h>
+#include <limits.h>
 #include <png.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -18,14 +20,15 @@
  */
 int _XmPngGetImage(FILE *fp, XColor *bg, XImage **ximage)
 {
-  long pos;
   XImage *img = NULL;
   png_color_16 bgcolor;
   png_uint_32 w, h, i;
   png_structp pngp = NULL;
   png_infop infop = NULL;
-  png_bytep *rows = NULL;
-  unsigned char header[8], *data = NULL;
+  unsigned char header[8];
+  /* Modified after setjmp() and used after longjmp(), so must be volatile */
+  unsigned char *volatile data = NULL;
+  png_bytep *volatile rows = NULL;
   if (!ximage || !fp || fread(header, 1, sizeof header, fp) != sizeof header ||
       png_sig_cmp(header, 0, sizeof header))
     return 1;
@@ -38,47 +41,14 @@ int _XmPngGetImage(FILE *fp, XColor *bg, XImage **ximage)
     return 2;
   }
   if (setjmp(png_jmpbuf(pngp))) {
-    free(data);
+    if (data)
+      XFree(data);
     free(rows);
-    if (img)
-      XFree(img);
-    *ximage = NULL;
     png_destroy_read_struct(&pngp, &infop, NULL);
     return 3;
   }
-  pos = ftell(fp);
   png_init_io(pngp, fp);
   png_set_sig_bytes(pngp, sizeof header);
-  /* Peek at the width / height and reinitialize */
-  png_read_info(pngp, infop);
-  png_get_IHDR(pngp, infop, &w, &h, NULL, NULL, NULL, NULL, NULL);
-  png_destroy_read_struct(&pngp, &infop, NULL);
-  if (!(pngp = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL)) ||
-      !(infop = png_create_info_struct(pngp)))
-  {
-    if (pngp)
-      png_destroy_read_struct(&pngp, NULL, NULL);
-    return 4;
-  }
-  fseek(fp, pos, SEEK_SET);
-  png_init_io(pngp, fp);
-  png_set_sig_bytes(pngp, sizeof header);
-  /**
-   * Allocate the row pointers, so that the [A]RGB pixels are nice and
-   * contiguous in our buffer.
-   */
-  if (!(data = Xmalloc(w * h * 4))) {
-    png_destroy_read_struct(&pngp, &infop, NULL);
-    return 5;
-  }
-  if (!(rows = malloc(h * sizeof(*rows)))) {
-    XFree(data);
-    png_destroy_read_struct(&pngp, &infop, NULL);
-    return 6;
-  }
-  for (i = 0; i < h; i++)
-    rows[i] = data + i * w * 4;
-  png_set_rows(pngp, infop, rows);
   png_set_palette_to_rgb(pngp);
   png_set_filler(pngp, 0xff, PNG_FILLER_BEFORE);
   /* If we've specified a background color, use that in lieu of alpha */
@@ -90,11 +60,40 @@ int _XmPngGetImage(FILE *fp, XColor *bg, XImage **ximage)
   }
   else
     png_set_alpha_mode(pngp, PNG_ALPHA_STANDARD, PNG_DEFAULT_sRGB);
-  png_read_png(pngp,
-               infop,
-               PNG_TRANSFORM_SWAP_ALPHA | PNG_TRANSFORM_GRAY_TO_RGB | PNG_TRANSFORM_SCALE_16 |
-                   PNG_TRANSFORM_EXPAND,
-               NULL);
+  png_read_info(pngp, infop);
+  /* Same transformations as png_read_png() would apply */
+  png_set_scale_16(pngp);
+  png_set_expand(pngp);
+  png_set_swap_alpha(pngp);
+  png_set_gray_to_rgb(pngp);
+  png_set_interlace_handling(pngp);
+  png_read_update_info(pngp, infop);
+  w = png_get_image_width(pngp, infop);
+  h = png_get_image_height(pngp, infop);
+  /* The transformations above must have yielded 8-bit ARGB pixels */
+  if (!w || !h || w > INT_MAX / 4 || h > INT_MAX || h > SIZE_MAX / 4 / w ||
+      png_get_rowbytes(pngp, infop) != (size_t)w * 4)
+  {
+    png_destroy_read_struct(&pngp, &infop, NULL);
+    return 4;
+  }
+  /**
+   * Allocate the row pointers, so that the [A]RGB pixels are nice and
+   * contiguous in our buffer.
+   */
+  if (!(data = Xmalloc((size_t)w * h * 4))) {
+    png_destroy_read_struct(&pngp, &infop, NULL);
+    return 5;
+  }
+  if (!(rows = malloc(h * sizeof(*rows)))) {
+    XFree(data);
+    png_destroy_read_struct(&pngp, &infop, NULL);
+    return 6;
+  }
+  for (i = 0; i < h; i++)
+    rows[i] = data + (size_t)i * w * 4;
+  png_read_image(pngp, rows);
+  png_read_end(pngp, NULL);
   png_destroy_read_struct(&pngp, &infop, NULL);
   free(rows);
   /* Create our XImage */
