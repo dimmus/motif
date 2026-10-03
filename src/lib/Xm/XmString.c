@@ -64,6 +64,7 @@ struct __Xmlocale {
   char *tag;
   int taglen;
   Boolean inited;
+  Boolean is_utf8; /* tag is "UTF-8" */
 };
 
 /* enums for which_seg for calculating widths */
@@ -376,7 +377,16 @@ static _XmStringEntry EntryCvtToUnopt(_XmStringEntry entry);
 static XmString StringTabCreate(void);
 static XmString StringEmptyCreate(void);
 static int _get_generate_parse_table(XmParseTable *gen_table);
+static Boolean CurrentCharsetIsUTF8(void);
 /********    End Static Function Declarations    ********/
+/*
+ * Strings converted from UTF-8 to UCS-2 for core fonts fit on the stack
+ * when they are short, which is nearly always; at most one UCS-2
+ * character comes out of each byte.
+ */
+#define UCS2_LOCAL_LEN 256
+#define Ucs2Buffer(len, local) \
+  ((len) <= UCS2_LOCAL_LEN ? (local) : (XChar2b *)XtMalloc((len) * sizeof(XChar2b)))
 static struct __Xmlocale locale;
 static char **_tag_cache;
 static int _cache_count = 0;
@@ -1797,22 +1807,34 @@ static int TabVal(Display *d, Screen **pscreen, Window w, XmTab tab)
     return (0);
   convertValue += (convertValue > 0.0) ? 0.5 : -0.5;
   intValue = convertValue;
+  /* A tab in pixels needs no screen. */
+  if (fromType == XmPIXELS)
+    return intValue;
   /*
-   * The pscreen storage should be pushed higher; we may still make
-   * several round trips to the server to draw a single string???
+   * All we really want is the screen, but we may only have a drawable,
+   * or nothing (w == None) when measuring.  The screen is looked up at
+   * most once per string, through *pscreen.
    */
-  /* All we really want is the screen, but we may only have a drawable. */
-  assert(w || *pscreen);
   if (*pscreen == NULL) {
-    Widget widget = XtWindowToWidget(d, w);
+    Widget widget;
+    if (w == None)
+      *pscreen = XtScreenOfObject(XmGetXmDisplay(d));
     /* If this drawable is really a widget Xt will have cached it. */
-    if (widget)
+    else if ((widget = XtWindowToWidget(d, w)) != NULL)
       *pscreen = XtScreenOfObject(widget);
+    else if (ScreenCount(d) == 1)
+      *pscreen = ScreenOfDisplay(d, 0);
     else {
-      /* Give up and ask the server. */
-      XWindowAttributes attr;
-      XGetWindowAttributes(d, w, &attr);
-      *pscreen = attr.screen;
+      /* Give up and ask the server; unlike XGetWindowAttributes,
+       * XGetGeometry also works for a pixmap. */
+      Window root;
+      int x, y, i;
+      unsigned int width, height, border, depth;
+      *pscreen = DefaultScreenOfDisplay(d);
+      if (XGetGeometry(d, w, &root, &x, &y, &width, &height, &border, &depth))
+        for (i = 0; i < ScreenCount(d); i++)
+          if (RootWindow(d, i) == root)
+            *pscreen = ScreenOfDisplay(d, i);
     }
   }
   return _XmConvertUnits(*pscreen, XmHORIZONTAL, fromType, intValue, XmPIXELS);
@@ -1963,7 +1985,7 @@ static void OptLineMetrics(XmRenderTable r,
         descent,
 #if XM_UTF8
         (_XmStrTextType(opt) == XmCHARSET_TEXT || _XmStrTextType(opt) == XmMULTIBYTE_TEXT) &&
-            ((_XmStrTagGet(opt) == XmFONTLIST_DEFAULT_TAG && _XmStringIsCurrentCharset("UTF-8")) ||
+            ((_XmStrTagGet(opt) == XmFONTLIST_DEFAULT_TAG && CurrentCharsetIsUTF8()) ||
              (_XmStrTagGet(opt) &&
               strcmp(_XmStringIndexGetTag(_XmStrTagIndex(opt)), "UTF-8") == 0))
 #else
@@ -1972,13 +1994,13 @@ static void OptLineMetrics(XmRenderTable r,
     );
   if (rend != NULL)
     tl = _XmRendTabs(rend);
-  d = (_XmRTDisplay(r) == NULL) ? _XmGetDefaultDisplay() : _XmRTDisplay(r);
-  screen = XtScreenOfObject(XmGetXmDisplay(d));
   tab = ((tl == NULL) || ((long)tl == XmAS_IS)) ? NULL : _XmTabLStart(tl);
   prev_val = 0;
   tab_cnt = 0;
   /* If this string is tabbed, set width accordingly. */
   if ((tab != NULL) && (_XmStrTabs(opt) != 0) && (tab_cnt < _XmTabLCount(tl))) {
+    d = (_XmRTDisplay(r) == NULL) ? _XmGetDefaultDisplay() : _XmRTDisplay(r);
+    screen = NULL; /* Looked up by TabVal when a tab needs it. */
     for (i = 0; (i < _XmStrTabs(opt)) && (tab_cnt < _XmTabLCount(tl));
          tab = _XmTabNext(tab), tab_cnt++, i++)
     {
@@ -2026,7 +2048,7 @@ static void LineMetrics(_XmStringEntry line,
   XmDirection lay_dir = 0;
   Boolean set_direction = FALSE;
   d = _XmRendDisplay(*rend_io);
-  screen = XtScreenOfObject(XmGetXmDisplay(d));
+  screen = NULL; /* Looked up by TabVal when a tab needs it. */
   seg = _XmEntrySegmentGet(line)[seg_index];
   if (_XmEntryType(seg) != XmSTRING_ENTRY_OPTIMIZED) {
     lay_dir = _XmEntryLayoutGet(seg, prim_dir);
@@ -2923,7 +2945,7 @@ static void SubStringPosition(Boolean one_byte,
 #if XM_UTF8
         Boolean utf8 = ((_XmEntryTextTypeGet(seg) == XmCHARSET_TEXT) &&
                         (((_XmEntryTag((_XmStringEntry)seg) == XmFONTLIST_DEFAULT_TAG) &&
-                          _XmStringIsCurrentCharset("UTF-8")) ||
+                          CurrentCharsetIsUTF8()) ||
                          (strcmp(seg_tag, "UTF-8") == 0)));
 #else
         Boolean utf8 = False;
@@ -3130,7 +3152,7 @@ extern void _XmStringDrawSegment(Display *d,
             (font_type == XmFONT_IS_FONTSET || font_type == XmFONT_IS_XFT ||
              (font_type == XmFONT_IS_FONT && _XmIsISO10646(d, _XmRendFont(rend)))) &&
             (((_XmEntryTag((_XmStringEntry)seg) == XmFONTLIST_DEFAULT_TAG &&
-               (_XmStringIsCurrentCharset("UTF-8"))) ||
+               (CurrentCharsetIsUTF8())) ||
               ((_XmEntryTagIndex(seg) != TAG_INDEX_UNSET &&
                 strcmp(_XmEntryTag((_XmStringEntry)seg), "UTF-8") == 0)))));
 #else
@@ -3288,13 +3310,12 @@ extern void _XmStringDrawSegment(Display *d,
       if (image) {
         if (text16)
           if (utf8) {
-            size_t ucs_str_len;
-            XChar2b *ucs_str;
-            /* TODO: it is very unoptimized convert the same sting
-             * twice - for getting extents and drawing */
-            ucs_str = _XmUtf8ToUcs2(draw_text, seg_len, &ucs_str_len);
+            XChar2b ucs_local[UCS2_LOCAL_LEN];
+            XChar2b *ucs_str = Ucs2Buffer(seg_len, ucs_local);
+            size_t ucs_str_len = _XmUtf8ToUcs2Buf(draw_text, seg_len, ucs_str);
             XDrawImageString16(d, w, gc, x, y, ucs_str, ucs_str_len);
-            XFree(ucs_str);
+            if (ucs_str != ucs_local)
+              XtFree((char *)ucs_str);
           }
           else
             XDrawImageString16(d, w, gc, x, y, (XChar2b *)draw_text, Half(seg_len));
@@ -3319,13 +3340,12 @@ extern void _XmStringDrawSegment(Display *d,
       else {
         if (text16) {
           if (utf8) {
-            size_t ucs_str_len;
-            XChar2b *ucs_str;
-            /* TODO: it is very unoptimized convert the same sting
-             * twice - for getting extents and drawing */
-            ucs_str = _XmUtf8ToUcs2(draw_text, seg_len, &ucs_str_len);
+            XChar2b ucs_local[UCS2_LOCAL_LEN];
+            XChar2b *ucs_str = Ucs2Buffer(seg_len, ucs_local);
+            size_t ucs_str_len = _XmUtf8ToUcs2Buf(draw_text, seg_len, ucs_str);
             XDrawString16(d, w, gc, x, y, ucs_str, ucs_str_len);
-            XFree(ucs_str);
+            if (ucs_str != ucs_local)
+              XtFree((char *)ucs_str);
           }
           else
             XDrawString16(d, w, gc, x, y, (XChar2b *)draw_text, Half(seg_len));
@@ -5068,12 +5088,12 @@ static void ComputeMetrics(XmRendition rend,
       if (two_byte_font(font_struct)) {
         if (byte_count >= 2 || utf8) {
           if (utf8) {
-            /* TODO: it is very unoptimized convert the same sting
-             * twice - for getting extents and drawing */
-            size_t str_len = 0;
-            XChar2b *str = _XmUtf8ToUcs2(text, byte_count, &str_len);
+            XChar2b ucs_local[UCS2_LOCAL_LEN];
+            XChar2b *str = Ucs2Buffer(byte_count, ucs_local);
+            size_t str_len = _XmUtf8ToUcs2Buf(text, byte_count, str);
             XTextExtents16(font_struct, str, str_len, &dir, &asc, &desc, &char_ret);
-            XFree(str);
+            if (str != ucs_local)
+              XtFree((char *)str);
           }
           else
             XTextExtents16(
@@ -5410,8 +5430,8 @@ static Boolean SpecifiedSegmentExtents(_XmStringEntry entry,
 #if XM_UTF8
         _XmEntryType(entry) == XmCHARSET_TEXT &&
             (_XmEntryTag(entry) == XmFONTLIST_DEFAULT_TAG &&
-             (_XmStringIsCurrentCharset("UTF-8") || (_XmEntryTagIndex(entry) != TAG_INDEX_UNSET &&
-                                                     strcmp(_XmEntryTag(entry), "UTF-8") == 0)))
+             (CurrentCharsetIsUTF8() || (_XmEntryTagIndex(entry) != TAG_INDEX_UNSET &&
+                                         strcmp(_XmEntryTag(entry), "UTF-8") == 0)))
 #else
         False
 #endif
@@ -5530,6 +5550,7 @@ char *_XmStringGetCurrentCharset(void)
   strncpy(locale.tag, ptr, len);
   locale.tag[len] = '\0';
   locale.taglen = len;
+  locale.is_utf8 = (strcmp(locale.tag, "UTF-8") == 0);
   /* Register XmSTRING_DEFAULT_CHARSET for compound text conversion. */
   XmRegisterSegmentEncoding(XmSTRING_DEFAULT_CHARSET, XmFONTLIST_DEFAULT_TAG);
   locale.inited = TRUE;
@@ -5545,6 +5566,18 @@ out:
 Boolean _XmStringIsCurrentCharset(XmStringCharSet c)
 {
   return (strcmp(c, _XmStringGetCurrentCharset()) == 0);
+}
+
+/* _XmStringIsCurrentCharset("UTF-8"), without comparing strings. */
+static Boolean CurrentCharsetIsUTF8(void)
+{
+  Boolean is_utf8;
+  _XmProcessLock();
+  if (!locale.inited)
+    (void)_XmStringGetCurrentCharset();
+  is_utf8 = locale.is_utf8;
+  _XmProcessUnlock();
+  return is_utf8;
 }
 
 /*

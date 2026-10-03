@@ -29,6 +29,7 @@
 #endif
 #include "MessagesI.h"
 #include "XmI.h"
+#include <X11/Xlibint.h> /* for XESetCloseDisplay */
 #include <X11/keysym.h>
 #include <Xm/GadgetP.h>
 #include <Xm/IconGP.h>
@@ -292,48 +293,112 @@ void _XmWarningMsg(Widget w, char *type, char *message, char **params, Cardinal 
     XtWarning(message);
 }
 
+/*
+ * The atoms _XmIsISO10646 compares a font's CHARSET_REGISTRY property
+ * with, interned once per display.  Comparing atoms is the same as
+ * comparing their names, and avoids fetching the name of the property
+ * value (a malloc, and a round trip when Xlib's atom cache misses) every
+ * time a segment is drawn.  A record is dropped when its display is
+ * closed, so that a new display at the same address starts afresh.
+ */
+typedef struct _XmISO10646AtomsRec {
+  struct _XmISO10646AtomsRec *next;
+  Display *display;
+  int extension;
+  Atom registry;
+  Atom upper;
+  Atom lower;
+} XmISO10646AtomsRec;
+
+static XmISO10646AtomsRec *iso10646_atoms = NULL;
+
+static int ISO10646CloseDisplay(Display *dpy, XExtCodes *codes)
+{
+  XmISO10646AtomsRec **prev, *rec;
+  _XmProcessLock();
+  for (prev = &iso10646_atoms; (rec = *prev) != NULL; prev = &rec->next)
+    if (rec->display == dpy && rec->extension == codes->extension) {
+      *prev = rec->next;
+      XtFree((char *)rec);
+      break;
+    }
+  _XmProcessUnlock();
+  return 0;
+}
+
+static Boolean GetISO10646Atoms(Display *dpy, XmISO10646AtomsRec *atoms)
+{
+  static char *names[] = {"CHARSET_REGISTRY", "ISO10646", "iso10646"};
+  Atom values[XtNumber(names)];
+  XmISO10646AtomsRec *rec;
+  XExtCodes *codes;
+  _XmProcessLock();
+  for (rec = iso10646_atoms; rec != NULL; rec = rec->next)
+    if (rec->display == dpy) {
+      *atoms = *rec;
+      _XmProcessUnlock();
+      return True;
+    }
+  _XmProcessUnlock();
+  /* The names must exist for a later font to be matched, so create them. */
+  if (!XInternAtoms(dpy, names, XtNumber(names), False, values))
+    return False;
+  atoms->registry = values[0];
+  atoms->upper = values[1];
+  atoms->lower = values[2];
+  /* Without a close hook the atoms cannot be cached; still use them. */
+  if ((codes = XAddExtension(dpy)) == NULL)
+    return True;
+  XESetCloseDisplay(dpy, codes->extension, ISO10646CloseDisplay);
+  rec = XtNew(XmISO10646AtomsRec);
+  *rec = *atoms;
+  rec->display = dpy;
+  rec->extension = codes->extension;
+  _XmProcessLock();
+  rec->next = iso10646_atoms;
+  iso10646_atoms = rec;
+  _XmProcessUnlock();
+  return True;
+}
+
 /* ARGSUSED */
 Boolean _XmIsISO10646(Display *dpy, XFontStruct *font)
 {
-  Boolean ok;
-  int i;
-  char *regname;
-  Atom registry;
+  XmISO10646AtomsRec atoms;
   XFontProp *xfp;
-  ok = False;
-  registry = XInternAtom(dpy, "CHARSET_REGISTRY", False);
-  for (i = 0, xfp = font->properties; ok == False && i < font->n_properties; xfp++, i++) {
-    if (xfp->name == registry) {
-      regname = XGetAtomName(dpy, (Atom)xfp->card32);
-      if (strcmp(regname, "ISO10646") == 0 || strcmp(regname, "iso10646") == 0)
-        ok = True;
-      XFree(regname);
-    }
+  int i;
+  if (font == NULL || font->n_properties <= 0 || !GetISO10646Atoms(dpy, &atoms))
+    return False;
+  for (i = 0, xfp = font->properties; i < font->n_properties; xfp++, i++) {
+    if (xfp->name == atoms.registry &&
+        ((Atom)xfp->card32 == atoms.upper || (Atom)xfp->card32 == atoms.lower))
+      return True;
   }
-  return ok;
+  return False;
 }
 
-XChar2b *_XmUtf8ToUcs2(char *draw_text, size_t seg_len, size_t *ret_str_len)
+/*
+ * Convert seg_len bytes of UTF-8 to UCS-2 in buf, which has room for
+ * seg_len characters, and return the number of characters.  A sequence
+ * that is not 1 to 3 bytes long, or is cut short by the end of the text,
+ * becomes '?' and consumes one byte.
+ */
+size_t _XmUtf8ToUcs2Buf(char *draw_text, size_t seg_len, XChar2b *buf)
 {
   char *ep;
   unsigned short codepoint;
   XChar2b *ptr;
-  XChar2b *buf2b;
-  /*
-   * Convert to UCS2 string on the fly.
-   */
-  buf2b = (XChar2b *)XtMalloc(seg_len * sizeof(XChar2b));
   ep = draw_text + seg_len;
-  for (ptr = buf2b; draw_text < ep; ptr++) {
+  for (ptr = buf; draw_text < ep; ptr++) {
     if ((draw_text[0] & 0x80) == 0) {
       codepoint = draw_text[0];
       draw_text++;
     }
-    else if ((draw_text[0] & 0x20) == 0) {
+    else if ((draw_text[0] & 0x20) == 0 && ep - draw_text >= 2) {
       codepoint = (draw_text[0] & 0x1F) << 6 | (draw_text[1] & 0x3F);
       draw_text += 2;
     }
-    else if ((draw_text[0] & 0x10) == 0) {
+    else if ((draw_text[0] & 0x30) == 0x20 && ep - draw_text >= 3) {
       codepoint = (draw_text[0] & 0x0F) << 12 | (draw_text[1] & 0x3F) << 6 | (draw_text[2] & 0x3F);
       draw_text += 3;
     }
@@ -342,10 +407,19 @@ XChar2b *_XmUtf8ToUcs2(char *draw_text, size_t seg_len, size_t *ret_str_len)
       draw_text++;
     }
     ptr->byte1 = (codepoint >> 8) & 0xff;
-    ;
     ptr->byte2 = codepoint & 0xff;
   }
-  *ret_str_len = ptr - buf2b;
+  return ptr - buf;
+}
+
+XChar2b *_XmUtf8ToUcs2(char *draw_text, size_t seg_len, size_t *ret_str_len)
+{
+  XChar2b *buf2b;
+  /*
+   * Convert to UCS2 string on the fly.
+   */
+  buf2b = (XChar2b *)XtMalloc(seg_len * sizeof(XChar2b));
+  *ret_str_len = _XmUtf8ToUcs2Buf(draw_text, seg_len, buf2b);
   return buf2b;
 }
 

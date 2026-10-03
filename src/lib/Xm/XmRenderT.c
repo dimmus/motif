@@ -45,6 +45,7 @@ static char rcsid[] = "$TOG: XmRenderT.c /main/14 1998/10/26 20:14:42 samborn $"
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration */
 #endif /* __cplusplus */
+#include "HashI.h"
 #include "MessagesI.h"
 #include "XmI.h"
 #include "XmRenderTI.h"
@@ -52,6 +53,7 @@ static char rcsid[] = "$TOG: XmRenderT.c /main/14 1998/10/26 20:14:42 samborn $"
 #include "XmTabListI.h"
 #include <X11/IntrinsicP.h>
 #include <X11/ShellP.h>
+#include <X11/Xlibint.h> /* for XESetCloseDisplay */
 #include <X11/Xresource.h>
 #include <Xm/Display.h>  /* For XmGetXmDisplay */
 #include <Xm/DisplayP.h> /* For direct access to callback fields */
@@ -145,6 +147,8 @@ static Boolean GetResources(XmRendition rend,
 static void SetDefault(XmRendition rend);
 #if USE_XFT
 static XftColor GetCachedXftColor(Display *display, Pixel color);
+static Boolean LookupXftFont(Display *display, XmRendition rend, XftFont **font);
+static void CacheXftFont(Display *display, XmRendition rend);
 #endif
 /********    End Static Function Declarations    ********/
 /* Resource List. */
@@ -1632,36 +1636,6 @@ static void ValidateTag(XmRendition rend, XmStringTag dflt)
     _XmRendTag(rend) = _XmStringCacheTag(dflt, XmSTRING_TAG_STRLEN);
   }
 }
-#if USE_XFT
-static int GetSameRenditions(XmRendition *rend_cache, XmRendition rend, int count_rend)
-{
-  int i;
-  for (i = 0; i < count_rend; i++) {
-    if (rend_cache && (rend_cache[i]) &&
-        ((((_XmRendFontName(rend) && _XmRendFontName(rend_cache[i])) &&
-           !strcmp(_XmRendFontName(rend_cache[i]), _XmRendFontName(rend))) ||
-          (!_XmRendFontName(rend) && !_XmRendFontName(rend_cache[i]))) &&
-         (((_XmRendFontFoundry(rend) && _XmRendFontFoundry(rend_cache[i])) &&
-           !strcmp(_XmRendFontFoundry(rend_cache[i]), _XmRendFontFoundry(rend))) ||
-          (!_XmRendFontFoundry(rend) && !_XmRendFontFoundry(rend_cache[i]))) &&
-         (((_XmRendFontEncoding(rend) && _XmRendFontEncoding(rend_cache[i])) &&
-           !strcmp(_XmRendFontEncoding(rend_cache[i]), _XmRendFontEncoding(rend))) ||
-          (!_XmRendFontEncoding(rend) && !_XmRendFontEncoding(rend_cache[i]))) &&
-         (((_XmRendFontStyle(rend) && _XmRendFontStyle(rend_cache[i])) &&
-           !strcmp(_XmRendFontStyle(rend_cache[i]), _XmRendFontStyle(rend))) ||
-          (!_XmRendFontStyle(rend) && !_XmRendFontStyle(rend_cache[i]))) &&
-         _XmRendFontSize(rend) == _XmRendFontSize(rend_cache[i]) &&
-         _XmRendPixelSize(rend) == _XmRendPixelSize(rend_cache[i]) &&
-         _XmRendFontSlant(rend) == _XmRendFontSlant(rend_cache[i]) &&
-         _XmRendFontWeight(rend) == _XmRendFontWeight(rend_cache[i]) &&
-         _XmRendFontSpacing(rend) == _XmRendFontSpacing(rend_cache[i])))
-    {
-      return i;
-    }
-  }
-  return -1;
-}
-#endif
 /* Make sure all the font related resources make sense together and */
 /* then load the font specified by fontName if necessary. */
 static void ValidateAndLoadFont(XmRendition rend, Display *display)
@@ -1716,11 +1690,10 @@ static void ValidateAndLoadFont(XmRendition rend, Display *display)
           case XmFONT_IS_XFT: {
             FcResult res;
             FcPattern *p;
-            static XmRendition *rend_cache;
-            static int count_rend = 0, num_rend;
-            num_rend = GetSameRenditions(rend_cache, rend, count_rend);
-            if (num_rend >= 0 && (display == _XmRendDisplay(rend_cache[num_rend]))) {
-              _XmRendXftFont(rend) = _XmRendXftFont(rend_cache[num_rend]);
+            XftFont *cached;
+            if (LookupXftFont(display, rend, &cached)) {
+              /* FreeRendition closes the font, so take a reference. */
+              _XmRendXftFont(rend) = cached ? XftFontCopy(display, cached) : NULL;
             }
             else {
               _XmRendPattern(rend) = FcPatternCreate();
@@ -1747,11 +1720,11 @@ static void ValidateAndLoadFont(XmRendition rend, Display *display)
               if (_XmRendFontSpacing(rend))
                 FcPatternAddInteger(_XmRendPattern(rend), FC_SPACING, _XmRendFontSpacing(rend));
               p = XftFontMatch(display, 0, _XmRendPattern(rend), &res);
-              _XmRendXftFont(rend) = XftFontOpenPattern(display, p);
-              rend_cache = (XmRendition *)XtRealloc(
-                  (char *)rend_cache, (Cardinal)(sizeof(XmRendition) * (count_rend + 1)));
-              rend_cache[count_rend] = _XmRenditionCopy(rend, TRUE);
-              count_rend++;
+              _XmRendXftFont(rend) = p ? XftFontOpenPattern(display, p) : NULL;
+              /* The font owns the pattern only once it is open. */
+              if (p != NULL && _XmRendXftFont(rend) == NULL)
+                FcPatternDestroy(p);
+              CacheXftFont(display, rend);
             }
           }
             result = _XmRendXftFont(rend) != NULL;
@@ -2366,13 +2339,339 @@ static Token ReadToken(char *string, int *position, Token reusetoken)
   return (new_token);
 }
 #if USE_XFT
-static struct _XmXftDrawCacheStruct {
-  Display *display;
-  Window window;
-  XftDraw *draw;
-} *_XmXftDrawCache = NULL;
+/*
+ * Per-display Xft state: the XftDraw of each window that has been drawn
+ * into, the XftColor of each (colormap, pixel) pair, and the font opened
+ * for each font description, all in hash tables so that every Xft draw
+ * does not scan a list or ask the server for the colour of a pixel.  A
+ * record lives until its display is closed.
+ *
+ * The colour of a pixel is remembered only where it cannot change: in the
+ * default colormap of a screen whose default visual has a static class.
+ * In any other colormap a cell may be stored into, or freed and allocated
+ * again, so the colour of the pixel of a GC is asked for at every draw.
+ * The colours of renditions are remembered in the default colormap, as
+ * they always have been.
+ */
+typedef struct _XmXftColorRec {
+  Colormap colormap;
+  XftColor color; /* color.pixel is the rest of the key */
+} XmXftColorRec;
 
-static int _XmXftDrawCacheSize = 0;
+typedef struct _XmXftDisplayRec {
+  struct _XmXftDisplayRec *next;
+  Display *display;
+  int extension;
+  XmHashTable draws;  /* Window -> XftDraw * */
+  XmHashTable colors; /* XmXftColorRec * -> XmXftColorRec * */
+  XmHashTable fonts;  /* XmXftFontRec * -> XmXftFontRec * */
+} XmXftDisplayRec;
+
+static XmXftDisplayRec *_XmXftDisplays = NULL;
+
+static Boolean CompareXftColor(XmHashKey k1, XmHashKey k2)
+{
+  XmXftColorRec *c1 = (XmXftColorRec *)k1, *c2 = (XmXftColorRec *)k2;
+  return (c1->color.pixel == c2->color.pixel && c1->colormap == c2->colormap);
+}
+
+static XmHashValue HashXftColor(XmHashKey k)
+{
+  XmXftColorRec *c = (XmXftColorRec *)k;
+  return (XmHashValue)(c->color.pixel ^ (c->colormap << 7));
+}
+
+static Boolean FreeXftColor(XmHashKey k, XtPointer value, XtPointer data)
+{
+  XtFree((char *)value);
+  return False;
+}
+
+/*
+ * A font opened by ValidateAndLoadFont, and the rendition resources that
+ * describe it.  The record holds its own reference to the font, and its
+ * own copy of the strings, so that it does not depend on what happens to
+ * the renditions that use the font.
+ */
+typedef struct _XmXftFontRec {
+  char *name, *foundry, *encoding, *style;
+  int size, pixel_size, slant, weight, spacing;
+  XftFont *font; /* NULL if it failed to open */
+} XmXftFontRec;
+
+static void XftFontDesc(XmRendition rend, XmXftFontRec *desc)
+{
+  desc->name = NameIsString(_XmRendFontName(rend)) ? _XmRendFontName(rend) : NULL;
+  desc->foundry = _XmRendFontFoundry(rend);
+  desc->encoding = _XmRendFontEncoding(rend);
+  desc->style = _XmRendFontStyle(rend);
+  desc->size = _XmRendFontSize(rend);
+  desc->pixel_size = _XmRendPixelSize(rend);
+  desc->slant = _XmRendFontSlant(rend);
+  desc->weight = _XmRendFontWeight(rend);
+  desc->spacing = _XmRendFontSpacing(rend);
+  desc->font = NULL;
+}
+
+static Boolean SameString(char *s1, char *s2)
+{
+  return ((s1 == NULL && s2 == NULL) || (s1 != NULL && s2 != NULL && strcmp(s1, s2) == 0));
+}
+
+static Boolean CompareXftFont(XmHashKey k1, XmHashKey k2)
+{
+  XmXftFontRec *f1 = (XmXftFontRec *)k1, *f2 = (XmXftFontRec *)k2;
+  return (f1->size == f2->size && f1->pixel_size == f2->pixel_size && f1->slant == f2->slant &&
+          f1->weight == f2->weight && f1->spacing == f2->spacing &&
+          SameString(f1->name, f2->name) && SameString(f1->foundry, f2->foundry) &&
+          SameString(f1->encoding, f2->encoding) && SameString(f1->style, f2->style));
+}
+
+static unsigned int HashString(unsigned int h, char *s)
+{
+  if (s != NULL)
+    while (*s)
+      h = h * 31 + (unsigned char)*s++;
+  return h * 31;
+}
+
+static XmHashValue HashXftFont(XmHashKey k)
+{
+  XmXftFontRec *f = (XmXftFontRec *)k;
+  unsigned int h = 0;
+  h = HashString(h, f->name);
+  h = HashString(h, f->foundry);
+  h = HashString(h, f->encoding);
+  h = HashString(h, f->style);
+  h = h * 31 + (unsigned int)f->size;
+  h = h * 31 + (unsigned int)f->pixel_size;
+  h = h * 31 + (unsigned int)f->slant;
+  h = h * 31 + (unsigned int)f->weight;
+  h = h * 31 + (unsigned int)f->spacing;
+  return (XmHashValue)(h & 0x7FFFFFFF);
+}
+
+/* Close a font of a display that is being closed; the connection is
+ * still open, and Xft releases the font's server resources. */
+static Boolean FreeXftFont(XmHashKey k, XtPointer value, XtPointer data)
+{
+  XmXftFontRec *f = (XmXftFontRec *)value;
+  if (f->font != NULL)
+    XftFontClose((Display *)data, f->font);
+  XtFree(f->name);
+  XtFree(f->foundry);
+  XtFree(f->encoding);
+  XtFree(f->style);
+  XtFree((char *)f);
+  return False;
+}
+
+static int XftDisplayClose(Display *display, XExtCodes *codes)
+{
+  XmXftDisplayRec **prev, *rec;
+  _XmProcessLock();
+  for (prev = &_XmXftDisplays; (rec = *prev) != NULL; prev = &rec->next)
+    if (rec->display == display && rec->extension == codes->extension) {
+      *prev = rec->next;
+      /* The XftDraws are not destroyed: the server has already freed the
+       * Pictures of the windows that went away, and Xft is closing too. */
+      _XmFreeHashTable(rec->draws);
+      _XmMapHashTable(rec->colors, FreeXftColor, NULL);
+      _XmFreeHashTable(rec->colors);
+      _XmMapHashTable(rec->fonts, FreeXftFont, (XtPointer)display);
+      _XmFreeHashTable(rec->fonts);
+      XtFree((char *)rec);
+      break;
+    }
+  _XmProcessUnlock();
+  return 0;
+}
+
+/* Call with the process lock held. */
+static XmXftDisplayRec *FindXftDisplay(Display *display, Boolean create)
+{
+  XmXftDisplayRec **prev, *rec;
+  XExtCodes *codes;
+  for (prev = &_XmXftDisplays; (rec = *prev) != NULL; prev = &rec->next)
+    if (rec->display == display) {
+      if (prev != &_XmXftDisplays) { /* Keep the last display used first. */
+        *prev = rec->next;
+        rec->next = _XmXftDisplays;
+        _XmXftDisplays = rec;
+      }
+      return rec;
+    }
+  if (!create || (codes = XAddExtension(display)) == NULL)
+    return NULL;
+  XESetCloseDisplay(display, codes->extension, XftDisplayClose);
+  rec = XtNew(XmXftDisplayRec);
+  rec->display = display;
+  rec->extension = codes->extension;
+  rec->draws = _XmAllocHashTable(64, NULL, NULL);
+  rec->colors = _XmAllocHashTable(64, CompareXftColor, HashXftColor);
+  rec->fonts = _XmAllocHashTable(16, CompareXftFont, HashXftFont);
+  rec->next = _XmXftDisplays;
+  _XmXftDisplays = rec;
+  return rec;
+}
+
+/*
+ * Destroy callback of a widget whose window has an XftDraw: destroy the
+ * XftDraw while the window still exists, so that the table does not keep
+ * every window ever drawn into, nor hand a stale XftDraw to a new window
+ * that gets the same XID.
+ */
+static void XftDrawWidgetDestroyed(Widget w, XtPointer client_data, XtPointer call_data)
+{
+  Window window = (Window)client_data;
+  XmXftDisplayRec *rec;
+  XftDraw *draw = NULL;
+  _XmProcessLock();
+  if ((rec = FindXftDisplay(XtDisplay(w), False)) != NULL &&
+      (draw = (XftDraw *)_XmGetHashEntry(rec->draws, (XmHashKey)window)) != NULL)
+    (void)_XmRemoveHashEntry(rec->draws, (XmHashKey)window);
+  _XmProcessUnlock();
+  /* If the widget was unrealized meanwhile, the server has already freed
+   * the window and its Picture: only forget the XftDraw then. */
+  if (draw != NULL && XtWindow(w) == window)
+    XftDrawDestroy(draw);
+}
+
+/* Grow a table once it holds more entries than buckets. */
+static void AddHashEntry(XmHashTable table, XmHashKey key, XtPointer value)
+{
+  _XmAddHashEntry(table, key, value);
+  if (_XmHashTableCount(table) > _XmHashTableSize(table))
+    _XmResizeHashTable(table, 2 * _XmHashTableSize(table));
+}
+
+/*
+ * The font opened earlier on display for the font resources of rend,
+ * which may be NULL if it failed to open; False if there is none.  This
+ * saves building and matching a pattern for every rendition.
+ */
+static Boolean LookupXftFont(Display *display, XmRendition rend, XftFont **font)
+{
+  XmXftDisplayRec *rec;
+  XmXftFontRec key, *found = NULL;
+  XftFontDesc(rend, &key);
+  _XmProcessLock();
+  if ((rec = FindXftDisplay(display, False)) != NULL)
+    found = (XmXftFontRec *)_XmGetHashEntry(rec->fonts, (XmHashKey)&key);
+  if (found != NULL)
+    *font = found->font;
+  _XmProcessUnlock();
+  return (found != NULL);
+}
+
+/* Remember the font just opened for rend, until display is closed. */
+static void CacheXftFont(Display *display, XmRendition rend)
+{
+  XmXftDisplayRec *rec;
+  XmXftFontRec key, *entry;
+  XftFontDesc(rend, &key);
+  _XmProcessLock();
+  if ((rec = FindXftDisplay(display, True)) != NULL &&
+      _XmGetHashEntry(rec->fonts, (XmHashKey)&key) == NULL) {
+    entry = XtNew(XmXftFontRec);
+    *entry = key;
+    entry->name = XtNewString(key.name);
+    entry->foundry = XtNewString(key.foundry);
+    entry->encoding = XtNewString(key.encoding);
+    entry->style = XtNewString(key.style);
+    if (_XmRendXftFont(rend) != NULL)
+      entry->font = XftFontCopy(display, _XmRendXftFont(rend));
+    AddHashEntry(rec->fonts, (XmHashKey)entry, (XtPointer)entry);
+  }
+  _XmProcessUnlock();
+}
+
+/* The colormap of the widget that owns window, else the default one. */
+static Colormap WindowColormap(Display *display, Window window)
+{
+  Widget w = XtWindowToWidget(display, window);
+  if (w != NULL && w->core.colormap != None)
+    return w->core.colormap;
+  return DefaultColormap(display, DefaultScreen(display));
+}
+
+/*
+ * Whether the colours of colormap cannot change: it is the default
+ * colormap of a screen whose default visual is StaticGray, StaticColor
+ * or TrueColor.  The visual of another colormap is not known here.
+ */
+static Boolean ColormapIsStatic(Display *display, Colormap colormap)
+{
+  int i, c;
+  for (i = 0; i < ScreenCount(display); i++)
+    if (colormap == DefaultColormap(display, i)) {
+      c = DefaultVisual(display, i)->class;
+      return (c == StaticGray || c == StaticColor || c == TrueColor);
+    }
+  return False;
+}
+
+/* The XftColor for pixel in colormap, asking the server once if cache. */
+static XftColor GetXftColor(Display *display, Colormap colormap, Pixel pixel, Boolean cache)
+{
+  XmXftDisplayRec *rec;
+  XmXftColorRec key, *entry;
+  XColor xcol;
+  key.colormap = colormap;
+  key.color.pixel = pixel;
+  key.color.color.red = key.color.color.green = key.color.color.blue = 0;
+  key.color.color.alpha = 0xFFFF;
+  if (display == NULL)
+    return key.color;
+  if (!cache) {
+    memset(&xcol, 0, sizeof(xcol));
+    xcol.pixel = pixel;
+    XQueryColor(display, colormap, &xcol);
+    key.color.color.red = xcol.red;
+    key.color.color.green = xcol.green;
+    key.color.color.blue = xcol.blue;
+    return key.color;
+  }
+  _XmProcessLock();
+  rec = FindXftDisplay(display, True);
+  entry = rec ? (XmXftColorRec *)_XmGetHashEntry(rec->colors, (XmHashKey)&key) : NULL;
+  if (entry != NULL) {
+    key.color = entry->color;
+    _XmProcessUnlock();
+    return key.color;
+  }
+  _XmProcessUnlock();
+  memset(&xcol, 0, sizeof(xcol));
+  xcol.pixel = pixel;
+  XQueryColor(display, colormap, &xcol);
+  key.color.color.red = xcol.red;
+  key.color.color.green = xcol.green;
+  key.color.color.blue = xcol.blue;
+  _XmProcessLock();
+  if ((rec = FindXftDisplay(display, True)) != NULL &&
+      _XmGetHashEntry(rec->colors, (XmHashKey)&key) == NULL) {
+    entry = XtNew(XmXftColorRec);
+    *entry = key;
+    AddHashEntry(rec->colors, (XmHashKey)entry, (XtPointer)entry);
+  }
+  _XmProcessUnlock();
+  return key.color;
+}
+
+static XftColor GetCachedXftColor(Display *display, Pixel color)
+{
+  if (display == NULL)
+    return GetXftColor(NULL, None, color, True);
+  return GetXftColor(display, DefaultColormap(display, DefaultScreen(display)), color, True);
+}
+
+/* The XftColor to draw pixel with into window. */
+static XftColor GetDrawXftColor(Display *display, Window window, Pixel pixel)
+{
+  Colormap colormap = WindowColormap(display, window);
+  return GetXftColor(display, colormap, pixel, ColormapIsStatic(display, colormap));
+}
+
 static XErrorHandler oldErrorHandler __attribute__((unused));
 static int xft_error __attribute__((unused));
 /* Suppress unused variable warning */
@@ -2392,48 +2691,44 @@ static int __attribute__((unused)) _XmXftErrorHandler(Display *display, XErrorEv
 
 XftDraw *_XmXftDrawCreate(Display *display, Window window)
 {
-  XftDraw *draw;
-  int i;
-  for (i = 0; i < _XmXftDrawCacheSize; i++) {
-    if (_XmXftDrawCache[i].display == display && _XmXftDrawCache[i].window == window) {
-      return _XmXftDrawCache[i].draw;
-    }
-  }
+  XmXftDisplayRec *rec;
+  XftDraw *draw = NULL;
+  Widget widget;
+  _XmProcessLock();
+  if ((rec = FindXftDisplay(display, True)) != NULL)
+    draw = (XftDraw *)_XmGetHashEntry(rec->draws, (XmHashKey)window);
+  _XmProcessUnlock();
+  if (draw != NULL)
+    return draw;
   if (!(draw = XftDrawCreate(display,
                              window,
                              DefaultVisual(display, DefaultScreen(display)),
                              DefaultColormap(display, DefaultScreen(display)))))
     draw = XftDrawCreateBitmap(display, window);
-  /* Store it in the cache. Look for an empty slot first */
-  for (i = 0; i < _XmXftDrawCacheSize; i++)
-    if (_XmXftDrawCache[i].display == NULL) {
-      _XmXftDrawCache[i].display = display;
-      _XmXftDrawCache[i].draw = draw;
-      _XmXftDrawCache[i].window = window;
-      return draw;
-    }
-  i = _XmXftDrawCacheSize; /* Next free index */
-  _XmXftDrawCacheSize = _XmXftDrawCacheSize * 2 + 8;
-  _XmXftDrawCache = (struct _XmXftDrawCacheStruct *)XtRealloc(
-      (char *)_XmXftDrawCache, sizeof(struct _XmXftDrawCacheStruct) * _XmXftDrawCacheSize);
-  memset(_XmXftDrawCache + i, 0, (_XmXftDrawCacheSize - i) * sizeof(*_XmXftDrawCache));
-  _XmXftDrawCache[i].display = display;
-  _XmXftDrawCache[i].draw = draw;
-  _XmXftDrawCache[i].window = window;
+  if (draw == NULL)
+    return NULL;
+  _XmProcessLock();
+  if ((rec = FindXftDisplay(display, True)) != NULL)
+    AddHashEntry(rec->draws, (XmHashKey)window, (XtPointer)draw);
+  _XmProcessUnlock();
+  if (rec != NULL && (widget = XtWindowToWidget(display, window)) != NULL)
+    XtAddCallback(widget, XtNdestroyCallback, XftDrawWidgetDestroyed, (XtPointer)window);
   return draw;
 }
 
 void _XmXftDrawDestroy(Display *display, Window window, XftDraw *draw)
 {
-  int i;
-  for (i = 0; i < _XmXftDrawCacheSize; i++)
-    if (_XmXftDrawCache[i].display == display && _XmXftDrawCache[i].window == window) {
-      _XmXftDrawCache[i].display = NULL;
-      _XmXftDrawCache[i].draw = NULL;
-      _XmXftDrawCache[i].window = None;
-      XftDrawDestroy(draw);
-      return;
-    }
+  XmXftDisplayRec *rec;
+  XtPointer found = NULL;
+  _XmProcessLock();
+  if ((rec = FindXftDisplay(display, True)) != NULL &&
+      (found = _XmGetHashEntry(rec->draws, (XmHashKey)window)) != NULL)
+    (void)_XmRemoveHashEntry(rec->draws, (XmHashKey)window);
+  _XmProcessUnlock();
+  if (found != NULL) {
+    XftDrawDestroy(draw);
+    return;
+  }
   XmeWarning(NULL, "_XmXftDrawDestroy() this should not happen\n");
 }
 
@@ -2449,15 +2744,10 @@ void _XmXftDrawString2(Display *display,
 {
   XftDraw *draw = _XmXftDrawCreate(display, window);
   XGCValues gc_val;
-  XColor xcol;
   XftColor xftcol;
+  /* XGetGCValues reads Xlib's copy of the GC; it is not a round trip. */
   XGetGCValues(display, gc, GCForeground, &gc_val);
-  xcol.pixel = gc_val.foreground;
-  XQueryColor(display, DefaultColormap(display, DefaultScreen(display)), &xcol);
-  xftcol.color.red = xcol.red;
-  xftcol.color.blue = xcol.blue;
-  xftcol.color.green = xcol.green;
-  xftcol.color.alpha = 0xFFFF;
+  xftcol = GetDrawXftColor(display, window, gc_val.foreground);
   switch (bpc) {
     case 1:
       XftDrawStringUtf8(draw, &xftcol, font, x, y, (XftChar8 *)s, len);
@@ -2502,15 +2792,8 @@ void _XmXftDrawString(Display *display,
     }
     if (_XmRendBG(rend) == XmUNSPECIFIED_PIXEL) {
       XGCValues gc_val;
-      XColor xcol;
       XGetGCValues(display, _XmRendGC(rend), GCBackground, &gc_val);
-      xcol.pixel = gc_val.background;
-      XQueryColor(display, DefaultColormapOfScreen(DefaultScreenOfDisplay(display)), &xcol);
-      bg_color.pixel = xcol.pixel;
-      bg_color.color.red = xcol.red;
-      bg_color.color.green = xcol.green;
-      bg_color.color.blue = xcol.blue;
-      bg_color.color.alpha = 0xFFFF;
+      bg_color = GetDrawXftColor(display, window, gc_val.background);
     }
     XftDrawRect(draw,
                 &bg_color,
@@ -2521,15 +2804,8 @@ void _XmXftDrawString(Display *display,
   }
   if (_XmRendFG(rend) == XmUNSPECIFIED_PIXEL) {
     XGCValues gc_val;
-    XColor xcol;
     XGetGCValues(display, _XmRendGC(rend), GCForeground, &gc_val);
-    xcol.pixel = gc_val.foreground;
-    XQueryColor(display, DefaultColormapOfScreen(DefaultScreenOfDisplay(display)), &xcol);
-    fg_color.pixel = xcol.pixel;
-    fg_color.color.red = xcol.red;
-    fg_color.color.green = xcol.green;
-    fg_color.color.blue = xcol.blue;
-    fg_color.color.alpha = 0xFFFF;
+    fg_color = GetDrawXftColor(display, window, gc_val.foreground);
   }
   switch (bpc) {
     case 1:
@@ -2551,39 +2827,6 @@ void _XmXftSetClipRectangles(
 {
   XftDraw *d = _XmXftDrawCreate(display, window);
   XftDrawSetClipRectangles(d, x, y, rects, n);
-}
-
-static XftColor GetCachedXftColor(Display *display, Pixel color)
-{
-  static XftColor *color_cache = NULL;
-  static int colors_count = 0;
-  XftColor xftcol = {0, {0, 0, 0, 0xFFFF}};
-  XColor xcol;
-  Boolean color_exist = FALSE;
-  int i;
-  if (color_cache != NULL) {
-    for (i = 0; i < colors_count; ++i) {
-      if (color_cache[i].pixel == color) {
-        xftcol = color_cache[i];
-        color_exist = TRUE;
-        break;
-      }
-    }
-  }
-  if (!color_exist) {
-    xcol.pixel = color;
-    XQueryColor(display, DefaultColormap(display, DefaultScreen(display)), &xcol);
-    xftcol.pixel = color;
-    xftcol.color.red = xcol.red;
-    xftcol.color.blue = xcol.blue;
-    xftcol.color.green = xcol.green;
-    xftcol.color.alpha = 0xFFFF;
-    color_cache = (XftColor *)XtRealloc((char *)color_cache,
-                                        (Cardinal)(sizeof(XftColor) * (colors_count + 1)));
-    if (color_cache != NULL)
-      color_cache[colors_count++] = xftcol;
-  }
-  return xftcol;
 }
 
 XftColor _XmXftGetXftColor(Display *display, Pixel color)
