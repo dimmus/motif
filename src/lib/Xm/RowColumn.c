@@ -1960,8 +1960,8 @@ static void PreparePostFromList(XmRowColumnWidget rowcol)
   /* malloc enough space for 1 more addition to the list */
   rowcol->row_column.postFromListSize = rowcol->row_column.postFromCount + 1;
   tempPtr = rowcol->row_column.postFromList;
-  rowcol->row_column.postFromList = (Widget *)XtMalloc(rowcol->row_column.postFromListSize *
-                                                       sizeof(Widget));
+  rowcol->row_column.postFromList =
+      (Widget *)_XmMallocArray(rowcol->row_column.postFromListSize, sizeof(Widget));
   if (tempPtr) {
     /* use temp - postFromCount incremented in _XmRC_AddToPostFromList() */
     int cnt = rowcol->row_column.postFromCount;
@@ -2771,7 +2771,7 @@ static Boolean TraversalChildren(Widget wid, Widget **childList, Cardinal *numCh
     /*
      * add the TOC to the children list
      */
-    *childList = (WidgetList)XtMalloc(sizeof(Widget) * (rc->composite.num_children + 1));
+    *childList = (WidgetList)_XmMallocArray(rc->composite.num_children + 1, sizeof(Widget));
     (*childList)[0] = RC_TearOffControl(rc);
     for (i = 1; i <= rc->composite.num_children; i++) {
       (*childList)[i] = rc->composite.children[i - 1];

@@ -448,7 +448,7 @@ static void Initialize(Widget request, Widget new_w, ArgList args, Cardinal *num
   XmPanedWindowWidget pw = (XmPanedWindowWidget)new_w;
   /* Protect against empty widgets */
   pw->paned_window.pane_count = 0;
-  pw->paned_window.managed_children = (WidgetList)XtMalloc(XmBLOCK * sizeof(Widget));
+  pw->paned_window.managed_children = (WidgetList)_XmMallocArray(XmBLOCK, sizeof(Widget));
   pw->paned_window.num_slots = XmBLOCK;
   pw->paned_window.num_managed_children = 0;
   PaneStartPos(pw) = 0;
@@ -673,9 +673,10 @@ static void ReManageChildren(XmPanedWindowWidget pw)
     if (XtIsManaged(pw->composite.children[i])) {
       if ((pw->paned_window.num_managed_children + 1) > pw->paned_window.num_slots) {
         pw->paned_window.num_slots += XmBLOCK;
-        pw->paned_window.managed_children = (WidgetList)XtRealloc(
-            (char *)pw->paned_window.managed_children,
-            (pw->paned_window.num_slots * sizeof(Widget)));
+        pw->paned_window.managed_children =
+            (WidgetList)_XmReallocArray((char *)pw->paned_window.managed_children,
+                                        pw->paned_window.num_slots,
+                                        sizeof(Widget));
       }
       pw->paned_window.managed_children[pw->paned_window.num_managed_children++] =
           pw->composite.children[i];
@@ -1927,7 +1928,7 @@ static Boolean SetValues(Widget cw,
     WidgetList sep_children;
     Cardinal num_separators = 0;
     /* This should be more than enough space */
-    sep_children = (WidgetList)XtMalloc((num_children / 3) * sizeof(Widget));
+    sep_children = (WidgetList)_XmMallocArray(num_children / 3, sizeof(Widget));
     for (childP = children, i = 0; i < num_children; childP++, i++) {
       if (IsPane(*childP)) {
         Widget separator = PaneInfo(*childP)->panedw.separator;

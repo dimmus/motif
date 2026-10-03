@@ -560,7 +560,7 @@ static void MapInit(FormIndexMap *map, int count)
   while (size < 2 * (unsigned long)count)
     size <<= 1;
   map->keys = (Widget *)XtCalloc((Cardinal)size, sizeof(Widget));
-  map->vals = (int *)XtMalloc((Cardinal)(size * sizeof(int)));
+  map->vals = (int *)_XmMallocArray(size, sizeof(int));
   map->mask = size - 1;
 }
 
@@ -612,7 +612,7 @@ static void HeapPush(int **heap, int *len, int *size, int val)
   int *h;
   if (*len == *size) {
     *size = (*size > 0) ? 2 * *size : 16;
-    *heap = (int *)XtRealloc((char *)*heap, (Cardinal)(*size * sizeof(int)));
+    *heap = (int *)_XmReallocArray((char *)*heap, *size, sizeof(int));
   }
   h = *heap;
   for (i = (*len)++; i > 0 && h[parent = (i - 1) / 2] > val; i = parent)
@@ -684,7 +684,7 @@ static void LayoutInit(XmFormWidget fw, FormLayout *l)
   XmFormConstraint c;
   int *fill;
   int i, j, k, m, n = 0;
-  l->kids = (Widget *)XtMalloc((Cardinal)((num ? num : 1) * sizeof(Widget)));
+  l->kids = (Widget *)_XmMallocArray(num ? num : 1, sizeof(Widget));
   l->num_managed = -1;
   for (child = fw->form.first_child; child != NULL && n < (int)num;
        child = GetFormConstraint(child)->next_sibling)
@@ -702,8 +702,8 @@ static void LayoutInit(XmFormWidget fw, FormLayout *l)
     MapAdd(&l->map, l->kids[i], i);
   /* Every child starts dirty; note which ones read the form size. */
   l->flags = (unsigned char *)XtMalloc((Cardinal)(m + 1));
-  l->readers[0] = (int *)XtMalloc((Cardinal)((m + 1) * sizeof(int)));
-  l->readers[1] = (int *)XtMalloc((Cardinal)((m + 1) * sizeof(int)));
+  l->readers[0] = (int *)_XmMallocArray(m + 1, sizeof(int));
+  l->readers[1] = (int *)_XmMallocArray(m + 1, sizeof(int));
   l->num_readers[0] = l->num_readers[1] = 0;
   l->seen[0] = (unsigned int *)XtCalloc((Cardinal)(m + 1), sizeof(unsigned int));
   l->seen[1] = (unsigned int *)XtCalloc((Cardinal)(m + 1), sizeof(unsigned int));
@@ -733,8 +733,8 @@ static void LayoutInit(XmFormWidget fw, FormLayout *l)
   }
   for (i = 0; i < m; i++)
     l->dep_start[i + 1] += l->dep_start[i];
-  l->deps = (int *)XtMalloc((Cardinal)((l->dep_start[m] + 1) * sizeof(int)));
-  fill = (int *)XtMalloc((Cardinal)((m + 1) * sizeof(int)));
+  l->deps = (int *)_XmMallocArray(l->dep_start[m] + 1, sizeof(int));
+  fill = (int *)_XmMallocArray(m + 1, sizeof(int));
   for (i = 0; i < m; i++)
     fill[i] = l->dep_start[i];
   for (i = 0; i < m; i++) {
@@ -747,7 +747,7 @@ static void LayoutInit(XmFormWidget fw, FormLayout *l)
     }
   }
   XtFree((char *)fill);
-  l->deferred = (int *)XtMalloc((Cardinal)((m + 1) * sizeof(int)));
+  l->deferred = (int *)_XmMallocArray(m + 1, sizeof(int));
   l->heap = NULL;
   l->heap_len = l->heap_size = 0;
   l->scope = -1;
@@ -2131,7 +2131,7 @@ static void SortChildren(register XmFormWidget fw)
   }
   for (i = 0; i < (int)num; i++)
     edge_start[i + 1] += edge_start[i];
-  edges = (int *)XtMalloc((Cardinal)((edge_start[num] + 1) * sizeof(int)));
+  edges = (int *)_XmMallocArray(edge_start[num] + 1, sizeof(int));
   for (i = 0; i < (int)num; i++)
     order[i] = edge_start[i]; /* fill pointers, for now */
   for (i = 0; i < (int)num; i++) {
@@ -2149,7 +2149,7 @@ static void SortChildren(register XmFormWidget fw)
   MapFree(&map);
   /* Take the ready children lowest index first. */
   heap_size = (int)num;
-  heap = (int *)XtMalloc((Cardinal)((num + 1) * sizeof(int)));
+  heap = (int *)_XmMallocArray(num + 1, sizeof(int));
   for (i = 0; i < (int)num; i++) {
     child = children[i];
     if (XtIsRectObj(child) && XtIsManaged(child) && (indeg[i] == 0))
@@ -2306,7 +2306,7 @@ static float CheckBase(
     return (*proc)(sibling, opposite, layout);
   if (layout->base_state == NULL) {
     size = layout->num_kids * NUM_BASE_SLOTS;
-    layout->base_val = (float *)XtMalloc((Cardinal)(size * sizeof(float)));
+    layout->base_val = (float *)_XmMallocArray(size, sizeof(float));
     layout->base_state = (unsigned char *)XtCalloc((Cardinal)size, 1);
   }
   slot = i * NUM_BASE_SLOTS + kind + (opposite ? 1 : 0);

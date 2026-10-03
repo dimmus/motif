@@ -1957,14 +1957,16 @@ static void ScrollList(XmListWidget lw, int old_top)
       /* more visible rows than room on the stack */
       size *= 2;
       if (lines[0] == rects[0]) {
-        lines[0] = (XRectangle *)memcpy(XtMalloc(size * sizeof(XRectangle)), rects[0],
+        lines[0] = (XRectangle *)memcpy(_XmMallocArray(size, sizeof(XRectangle)),
+                                        rects[0],
                                         sizeof(rects[0]));
-        lines[1] = (XRectangle *)memcpy(XtMalloc(size * sizeof(XRectangle)), rects[1],
+        lines[1] = (XRectangle *)memcpy(_XmMallocArray(size, sizeof(XRectangle)),
+                                        rects[1],
                                         sizeof(rects[1]));
       }
       else {
-        lines[0] = (XRectangle *)XtRealloc((char *)lines[0], size * sizeof(XRectangle));
-        lines[1] = (XRectangle *)XtRealloc((char *)lines[1], size * sizeof(XRectangle));
+        lines[0] = (XRectangle *)_XmReallocArray((char *)lines[0], size, sizeof(XRectangle));
+        lines[1] = (XRectangle *)_XmReallocArray((char *)lines[1], size, sizeof(XRectangle));
       }
     }
     lines[k][nlines[k]].x = lw->list.BaseX;
@@ -2662,8 +2664,9 @@ static int AddInternalElements(
     pos = position - 1;
   else
     pos = lw->list.LastItem;
-  lw->list.InternalList = (ElementPtr *)XtRealloc((char *)lw->list.InternalList,
-                                                  (sizeof(Element *) * lw->list.itemCount));
+  lw->list.InternalList = (ElementPtr *)_XmReallocArray((char *)lw->list.InternalList,
+                                                        lw->list.itemCount,
+                                                        sizeof(Element *));
   /* Make room in the InternalList for the new items. */
   if (pos < lw->list.LastItem)
     memmove((char *)(lw->list.InternalList + pos + nitems),
@@ -2737,8 +2740,9 @@ static int DeleteInternalElements(XmListWidget lw, XmString string, int position
   FixStartEnd(lw, curpos, count, &lw->list.OldStartItem, &lw->list.OldEndItem);
   /* END OSF Fix CR 4656 */
   if (lw->list.itemCount) {
-    lw->list.InternalList = (ElementPtr *)XtRealloc((char *)lw->list.InternalList,
-                                                    (sizeof(Element *) * lw->list.itemCount));
+    lw->list.InternalList = (ElementPtr *)_XmReallocArray((char *)lw->list.InternalList,
+                                                          lw->list.itemCount,
+                                                          sizeof(Element *));
   }
   else {
     XtFree((char *)lw->list.InternalList);
@@ -2827,8 +2831,9 @@ static int DeleteInternalElementPositions(XmListWidget lw,
     }
   }
   if (lw->list.itemCount) {
-    lw->list.InternalList = (ElementPtr *)XtRealloc((char *)lw->list.InternalList,
-                                                    (sizeof(ElementPtr) * lw->list.itemCount));
+    lw->list.InternalList = (ElementPtr *)_XmReallocArray((char *)lw->list.InternalList,
+                                                          lw->list.itemCount,
+                                                          sizeof(ElementPtr));
   }
   else {
     XtFree((char *)lw->list.InternalList);
@@ -2886,8 +2891,8 @@ static void AddItems(XmListWidget lw, XmString *items, int nitems, int pos)
 {
   int i;
   int TotalItems = lw->list.itemCount + nitems;
-  lw->list.items = (XmString *)XtRealloc((char *)lw->list.items,
-                                         (sizeof(XmString) * (TotalItems)));
+  lw->list.items =
+      (XmString *)_XmReallocArray((char *)lw->list.items, TotalItems, sizeof(XmString));
   /* Make a gap in the array for the new items. */
   if (pos < lw->list.itemCount)
     memmove((char *)(lw->list.items + pos + nitems),
@@ -2924,7 +2929,8 @@ static void DeleteItems(XmListWidget lw, int nitems, int pos)
             (char *)(lw->list.items + pos + nitems),
             (TotalItems - pos) * sizeof(XmString));
   if (TotalItems) {
-    lw->list.items = (XmString *)XtRealloc((char *)lw->list.items, TotalItems * sizeof(XmString));
+    lw->list.items =
+        (XmString *)_XmReallocArray((char *)lw->list.items, TotalItems, sizeof(XmString));
   }
   else {
     /* Null out the list pointer, if we have deleted the last item. */
@@ -2990,7 +2996,8 @@ static void DeleteItemPositions(XmListWidget lw,
     }
   }
   if (TotalItems) {
-    lw->list.items = (XmString *)XtRealloc((char *)lw->list.items, TotalItems * sizeof(XmString));
+    lw->list.items =
+        (XmString *)_XmReallocArray((char *)lw->list.items, TotalItems, sizeof(XmString));
   }
   else {
     /* Null out the list pointer, if we have deleted the last item. */
@@ -3109,7 +3116,7 @@ static void CopyItems(XmListWidget lw)
   register int i;
   XmString *il;
   if (lw->list.items && lw->list.itemCount) {
-    il = (XmString *)XtMalloc(sizeof(XmString) * (lw->list.itemCount));
+    il = (XmString *)_XmMallocArray(lw->list.itemCount, sizeof(XmString));
     for (i = 0; i < lw->list.itemCount; i++)
       il[i] = XmStringCopy(lw->list.items[i]);
     lw->list.items = il;
@@ -3126,7 +3133,7 @@ static void CopySelectedItems(XmListWidget lw)
   register int i;
   XmString *sl;
   if (lw->list.selectedItems && lw->list.selectedItemCount) {
-    sl = (XmString *)XtMalloc(sizeof(XmString) * (lw->list.selectedItemCount));
+    sl = (XmString *)_XmMallocArray(lw->list.selectedItemCount, sizeof(XmString));
     for (i = 0; i < lw->list.selectedItemCount; i++)
       sl[i] = XmStringCopy(lw->list.selectedItems[i]);
     lw->list.selectedItems = sl;
@@ -3236,7 +3243,7 @@ static void BuildSelectedList(XmListWidget lw, Boolean commit)
   lw->list.selectedItems = NULL;
   if (j == 0)
     return;
-  lw->list.selectedItems = (XmString *)XtMalloc(sizeof(XmString) * j);
+  lw->list.selectedItems = (XmString *)_XmMallocArray(j, sizeof(XmString));
   for (i = 0, j = 0; i < count; i++) {
     if (lw->list.InternalList[i]->selected) {
       lw->list.selectedItems[j] = XmStringCopy(lw->list.items[i]);
@@ -3269,7 +3276,7 @@ static void BuildSelectedPositions(XmListWidget lw, int count)
     lw->list.selectedPositions = NULL;
   }
   else {
-    lw->list.selectedPositions = (int *)XtMalloc(sizeof(int) * nsel);
+    lw->list.selectedPositions = (int *)_XmMallocArray(nsel, sizeof(int));
     for (pos = 0, nsel = 0; pos < nitems; pos++) {
       if (lw->list.InternalList[pos]->selected) {
         lw->list.selectedPositions[nsel] = pos + 1;
@@ -3349,7 +3356,7 @@ static void UpdateSelection(XmListWidget lw)
 {
   int count = lw->list.itemCount;
   int size = lw->list.selectedPositionCount + 16;
-  int *positions = (int *)XtMalloc(sizeof(int) * size);
+  int *positions = (int *)_XmMallocArray(size, sizeof(int));
   int i, nsel = 0;
   ElementPtr el;
   /* Commit the selection and collect it. */
@@ -3359,7 +3366,7 @@ static void UpdateSelection(XmListWidget lw)
     if (el->selected) {
       if (nsel == size) {
         size *= 2;
-        positions = (int *)XtRealloc((char *)positions, sizeof(int) * size);
+        positions = (int *)_XmReallocArray((char *)positions, size, sizeof(int));
       }
       positions[nsel++] = i + 1;
     }
@@ -3368,7 +3375,7 @@ static void UpdateSelection(XmListWidget lw)
   lw->list.selectedItemCount = nsel;
   lw->list.selectedItems = NULL;
   if (nsel) {
-    lw->list.selectedItems = (XmString *)XtMalloc(sizeof(XmString) * nsel);
+    lw->list.selectedItems = (XmString *)_XmMallocArray(nsel, sizeof(XmString));
     for (i = 0; i < nsel; i++)
       lw->list.selectedItems[i] = XmStringCopy(lw->list.items[positions[i] - 1]);
   }
@@ -3377,7 +3384,7 @@ static void UpdateSelection(XmListWidget lw)
   ClearSelectedPositions(lw);
   lw->list.selectedPositionCount = nsel;
   if (nsel) {
-    lw->list.selectedPositions = (int *)XtRealloc((char *)positions, sizeof(int) * nsel);
+    lw->list.selectedPositions = (int *)_XmReallocArray((char *)positions, nsel, sizeof(int));
   }
   else {
     lw->list.selectedPositions = NULL;
@@ -5662,8 +5669,8 @@ static void ListProcessDrag(Widget wid,
   ListDragConv->w = wid;
   if (lw->list.InternalList[item]->selected) {
     /* CR 8878: selectedItems may contain extraneous items. */
-    ListDragConv->strings = (XmString *)XtMalloc(sizeof(XmString) *
-                                                 lw->list.selectedPositionCount);
+    ListDragConv->strings =
+        (XmString *)_XmMallocArray(lw->list.selectedPositionCount, sizeof(XmString));
     ListDragConv->num_strings = lw->list.selectedPositionCount;
     for (i = 0; i < lw->list.selectedPositionCount; i++) {
       ListDragConv->strings[i] = XmStringCopy(lw->list.items[lw->list.selectedPositions[i] - 1]);
@@ -7416,7 +7423,7 @@ Boolean XmListGetMatchPos(Widget w, XmString item, int **pos_list, int *pos_coun
     _XmAppUnlock(app);
     return FALSE;
   }
-  pos = (int *)XtMalloc((sizeof(int) * lw->list.itemCount));
+  pos = (int *)_XmMallocArray(lw->list.itemCount, sizeof(int));
   j = 0;
   _XmProcessLock();
   for (i = 0; i < lw->list.itemCount; i++) {
@@ -7429,7 +7436,7 @@ Boolean XmListGetMatchPos(Widget w, XmString item, int **pos_list, int *pos_coun
     _XmAppUnlock(app);
     return (FALSE);
   }
-  pos = (int *)XtRealloc((char *)pos, (sizeof(int) * j));
+  pos = (int *)_XmReallocArray((char *)pos, j, sizeof(int));
   *pos_list = pos;
   *pos_count = j;
   _XmAppUnlock(app);
@@ -7496,7 +7503,7 @@ Boolean XmListGetSelectedPos(Widget w, int **pos_list, int *pos_count)
     _XmAppUnlock(app);
     return FALSE;
   }
-  posList = (int *)XtMalloc(sizeof(int) * lw->list.selectedPositionCount);
+  posList = (int *)_XmMallocArray(lw->list.selectedPositionCount, sizeof(int));
   count = lw->list.selectedPositionCount;
   memcpy((char *)posList, (char *)lw->list.selectedPositions, count * sizeof(int));
   *pos_list = posList;

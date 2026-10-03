@@ -1283,7 +1283,7 @@ static void FitBoxesAveraging(XmKidGeometry rowPtr,
   /****************/
   /* Get memory to use for sorting the list of boxes.
    */
-  sortedBoxes = (XmKidGeometry *)XtMalloc(numBoxes * sizeof(XmKidGeometry));
+  sortedBoxes = (XmKidGeometry *)_XmMallocArray(numBoxes, sizeof(XmKidGeometry));
   /* Enter the boxes into the array and sort.
    */
   Index = 0;
@@ -1911,7 +1911,7 @@ XmKidGeometry _XmGetKidGeo(Widget wid,                 /* Widget w/ children. */
   int j = 0;
   Boolean helpFound = FALSE;
   /****************/
-  geo = (XmKidGeometry)XtMalloc((_XmGeoCount_kids(c) + 1) * sizeof(XmKidGeometryRec));
+  geo = (XmKidGeometry)_XmMallocArray(_XmGeoCount_kids(c) + 1, sizeof(XmKidGeometryRec));
   /* load all managed kids */
   for (i = 0; i < c->composite.num_children; i++) {
     kidWid = c->composite.children[i];

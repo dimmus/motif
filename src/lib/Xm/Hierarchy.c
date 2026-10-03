@@ -866,9 +866,10 @@ static void BuildNodeTable(Widget w, HierarchyConstraints node, Cardinal *curren
      * This will allocate more space than we need, but shouldn't be too
      * terrible.
      */
-    XmHierarchy_node_table(hw) = (HierarchyConstraints *)XtRealloc(
-        (XtPointer)XmHierarchy_node_table(hw),
-        sizeof(HierarchyConstraints) * hw->composite.num_children);
+    XmHierarchy_node_table(hw) =
+        (HierarchyConstraints *)_XmReallocArray((XtPointer)XmHierarchy_node_table(hw),
+                                                hw->composite.num_children,
+                                                sizeof(HierarchyConstraints));
     XmHierarchy_alloc_nodes(hw) = hw->composite.num_children;
   }
   _BuildNodeTable(w, node, current_index);
@@ -1292,7 +1293,7 @@ WidgetList XmHierarchyGetChildNodes(Widget nw)
     _XmAppUnlock(app);
     return retval;
   }
-  retval = (WidgetList)XtMalloc((XmHierarchyC_num_children(node) + 1) * sizeof(Widget));
+  retval = (WidgetList)_XmMallocArray(XmHierarchyC_num_children(node) + 1, sizeof(Widget));
   for (i = 0; i < XmHierarchyC_num_children(node); i++)
     retval[i] = XmHierarchyC_widget(XmHierarchyC_children(node)[i]);
   retval[i] = (Widget)NULL;

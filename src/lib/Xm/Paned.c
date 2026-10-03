@@ -2129,8 +2129,10 @@ static void ReManageChildren(XmPanedWidget pw)
       /* expand our storage area if needed */
       if ((XmPaned_num_panes(pw) + 1) > XmPaned_num_slots(pw)) {
         XmPaned_num_slots(pw) += BLOCK;
-        XmPaned_managed_children(pw) = (WidgetList)XtRealloc(
-            (XtPointer)XmPaned_managed_children(pw), (XmPaned_num_slots(pw) * sizeof(Widget)));
+        XmPaned_managed_children(pw) =
+            (WidgetList)_XmReallocArray((XtPointer)XmPaned_managed_children(pw),
+                                        XmPaned_num_slots(pw),
+                                        sizeof(Widget));
       }
 #ifndef POSITION_IMPLEMENTED
       /*
@@ -2275,7 +2277,7 @@ static Boolean SetValues(Widget old, Widget request, Widget set, ArgList args, C
       WidgetList sep_children;
       Cardinal num_separators = 0;
       /* This should be more than enough space */
-      sep_children = (WidgetList)XtMalloc(num_panes * sizeof(Widget));
+      sep_children = (WidgetList)_XmMallocArray(num_panes, sizeof(Widget));
       for (childP = XmPaned_managed_children(set_pw);
            childP < XmPaned_managed_children(set_pw) + XmPaned_num_panes(set_pw);
            childP++)

@@ -814,8 +814,8 @@ static void GetDetailHeader(Widget wid,
            done in Destroy */
     if (cw->container.cache_detail_heading)
       XtFree((char *)cw->container.cache_detail_heading);
-    cw->container.cache_detail_heading = (XmStringTable)XtMalloc(sizeof(XmString) *
-                                                                 (icon_detail_header_count + 1));
+    cw->container.cache_detail_heading =
+        (XmStringTable)_XmMallocArray(icon_detail_header_count + 1, sizeof(XmString));
     for (i = 0; i < icon_detail_header_count; i++)
       cw->container.cache_detail_heading[i + 1] = icon_detail_header[i];
     cw->container.cache_detail_heading[0] = label_string;
@@ -935,8 +935,8 @@ static void Initialize(Widget rw,
    * deal with XmNdetailOrder & XmNdetailOrderCount
    */
   if (ncw->container.detail_order_count && ncw->container.detail_order) {
-    ncw->container.detail_order = (Cardinal *)XtMalloc(sizeof(Cardinal) *
-                                                       ncw->container.detail_order_count);
+    ncw->container.detail_order =
+        (Cardinal *)_XmMallocArray(ncw->container.detail_order_count, sizeof(Cardinal));
     for (i = 0; i < ncw->container.detail_order_count; i++)
       ncw->container.detail_order[i] = rcw->container.detail_order[i];
   }
@@ -1476,7 +1476,8 @@ static Boolean SetValues(Widget cw,
     }
     if (ncw->container.detail_order_count && ncw->container.detail_order) {
       Cardinal *detail_order;
-      detail_order = (Cardinal *)XtMalloc(sizeof(Cardinal) * ncw->container.detail_order_count);
+      detail_order =
+          (Cardinal *)_XmMallocArray(ncw->container.detail_order_count, sizeof(Cardinal));
       for (i = 0; i < ncw->container.detail_order_count; i++)
         detail_order[i] = ncw->container.detail_order[i];
       ncw->container.detail_order = detail_order;
@@ -4520,7 +4521,7 @@ static XmTabList GetDumbTabList(int tab_size, Cardinal asked_num_tab)
   _XmProcessLock();
   if (Num_tab < asked_num_tab) {
     Num_tab = MAX(asked_num_tab, 100); /* HACKKKK */
-    Tab_pool = (XmTab *)XtRealloc((char *)Tab_pool, Num_tab * sizeof(XmTab));
+    Tab_pool = (XmTab *)_XmReallocArray((char *)Tab_pool, Num_tab, sizeof(XmTab));
   }
   /* create more tabs */
   for (i = prev_num_tab; i < Num_tab; i++)
@@ -4965,8 +4966,9 @@ static void LayoutSpatial(Widget wid, Boolean growth_req_allowed, CwidNode stop_
           cw->container.cell_count += height_in_cells;
         else
           cw->container.cell_count += width_in_cells;
-        cw->container.cells = (int *)XtRealloc((char *)cw->container.cells,
-                                               (sizeof(int) * (cw->container.cell_count)));
+        cw->container.cells = (int *)_XmReallocArray((char *)cw->container.cells,
+                                                     cw->container.cell_count,
+                                                     sizeof(int));
         for (i = old_cell_count; i < cw->container.cell_count; i++)
           cw->container.cells[i] = 0;
       }
@@ -7082,7 +7084,7 @@ static WidgetList GetSelectedCwids(Widget wid)
   XmContainerConstraint c;
   if (cw->container.selected_item_count == 0)
     return (NULL);
-  selected_items = (WidgetList)XtMalloc(cw->container.selected_item_count * sizeof(Widget));
+  selected_items = (WidgetList)_XmMallocArray(cw->container.selected_item_count, sizeof(Widget));
   /*
    * Search through all the visible items first - it'll work 99% of
    * the time and it's faster than searching through all the items.
@@ -7795,7 +7797,7 @@ int XmContainerGetItemChildren(Widget wid, Widget item, WidgetList *item_childre
     clist_count++;
     node = node->next_ptr;
   }
-  clist = (WidgetList)XtMalloc(clist_count * sizeof(Widget));
+  clist = (WidgetList)_XmMallocArray(clist_count, sizeof(Widget));
   node = first_child_node;
   for (i = 0; i < clist_count; i++) {
     clist[i] = node->widget_ptr;
@@ -7854,7 +7856,7 @@ void XmContainerReorder(Widget wid, WidgetList cwid_list, int cwid_count)
   _XmAppLock(app);
   c = GetContainerConstraint(cwid_list[0]);
   pcwid = c->entry_parent;
-  pi_list = (int *)XtMalloc(cwid_count * sizeof(int));
+  pi_list = (int *)_XmMallocArray(cwid_count, sizeof(int));
   pi_count = 0;
   for (i = 0; i < cwid_count; i++) {
     c = GetContainerConstraint(cwid_list[i]);

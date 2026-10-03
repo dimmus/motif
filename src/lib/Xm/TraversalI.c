@@ -841,8 +841,9 @@ Boolean _XmNewTravGraph(XmTravGraph trav_list, Widget top_wid, Widget init_curre
      * routinely attempt to prune excessive memory allocation.
      */
     trav_list->num_alloc -= XmTRAV_LIST_ALLOC_INCREMENT;
-    trav_list->head = (XmTraversalNode)XtRealloc(
-        (char *)trav_list->head, trav_list->num_alloc * sizeof(XmTraversalNodeRec));
+    trav_list->head = (XmTraversalNode)_XmReallocArray((char *)trav_list->head,
+                                                       trav_list->num_alloc,
+                                                       sizeof(XmTraversalNodeRec));
   }
   LinkNodeList(trav_list);
   SortNodeList(trav_list);
@@ -866,13 +867,14 @@ static XmTraversalNode AllocListEntry(XmTravGraph list)
       list->num_alloc = list->next_alloc;
     else
       list->num_alloc = XmTRAV_LIST_ALLOC_INCREMENT;
-    list->head = (XmTraversalNode)XtMalloc(list->num_alloc * sizeof(XmTraversalNodeRec));
+    list->head = (XmTraversalNode)_XmMallocArray(list->num_alloc, sizeof(XmTraversalNodeRec));
   }
   else {
     if (list->num_entries == list->num_alloc) {
       list->num_alloc += XmTRAV_LIST_ALLOC_INCREMENT;
-      list->head = (XmTraversalNode)XtRealloc((char *)list->head,
-                                              list->num_alloc * sizeof(XmTraversalNodeRec));
+      list->head = (XmTraversalNode)_XmReallocArray((char *)list->head,
+                                                    list->num_alloc,
+                                                    sizeof(XmTraversalNodeRec));
     }
   }
   return &(list->head[list->num_entries++]);
@@ -1130,8 +1132,9 @@ static void AppendToRow(XmTraversalNode item,
   assert(row->num_items <= row->max_items);
   if (row->num_items == row->max_items) {
     row->max_items += 10;
-    row->items = (XmTraversalNode *)XtRealloc((char *)row->items,
-                                              row->max_items * sizeof(XmTraversalNode));
+    row->items = (XmTraversalNode *)_XmReallocArray((char *)row->items,
+                                                    row->max_items,
+                                                    sizeof(XmTraversalNode));
   }
   /* Append this item.*/
   row->items[row->num_items++] = item;
@@ -1259,7 +1262,7 @@ static void Sort(XmTraversalNode *list, size_t n_mem, Boolean horizontal, XmDire
         new_data.max_hint = node->any.rect.x + node->any.rect.width;
       }
       num_rows++;
-      rows = (XmTraversalRow *)XtRealloc((char *)rows, num_rows * sizeof(XmTraversalRow));
+      rows = (XmTraversalRow *)_XmReallocArray((char *)rows, num_rows, sizeof(XmTraversalRow));
       /* Keep rows sorted by initial element. */
       for (row = new_index; row > 0; row--) {
         if (NodeDominates(node, rows[row - 1].lead_item, horizontal, layout)) {
@@ -1756,13 +1759,14 @@ void _XmTabListAdd(XmTravGraph graph, Widget wid)
     if (!(graph->tab_list_alloc)) {
       Widget shell = _XmFindTopMostShell(wid);
       graph->tab_list_alloc = XmTAB_LIST_ALLOC_INCREMENT;
-      graph->excl_tab_list = (Widget *)XtMalloc(graph->tab_list_alloc * sizeof(Widget));
+      graph->excl_tab_list = (Widget *)_XmMallocArray(graph->tab_list_alloc, sizeof(Widget));
       graph->excl_tab_list[graph->num_tab_list++] = shell;
     }
     if (graph->num_tab_list >= graph->tab_list_alloc) {
       graph->tab_list_alloc += XmTAB_LIST_ALLOC_INCREMENT;
-      graph->excl_tab_list = (Widget *)XtRealloc((char *)graph->excl_tab_list,
-                                                 graph->tab_list_alloc * sizeof(Widget));
+      graph->excl_tab_list = (Widget *)_XmReallocArray((char *)graph->excl_tab_list,
+                                                       graph->tab_list_alloc,
+                                                       sizeof(Widget));
     }
     graph->excl_tab_list[graph->num_tab_list++] = wid;
   }
@@ -1773,8 +1777,9 @@ void _XmTabListDelete(XmTravGraph graph, Widget wid)
   DeleteFromTabList(graph, SearchTabList(graph, wid));
   if ((graph->num_tab_list + XmTAB_LIST_ALLOC_INCREMENT) < graph->tab_list_alloc) {
     graph->tab_list_alloc -= XmTAB_LIST_ALLOC_INCREMENT;
-    graph->excl_tab_list = (Widget *)XtRealloc((char *)graph->excl_tab_list,
-                                               graph->tab_list_alloc * sizeof(Widget));
+    graph->excl_tab_list = (Widget *)_XmReallocArray((char *)graph->excl_tab_list,
+                                                     graph->tab_list_alloc,
+                                                     sizeof(Widget));
   }
 }
 

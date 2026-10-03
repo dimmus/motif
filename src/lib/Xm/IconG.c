@@ -975,7 +975,7 @@ static void Initialize(Widget rw,
     IG_LabelString(nw) = XmStringCopy(IG_LabelString(nw));
   /* XmNdetail */
   if (IG_Detail(nw) && IG_DetailCount(nw)) {
-    IG_Detail(nw) = (XmStringTable)XtMalloc(IG_DetailCount(nw) * sizeof(XmString));
+    IG_Detail(nw) = (XmStringTable)_XmMallocArray(IG_DetailCount(nw), sizeof(XmString));
     for (i = 0; i < IG_DetailCount(nw); i++)
       IG_Detail(nw)[i] = XmStringCopy(IG_Detail(rw)[i]);
   }
@@ -2043,7 +2043,7 @@ static Boolean SetValues(Widget cw,
     }
     /* now copy */
     if (IG_Detail(nw) && IG_DetailCount(nw)) {
-      IG_Detail(nw) = (XmStringTable)XtMalloc(IG_DetailCount(nw) * sizeof(XmString));
+      IG_Detail(nw) = (XmStringTable)_XmMallocArray(IG_DetailCount(nw), sizeof(XmString));
       for (i = 0; i < IG_DetailCount(nw); i++)
         IG_Detail(nw)[i] = XmStringCopy(IG_Detail(rw)[i]);
     }
@@ -2602,7 +2602,7 @@ static XmStringTable GetStringTableReOrdered(XmStringTable st,
   count = MIN(order_count, st_count);
   if (count > Max_st_count) {
     Max_st_count = MAX(count, 33);
-    Default_st = (XmStringTable)XtRealloc((char *)Default_st, Max_st_count * sizeof(XmString));
+    Default_st = (XmStringTable)_XmReallocArray((char *)Default_st, Max_st_count, sizeof(XmString));
   }
   for (i = 0; i < count; i++) {
     if (order) {

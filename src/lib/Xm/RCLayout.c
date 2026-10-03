@@ -1470,8 +1470,8 @@ XmRCKidGeometry _XmRCGetKidGeo(Widget wid,                 /* Widget w/ children
   Boolean helpFound = FALSE;
   Boolean tocFound;
   tocFound = (toc && XtIsManaged(toc)) & 0x1;
-  geo = (XmRCKidGeometry)XtMalloc((_XmGeoCount_kids(c) + 1 + tocFound) *
-                                  sizeof(XmRCKidGeometryRec));
+  geo = (XmRCKidGeometry)_XmMallocArray(_XmGeoCount_kids(c) + 1 + tocFound,
+                                        sizeof(XmRCKidGeometryRec));
   i = 0;
   if (tocFound) {
     geo[j].kid = toc;

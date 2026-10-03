@@ -1432,7 +1432,7 @@ static void FileSearchProc(Widget w, XtPointer sd)
     Boolean showDotFiles = (FS_FileFilterStyle(fs) == XmFILTER_NONE);
     if (numFiles > 1)
       qsort((void *)fileList, numFiles, sizeof(char *), _XmOSFileCompare);
-    XmStringFileList = (XmString *)XtMalloc(numFiles * sizeof(XmString));
+    XmStringFileList = (XmString *)_XmMallocArray(numFiles, sizeof(XmString));
     Index = 0;
     dirLen = strlen(dir);
     while (Index < numFiles) {
@@ -1807,7 +1807,7 @@ static void DirSearchProc(Widget w, XtPointer sd)
     if (numDirs > 1) {
       qsort((void *)dirList, numDirs, sizeof(char *), _XmOSFileCompare);
     }
-    XmStringDirList = (XmString *)XtMalloc(numDirs * sizeof(XmString));
+    XmStringDirList = (XmString *)_XmMallocArray(numDirs, sizeof(XmString));
     Index = 0;
     dirLen = strlen(qualifiedDir);
     while (Index < numDirs) {

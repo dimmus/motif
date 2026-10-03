@@ -1085,7 +1085,7 @@ static void read_rgb_file(XmColorSelectorWidget csw,
         else {
           alloc += 20;
         }
-        color_info = (ColorInfo *)XtRealloc((XtPointer)color_info, sizeof(ColorInfo) * alloc);
+        color_info = (ColorInfo *)_XmReallocArray((XtPointer)color_info, alloc, sizeof(ColorInfo));
       }
       sscanf(buf,
              "%hu %hu %hu",
@@ -1163,7 +1163,7 @@ static void read_rgb_file(XmColorSelectorWidget csw,
         i++;
     }
     {
-      XmString *strs = (XmString *)XtMalloc(sizeof(XmString) * count);
+      XmString *strs = (XmString *)_XmMallocArray(count, sizeof(XmString));
       for (i = 0; i < count; i++)
         strs[i] = XmStringCreateLocalized(color_info[i].name);
       XtVaSetValues(XmColorS_list(csw), XmNitems, strs, XmNitemCount, count, NULL);

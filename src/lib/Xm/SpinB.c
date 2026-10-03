@@ -779,7 +779,7 @@ static void ConstraintInitialize(Widget req,
   else {
     if (reqC->values != NULL) {
       /* buffer the values XmStringTable */
-      newC->values = (XmString *)XtMalloc(reqC->num_values * sizeof(XmString));
+      newC->values = (XmString *)_XmMallocArray(reqC->num_values, sizeof(XmString));
       if (newC->values != NULL)
         for (valLoop = 0; valLoop < reqC->num_values; valLoop++)
           newC->values[valLoop] = XmStringCopy(reqC->values[valLoop]);
@@ -884,7 +884,7 @@ static Boolean ConstraintSetValues(Widget old,
     if (reqC->values == NULL)
       reqC->values = oldC->values;
     else if (reqC->values != oldC->values) {
-      newC->values = (XmString *)XtMalloc(reqC->num_values * sizeof(XmString));
+      newC->values = (XmString *)_XmMallocArray(reqC->num_values, sizeof(XmString));
       if (newC->values != NULL)
         for (valLoop = 0; valLoop < reqC->num_values; valLoop++)
           newC->values[valLoop] = XmStringCopy(reqC->values[valLoop]);
@@ -1542,7 +1542,7 @@ static void NumToString(char **buffer, int min, int max, int decimal, int value)
     test--;
     result /= 10.0;
   }
-  *buffer = (char *)XtMalloc((digits + 1) * sizeof(char));
+  *buffer = (char *)_XmMallocArray(digits + 1, sizeof(char));
   if (*buffer) {
 #ifdef __osf__
     if (decimal == 0)

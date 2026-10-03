@@ -3933,8 +3933,8 @@ static void Layout(XmTabBoxWidget tab)
   }
   if (count > XmTabBox__num_actual(tab)) {
     XmTabBox__num_actual(tab) = count;
-    XmTabBox__actual(tab) = (XiTabRect *)XtRealloc((XtPointer)XmTabBox__actual(tab),
-                                                   sizeof(XiTabRect) * count);
+    XmTabBox__actual(tab) =
+        (XiTabRect *)_XmReallocArray((XtPointer)XmTabBox__actual(tab), count, sizeof(XiTabRect));
   }
   switch (XmTabBox_tab_mode(tab)) {
     case XmTABS_BASIC:
@@ -4335,8 +4335,8 @@ static void CalcTabGeometry(XmTabBoxWidget tab)
    */
   if (count > XmTabBox__num_wanted(tab)) {
     XmTabBox__num_wanted(tab) = count;
-    XmTabBox__wanted(tab) = (XRectangle *)XtRealloc((XtPointer)XmTabBox__wanted(tab),
-                                                    sizeof(XRectangle) * count);
+    XmTabBox__wanted(tab) =
+        (XRectangle *)_XmReallocArray((XtPointer)XmTabBox__wanted(tab), count, sizeof(XRectangle));
   }
   geom = XmTabBox__wanted(tab);
   /*
@@ -7920,8 +7920,8 @@ static void ResetImageCache(XmTabBoxWidget tab)
    */
   if (cnt != XmTabBox__cache_size(tab)) {
     XmTabBox__cache_size(tab) = cnt;
-    XmTabBox__cache(tab) = (XiCache *)XtRealloc((XtPointer)XmTabBox__cache(tab),
-                                                sizeof(XiCache) * cnt);
+    XmTabBox__cache(tab) =
+        (XiCache *)_XmReallocArray((XtPointer)XmTabBox__cache(tab), cnt, sizeof(XiCache));
   }
   /*
    * Then lets zero the cache out.

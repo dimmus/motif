@@ -60,8 +60,9 @@ void _XmSFAddNavigator(Widget sf, Widget nav, Mask dimMask, XmScrollFrameData sc
     if (scroll_frame_data->num_nav_list == scroll_frame_data->num_nav_slots) {
       /* Allocate more space */
       scroll_frame_data->num_nav_slots += 2;
-      scroll_frame_data->nav_list = (WidgetList)XtRealloc(
-          (char *)scroll_frame_data->nav_list, scroll_frame_data->num_nav_slots * sizeof(Widget));
+      scroll_frame_data->nav_list = (WidgetList)_XmReallocArray((char *)scroll_frame_data->nav_list,
+                                                                scroll_frame_data->num_nav_slots,
+                                                                sizeof(Widget));
     }
     scroll_frame_data->nav_list[scroll_frame_data->num_nav_list] = nav;
     scroll_frame_data->num_nav_list++;

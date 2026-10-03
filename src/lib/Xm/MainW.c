@@ -848,9 +848,9 @@ static void ChangeManaged(Widget wid)
                    me keep this hacky code around... */
         if (mw->composite.num_children == mw->composite.num_slots) {
           mw->composite.num_slots += (mw->composite.num_slots / 2) + 2;
-          mw->composite.children = (WidgetList)XtRealloc((char *)mw->composite.children,
-                                                         (unsigned)(mw->composite.num_slots) *
-                                                             sizeof(Widget));
+          mw->composite.children = (WidgetList)_XmReallocArray((char *)mw->composite.children,
+                                                               mw->composite.num_slots,
+                                                               sizeof(Widget));
         }
         mw->composite.children[mw->composite.num_children++] = w;
         w->core.parent = (Widget)mw;
@@ -987,7 +987,7 @@ static void GetVertRects(Widget sw, XRectangle **vrect, Cardinal *num_vrect)
   Widget w;
   XmMainWindowWidget mw = (XmMainWindowWidget)sw;
   *num_vrect = 2;
-  *vrect = (XRectangle *)XtMalloc(sizeof(XRectangle) * (*num_vrect));
+  *vrect = (XRectangle *)_XmMallocArray(*num_vrect, sizeof(XRectangle));
   /* The vertical rectangles are the ones that vertically auto scroll,
        they are defined by areas on the top and bottom of the
        workarea, e.g. the margins, the spacing, the scrollbars

@@ -625,7 +625,7 @@ void XmSimpleSpinBoxAddItem(Widget ssb_w, XmString item, int pos)
   /*
    * Copy the current array of values adding in the new item.
    */
-  values = (XmStringTable)XtRealloc((char *)NULL, sizeof(XmString) * new_nvalues);
+  values = (XmStringTable)_XmReallocArray((char *)NULL, new_nvalues, sizeof(XmString));
   if (values == (XmStringTable)NULL) {
     _XmAppUnlock(app);
     return;
@@ -729,7 +729,7 @@ void XmSimpleSpinBoxDeletePos(Widget ssb_w, int pos)
   /*
    * Copy the current array of values skipping the item in position 'pos'.
    */
-  values = (XmStringTable)XtRealloc((char *)NULL, sizeof(XmString) * new_nvalues);
+  values = (XmStringTable)_XmReallocArray((char *)NULL, new_nvalues, sizeof(XmString));
   if (values == (XmStringTable)NULL) {
     _XmAppUnlock(app);
     return;
