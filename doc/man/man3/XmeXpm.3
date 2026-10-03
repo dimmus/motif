@@ -1,0 +1,276 @@
+.TH "XmeXpm" "library call"
+.nh
+.SH "NAME"
+\fBXmeXpmReadFileToPixmap\fP,
+\fBXmeXpmReadFileToImage\fP,
+\fBXmeXpmReadFileToXpmImage\fP,
+\fBXmeXpmReadFileToBuffer\fP,
+\fBXmeXpmReadFileToData\fP,
+\fBXmeXpmWriteFileFromPixmap\fP,
+\fBXmeXpmWriteFileFromImage\fP,
+\fBXmeXpmWriteFileFromXpmImage\fP,
+\fBXmeXpmWriteFileFromBuffer\fP,
+\fBXmeXpmWriteFileFromData\fP,
+\fBXmeXpmCreatePixmapFromData\fP,
+\fBXmeXpmCreatePixmapFromBuffer\fP,
+\fBXmeXpmCreatePixmapFromXpmImage\fP,
+\fBXmeXpmCreateImageFromData\fP,
+\fBXmeXpmCreateImageFromBuffer\fP,
+\fBXmeXpmCreateImageFromXpmImage\fP,
+\fBXmeXpmCreateXpmImageFromData\fP,
+\fBXmeXpmCreateXpmImageFromBuffer\fP,
+\fBXmeXpmCreateXpmImageFromImage\fP,
+\fBXmeXpmCreateXpmImageFromPixmap\fP,
+\fBXmeXpmCreateDataFromPixmap\fP,
+\fBXmeXpmCreateDataFromImage\fP,
+\fBXmeXpmCreateDataFromXpmImage\fP,
+\fBXmeXpmCreateBufferFromPixmap\fP,
+\fBXmeXpmCreateBufferFromImage\fP,
+\fBXmeXpmCreateBufferFromXpmImage\fP,
+\fBXmeXpmAttributesSize\fP,
+\fBXmeXpmFreeAttributes\fP,
+\fBXmeXpmFreeExtensions\fP,
+\fBXmeXpmFreeXpmImage\fP,
+\fBXmeXpmFreeXpmInfo\fP,
+\fBXmeXpmFree\fP,
+\fBXmeXpmGetErrorString\fP,
+\fBXmeXpmLibraryVersion\fP \(em the XPM functions built into Motif
+.iX "XmeXpm"
+.iX "XPM functions" "XmeXpmReadFileToPixmap"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/XpmP\&.h>
+.PP
+\fBint \fBXmeXpmReadFileToPixmap\fP\fR(
+\fBDisplay *\fBdisplay\fR\fR,
+\fBDrawable \fBd\fR\fR,
+\fBconst char *\fBfilename\fR\fR,
+\fBPixmap *\fBpixmap_return\fR\fR,
+\fBPixmap *\fBshapemask_return\fR\fR,
+\fBXpmAttributes *\fBattributes\fR\fR);
+\fBint \fBXmeXpmReadFileToImage\fP\fR(
+\fBDisplay *\fBdisplay\fR\fR,
+\fBconst char *\fBfilename\fR\fR,
+\fBXImage **\fBimage_return\fR\fR,
+\fBXImage **\fBshapeimage_return\fR\fR,
+\fBXpmAttributes *\fBattributes\fR\fR);
+\fBint \fBXmeXpmReadFileToXpmImage\fP\fR(
+\fBconst char *\fBfilename\fR\fR,
+\fBXpmImage *\fBimage\fR\fR,
+\fBXpmInfo *\fBinfo\fR\fR);
+\fBint \fBXmeXpmReadFileToBuffer\fP\fR(
+\fBconst char *\fBfilename\fR\fR,
+\fBchar **\fBbuffer_return\fR\fR);
+\fBint \fBXmeXpmReadFileToData\fP\fR(
+\fBconst char *\fBfilename\fR\fR,
+\fBchar ***\fBdata_return\fR\fR);
+.PP
+\fBint \fBXmeXpmWriteFileFromPixmap\fP\fR(
+\fBDisplay *\fBdisplay\fR\fR,
+\fBconst char *\fBfilename\fR\fR,
+\fBPixmap \fBpixmap\fR\fR,
+\fBPixmap \fBshapemask\fR\fR,
+\fBXpmAttributes *\fBattributes\fR\fR);
+\fBint \fBXmeXpmWriteFileFromImage\fP\fR(
+\fBDisplay *\fBdisplay\fR\fR,
+\fBconst char *\fBfilename\fR\fR,
+\fBXImage *\fBimage\fR\fR,
+\fBXImage *\fBshapeimage\fR\fR,
+\fBXpmAttributes *\fBattributes\fR\fR);
+\fBint \fBXmeXpmWriteFileFromXpmImage\fP\fR(
+\fBconst char *\fBfilename\fR\fR,
+\fBXpmImage *\fBimage\fR\fR,
+\fBXpmInfo *\fBinfo\fR\fR);
+\fBint \fBXmeXpmWriteFileFromBuffer\fP\fR(
+\fBconst char *\fBfilename\fR\fR,
+\fBchar *\fBbuffer\fR\fR);
+\fBint \fBXmeXpmWriteFileFromData\fP\fR(
+\fBconst char *\fBfilename\fR\fR,
+\fBchar **\fBdata\fR\fR);
+.PP
+\fBint \fBXmeXpmCreatePixmapFromData\fP\fR(
+\fBDisplay *\fBdisplay\fR\fR,
+\fBDrawable \fBd\fR\fR,
+\fBchar **\fBdata\fR\fR,
+\fBPixmap *\fBpixmap_return\fR\fR,
+\fBPixmap *\fBshapemask_return\fR\fR,
+\fBXpmAttributes *\fBattributes\fR\fR);
+\fBint \fBXmeXpmCreatePixmapFromBuffer\fP\fR(
+\fBDisplay *\fBdisplay\fR\fR,
+\fBDrawable \fBd\fR\fR,
+\fBchar *\fBbuffer\fR\fR,
+\fBPixmap *\fBpixmap_return\fR\fR,
+\fBPixmap *\fBshapemask_return\fR\fR,
+\fBXpmAttributes *\fBattributes\fR\fR);
+\fBint \fBXmeXpmCreatePixmapFromXpmImage\fP\fR(
+\fBDisplay *\fBdisplay\fR\fR,
+\fBDrawable \fBd\fR\fR,
+\fBXpmImage *\fBimage\fR\fR,
+\fBPixmap *\fBpixmap_return\fR\fR,
+\fBPixmap *\fBshapemask_return\fR\fR,
+\fBXpmAttributes *\fBattributes\fR\fR);
+\fBint \fBXmeXpmCreateImageFromData\fP\fR(
+\fBDisplay *\fBdisplay\fR\fR,
+\fBchar **\fBdata\fR\fR,
+\fBXImage **\fBimage_return\fR\fR,
+\fBXImage **\fBshapemask_return\fR\fR,
+\fBXpmAttributes *\fBattributes\fR\fR);
+\fBint \fBXmeXpmCreateImageFromBuffer\fP\fR(
+\fBDisplay *\fBdisplay\fR\fR,
+\fBchar *\fBbuffer\fR\fR,
+\fBXImage **\fBimage_return\fR\fR,
+\fBXImage **\fBshapemask_return\fR\fR,
+\fBXpmAttributes *\fBattributes\fR\fR);
+\fBint \fBXmeXpmCreateImageFromXpmImage\fP\fR(
+\fBDisplay *\fBdisplay\fR\fR,
+\fBXpmImage *\fBimage\fR\fR,
+\fBXImage **\fBimage_return\fR\fR,
+\fBXImage **\fBshapeimage_return\fR\fR,
+\fBXpmAttributes *\fBattributes\fR\fR);
+.PP
+\fBint \fBXmeXpmCreateXpmImageFromData\fP\fR(
+\fBchar **\fBdata\fR\fR,
+\fBXpmImage *\fBimage\fR\fR,
+\fBXpmInfo *\fBinfo\fR\fR);
+\fBint \fBXmeXpmCreateXpmImageFromBuffer\fP\fR(
+\fBchar *\fBbuffer\fR\fR,
+\fBXpmImage *\fBimage\fR\fR,
+\fBXpmInfo *\fBinfo\fR\fR);
+\fBint \fBXmeXpmCreateXpmImageFromImage\fP\fR(
+\fBDisplay *\fBdisplay\fR\fR,
+\fBXImage *\fBimage\fR\fR,
+\fBXImage *\fBshapeimage\fR\fR,
+\fBXpmImage *\fBxpmimage\fR\fR,
+\fBXpmAttributes *\fBattributes\fR\fR);
+\fBint \fBXmeXpmCreateXpmImageFromPixmap\fP\fR(
+\fBDisplay *\fBdisplay\fR\fR,
+\fBPixmap \fBpixmap\fR\fR,
+\fBPixmap \fBshapemask\fR\fR,
+\fBXpmImage *\fBxpmimage\fR\fR,
+\fBXpmAttributes *\fBattributes\fR\fR);
+.PP
+\fBint \fBXmeXpmCreateDataFromPixmap\fP\fR(
+\fBDisplay *\fBdisplay\fR\fR,
+\fBchar ***\fBdata_return\fR\fR,
+\fBPixmap \fBpixmap\fR\fR,
+\fBPixmap \fBshapemask\fR\fR,
+\fBXpmAttributes *\fBattributes\fR\fR);
+\fBint \fBXmeXpmCreateDataFromImage\fP\fR(
+\fBDisplay *\fBdisplay\fR\fR,
+\fBchar ***\fBdata_return\fR\fR,
+\fBXImage *\fBimage\fR\fR,
+\fBXImage *\fBshapeimage\fR\fR,
+\fBXpmAttributes *\fBattributes\fR\fR);
+\fBint \fBXmeXpmCreateDataFromXpmImage\fP\fR(
+\fBchar ***\fBdata_return\fR\fR,
+\fBXpmImage *\fBimage\fR\fR,
+\fBXpmInfo *\fBinfo\fR\fR);
+\fBint \fBXmeXpmCreateBufferFromPixmap\fP\fR(
+\fBDisplay *\fBdisplay\fR\fR,
+\fBchar **\fBbuffer_return\fR\fR,
+\fBPixmap \fBpixmap\fR\fR,
+\fBPixmap \fBshapemask\fR\fR,
+\fBXpmAttributes *\fBattributes\fR\fR);
+\fBint \fBXmeXpmCreateBufferFromImage\fP\fR(
+\fBDisplay *\fBdisplay\fR\fR,
+\fBchar **\fBbuffer_return\fR\fR,
+\fBXImage *\fBimage\fR\fR,
+\fBXImage *\fBshapeimage\fR\fR,
+\fBXpmAttributes *\fBattributes\fR\fR);
+\fBint \fBXmeXpmCreateBufferFromXpmImage\fP\fR(
+\fBchar **\fBbuffer_return\fR\fR,
+\fBXpmImage *\fBimage\fR\fR,
+\fBXpmInfo *\fBinfo\fR\fR);
+.PP
+\fBint \fBXmeXpmAttributesSize\fP\fR(\fBvoid\fR);
+\fBvoid \fBXmeXpmFreeAttributes\fP\fR(
+\fBXpmAttributes *\fBattributes\fR\fR);
+\fBvoid \fBXmeXpmFreeExtensions\fP\fR(
+\fBXpmExtension *\fBextensions\fR\fR,
+\fBint \fBnextensions\fR\fR);
+\fBvoid \fBXmeXpmFreeXpmImage\fP\fR(
+\fBXpmImage *\fBimage\fR\fR);
+\fBvoid \fBXmeXpmFreeXpmInfo\fP\fR(
+\fBXpmInfo *\fBinfo\fR\fR);
+\fBvoid \fBXmeXpmFree\fP\fR(
+\fBvoid *\fBptr\fR\fR);
+\fBchar *\fBXmeXpmGetErrorString\fP\fR(
+\fBint \fBerrcode\fR\fR);
+\fBint \fBXmeXpmLibraryVersion\fP\fR(\fBvoid\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fBlibXm\fP contains its own copy of the XPM library, version 3\&.4k,
+which it uses to read the XPM pixmaps and icons named in resources and
+by \fBXmGetPixmap\fP(3)\&. Its functions are exported with an
+\fBXme\fP prefix so that they do not clash with a system \fBlibXpm\fP
+loaded into the same process\&. \fB<Xm/XpmP\&.h>\fP declares them and
+defines the usual XPM names as macros for them (\fBXpmReadFileToPixmap\fP
+for \fBXmeXpmReadFileToPixmap\fP, and so on), together with the XPM
+types (\fBXpmAttributes\fP, \fBXpmImage\fP, \fBXpmInfo\fP,
+\fBXpmColor\fP, \fBXpmColorSymbol\fP, \fBXpmExtension\fP), the
+attribute mask bits (\fBXpmVisual\fP, \fBXpmColormap\fP,
+\fBXpmSize\fP, \&.\&.\&.) and the status codes\&.
+.PP
+Each function behaves as the XPM function of the same name without the
+\fBXme\fP prefix, which the XPM Manual (Arnaud Le Hors, \fIXPM Manual,
+The X PixMap Format\fP) and the \fBlibXpm\fP manual pages describe in
+detail\&. In summary:
+.IP "\fBXmeXpmReadFileTo\fP\fItype\fP" 10
+reads an XPM file into a pixmap and its shape mask, an \fBXImage\fP
+and its shape image, an \fBXpmImage\fP and \fBXpmInfo\fP, a buffer
+holding the file contents, or an array of strings ("data", as an XPM
+file included in C source)\&.
+.IP "\fBXmeXpmWriteFileFrom\fP\fItype\fP" 10
+writes one of those representations to an XPM file\&.
+.IP "\fBXmeXpmCreate\fP\fIto\fP\fBFrom\fP\fIfrom\fP" 10
+converts between the representations without a file\&.
+.IP "\fBXmeXpmFree\fP\fIthing\fP" 10
+frees the memory that the other functions allocated\&. Free returned
+buffers and data arrays with \fBXmeXpmFree\fP, and the contents of an
+\fBXpmAttributes\fP, \fBXpmImage\fP or \fBXpmInfo\fP filled in by
+them with \fBXmeXpmFreeAttributes\fP, \fBXmeXpmFreeXpmImage\fP and
+\fBXmeXpmFreeXpmInfo\fP\&. Free pixmaps and images with
+\fBXFreePixmap\fP(3) and \fBXDestroyImage\fP(3)\&.
+.IP "\fBXmeXpmAttributesSize\fP" 10
+returns \fBsizeof(XpmAttributes)\fP as compiled into the library\&.
+.IP "\fBXmeXpmGetErrorString\fP" 10
+returns a static string describing a status code\&.
+.IP "\fBXmeXpmLibraryVersion\fP" 10
+returns the version of the XPM code, \fBXpmIncludeVersion\fP, which
+is 30411 for 3\&.4k\&.
+.PP
+This copy differs from \fBlibXpm\fP in two ways\&. It never runs
+external programs: a file whose name ends in \fB\&.Z\fP or \fB\&.gz\fP
+is read as an uncompressed XPM file (and is therefore normally rejected
+as invalid), and the writers always write uncompressed files whatever
+the file name\&. It also does not provide \fBXpmGetParseError\fP,
+although \fB<Xm/XpmP\&.h>\fP declares it\&.
+.SH "RETURN"
+.PP
+The functions returning \fBint\fP, other than
+\fBXmeXpmAttributesSize\fP and \fBXmeXpmLibraryVersion\fP, return one
+of:
+.IP "\fBXpmSuccess\fP" 10
+The function succeeded\&.
+.IP "\fBXpmColorError\fP" 10
+The image was created, but some colors could not be allocated exactly
+and the closest ones were used\&.
+.IP "\fBXpmOpenFailed\fP" 10
+The file could not be opened\&.
+.IP "\fBXpmFileInvalid\fP" 10
+The file or data is not valid XPM\&.
+.IP "\fBXpmNoMemory\fP" 10
+Memory was exhausted\&.
+.IP "\fBXpmColorFailed\fP" 10
+A color could not be allocated and no fallback was possible\&.
+.SH "NOTES"
+.PP
+\fB<Xm/XpmP\&.h>\fP and \fB<X11/xpm\&.h>\fP define the same names and
+must not both be included\&. Programs that do not depend on the copy in
+\fBlibXm\fP should use the system \fBlibXpm\fP instead\&.
+.SH "RELATED"
+.PP
+\fBXmGetPixmap\fP(3), \fBXmGetPixmapByDepth\fP(3) and
+\fBXmInstallImage\fP(3)\&.
