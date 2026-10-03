@@ -73,7 +73,9 @@ static void usage(const char *prog)
 {
 	size_t i;
 
-	fprintf(stderr, "usage: %s [suite ...]\navailable suites:", prog);
+	fprintf(stderr, "usage: %s [--xfail] [suite ...]\n"
+		"  --xfail  run only the test cases tagged \"xfail\" (known failures)\n"
+		"available suites:", prog);
 	for (i = 0; i < N_SUITES; i++)
 		fprintf(stderr, " %s", suite_table[i].name);
 	fputc('\n', stderr);
@@ -99,16 +101,25 @@ static int add_suite(SRunner *runner, const struct suite_entry *e)
  * Run the suites named on the command line, or all of them if none are
  * named.  If every requested suite had to be skipped, exit with status
  * 77 so that the harness reports a skip rather than a pass.
+ *
+ * Test cases tagged "xfail" document known library bugs.  They are left
+ * out of normal runs; with --xfail only they are run, and the run passes
+ * only if every one of them still fails, so that a fix is noticed.
  */
 int main(int argc, char *argv[])
 {
 	const struct suite_entry *e;
-	int failed, i, n_added = 0;
+	int failed, run, i, first = 1, n_added = 0, xfail = 0;
 	SRunner *runner;
 
+	if (argc > 1 && !strcmp(argv[1], "--xfail")) {
+		xfail = 1;
+		first = 2;
+	}
+
 	runner = srunner_create(NULL);
-	if (argc > 1) {
-		for (i = 1; i < argc; i++) {
+	if (argc > first) {
+		for (i = first; i < argc; i++) {
 			if (!(e = find_suite(argv[i]))) {
 				fprintf(stderr, "%s: unknown suite '%s'\n", argv[0], argv[i]);
 				usage(argv[0]);
@@ -134,8 +145,23 @@ int main(int argc, char *argv[])
 	 * at runtime, the tests NEED to fork.
 	 */
 	srunner_set_fork_status(runner, CK_FORK);
-	srunner_run_all(runner, CK_SILENT);
+	srunner_run_tagged(runner, NULL, NULL, xfail ? "xfail" : NULL,
+			   xfail ? NULL : "xfail", CK_SILENT);
 	failed = srunner_ntests_failed(runner);
+	run = srunner_ntests_run(runner);
 	srunner_free(runner);
+
+	if (xfail) {
+		if (!run) {
+			printf("# no test cases tagged xfail were run\n");
+			return EXIT_FAILURE;
+		}
+		if (failed != run) {
+			printf("# %d of %d expected failures passed unexpectedly\n",
+			       run - failed, run);
+			return EXIT_FAILURE;
+		}
+		return EXIT_SUCCESS;
+	}
 	return failed ? EXIT_FAILURE : EXIT_SUCCESS;
 }
