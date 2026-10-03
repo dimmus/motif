@@ -102,6 +102,112 @@ db_check_table_size (_db_header_ptr header, int extra, size_t item_size)
 	diag_issue_diagnostic (d_bad_database, diag_k_no_source, diag_k_no_column);
 }
 
+/*
+ * The number of entries, counted from index 0, in a table that has just
+ * been read from the database.
+ */
+static int
+db_table_entries (_db_header_ptr header)
+{
+    switch (header->table_id)
+	{
+	case Constraint_Tab:
+	case Argument_Type_Table_Value:
+	case Child_Class_Table:
+	case Charset_Wrdirection_Table:
+	case Charset_Parsdirection_Table:
+	case Charset_Charsize_Table:
+	case Key_Table:
+	case Key_Table_Case_Ins:
+	    return header->num_items;
+	case Allowed_Argument_Table:
+	case Allowed_Child_Table:
+	case Allowed_Control_Table:
+	case Allowed_Reason_Table:
+	case Charset_Xmstring_Names_Table:
+	case Charset_Lang_Names_Table:
+	case Uil_Widget_Names:
+	case Uil_Children_Names:
+	case Uil_Argument_Names:
+	case Uil_Reason_Names:
+	case Uil_Enumval_names:
+	case Uil_Charset_Names:
+	case Uil_Widget_Funcs:
+	case Uil_Argument_Toolkit_Names:
+	case Uil_Reason_Toolkit_Names:
+	case Enum_Set_Table:
+	    return header->num_items + 1;
+	case Charset_Lang_Codes_Table:
+	case Argument_Enum_Set_Table:
+	case Related_Argument_Table:
+	case Uil_Gadget_Funcs:
+	case Uil_Urm_Nondialog_Class:
+	case Uil_Urm_Subtree_Resource:
+	    return header->table_size / (int) sizeof (unsigned short int);
+	case Enumval_Values_Table:
+	    return header->table_size / (int) sizeof (int);
+	default:
+	    return 0;
+	}
+}
+
+/*
+ * The number of entries, counted from index 0, that a table must have
+ * for the maxima in the database globals.  The compiler indexes the
+ * tables with codes up to those maxima.
+ */
+static int
+db_table_required_entries (_db_globals *globals, int table_id)
+{
+    switch (table_id)
+	{
+	case Key_Table:
+	case Key_Table_Case_Ins:
+	    return globals->key_k_keyword_count;
+	case Charset_Lang_Names_Table:
+	case Charset_Lang_Codes_Table:
+	    return globals->charset_lang_table_max;
+	case Constraint_Tab:
+	    /* a bit vector indexed by argument code - 1 */
+	    return (globals->uil_max_arg + 7) / 8;
+	case Allowed_Control_Table:
+	case Uil_Widget_Names:
+	case Uil_Widget_Funcs:
+	case Uil_Gadget_Funcs:
+	case Uil_Urm_Nondialog_Class:
+	case Uil_Urm_Subtree_Resource:
+	    return globals->uil_max_object + 1;
+	case Argument_Type_Table_Value:
+	case Allowed_Argument_Table:
+	case Uil_Argument_Names:
+	case Uil_Argument_Toolkit_Names:
+	case Argument_Enum_Set_Table:
+	case Related_Argument_Table:
+	    return globals->uil_max_arg + 1;
+	case Allowed_Reason_Table:
+	case Uil_Reason_Names:
+	case Uil_Reason_Toolkit_Names:
+	    return globals->uil_max_reason + 1;
+	case Charset_Xmstring_Names_Table:
+	case Charset_Wrdirection_Table:
+	case Charset_Parsdirection_Table:
+	case Charset_Charsize_Table:
+	case Uil_Charset_Names:
+	    return globals->uil_max_charset + 1;
+	case Uil_Enumval_names:
+	case Enumval_Values_Table:
+	    return globals->uil_max_enumval + 1;
+	case Enum_Set_Table:
+	    return globals->uil_max_enumset + 1;
+	case Child_Class_Table:
+	case Allowed_Child_Table:
+	case Uil_Children_Names:
+	    return globals->uil_max_child + 1;
+	default:
+	    return 0;
+	}
+}
+
 
 
 
@@ -160,6 +266,8 @@ void db_incorporate()
     int			return_num_items;
     _db_header		header;
     _db_globals		globals;
+    int			entries[Uil_Children_Names + 1];
+    int			i;
 
     db_open_file();
 
@@ -181,7 +289,8 @@ void db_incorporate()
 	 (unsigned) globals.uil_max_enumset>1000 ||
 	 (unsigned) globals.key_k_keyword_count>10000 ||
 	 (unsigned) globals.key_k_keyword_max_length>200 ||
-	 (unsigned) globals.uil_max_child>250)
+	 (unsigned) globals.uil_max_child>250 ||
+	 globals.key_k_keyword_count<1)
 	diag_issue_diagnostic (d_bad_database,
 			       diag_k_no_source,
 			       diag_k_no_column);
@@ -203,6 +312,10 @@ void db_incorporate()
 
     if (globals.version > DB_Compiled_Version)
 	diag_issue_diagnostic( d_future_version, diag_k_no_source, diag_k_no_column );
+
+    /* -1 marks a table that is not in the file */
+    for (i = 0; i <= Uil_Children_Names; i++)
+	entries[i] = -1;
 
     for (;;)
 	{
@@ -389,7 +502,21 @@ void db_incorporate()
 	    default:
 		diag_issue_diagnostic( d_bad_database, diag_k_no_source, diag_k_no_column );
 	    } /* end switch */
+
+	/* the table ids that reach here are 1..Uil_Children_Names */
+	entries[header.table_id] = db_table_entries (&header);
 	} /* end for */
+
+    /*
+     * Every table must be present and cover the maxima given in the
+     * globals; the compiler does not check the codes it indexes them with.
+     */
+    for (i = 1; i <= Uil_Children_Names; i++)
+	if (entries[i] < db_table_required_entries (&globals, i))
+	    diag_issue_diagnostic (d_bad_database,
+				   diag_k_no_source,
+				   diag_k_no_column);
+
     fclose (dbfile);
     return;
 }
