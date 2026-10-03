@@ -25,5 +25,7 @@ void jpeg_suite(SRunner *runner);
 void svg_suite(SRunner *runner);
 void log_suite(SRunner *runner);
 void log_config_suite(SRunner *runner);
+void xmstring_suite(SRunner *runner);
+void xmstring_ct_suite(SRunner *runner);
 
 #endif /* SUITES_H */

@@ -26,16 +26,17 @@ set(MOTIF_TEST_SRCS
     Xm/testSvg.c
     Xm/testLog.c
     Xm/testLogConfig.c
+    Xm/testXmString.c
 )
 
 # Suites that open a display, and suites that do not.
-set(MOTIF_TEST_X_SUITES FontListEntry FontList)
-set(MOTIF_TEST_SUITES Svg Log LogConfig)
+set(MOTIF_TEST_X_SUITES FontListEntry FontList XmStringCT)
+set(MOTIF_TEST_SUITES Svg Log LogConfig XmString)
 set(MOTIF_TEST_DEFS "")
 
 # Suites with test cases tagged "xfail" (known library bugs); these get an
 # extra Xm.<suite>.xfail test that passes only while those cases still fail.
-set(MOTIF_TEST_XFAIL_SUITES "")
+set(MOTIF_TEST_XFAIL_SUITES XmString)
 
 if(MOTIF_JPEG_FOUND)
     list(APPEND MOTIF_TEST_SRCS Xm/testJpeg.c)

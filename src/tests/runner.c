@@ -34,6 +34,8 @@ static const struct suite_entry {
 	{ "Svg",           svg_suite,             0 },
 	{ "Log",           log_suite,             0 },
 	{ "LogConfig",     log_config_suite,      0 },
+	{ "XmString",      xmstring_suite,        0 },
+	{ "XmStringCT",    xmstring_ct_suite,     1 },
 };
 
 #define N_SUITES (sizeof suite_table / sizeof suite_table[0])
