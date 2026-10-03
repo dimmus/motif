@@ -144,8 +144,9 @@ UrmFetchSetValues (MrmHierarchy		hierarchy_id ,
   long			val ;		/* value as immediate or pointer */
   int			vec_count ;	/* number of items in val if vector */
   int			vec_size ;
-  _SavePixmapArg	pixargs[10] ;	/* to save pixmap args */
+  _SavePixmapArgPtr	pixargs ;	/* to save pixmap args */
   Cardinal		pixargs_cnt = 0 ;  /* # pixargs saved */
+  int			nctx ;		/* # contexts before reading literal */
   _SavePixmapArgPtr	savepix ;	/* current saved pixmap entry */
   Screen		*screen ;	/* screen for pixmaps */
   Display		*display ;	/* display for pixmaps */
@@ -158,6 +159,7 @@ UrmFetchSetValues (MrmHierarchy		hierarchy_id ,
    * Create local arglist and pointer list for contexts.
    */
   locargs = (ArgList) XtMalloc (num_args*sizeof(Arg)) ;
+  pixargs = (_SavePixmapArgPtr) XtMalloc (num_args*sizeof(_SavePixmapArg)) ;
   UrmPlistInit (num_args, &ptrlist) ;
 
   /*
@@ -186,6 +188,7 @@ UrmFetchSetValues (MrmHierarchy		hierarchy_id ,
       locargs[num_used].name = args[ndx].name ;
       strncpy (resptr->key.index, (char*)args[ndx].value, indexlen) ;
       resptr->key.index[indexlen] = '\0' ;
+      nctx = UrmPlistNum (ptrlist) ;
       result = Urm__CW_ReadLiteral (resptr, hierarchy_id, NULL,
 				    ptrlist, &reptype, &val, &vec_count,
 				    &file_id, &vec_size) ;
@@ -198,6 +201,13 @@ UrmFetchSetValues (MrmHierarchy		hierarchy_id ,
 	    badfet_res = result;
 	  continue;
 	}
+
+      /*
+       * Convert the literal from the byte order of its file, as
+       * Urm__ValidLiteral checked it.
+       */
+      swap_needed = UrmRCByteSwap
+	((URMResourceContextPtr) UrmPlistPtrN (ptrlist, nctx)) ;
 
       /*
        * Fix up and perform conversion on the value. If this succeeds, put it
@@ -215,9 +225,13 @@ UrmFetchSetValues (MrmHierarchy		hierarchy_id ,
 	  savepix->pixndx = ndx ;
 	  pixargs_cnt += 1 ;
 	  continue ;
-	case MrmRtypeFontList:
-	  /* Check for 1.1 version and malloc new fontlist if necessary. */
-	  if (strcmp(file_id->db_version, URM1_1version) <= 0)
+	default:
+	  /*
+	   * Convert an old style font list into a new one. The literal
+	   * itself belongs to its context in ptrlist.
+	   */
+	  if (reptype == MrmRtypeFontList &&
+	      strcmp(file_id->db_version, URM1_1version) <= 0)
 	    {
 	      int count = ((OldRGMFontListPtr)val)->count;
 	      RGMFontListPtr fontlist = (RGMFontListPtr)
@@ -226,17 +240,12 @@ UrmFetchSetValues (MrmHierarchy		hierarchy_id ,
 	      result = Urm__CW_FixupValue((long)fontlist, reptype,
 					  (XtPointer)val, file_id,
 					  &swap_needed);
-	      XtFree((char *)val);
 	      val = (long)fontlist;
 	    }
 	  else
-	    result = Urm__CW_FixupValue (val, reptype, (XtPointer)val,
-					 file_id, &swap_needed) ;
-
-	default:
-	  result =
-	    Urm__CW_FixupValue (val, reptype, (XtPointer)val, file_id,
-				&swap_needed) ;
+	    result =
+	      Urm__CW_FixupValue (val, reptype, (XtPointer)val, file_id,
+				  &swap_needed) ;
 	  if ( result != MrmSUCCESS )
 	    {
 	      num_succ -= 1;
@@ -310,6 +319,7 @@ UrmFetchSetValues (MrmHierarchy		hierarchy_id ,
     XtSetValues (w, locargs, num_used) ;
 
   XtFree ((char*)locargs) ;
+  XtFree ((char*)pixargs) ;
   XtFree ((char*)resptr) ;
   for ( ndx=0 ; ndx<UrmPlistNum(ptrlist) ; ndx++ )
     UrmFreeResourceContext ((URMResourceContextPtr)UrmPlistPtrN(ptrlist,ndx)) ;

@@ -61,6 +61,27 @@
 #define _FULLWORD(exp) (_sl * (((exp) + _slm) / _sl))	/* (4*(((exp)+3)/4)) */
 
 /*
+ * Bounds checks for data read from UID files. Everything in a UID file
+ * (record contents, data entries, widget records, literals) is untrusted,
+ * so every offset, count and string taken from it must be checked against
+ * the buffer that holds it before use.
+ *
+ * _UrmInBuffer is true if the len bytes at byte offset offs lie entirely
+ * within a buffer of size bytes. The arguments are converted to size_t,
+ * so negative values are rejected, and the test itself cannot overflow.
+ *
+ * _UrmStringInBuffer is true if a NUL-terminated string starts at byte
+ * offset offs of the buffer at buf and ends within its size bytes.
+ */
+#define _UrmInBuffer(offs,len,size) \
+  ((size_t)(offs) <= (size_t)(size) && \
+   (size_t)(len) <= (size_t)(size) - (size_t)(offs))
+#define _UrmStringInBuffer(buf,offs,size) \
+  ((size_t)(offs) < (size_t)(size) && \
+   memchr ((char *)(buf) + (size_t)(offs), '\0', \
+	   (size_t)(size) - (size_t)(offs)) != NULL)
+
+/*
  *  Swap the byte order of 4- and 2- byte quantities.
  *  "tp +=" lines are needed on Cray (CARD32 is actually 64 bits).
  */
@@ -513,6 +534,8 @@ typedef struct {
 	  					   opposite-endian machine */
 	MrmFlag		in_memory ;		/* for memory mapped files */
 	unsigned char 	*uid_buffer ;		/* pointer to memory buffer */
+	size_t		uid_buffer_size ;	/* bytes in uid_buffer, 0 if
+						   unknown */
 } IDBOpenFile, *IDBFile ;
 
 
@@ -1275,6 +1298,10 @@ extern Cardinal Urm__OpenHierarchy  _ARGUMENTS(( MrmCount num_files ,
 						 MrmHierarchy *hierarchy_id_return,
 						 MrmFlag in_memory,
 						 unsigned char *uid_buffer));
+extern Cardinal Urm__OpenHierarchyFromBuffer  _ARGUMENTS((
+						 unsigned char *uid_buffer,
+						 size_t uid_buffer_size,
+						 MrmHierarchy *hierarchy_id_return));
 extern Cardinal Urm__CloseHierarchy  _ARGUMENTS(( MrmHierarchy hierarchy_id ));
 extern Cardinal UrmHGetIndexedResource  _ARGUMENTS(( MrmHierarchy hierarchy_id ,
 						String index ,
@@ -1384,6 +1411,10 @@ extern Boolean Idb__DB_MatchFilter  _ARGUMENTS(( IDBFile file_id ,
 						IDBDataHandle data_entry ,
 						MrmCode group_filter ,
 						MrmCode type_filter ));
+extern IDBDataEntryHdrPtr Idb__DB_EntryHeader  _ARGUMENTS((
+						IDBFile file_id ,
+						IDBRecordBufferPtr buffer ,
+						MrmOffset item_offs ));
 
 /* mrmifile.c */
 extern Cardinal Idb__FU_OpenFile  _ARGUMENTS(( char *name ,
@@ -1517,6 +1548,10 @@ extern Cardinal UrmIdbOpenFileRead  _ARGUMENTS(( String name ,
 						    char *fname_return ));
 extern Cardinal UrmIdbOpenBuffer  _ARGUMENTS(( unsigned char *uid_buffer ,
 						    IDBFile *file_id_return ));
+extern Cardinal UrmIdbOpenBufferWithSize  _ARGUMENTS((
+						unsigned char *uid_buffer ,
+						size_t uid_buffer_size ,
+						IDBFile *file_id_return ));
 extern Cardinal UrmIdbCloseFile  _ARGUMENTS(( IDBFile file_id ,
 						Boolean keep_new_file ));
 extern Cardinal UrmIdbGetIndexedResource  _ARGUMENTS(( IDBFile file_id ,
@@ -1956,6 +1991,12 @@ extern Cardinal UrmPutRIDWidget  _ARGUMENTS(( IDBFile file_id ,
 
 /* mrmiswap.c */
 extern Cardinal Idb__BM_SwapRecordBytes _ARGUMENTS(( IDBRecordBufferPtr	buffer ));
+/* mrmvalid.c */
+extern Cardinal Urm__ValidWidgetRecord _ARGUMENTS(( IDBFile file_id ,
+					URMResourceContextPtr context_id ));
+extern Cardinal Urm__ValidLiteral _ARGUMENTS(( IDBFile file_id ,
+					URMResourceContextPtr context_id ));
+
 extern unsigned Urm__SwapValidation _ARGUMENTS(( unsigned validation ));
 extern Cardinal Urm__SwapRGMResourceDesc _ARGUMENTS(( RGMResourceDescPtr res_desc ));
 extern Cardinal Urm__SwapRGMCallbackDesc _ARGUMENTS(( RGMCallbackDescPtr callb_desc,

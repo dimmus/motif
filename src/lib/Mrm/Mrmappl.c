@@ -65,6 +65,9 @@ static char rcsid[] = "$XConsortium: Mrmappl.c /main/17 1996/11/13 13:59:58 drk 
  *	MrmOpenHierarchyPerDisplay     	Open a hierarchy taking display arg
  *
  *	MrmOpenHierarchyFromBuffer	Open a hierarchy from a memory buffer
+ *	MrmOpenHierarchyFromBufferWithSize
+ *					Open a hierarchy from a memory buffer
+ *					of known size
  *
  *	MrmCloseHierarchy		Close an open hierarchy
  *
@@ -261,8 +264,59 @@ MrmOpenHierarchyFromBuffer (unsigned char	*uid_buffer,
   Cardinal		result;
 
   _MrmProcessLock();
-  result = Urm__OpenHierarchy((MrmCount) 1, NULL, NULL,
-			      hierarchy_id_return, TRUE, uid_buffer);
+  result = Urm__OpenHierarchyFromBuffer(uid_buffer, 0, hierarchy_id_return);
+  _MrmProcessUnlock();
+  return result;
+}
+
+/*
+ *++
+ *
+ *  PROCEDURE DESCRIPTION:
+ *
+ *	MrmOpenHierarchyFromBufferWithSize opens a buffer containing the
+ *	memory image of a UID file, like MrmOpenHierarchyFromBuffer, but
+ *	is also given the size of the buffer and never reads outside it.
+ *	Use it for UID data that is not fully trusted.
+ *
+ *  FORMAL PARAMETERS:
+ *
+ *	uid_buffer		the memory image of the UID file
+ *	uid_buffer_size		the number of bytes in uid_buffer
+ *	hierarchy_id_return	to return the ID of the new hierarchy
+ *
+ *  IMPLICIT INPUTS:
+ *
+ *  IMPLICIT OUTPUTS:
+ *
+ *  FUNCTION VALUE:
+ *
+ *	MrmSUCCESS	operation succeeded
+ *	MrmNOT_VALID	the buffer does not hold a valid UID file
+ *	MrmFAILURE	operation failed, no further reason
+ *
+ *  SIDE EFFECTS:
+ *
+ *--
+ */
+
+Cardinal
+MrmOpenHierarchyFromBufferWithSize (unsigned char	*uid_buffer,
+				    size_t		uid_buffer_size,
+				    MrmHierarchy	*hierarchy_id_return)
+{
+
+  /*
+   *  Local variables
+   */
+  Cardinal		result;
+
+  if ( uid_buffer == NULL || uid_buffer_size == 0 )
+    return MrmNOT_VALID;
+
+  _MrmProcessLock();
+  result = Urm__OpenHierarchyFromBuffer(uid_buffer, uid_buffer_size,
+					hierarchy_id_return);
   _MrmProcessUnlock();
   return result;
 }

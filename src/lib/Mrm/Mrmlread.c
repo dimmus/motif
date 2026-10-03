@@ -122,7 +122,7 @@ Urm__FetchLiteral (MrmHierarchy			hierarchy_id,
   result = Urm__HGetIndexedLiteral (hierarchy_id, index, context_id, &file_id);
   if ( result != MrmSUCCESS )
     {
-      sprintf (err_msg, _MrmMMsg_0042, index);
+      snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0042, index);
       return Urm__UT_Error ("Urm__FetchLiteral", err_msg, NULL, NULL, result);
     }
 
@@ -139,6 +139,7 @@ Urm__FetchLiteral (MrmHierarchy			hierarchy_id,
       UrmPlistInit (10, ctxlist);
       result = Urm__CW_LoadIconImage ((RGMIconImagePtr)val, (XtPointer)val,
 				      hierarchy_id, file_id, *ctxlist);
+      if ( result != MrmSUCCESS ) return result;
       /* LoadIconImage checks validations and handle swapping */
       swap_needed = FALSE ;
       break;
@@ -149,13 +150,15 @@ Urm__FetchLiteral (MrmHierarchy			hierarchy_id,
 	  int count = ((OldRGMFontListPtr)val)->count;
 	  RGMFontListPtr fontlist = (RGMFontListPtr)
 	    XtMalloc(sizeof(RGMFontList) + (sizeof(RGMFontItem) * (count - 1)));
-	  Urm__CW_FixupValue ((long)fontlist, type, (XtPointer)val, file_id,
-			      &swap_needed);
+	  result = Urm__CW_FixupValue ((long)fontlist, type, (XtPointer)val,
+				       file_id, &swap_needed);
 	  XtFree((char *)val);
 	  UrmRCBuffer(context_id) = (char *)fontlist;
 	}
       else
-	Urm__CW_FixupValue (val, type, (XtPointer)val, file_id, &swap_needed);
+	result = Urm__CW_FixupValue (val, type, (XtPointer)val, file_id,
+				     &swap_needed);
+      if ( result != MrmSUCCESS ) return result;
       break;
     case MrmRtypeInteger:
     case MrmRtypeBoolean:
@@ -183,7 +186,9 @@ Urm__FetchLiteral (MrmHierarchy			hierarchy_id,
       break;
 
     default:
-      Urm__CW_FixupValue (val, type, (XtPointer)val, file_id, &swap_needed);
+      result = Urm__CW_FixupValue (val, type, (XtPointer)val, file_id,
+				   &swap_needed);
+      if ( result != MrmSUCCESS ) return result;
       break;
     }
 
@@ -311,7 +316,7 @@ MrmFetchLiteral (MrmHierarchy		hierarchy_id,
 	  **  Do necessary conversions (Fixups were done by Urm__FetchLiteral)
 	  */
 	  vec_count = ((RGMIntegerVectorPtr)*value_return)->count;
-	  vec_size  = vec_count * sizeof ( int * );
+	  vec_size  = vec_count * sizeof ( int );
 	  result = Urm__CW_ConvertValue (NULL, (long*)value_return,
 					 (MrmType)*type_return, 0, display,
 					 hierarchy_id, NULL) ;
@@ -367,7 +372,14 @@ MrmFetchLiteral (MrmHierarchy		hierarchy_id,
     }
   else
     {
-      (*(context_id->free_func)) ((void *)context_id) ;
+      if ( ctxlist != NULL )
+	{
+	  for ( ndx=0 ; ndx<UrmPlistNum(ctxlist) ; ndx++ )
+	    UrmFreeResourceContext
+	      ((URMResourceContextPtr) UrmPlistPtrN(ctxlist,ndx)) ;
+	  UrmPlistFree (ctxlist) ;
+	}
+      UrmFreeResourceContext (context_id);
       _MrmAppUnlock(app);
       _MrmProcessUnlock();
       return result;
@@ -685,7 +697,7 @@ MrmFetchColorLiteral (MrmHierarchy                hierarchy_id,
 	 XBlackPixelOfScreen(XDefaultScreenOfDisplay(display)));
       break;
     default:
-      sprintf(err_msg, "%s", _MrmMMsg_0040);
+      snprintf (err_msg, sizeof(err_msg), "%s", _MrmMMsg_0040);
       result = Urm__UT_Error ("MrmFetchColorLiteral",
 			      err_msg, NULL, NULL, MrmFAILURE) ;
       _MrmAppUnlock(app);
@@ -770,6 +782,7 @@ UrmGetIndexedLiteral (IDBFile			file_id ,
    *  Local variables
    */
   MrmType		lit_type ;	/* the type of the literal */
+  Cardinal		result ;	/* function results */
 
 
   /*
@@ -780,8 +793,10 @@ UrmGetIndexedLiteral (IDBFile			file_id ,
 			  file_id, context_id, MrmBAD_CONTEXT) ;
 
   lit_type = UrmRCType (context_id) ;
-  return UrmIdbGetIndexedResource
+  result = UrmIdbGetIndexedResource
     (file_id, index, URMgLiteral, lit_type, context_id) ;
+  if ( result != MrmSUCCESS ) return result ;
+  return Urm__ValidLiteral (file_id, context_id) ;
 
 }
 
@@ -825,6 +840,7 @@ UrmGetRIDLiteral (IDBFile			file_id ,
    *  Local variables
    */
   MrmType		lit_type ;	/* the type of the literal */
+  Cardinal		result ;	/* function results */
 
 
   /*
@@ -835,8 +851,10 @@ UrmGetRIDLiteral (IDBFile			file_id ,
 			  file_id, context_id, MrmBAD_CONTEXT) ;
 
   lit_type = UrmRCType (context_id) ;
-  return UrmIdbGetRIDResource
+  result = UrmIdbGetRIDResource
     (file_id, resource_id, URMgLiteral, lit_type, context_id) ;
+  if ( result != MrmSUCCESS ) return result ;
+  return Urm__ValidLiteral (file_id, context_id) ;
 
 }
 
@@ -883,6 +901,7 @@ Urm__HGetIndexedLiteral (MrmHierarchy		hierarchy_id ,
    *  Local variables
    */
   MrmType			lit_type ;	/* the type of the literal */
+  Cardinal			result ;	/* function results */
 
   /*
    * Validate hierarchy and context, then attempt the read.
@@ -898,8 +917,10 @@ Urm__HGetIndexedLiteral (MrmHierarchy		hierarchy_id ,
 			  NULL, context_id, MrmBAD_CONTEXT) ;
 
   lit_type = UrmRCType (context_id) ;
-  return UrmHGetIndexedResource
+  result = UrmHGetIndexedResource
     (hierarchy_id, index, URMgLiteral, lit_type, context_id, file_id_return) ;
+  if ( result != MrmSUCCESS ) return result ;
+  return Urm__ValidLiteral (*file_id_return, context_id) ;
 
 }
 

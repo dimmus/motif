@@ -124,6 +124,19 @@ static	IDBRecordBufferPtr	idb__buffer_pool_vec = NULL ;
 static	long int		idb__buffer_activity_count = 1 ;
 
 
+/*
+ * Release a buffer whose contents could not be read or validated, so that
+ * a later Idb__BM_GetRecord does not find and return them.
+ */
+static void
+Idb__BM_Invalidate (IDBRecordBufferPtr	buffer)
+{
+  buffer->cur_file = NULL ;
+  buffer->activity = 0 ;
+  buffer->modified = FALSE ;
+}
+
+
 
 /*
  *++
@@ -440,6 +453,26 @@ Idb__BM_GetRecord (IDBFile                     file_id,
   unsigned char		*buf_src; /* tmp pointer to location in uid buffer */
 
   /*
+   * Record numbers start at 1 (the header record). The number may come
+   * from the file, so reject anything else before using it as a position.
+   */
+  if ( record < IDBHeaderRecordNumber )
+    return Urm__UT_Error ("Idb__BM_GetRecord", _MrmMMsg_0003,
+			  file_id, NULL, MrmNOT_FOUND) ;
+
+  /*
+   * A memory buffer must contain the record. If its size is unknown
+   * (MrmOpenHierarchyFromBuffer), the record count in the file header is
+   * all there is to go by once the header has been read.
+   */
+  if ( file_id->in_memory &&
+       ( (file_id->uid_buffer_size != 0) ?
+	 ((size_t) record > file_id->uid_buffer_size / IDBRecordSize) :
+	 (file_id->last_record > 0 && record > file_id->last_record) ) )
+    return Urm__UT_Error ("Idb__BM_GetRecord", _MrmMMsg_0019,
+			  file_id, NULL, MrmNOT_FOUND) ;
+
+  /*
    * If buffer pool is unallocated, get a buffer (which WILL allocate it),
    * and read the record into that. Else see if the record is already in
    * memory, and return it if so. If the record is not found, get a buffer
@@ -483,8 +516,11 @@ Idb__BM_GetRecord (IDBFile                     file_id,
 
 
   if ( result != MrmSUCCESS )
-    return Urm__UT_Error ("Idb__BM_GetRecord", _MrmMMsg_0003,
-			  file_id, NULL, result) ;
+    {
+      Idb__BM_Invalidate (*buffer_return) ;
+      return Urm__UT_Error ("Idb__BM_GetRecord", _MrmMMsg_0003,
+			    file_id, NULL, result) ;
+    }
   file_id->get_count++ ;
 
   /*
@@ -497,18 +533,34 @@ Idb__BM_GetRecord (IDBFile                     file_id,
   if ( (*buffer_return)->IDB_record->header.validation !=
        IDBRecordHeaderValid ) {
     swapbytes( (*buffer_return)->IDB_record->header.validation );
-    if ((*buffer_return)->IDB_record->header.validation == IDBRecordHeaderValid)
+    if ((*buffer_return)->IDB_record->header.validation != IDBRecordHeaderValid)
       {
-	/* must be a file needing byte swapping */
-	file_id->byte_swapped = TRUE;
-	Idb__BM_SwapRecordBytes (*buffer_return);
-	Idb__BM_MarkActivity (*buffer_return);
-	return MrmSUCCESS ;
+	/* byte swapping has done no good, return error */
+	Idb__BM_Invalidate (*buffer_return) ;
+	return Urm__UT_Error("Idb__BM_GetRecord", _MrmMMsg_0005,
+			     file_id, NULL, MrmNOT_VALID) ;
       }
-    /* byte swapping has done no good, return error */
-    return Urm__UT_Error("Idb__BM_GetRecord", _MrmMMsg_0005,
-			 file_id, NULL, MrmNOT_VALID) ;
+
+    /* must be a file needing byte swapping */
+    file_id->byte_swapped = TRUE;
+    result = Idb__BM_SwapRecordBytes (*buffer_return);
+    if ( result != MrmSUCCESS )
+      {
+	Idb__BM_Invalidate (*buffer_return) ;
+	return result ;
+      }
   }
+
+  /*
+   * The buffer pool is searched by the record number stored in the
+   * record, so it must be the number of the record actually read.
+   */
+  if ( (*buffer_return)->IDB_record->header.record_num != record )
+    {
+      Idb__BM_Invalidate (*buffer_return) ;
+      return Urm__UT_Error("Idb__BM_GetRecord", _MrmMMsg_0005,
+			   file_id, NULL, MrmBAD_RECORD) ;
+    }
 
   /*
    * Record successfully read

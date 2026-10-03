@@ -186,6 +186,12 @@ typedef struct {
 #define	IDBRecordSize	4096
 
 /*
+ * True if the len bytes at byte offset offs from the start of a record
+ * lie entirely within the record (see _UrmInBuffer).
+ */
+#define	_IdbInRecord(offs,len)	_UrmInBuffer(offs,len,IDBRecordSize)
+
+/*
  * IDB record header
  */
 #define	IDBRecordHeaderValid	310144882
@@ -372,6 +378,11 @@ typedef struct {
  */
 #define	IDBIndexLeafFreeMax	(IDBRecordSize - sizeof(IDBIndexLeafHdr))
 
+/*
+ * Max number of entries in a leaf index record
+ */
+#define	IDBIndexLeafMaxCount	(IDBIndexLeafFreeMax / IDBIndexLeafEntrySize)
+
 
 
 /*
@@ -432,6 +443,11 @@ typedef struct {
  * Max number of free bytes in node index record (0 entries)
  */
 #define	IDBIndexNodeFreeMax	(IDBRecordSize - sizeof(IDBIndexNodeHdr))
+
+/*
+ * Max number of entries in a node index record
+ */
+#define	IDBIndexNodeMaxCount	(IDBIndexNodeFreeMax / IDBIndexNodeEntrySize)
 
 /*
  * Max number of bytes consumed by a new entry

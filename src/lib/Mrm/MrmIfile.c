@@ -73,6 +73,7 @@ static char rcsid[] = "$XConsortium: MrmIfile.c /main/13 1996/11/13 13:56:30 drk
 
 #define	PMODE	0666	/* Default protection mode before umask		*/
 #define FAILURE	-1	/* creat/stat returns this			*/
+#define FNAMELEN 256	/* documented minimum size of returned_fname	*/
 
 /*
  *++
@@ -93,7 +94,8 @@ static char rcsid[] = "$XConsortium: MrmIfile.c /main/13 1996/11/13 13:56:30 drk
  *	os_ext		an operating specific structure to take advantage
  *			of file system features (if any).
  *	file_id		IDB file id used in all calls to low level routines.
- *	returned_fname	The resultant file name.
+ *	returned_fname	The resultant file name. Must hold at least
+ *			FNAMELEN (256) bytes; longer names are truncated.
  *
  *  IMPLICIT INPUTS:
  *
@@ -136,7 +138,8 @@ Idb__FU_OpenFile (char 			*name,
 
   /* Fill in the result name with the name specified so far */
   length = strlen (name);
-  strcpy (returned_fname, name);
+  strncpy (returned_fname, name, FNAMELEN - 1);
+  returned_fname[FNAMELEN - 1] = '\0';
 
   /* Check if this file is to be opened for read or write access */
   if (access == URMWriteAccess)
@@ -321,8 +324,12 @@ Idb__FU_GetBlock (IDBLowLevelFile	*file_id,
   int	fdesc ;			/* file descriptor from lowlevel desc */
 
 
+  if (block_num < 1)
+    return MrmFAILURE;
+
   fdesc = file_id->file_desc ;
-  lseek (fdesc, (block_num-1)*IDBRecordSize, 0);
+  if (lseek (fdesc, (off_t)(block_num-1)*IDBRecordSize, SEEK_SET) < 0)
+    return MrmFAILURE;
   number_read = read (file_id->file_desc, buffer, IDBRecordSize);
 
   if (number_read != IDBRecordSize)
@@ -380,8 +387,12 @@ Idb__FU_PutBlock (IDBLowLevelFile	*file_id,
   int	fdesc ;			/* file descriptor from lowlevel desc */
 
 
+  if (block_num < 1)
+    return MrmFAILURE;
+
   fdesc = file_id->file_desc ;
-  lseek (fdesc, (block_num-1)*IDBRecordSize, 0);
+  if (lseek (fdesc, (off_t)(block_num-1)*IDBRecordSize, SEEK_SET) < 0)
+    return MrmFAILURE;
   number_written = write (file_id->file_desc, buffer, IDBRecordSize);
 
   if (number_written != IDBRecordSize)

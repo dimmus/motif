@@ -206,9 +206,9 @@ Idb__HDR_GetHeader (IDBFile		file_id)
    * Compare version in header against compiled-in version, flagging
    * mismatch if found.
    */
-  if (sscanf(hdrptr->db_version, "URM %d.%d", &file_major, &file_minor) != 2)
+  if (sscanf(file_id->db_version, "URM %d.%d", &file_major, &file_minor) != 2)
     {
-      sprintf(errmsg, _MrmMMsg_0117, hdrptr->db_version);
+      snprintf (errmsg, sizeof(errmsg), _MrmMMsg_0117, file_id->db_version);
       return Urm__UT_Error ("Idb__HDR_GetHeader", errmsg,
 			    file_id, NULL, MrmNOT_VALID);
     }
@@ -224,13 +224,15 @@ Idb__HDR_GetHeader (IDBFile		file_id)
   if ((file_major > db_major) ||
       ((file_major == db_major) && (file_minor > db_minor)))
     {
-      sprintf (errmsg, _MrmMMsg_0011, hdrptr->db_version, idb__database_version);
+      snprintf (errmsg, sizeof(errmsg), _MrmMMsg_0011, file_id->db_version,
+		idb__database_version);
       return Urm__UT_Error ("Idb__HDR_GetHeader", errmsg,
 			    file_id, NULL, MrmNOT_VALID);
     }
   else if (db_major > file_major)
     {
-      sprintf(errmsg, _MrmMMsg_0118, idb__database_version, hdrptr->db_version);
+      snprintf (errmsg, sizeof(errmsg), _MrmMMsg_0118, idb__database_version,
+		file_id->db_version);
       return Urm__UT_Error ("Idb__HDR_GetHeader", errmsg,
 			    file_id, NULL, MrmNOT_VALID);
     }
@@ -566,7 +568,7 @@ Idb__HDR_EnterItem (IDBFile		file_id,
   /*
    * Set the data item.
    */
-  if ( resndx >= IDBHeaderRIDMax )
+  if ( resndx < 0 || resndx >= IDBHeaderRIDMax )
     return Urm__UT_Error("Idb__HDR_EnterItem", _MrmMMsg_0013,
 			 file_id, NULL, MrmBAD_DATA_INDEX);
   recptr->RID_pointers[resndx].internal_id.rec_no = data_entry.rec_no;
@@ -654,7 +656,7 @@ Idb__HDR_ReturnItem (IDBFile		file_id,
   /*
    * Retrieve the data item.
    */
-  if ( resndx >= IDBHeaderRIDMax )
+  if ( resndx < 0 || resndx >= IDBHeaderRIDMax )
     return Urm__UT_Error("Idb__HDR_ReturnItem", _MrmMMsg_0013,
 			 file_id, NULL, MrmBAD_DATA_INDEX);
   if (( recptr->RID_pointers[resndx].internal_id.rec_no == 0) &&
@@ -728,7 +730,7 @@ Idb__HDR_NextRID (IDBFile		file_id,
   if ( file_id->next_RID.internal_id.map_rec != IDBHeaderRecordNumber )
     return Urm__UT_Error("Idb__HDR_NextRID", _MrmMMsg_0012,
 			 file_id, NULL, MrmBAD_RECORD);
-  if ( resndx >= IDBHeaderRIDMax )
+  if ( resndx < 0 || resndx >= IDBHeaderRIDMax )
     return MrmFAILURE;
 
   /*
@@ -784,7 +786,6 @@ Idb__HDR_GetDataEntry (IDBFile			file_id,
   IDBRecordNumber	record_number;	/* Record to be read in */
   IDBDataEntryHdrPtr	datahdr;	/* Header part of entry */
   IDBSimpleDataPtr	sim_data;	/* Simple data entry */
-  IDBHeaderRecordPtr	recptr;		/* pointer data record */
   IDBRecordBufferPtr	bufptr;		/* temp buffer for record */
   char			*buff_ptr;	/* ptr into context buffer */
 
@@ -815,12 +816,8 @@ Idb__HDR_GetDataEntry (IDBFile			file_id,
    * is resized if necessary. Note that all context info except the
    * actual data can be set now regardless of the entry type.
    */
-  recptr = (IDBHeaderRecordPtr) bufptr->IDB_record;
-  datahdr =
-    (IDBDataEntryHdrPtr) &recptr->data[data_entry.item_offs];
-  if ((datahdr->validation != IDBDataEntryValid) && ( file_id->byte_swapped ))
-    SwapIDBDataEntryHdr(datahdr) ;
-  if (datahdr->validation != IDBDataEntryValid)
+  datahdr = Idb__DB_EntryHeader (file_id, bufptr, data_entry.item_offs);
+  if ( datahdr == NULL || ! Idb__HDR_ValidRecord(bufptr) )
     return Urm__UT_Error("Idb__HDR_GetDataEntry", _MrmMMsg_0007,
 			 NULL, context_id, MrmNOT_VALID);
 
@@ -846,7 +843,13 @@ Idb__HDR_GetDataEntry (IDBFile			file_id,
     {
     case IDBdrSimple:
       sim_data = (IDBSimpleDataPtr) datahdr;
-      UrmBCopy (sim_data->data, buff_ptr, datahdr->entry_size);
+      if ( ! _IdbInRecord ((char *) sim_data->data -
+			   (char *) bufptr->IDB_record,
+			   datahdr->entry_size) )
+	return Urm__UT_Error("Idb__HDR_GetDataEntry", _MrmMMsg_0007,
+			     NULL, context_id, MrmNOT_VALID);
+      if ( datahdr->entry_size > 0 )
+	UrmBCopy (sim_data->data, buff_ptr, datahdr->entry_size);
       return MrmSUCCESS;
 
     case IDBdrOverflow:
@@ -1013,7 +1016,6 @@ Idb__HDR_MatchFilter (IDBFile		file_id,
   Cardinal		result;		/* return status */
   IDBRecordNumber	record_number;	/* Record to be read in */
   IDBRecordBufferPtr	bufptr;		/* buffer for data record */
-  IDBHeaderRecordPtr	recptr;		/* pointer data record */
   IDBDataEntryHdrPtr	datahdr;	/* Header part of entry */
 
   /*
@@ -1036,10 +1038,8 @@ Idb__HDR_MatchFilter (IDBFile		file_id,
   /*
    * Point to the header in the entry, and check the filters.
    */
-  recptr = (IDBHeaderRecordPtr) bufptr->IDB_record;
-  datahdr =
-    (IDBDataEntryHdrPtr) &recptr->data[data_entry.item_offs];
-  if (datahdr->validation != IDBDataEntryValid)
+  datahdr = Idb__DB_EntryHeader (file_id, bufptr, data_entry.item_offs);
+  if ( datahdr == NULL || ! Idb__HDR_ValidRecord(bufptr) )
     {
       Urm__UT_Error("Idb__HDR_GetDataEntry", _MrmMMsg_0007,
 		    NULL, NULL, MrmNOT_VALID);
