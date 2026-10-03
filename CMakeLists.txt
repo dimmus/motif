@@ -113,6 +113,9 @@ else()
   set(MOTIF_LIB_TYPE STATIC)
 endif()
 
+motif_option(WITH_HARDENING
+  "Build with hardening flags (_FORTIFY_SOURCE=3, stack protector, stack clash protection, CET, full RELRO)" ON)
+
 # Sanitizers and coverage, see "Sanitizers and coverage" below
 motif_option(WITH_COMPILER_ASAN
   "Build with AddressSanitizer (includes LeakSanitizer where supported)" OFF)
@@ -485,6 +488,42 @@ if(WITH_COMPILER_CODE_COVERAGE)
   endif()
   add_compile_options(${_coverage_flags})
   add_link_options(${_coverage_flags})
+endif()
+
+# -----------------------------------------------------------------------------
+# Hardening
+#
+# Global for the same reason as the sanitizers: the programs as well as the
+# libraries should get them.
+
+if(WITH_HARDENING AND CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
+  set(MOTIF_HARDENING_FLAGS)
+  motif_check_c_flags(MOTIF_HARDENING_FLAGS
+    -fstack-protector-strong
+    -fstack-clash-protection
+    -fcf-protection
+  )
+  add_compile_options(${MOTIF_HARDENING_FLAGS})
+
+  # _FORTIFY_SOURCE needs optimisation (glibc warns without it), and the
+  # sanitizers do these checks themselves.  -U first, as some toolchains
+  # predefine a different level.
+  if(NOT MOTIF_SANITIZE_FLAGS)
+    set(_optimized "$<OR:$<CONFIG:Release>,$<CONFIG:RelWithDebInfo>,$<CONFIG:MinSizeRel>>")
+    add_compile_options(
+      "$<${_optimized}:-U_FORTIFY_SOURCE>"
+      "$<${_optimized}:-D_FORTIFY_SOURCE=3>"
+    )
+  endif()
+
+  if(NOT APPLE)
+    set(CMAKE_REQUIRED_LINK_OPTIONS -Wl,-z,relro -Wl,-z,now)
+    check_c_source_compiles("int main(void) { return 0; }" MOTIF_HAVE_LDFLAG_RELRO_NOW)
+    unset(CMAKE_REQUIRED_LINK_OPTIONS)
+    if(MOTIF_HAVE_LDFLAG_RELRO_NOW)
+      add_link_options(-Wl,-z,relro -Wl,-z,now)
+    endif()
+  endif()
 endif()
 
 # Optimization options. These are applied here rather than in the presets in
