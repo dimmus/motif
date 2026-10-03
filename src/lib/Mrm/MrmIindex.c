@@ -96,6 +96,66 @@ static char rcsid[] = "$XConsortium: MrmIindex.c /main/13 1996/11/13 13:57:31 dr
      (_IdbBufferRecordType(buffer)==IDBrtIndexLeaf ||  \
       _IdbBufferRecordType(buffer)==IDBrtIndexNode)
 
+/*
+ * Maximum depth of the B-tree index. The index is a balanced B-tree in
+ * which every node has at least two children, and a file has fewer than
+ * 32768 records, so a valid index is at most 16 levels deep. The limit
+ * stops the search of a corrupt file in which the record pointers form
+ * a cycle.
+ */
+#define	IDBMaxIndexDepth	64
+
+
+
+/*
+ *  Helper routines for reading index records, whose contents come from
+ *  the file and must be checked before use.
+ */
+
+/*
+ * Return the number of entries in an index leaf or node record, or -1 if
+ * the record is not an index record or the count does not fit in it.
+ */
+static int
+Idb__INX_EntryCount (IDBRecordBufferPtr		buffer)
+{
+  int			count ;		/* entry count */
+
+  switch ( _IdbBufferRecordType (buffer) )
+    {
+    case IDBrtIndexLeaf:
+      count = ((IDBIndexLeafRecordPtr) buffer->IDB_record)->
+	leaf_header.index_count ;
+      if ( count < 0 || count > (int) IDBIndexLeafMaxCount ) return -1 ;
+      return count ;
+    case IDBrtIndexNode:
+      count = ((IDBIndexNodeRecordPtr) buffer->IDB_record)->
+	node_header.index_count ;
+      if ( count < 0 || count > (int) IDBIndexNodeMaxCount ) return -1 ;
+      return count ;
+    default:
+      return -1 ;
+    }
+}
+
+/*
+ * Return the index string at offset stgoffs from the entry vector at
+ * stgbase in a record buffer, or NULL if the string does not start and
+ * end (with its NUL) within the record.
+ */
+static char *
+Idb__INX_EntryString (IDBRecordBufferPtr	buffer,
+		      char			*stgbase,
+		      MrmOffset			stgoffs)
+{
+  size_t		offs ;		/* string offset in record */
+
+  offs = (stgbase - (char *) buffer->IDB_record) + (size_t) stgoffs ;
+  if ( ! _UrmStringInBuffer (buffer->IDB_record, offs, IDBRecordSize) )
+    return NULL ;
+  return (char *) buffer->IDB_record + offs ;
+}
+
 
 
 /*
@@ -237,6 +297,7 @@ Idb__INX_FindIndex (IDBFile			file_id,
    *  Local variables
    */
   Cardinal		result ;	/* function results */
+  int			depth = 0 ;	/* levels searched */
 
   /*
    * Initialize search at the root of the index, then continue searching
@@ -250,6 +311,9 @@ Idb__INX_FindIndex (IDBFile			file_id,
 			  file_id, NULL, MrmBAD_RECORD) ;
 
   do  {
+    if ( ++depth > IDBMaxIndexDepth )
+      return Urm__UT_Error ("Idb__INX_FindIndex", _MrmMMsg_0010,
+			    file_id, NULL, MrmBAD_BTREE) ;
     result =
       Idb__INX_SearchIndex (file_id, index, *buffer_return, index_return) ;
     if ( _IdbBufferRecordType(*buffer_return) == IDBrtIndexLeaf) return result ;
@@ -329,12 +393,10 @@ Idb__INX_SearchIndex (IDBFile			file_id,
    */
   MrmType		buftyp ;	/* buffer type */
   IDBIndexLeafRecordPtr	leafrec =NULL ;	/* index leaf record */
-  IDBIndexLeafHdrPtr	leafhdr =NULL;	/* index leaf header */
   IDBIndexNodeRecordPtr	noderec ;	/* index node record */
-  IDBIndexNodeHdrPtr	nodehdr ;	/* index node header */
   IDBIndexLeafEntryPtr	leaf_ndxvec = NULL;	/* index leaf entry vector */
   IDBIndexNodeEntryPtr	node_ndxvec = NULL;	/* index node entry vector */
-  MrmCount		ndxcnt ;	/* number of entries in vector */
+  int			ndxcnt ;	/* number of entries in vector */
   char			*stgbase ;	/* base adddress for string offsets */
   int			lowlim ;	/* binary search lower limit index */
   int			uprlim ;	/* binary search upper limit index */
@@ -350,33 +412,39 @@ Idb__INX_SearchIndex (IDBFile			file_id,
     {
     case IDBrtIndexLeaf:
       leafrec = (IDBIndexLeafRecordPtr) buffer->IDB_record ;
-      leafhdr = (IDBIndexLeafHdrPtr) &leafrec->leaf_header ;
       leaf_ndxvec = leafrec->index ;
-      ndxcnt = leafhdr->index_count ;
       stgbase = (char *) leafrec->index ;
       break ;
     case IDBrtIndexNode:
       noderec = (IDBIndexNodeRecordPtr) buffer->IDB_record ;
-      nodehdr = (IDBIndexNodeHdrPtr) &noderec->node_header ;
       node_ndxvec = noderec->index ;
-      ndxcnt = nodehdr->index_count ;
       stgbase = (char *) noderec->index ;
       break ;
     default:
       return Urm__UT_Error ("Idb__INX_SearchIndex", _MrmMMsg_0010,
 			    file_id, NULL, MrmBAD_RECORD) ;
     }
+  ndxcnt = Idb__INX_EntryCount (buffer) ;
+  if ( ndxcnt < 0 )
+    return Urm__UT_Error ("Idb__INX_SearchIndex", _MrmMMsg_0010,
+			  file_id, NULL, MrmBAD_BTREE) ;
 
   /*
-   * Search the index vector for the given index (binary search)
+   * Search the index vector for the given index (binary search). An
+   * empty record orders the index before its (nonexistent) first entry.
    */
   Idb__BM_MarkActivity (buffer) ;
+  *index_return = 0 ;
   for ( lowlim=0,uprlim=ndxcnt-1 ; lowlim<=uprlim ; )
     {
       *index_return = (lowlim+uprlim) / 2 ;
-      ndxstg = (buftyp==IDBrtIndexLeaf) ?
-        (char *) stgbase + leaf_ndxvec[*index_return].index_stg :
-        (char *) stgbase + node_ndxvec[*index_return].index_stg ;
+      ndxstg = Idb__INX_EntryString
+	(buffer, stgbase, (buftyp==IDBrtIndexLeaf) ?
+	 leaf_ndxvec[*index_return].index_stg :
+	 node_ndxvec[*index_return].index_stg) ;
+      if ( ndxstg == NULL )
+	return Urm__UT_Error ("Idb__INX_SearchIndex", _MrmMMsg_0010,
+			      file_id, NULL, MrmBAD_BTREE) ;
       cmpres = strncmp (index, ndxstg, IDBMaxIndexLength) ;
       if ( cmpres == 0 ) return MrmSUCCESS ;
       if ( cmpres < 0 ) uprlim = *index_return - 1 ;
@@ -446,6 +514,10 @@ Idb__INX_GetBtreeRecord ( IDBFile		file_id,
    * Set buffer pointers
    */
   recptr = (IDBIndexNodeRecordPtr) (*buffer_return)->IDB_record ;
+  if ( ! Idb__INX_ValidNode(*buffer_return) ||
+       entry_index < 0 || entry_index >= (int) IDBIndexNodeMaxCount )
+    return Urm__UT_Error ("Idb__INX_GetBTreeRecord", _MrmMMsg_0010,
+			  file_id, NULL, MrmBAD_BTREE) ;
 
   /*
    * Retrieve the record number
@@ -478,6 +550,165 @@ Idb__INX_GetBtreeRecord ( IDBFile		file_id,
   return MrmSUCCESS ;
 
 }
+
+
+
+/*
+ * The recursive part of Idb__INX_FindResources. visited is a bit vector
+ * of the records already searched, and depth is the level of recno in
+ * the tree; both keep a corrupt index from making the search loop.
+ */
+static Cardinal
+Idb__INX_FindResourcesIn (IDBFile		file_id,
+			  IDBRecordNumber	recno,
+			  MrmGroup		group_filter,
+			  MrmType		type_filter,
+			  URMPointerListPtr	index_list,
+			  unsigned char		*visited,
+			  int			depth)
+{
+
+  /*
+   *  Local variables
+   */
+  Cardinal		result ;	/* function results */
+  IDBRecordBufferPtr	bufptr ;	/* buffer containing entry */
+  int			entndx ;	/* entry loop index */
+  IDBIndexLeafRecordPtr	leafrec ;	/* index leaf record */
+  IDBIndexNodeRecordPtr	noderec ;	/* index node record */
+  IDBIndexLeafEntryPtr	leaf_ndxvec ;	/* index leaf entry vector */
+  IDBIndexNodeEntryPtr	node_ndxvec ;	/* index node entry vector */
+  int			ndxcnt ;	/* number of entries in vector */
+  char			*stgbase ;	/* base adddress for string offsets */
+  char			*ndxstg ;	/* index string of current entry */
+  IDBRecordNumber	gt_record ;	/* GT record of current entry */
+  IDBDataHandle		entry_data ;	/* data entry of current entry */
+
+
+  /*
+   * Each record of a valid index is reached exactly once, so a record
+   * seen twice, or a tree deeper than any valid one, means the record
+   * pointers are corrupt.
+   */
+  if ( recno < IDBHeaderRecordNumber || depth > IDBMaxIndexDepth ||
+       (visited[recno / 8] & (1 << (recno % 8))) )
+    return Urm__UT_Error ("Idb__INX_FindResources", _MrmMMsg_0010,
+			  file_id, NULL, MrmBAD_BTREE) ;
+  visited[recno / 8] |= 1 << (recno % 8) ;
+
+  /*
+   * Read the record in, then bind pointers and process the record.
+   */
+  result = Idb__BM_GetRecord (file_id, recno, &bufptr) ;
+  if ( result != MrmSUCCESS ) return result ;
+  ndxcnt = Idb__INX_EntryCount (bufptr) ;
+  if ( ndxcnt < 0 )
+    return Urm__UT_Error ("Idb__INX_FindResources", _MrmMMsg_0010,
+			  file_id, NULL, MrmBAD_RECORD) ;
+
+  switch ( _IdbBufferRecordType (bufptr) )
+    {
+
+      /*
+       * Simply apply the filter to all entries in the leaf record
+       */
+    case IDBrtIndexLeaf:
+      leafrec = (IDBIndexLeafRecordPtr) bufptr->IDB_record ;
+      leaf_ndxvec = leafrec->index ;
+      stgbase = (char *) leafrec->index ;
+
+      for ( entndx=0 ; entndx<ndxcnt ; entndx++ )
+	{
+	  /*
+	   * Matching the filter reads another record, which may reuse
+	   * this buffer, so re-read this record before using it again.
+	   */
+	  if ( entndx > 0 )
+	    {
+	      result = Idb__BM_GetRecord (file_id, recno, &bufptr) ;
+	      if ( result != MrmSUCCESS ) return result ;
+	      if ( ! Idb__INX_ValidLeaf(bufptr) ||
+		   Idb__INX_EntryCount (bufptr) != ndxcnt )
+		return Urm__UT_Error ("Idb__INX_FindResources", _MrmMMsg_0010,
+				      file_id, NULL, MrmBAD_RECORD) ;
+	      leafrec = (IDBIndexLeafRecordPtr) bufptr->IDB_record ;
+	      leaf_ndxvec = leafrec->index ;
+	      stgbase = (char *) leafrec->index ;
+	    }
+
+	  entry_data.rec_no = leaf_ndxvec[entndx].data.internal_id.rec_no;
+	  entry_data.item_offs =
+	    leaf_ndxvec[entndx].data.internal_id.item_offs;
+	  ndxstg = Idb__INX_EntryString
+	    (bufptr, stgbase, leaf_ndxvec[entndx].index_stg) ;
+	  if ( ndxstg == NULL )
+	    return Urm__UT_Error ("Idb__INX_FindResources", _MrmMMsg_0010,
+				  file_id, NULL, MrmBAD_BTREE) ;
+	  ndxstg = XtNewString (ndxstg) ;
+
+	  if ( Idb__DB_MatchFilter(file_id, entry_data, group_filter,
+				   type_filter) )
+	    UrmPlistAppendString (index_list, ndxstg) ;
+	  XtFree (ndxstg) ;
+	}
+      return MrmSUCCESS ;
+
+      /*
+       * Process the first LT record, then process each index followed by
+       * its GT record. This will produce a correctly ordered list. The
+       * record is read again, and all pointers bound, after each FindResources
+       * call in order to guarantee that buffer turning has not purged the
+       * current record from memory
+       */
+    case IDBrtIndexNode:
+      noderec = (IDBIndexNodeRecordPtr) bufptr->IDB_record ;
+      node_ndxvec = noderec->index ;
+      result = Idb__INX_FindResourcesIn
+	(file_id, node_ndxvec[0].LT_record,
+	 group_filter, type_filter, index_list, visited, depth + 1) ;
+      if ( result != MrmSUCCESS ) return result ;
+
+      for ( entndx=0 ; entndx<ndxcnt ; entndx++ )
+	{
+	  result = Idb__BM_GetRecord (file_id, recno, &bufptr) ;
+	  if ( result != MrmSUCCESS ) return result ;
+	  if ( ! Idb__INX_ValidNode(bufptr) ||
+	       Idb__INX_EntryCount (bufptr) != ndxcnt )
+	    return Urm__UT_Error ("Idb__INX_FindResources", _MrmMMsg_0010,
+				  file_id, NULL, MrmBAD_RECORD) ;
+	  noderec = (IDBIndexNodeRecordPtr) bufptr->IDB_record ;
+	  node_ndxvec = noderec->index ;
+	  stgbase = (char *) noderec->index ;
+
+	  entry_data.rec_no = node_ndxvec[entndx].data.internal_id.rec_no;
+	  entry_data.item_offs =
+	    node_ndxvec[entndx].data.internal_id.item_offs;
+	  gt_record = node_ndxvec[entndx].GT_record ;
+	  ndxstg = Idb__INX_EntryString
+	    (bufptr, stgbase, node_ndxvec[entndx].index_stg) ;
+	  if ( ndxstg == NULL )
+	    return Urm__UT_Error ("Idb__INX_FindResources", _MrmMMsg_0010,
+				  file_id, NULL, MrmBAD_BTREE) ;
+	  ndxstg = XtNewString (ndxstg) ;
+
+	  if ( Idb__DB_MatchFilter
+	       (file_id, entry_data, group_filter, type_filter) )
+	    UrmPlistAppendString (index_list, ndxstg) ;
+	  XtFree (ndxstg) ;
+	  result = Idb__INX_FindResourcesIn
+	    (file_id, gt_record, group_filter, type_filter, index_list,
+	     visited, depth + 1) ;
+	  if ( result != MrmSUCCESS ) return result ;
+	}
+      return MrmSUCCESS ;
+
+    default:
+      return Urm__UT_Error ("Idb__INX_FindResources", _MrmMMsg_0010,
+			    file_id, NULL, MrmBAD_RECORD) ;
+    }
+
+}
+
 
 
 
@@ -528,99 +759,16 @@ Idb__INX_FindResources (IDBFile			file_id,
    *  Local variables
    */
   Cardinal		result ;	/* function results */
-  IDBRecordBufferPtr	bufptr ;	/* buffer containing entry */
-  int			entndx ;	/* entry loop index */
-  IDBIndexLeafRecordPtr	leafrec ;	/* index leaf record */
-  IDBIndexLeafHdrPtr	leafhdr ;	/* index leaf header */
-  IDBIndexNodeRecordPtr	noderec ;	/* index node record */
-  IDBIndexNodeHdrPtr	nodehdr ;	/* index node header */
-  IDBIndexLeafEntryPtr	leaf_ndxvec ;	/* index leaf entry vector */
-  IDBIndexNodeEntryPtr	node_ndxvec ;	/* index node entry vector */
-  MrmCount		ndxcnt ;	/* number of entries in vector */
-  char			*stgbase ;	/* base adddress for string offsets */
-
-
+  unsigned char		*visited ;	/* records searched, one bit each */
 
   /*
-   * Read the record in, then bind pointers and process the record.
+   * Record numbers are positive shorts, so one bit for each of 32768
+   * possible records.
    */
-  result = Idb__BM_GetRecord (file_id, recno, &bufptr) ;
-  if ( result != MrmSUCCESS ) return result ;
-
-  switch ( _IdbBufferRecordType (bufptr) )
-    {
-
-      /*
-       * Simply apply the filter to all entries in the leaf record
-       */
-    case IDBrtIndexLeaf:
-      leafrec = (IDBIndexLeafRecordPtr) bufptr->IDB_record ;
-      leafhdr = (IDBIndexLeafHdrPtr) &leafrec->leaf_header ;
-      leaf_ndxvec = leafrec->index ;
-      ndxcnt = leafhdr->index_count ;
-      stgbase = (char *) leafrec->index ;
-
-      for ( entndx=0 ; entndx<ndxcnt ; entndx++ )
-	{
-	  IDBDataHandle	entry_data;
-
-	  entry_data.rec_no = leaf_ndxvec[entndx].data.internal_id.rec_no;
-	  entry_data.item_offs =
-	    leaf_ndxvec[entndx].data.internal_id.item_offs;
-
-	  if ( Idb__DB_MatchFilter(file_id, entry_data, group_filter,
-				   type_filter) )
-	    UrmPlistAppendString (index_list,
-				  stgbase+leaf_ndxvec[entndx].index_stg) ;
-	  Idb__BM_MarkActivity (bufptr) ;
-	}
-      return MrmSUCCESS ;
-
-      /*
-       * Process the first LT record, then process each index followed by
-       * its GT record. This will produce a correctly ordered list. The
-       * record is read again, and all pointers bound, after each FindResources
-       * call in order to guarantee that buffer turning has not purged the
-       * current record from memory
-       */
-    case IDBrtIndexNode:
-      noderec = (IDBIndexNodeRecordPtr) bufptr->IDB_record ;
-      nodehdr = (IDBIndexNodeHdrPtr) &noderec->node_header ;
-      node_ndxvec = noderec->index ;
-      ndxcnt = nodehdr->index_count ;
-      stgbase = (char *) noderec->index ;
-      result = Idb__INX_FindResources
-	(file_id, node_ndxvec[0].LT_record,
-	 group_filter, type_filter, index_list) ;
-      if ( result != MrmSUCCESS ) return result ;
-
-      for ( entndx=0 ; entndx<ndxcnt ; entndx++ )
-	{
-	  IDBDataHandle	entry_data;
-
-	  entry_data.rec_no = node_ndxvec[entndx].data.internal_id.rec_no;
-	  entry_data.item_offs =
-	    node_ndxvec[entndx].data.internal_id.item_offs;
-
-	  Idb__BM_GetRecord (file_id, recno, &bufptr) ;
-	  noderec = (IDBIndexNodeRecordPtr) bufptr->IDB_record ;
-	  nodehdr = (IDBIndexNodeHdrPtr) &noderec->node_header ;
-	  node_ndxvec = noderec->index ;
-	  stgbase = (char *) noderec->index ;
-	  if ( Idb__DB_MatchFilter
-	       (file_id, entry_data, group_filter, type_filter) )
-	    UrmPlistAppendString (index_list,
-				  stgbase+node_ndxvec[entndx].index_stg) ;
-	  result = Idb__INX_FindResources
-	    (file_id, node_ndxvec[entndx].GT_record,
-	     group_filter, type_filter, index_list) ;
-	  if ( result != MrmSUCCESS ) return result ;
-	}
-      return MrmSUCCESS ;
-
-    default:
-      return Urm__UT_Error ("Idb__INX_FindResources", _MrmMMsg_0010,
-			    file_id, NULL, MrmBAD_RECORD) ;
-    }
+  visited = (unsigned char *) XtCalloc (32768 / 8, 1) ;
+  result = Idb__INX_FindResourcesIn (file_id, recno, group_filter,
+				     type_filter, index_list, visited, 1) ;
+  XtFree ((char *) visited) ;
+  return result ;
 
 }

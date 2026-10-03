@@ -378,6 +378,11 @@ typedef struct {
  */
 #define	IDBIndexLeafFreeMax	(IDBRecordSize - sizeof(IDBIndexLeafHdr))
 
+/*
+ * Max number of entries in a leaf index record
+ */
+#define	IDBIndexLeafMaxCount	(IDBIndexLeafFreeMax / IDBIndexLeafEntrySize)
+
 
 
 /*
@@ -438,6 +443,11 @@ typedef struct {
  * Max number of free bytes in node index record (0 entries)
  */
 #define	IDBIndexNodeFreeMax	(IDBRecordSize - sizeof(IDBIndexNodeHdr))
+
+/*
+ * Max number of entries in a node index record
+ */
+#define	IDBIndexNodeMaxCount	(IDBIndexNodeFreeMax / IDBIndexNodeEntrySize)
 
 /*
  * Max number of bytes consumed by a new entry

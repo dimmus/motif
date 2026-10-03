@@ -164,6 +164,9 @@ Idb__BM_SwapRecordBytes (IDBRecordBufferPtr		buffer)
       swapbytes( leaf_rec->leaf_header.index_count );
       swapbytes( leaf_rec->leaf_header.heap_start );
       swapbytes( leaf_rec->leaf_header.free_bytes );
+      if ( leaf_rec->leaf_header.index_count < 0 ||
+	   leaf_rec->leaf_header.index_count > (int) IDBIndexLeafMaxCount )
+	goto bad_record;
       for( ndx=0 ; ndx < leaf_rec->leaf_header.index_count ; ndx++ )
 	{
 	  swapbytes( leaf_rec->index[ndx].index_stg );
@@ -178,6 +181,9 @@ Idb__BM_SwapRecordBytes (IDBRecordBufferPtr		buffer)
       swapbytes( node_rec->node_header.index_count );
       swapbytes( node_rec->node_header.heap_start );
       swapbytes( node_rec->node_header.free_bytes );
+      if ( node_rec->node_header.index_count < 0 ||
+	   node_rec->node_header.index_count > (int) IDBIndexNodeMaxCount )
+	goto bad_record;
       for( ndx=0 ; ndx < node_rec->node_header.index_count ; ndx++ )
 	{
 	  swapbytes( node_rec->index[ndx].index_stg );
@@ -209,8 +215,9 @@ Idb__BM_SwapRecordBytes (IDBRecordBufferPtr		buffer)
       break;
 
     default:
-      snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0020, idb_header->record_num,
-	      idb_header->record_type);
+    bad_record:
+      snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0020,
+		idb_header->record_num, idb_header->record_type);
       return Urm__UT_Error ("Idb__BM_SwapRecordBytes",
 			    err_msg, NULL, NULL, MrmFAILURE) ;
     }
