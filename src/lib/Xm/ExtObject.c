@@ -70,8 +70,15 @@ static XtResource extResources[] = {{XmNlogicalParent,
                                      XmRImmediate,
                                      (XtPointer)XmDEFAULT_EXTENSION}};
 #undef Offset
-#define XmNUM_ELEMENTS 4
-#define XmNUM_BYTES 255
+/*
+ * Scratch records for the secondary objects that gadgets build around
+ * every Get/SetValues call.  They must hold the largest gadget cache
+ * object (ToggleButtonGadget's, about 310 bytes with 64-bit pointers;
+ * with the old 255 bytes PushButtonGadget's and ToggleButtonGadget's went
+ * to malloc), and a SetValues on a subclass uses several at once.
+ */
+#define XmNUM_ELEMENTS 8
+#define XmNUM_BYTES 512
 
 typedef struct _XmExtCache {
   char data[XmNUM_BYTES];

@@ -69,46 +69,47 @@ void _XmCacheCopy(XtPointer src, XtPointer dest, size_t size)
  *  _XmCachePart
  *	Pass in a pointer, <cpart>, to <size> bytes of a temporary Cache
  *	record.
- *	- If the Class cache head is NULL (no entries yet!), allocate a new
- *	  cache record, copy in temporary Cache bytes, append it to the
- *	  class-cache linked list, and return the address.
- *	- Else, run through the class linked list.
- *	  = If a match is found, increment the ref_count and return the
- *	    address.
+ *	- Run through the class linked list.
+ *	  = If a match is found, increment the ref_count, move the record
+ *	    to the front of the list and return the address.
  *	  = Else, allocate a new cache record, copy in temporary Cache bytes,
- *	    append it to the class-cache linked list, and return the address.
+ *	    put it at the front of the class-cache linked list, and return
+ *	    the address.
  *
  ************************************************************************/
 XtPointer _XmCachePart(XmCacheClassPartPtr cp, XtPointer cpart, size_t size)
 {
-  XmGadgetCachePtr ptr, last;
-  if (ClassCacheHead(cp).next == NULL) /* First one */ {
-    ClassCacheHead(cp).next = (struct _XmGadgetCache *)XtMalloc(
-        size + XtOffsetOf(XmGadgetCacheRef, data));
-    ptr = (XmGadgetCachePtr)ClassCacheHead(cp).next;
-    ClassCacheCopy(cp)(cpart, CacheDataPtr(ptr), size);
-    ptr->ref_count = 1;
-    ptr->next = NULL;
-    ptr->prev = (struct _XmGadgetCache *)&ClassCacheHead(cp);
-    return (CacheDataPtr(ptr));
-  }
-  ptr = (XmGadgetCachePtr)ClassCacheHead(cp).next;
-  do {
+  XmGadgetCachePtr head = &ClassCacheHead(cp);
+  XmGadgetCachePtr ptr;
+  /*
+   * The records are kept most recently used first: gadgets tend to be
+   * created and changed in runs that share their cache part, so the
+   * search for one usually stops at the first record.
+   */
+  for (ptr = head->next; ptr; ptr = ptr->next) {
     if ((ClassCacheCompare(cp)(cpart, CacheDataPtr(ptr)))) {
       ptr->ref_count++;
+      if (ptr != head->next) {
+        /* Unlink, then put it back at the front. */
+        ptr->prev->next = ptr->next;
+        if (ptr->next)
+          ptr->next->prev = ptr->prev;
+        ptr->next = head->next;
+        ptr->next->prev = ptr;
+        ptr->prev = head;
+        head->next = ptr;
+      }
       return ((XtPointer)CacheDataPtr(ptr));
     }
-    else {
-      last = ptr;
-      ptr = (XmGadgetCachePtr)ptr->next;
-    }
-  } while (ptr);
-  /* Malloc a new rec off of last, fill it out*/
+  }
+  /* Malloc a new rec at the front, fill it out */
   ptr = (XmGadgetCachePtr)XtMalloc(size + XtOffsetOf(XmGadgetCacheRef, data));
-  last->next = (struct _XmGadgetCache *)ptr;
   ClassCacheCopy(cp)(cpart, CacheDataPtr(ptr), size);
   ptr->ref_count = 1;
-  ptr->next = NULL;
-  ptr->prev = last;
+  ptr->next = head->next;
+  if (ptr->next)
+    ptr->next->prev = ptr;
+  ptr->prev = head;
+  head->next = ptr;
   return (CacheDataPtr(ptr));
 }

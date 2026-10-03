@@ -28,3 +28,11 @@ makes one pass, remove its tag.
 `XmString/` holds the old interactive XmString programs and data, which
 are not built; `environment/fonts` holds BDF fonts for future rendering
 tests.
+
+`bench/` holds `xmbench`, a set of micro- and macro-benchmarks for libXm.
+It is not part of CTest and is not built by default; `cmake --build
+<build> --target bench` builds it and runs every case (the X ones under
+`xvfb-run` when it was found) and writes `<build>/src/tests/bench/xmbench.json`.
+`xmbench -l` lists the cases; each reports ns, mallocs, X requests, round
+trips and `XSetICValues` calls per operation (the counters come from a
+small `LD_PRELOAD` library that `xmbench` loads itself).

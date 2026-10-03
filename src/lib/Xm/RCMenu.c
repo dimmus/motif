@@ -659,14 +659,28 @@ static int SIF_ErrorHandler(Display *display, /* unused */
   return 0;
 }
 
-static void SetInputFocus(Display *display, Window focus, int revert_to, Time time)
+/*
+ * Set the input focus, ignoring the BadMatch error that a window which is
+ * no longer viewable gets.  The handler has to stay in place until the
+ * server has answered, so this makes a round trip: when focus_return is
+ * not NULL that round trip is an XGetInputFocus, whose result is returned.
+ */
+static void SetInputFocus(Display *display,
+                          Window focus,
+                          int revert_to,
+                          Time time,
+                          Window *focus_return,
+                          int *revert_return)
 {
   XErrorHandler old_Handler;
   /* Setup error proc and reset error flag */
   old_Handler = XSetErrorHandler((XErrorHandler)SIF_ErrorHandler);
   /* Set the input focus */
   XSetInputFocus(display, focus, revert_to, time);
-  XSync(display, False);
+  if (focus_return)
+    XGetInputFocus(display, focus_return, revert_return);
+  else
+    XSync(display, False);
   XSetErrorHandler(old_Handler);
 }
 
@@ -690,28 +704,19 @@ void _XmMenuFocus(Widget w, int operation, Time _time)
                            XtNdestroyCallback,
                            (XtCallbackProc)InvalidateOldFocus,
                            (XtPointer)&mst->RC_menuFocus.oldFocus);
-          /* oldWidget is not destroyed so the window is valid. */
+          /*
+           * oldWidget is not destroyed so the window is valid.  The
+           * focus can only go back to it if it is still viewable; rather
+           * than asking the server first (two more round trips on every
+           * unpost), let SetInputFocus ignore the BadMatch it gets if not.
+           */
           if (XtIsRealized(mst->RC_menuFocus.oldWidget)) {
-            XWindowAttributes xwa;
-            /* 99.9% of the time, oldWidget is a shell.  So we'll
-             * funnel everything through XGetWindowAttributes.  For
-             * non-shells we could just call _XmIsViewable().
-             */
-            XGetWindowAttributes(
-                XtDisplay(mst->RC_menuFocus.oldWidget), mst->RC_menuFocus.oldFocus, &xwa);
-            if (xwa.map_state == IsViewable)
-            /** old code with fix for 5715
-               if (!XtIsShell(mst->RC_menuFocus.oldWidget) ||
-                   XtIsApplicationShell(mst->RC_menuFocus.oldWidget) ||
-                   (((ShellWidget)mst->RC_menuFocus.oldWidget)->
-                      shell.popped_up))
-**/
-            {
-              SetInputFocus(XtDisplay(w),
-                            mst->RC_menuFocus.oldFocus,
-                            mst->RC_menuFocus.oldRevert,
-                            mst->RC_menuFocus.oldTime);
-            }
+            SetInputFocus(XtDisplay(w),
+                          mst->RC_menuFocus.oldFocus,
+                          mst->RC_menuFocus.oldRevert,
+                          mst->RC_menuFocus.oldTime,
+                          NULL,
+                          NULL);
           }
         }
         /*
@@ -723,7 +728,9 @@ void _XmMenuFocus(Widget w, int operation, Time _time)
           SetInputFocus(XtDisplay(w),
                         mst->RC_menuFocus.oldFocus,
                         mst->RC_menuFocus.oldRevert,
-                        mst->RC_menuFocus.oldTime);
+                        mst->RC_menuFocus.oldTime,
+                        NULL,
+                        NULL);
         }
         mst->RC_menuFocus.oldFocus = 0;
         mst->RC_menuFocus.oldRevert = 0;
@@ -735,8 +742,6 @@ void _XmMenuFocus(Widget w, int operation, Time _time)
       XGetInputFocus(XtDisplay(w), &mst->RC_menuFocus.oldFocus, &mst->RC_menuFocus.oldRevert);
       mst->RC_menuFocus.oldWidget = XtWindowToWidget(XtDisplay(w), mst->RC_menuFocus.oldFocus);
       mst->RC_menuFocus.oldTime = _time - 1;
-      SetInputFocus(
-          XtDisplay(w), XtWindow(w), mst->RC_menuFocus.oldRevert, mst->RC_menuFocus.oldTime);
       /*
        * If unable to set focus, it means that some other application
        * (hopefully the WM) has set the focus more recently; try to
@@ -744,9 +749,14 @@ void _XmMenuFocus(Widget w, int operation, Time _time)
        * it's possible some other application (hopefully the WM)
        * will set the focus soon - see XmMENU_MIDDLE comments.
        */
-      XGetInputFocus(XtDisplay(w), &tmpWindow, &tmpRevert);
+      SetInputFocus(XtDisplay(w),
+                    XtWindow(w),
+                    mst->RC_menuFocus.oldRevert,
+                    mst->RC_menuFocus.oldTime,
+                    &tmpWindow,
+                    &tmpRevert);
       if (tmpWindow != XtWindow(w)) {
-        SetInputFocus(XtDisplay(w), XtWindow(w), tmpRevert, _time);
+        SetInputFocus(XtDisplay(w), XtWindow(w), tmpRevert, _time, NULL, NULL);
         mst->RC_menuFocus.oldRevert = tmpRevert;
         mst->RC_menuFocus.oldTime = _time;
         if (tmpWindow != mst->RC_menuFocus.oldFocus) {
@@ -762,17 +772,20 @@ void _XmMenuFocus(Widget w, int operation, Time _time)
       XFlush(XtDisplay(w));
       break;
     case XmMENU_MIDDLE:
-      SetInputFocus(
-          XtDisplay(w), XtWindow(w), mst->RC_menuFocus.oldRevert, mst->RC_menuFocus.oldTime);
       /*
        * If unable to set focus, some other application has set
        * focus more recently than time saved by our last success.
        * Try _time (if later than oldTime), and update menuFocus
        * structure appropriately.
        */
-      XGetInputFocus(XtDisplay(w), &tmpWindow, &tmpRevert);
+      SetInputFocus(XtDisplay(w),
+                    XtWindow(w),
+                    mst->RC_menuFocus.oldRevert,
+                    mst->RC_menuFocus.oldTime,
+                    &tmpWindow,
+                    &tmpRevert);
       if ((tmpWindow != XtWindow(w)) && (_time > mst->RC_menuFocus.oldTime)) {
-        SetInputFocus(XtDisplay(w), XtWindow(w), tmpRevert, _time);
+        SetInputFocus(XtDisplay(w), XtWindow(w), tmpRevert, _time, NULL, NULL);
         mst->RC_menuFocus.oldRevert = tmpRevert;
         mst->RC_menuFocus.oldTime = _time;
         if (tmpWindow != mst->RC_menuFocus.oldFocus) {
