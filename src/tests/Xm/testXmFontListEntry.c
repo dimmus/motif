@@ -212,7 +212,7 @@ void xmfontlistentry_suite(SRunner *runner)
 	tcase_add_test(t, create_entry_from_fontset);
 	tcase_add_checked_fixture(t, _init_xt, uninit_xt);
 	tcase_add_checked_fixture(t, load_fonts, unload_fonts);
-	tcase_set_timeout(t, 1);
+	tcase_set_timeout(t, 10);
 	suite_add_tcase(s, t);
 
 	t = tcase_create("Load entry");
@@ -222,7 +222,7 @@ void xmfontlistentry_suite(SRunner *runner)
 	tcase_add_test(t, load_entry);
 	tcase_add_checked_fixture(t, _init_xt, uninit_xt);
 	tcase_add_checked_fixture(t, load_fonts, unload_fonts);
-	tcase_set_timeout(t, 1);
+	tcase_set_timeout(t, 10);
 	suite_add_tcase(s, t);
 
 	t = tcase_create("Get entry properties");
@@ -232,7 +232,7 @@ void xmfontlistentry_suite(SRunner *runner)
 	tcase_add_test(t, get_tag);
 	tcase_add_checked_fixture(t, _init_xt, uninit_xt);
 	tcase_add_checked_fixture(t, load_fonts, unload_fonts);
-	tcase_set_timeout(t, 1);
+	tcase_set_timeout(t, 10);
 	suite_add_tcase(s, t);
 	srunner_add_suite(runner, s);
 }

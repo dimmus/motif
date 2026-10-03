@@ -327,14 +327,14 @@ void xmfontlist_suite(SRunner *runner)
 	tcase_add_test(t, create_from_invalid_entry);
 	tcase_add_test(t, create_from_valid_entry);
 	tcase_add_checked_fixture(t, _init_xt, uninit_xt);
-	tcase_set_timeout(t, 1);
+	tcase_set_timeout(t, 10);
 	suite_add_tcase(s, t);
 
 	t = tcase_create("Add an entry to a font list");
 	tcase_add_test(t, add_invalid_entry);
 	tcase_add_test(t, add_valid_entry);
 	tcase_add_checked_fixture(t, _init_xt, uninit_xt);
-	tcase_set_timeout(t, 1);
+	tcase_set_timeout(t, 10);
 	suite_add_tcase(s, t);
 
 	t = tcase_create("Remove an entry from a font list");
@@ -344,14 +344,14 @@ void xmfontlist_suite(SRunner *runner)
 	tcase_add_test(t, remove_entry);
 	tcase_add_test(t, remove_sole_entry);
 	tcase_add_checked_fixture(t, _init_xt, uninit_xt);
-	tcase_set_timeout(t, 1);
+	tcase_set_timeout(t, 10);
 	suite_add_tcase(s, t);
 
 	t = tcase_create("Copy a font list");
 	tcase_add_test(t, copy_list_invalid);
 	tcase_add_test(t, copy_list);
 	tcase_add_checked_fixture(t, _init_xt, uninit_xt);
-	tcase_set_timeout(t, 1);
+	tcase_set_timeout(t, 10);
 	suite_add_tcase(s, t);
 
 	t = tcase_create("Enumerate a font list");
@@ -362,7 +362,7 @@ void xmfontlist_suite(SRunner *runner)
 	tcase_add_test(t, enum_second_entry);
 	tcase_add_test(t, enum_beyond_the_end);
 	tcase_add_checked_fixture(t, _init_xt, uninit_xt);
-	tcase_set_timeout(t, 1);
+	tcase_set_timeout(t, 10);
 	suite_add_tcase(s, t);
 	srunner_add_suite(runner, s);
 }

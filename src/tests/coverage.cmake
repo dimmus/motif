@@ -29,16 +29,6 @@ endif()
 
 set(_xm_percent "")
 
-# percent_from_gcovr_json(<json file>): set _xm_percent from a gcovr
-# JSON summary, as libXm's line coverage.
-function(percent_from_gcovr_json path)
-  file(READ "${path}" _j)
-  # Lines of the files under src/lib/Xm
-  string(REGEX MATCHALL "\"file\"[^}]*\"line_total\"[ :]*[0-9]+[^}]*\"line_covered\"[ :]*[0-9]+"
-         _ignore "${_j}")
-  # Simpler: use the overall line_percent gcovr prints to the console.
-endfunction()
-
 if(COMPILER_ID STREQUAL "GNU" AND GCOVR)
   message(STATUS "coverage: gcovr")
   execute_process(
@@ -77,7 +67,7 @@ elseif(COMPILER_ID STREQUAL "GNU" AND GCOV)
             -P ${CMAKE_CURRENT_LIST_DIR}/coverage_gcov.cmake
     OUTPUT_VARIABLE _out ERROR_VARIABLE _err)
   message("${_out}${_err}")
-  string(REGEX MATCH "libXm lines: ([0-9.]+)%" _m "${_out}")
+  string(REGEX MATCH "libXm lines: ([0-9.]+)%" _m "${_out}${_err}")
   if(_m)
     set(_xm_percent "${CMAKE_MATCH_1}")
   endif()
