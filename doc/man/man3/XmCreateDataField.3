@@ -1,0 +1,34 @@
+.TH "XmCreateDataField" "library call"
+.SH "NAME"
+\fBXmCreateDataField\fP \(em The DataField widget creation function
+.iX "XmCreateDataField"
+.iX "creation functions" "XmCreateDataField"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/DataF\&.h>
+\fBWidget \fBXmCreateDataField\fP\fR(
+\fBWidget \fBparent\fR\fR,
+\fBString \fBname\fR\fR,
+\fBArgList \fBarglist\fR\fR,
+\fBCardinal \fBargcount\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fBXmCreateDataField\fP creates an instance of a DataField widget and returns the
+associated widget ID\&.
+.IP "\fIparent\fP" 10
+Specifies the parent widget ID\&.
+.IP "\fIname\fP" 10
+Specifies the name of the created widget\&.
+.IP "\fIarglist\fP" 10
+Specifies the argument list\&.
+.IP "\fIargcount\fP" 10
+Specifies the number of attribute/value pairs in the argument list
+(\fIarglist\fP)\&.
+.SH "RETURN"
+.PP
+Returns the DataField widget ID\&.
+.SH "RELATED"
+.PP
+\fBXmDataField\fP(3), \fBXmVaCreateDataField\fP(3) and \fBXtCreateWidget\fP(3)\&.
