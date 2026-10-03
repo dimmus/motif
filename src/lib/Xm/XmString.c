@@ -945,6 +945,9 @@ static void MergeEnds(_XmStringEntry a, _XmStringEntry b)
     }
     return;
   }
+  /* The counts are unsigned chars: drop what does not fit. */
+  if (a_count + b_count > UCHAR_MAX)
+    b_count = UCHAR_MAX - a_count;
   _XmUnoptSegRendEnds(a) = (XmStringTag *)XtRealloc((char *)_XmUnoptSegRendEnds(a),
                                                     (sizeof(XmStringTag) * (a_count + b_count)));
   for (i = 0; i < b_count; i++)
@@ -972,6 +975,9 @@ static void MergeBegins(_XmStringEntry a, _XmStringEntry b)
     }
     return;
   }
+  /* The counts are unsigned chars: drop what does not fit. */
+  if (a_b_cnt + b_b_cnt > UCHAR_MAX)
+    b_b_cnt = UCHAR_MAX - a_b_cnt;
   _XmUnoptSegRendBegins(a) = (XmStringTag *)XtRealloc((char *)_XmUnoptSegRendBegins(a),
                                                       sizeof(XmStringTag) * (a_b_cnt + b_b_cnt));
   for (i = 0; i < b_b_cnt; i++)
@@ -4383,6 +4389,8 @@ static _XmString _XmStringNonOptCreate(unsigned char *c, unsigned char *end, Boo
           finish_segment(string, &seg, &lc, &sc, &needs_unopt, dir);
           push_seen = txt_seen = pop_seen = False;
         }
+        if (_XmUnoptSegRendBeginCount(&seg) == UCHAR_MAX)
+          break; /* no room for more tags in this segment */
         rend_cnt = ++(_XmUnoptSegRendBeginCount(&seg));
         if (rend_cnt > 1)
           needs_unopt = True;
@@ -4460,6 +4468,8 @@ static _XmString _XmStringNonOptCreate(unsigned char *c, unsigned char *end, Boo
         break;
       case XmSTRING_COMPONENT_RENDITION_END:
         txt_seen = True;
+        if (_XmUnoptSegRendEndCount(&seg) == UCHAR_MAX)
+          break; /* no room for more tags in this segment */
         rend_cnt = ++(_XmUnoptSegRendEndCount(&seg));
         if (rend_cnt > 1)
           needs_unopt = True;
@@ -4904,6 +4914,8 @@ void _XmEntryRendEndSet(_XmStringEntry entry, XmStringTag tag, int n)
     }
     else {
       if (n >= _XmUnoptSegRendEndCount(entry)) {
+        if (_XmUnoptSegRendEndCount(entry) == UCHAR_MAX)
+          return; /* the count would wrap */
         n = _XmUnoptSegRendEndCount(entry);
         _XmUnoptSegRendEndCount(entry)++;
         _XmUnoptSegRendEnds(entry) = (XmStringTag *)XtRealloc((char *)_XmUnoptSegRendEnds(entry),
@@ -4943,6 +4955,8 @@ void _XmEntryRendBeginSet(_XmStringEntry entry, XmStringTag tag, int n)
     }
     else {
       if (n >= _XmUnoptSegRendBeginCount(entry)) {
+        if (_XmUnoptSegRendBeginCount(entry) == UCHAR_MAX)
+          return; /* the count would wrap */
         n = _XmUnoptSegRendBeginCount(entry);
         _XmUnoptSegRendBeginCount(entry)++;
         _XmUnoptSegRendBegins(entry) = (XmStringTag *)XtRealloc(
