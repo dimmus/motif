@@ -1,0 +1,20 @@
+# Locally built manual test programs; never commit them.
+FontListA
+FontListC
+RendToProp
+StringComp
+StringConcat
+StringCopy
+StringDisp
+StringDraw
+StringEmpty
+StringExt
+StringGLR
+StringNext
+StringParse
+StringRend
+StringTab
+StringToByte
+StringToCT
+StringWidth
+test_report.md
