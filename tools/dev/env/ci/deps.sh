@@ -8,7 +8,9 @@
 # Besides the libraries this installs both compilers (the CI matrix picks
 # one through $CC), lld and the LLVM tools (llvm-ar, llvm-symbolizer) for
 # clang LTO and sanitizer reports, ccache, libcheck and an Xvfb with
-# xauth and the core fonts, which the X11 test suites use.
+# xauth and the core fonts, which the X11 test suites use, plus xdotool
+# and Xephyr for the tests that drive real input (Text.xdotool,
+# Mwm.xdotool), which CI must not skip.
 
 set -eu
 
@@ -34,7 +36,7 @@ case "$os:$id" in
       libx11-dev libxt-dev libxmu-dev libxext-dev libxft-dev libxpm-dev \
       libxrender-dev libfontconfig-dev libfreetype-dev libpng-dev libjpeg-dev \
       x11proto-dev xbitmaps check \
-      xvfb xauth xfonts-base \
+      xvfb xauth xfonts-base xdotool xserver-xephyr \
       "$@"
     ;;
   Linux:fedora)
@@ -49,6 +51,7 @@ case "$os:$id" in
       'pkgconfig(libjpeg)' 'pkgconfig(xproto)' 'pkgconfig(xbitmaps)' \
       'pkgconfig(check)' \
       xorg-x11-server-Xvfb xorg-x11-xauth xorg-x11-fonts-misc \
+      xdotool xorg-x11-server-Xephyr \
       "$@"
     ;;
   Linux:alpine)
@@ -58,7 +61,7 @@ case "$os:$id" in
       libx11-dev libxt-dev libxmu-dev libxext-dev libxft-dev libxpm-dev \
       libxrender-dev fontconfig-dev freetype-dev libpng-dev \
       libjpeg-turbo-dev xorgproto xbitmaps check-dev \
-      xvfb xvfb-run xauth font-misc-misc \
+      xvfb xvfb-run xauth font-misc-misc xdotool xorg-server-xephyr \
       "$@"
     # llvm-ar for clang LTO; Alpine names the LLVM tools by major version.
     $SUDO apk add --no-cache llvm ||
@@ -71,6 +74,7 @@ case "$os:$id" in
       libx11 libxt libxmu libxext libxft libxpm libxrender fontconfig \
       freetype2 libpng libjpeg-turbo xorgproto xbitmaps check \
       xorg-server-xvfb xorg-xauth xorg-fonts-misc \
+      xdotool xorg-server-xephyr \
       "$@"
     ;;
   FreeBSD:*)
@@ -78,7 +82,7 @@ case "$os:$id" in
       cmake ninja pkgconf ccache bison flex \
       libX11 libXt libXmu libXext libXft libXpm libXrender fontconfig \
       freetype2 png jpeg-turbo xorgproto xbitmaps check \
-      xorg-vfbserver xauth xorg-fonts-miscbitmaps \
+      xorg-vfbserver xauth xorg-fonts-miscbitmaps xdotool xephyr \
       "$@"
     ;;
   *)
