@@ -2189,7 +2189,8 @@ static void Select(Widget wid, XEvent *event, String *params, Cardinal *num_para
   if (slider_moved) {
     ScrollCallback(
         sbw, sbw->scrollBar.change_type, sbw->scrollBar.value, 0, 0, (XEvent *)buttonEvent);
-    XSync(XtDisplay((Widget)sbw), False);
+    /* The server catches up during the initial delay; no need to wait. */
+    XFlush(XtDisplay((Widget)sbw));
     sbw->scrollBar.flags |= FIRST_SCROLL_FLAG;
     sbw->scrollBar.flags &= ~END_TIMER;
     if (!sbw->scrollBar.timer)
@@ -3184,7 +3185,7 @@ static void TimerEvent(XtPointer closure, XtIntervalId *id) /* unused */
     return;
   }
   if (sbw->scrollBar.flags & FIRST_SCROLL_FLAG) {
-    XSync(XtDisplay(sbw), False);
+    /* Xt flushed the output before it waited for this timer. */
     sbw->scrollBar.flags &= ~FIRST_SCROLL_FLAG;
     sbw->scrollBar.timer = XtAppAddTimeOut(XtWidgetToApplicationContext((Widget)sbw),
                                            (unsigned long)sbw->scrollBar.repeat_delay,
