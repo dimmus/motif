@@ -139,6 +139,7 @@ Urm__FetchLiteral (MrmHierarchy			hierarchy_id,
       UrmPlistInit (10, ctxlist);
       result = Urm__CW_LoadIconImage ((RGMIconImagePtr)val, (XtPointer)val,
 				      hierarchy_id, file_id, *ctxlist);
+      if ( result != MrmSUCCESS ) return result;
       /* LoadIconImage checks validations and handle swapping */
       swap_needed = FALSE ;
       break;
@@ -149,13 +150,15 @@ Urm__FetchLiteral (MrmHierarchy			hierarchy_id,
 	  int count = ((OldRGMFontListPtr)val)->count;
 	  RGMFontListPtr fontlist = (RGMFontListPtr)
 	    XtMalloc(sizeof(RGMFontList) + (sizeof(RGMFontItem) * (count - 1)));
-	  Urm__CW_FixupValue ((long)fontlist, type, (XtPointer)val, file_id,
-			      &swap_needed);
+	  result = Urm__CW_FixupValue ((long)fontlist, type, (XtPointer)val,
+				       file_id, &swap_needed);
 	  XtFree((char *)val);
 	  UrmRCBuffer(context_id) = (char *)fontlist;
 	}
       else
-	Urm__CW_FixupValue (val, type, (XtPointer)val, file_id, &swap_needed);
+	result = Urm__CW_FixupValue (val, type, (XtPointer)val, file_id,
+				     &swap_needed);
+      if ( result != MrmSUCCESS ) return result;
       break;
     case MrmRtypeInteger:
     case MrmRtypeBoolean:
@@ -183,7 +186,9 @@ Urm__FetchLiteral (MrmHierarchy			hierarchy_id,
       break;
 
     default:
-      Urm__CW_FixupValue (val, type, (XtPointer)val, file_id, &swap_needed);
+      result = Urm__CW_FixupValue (val, type, (XtPointer)val, file_id,
+				   &swap_needed);
+      if ( result != MrmSUCCESS ) return result;
       break;
     }
 
@@ -367,7 +372,14 @@ MrmFetchLiteral (MrmHierarchy		hierarchy_id,
     }
   else
     {
-      (*(context_id->free_func)) ((void *)context_id) ;
+      if ( ctxlist != NULL )
+	{
+	  for ( ndx=0 ; ndx<UrmPlistNum(ctxlist) ; ndx++ )
+	    UrmFreeResourceContext
+	      ((URMResourceContextPtr) UrmPlistPtrN(ctxlist,ndx)) ;
+	  UrmPlistFree (ctxlist) ;
+	}
+      UrmFreeResourceContext (context_id);
       _MrmAppUnlock(app);
       _MrmProcessUnlock();
       return result;

@@ -1583,6 +1583,7 @@ Urm__CW_CreateArglist (Widget			parent,
 			       argptr->tag_code) ;
 		      Urm__UT_Error ("Urm__CW_CreateArglist",
 				     err_msg, NULL, NULL, uncmp_res) ;
+		      continue ;
 		    }
 		}
 

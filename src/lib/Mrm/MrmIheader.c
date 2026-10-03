@@ -848,7 +848,8 @@ Idb__HDR_GetDataEntry (IDBFile			file_id,
 			   datahdr->entry_size) )
 	return Urm__UT_Error("Idb__HDR_GetDataEntry", _MrmMMsg_0007,
 			     NULL, context_id, MrmNOT_VALID);
-      UrmBCopy (sim_data->data, buff_ptr, datahdr->entry_size);
+      if ( datahdr->entry_size > 0 )
+	UrmBCopy (sim_data->data, buff_ptr, datahdr->entry_size);
       return MrmSUCCESS;
 
     case IDBdrOverflow:
