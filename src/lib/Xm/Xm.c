@@ -29,6 +29,7 @@
 #endif
 #include "MessagesI.h"
 #include "XmI.h"
+#include <X11/Xlibint.h> /* for XESetCloseDisplay */
 #include <X11/keysym.h>
 #include <Xm/GadgetP.h>
 #include <Xm/IconGP.h>
@@ -292,25 +293,88 @@ void _XmWarningMsg(Widget w, char *type, char *message, char **params, Cardinal 
     XtWarning(message);
 }
 
+/*
+ * The atoms _XmIsISO10646 compares a font's CHARSET_REGISTRY property
+ * with, interned once per display.  Comparing atoms is the same as
+ * comparing their names, and avoids fetching the name of the property
+ * value (a malloc, and a round trip when Xlib's atom cache misses) every
+ * time a segment is drawn.  A record is dropped when its display is
+ * closed, so that a new display at the same address starts afresh.
+ */
+typedef struct _XmISO10646AtomsRec {
+  struct _XmISO10646AtomsRec *next;
+  Display *display;
+  int extension;
+  Atom registry;
+  Atom upper;
+  Atom lower;
+} XmISO10646AtomsRec;
+
+static XmISO10646AtomsRec *iso10646_atoms = NULL;
+
+static int ISO10646CloseDisplay(Display *dpy, XExtCodes *codes)
+{
+  XmISO10646AtomsRec **prev, *rec;
+  _XmProcessLock();
+  for (prev = &iso10646_atoms; (rec = *prev) != NULL; prev = &rec->next)
+    if (rec->display == dpy && rec->extension == codes->extension) {
+      *prev = rec->next;
+      XtFree((char *)rec);
+      break;
+    }
+  _XmProcessUnlock();
+  return 0;
+}
+
+static Boolean GetISO10646Atoms(Display *dpy, XmISO10646AtomsRec *atoms)
+{
+  static char *names[] = {"CHARSET_REGISTRY", "ISO10646", "iso10646"};
+  Atom values[XtNumber(names)];
+  XmISO10646AtomsRec *rec;
+  XExtCodes *codes;
+  _XmProcessLock();
+  for (rec = iso10646_atoms; rec != NULL; rec = rec->next)
+    if (rec->display == dpy) {
+      *atoms = *rec;
+      _XmProcessUnlock();
+      return True;
+    }
+  _XmProcessUnlock();
+  /* The names must exist for a later font to be matched, so create them. */
+  if (!XInternAtoms(dpy, names, XtNumber(names), False, values))
+    return False;
+  atoms->registry = values[0];
+  atoms->upper = values[1];
+  atoms->lower = values[2];
+  /* Without a close hook the atoms cannot be cached; still use them. */
+  if ((codes = XAddExtension(dpy)) == NULL)
+    return True;
+  XESetCloseDisplay(dpy, codes->extension, ISO10646CloseDisplay);
+  rec = XtNew(XmISO10646AtomsRec);
+  *rec = *atoms;
+  rec->display = dpy;
+  rec->extension = codes->extension;
+  _XmProcessLock();
+  rec->next = iso10646_atoms;
+  iso10646_atoms = rec;
+  _XmProcessUnlock();
+  return True;
+}
+
 /* ARGSUSED */
 Boolean _XmIsISO10646(Display *dpy, XFontStruct *font)
 {
-  Boolean ok;
-  int i;
-  char *regname;
-  Atom registry;
+  XmISO10646AtomsRec atoms;
   XFontProp *xfp;
-  ok = False;
-  registry = XInternAtom(dpy, "CHARSET_REGISTRY", False);
-  for (i = 0, xfp = font->properties; ok == False && i < font->n_properties; xfp++, i++) {
-    if (xfp->name == registry) {
-      regname = XGetAtomName(dpy, (Atom)xfp->card32);
-      if (strcmp(regname, "ISO10646") == 0 || strcmp(regname, "iso10646") == 0)
-        ok = True;
-      XFree(regname);
-    }
+  int i;
+  if (font == NULL || font->n_properties <= 0 || !GetISO10646Atoms(dpy, &atoms))
+    return False;
+  for (i = 0, xfp = font->properties; i < font->n_properties; xfp++, i++) {
+    if (xfp->name == atoms.registry &&
+        ((Atom)xfp->card32 == atoms.upper || (Atom)xfp->card32 == atoms.lower))
+      return True;
   }
-  return ok;
+  return False;
 }
 
 XChar2b *_XmUtf8ToUcs2(char *draw_text, size_t seg_len, size_t *ret_str_len)
