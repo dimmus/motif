@@ -29,6 +29,9 @@
 #      define XmSTRING_COMPONENT_CHARSET XmSTRING_COMPONENT_TAG
 #    endif
 /* }}} */
+#    ifdef __cplusplus
+extern "C" {
+#    endif
 /********    Public Function Declarations for MenuUtil.c    ********/
 XM_ALTERNATIVE(Use XtSetValues for XmNmenuCursor on XmScreen instead)
 extern void XmSetMenuCursor(Display *display, Cursor cursorId);
@@ -101,5 +104,8 @@ XM_ALTERNATIVE(Use XmFontListNextEntry instead)
 extern Boolean XmFontListGetNextFont(XmFontContext context,
                                      XmStringCharSet *charset,
                                      XFontStruct **font);
+#    ifdef __cplusplus
+} /* extern "C" */
+#    endif
 #  endif /* XM_OBSOLETE_H */
 #endif   /* _Xm_h */
