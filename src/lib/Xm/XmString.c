@@ -4348,7 +4348,7 @@ static _XmString _XmStringNonOptCreate(unsigned char *c, unsigned char *end, Boo
         if (rend_cnt > 1)
           needs_unopt = True;
         _XmUnoptSegRendBegins(&seg) = (XmStringTag *)XtRealloc((char *)_XmUnoptSegRendBegins(&seg),
-                                                               rend_cnt);
+                                                               rend_cnt * sizeof(XmStringTag));
         _XmUnoptSegRendBegins(&seg)[rend_cnt - 1] = _XmStringCacheTag(
             (char *)(c + _asn1_size(length)), (int)length);
         break;
@@ -4425,7 +4425,7 @@ static _XmString _XmStringNonOptCreate(unsigned char *c, unsigned char *end, Boo
         if (rend_cnt > 1)
           needs_unopt = True;
         _XmUnoptSegRendEnds(&seg) = (XmStringTag *)XtRealloc((char *)_XmUnoptSegRendEnds(&seg),
-                                                             rend_cnt);
+                                                             rend_cnt * sizeof(XmStringTag));
         _XmUnoptSegRendEnds(&seg)[rend_cnt - 1] = _XmStringCacheTag(
             (char *)(c + _asn1_size(length)), (int)length);
         break;
@@ -7437,6 +7437,10 @@ void _XmStringContextCopy(_XmStringContext target, _XmStringContext source)
     size = sizeof(XmStringTag) * _XmStrContRendCount(target);
     _XmStrContRendTags(target) = (XmStringTag *)XtMalloc(size);
     memcpy(_XmStrContRendTags(target), _XmStrContRendTags(source), size);
+  }
+  else {
+    /* The source may still own an emptied list; never share it. */
+    _XmStrContRendTags(target) = NULL;
   }
 }
 
