@@ -130,20 +130,34 @@ if(WITH_COMPILER_CCACHE AND NOT CMAKE_C_COMPILER_LAUNCHER)
   endif()
 endif()
 
-# The following only works with the Ninja generator in CMake >= 3.0.
-if("${CMAKE_GENERATOR}" MATCHES "Ninja")
-  option(WITH_NINJA_POOL_JOBS "\
-Enable Ninja pools of jobs, to try to ease building on machines with 16GB of RAM or less \
-(if not yet defined, will try to set best values based on detected machine specifications)."
-    ON
-  )
+# Ninja job pools, to limit memory use on small machines.  Off by default:
+# "ninja -j" already bounds the number of jobs.  When enabled, the pool sizes
+# default to one compile job per GiB and one link job per 2 GiB of memory,
+# at most one per CPU.
+if(CMAKE_GENERATOR MATCHES "Ninja")
+  option(WITH_NINJA_POOL_JOBS "Limit parallel compile and link jobs with Ninja job pools" OFF)
   mark_as_advanced(WITH_NINJA_POOL_JOBS)
-  
   if(WITH_NINJA_POOL_JOBS)
-    # Set up Ninja job pools for better memory management
-    set_property(GLOBAL PROPERTY JOB_POOLS compile_job_pool=4 link_job_pool=2)
-    set(CMAKE_JOB_POOL_COMPILE compile_job_pool)
-    set(CMAKE_JOB_POOL_LINK link_job_pool)
+    cmake_host_system_information(RESULT _ncpu QUERY NUMBER_OF_LOGICAL_CORES)
+    cmake_host_system_information(RESULT _mem QUERY TOTAL_PHYSICAL_MEMORY)
+    math(EXPR _compile_jobs "${_mem} / 1024")
+    math(EXPR _link_jobs "${_mem} / 2048")
+    foreach(_var _compile_jobs _link_jobs)
+      if(${_var} GREATER _ncpu)
+        set(${_var} ${_ncpu})
+      endif()
+      if(${_var} LESS 1)
+        set(${_var} 1)
+      endif()
+    endforeach()
+    set(MOTIF_NINJA_COMPILE_JOBS ${_compile_jobs} CACHE STRING "Size of the Ninja compile job pool")
+    set(MOTIF_NINJA_LINK_JOBS ${_link_jobs} CACHE STRING "Size of the Ninja link job pool")
+    mark_as_advanced(MOTIF_NINJA_COMPILE_JOBS MOTIF_NINJA_LINK_JOBS)
+    set_property(GLOBAL PROPERTY JOB_POOLS
+      motif_compile=${MOTIF_NINJA_COMPILE_JOBS}
+      motif_link=${MOTIF_NINJA_LINK_JOBS})
+    set(CMAKE_JOB_POOL_COMPILE motif_compile)
+    set(CMAKE_JOB_POOL_LINK motif_link)
   endif()
 endif()
 
