@@ -2397,7 +2397,13 @@ static void CalcScrollBarData(
   else
     /* this looks suspicious to me, but it is bc to let it in */
     scrollbar_size -= 2 * (sw->scale.highlight_thickness + sw->manager.shadow_thickness);
-  slider_size = (SCROLLBAR_MAX / scrollbar_size) * SLIDER_SIZE(sw);
+  /* (SCROLLBAR_MAX / scrollbar_size) * SLIDER_SIZE, clamped to
+     SCROLLBAR_MAX before the product can overflow. */
+  slider_size = SLIDER_SIZE(sw);
+  if (slider_size > 0 && SCROLLBAR_MAX / scrollbar_size > SCROLLBAR_MAX / slider_size)
+    slider_size = SCROLLBAR_MAX;
+  else
+    slider_size = (SCROLLBAR_MAX / scrollbar_size) * slider_size;
   /*
    * Now error check our arithmetic
    */
