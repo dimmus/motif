@@ -141,6 +141,14 @@ void	sar_include_file(yystype *file_frame, yystype *include_frame, yystype *semi
 /*
  * End Fix for CR 5465
  */
+
+    /*
+    ** The name must fit in the include entry's file_name.
+    */
+    if (value_entry->w_length >= sizeof (include_entry->file_name))
+      diag_issue_diagnostic (
+             d_include_file,
+             _sar_source_pos2(value_entry));
 /*
  * If the direction is RtoL then reverse the include file.
  */
@@ -179,7 +187,8 @@ void	sar_include_file(yystype *file_frame, yystype *include_frame, yystype *semi
 		   value_entry -> w_length);
     buffer [value_entry -> w_length] = 0 ;
 
-    src_open_file (buffer, include_entry->full_file_name);
+    src_open_file (buffer, include_entry->full_file_name,
+		   sizeof (include_entry->full_file_name));
 
     /*
     **  Allocate a section entry for this include "section".
