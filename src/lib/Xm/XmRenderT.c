@@ -1428,7 +1428,7 @@ XmRenderTable XmRenderTableCopy(XmRenderTable table, XmStringTag *tags, int tag_
   if ((_XmRTRefcountInc(table) == 0) || (tags != NULL)) {
     /* Malloc new table */
     _XmRTRefcountDec(table);
-    if (tag_count > 0)
+    if ((tags != NULL) && (tag_count > 0))
       size = (sizeof(_XmRendition) * (tag_count - RENDITIONS_IN_STRUCT));
     else
       size = (sizeof(_XmRendition) * (_XmRTCount(table) - RENDITIONS_IN_STRUCT));
@@ -1446,22 +1446,28 @@ XmRenderTable XmRenderTableCopy(XmRenderTable table, XmStringTag *tags, int tag_
       if (rend != _XmRTRenditions(table)[i])
         break;
     }
-    if (i < _XmRTCount(table)) /* Overflow! */ {
-      /* Malloc new table. */
-      t = (_XmRenderTable)XtMalloc(
-          sizeof(_XmRenderTableRec) +
-          (sizeof(_XmRendition) * (_XmRTCount(table) - RENDITIONS_IN_STRUCT)));
-      rt = GetHandle(_XmRenderTable);
-      SetPtr(rt, t);
-      _XmRTRefcount(rt) = 1;
+    if ((i < _XmRTCount(table)) || (rt != NULL)) /* Overflow! */ {
+      /* Either a rendition or the table refcount overflowed. */
+      if (rt == NULL) {
+        /* Malloc new table, giving back the reference taken above. */
+        _XmRTRefcountDec(table);
+        t = (_XmRenderTable)XtMalloc(
+            sizeof(_XmRenderTableRec) +
+            (sizeof(_XmRendition) * (_XmRTCount(table) - RENDITIONS_IN_STRUCT)));
+        rt = GetHandle(_XmRenderTable);
+        SetPtr(rt, t);
+        _XmRTRefcount(rt) = 1;
+      }
       _XmRTCount(rt) = _XmRTCount(table);
       /* Move renditions done already. */
       for (j = 0; j < i; j++)
         _XmRTRenditions(rt)[j] = _XmRTRenditions(table)[j];
-      _XmRTRenditions(rt)[i] = rend;
-      /* Copy rest */
-      for (j = i + 1; j < _XmRTCount(rt); j++)
-        _XmRTRenditions(rt)[j] = DuplicateRendition(_XmRTRenditions(table)[j]);
+      if (i < _XmRTCount(rt)) {
+        _XmRTRenditions(rt)[i] = rend;
+        /* Copy rest */
+        for (j = i + 1; j < _XmRTCount(rt); j++)
+          _XmRTRenditions(rt)[j] = DuplicateRendition(_XmRTRenditions(table)[j]);
+      }
     }
     else {
       rt = GetHandle(_XmRenderTable);
@@ -1473,15 +1479,14 @@ XmRenderTable XmRenderTableCopy(XmRenderTable table, XmStringTag *tags, int tag_
     for (i = 0; i < tag_count; i++) {
       XmRendition match;
       match = XmRenderTableGetRendition(table, tags[i]);
-      if (match != NULL) {
-        _XmRTRenditions(rt)[i] = match;
-        ++count;
-      }
+      if (match != NULL)
+        _XmRTRenditions(rt)[count++] = match;
     }
     /* Realloc table */
     t = (_XmRenderTable)XtRealloc((char *)t,
                                   sizeof(_XmRenderTableRec) +
-                                      (sizeof(XmRendition) * (count - RENDITIONS_IN_STRUCT)));
+                                      (sizeof(XmRendition) *
+                                       (MAX(count, RENDITIONS_IN_STRUCT) - RENDITIONS_IN_STRUCT)));
     SetPtr(rt, t);
     _XmRTCount(rt) = count;
   }
