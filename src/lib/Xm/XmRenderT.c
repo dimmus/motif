@@ -1701,6 +1701,10 @@ static void ValidateAndLoadFont(XmRendition rend, Display *display)
                 display, XtCvtStringToFontStruct, args, num_args, &fromVal, &toVal, NULL);
             break;
           case XmFONT_IS_FONTSET:
+            /* libX11's XCreateFontSet() frees an empty base font name */
+            /* list that it does not own; never hand it one. */
+            if (*_XmRendFontName(rend) == '\0')
+              break;
             locale = XrmQuarkToString(XrmStringToQuark(setlocale(LC_ALL, NULL)));
             args[1].addr = (XPointer)&locale;
             args[1].size = sizeof(XrmString);
