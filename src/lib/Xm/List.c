@@ -1897,7 +1897,12 @@ static void ScrollList(XmListWidget lw, int old_top)
   ElementPtr item;
   XGCValues values;
   GC gc;
+  /* The gaps between the bands show the window background, which is
+   * only the same everywhere when it is not a pixmap; and the copy needs
+   * Redisplay to see GraphicsExpose, which a subclass may not ask for. */
   if (!XtIsRealized((Widget)lw) || !lw->list.items || !lw->list.itemCount ||
+      (lw->core.background_pixmap != XtUnspecifiedPixmap) ||
+      !(XtClass((Widget)lw)->core_class.compress_exposure & XtExposeGraphicsExpose) ||
       !XtIsSensitive((Widget)lw) || (lw->list.spacing < 1) || (DrawnTop(lw) != old_top) ||
       (DrawnGen(lw) != ListGen(lw)) || (DrawnXOrigin(lw) != lw->list.XOrigin) ||
       (DrawnVizCount(lw) != lw->list.visibleItemCount) || (DrawnItemHeight(lw) != height))
