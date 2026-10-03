@@ -1120,6 +1120,32 @@ static void _init_xt(void)
  * Compound text conversion goes through Xlib's XmbTextListToTextProperty
  * and friends, which intern atoms on the default display.
  */
+/*
+ * XmCvtXmStringTableToTextProperty joins the text of all the segments of
+ * a string; GetUseableText used to restart the buffer for every segment
+ * and keep only the last one.
+ */
+START_TEST(text_property_joins_segments)
+{
+	XmString s = cat(XmStringCreateLocalized("abc"), tab(),
+			 XmStringCreateLocalized("def"), NULL);
+	Display **dpys;
+	Cardinal ndpys;
+	XTextProperty prop;
+
+	XtGetDisplays(app, &dpys, &ndpys);
+	ck_assert_uint_gt(ndpys, 0);
+	ck_assert_int_eq(XmCvtXmStringTableToTextProperty(dpys[0], &s, 1,
+							  XmSTYLE_LOCALE,
+							  &prop), Success);
+	ck_assert_ptr_nonnull(prop.value);
+	ck_assert_str_eq((char *)prop.value, "abc\tdef");
+	XFree(prop.value);
+	XtFree((char *)dpys);
+	XmStringFree(s);
+}
+END_TEST
+
 void xmstring_ct_suite(SRunner *runner)
 {
 	TCase *t;
@@ -1128,6 +1154,7 @@ void xmstring_ct_suite(SRunner *runner)
 	t = tcase_create("Compound text");
 	tcase_add_test(t, ct_round_trip);
 	tcase_add_test(t, ct_malformed);
+	tcase_add_test(t, text_property_joins_segments);
 	tcase_add_checked_fixture(t, _init_xt, uninit_xt);
 	suite_add_tcase(s, t);
 

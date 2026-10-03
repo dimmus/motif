@@ -94,17 +94,7 @@ static int TextPropertyToSingleTextItem(Display *display,
   else if (count > 1) {
     /* If we got back more than one string, then
            let's concatenate them all together. */
-    int i, length = 0;
-    char *newstring;
-    /* First figure out how big the final string will be */
-    for (i = 0; i < count; ++i)
-      length += strlen(textlist[i]);
-    /* Allocate a buffer and jam all the strings into it */
-    newstring = (char *)_XmMallocArray(length + 1, sizeof(char));
-    newstring[0] = '\0';
-    for (i = 0; i < count; ++i)
-      strcat(newstring, textlist[i]);
-    *text_item = newstring;
+    *text_item = _XmConcatStrings(textlist, count);
     XFreeStringList(textlist);
   }
   return (Success);
@@ -228,8 +218,7 @@ static unsigned char GetTextSegment(Display *display, /* unused */
       newstring = (char *)_XmMallocArray(newlength + 1, sizeof(char));
       for (i = 0; i < tabs; i++)
         newstring[i] = '\t';
-      strcpy(&newstring[i], *buffer);
-      strcat(newstring, "\n");
+      snprintf(&newstring[i], newlength + 1 - i, "%s%s", *buffer, separator ? "\n" : "");
       XtFree(*buffer);
       *buffer = newstring;
     }
@@ -270,7 +259,8 @@ static int GetUseableText(
   XTextProperty text_prop_return;
   char *text = NULL, *final_string = NULL, *text_item = NULL, *compound_text;
   unsigned char return_status;
-  int result, size_so_far = 1; /* initialized for the ending NULL */
+  int result;
+  size_t size_so_far = 1; /* initialized for the ending NULL */
   /* Initialize the buffer in case we have to abort and return
        failure. */
   *buffer = NULL;
@@ -290,10 +280,10 @@ static int GetUseableText(
   while ((return_status = GetTextSegment(display, &stack_context, xmstring, &text, texttype)) ==
          _VALID_SEGMENT)
   {
-    size_so_far += strlen(text);
-    final_string = (char *)XtRealloc(final_string, size_so_far);
-    final_string[0] = '\0';
-    strcat(final_string, text);
+    size_t len = strlen(text);
+    final_string = _XmReallocArray(final_string, size_so_far + len, 1);
+    memcpy(final_string + size_so_far - 1, text, len + 1);
+    size_so_far += len;
     XtFree(text);
     text = NULL;
   }
@@ -323,7 +313,7 @@ static int GetUseableText(
     /* then to a text property in TextStyle encoding ... */
     txt_len = strlen(compound_text) + 1;
     txt_value = _XmMallocArray(txt_len + 1, sizeof(char));
-    strcpy(txt_value, compound_text);
+    memcpy(txt_value, compound_text, txt_len);
     text_prop_return.value = (unsigned char *)txt_value;
     text_prop_return.value[txt_len] = '\0';
     text_prop_return.nitems = txt_len;
@@ -379,7 +369,7 @@ int XmCvtXmStringTableToTextProperty(Display *display,
       ptr = xm_compound_text = (char *)_XmMallocArray(total_size + 1, sizeof(char));
       for (i = 0; i < count; i++) {
         if (compound_text[i]) {
-          strcpy(ptr, compound_text[i]);
+          memcpy(ptr, compound_text[i], strlen(compound_text[i]) + 1);
           XtFree(compound_text[i]);
         }
         else {
@@ -501,8 +491,9 @@ int XmCvtXmStringTableToTextProperty(Display *display,
       final_string[0] = '\0';
       bufptr = final_string;
       for (i = 0; i < count; ++i) {
-        strcpy((char *)bufptr, useable_text[i]);
-        bufptr += strlen(useable_text[i]) + 1;
+        size_t len = strlen(useable_text[i]) + 1;
+        memcpy(bufptr, useable_text[i], len);
+        bufptr += len;
       }
       *bufptr = '\0';
       /* Fill in the text property with the data */
