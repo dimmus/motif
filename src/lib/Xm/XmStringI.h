@@ -520,8 +520,17 @@ typedef struct __XmStringArraySegRec *_XmStringLine;
 #define _XmEntrySegmentCount(entry) (((_XmStringEntry)(entry))->multiple.segment_count)
 #define _XmEntrySegmentCountGet(entry) (_XmEntryMultiple(entry) ? _XmEntrySegmentCount(entry) : 1)
 #define _XmEntrySegment(entry) (((_XmStringArraySeg)(entry))->seg)
+/*
+ * A non-array entry is its own single segment.  Return it through a
+ * one-element compound literal holding the converted pointer value rather
+ * than through (_XmStringNREntry *)&(entry): that reads an _XmStringEntry
+ * object via an _XmStringNREntry lvalue, which violates strict aliasing and
+ * lets the optimizer return a stale value of the variable.  The result is
+ * read-only in effect; stores through it must use _XmEntrySegment().
+ */
 #define _XmEntrySegmentGet(entry) \
-  (_XmEntryMultiple(entry) ? _XmEntrySegment(entry) : (_XmStringNREntry *)&(entry))
+  (_XmEntryMultiple(entry) ? _XmEntrySegment(entry) : \
+                             (_XmStringNREntry[]){(_XmStringNREntry)(entry)})
 /* Creation macros */
 #define _XmEntryInit(entry, type) \
   { \

@@ -1269,8 +1269,8 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
             a_last = (_XmStringNREntry)XtRealloc((char *)a_last, size);
             _XmStrEntry(a_str)[a_lc - 1] = a_line = (_XmStringEntry)a_last;
           }
-          else
-            _XmEntrySegmentGet(a_line)[a_sc - 1] = a_last = (_XmStringNREntry)XtRealloc(
+          else /* a_last is not a_line itself, so a_line is an array entry */
+            _XmEntrySegment(a_line)[a_sc - 1] = a_last = (_XmStringNREntry)XtRealloc(
                 (char *)a_last, size);
         }
         else {
@@ -3336,7 +3336,7 @@ static void recursive_layout(_XmString string,
                              XmDirection p_direction,
                              int depth)
 {
-  _XmStringEntry line;
+  _XmStringEntry line = NULL; /* only used if _XmStrImplicitLine(string) */
   _XmStringNREntry seg, seg2;
   _XmStringNREntry last;
   XmDirection pop_dir = 0;
