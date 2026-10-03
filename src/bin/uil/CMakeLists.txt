@@ -74,6 +74,15 @@ target_compile_options(uil PRIVATE
     -include ${CMAKE_SOURCE_DIR}/include/motif_system.h
 )
 
+if(WITH_TESTS)
+    # Pathological inputs; no display is needed
+    add_test(NAME uil_robustness
+        COMMAND ${CMAKE_COMMAND}
+            -DUIL=$<TARGET_FILE:uil>
+            -DWORK_DIR=${CMAKE_CURRENT_BINARY_DIR}/uil_robustness
+            -P ${CMAKE_CURRENT_SOURCE_DIR}/tests/uil_robustness.cmake)
+endif()
+
 # Install executables
 install(TARGETS uil
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
