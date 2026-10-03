@@ -196,6 +196,13 @@ int xpmParseValues(xpmData *data,
     *hotspot = 0;
     *extensions = 0;
   }
+  /*
+   * Every pixel takes at least one character. With none, the pixel
+   * loops consume no input, so a tiny file could still claim a huge
+   * width and keep them running (the CVE-2022-44617 runaway again).
+   */
+  if (*cpp == 0)
+    return (XpmFileInvalid);
   return (XpmSuccess);
 }
 
