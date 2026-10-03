@@ -656,6 +656,9 @@ static int FindResolution(Widget w)
    *
    *         = (254 * N pixels / M inch + 5) / 10
    */
+  /* Some servers report a physical size of 0 mm. */
+  if (WidthMMOfScreen(screen) <= 0 || HeightMMOfScreen(screen) <= 0)
+    return (resolutions[0]);
   /* This will get us the true pixels / inch.  That is probably
        not what we want */
   xres = (254 * WidthOfScreen(screen) / WidthMMOfScreen(screen) + 5) / 10;
