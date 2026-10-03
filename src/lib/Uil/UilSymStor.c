@@ -224,15 +224,28 @@ Uil_sym_cleanup_storage (boolean freealloc)
 {
 if ( freealloc )
   { if ( sym_az_allocated_nodes != NULL )
+      {
 	UrmPlistFreeContents (sym_az_allocated_nodes);
+	/* The error value entry was one of the allocated nodes; let the
+	   next sym_initialize_storage allocate a new one. */
+	sym_az_error_value_entry = NULL;
+      }
     else
       if ( sym_az_freed_nodes != NULL )
 	 UrmPlistFreeContents (sym_az_freed_nodes);
   }
+/* Clear the lists, so that a later call of the callable compiler that
+   returns before sym_initialize_storage does not free them again. */
 if ( sym_az_allocated_nodes != NULL )
+    {
     UrmPlistFree (sym_az_allocated_nodes);
+    sym_az_allocated_nodes = NULL;
+    }
 if ( sym_az_freed_nodes != NULL )
+    {
     UrmPlistFree (sym_az_freed_nodes);
+    sym_az_freed_nodes = NULL;
+    }
 }
 
 

@@ -14,16 +14,6 @@
 
 static char uid_path[256];
 
-/*
- * Known libUil bug: sym_initialize_storage() allocates the error value
- * entry only while sym_az_error_value_entry is NULL, and
- * Uil_sym_cleanup_storage() frees it with every other node at the end
- * of Uil() without clearing the pointer, so a second Uil() call in the
- * same process writes to freed memory (UilSymStor.c).  Clear it here
- * so that the fuzzer can call Uil() more than once.
- */
-extern void *sym_az_error_value_entry;
-
 static Uil_continue_type quiet_message(char *data, int msg_number,
 				       int severity, char *msg_buffer,
 				       char *src_buffer, char *ptr_buffer,
@@ -73,7 +63,6 @@ int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
 	cmd.report_info_msg_flag = 0;
 	cmd.report_warn_msg_flag = 0;
 	cmd.issue_summary = 0;
-	sym_az_error_value_entry = NULL;
 	Uil(&cmd, &desc, (Uil_continue_type (*)())quiet_message, NULL,
 	    (Uil_continue_type (*)())quiet_status, NULL);
 	unlink(uid_path);
