@@ -47,6 +47,9 @@ static char rcsid[] = "$TOG: DragICC.c /main/14 1997/06/18 17:38:07 samborn $"
 #define BUFFER_HEAP 1
 #define NUM_HEADER_ARGS 0
 #define MAXSTACK 1000
+/* read one fixed-size record from the data part of a property buffer */
+#define READ_DS_DATA(propBuf, rec) \
+  (_XmReadDragBuffer((propBuf), BUFFER_DATA, (BYTE *)(rec), sizeof(*(rec))) == sizeof(*(rec)))
     /*
      * We assume that there are only 64 possible messageTypes for each
      * clientMessage type that we use.  This allows us to only eat up a
@@ -169,6 +172,9 @@ unsigned char _XmReasonToMessageType(int reason)
  ***********************************************************************/
 unsigned int _XmMessageTypeToReason(unsigned char messageType)
 {
+  /* messageType may come straight off the wire */
+  if (messageType >= XtNumber(messageTable))
+    return _XmNUMBER_DND_CB_REASONS;
   return (messageTable[messageType]);
 }
 
@@ -507,6 +513,10 @@ static Boolean _XdndToMotifEvent(XClientMessageEvent *msgEv, XmICCCallbackStruct
       te->n_targets = (te->targets[0] != None) + (te->targets[1] != None) +
                       (te->targets[2] != None);
     }
+    else {
+      /* more than 3 types: they are read from XdndTypeList later */
+      te->n_targets = 0;
+    }
   }
   else if (msgEv->message_type == xdndLeave) {
 #ifdef DEBUG_XDND
@@ -587,6 +597,12 @@ static XmICCEventType GetMessageData(Display *display,
       register XmTopLevelEnterCallback cb = (XmTopLevelEnterCallback)callback;
       cb->window = (Window)xmessage->topLevelEnter.src_window;
       cb->iccHandle = (Atom)xmessage->topLevelEnter.icc_handle;
+      /*
+       * The Motif message carries no targets; the receiver reads them
+       * from the initiator info later.
+       */
+      cb->dragProtocolStyle = XmDRAG_NONE;
+      cb->n_targets = 0;
     } break;
     case XmTOP_LEVEL_LEAVE: {
       register XmTopLevelLeaveCallback cb = (XmTopLevelLeaveCallback)callback;
@@ -662,7 +678,7 @@ static void SwapMessageData(xmICCMessageStruct *xmessage)
 {
   swap2bytes(xmessage->any.flags);
   swap4bytes(xmessage->any.time);
-  switch (xmessage->any.message_type) {
+  switch (xmessage->any.message_type & CLEAR_ICC_EVENT_TYPE) {
     case XmTOP_LEVEL_ENTER: {
       swap4bytes(xmessage->topLevelEnter.src_window);
       swap4bytes(xmessage->topLevelEnter.icc_handle);
@@ -708,6 +724,8 @@ Boolean _XmICCEventToICCCallback(XClientMessageEvent *msgEv,
     motif_dnd_message_atom = XInternAtom(msgEv->display, _Xm_MOTIF_DRAG_AND_DROP_MESSAGE, False);
     if (msgEv->message_type != motif_dnd_message_atom)
       return False;
+    if ((xmessage->any.message_type & CLEAR_ICC_EVENT_TYPE) >= XtNumber(messageTable))
+      return False;
     if (xmessage->any.byte_order != _XmByteOrderChar) {
       /*
        * swap it inplace and update the byte_order field so no one
@@ -741,9 +759,11 @@ _XmReadDragBuffer(xmPropertyBuffer propBuf, BYTE which, BYTE *ptr, CARD32 size)
   else
     buf = &propBuf->heap;
   numCurr = buf->curr - buf->bytes;
-  if (numCurr + size > buf->size) {
+  /* the buffer may come from another client; never read past its end */
+  if (numCurr >= buf->size)
+    return 0;
+  if (size > buf->size - numCurr)
     size = buf->size - numCurr;
-  }
   memcpy(ptr, buf->curr, (size_t)size);
   buf->curr += size;
   return size;
@@ -857,20 +877,20 @@ void _XmReadInitiatorInfo(Widget dc)
                          &format,
                          &lengthRtn,
                          &bytesafter,
-                         (unsigned char **)&info) == Success)
+                         (unsigned char **)&info) == Success &&
+      type == initiatorAtom && format == 8 && lengthRtn >= sizeof(xmDragInitiatorInfoStruct))
   {
-    if (lengthRtn >= sizeof(xmDragInitiatorInfoStruct)) {
-      if (info->byte_order != _XmByteOrderChar) {
-        swap2bytes(info->targets_index);
-        swap4bytes(info->icc_handle);
-      }
-      ++set_exports;
-      numExportTargets = _XmIndexToTargets(dc, info->targets_index, &exportTargets);
+    if (info->byte_order != _XmByteOrderChar) {
+      swap2bytes(info->targets_index);
+      swap4bytes(info->icc_handle);
     }
+    ++set_exports;
+    numExportTargets = _XmIndexToTargets(dc, info->targets_index, &exportTargets);
   }
-  else {
+  if (!set_exports) {
     /**
-     * Get the Xdnd type list, if the receiver has published it
+     * No Motif initiator info: get the Xdnd type list, if the source
+     * has published it
      */
     xdndTypeList = XInternAtom(XtDisplayOfObject(dc), "XdndTypeList", False);
     if (XGetWindowProperty(XtDisplayOfObject(dc),
@@ -909,6 +929,74 @@ void _XmReadInitiatorInfo(Widget dc)
 
 /************************************************************************
  *
+ *  ReadXdndProxy()
+ *
+ *  Return the window named by the XdndProxy property of window, or
+ *  None if it has no valid one.
+ ***********************************************************************/
+static Window ReadXdndProxy(Display *display, Window window, Atom xdndProxy)
+{
+  Atom type;
+  int format;
+  unsigned long lengthRtn, bytesafter;
+  unsigned char *data = NULL;
+  Window proxy = None;
+  if (XGetWindowProperty(display,
+                         window,
+                         xdndProxy,
+                         0,
+                         1,
+                         False,
+                         XA_WINDOW,
+                         &type,
+                         &format,
+                         &lengthRtn,
+                         &bytesafter,
+                         &data) == Success &&
+      type == XA_WINDOW && format == 32 && lengthRtn == 1)
+    proxy = *(Window *)data;
+  if (data)
+    XFree(data);
+  return proxy;
+}
+
+static int IgnoreXErrors(Display *display, XErrorEvent *event)
+{
+  (void)display;
+  (void)event;
+  return 0;
+}
+
+/************************************************************************
+ *
+ *  GetXdndProxy()
+ *
+ *  Return the window that Xdnd messages for window must be sent to.
+ *  Per the Xdnd specification the proxy must exist and its own
+ *  XdndProxy property must point to itself; otherwise the property is
+ *  a leftover from a crashed client and is ignored.
+ ***********************************************************************/
+static Window GetXdndProxy(Display *display, Window window)
+{
+  Atom xdndProxy = XInternAtom(display, "XdndProxy", False);
+  Window proxy, check;
+  XErrorHandler old_handler;
+  proxy = ReadXdndProxy(display, window, xdndProxy);
+  if (proxy == None || proxy == window)
+    return window;
+  /* the proxy window may be gone: don't let BadWindow be fatal */
+  _XmProcessLock();
+  XSync(display, False);
+  old_handler = XSetErrorHandler(IgnoreXErrors);
+  check = ReadXdndProxy(display, proxy, xdndProxy);
+  XSync(display, False);
+  (void)XSetErrorHandler(old_handler);
+  _XmProcessUnlock();
+  return (check == proxy) ? proxy : window;
+}
+
+/************************************************************************
+ *
  *  _XmGetDragReceiverInfo()
  *
  *  The caller is responsible for freeing (using XFree) the dataRtn
@@ -926,7 +1014,7 @@ Boolean _XmGetDragReceiverInfo(Display *display,
   unsigned int bw;
   unsigned char *data;
   Atom drag_hints_atom, type = None;
-  Atom xdndAware, xdndProxy;
+  Atom xdndAware;
   XmDisplay dd = (XmDisplay)XmGetXmDisplay(display);
   /* get their geometry */
   assert(receiverInfoRtn);
@@ -960,17 +1048,26 @@ Boolean _XmGetDragReceiverInfo(Display *display,
                          &format,
                          &lengthRtn,
                          &bytesafter,
-                         (unsigned char **)&iccInfo) == Success)
+                         (unsigned char **)&iccInfo) == Success &&
+      type == drag_hints_atom && format == 8 && lengthRtn >= sizeof(xmDragReceiverInfoStruct))
   {
-    if (lengthRtn >= sizeof(xmDragReceiverInfoStruct)) {
-      if (iccInfo->protocol_version != _MOTIF_DRAG_PROTOCOL_VERSION) {
-        XmeWarning((Widget)dd, MESSAGE2);
-      }
-      if (iccInfo->byte_order != _XmByteOrderChar) {
-        swap2bytes(iccInfo->num_drop_sites);
-        swap4bytes(iccInfo->proxy_window);
-        swap4bytes(iccInfo->heap_offset);
-      }
+    if (iccInfo->protocol_version != _MOTIF_DRAG_PROTOCOL_VERSION) {
+      XmeWarning((Widget)dd, MESSAGE2);
+    }
+    if (iccInfo->byte_order != _XmByteOrderChar) {
+      swap2bytes(iccInfo->num_drop_sites);
+      swap4bytes(iccInfo->proxy_window);
+      swap4bytes(iccInfo->heap_offset);
+    }
+    /*
+     * The property is written by another client, so validate it before
+     * trusting it: the drop site data must lie between the header and
+     * the end of the property, and the protocol style must be one we
+     * know about (it is used as a table index).
+     */
+    if (iccInfo->heap_offset >= sizeof(xmDragReceiverInfoStruct) &&
+        iccInfo->heap_offset <= lengthRtn && iccInfo->drag_protocol_style <= XmDRAG_XDND)
+    {
       dd->display.proxyWindow = iccInfo->proxy_window;
       receiverInfoRtn->dragProtocolStyle = iccInfo->drag_protocol_style;
       dsmInfo = XtNew(XmReceiverDSTreeStruct);
@@ -981,6 +1078,7 @@ Boolean _XmGetDragReceiverInfo(Display *display,
       dsmInfo->propBufRec.data.size = (size_t)iccInfo->heap_offset;
       dsmInfo->propBufRec.heap.bytes = (BYTE *)iccInfo + iccInfo->heap_offset;
       dsmInfo->propBufRec.heap.size = (size_t)(lengthRtn - iccInfo->heap_offset);
+      dsmInfo->propBufRec.heap.curr = dsmInfo->propBufRec.heap.bytes;
       /*
        * skip over the info that we've already got
        */
@@ -997,25 +1095,7 @@ Boolean _XmGetDragReceiverInfo(Display *display,
   receiverInfoRtn->iccInfo = NULL;
   receiverInfoRtn->dragProtocolStyle = XmDRAG_NONE;
   xdndAware = XInternAtom(display, "XdndAware", False);
-  xdndProxy = XInternAtom(display, "XdndProxy", False);
-  dd->display.proxyWindow = window;
-  if (XGetWindowProperty(display,
-                         window,
-                         xdndProxy,
-                         0,
-                         1,
-                         False,
-                         XA_WINDOW,
-                         &type,
-                         &format,
-                         &lengthRtn,
-                         &bytesafter,
-                         &data) == Success)
-  {
-    if (type != None && format == 32 && length == 1)
-      dd->display.proxyWindow = *(Window *)data;
-    XFree(data);
-  }
+  dd->display.proxyWindow = GetXdndProxy(display, window);
   /* Check for XdndAware and protocol version */
   if (XGetWindowProperty(display,
                          dd->display.proxyWindow,
@@ -1054,11 +1134,21 @@ Boolean _XmReadDSFromStream(XmDropSiteManagerObject dsm,
 {
   xmDSHeaderStruct dsHeader;
   XmReceiverDSTree dsmInfo = (XmReceiverDSTree)iccInfo;
-  xmPropertyBufferRec *propBuf = &dsmInfo->propBufRec;
-  int i;
+  xmPropertyBufferRec *propBuf;
+  CARD32 i;
+  size_t remaining;
   xmICCRegBoxRec box;
   XmRegion region;
-  _XmReadDragBuffer(propBuf, BUFFER_DATA, (BYTE *)&dsHeader, sizeof(xmDSHeaderStruct));
+  /*
+   * The stream comes from another client's property: stop after the
+   * advertised number of drop sites, and fail on any short read.  The
+   * stream itself is freed by its owner with _XmFreeDragReceiverInfo().
+   */
+  if (dsmInfo == NULL || dsmInfo->currDropSite >= dsmInfo->numDropSites)
+    return False;
+  propBuf = &dsmInfo->propBufRec;
+  if (!READ_DS_DATA(propBuf, &dsHeader))
+    return False;
   if (dsmInfo->byteOrder != _XmByteOrderChar) {
     swap2bytes(dsHeader.flags);
     swap2bytes(dsHeader.import_targets_id);
@@ -1074,8 +1164,8 @@ Boolean _XmReadDSFromStream(XmDropSiteManagerObject dsm,
     case XmDRAG_UNDER_HIGHLIGHT: {
       XmICCDropSiteHighlight info = (XmICCDropSiteHighlight)dropSiteInfoRtn;
       xmDSHighlightDataStruct dsHighlight;
-      _XmReadDragBuffer(
-          propBuf, BUFFER_DATA, (BYTE *)&dsHighlight, sizeof(xmDSHighlightDataStruct));
+      if (!READ_DS_DATA(propBuf, &dsHighlight))
+        return False;
       if (dsmInfo->byteOrder != _XmByteOrderChar) {
         swap2bytes(dsHighlight.borderWidth);
         swap2bytes(dsHighlight.highlightThickness);
@@ -1093,7 +1183,8 @@ Boolean _XmReadDSFromStream(XmDropSiteManagerObject dsm,
     case XmDRAG_UNDER_SHADOW_OUT: {
       XmICCDropSiteShadow info = (XmICCDropSiteShadow)dropSiteInfoRtn;
       xmDSShadowDataStruct dsShadow;
-      _XmReadDragBuffer(propBuf, BUFFER_DATA, (BYTE *)&dsShadow, sizeof(xmDSShadowDataStruct));
+      if (!READ_DS_DATA(propBuf, &dsShadow))
+        return False;
       if (dsmInfo->byteOrder != _XmByteOrderChar) {
         swap2bytes(dsShadow.borderWidth);
         swap2bytes(dsShadow.highlightThickness);
@@ -1116,7 +1207,8 @@ Boolean _XmReadDSFromStream(XmDropSiteManagerObject dsm,
     case XmDRAG_UNDER_PIXMAP: {
       XmICCDropSitePixmap info = (XmICCDropSitePixmap)dropSiteInfoRtn;
       xmDSPixmapDataStruct dsPixmap;
-      _XmReadDragBuffer(propBuf, BUFFER_DATA, (BYTE *)&dsPixmap, sizeof(xmDSPixmapDataStruct));
+      if (!READ_DS_DATA(propBuf, &dsPixmap))
+        return False;
       if (dsmInfo->byteOrder != _XmByteOrderChar) {
         swap2bytes(dsPixmap.borderWidth);
         swap2bytes(dsPixmap.highlightThickness);
@@ -1139,20 +1231,35 @@ Boolean _XmReadDSFromStream(XmDropSiteManagerObject dsm,
     case XmDRAG_UNDER_NONE: {
       XmICCDropSiteNone info = (XmICCDropSiteNone)dropSiteInfoRtn;
       xmDSNoneDataStruct dsNone;
-      _XmReadDragBuffer(propBuf, BUFFER_DATA, (BYTE *)&dsNone, sizeof(xmDSNoneDataStruct));
+      if (!READ_DS_DATA(propBuf, &dsNone))
+        return False;
       if (dsmInfo->byteOrder != _XmByteOrderChar) {
         swap2bytes(dsNone.borderWidth);
       }
       info->animation_data.borderWidth = (Dimension)dsNone.borderWidth;
     } break;
-    default:
-      break;
+    default: {
+      /*
+       * Unknown style, which has no animation data on the wire.  Don't
+       * pass it on: the drop site manager keeps the style in a 3-bit
+       * field, so it could alias a style whose animation data is
+       * larger than the record allocated for it.
+       */
+      XmICCDropSiteNone info = (XmICCDropSiteNone)dropSiteInfoRtn;
+      dropSiteInfoRtn->header.animationStyle = XmDRAG_UNDER_NONE;
+      info->animation_data.borderWidth = 0;
+    } break;
   }
   /*
-   *  Read the region, byte swapping if necessary.
+   *  Read the region, byte swapping if necessary.  The box count is
+   *  bounded by the bytes actually left in the buffer.
    */
-  region = dropSiteInfoRtn->header.region = _XmRegionCreateSize((long)dsHeader.dsRegionNumBoxes);
-  for (i = 0; i < (long)dsHeader.dsRegionNumBoxes; i++) {
+  remaining = propBuf->data.size - (size_t)(propBuf->data.curr - propBuf->data.bytes);
+  if (dsHeader.dsRegionNumBoxes > remaining / sizeof(xmICCRegBoxRec))
+    return False;
+  if ((region = _XmRegionCreateSize((long)dsHeader.dsRegionNumBoxes)) == NULL)
+    return False;
+  for (i = 0; i < dsHeader.dsRegionNumBoxes; i++) {
     _XmReadDragBuffer(propBuf, BUFFER_DATA, (BYTE *)&box, sizeof(xmICCRegBoxRec));
     if (dsmInfo->byteOrder != _XmByteOrderChar) {
       swap2bytes(box.x1);
@@ -1167,14 +1274,8 @@ Boolean _XmReadDSFromStream(XmDropSiteManagerObject dsm,
   }
   region->numRects = (long)dsHeader.dsRegionNumBoxes;
   _XmRegionComputeExtents(region);
-  if (++dsmInfo->currDropSite == dsmInfo->numDropSites) {
-    /* free all the wire data */
-    XtFree((char *)dsmInfo->propBufRec.data.bytes);
-    XtFree((char *)dsmInfo);
-#ifdef DEBUG
-    printf("freed the dsmInfo, all done\n");
-#endif
-  }
+  dropSiteInfoRtn->header.region = region;
+  dsmInfo->currDropSite++;
   return True;
 }
 

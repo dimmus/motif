@@ -703,6 +703,8 @@ static void DragContextDestroy(Widget w)
     dc->drag.dragTimerId = (XtIntervalId)NULL;
   }
   if (dc->drag.receiverInfos) {
+    for (i = 0; i < dc->drag.numReceiverInfos; i++)
+      _XmFreeDragReceiverInfo(dc->drag.receiverInfos[i].iccInfo);
     if (dc->drag.trackingMode != XmDRAG_TRACK_MOTION) {
       EventMask mask;
       XmDragReceiverInfo info;
@@ -807,9 +809,10 @@ XmDragReceiverInfo _XmAllocReceiverInfo(XmDragContext dc)
         (char *)dc->drag.receiverInfos,
         dc->drag.maxReceiverInfos * sizeof(XmDragReceiverInfoStruct));
   }
-  if (offset)
+  if (dc->drag.currReceiverInfo)
     dc->drag.currReceiverInfo = &(dc->drag.receiverInfos[offset]);
   dc->drag.rootReceiverInfo = dc->drag.receiverInfos;
+  memset(&dc->drag.receiverInfos[dc->drag.numReceiverInfos], 0, sizeof(XmDragReceiverInfoStruct));
   return &(dc->drag.receiverInfos[dc->drag.numReceiverInfos++]);
 }
 
@@ -865,6 +868,9 @@ static void GetDestinationInfo(XmDragContext dc, Window root, Window win)
    */
   if (currReceiverInfo != dc->drag.rootReceiverInfo /* is it the root ? */) {
     if (!currReceiverInfo->shell) {
+      /* drop any drop site stream left over from an earlier visit */
+      _XmFreeDragReceiverInfo(currReceiverInfo->iccInfo);
+      currReceiverInfo->iccInfo = NULL;
       if (_XmGetDragReceiverInfo(dpy, currReceiverInfo->window, currReceiverInfo)) {
         switch (currReceiverInfo->dragProtocolStyle) {
           case XmDRAG_PREREGISTER:
@@ -877,6 +883,7 @@ static void GetDestinationInfo(XmDragContext dc, Window root, Window win)
           case XmDRAG_NONE:
             /* free the data returned by the icc layer */
             _XmFreeDragReceiverInfo(currReceiverInfo->iccInfo);
+            currReceiverInfo->iccInfo = NULL;
             break;
         }
       }
@@ -930,6 +937,7 @@ static void GetScreenInfo(XmDragContext dc)
   rootInfo->width = XWidthOfScreen(dc->drag.currScreen);
   rootInfo->height = XHeightOfScreen(dc->drag.currScreen);
   rootInfo->depth = DefaultDepthOfScreen(dc->drag.currScreen);
+  _XmFreeDragReceiverInfo(rootInfo->iccInfo);
   rootInfo->iccInfo = NULL;
   if (_XmGetDragReceiverInfo(dpy, root, rootInfo)) {
     switch (rootInfo->dragProtocolStyle) {
@@ -942,6 +950,7 @@ static void GetScreenInfo(XmDragContext dc)
       case XmDRAG_NONE:
         /* free the data returned by the icc layer */
         _XmFreeDragReceiverInfo(rootInfo->iccInfo);
+        rootInfo->iccInfo = NULL;
         break;
     }
   }
@@ -1760,8 +1769,12 @@ static void TopWindowsReceived(Widget w,
      * we make a receiverInfo array one larger than the number of
      * client windows since we keep the root info in array[0].
      */
-    if (dc->drag.numReceiverInfos >= 1)
+    if (dc->drag.numReceiverInfos >= 1) {
       startInfo = dc->drag.receiverInfos;
+      /* only the root entry is kept; drop the others' drop site streams */
+      for (i = 1; i < dc->drag.numReceiverInfos; i++)
+        _XmFreeDragReceiverInfo(startInfo[i].iccInfo);
+    }
     else
       startInfo = NULL;
     dc->drag.numReceiverInfos = dc->drag.maxReceiverInfos = *length + 1;
@@ -2164,7 +2177,11 @@ static void DragMotionProto(XmDragContext dc, Window root, Window subWindow)
       {
         SendDragMessage(dc, dc->drag.currReceiverInfo->window, XmTOP_LEVEL_ENTER);
       }
-      /* clear iccInfo for dsm's sanity */
+      /*
+       * The dsm has read the drop site stream (if any) by now; the
+       * drag context owns it, so free it here.
+       */
+      _XmFreeDragReceiverInfo(dc->drag.currReceiverInfo->iccInfo);
       dc->drag.currReceiverInfo->iccInfo = NULL;
       GenerateClientCallback(dc, XmCR_TOP_LEVEL_ENTER);
     }
