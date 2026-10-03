@@ -176,74 +176,63 @@ UrmCreateWidgetInstanceCleanup (URMResourceContextPtr	context_id,
 
 
 /*
- *++
- *
- *  PROCEDURE DESCRIPTION:
- *
- *	UrmCreateWidgetTree is the recursive routine
- *	which recurses down a widget subtree and instantiates all widgets
- *	in the tree. The recursion process is:
- *
- *		o Create this widget.
- *		o Create a new context. Read each child of this widget
- *		  into the context in succession. Create each child,
- *		  saving its id.
- *		o manage the children
- *
- *	This routine accepts override parameters for the widget name, and
- *	to override arguments in the creation arglist. The latter are appended
- *	to the list created from the UID file, and do not replace all values.
- *	The parameters are not passed down to any children in the subtree.
- *
- *  FORMAL PARAMETERS:
- *
- *	context_id	context containing widget record describing widget
- *			to create
- *	parent		id of parent widget
- *	hierarchy_id	URM hierarchy from which to read public resources
- *	file_id		URM file from which to read private resources
- *	ov_name		Name to override widget name (NULL for no override)
- *	ov_args		Override arglist, exactly as would be given to
- *			XtCreateWidget (conversion complete, etc). NULL
- *			for no override.
- *	ov_num_args	# args in ov_args; 0 for no override
- *	keytype		type of key which accessed this widget
- *	kindex		index for URMrIndex access
- *	krid		resource id for URMrRID access
- *	svlist		list of SetValues descriptors for widgets in tree
- *	wref_id		to accumulate widget reference definitions
- *	w_return	To return id of newly created widget
- *
- *  IMPLICIT INPUTS:
- *
- *  IMPLICIT OUTPUTS:
- *
- *  FUNCTION VALUE:
- *
- *	MrmSUCCESS	operation succeeded
- *	MrmBAD_CONTEXT	invalid context
- *	MrmBAD_WIDGET_REC	invalid widget record
- *
- *  SIDE EFFECTS:
- *
- *--
+ * The widgets whose trees are being created by the current call of
+ * UrmCreateWidgetTree, innermost first. A widget record whose children or
+ * subtree resources lead back to one of its ancestors would otherwise be
+ * instantiated without end, and a corrupt file could nest widgets deeply
+ * enough to exhaust the stack. Widget trees are created under the Mrm
+ * process lock, which protects the list.
  */
+typedef struct _UrmWidgetTreeNode {
+  IDBFile			file_id ;	/* file of the widget record */
+  MrmCode			keytype ;	/* URMrIndex or URMrRID */
+  char				kindex[URMMaxIndexLen1] ; /* index */
+  MrmResource_id		krid ;		/* resource id */
+  struct _UrmWidgetTreeNode	*parent ;	/* enclosing widget */
+} UrmWidgetTreeNode ;
 
-Cardinal
-UrmCreateWidgetTree (URMResourceContextPtr	context_id,
-		     Widget			parent,
-		     MrmHierarchy		hierarchy_id,
-		     IDBFile			file_id,
-		     String			ov_name,
-		     ArgList			ov_args,
-		     Cardinal			ov_num_args,
-		     MrmCode			keytype,
-		     String			kindex,
-		     MrmResource_id		krid,
-		     MrmManageFlag		manage,
-		     URMPointerListPtr		*svlist,
-		     URMResourceContextPtr	wref_id,
-		     Widget			*w_return)
+static UrmWidgetTreeNode	*urm__cw_tree_nodes = NULL ;
+
+/*
+ * Maximum nesting of widgets in a tree. Real interfaces stay far below.
+ */
+#define	URMMaxWidgetTreeDepth	256
+
+static Cardinal Urm__CW_CreateWidgetTree (URMResourceContextPtr	context_id,
+					  Widget		parent,
+					  MrmHierarchy		hierarchy_id,
+					  IDBFile		file_id,
+					  String		ov_name,
+					  ArgList		ov_args,
+					  Cardinal		ov_num_args,
+					  MrmCode		keytype,
+					  String		kindex,
+					  MrmResource_id	krid,
+					  MrmManageFlag		manage,
+					  URMPointerListPtr	*svlist,
+					  URMResourceContextPtr	wref_id,
+					  Widget		*w_return);
+
+
+
+/*
+ * The work of UrmCreateWidgetTree, described below.
+ */
+static Cardinal
+Urm__CW_CreateWidgetTreeBody (URMResourceContextPtr	context_id,
+			      Widget			parent,
+			      MrmHierarchy		hierarchy_id,
+			      IDBFile			file_id,
+			      String			ov_name,
+			      ArgList			ov_args,
+			      Cardinal			ov_num_args,
+			      MrmCode			keytype,
+			      String			kindex,
+			      MrmResource_id		krid,
+			      MrmManageFlag		manage,
+			      URMPointerListPtr		*svlist,
+			      URMResourceContextPtr	wref_id,
+			      Widget			*w_return)
 {
   /*
    *  Local variables
@@ -329,15 +318,13 @@ UrmCreateWidgetTree (URMResourceContextPtr	context_id,
 	  /*
 	   * Create the child and its subtree.
 	   */
-	  result = UrmCreateWidgetTree (child_ctx, widget_id, hierarchy_id,
-					loc_file_id, NULL, NULL, 0,
-					childptr->type, child_idx,
-					childptr->key.id,
-					((childptr->manage) ?
-					 MrmManageManage : MrmManageUnmanage),
-					svlist, wref_id, &child_id)  ;
-	  UrmCreateWidgetInstanceCleanup(child_ctx, child_id, loc_file_id);
+	  result = Urm__CW_CreateWidgetTree
+	    (child_ctx, widget_id, hierarchy_id, loc_file_id, NULL, NULL, 0,
+	     childptr->type, child_idx, childptr->key.id,
+	     ((childptr->manage) ? MrmManageManage : MrmManageUnmanage),
+	     svlist, wref_id, &child_id)  ;
 	  if ( result != MrmSUCCESS ) continue ;
+	  UrmCreateWidgetInstanceCleanup(child_ctx, child_id, loc_file_id);
 
 	  /*
 	   * loop end
@@ -358,6 +345,155 @@ UrmCreateWidgetTree (URMResourceContextPtr	context_id,
 
   return MrmSUCCESS ;
 }
+
+
+/*
+ * Create a widget tree from within the creation of another one (for a
+ * child or a subtree resource), refusing widgets that are already being
+ * created further up the tree.
+ */
+static Cardinal
+Urm__CW_CreateWidgetTree (URMResourceContextPtr	context_id,
+			      Widget			parent,
+			      MrmHierarchy		hierarchy_id,
+			      IDBFile			file_id,
+			      String			ov_name,
+			      ArgList			ov_args,
+			      Cardinal			ov_num_args,
+			      MrmCode			keytype,
+			      String			kindex,
+			      MrmResource_id		krid,
+			      MrmManageFlag		manage,
+			      URMPointerListPtr		*svlist,
+			      URMResourceContextPtr	wref_id,
+			      Widget			*w_return)
+{
+  /*
+   *  Local variables
+   */
+  Cardinal		result ;	/* function results */
+  UrmWidgetTreeNode	node ;		/* this widget */
+  UrmWidgetTreeNode	*np ;		/* enclosing widgets */
+  int			depth = 0 ;	/* nesting of this widget */
+
+  if ( kindex == NULL ) kindex = "" ;
+  for ( np=urm__cw_tree_nodes ; np!=NULL ; np=np->parent )
+    {
+      if ( ++depth >= URMMaxWidgetTreeDepth ||
+	   ( np->file_id == file_id && np->keytype == keytype &&
+	     ( keytype == URMrRID ?
+	       np->krid == krid :
+	       strncmp (np->kindex, kindex, URMMaxIndexLen) == 0 ) ) )
+	return Urm__UT_Error ("UrmCreateWidgetTree", _MrmMMsg_0026,
+			      NULL, context_id, MrmBAD_WIDGET_REC) ;
+    }
+
+  node.file_id = file_id ;
+  node.keytype = keytype ;
+  strncpy (node.kindex, kindex, URMMaxIndexLen) ;
+  node.kindex[URMMaxIndexLen] = '\0' ;
+  node.krid = krid ;
+  node.parent = urm__cw_tree_nodes ;
+  urm__cw_tree_nodes = &node ;
+
+  result = Urm__CW_CreateWidgetTreeBody
+    (context_id, parent, hierarchy_id, file_id, ov_name, ov_args,
+     ov_num_args, keytype, kindex, krid, manage, svlist, wref_id, w_return) ;
+
+  urm__cw_tree_nodes = node.parent ;
+  return result ;
+}
+
+
+/*
+ *++
+ *
+ *  PROCEDURE DESCRIPTION:
+ *
+ *	UrmCreateWidgetTree is the recursive routine
+ *	which recurses down a widget subtree and instantiates all widgets
+ *	in the tree. The recursion process is:
+ *
+ *		o Create this widget.
+ *		o Create a new context. Read each child of this widget
+ *		  into the context in succession. Create each child,
+ *		  saving its id.
+ *		o manage the children
+ *
+ *	This routine accepts override parameters for the widget name, and
+ *	to override arguments in the creation arglist. The latter are appended
+ *	to the list created from the UID file, and do not replace all values.
+ *	The parameters are not passed down to any children in the subtree.
+ *
+ *  FORMAL PARAMETERS:
+ *
+ *	context_id	context containing widget record describing widget
+ *			to create
+ *	parent		id of parent widget
+ *	hierarchy_id	URM hierarchy from which to read public resources
+ *	file_id		URM file from which to read private resources
+ *	ov_name		Name to override widget name (NULL for no override)
+ *	ov_args		Override arglist, exactly as would be given to
+ *			XtCreateWidget (conversion complete, etc). NULL
+ *			for no override.
+ *	ov_num_args	# args in ov_args; 0 for no override
+ *	keytype		type of key which accessed this widget
+ *	kindex		index for URMrIndex access
+ *	krid		resource id for URMrRID access
+ *	svlist		list of SetValues descriptors for widgets in tree
+ *	wref_id		to accumulate widget reference definitions
+ *	w_return	To return id of newly created widget
+ *
+ *  IMPLICIT INPUTS:
+ *
+ *  IMPLICIT OUTPUTS:
+ *
+ *  FUNCTION VALUE:
+ *
+ *	MrmSUCCESS	operation succeeded
+ *	MrmBAD_CONTEXT	invalid context
+ *	MrmBAD_WIDGET_REC	invalid widget record
+ *
+ *  SIDE EFFECTS:
+ *
+ *--
+ */
+
+Cardinal
+UrmCreateWidgetTree (URMResourceContextPtr	context_id,
+		     Widget			parent,
+		     MrmHierarchy		hierarchy_id,
+		     IDBFile			file_id,
+		     String			ov_name,
+		     ArgList			ov_args,
+		     Cardinal			ov_num_args,
+		     MrmCode			keytype,
+		     String			kindex,
+		     MrmResource_id		krid,
+		     MrmManageFlag		manage,
+		     URMPointerListPtr		*svlist,
+		     URMResourceContextPtr	wref_id,
+		     Widget			*w_return)
+{
+  /*
+   *  Local variables
+   */
+  Cardinal		result ;	/* function results */
+  UrmWidgetTreeNode	*saved ;	/* trees being created by callers */
+
+  /*
+   * A new widget tree, possibly fetched by a callback of a widget in a
+   * tree being created: it does not share that tree's ancestors.
+   */
+  saved = urm__cw_tree_nodes ;
+  urm__cw_tree_nodes = NULL ;
+  result = Urm__CW_CreateWidgetTree
+    (context_id, parent, hierarchy_id, file_id, ov_name, ov_args,
+     ov_num_args, keytype, kindex, krid, manage, svlist, wref_id, w_return) ;
+  urm__cw_tree_nodes = saved ;
+  return result ;
+}
+
 
 
 /*
@@ -3523,7 +3659,7 @@ Urm__CW_LoadWidgetResource (Widget			parent ,
    * Now create the widget subtree. The pointer result is the widget id of
    * the widget we now have (the root of the tree).
    */
-  result = UrmCreateWidgetTree
+  result = Urm__CW_CreateWidgetTree
     (context_id, parent, hierarchy_id, loc_fileid, NULL, NULL, 0,
      resptr->type, resptr->key.index, resptr->key.id, MrmManageDefault,
      (URMPointerListPtr *)svlist, wref_id, (Widget *)val) ;
