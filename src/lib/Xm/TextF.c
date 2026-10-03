@@ -7211,12 +7211,12 @@ static void PreeditDraw(XIC xic, XPointer client_data, XIMPreeditDrawCallbackStr
         strncpy(mb, call_data->text->string.multi_byte, insert_length * tf->text.max_char_size);
         mb[insert_length * tf->text.max_char_size] = '\0';
         escapement = XmbTextExtents((XFontSet)TextF_Font(tf), mb, strlen(mb), &overall_ink, NULL);
+        XtFree(mb);
+        mb = NULL;
         if (escapement == 0 && overall_ink.width == 0 &&
             strchr(call_data->text->string.multi_byte, '\t') == 0)
         {
           /* cursor on */
-          if (mb)
-            XtFree(mb);
           return;
         }
       }
@@ -7279,6 +7279,7 @@ static void PreeditDraw(XIC xic, XPointer client_data, XIMPreeditDrawCallbackStr
   PreCursor(tf) = PreStart(tf) + call_data->caret;
   if (tf->text.max_char_size == 1) {
     if (call_data->text) {
+      XtFree(mb);
       if (call_data->text->encoding_is_wchar) {
         mb = XtMalloc((insert_length + 1) * sizeof(char));
         wcstombs(mb, call_data->text->string.wide_char, insert_length);
@@ -7306,6 +7307,8 @@ static void PreeditDraw(XIC xic, XPointer client_data, XIMPreeditDrawCallbackStr
       PreeditVerifyReplace(tf, startPos, endPos, mb, strlen(mb), PreCursor(tf), &end_preedit);
       if (end_preedit) {
         _XmTextFieldDrawInsertionPoint(tf, True);
+        XtFree(mb);
+        XtFree((char *)wc);
         return;
       }
     }
@@ -7316,6 +7319,7 @@ static void PreeditDraw(XIC xic, XPointer client_data, XIMPreeditDrawCallbackStr
   }
   else {
     if (call_data->text) {
+      XtFree((char *)wc);
       if (!call_data->text->encoding_is_wchar) {
         wc = (wchar_t *)XtMalloc((unsigned)(insert_length + 1) * sizeof(wchar_t));
         mbstowcs(wc, call_data->text->string.multi_byte, insert_length);
@@ -7353,6 +7357,8 @@ static void PreeditDraw(XIC xic, XPointer client_data, XIMPreeditDrawCallbackStr
           tf, startPos, endPos, (char *)wc, wcslen(wc), PreCursor(tf), &end_preedit);
       if (end_preedit) {
         _XmTextFieldDrawInsertionPoint(tf, True);
+        XtFree(mb);
+        XtFree((char *)wc);
         return;
       }
     }
