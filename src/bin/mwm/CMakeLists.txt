@@ -67,9 +67,17 @@ install(TARGETS mwm
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
-# Install system.mwmrc where mwm looks for it (MWMRCDIR above).  The full
-# path matters: GNUInstallDirs maps the sysconfdir of the /usr prefix to /etc,
-# not /usr/etc.
+# Install system.mwmrc where mwm looks for it (MWMRCDIR above).
+# GNUInstallDirs maps the sysconfdir of the /usr prefix to /etc, not
+# /usr/etc, so the full path is used when the sysconfdir is outside the
+# prefix.  Otherwise the destination stays relative, so that
+# "cmake --install --prefix <dir>" can still stage it below <dir>.
+if(CMAKE_INSTALL_FULL_SYSCONFDIR STREQUAL
+   "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_SYSCONFDIR}")
+    set(MWM_RC_INSTALL_DIR ${CMAKE_INSTALL_SYSCONFDIR}/X11)
+else()
+    set(MWM_RC_INSTALL_DIR ${CMAKE_INSTALL_FULL_SYSCONFDIR}/X11)
+endif()
 install(FILES system.mwmrc
-    DESTINATION ${CMAKE_INSTALL_FULL_SYSCONFDIR}/X11
+    DESTINATION ${MWM_RC_INSTALL_DIR}
 )
