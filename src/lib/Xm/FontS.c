@@ -1202,17 +1202,17 @@ static String BuildFontString(XmFontSelectorWidget fsw, FontData *cf, String buf
   else
     family = XrmQuarkToString(cf->familyq);
   if (cf->point_size == 0) {
-    strcpy(point_size, STAR_STRING);
+    snprintf(point_size, sizeof(point_size), "%s", STAR_STRING);
   }
   else
     snprintf(point_size, sizeof(point_size), "%d", cf->point_size);
   if (cf->resolution_x == 0) {
-    strcpy(res_x, STAR_STRING);
+    snprintf(res_x, sizeof(res_x), "%s", STAR_STRING);
   }
   else
     snprintf(res_x, sizeof(res_x), "%d", (int)cf->resolution_x);
   if (cf->resolution_y == 0) {
-    strcpy(res_y, STAR_STRING);
+    snprintf(res_y, sizeof(res_y), "%s", STAR_STRING);
   }
   else
     snprintf(res_y, sizeof(res_y), "%d", (int)cf->resolution_y);
