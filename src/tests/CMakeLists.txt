@@ -28,10 +28,11 @@ set(MOTIF_TEST_SRCS
     Xm/testLogConfig.c
     Xm/testXmString.c
     Xm/testWidgets.c
+    Xm/testText.c
 )
 
 # Suites that open a display, and suites that do not.
-set(MOTIF_TEST_X_SUITES FontListEntry FontList XmStringCT Widgets)
+set(MOTIF_TEST_X_SUITES FontListEntry FontList XmStringCT Widgets Text)
 set(MOTIF_TEST_SUITES Svg Log LogConfig XmString)
 set(MOTIF_TEST_DEFS "")
 

@@ -7,16 +7,21 @@
 # ASAN_SYMBOLIZER_PATH, which CTest sets up when there is no
 # llvm-symbolizer).
 
-# Text widgets taking the MOTIF_DESTINATION selection: memory that libXt
-# allocates in XtOwnSelection(), and in XtDisownSelection() when the
-# widget is destroyed (Transfer.c, DisownCallback), is never freed.
-# Seen with TextField (XmeSecondarySink), DataField (df_SetDestination)
-# and the SelectionBox family through their TextField.  Not yet known
-# whether libXt or the way Motif hands over the selection is at fault.
-leak:XmeSecondarySink
-leak:df_SetDestination
-leak:DisownCallback
+# libXt: the 104-byte record that XtOwnSelection() and
+# XtDisownSelection() allocate for a selection is not freed when its
+# widget is destroyed.  Seen from every Motif selection owner: the text
+# widgets (PRIMARY through XmeNamedSource, MOTIF_DESTINATION through
+# XmeSecondarySink and df_SetDestination, the destroy callback
+# DisownCallback) and the clipboard (AssertClipboardSelection).  Not
+# known to be Motif's fault.
+leak:XtOwnSelection
+leak:XtDisownSelection
 
 # Notebook.c, Destroy: frees the scroll frame data but not its navigator
 # list (ScrollFrameT.c, _XmSFAddNavigator).
 leak:_XmSFAddNavigator
+
+# CutPaste.c, ClipboardGetByNameItem: the format record it gets from
+# ClipboardFindFormat() is never freed; every conversion of the
+# CLIPBOARD selection by its Motif owner (a paste) leaks one.
+leak:ClipboardGetByNameItem
