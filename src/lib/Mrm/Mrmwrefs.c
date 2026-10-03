@@ -145,8 +145,9 @@ Urm__CW_AddWRef (URMResourceContextPtr	wref_id,
    */
   Cardinal		result;		/* function results */
   URMWRefStructPtr	refdsc;		/* buffer as reference structure */
-  MrmCount		name_bytes;	/* # bytes for name & NULL */
-  MrmCount		bytes_needed;	/* # bytes for whole ref */
+  size_t		name_bytes;	/* # bytes for name & NULL */
+  size_t		bytes_needed;	/* # bytes for whole ref */
+  size_t		bytes_used;	/* # bytes in use */
   Cardinal		ndx;		/* entry index in structure */
   MrmOffset		new_offs;	/* new offset in heap */
   Cardinal		old_size;	/* old buffer size */
@@ -167,12 +168,26 @@ Urm__CW_AddWRef (URMResourceContextPtr	wref_id,
     if ( w_name[ndx] == '-' ) return MrmFAILURE;
   name_bytes += 1;
 
+  /*
+   * The structure is a resource context of at most MrmMaxResourceSize
+   * bytes, and its heap size is an MrmCount. Widgets which do not fit
+   * cannot be referred to by name.
+   */
   bytes_needed = sizeof(URMWRef) + name_bytes;
   bytes_needed = _FULLWORD(bytes_needed);
-  if ( bytes_needed > (UrmRCBufSize(wref_id)-UrmWRefBytesUsed(refdsc)) )
+  bytes_used = UrmWRefBytesUsed(refdsc);
+  if ( bytes_needed > MrmMaxResourceSize - bytes_used ||
+       name_bytes > 32767 - (size_t) refdsc->heap_size )
+    return MrmTOO_MANY;
+
+  if ( bytes_needed > (UrmRCBufSize(wref_id)-bytes_used) )
     {
       old_size = UrmRCBufSize (wref_id);
       new_size = 2 * old_size;
+      if ( new_size < bytes_used + bytes_needed )
+	new_size = bytes_used + bytes_needed;
+      if ( new_size > MrmMaxResourceSize )
+	new_size = MrmMaxResourceSize;
       delta = new_size - old_size;
       result = UrmResizeResourceContext (wref_id, new_size);
       if ( result != MrmSUCCESS ) return result;
@@ -193,8 +208,7 @@ Urm__CW_AddWRef (URMResourceContextPtr	wref_id,
   refdsc->refs[ndx].w_name_offs = new_offs;
   refdsc->num_refs += 1;
   refdsc->heap_size += name_bytes;
-  strncpy ((String)refdsc+new_offs, w_name, name_bytes - 1);
-  ((String)refdsc+new_offs)[name_bytes - 1] = '\0';
+  memcpy ((String)refdsc+new_offs, w_name, name_bytes);
 
   return MrmSUCCESS;
 }
@@ -383,7 +397,7 @@ Urm__CW_AppendCBSVWidgetRef (IDBFile			file_id,
 {
   URMSetValuesDescPtr	svdesc ;	/* new descriptor */
   RGMCallbackDescPtr	cbdesc;		/* Copy of descriptor */
-  MrmSize		descsize;	/* Size of descriptor to be copied */
+  size_t		descsize;	/* Size of descriptor to be copied */
   Cardinal		uncmp_res;	/* function result */
   char			errmsg[300];
 
