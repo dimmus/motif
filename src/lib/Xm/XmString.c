@@ -1797,22 +1797,34 @@ static int TabVal(Display *d, Screen **pscreen, Window w, XmTab tab)
     return (0);
   convertValue += (convertValue > 0.0) ? 0.5 : -0.5;
   intValue = convertValue;
+  /* A tab in pixels needs no screen. */
+  if (fromType == XmPIXELS)
+    return intValue;
   /*
-   * The pscreen storage should be pushed higher; we may still make
-   * several round trips to the server to draw a single string???
+   * All we really want is the screen, but we may only have a drawable,
+   * or nothing (w == None) when measuring.  The screen is looked up at
+   * most once per string, through *pscreen.
    */
-  /* All we really want is the screen, but we may only have a drawable. */
-  assert(w || *pscreen);
   if (*pscreen == NULL) {
-    Widget widget = XtWindowToWidget(d, w);
+    Widget widget;
+    if (w == None)
+      *pscreen = XtScreenOfObject(XmGetXmDisplay(d));
     /* If this drawable is really a widget Xt will have cached it. */
-    if (widget)
+    else if ((widget = XtWindowToWidget(d, w)) != NULL)
       *pscreen = XtScreenOfObject(widget);
+    else if (ScreenCount(d) == 1)
+      *pscreen = ScreenOfDisplay(d, 0);
     else {
-      /* Give up and ask the server. */
-      XWindowAttributes attr;
-      XGetWindowAttributes(d, w, &attr);
-      *pscreen = attr.screen;
+      /* Give up and ask the server; unlike XGetWindowAttributes,
+       * XGetGeometry also works for a pixmap. */
+      Window root;
+      int x, y, i;
+      unsigned int width, height, border, depth;
+      *pscreen = DefaultScreenOfDisplay(d);
+      if (XGetGeometry(d, w, &root, &x, &y, &width, &height, &border, &depth))
+        for (i = 0; i < ScreenCount(d); i++)
+          if (RootWindow(d, i) == root)
+            *pscreen = ScreenOfDisplay(d, i);
     }
   }
   return _XmConvertUnits(*pscreen, XmHORIZONTAL, fromType, intValue, XmPIXELS);
@@ -1972,13 +1984,13 @@ static void OptLineMetrics(XmRenderTable r,
     );
   if (rend != NULL)
     tl = _XmRendTabs(rend);
-  d = (_XmRTDisplay(r) == NULL) ? _XmGetDefaultDisplay() : _XmRTDisplay(r);
-  screen = XtScreenOfObject(XmGetXmDisplay(d));
   tab = ((tl == NULL) || ((long)tl == XmAS_IS)) ? NULL : _XmTabLStart(tl);
   prev_val = 0;
   tab_cnt = 0;
   /* If this string is tabbed, set width accordingly. */
   if ((tab != NULL) && (_XmStrTabs(opt) != 0) && (tab_cnt < _XmTabLCount(tl))) {
+    d = (_XmRTDisplay(r) == NULL) ? _XmGetDefaultDisplay() : _XmRTDisplay(r);
+    screen = NULL; /* Looked up by TabVal when a tab needs it. */
     for (i = 0; (i < _XmStrTabs(opt)) && (tab_cnt < _XmTabLCount(tl));
          tab = _XmTabNext(tab), tab_cnt++, i++)
     {
@@ -2026,7 +2038,7 @@ static void LineMetrics(_XmStringEntry line,
   XmDirection lay_dir = 0;
   Boolean set_direction = FALSE;
   d = _XmRendDisplay(*rend_io);
-  screen = XtScreenOfObject(XmGetXmDisplay(d));
+  screen = NULL; /* Looked up by TabVal when a tab needs it. */
   seg = _XmEntrySegmentGet(line)[seg_index];
   if (_XmEntryType(seg) != XmSTRING_ENTRY_OPTIMIZED) {
     lay_dir = _XmEntryLayoutGet(seg, prim_dir);
