@@ -311,10 +311,7 @@ static Boolean ConvertInsertSelection(Widget w,
   static unsigned long old_serial = 0;
   Atom TARGETS = XmInternAtom(XtDisplay(w), "TARGETS", False);
   Atom MOTIF_DESTINATION = XmInternAtom(XtDisplay(w), "MOTIF_DESTINATION", False);
-  Atom actual_type;
-  int actual_format;
   unsigned long nitems;
-  unsigned long bytes;
   unsigned char *prop = NULL;
   DataFInsertSelectRec *insert_select;
   _XmTextInsertPair pair;
@@ -339,24 +336,19 @@ static Boolean ConvertInsertSelection(Widget w,
   else
     return False;
   /* The parameter is the ATOM_PAIR the requestor stored on its window. */
-  if (XGetWindowProperty(req_event->display,
-                         req_event->requestor,
-                         req_event->property,
-                         0L,
-                         2L,
-                         False,
-                         AnyPropertyType,
-                         &actual_type,
-                         &actual_format,
-                         &nitems,
-                         &bytes,
-                         &prop) != Success)
-    return FALSE;
-  if (prop == NULL || actual_format != 32 || nitems < 2) {
-    if (prop != NULL)
-      XFree((void *)prop);
+  if (!_XmGetWindowPropertyChecked(req_event->display,
+                                   req_event->requestor,
+                                   req_event->property,
+                                   2L,
+                                   AnyPropertyType,
+                                   32,
+                                   2,
+                                   NULL,
+                                   NULL,
+                                   &nitems,
+                                   NULL,
+                                   &prop))
     return False;
-  }
   pair = *(_XmTextInsertPair *)prop;
   XFree((void *)prop);
   insert_select = (DataFInsertSelectRec *)XtMalloc(sizeof(DataFInsertSelectRec));

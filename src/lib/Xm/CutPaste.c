@@ -1132,28 +1132,22 @@ static int ClipboardGetLenFromFormat(Display *display, char *format_name, int *f
   Window rootwindow;
   unsigned long outlength;
   unsigned char *outpointer;
-  Atom type;
-  int format;
-  unsigned long bytes_left;
-  outpointer = NULL;
   format_atom = ClipboardGetAtomFromFormat(display, format_name);
   rootwindow = RootWindow(display, 0);
-  /* get the format record */
-  ret_value = XGetWindowProperty(display,
-                                 rootwindow,
-                                 format_atom,
-                                 0,        /*offset*/
-                                 10000000, /*length*/
-                                 False,
-                                 AnyPropertyType,
-                                 &type,
-                                 &format,
-                                 &outlength,
-                                 &bytes_left,
-                                 &outpointer);
-  /* any client can write this property: it must hold one 32-bit item
-     with a valid format length */
-  if (outpointer == 0 || outlength == 0 || ret_value != 0 || format != 32 ||
+  /* get the format record: any client can write this property, it must
+     hold one 32-bit item with a valid format length */
+  if (!_XmGetWindowPropertyChecked(display,
+                                   rootwindow,
+                                   format_atom,
+                                   10000000,
+                                   AnyPropertyType,
+                                   32,
+                                   1,
+                                   NULL,
+                                   NULL,
+                                   &outlength,
+                                   NULL,
+                                   &outpointer) ||
       (*((long *)outpointer) != 8 && *((long *)outpointer) != 16 && *((long *)outpointer) != 32))
   {
     /* if not successful, return warning that format is not registered */
@@ -2244,10 +2238,6 @@ static int ClipboardWindowExists(Display *display, Window window)
   int exists;
   unsigned long outlength;
   unsigned char *outpointer;
-  Atom type;
-  int format;
-  unsigned long bytes_left;
-  outpointer = NULL;
   rootwindow = RootWindow(display, 0);
   exists = ClipboardSearchForWindow(display, rootwindow, window);
   if (exists == 1) {
@@ -2256,24 +2246,22 @@ static int ClipboardWindowExists(Display *display, Window window)
            and the lock is bogus due to a crash of the application
            with the original locking window */
     itematom = XInternAtom(display, XmS_MOTIF_CLIP_LOCK_ACCESS_VALID, False);
-    XGetWindowProperty(display,
-                       window,
-                       itematom,
-                       0,        /*offset*/
-                       10000000, /*length*/
-                       False,
-                       AnyPropertyType,
-                       &type,
-                       &format,
-                       &outlength,
-                       &bytes_left,
-                       &outpointer);
-    if (outpointer == 0 || outlength == 0) {
+    if (_XmGetWindowPropertyChecked(display,
+                                    window,
+                                    itematom,
+                                    10000000,
+                                    AnyPropertyType,
+                                    0,
+                                    1,
+                                    NULL,
+                                    NULL,
+                                    &outlength,
+                                    NULL,
+                                    &outpointer))
+      XFree((char *)outpointer);
+    else
       /* not the same window that locked the clipboard */
       exists = 0;
-    }
-    if (outpointer != NULL)
-      XFree((char *)outpointer);
   }
   return exists;
 }

@@ -1917,55 +1917,57 @@ void XmeStandardConvert(Widget w,
   }
   else if (atoms[XmACLASS] == cs->target) {
     Widget current;
-    unsigned long bytesAfter;
+    Atom type;
+    int format;
+    unsigned long length;
+    unsigned char *value;
     cs->value = NULL;
     cs->format = 32;
     cs->length = 0;
     cs->type = XA_INTEGER;
     for (current = w; current != (Widget)NULL; current = XtParent(current)) {
-      if (XtIsShell(current)) {
-        XGetWindowProperty(XtDisplay(current),
-                           XtWindow(current),
-                           XA_WM_CLASS,
-                           0L,
-                           100000L,
-                           False,
-                           (Atom)AnyPropertyType,
-                           &cs->type,
-                           &cs->format,
-                           &cs->length,
-                           &bytesAfter,
-                           (unsigned char **)&cs->value);
-        if (cs->value != NULL)
-          break;
+      if (XtIsShell(current) && _XmGetWindowPropertyChecked(XtDisplay(current),
+                                                            XtWindow(current),
+                                                            XA_WM_CLASS,
+                                                            100000L,
+                                                            (Atom)AnyPropertyType,
+                                                            0,
+                                                            0,
+                                                            &type,
+                                                            &format,
+                                                            &length,
+                                                            NULL,
+                                                            &value))
+      {
+        cs->value = (XtPointer)value;
+        cs->type = type;
+        cs->format = format;
+        cs->length = length;
+        break;
       }
     }
   }
   else if (atoms[XmANAME] == cs->target) {
     Widget current;
-    unsigned long bytesAfter;
     Atom type = None;
     int format = 8;
     unsigned char *value = NULL;
     char *total_value = NULL;
     unsigned long length = 0;
     for (current = w; current != (Widget)NULL; current = XtParent(current)) {
-      if (XtIsShell(current)) {
-        XGetWindowProperty(XtDisplay(current),
-                           XtWindow(current),
-                           XA_WM_NAME,
-                           0L,
-                           100000L,
-                           False,
-                           (Atom)AnyPropertyType,
-                           &type,
-                           &format,
-                           &length,
-                           &bytesAfter,
-                           &value);
-        if (value != NULL)
-          break;
-      }
+      if (XtIsShell(current) && _XmGetWindowPropertyChecked(XtDisplay(current),
+                                                            XtWindow(current),
+                                                            XA_WM_NAME,
+                                                            100000L,
+                                                            (Atom)AnyPropertyType,
+                                                            0,
+                                                            0,
+                                                            &type,
+                                                            &format,
+                                                            &length,
+                                                            NULL,
+                                                            &value))
+        break;
     }
     if (value != NULL) {
       total_value = _XmTextToLocaleText(w, (XtPointer)value, type, format, length, NULL);
