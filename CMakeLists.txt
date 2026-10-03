@@ -19,6 +19,17 @@ include(CMakeDependentOption)
 
 include(tools/cmake/motif_helpers.cmake)
 
+# Default to an optimised build with debug information.  Use the standard
+# CMAKE_C_FLAGS_<CONFIG>: Debug keeps assert() (no NDEBUG), the others define
+# NDEBUG.
+get_property(_motif_multi_config GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+if(NOT _motif_multi_config AND NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING
+    "Build type (Debug, Release, RelWithDebInfo or MinSizeRel)" FORCE)
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
+    Debug Release RelWithDebInfo MinSizeRel)
+endif()
+
 # -----------------------------------------------------------------------------
 # Check for ccache and use it if available
 
@@ -81,7 +92,6 @@ motif_option(WITH_SHARED_LIBS "Build shared libraries" ON)
 motif_option(WITH_STATIC_LIBS "Build static libraries" OFF)
 motif_option(WITH_DEMOS "Build examples" ON)
 motif_option(WITH_TESTS "Build tests" OFF)
-motif_option(WITH_DEBUG "Enable debug build" OFF)
 motif_option(WITH_UTF8 "Enable UTF-8 support" ON)
 motif_option(WITH_MESSAGE_CATALOG "Enable X/Open message catalog support" OFF)
 motif_option(WITH_PRINTING "Enable printing support" OFF)
@@ -317,13 +327,6 @@ else()
     add_compile_definitions(PWC_DEBUG=0)
 endif()
 
-# Compiler flags
-if(WITH_DEBUG)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Og -ggdb -DDEBUG")
-else()
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2 -DNDEBUG")
-endif()
-
 # Optimization options. These are applied here rather than in the presets in
 # tools/cmake/config, because presets run before the compiler is detected.
 if(WITH_LTO)
@@ -393,14 +396,11 @@ if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
 endif()
 string(REPLACE ";" " " C_WARNINGS "${C_WARNINGS}")
 
-# Set C standard
+# C17 with GNU extensions (-std=gnu17).  C23 needs the remaining
+# unprototyped () function declarations fixed first.
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED ON)
-
-# Use C11 + GNU extensions
-if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
-  string(APPEND CMAKE_C_FLAGS " -std=gnu11")
-endif()
+set(CMAKE_C_EXTENSIONS ON)
 
 # Include warnings first, so its possible to disable them with user defined flags
 # eg: -Wno-uninitialized
@@ -677,45 +677,6 @@ install(FILES ${CMAKE_BINARY_DIR}/motif.pc
 install(FILES README.md
     DESTINATION ${CMAKE_INSTALL_DATADIR}/Xm/doc
 )
-
-# Print configuration summary
-# message(STATUS "")
-# message(STATUS "------------------------------------------------------------------------")
-# message(STATUS "${PROJECT_NAME} ${PROJECT_VERSION}")
-# message(STATUS "------------------------------------------------------------------------")
-# message(STATUS "")
-# message(STATUS "System configuration:")
-# message(STATUS "  os.............: ${CMAKE_SYSTEM_NAME}")
-# message(STATUS "  c compiler.....: ${CMAKE_C_COMPILER}")
-# message(STATUS "  c standard.....: C${CMAKE_C_STANDARD}")
-# message(STATUS "")
-# message(STATUS "Features:")
-# message(STATUS "  shared libs....: ${WITH_SHARED_LIBS}")
-# message(STATUS "  static libs....: ${WITH_STATIC_LIBS}")
-# message(STATUS "  examples.......: ${WITH_DEMOS}")
-# message(STATUS "  tests..........: ${WITH_TESTS}")
-# message(STATUS "  debug..........: ${WITH_DEBUG}")
-# message(STATUS "  utf8...........: ${WITH_UTF8}")
-# message(STATUS "  jpeg...........: ${WITH_JPEG}")
-# message(STATUS "  png............: ${WITH_PNG}")
-# message(STATUS "  xft............: ${WITH_XFT}")
-# message(STATUS "  printing.......: ${WITH_PRINTING}")
-# message(STATUS "  msg catalog....: ${WITH_MESSAGE_CATALOG}")
-# message(STATUS "  uil debug......: ${WITH_UIL_DEBUG}")
-# message(STATUS "")
-# message(STATUS "Compilation......: make")
-# message(STATUS "  CPPFLAGS.......: ${CMAKE_C_FLAGS}")
-# message(STATUS "  CFLAGS.........: ${CMAKE_C_FLAGS}")
-# message(STATUS "   X_CFLAGS......: ${X_CFLAGS}")
-# if(XFT_FOUND)
-#     message(STATUS "   XFT_CFLAGS....: ${XFT_CFLAGS}")
-# endif()
-# message(STATUS "  LDFLAGS........: ${CMAKE_EXE_LINKER_FLAGS}")
-# message(STATUS "   X_LIBS........: ${X_LIBRARIES}")
-# if(XFT_FOUND)
-#     message(STATUS "   XFT_LIBS......: ${XFT_LIBRARIES}")
-# endif()
-# message(STATUS "")
 
 # -----------------------------------------------------------------------------
 # Print Final Configuration

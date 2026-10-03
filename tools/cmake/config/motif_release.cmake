@@ -6,41 +6,34 @@
 # This configuration optimizes for performance and production use
 
 # Set build type to Release
-set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Build type" FORCE)
-
-# Disable debug features
-set(WITH_DEBUG OFF CACHE BOOL "Enable debug build" FORCE)
+set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Build type")
 
 # Enable essential features
-set(WITH_TESTS OFF CACHE BOOL "Build tests" FORCE)
-set(WITH_DEMOS ON CACHE BOOL "Build examples" FORCE)
+set(WITH_TESTS OFF CACHE BOOL "Build tests")
+set(WITH_DEMOS ON CACHE BOOL "Build examples")
 
 # Disable development features
-set(WITH_COMPILER_CODE_COVERAGE OFF CACHE BOOL "Enable code coverage" FORCE)
-set(WITH_UIL_DEBUG OFF CACHE BOOL "Enable UIL debug support" FORCE)
+set(WITH_COMPILER_CODE_COVERAGE OFF CACHE BOOL "Enable code coverage")
+set(WITH_UIL_DEBUG OFF CACHE BOOL "Enable UIL debug support")
 
 # Enable all optional features for full functionality
-set(WITH_UTF8 ON CACHE BOOL "Enable UTF-8 support" FORCE)
-set(WITH_MESSAGE_CATALOG ON CACHE BOOL "Enable message catalog support" FORCE)
-set(WITH_PRINTING ON CACHE BOOL "Enable printing support" FORCE)
-set(WITH_JPEG ON CACHE BOOL "Enable JPEG support" FORCE)
-set(WITH_PNG ON CACHE BOOL "Enable PNG support" FORCE)
-set(WITH_XFT ON CACHE BOOL "Enable Xft support" FORCE)
+set(WITH_UTF8 ON CACHE BOOL "Enable UTF-8 support")
+set(WITH_MESSAGE_CATALOG ON CACHE BOOL "Enable message catalog support")
+set(WITH_PRINTING ON CACHE BOOL "Enable printing support")
+set(WITH_JPEG ON CACHE BOOL "Enable JPEG support")
+set(WITH_PNG ON CACHE BOOL "Enable PNG support")
+set(WITH_XFT ON CACHE BOOL "Enable Xft support")
 
 # Enable documentation
-set(WITH_DOCS ON CACHE BOOL "Enable documentation installation" FORCE)
-set(WITH_WML_TOOLS ON CACHE BOOL "Enable WML tools" FORCE)
+set(WITH_DOCS ON CACHE BOOL "Enable documentation installation")
+set(WITH_WML_TOOLS ON CACHE BOOL "Enable WML tools")
 
 # Build shared libraries by default
-set(WITH_SHARED_LIBS ON CACHE BOOL "Build shared libraries" FORCE)
-set(WITH_STATIC_LIBS OFF CACHE BOOL "Build static libraries" FORCE)
+set(WITH_SHARED_LIBS ON CACHE BOOL "Build shared libraries")
+set(WITH_STATIC_LIBS OFF CACHE BOOL "Build static libraries")
 
 # Optimize for performance
-set(CMAKE_C_FLAGS_RELEASE "-O3 -DNDEBUG" CACHE STRING "Release C flags" FORCE)
-set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG" CACHE STRING "Release C++ flags" FORCE)
-
-# Enable optimizations
-add_compile_definitions(NDEBUG=1)
+set(CMAKE_C_FLAGS_RELEASE "-O3 -DNDEBUG" CACHE STRING "Release C flags")
 
 # Enable link-time optimization (applied in CMakeLists.txt once the compiler is known)
-set(WITH_LTO ON CACHE BOOL "Enable link-time optimization" FORCE)
+set(WITH_LTO ON CACHE BOOL "Enable link-time optimization")
