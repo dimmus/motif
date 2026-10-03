@@ -5116,8 +5116,8 @@ static void ParseKeySet (WmScreenData *pSD, unsigned char *lineP)
  *  Comments:
  *  --------
  *  If there are more than MAXLINE characters on a line in the file cfileP the
- *  excess are truncated.
- *  Assumes the line buffer is long enough for any parse string line.
+ *  excess are truncated.  Parse string lines longer than MAXLINE are
+ *  truncated as well.
  *
  *************************************<->***********************************/
 
@@ -5182,6 +5182,20 @@ GetNextLine (void)
 	       (*parseP != '\n'))
 	/* copy all but NULL and newlines to line buffer */
 	{
+	    if (chlen > MAXLINE - (string - line))
+	    {
+		/*
+		 * The parse string may come from a client property
+		 * (_MOTIF_WM_MENU), so its lines can be arbitrarily
+		 * long.  Truncate like fgets does for files and skip
+		 * the rest of the line.
+		 */
+		while ((*parseP != '\0') && (*parseP != '\n'))
+		{
+		    parseP++;
+		}
+		break;
+	    }
 	    while (chlen--)
 	    {
 	        *(string++) = *(parseP++);
