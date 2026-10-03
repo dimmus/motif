@@ -259,10 +259,10 @@ Urm__OpenHierarchy (MrmCount			num_files,
 	    case MrmSUCCESS:
 	      break;
 	    case MrmNOT_VALID:
-	      sprintf (err_stg, "%s", _MrmMMsg_0113);
+	      snprintf (err_stg, sizeof(err_stg), "%s", _MrmMMsg_0113);
 	      break;
 	    default:
-	      sprintf (err_stg, "%s", _MrmMMsg_0114);
+	      snprintf (err_stg, sizeof(err_stg), "%s", _MrmMMsg_0114);
 	      break;
 	    }
 	}
@@ -746,7 +746,7 @@ I18NOpenFile (Display			*display,
 
   if (resolvedname == 0)
     {
-      sprintf (err_stg, _MrmMMsg_0031, name) ;
+      snprintf (err_stg, sizeof(err_stg), _MrmMMsg_0031, name) ;
       return Urm__UT_Error ("I18NOpenFile", err_stg, NULL, NULL, MrmNOT_FOUND);
     }
 
@@ -756,11 +756,11 @@ I18NOpenFile (Display			*display,
     case MrmSUCCESS:
       break;
     case MrmNOT_VALID:
-      sprintf (err_stg, _MrmMMsg_0032, resolvedname) ;
+      snprintf (err_stg, sizeof(err_stg), _MrmMMsg_0032, resolvedname) ;
       break;
     case MrmNOT_FOUND:
     default:
-      sprintf (err_stg, _MrmMMsg_0031, resolvedname) ;
+      snprintf (err_stg, sizeof(err_stg), _MrmMMsg_0031, resolvedname) ;
       break;
     }
 

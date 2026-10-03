@@ -206,9 +206,9 @@ Idb__HDR_GetHeader (IDBFile		file_id)
    * Compare version in header against compiled-in version, flagging
    * mismatch if found.
    */
-  if (sscanf(hdrptr->db_version, "URM %d.%d", &file_major, &file_minor) != 2)
+  if (sscanf(file_id->db_version, "URM %d.%d", &file_major, &file_minor) != 2)
     {
-      sprintf(errmsg, _MrmMMsg_0117, hdrptr->db_version);
+      snprintf (errmsg, sizeof(errmsg), _MrmMMsg_0117, file_id->db_version);
       return Urm__UT_Error ("Idb__HDR_GetHeader", errmsg,
 			    file_id, NULL, MrmNOT_VALID);
     }
@@ -224,13 +224,15 @@ Idb__HDR_GetHeader (IDBFile		file_id)
   if ((file_major > db_major) ||
       ((file_major == db_major) && (file_minor > db_minor)))
     {
-      sprintf (errmsg, _MrmMMsg_0011, hdrptr->db_version, idb__database_version);
+      snprintf (errmsg, sizeof(errmsg), _MrmMMsg_0011, file_id->db_version,
+		idb__database_version);
       return Urm__UT_Error ("Idb__HDR_GetHeader", errmsg,
 			    file_id, NULL, MrmNOT_VALID);
     }
   else if (db_major > file_major)
     {
-      sprintf(errmsg, _MrmMMsg_0118, idb__database_version, hdrptr->db_version);
+      snprintf (errmsg, sizeof(errmsg), _MrmMMsg_0118, idb__database_version,
+		file_id->db_version);
       return Urm__UT_Error ("Idb__HDR_GetHeader", errmsg,
 			    file_id, NULL, MrmNOT_VALID);
     }

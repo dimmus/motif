@@ -193,7 +193,8 @@ Urm__UT_Error (char			*module,
    * sprintf (msg, "%s detected error %s - %s", module, error,
    *	      Urm__UT_UrmCodeString(status)) ;
    */
-  sprintf (msg, "%s: %s - %s", module, error, Urm__UT_UrmCodeString(status)) ;
+  snprintf (msg, sizeof(msg), "%s: %s - %s", module, error,
+	    Urm__UT_UrmCodeString(status)) ;
 
   /*
    * Print or save the message depending on the reporting style

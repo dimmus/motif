@@ -299,7 +299,7 @@ Urm__CW_ReadBitmapFile (String			filename,
   if (*pixmap == XmUNSPECIFIED_PIXMAP)
     {
       pixmap = 0;
-      sprintf (err_msg, _MrmMMsg_0033, filename);
+      snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0033, filename);
       return Urm__UT_Error ("UrmReadBitmapFile", err_msg,
 			    NULL, NULL, MrmFAILURE);
     }
@@ -1132,12 +1132,12 @@ Urm__RealizeColorTable (Screen			*screen,
 		     want a warning, though */
 		  if (result == MrmPARTIAL_SUCCESS) {
 		    result = MrmSUCCESS;
-		    sprintf (err_msg, _MrmMMsg_0038,
+		    snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0038,
 			     citem->color_item.cptr->desc.name);
 		    return Urm__UT_Error ("Urm__RealizeColorTable",
 					  err_msg, NULL, NULL, result);
 		  } else {
-		    sprintf (err_msg, _MrmMMsg_0038,
+		    snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0038,
 			     citem->color_item.cptr->desc.name);
 		    return Urm__UT_Error ("Urm__RealizeColorTable",
 					  err_msg, NULL, NULL, result);
@@ -1155,12 +1155,12 @@ Urm__RealizeColorTable (Screen			*screen,
 		     want a warning, though */
 		  if (result == MrmPARTIAL_SUCCESS) {
 		    result = MrmSUCCESS;
-		    sprintf (err_msg, _MrmMMsg_0038,
+		    snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0038,
 			     citem->color_item.cptr->desc.name);
 		    return Urm__UT_Error ("Urm__RealizeColorTable",
 					  err_msg, NULL, NULL, result);
 		  } else {
-		    sprintf (err_msg, _MrmMMsg_0039,
+		    snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0039,
 			     citem->color_item.cptr->desc.rgb.red,
 			     citem->color_item.cptr->desc.rgb.green,
 			     citem->color_item.cptr->desc.rgb.blue) ;
@@ -1170,7 +1170,7 @@ Urm__RealizeColorTable (Screen			*screen,
 		}
 		break;
 	      default:
-		sprintf(err_msg, "%s", _MrmMMsg_0040);
+		snprintf (err_msg, sizeof(err_msg), "%s", _MrmMMsg_0040);
 		return Urm__UT_Error ("Urm__RelizeColorTable",
 				      err_msg, NULL, NULL, MrmFAILURE) ;
 	      }
@@ -1184,7 +1184,7 @@ Urm__RealizeColorTable (Screen			*screen,
 	      ctable->item[URMColorTableBG].color_pixel;
 	    break;
 	  default:
-	    sprintf (err_msg, _MrmMMsg_0041,
+	    snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0041,
 		     citem->color_item.cptr->mono_state);
 	    return Urm__UT_Error ("Urm__RealizeColorTable",
 				  err_msg, NULL, NULL, result);
@@ -1207,12 +1207,12 @@ Urm__RealizeColorTable (Screen			*screen,
 		   want a warning, though */
 		if (result == MrmPARTIAL_SUCCESS) {
 		  result = MrmSUCCESS;
-		  sprintf (err_msg, _MrmMMsg_0038,
+		  snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0038,
 			   citem->color_item.cptr->desc.name);
 		  return Urm__UT_Error ("Urm__RealizeColorTable",
 					err_msg, NULL, NULL, result);
 		} else {
-		  sprintf (err_msg, _MrmMMsg_0038,
+		  snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0038,
 			   citem->color_item.cptr->desc.name);
 		  Urm__UT_Error ("Urm__RealizeColorTable",
 				 err_msg, NULL, NULL, result);
@@ -1230,12 +1230,12 @@ Urm__RealizeColorTable (Screen			*screen,
 		   want a warning, though */
 		if (result == MrmPARTIAL_SUCCESS) {
 		  result = MrmSUCCESS;
-		  sprintf (err_msg, _MrmMMsg_0038,
+		  snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0038,
 			   citem->color_item.cptr->desc.name);
 		  return Urm__UT_Error ("Urm__RealizeColorTable",
 					err_msg, NULL, NULL, result);
 		} else {
-		  sprintf (err_msg, _MrmMMsg_0039,
+		  snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0039,
 			   citem->color_item.cptr->desc.rgb.red,
 			   citem->color_item.cptr->desc.rgb.green,
 			   citem->color_item.cptr->desc.rgb.blue) ;
@@ -1246,7 +1246,7 @@ Urm__RealizeColorTable (Screen			*screen,
 	      break;
 	    default:
 	      result = MrmFAILURE;
-	      sprintf (err_msg, "%s", _MrmMMsg_0040);
+	      snprintf (err_msg, sizeof(err_msg), "%s", _MrmMMsg_0040);
 	      Urm__UT_Error ("Urm__RelizeColorTable",
 			     err_msg, NULL, NULL, MrmFAILURE) ;
 	    }

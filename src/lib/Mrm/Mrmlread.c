@@ -122,7 +122,7 @@ Urm__FetchLiteral (MrmHierarchy			hierarchy_id,
   result = Urm__HGetIndexedLiteral (hierarchy_id, index, context_id, &file_id);
   if ( result != MrmSUCCESS )
     {
-      sprintf (err_msg, _MrmMMsg_0042, index);
+      snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0042, index);
       return Urm__UT_Error ("Urm__FetchLiteral", err_msg, NULL, NULL, result);
     }
 
@@ -685,7 +685,7 @@ MrmFetchColorLiteral (MrmHierarchy                hierarchy_id,
 	 XBlackPixelOfScreen(XDefaultScreenOfDisplay(display)));
       break;
     default:
-      sprintf(err_msg, "%s", _MrmMMsg_0040);
+      snprintf (err_msg, sizeof(err_msg), "%s", _MrmMMsg_0040);
       result = Urm__UT_Error ("MrmFetchColorLiteral",
 			      err_msg, NULL, NULL, MrmFAILURE) ;
       _MrmAppUnlock(app);

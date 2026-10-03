@@ -345,7 +345,7 @@ Urm__WCI_LookupClassDescriptor (String		class_name,
   if ( hash_entry == NULL )
     {
       *class_return = NULL;
-      sprintf (err_msg, _MrmMMsg_0051, class_name);
+      snprintf (err_msg, sizeof(err_msg), _MrmMMsg_0051, class_name);
       return Urm__UT_Error ("Urm__WCI_LookupClassDescriptor",
 			    err_msg, NULL, NULL, MrmNOT_FOUND);
     }
