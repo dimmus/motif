@@ -76,46 +76,59 @@ add_custom_target(uil_parser_target
     COMMENT "UIL parser generation target"
 )
 
-# Create libUil library (shared, like libXm and libMrm, as upstream ships it)
-add_library(Uil ${MOTIF_LIB_TYPE} ${UIL_LIB_SRCS})
+# The compiler proper, shared by libUil and the uil program (as upstream
+# builds both from the same sources).  It is compiled once, as PIC so that it
+# can go into the shared library.
+add_library(UilCompiler OBJECT ${UIL_LIB_SRCS})
+set_target_properties(UilCompiler PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
+# Ensure the message catalog header, the WML tables and the parser are
+# generated before building the compiler
+add_dependencies(UilCompiler uil_msgcat_header wml_generated_files uil_parser_target)
+
+# Include directories and definitions of the compiler, for UilCompiler,
+# libUil and uil
+function(motif_uil_compiler_setup target)
+    target_include_directories(${target} PRIVATE
+        ${CMAKE_SOURCE_DIR}/include
+        ${CMAKE_SOURCE_DIR}/src/lib
+        ${CMAKE_SOURCE_DIR}/src/lib/Uil
+        ${CMAKE_SOURCE_DIR}/src/bin/uil
+        ${CMAKE_SOURCE_DIR}/src/bin/wml
+        ${CMAKE_BINARY_DIR}/include
+        ${CMAKE_BINARY_DIR}/include/uil
+        ${CMAKE_BINARY_DIR}/src/lib
+        ${CMAKE_BINARY_DIR}/src/lib/Uil
+        ${CMAKE_BINARY_DIR}/src/bin/uil
+        ${CMAKE_BINARY_DIR}/src/bin/wml
+    )
+    # Run-time search paths, compiled in as absolute paths
+    target_compile_definitions(${target} PRIVATE
+        INCDIR="${CMAKE_INSTALL_FULL_INCLUDEDIR}/X11"
+        LIBDIR="${CMAKE_INSTALL_FULL_LIBDIR}/X11"
+    )
+    if(WITH_UIL_DEBUG)
+        target_compile_definitions(${target} PRIVATE XM_UIL_DEBUG)
+    endif()
+endfunction()
+motif_uil_compiler_setup(UilCompiler)
+target_link_libraries(UilCompiler PRIVATE Mrm Xm)
+
+# Create libUil library (shared, like libXm and libMrm, as upstream ships it).
+# UilMain.c built with CALLABLE provides the Uil() entry point and the
+# uil_exit() and uil_catd that the compiler uses, in place of main().
+add_library(Uil ${MOTIF_LIB_TYPE}
+    $<TARGET_OBJECTS:UilCompiler>
+    ${CMAKE_SOURCE_DIR}/src/bin/uil/UilMain.c
+)
 set_target_properties(Uil PROPERTIES
     VERSION ${MOTIF_LIBRARY_VERSION}
     SOVERSION ${MOTIF_SOVERSION}
 )
 add_library(Motif::Uil ALIAS Uil)
-
-# Ensure message catalog header is generated before building this target
-add_dependencies(Uil uil_msgcat_header)
-
-# Ensure all UIL files are generated before building UIL
-add_dependencies(Uil wml_generated_files uil_parser_target)
-
-# Ensure Uil.h is copied before building UIL
-# add_dependencies(Uil ${CMAKE_BINARY_DIR}/src/bin/wml/Uil.h)
-
-target_include_directories(Uil PRIVATE
-    ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_SOURCE_DIR}/src/lib
-    ${CMAKE_SOURCE_DIR}/src/lib/Uil
-    ${CMAKE_SOURCE_DIR}/src/bin/uil
-    ${CMAKE_SOURCE_DIR}/src/bin/wml
-    ${CMAKE_BINARY_DIR}/include
-    ${CMAKE_BINARY_DIR}/include/uil
-    ${CMAKE_BINARY_DIR}/src/lib
-    ${CMAKE_BINARY_DIR}/src/lib/Uil
-    ${CMAKE_BINARY_DIR}/src/bin/uil
-    ${CMAKE_BINARY_DIR}/src/bin/wml
-)
-
-# Run-time search paths, compiled in as absolute paths
-target_compile_definitions(Uil PRIVATE
-    INCDIR="${CMAKE_INSTALL_FULL_INCLUDEDIR}/X11"
-    LIBDIR="${CMAKE_INSTALL_FULL_LIBDIR}/X11"
-)
-
-if(WITH_UIL_DEBUG)
-    target_compile_definitions(Uil PRIVATE XM_UIL_DEBUG)
-endif()
+add_dependencies(Uil UilCompiler)
+motif_uil_compiler_setup(Uil)
+target_compile_definitions(Uil PRIVATE CALLABLE)
 
 target_link_libraries(Uil
     PUBLIC
