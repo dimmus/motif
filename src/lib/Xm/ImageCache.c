@@ -561,12 +561,18 @@ static XtEnum GetXpmImage(Screen *screen,
     /* if the XPM file contained a embedded mask,
            install it using our mask name scheme if the color object
            tell us to do so */
-    if (mask_image && useMask) {
-      char mask_name[255];
-      _XmOSGenerateMaskName(image_name, mask_name, sizeof mask_name);
-      /* if an image already exist under that
-               name, nothing will be done */
-      _XmInstallImage(mask_image, mask_name, hot_x, hot_y);
+    if (mask_image) {
+      Boolean installed = False;
+      if (useMask) {
+        char mask_name[255];
+        _XmOSGenerateMaskName(image_name, mask_name, sizeof mask_name);
+        /* if an image already exist under that
+                 name, nothing will be done */
+        installed = _XmInstallImage(mask_image, mask_name, hot_x, hot_y);
+      }
+      /* the image cache only owns the mask once it is installed */
+      if (!installed)
+        XDestroyImage(mask_image);
     }
     /* now we have to adjust the passed acc_color */
     if (acc_color) {
