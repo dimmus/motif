@@ -784,13 +784,16 @@ _XmWriteDragBuffer(xmPropertyBuffer propBuf, BYTE which, BYTE *ptr, CARD32 size)
   else
     buf = &propBuf->heap;
   if (buf->size + size > buf->max) {
-    buf->max += 1000;
+    /* grow by at least what is written, not by a fixed amount */
+    if (buf->size + size > (Cardinal)~0 - 1000)
+      return (CARD16)buf->size; /* no property can be that big: drop it */
+    buf->max = (Cardinal)(buf->size + size + 1000);
     if (buf->bytes == buf->stack) {
       buf->bytes = (BYTE *)XtMalloc(buf->max);
       memcpy(buf->bytes, buf->stack, buf->size);
     }
     else {
-      buf->bytes = (BYTE *)XtRealloc((char *)buf->bytes, (Cardinal)buf->max);
+      buf->bytes = (BYTE *)XtRealloc((char *)buf->bytes, buf->max);
     }
   }
   memcpy(buf->bytes + buf->size, ptr, (size_t)size);
