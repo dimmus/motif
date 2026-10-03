@@ -2652,7 +2652,8 @@ static _XmStringEntry EntryCvtToOpt(_XmStringEntry entry)
     else {
       unsigned int len = _XmEntryByteCountGet(entry);
       text = (char *)XtMalloc(len);
-      memcpy(text, _XmEntryTextGet(entry), len);
+      if (len > 0)
+        memcpy(text, _XmEntryTextGet(entry), len);
       _XmEntryTextSet(new_entry, text);
     }
     return new_entry;
@@ -6633,6 +6634,8 @@ static void unparse_text(char **result,
   /* Convert c_value to the appropriate type and insert it. */
   if ((c_type == XmSTRING_COMPONENT_WIDECHAR_TEXT) == (output_type == XmWIDECHAR_TEXT)) {
     /* No conversion is necessary. */
+    if (c_length == 0)
+      return;
     *result = XtRealloc(*result, *length + c_length);
     memcpy(*result + *length, c_value, c_length);
     *length += c_length;
