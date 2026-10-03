@@ -157,6 +157,7 @@ static void DeleteItemPositions(XmListWidget lw,
                                 int position_count,
                                 Boolean track_kbd);
 static void ReplaceItem(XmListWidget lw, XmString item, int pos);
+static Boolean ItemsMatch(XmString a, XmString b);
 static int ItemNumber(XmListWidget lw, XmString item);
 static int ItemExists(XmListWidget lw, XmString item);
 static Boolean OnSelectedList(XmListWidget lw, XmString item, int pos);
@@ -2817,6 +2818,23 @@ static void ReplaceItem(XmListWidget lw, XmString item, int pos)
 
 /***************************************************************************
  *									   *
+ * ItemsMatch - XmStringCompare(a, b), but finding the usual mismatch of   *
+ * two optimized strings (different text) without a call per item.  The   *
+ * text test is one of those XmStringCompare makes for such strings.       *
+ * Call with the process lock held.                                        *
+ *									   *
+ ***************************************************************************/
+static Boolean ItemsMatch(XmString a, XmString b)
+{
+  if ((a != NULL) && (b != NULL) && _XmStrOptimized(a) && _XmStrOptimized(b) &&
+      ((_XmStrByteCount(a) != _XmStrByteCount(b)) ||
+       (strncmp(_XmStrText(a), _XmStrText(b), _XmStrByteCount(a)) != 0)))
+    return FALSE;
+  return XmStringCompare(a, b);
+}
+
+/***************************************************************************
+ *									   *
  * ItemNumber - returns the item number of the specified item in the 	   *
  * external item list.							   *
  *									   *
@@ -2824,10 +2842,15 @@ static void ReplaceItem(XmListWidget lw, XmString item, int pos)
 static int ItemNumber(XmListWidget lw, XmString item)
 {
   register int i;
+  int pos = 0;
+  _XmProcessLock();
   for (i = 0; i < lw->list.itemCount; i++)
-    if (XmStringCompare(lw->list.items[i], item))
-      return i + 1;
-  return 0;
+    if (ItemsMatch(lw->list.items[i], item)) {
+      pos = i + 1;
+      break;
+    }
+  _XmProcessUnlock();
+  return pos;
 }
 
 /***************************************************************************
@@ -2838,11 +2861,7 @@ static int ItemNumber(XmListWidget lw, XmString item)
  ***************************************************************************/
 static int ItemExists(XmListWidget lw, XmString item)
 {
-  register int i;
-  for (i = 0; i < lw->list.itemCount; i++)
-    if ((XmStringCompare(lw->list.items[i], item)))
-      return TRUE;
-  return FALSE;
+  return (ItemNumber(lw, item) != 0);
 }
 
 /************************************************************************
@@ -2855,11 +2874,17 @@ static int ItemExists(XmListWidget lw, XmString item)
 static Boolean OnSelectedList(XmListWidget lw, XmString item, int intern_pos)
 {
   register int i;
+  Boolean found = FALSE;
   /* Use selectedItems if applicable, else use selectedPositions */
   if (lw->list.selectedItems && (lw->list.selectedItemCount > 0)) {
+    _XmProcessLock();
     for (i = 0; i < lw->list.selectedItemCount; i++)
-      if (XmStringCompare(lw->list.selectedItems[i], item))
-        return TRUE;
+      if (ItemsMatch(lw->list.selectedItems[i], item)) {
+        found = TRUE;
+        break;
+      }
+    _XmProcessUnlock();
+    return found;
   }
   else if ((lw->list.selectedPositions != NULL) && (lw->list.selectedPositionCount > 0)) {
     for (i = 0; i < lw->list.selectedPositionCount; i++)
@@ -7187,10 +7212,12 @@ Boolean XmListGetMatchPos(Widget w, XmString item, int **pos_list, int *pos_coun
   }
   pos = (int *)XtMalloc((sizeof(int) * lw->list.itemCount));
   j = 0;
+  _XmProcessLock();
   for (i = 0; i < lw->list.itemCount; i++) {
-    if ((XmStringCompare(lw->list.items[i], item)))
+    if (ItemsMatch(lw->list.items[i], item))
       pos[j++] = (i + 1);
   }
+  _XmProcessUnlock();
   if (j == 0) {
     XtFree((char *)pos);
     _XmAppUnlock(app);
