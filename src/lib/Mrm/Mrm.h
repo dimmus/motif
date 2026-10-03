@@ -61,6 +61,27 @@
 #define _FULLWORD(exp) (_sl * (((exp) + _slm) / _sl))	/* (4*(((exp)+3)/4)) */
 
 /*
+ * Bounds checks for data read from UID files. Everything in a UID file
+ * (record contents, data entries, widget records, literals) is untrusted,
+ * so every offset, count and string taken from it must be checked against
+ * the buffer that holds it before use.
+ *
+ * _UrmInBuffer is true if the len bytes at byte offset offs lie entirely
+ * within a buffer of size bytes. The arguments are converted to size_t,
+ * so negative values are rejected, and the test itself cannot overflow.
+ *
+ * _UrmStringInBuffer is true if a NUL-terminated string starts at byte
+ * offset offs of the buffer at buf and ends within its size bytes.
+ */
+#define _UrmInBuffer(offs,len,size) \
+  ((size_t)(offs) <= (size_t)(size) && \
+   (size_t)(len) <= (size_t)(size) - (size_t)(offs))
+#define _UrmStringInBuffer(buf,offs,size) \
+  ((size_t)(offs) < (size_t)(size) && \
+   memchr ((char *)(buf) + (size_t)(offs), '\0', \
+	   (size_t)(size) - (size_t)(offs)) != NULL)
+
+/*
  *  Swap the byte order of 4- and 2- byte quantities.
  *  "tp +=" lines are needed on Cray (CARD32 is actually 64 bits).
  */
@@ -1384,6 +1405,10 @@ extern Boolean Idb__DB_MatchFilter  _ARGUMENTS(( IDBFile file_id ,
 						IDBDataHandle data_entry ,
 						MrmCode group_filter ,
 						MrmCode type_filter ));
+extern IDBDataEntryHdrPtr Idb__DB_EntryHeader  _ARGUMENTS((
+						IDBFile file_id ,
+						IDBRecordBufferPtr buffer ,
+						MrmOffset item_offs ));
 
 /* mrmifile.c */
 extern Cardinal Idb__FU_OpenFile  _ARGUMENTS(( char *name ,

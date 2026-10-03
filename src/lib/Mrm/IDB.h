@@ -186,6 +186,12 @@ typedef struct {
 #define	IDBRecordSize	4096
 
 /*
+ * True if the len bytes at byte offset offs from the start of a record
+ * lie entirely within the record (see _UrmInBuffer).
+ */
+#define	_IdbInRecord(offs,len)	_UrmInBuffer(offs,len,IDBRecordSize)
+
+/*
  * IDB record header
  */
 #define	IDBRecordHeaderValid	310144882
