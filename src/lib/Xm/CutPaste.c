@@ -813,9 +813,12 @@ static int ClipboardFindRecord(Display *display,
     return ClipboardFail;
   ptr = (ClipboardPointer)*outpointer;
   /* Records are INTEGER, but old clipboards typed them with the item
-     atom itself (what ClipboardReplaceItem() still does for None). */
+     atom itself (what ClipboardReplaceItem() still does for None).
+     GetWindowProperty() reports the _MOTIF_CLIP_ITEM_<n> atoms as None,
+     the header and next id atoms as themselves. */
   valid = (format == 32 && length >= min_len && length >= sizeof(long) &&
-           (type == XA_INTEGER || type == ClipboardGetAtomFromId(display, itemid)));
+           (type == XA_INTEGER || type == None ||
+            type == ClipboardGetAtomFromId(display, itemid)));
   if (valid && rec_type != 0 && ptr->header.recordType != rec_type) {
     XtFree((char *)ptr);
     *outpointer = NULL;
