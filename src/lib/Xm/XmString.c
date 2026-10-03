@@ -831,7 +831,7 @@ XmStringTag _XmStringIndexGetTag(int index)
 {
   XmStringTag ret_val;
   _XmProcessLock();
-  if (index > _cache_count) {
+  if ((index < 0) || (index >= _cache_count)) {
     _XmProcessUnlock();
     return NULL;
   }
