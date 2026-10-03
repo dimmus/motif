@@ -1720,13 +1720,22 @@ static void render_image(Screen *screen,
   psz = depth > 16 ? 32 : depth < 16 ? 8 : 16;
   if (dw <= 0 || dh <= 0)
     return;
-  if ((size_t)dw > SIZE_MAX / (size_t)dh / (psz >> 3) ||
-      !(data = Xmalloc((size_t)dw * dh * (psz >> 3))))
+  vis = DefaultVisualOfScreen(screen);
+  /**
+   * Let Xlib pick the server's bits per pixel for this depth (e.g. 16
+   * for depth 15, which psz would undersize) and size the data from it.
+   */
+  if (!(dest_image = XCreateImage(display, vis, depth, ZPixmap, 0, NULL, dw, dh, psz, 0)) ||
+      dest_image->bytes_per_line <= 0 ||
+      (size_t)dest_image->bytes_per_line > SIZE_MAX / (size_t)dh ||
+      !(data = Xmalloc((size_t)dest_image->bytes_per_line * dh)))
   {
+    if (dest_image)
+      XDestroyImage(dest_image);
     XmeWarning(NULL, "render_image: Out of memory");
     return;
   }
-  vis = DefaultVisualOfScreen(screen);
+  dest_image->data = data;
   gcv.foreground = ULONG_MAX;
   gcv.background = ULONG_MAX;
   XGetGCValues(display, gc, GCBackground | GCForeground, &gcv);
@@ -1737,11 +1746,6 @@ static void render_image(Screen *screen,
   }
   bg.pixel = gcv.background;
   XQueryColor(display, screen->cmap, &bg);
-  if (!(dest_image = XCreateImage(display, vis, depth, ZPixmap, 0, data, dw, dh, psz, 0))) {
-    XFree(data);
-    XmeWarning(NULL, "render_image: Out of memory");
-    return;
-  }
   /* dest_image only covers the destination rectangle at (dx, dy) */
   for (y = 0; y < dh; y++) {
     for (x = 0; x < dw; x++) {
