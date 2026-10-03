@@ -225,14 +225,16 @@ static void HandleInsertTargets(Widget w,
   Atom COMPOUND_TEXT = XmInternAtom(XtDisplay(w), "COMPOUND_TEXT", False);
   Atom target = TEXT;
   Atom *atom_ptr;
-  int i;
+  unsigned long i, num_atoms;
   if (!length) {
     XtFree((char *)value);
     insert_select->done_status = True;
     return; /* Supports no targets, so don't bother sending anything */
   }
   atom_ptr = (Atom *)value;
-  for (i = 0; i < *length; i++, atom_ptr++) {
+  /* the reply comes from another client: only an atom list is usable */
+  num_atoms = (*type == XA_ATOM && *format == 32) ? *length : 0;
+  for (i = 0; i < num_atoms; i++, atom_ptr++) {
     if (*atom_ptr == COMPOUND_TEXT) {
       target = *atom_ptr;
       break;
@@ -240,6 +242,7 @@ static void HandleInsertTargets(Widget w,
     else if (*atom_ptr == XA_STRING)
       target = *atom_ptr;
   }
+  XtFree((char *)value);
   XtGetSelectionValue(
       w, *seltype, target, InsertSelection, (XtPointer)insert_select, insert_select->event->time);
 }

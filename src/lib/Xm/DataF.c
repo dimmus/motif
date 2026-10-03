@@ -5195,7 +5195,7 @@ static void df_HandleTargets(Widget w,
   int status = 0;
   Atom targets[2];
   XmTextPosition select_pos;
-  int i;
+  unsigned long i, num_atoms;
   if (!length) {
     XtFree((char *)value);
     value = NULL;
@@ -5204,6 +5204,9 @@ static void df_HandleTargets(Widget w,
     return; /* Supports no targets, so don't bother sending anything */
   }
   atom_ptr = (Atom *)value;
+  /* the reply comes from another client: only an atom list is usable */
+  num_atoms = (*type == XA_ATOM && *format == 32) ? *length : 0;
+  tmp_prop.value = NULL;
   status = XmbTextListToTextProperty(
       XtDisplay(w), &tmp_string, 1, (XICCEncodingStyle)XTextStyle, &tmp_prop);
   if (status == Success)
@@ -5215,7 +5218,7 @@ static void df_HandleTargets(Widget w,
                            */
   if (tmp_prop.value != NULL)
     XFree((char *)tmp_prop.value);
-  for (i = 0; i < *length; i++, atom_ptr++) {
+  for (i = 0; i < num_atoms; i++, atom_ptr++) {
     if (*atom_ptr == CS_OF_LOCALE) {
       supports_locale_data = True;
       break;

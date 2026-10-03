@@ -303,7 +303,8 @@ static void HandleInsertTargets(Widget w,
   Boolean supports_text = False;
   Boolean supports_utf8_string = False;
   int i;
-  if (0 == *length) {
+  /* a reply that is not an atom list is treated as an empty one */
+  if (0 == *length || *type != XA_ATOM || *format != 32) {
     XtFree((char *)value);
     _insert_select->done_status = True;
     return; /* Supports no targets, so don't bother sending anything */
@@ -1197,7 +1198,8 @@ static void HandleTargets(Widget w, XtPointer closure, XmSelectionCallbackStruct
   Atom targets[2];
   XmTextPosition select_pos;
   int i;
-  if (!ds->length) {
+  /* a reply that is not an atom list is treated as an empty one */
+  if (!ds->length || ds->type != XA_ATOM || ds->format != 32) {
     XtFree((char *)ds->value);
     ds->value = NULL;
     return; /* Supports no targets, so don't bother sending anything */
