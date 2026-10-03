@@ -694,7 +694,7 @@ static void ClipboardEventHandler(Widget widget, XtPointer closure, XEvent *even
   int reason, ret_value;
   Atom atoms[XtNumber(atom_names)];
   event_rcvd = (XClientMessageEvent *)event;
-  if ((event_rcvd->type & 127) != ClientMessage)
+  if ((event_rcvd->type & 127) != ClientMessage || event_rcvd->format != 32)
     return;
   display = XtDisplay(widget);
   assert(XtNumber(atom_names) == NUM_ATOMS);
@@ -712,13 +712,14 @@ static void ClipboardEventHandler(Widget widget, XtPointer closure, XEvent *even
                                   XM_FORMAT_HEADER_TYPE);
   if (ret_value != ClipboardSuccess)
     return;
-  if (cbProcTable == NULL)
-    return;
-  if (formatitem->cutByNameCBIndex >= 0) {
-    _XmProcessLock();
+  /* The index comes from a root window property and the message can be
+     sent by any client: only call a callback that is registered in this
+     process for the data item owning the format. */
+  _XmProcessLock();
+  if (formatitem->cutByNameCBIndex >= 0 && formatitem->cutByNameCBIndex < maxCbProcs &&
+      cbIdTable[formatitem->cutByNameCBIndex] == formatitem->parentItemId)
     callbackroutine = cbProcTable[formatitem->cutByNameCBIndex];
-    _XmProcessUnlock();
-  }
+  _XmProcessUnlock();
   XtFree((char *)formatitem);
   if (callbackroutine == NULL)
     return;
@@ -1668,6 +1669,7 @@ static int ClipboardSendMessage(Display *display,
     return 0;
   assert(XtNumber(atom_names) == NUM_ATOMS);
   XInternAtoms(display, atom_names, XtNumber(atom_names), False, atoms);
+  memset(&event_sent, 0, sizeof(event_sent));
   event_sent.type = ClientMessage;
   event_sent.window = widgetwindow;
   event_sent.message_type = atoms[XmA_MOTIF_CLIP_MESSAGE];
