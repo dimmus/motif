@@ -1093,15 +1093,20 @@ Boolean XmIsTraversable(Widget wid)
 
 /*
  * Get the geometry and map state of a sibling window for XmGetVisibility.
- * For a widget's window, Xt knows the geometry, and a realized widget that
- * is mapped when managed is mapped exactly when it is managed (the same
- * assumption _XmIsViewable makes); only other windows need a round trip.
+ * For the window of a child of parent, Xt knows the geometry, and a
+ * realized widget that is mapped when managed is mapped exactly when it is
+ * managed (the same assumption _XmIsViewable makes); only other windows
+ * need a round trip.  Shells are left out: menu shells map and unmap the
+ * windows of their managed children themselves.
  */
-static Boolean SiblingGeometry(Display *dpy, Window window, XRectangle *rect)
+static Boolean SiblingGeometry(Widget parent, Window window, XRectangle *rect)
 {
   XWindowAttributes xwa;
+  Display *dpy = XtDisplay(parent);
   Widget sib = XtWindowToWidget(dpy, window);
-  if (sib && XtIsRealized(sib) && sib->core.mapped_when_managed && !sib->core.being_destroyed) {
+  if (sib && XtParent(sib) == parent && !XtIsShell(parent) && XtIsRealized(sib) &&
+      sib->core.mapped_when_managed && !sib->core.being_destroyed)
+  {
     if (!XtIsManaged(sib))
       return False;
     rect->x = sib->core.x + sib->core.border_width;
@@ -1167,7 +1172,7 @@ XmVisibility XmGetVisibility(Widget wid)
     XUnionRectWithRegion(&rect, region, region);
     _XmSetRect(&parent_rect, XtParent(wid));
     while (i < numchildren) {
-      if (SiblingGeometry(XtDisplay(wid), *windowptr, &srcRectB)) {
+      if (SiblingGeometry(XtParent(wid), *windowptr, &srcRectB)) {
         srcRectB.x += parent_rect.x;
         srcRectB.y += parent_rect.y;
         /* accumulate all the region covered by siblings */
