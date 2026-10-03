@@ -113,26 +113,64 @@ SwappedOffset (UrmValidBuffer	*vb,
 
 
 /*
- * A compound string in ASN.1 byte stream format: a 3-byte header, a 1 or
- * 3-byte length, and that many bytes of components.
+ * Read the length of an ASN.1 item from the length field at stg[0], of
+ * which avail bytes are present, and the size of that field. Only the
+ * shortest encoding of each length is accepted, because that is the size
+ * XmCvtByteStreamToXmString assumes when it skips over items.
+ */
+static Boolean
+CStringLength (unsigned char	*stg,
+	       size_t		avail,
+	       size_t		*len,
+	       size_t		*lensize)
+{
+  if ( avail < 1 ) return FALSE ;
+  if ( ! (stg[0] & 0x80) )
+    {
+      *len = stg[0] ;
+      *lensize = 1 ;
+      return TRUE ;
+    }
+  if ( avail < 3 ) return FALSE ;
+  *len = (size_t) stg[1] << 8 | stg[2] ;
+  *lensize = 3 ;
+  return *len > 127 ;
+}
+
+
+/*
+ * A compound string in ASN.1 byte stream format: a 3-byte header and a
+ * length, followed by that many bytes of components, each a 1-byte tag,
+ * a length and that many bytes of value.
  */
 static Boolean
 ValidCString (UrmValidBuffer	*vb,
 	      size_t		offs)
 {
   unsigned char		*stg ;		/* the byte stream */
-  size_t		len ;		/* total length of the stream */
+  size_t		avail ;		/* bytes left in the resource */
+  size_t		len ;		/* length of an item */
+  size_t		lensize ;	/* size of its length field */
+  size_t		pos ;		/* offset of current component */
+  size_t		end ;		/* end of the components */
 
   if ( ! _InBuf (vb, offs, 4) ) return FALSE ;
   stg = _At (vb, unsigned char *, offs) ;
-  if ( stg[3] & 0x80 )
+  avail = vb->size - offs ;
+  if ( ! CStringLength (stg + 3, avail - 3, &len, &lensize) ||
+       len > avail - 3 - lensize )
+    return FALSE ;
+
+  pos = 3 + lensize ;
+  end = pos + len ;
+  while ( pos < end )
     {
-      if ( ! _InBuf (vb, offs, 6) ) return FALSE ;
-      len = 6 + ((size_t) stg[4] << 8 | stg[5]) ;
+      if ( ! CStringLength (stg + pos + 1, end - pos - 1, &len, &lensize) ||
+	   len > end - pos - 1 - lensize )
+	return FALSE ;
+      pos += 1 + lensize + len ;
     }
-  else
-    len = 4 + stg[3] ;
-  return _InBuf (vb, offs, len) ;
+  return TRUE ;
 }
 
 
