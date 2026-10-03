@@ -1,0 +1,4 @@
+osfBackSpace:	<Key>BackSpace
+osfCancel:	<Key>Escape
+osfLeft:	Shift<Key>Left,<Key>KP_Left
+osfCopy:	Ctrl<Key>Insert

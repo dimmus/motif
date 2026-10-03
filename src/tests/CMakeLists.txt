@@ -13,6 +13,8 @@ if(NOT CHECK_FOUND)
                         "Install it, or configure with -DWITH_TESTS=OFF.")
 endif()
 
+option(WITH_FUZZERS "Build the libFuzzer targets in src/tests/fuzz (Clang only)" OFF)
+
 find_program(XVFB_RUN_EXECUTABLE xvfb-run
     DOC "xvfb-run used for the tests that need an X server (OFF: use $DISPLAY)")
 set(XVFB_RUN_ARGS -a -s "-screen 0 1280x1024x24 +extension RENDER"
@@ -140,6 +142,9 @@ endfunction()
 
 add_subdirectory(uil)
 add_subdirectory(interactive)
+if(WITH_FUZZERS)
+    add_subdirectory(fuzz)
+endif()
 
 foreach(suite IN LISTS MOTIF_TEST_SUITES)
     add_test(NAME Xm.${suite}
