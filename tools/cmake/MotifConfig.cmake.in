@@ -1,7 +1,11 @@
 # CMake package configuration file for Motif.
 #
-#   find_package(Motif 2.4 REQUIRED [COMPONENTS Xm Mrm Uil])
+#   find_package(Motif 2.4 CONFIG REQUIRED [COMPONENTS Xm Mrm Uil])
 #   target_link_libraries(app PRIVATE Motif::Xm)    # or Motif::Mrm, Motif::Uil
+#
+# CONFIG (or CMAKE_FIND_PACKAGE_PREFER_CONFIG) is needed because CMake ships a
+# FindMotif.cmake module of its own, which find_package() would otherwise use;
+# it only sets MOTIF_LIBRARIES and MOTIF_INCLUDE_DIR.
 #
 # Motif::Xm brings in X11 and Xt; Motif::Mrm and Motif::Uil bring in
 # Motif::Xm.

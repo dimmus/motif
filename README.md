@@ -343,9 +343,10 @@ gcc -o myapp myapp.c -lXm -lXt -lX11
 ```
 
 With CMake, use the installed package (set `CMAKE_PREFIX_PATH` to the Motif
-prefix if it is not a default one):
+prefix if it is not a default one).  `CONFIG` is needed because CMake's own
+`FindMotif` module would be used otherwise:
 ```cmake
-find_package(Motif 2.4 REQUIRED)       # COMPONENTS Xm Mrm Uil
+find_package(Motif 2.4 CONFIG REQUIRED)          # COMPONENTS Xm Mrm Uil
 target_link_libraries(myapp PRIVATE Motif::Xm)   # or Motif::Mrm, Motif::Uil
 ```
 
