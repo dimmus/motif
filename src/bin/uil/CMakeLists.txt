@@ -51,8 +51,8 @@ target_include_directories(uil PRIVATE
 )
 
 target_compile_definitions(uil PRIVATE
-    INCDIR="${CMAKE_INSTALL_INCLUDEDIR}/X11"
-    LIBDIR="${CMAKE_INSTALL_LIBDIR}/X11"
+    INCDIR="${CMAKE_INSTALL_FULL_INCLUDEDIR}/X11"
+    LIBDIR="${CMAKE_INSTALL_FULL_LIBDIR}/X11"
 )
 
 if(WITH_UIL_DEBUG)

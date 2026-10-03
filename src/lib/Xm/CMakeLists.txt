@@ -696,13 +696,15 @@ target_include_directories(Xm
         ${CMAKE_BINARY_DIR}/include/Xm
 )
 
-# Compile definitions
+# Run-time search paths, compiled in as absolute paths.  The key bindings
+# are installed by data/bindings, and the bitmaps by data/bitmaps under
+# INCDIR.
 target_compile_definitions(Xm
     PRIVATE
-        XMBINDDIR_FALLBACK="${CMAKE_INSTALL_DATADIR}/X11/bindings"
-        INCDIR="${CMAKE_INSTALL_INCLUDEDIR}/X11"
-        LIBDIR="${CMAKE_INSTALL_LIBDIR}/X11"
-        DATADIR="${CMAKE_INSTALL_DATADIR}"
+        XMBINDDIR_FALLBACK="${CMAKE_INSTALL_FULL_DATADIR}/X11/bindings"
+        INCDIR="${CMAKE_INSTALL_FULL_INCLUDEDIR}/X11"
+        LIBDIR="${CMAKE_INSTALL_FULL_LIBDIR}/X11"
+        DATADIR="${CMAKE_INSTALL_FULL_DATADIR}"
 )
 
 # Link libraries.  X11 and Xt are part of the interface of libXm.

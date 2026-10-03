@@ -50,8 +50,11 @@ target_compile_definitions(mwm PRIVATE
     UNMAP_ON_RESTART
     CDE_INSTALLATION_TOP="${CMAKE_INSTALL_PREFIX}/dt"
     CDE_CONFIGURATION_TOP="${CMAKE_INSTALL_PREFIX}/etc/dt"
-    BITMAPDIR="${CMAKE_INSTALL_INCLUDEDIR}/bitmaps"
-    MWMRCDIR="${CMAKE_INSTALL_SYSCONFDIR}/X11"
+    # Where data/bitmaps installs the bitmaps; the trailing slash is
+    # expected by WmResource.c, as in its built-in default.
+    BITMAPDIR="${CMAKE_INSTALL_FULL_INCLUDEDIR}/X11/bitmaps/"
+    # Where system.mwmrc is installed, below
+    MWMRCDIR="${CMAKE_INSTALL_FULL_SYSCONFDIR}/X11"
 )
 
 target_link_libraries(mwm
