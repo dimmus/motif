@@ -25,5 +25,6 @@ void jpeg_suite(SRunner *runner);
 void svg_suite(SRunner *runner);
 void log_suite(SRunner *runner);
 void log_config_suite(SRunner *runner);
+void layout_suite(SRunner *runner);
 
 #endif /* SUITES_H */
