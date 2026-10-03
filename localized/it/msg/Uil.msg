@@ -187,3 +187,6 @@ UIL_ERR "Errore: "
 $ UIL_SEV "Severe: "
 UIL_SEV "Errore grave: "
 UIL_MISC_0 "\t\t riga: %d  file: %s"
+
+$ TODO: translate (English fallback text)
+UIL_MISC_1 "\t\t line: %d  position: %d  file: %s"

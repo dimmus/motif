@@ -776,6 +776,9 @@ MSG_Resource_0011 "Verzeichnis"
 MSG_Resource_0012 ">"
 $ command-line prompt in the Command widget.
 
+$ TODO: translate (English fallback text)
+MSG_Resource_0013 "Find"
+
 
 $set MS_BaseClass
 
@@ -1261,3 +1264,50 @@ MSG_SSpinB_0001 "Ressource XmNtextField kann nicht gesetzt werden."
 MSG_SSpinB_0002 "Ressource XmNpositionType kann nur während der Erstellung gesetzt werden."
 
 MSG_SSpinB_0003 "Element existiert nicht. XmNposition ist unverändert."
+
+$set MS_DataF
+
+$ TODO: translate (English fallback text)
+MSG_DataF_0000 "Invalid cursor position, must be >= 0."
+$ TODO: translate (English fallback text)
+MSG_DataF_0001 "Invalid columns, must be > 0."
+$ TODO: translate (English fallback text)
+MSG_DataF_0002 "XmFontListInitFontContext Failed."
+$ TODO: translate (English fallback text)
+MSG_DataF_0003 "XmFontListGetNextFont Failed."
+$ TODO: translate (English fallback text)
+MSG_DataF_0004 "Character '%c', not supported in font.  Discarded."
+$ TODO: translate (English fallback text)
+MSG_DataF_0005 "Traversal_on must always be true."
+$ TODO: translate (English fallback text)
+MSG_DataF_0006 "Invalid columns, must be >= 0."
+
+$set MS_DataFWcs
+
+$ TODO: translate (English fallback text)
+MSG_DataFWcs_0000 "Character '%s', not supported in font.  Discarded."
+$ TODO: translate (English fallback text)
+MSG_DataFWcs_0001 "Cannot use multibyte locale without a fontset.  Value discarded."
+
+$set MS_ColorSB
+
+$ TODO: translate (English fallback text)
+MSG_ColorSB_0001 "Basic color"
+$ TODO: translate (English fallback text)
+MSG_ColorSB_0002 "Custom color"
+$ TODO: translate (English fallback text)
+MSG_ColorSB_0003 "Hue:"
+$ TODO: translate (English fallback text)
+MSG_ColorSB_0004 "Sat:"
+$ TODO: translate (English fallback text)
+MSG_ColorSB_0005 "Val:"
+$ TODO: translate (English fallback text)
+MSG_ColorSB_0006 "Red:"
+$ TODO: translate (English fallback text)
+MSG_ColorSB_0007 "Green:"
+$ TODO: translate (English fallback text)
+MSG_ColorSB_0008 "Blue:"
+$ TODO: translate (English fallback text)
+MSG_ColorSB_0009 "Add to Custom Colors"
+$ TODO: translate (English fallback text)
+MSG_ColorSB_0010 "Selected Color:"
