@@ -3774,7 +3774,11 @@ void GetConfigEvent (Display *display, Window window, unsigned long mask, int cu
 	     * waiting (unless moving opaquely).
 	     */
 
-	    if (!wmGD.freezeOnConfig && !wmGD.pActiveSD->moveOpaque)
+	    if (!wmGD.freezeOnConfig && !wmGD.pActiveSD->moveOpaque
+#ifdef WSM
+		&& !wmGD.useWindowOutline	/* outline is a real window */
+#endif /* WSM */
+		)
 		WaitForConfigEvent (display, window, mask,
 				    oX, oY, oWidth, oHeight, pev);
 	    else
