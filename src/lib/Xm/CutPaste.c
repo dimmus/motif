@@ -812,9 +812,10 @@ static int ClipboardFindRecord(Display *display,
       ClipboardSuccess)
     return ClipboardFail;
   ptr = (ClipboardPointer)*outpointer;
-  /* A type of None stands for the item atom used by old clipboards. */
-  valid = (format == 32 && (type == XA_INTEGER || type == None) && length >= min_len &&
-           length >= sizeof(long));
+  /* Records are INTEGER, but old clipboards typed them with the item
+     atom itself (what ClipboardReplaceItem() still does for None). */
+  valid = (format == 32 && length >= min_len && length >= sizeof(long) &&
+           (type == XA_INTEGER || type == ClipboardGetAtomFromId(display, itemid)));
   if (valid && rec_type != 0 && ptr->header.recordType != rec_type) {
     XtFree((char *)ptr);
     *outpointer = NULL;
