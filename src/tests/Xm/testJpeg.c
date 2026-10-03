@@ -220,19 +220,6 @@ void jpeg_suite(SRunner *runner)
 	tcase_add_test(t, load_grayscale_multirow);
 	tcase_add_test(t, load_rgb24_odd_width);
 	tcase_add_test(t, load_cmyk);
-	tcase_set_timeout(t, 1);
-	suite_add_tcase(s, t);
-
-	/**
-	 * Expected failure: Jpeg.c includes <jerror.h> before <jpeglib.h>, so
-	 * JPEG_LIB_VERSION is not yet defined when the error-code enum is
-	 * built.  With libjpeg 7+ (libjpeg-turbo 3.x: JPEG_LIB_VERSION 80) the
-	 * compiled JERR_NO_SOI then differs from the library's, the "not a
-	 * JPEG file" error is not recognised, and _XmJpegGetImage returns -1
-	 * instead of 1.  Remove the "xfail" tag once Jpeg.c is fixed.
-	 */
-	t = tcase_create("Known failures");
-	tcase_set_tags(t, "xfail");
 	tcase_add_test(t, load_invalid_header);
 	tcase_set_timeout(t, 1);
 	suite_add_tcase(s, t);
