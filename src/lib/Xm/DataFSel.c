@@ -65,6 +65,37 @@ extern Boolean _XmDataFielddf_SetDestination(Widget, XmTextPosition, Time);
 extern void _XmDataFielddf_SetCursorPosition(
     XmDataFieldWidget, XEvent *, XmTextPosition, Boolean, Boolean);
 
+/* State of one INSERT_SELECTION conversion.  It lives on the heap because
+   ConvertInsertSelection() may stop waiting while a request is still
+   pending; the callback of that request then frees it. */
+typedef struct {
+  _XmInsertSelect select;        /* first: the callbacks get its address */
+  XSelectionRequestEvent event;  /* Xt frees the request after conversion */
+  Boolean abandoned;             /* the convert proc gave up waiting */
+} DataFInsertSelectRec;
+
+/* Bound on the nested event loop of ConvertInsertSelection(), in units of
+   the selection timeout.  Xt times out each request it makes on its own;
+   this only guards against a peer that keeps a transfer going forever. */
+#define INSERT_SELECTION_WAIT_FACTOR 4
+
+/* Returns True (after freeing value and the record) if the convert proc
+   that issued this request has already given up on it. */
+static Boolean InsertSelectAbandoned(XtPointer closure, XtPointer value)
+{
+  DataFInsertSelectRec *rec = (DataFInsertSelectRec *)closure;
+  if (!rec->abandoned)
+    return False;
+  XtFree((char *)value);
+  XtFree((char *)rec);
+  return True;
+}
+
+static void InsertSelectTimeout(XtPointer closure, XtIntervalId *id)
+{
+  *(Boolean *)closure = True;
+}
+
 static void InsertSelection(Widget w,
                             XtPointer closure,
                             Atom *seltype,
@@ -90,12 +121,14 @@ static void InsertSelection(Widget w,
   int malloc_size = 0;
   int i, status = 0;
   XmAnyCallbackStruct cb;
+  if (InsertSelectAbandoned(closure, value))
+    return;
   if (!value) {
     insert_select->done_status = True;
     return;
   }
   /* Don't do replace if there is not text to add */
-  if (*(char *)value == (char)'\0' || *length == 0) {
+  if (*length == 0 || *(char *)value == (char)'\0') {
     XtFree((char *)value);
     insert_select->done_status = True;
     return;
@@ -226,6 +259,8 @@ static void HandleInsertTargets(Widget w,
   Atom target = TEXT;
   Atom *atom_ptr;
   unsigned long i, num_atoms;
+  if (InsertSelectAbandoned(closure, value))
+    return;
   if (!length) {
     XtFree((char *)value);
     insert_select->done_status = True;
@@ -269,28 +304,34 @@ static Boolean ConvertInsertSelection(Widget w,
   unsigned long nitems;
   unsigned long bytes;
   unsigned char *prop = NULL;
-  _XmInsertSelect insert_select;
-  _XmTextInsertPair *pair;
-  insert_select.done_status = False;
-  insert_select.success_status = False;
+  DataFInsertSelectRec *insert_select;
+  _XmTextInsertPair pair;
+  XmSelectType select_type;
+  XtIntervalId timer;
+  Boolean timed_out = False;
+  Boolean success;
   if (*selection == MOTIF_DESTINATION) {
-    insert_select.select_type = XmDEST_SELECT;
+    select_type = XmDEST_SELECT;
   }
   else if (*selection == XA_PRIMARY) {
-    insert_select.select_type = XmPRIM_SELECT;
+    select_type = XmPRIM_SELECT;
   }
+  else
+    return False;
   req_event = XtGetSelectionRequest(w, *selection, NULL);
-  insert_select.event = req_event;
+  if (req_event == NULL)
+    return False;
   /* Work around for intrinsics selection bug */
   if (old_serial != req_event->serial)
     old_serial = req_event->serial;
   else
     return False;
+  /* The parameter is the ATOM_PAIR the requestor stored on its window. */
   if (XGetWindowProperty(req_event->display,
                          req_event->requestor,
                          req_event->property,
                          0L,
-                         10000000,
+                         2L,
                          False,
                          AnyPropertyType,
                          &actual_type,
@@ -299,17 +340,30 @@ static Boolean ConvertInsertSelection(Widget w,
                          &bytes,
                          &prop) != Success)
     return FALSE;
-  pair = (_XmTextInsertPair *)prop;
-  if (pair->target != locale_atom) {
+  if (prop == NULL || actual_format != 32 || nitems < 2) {
+    if (prop != NULL)
+      XFree((void *)prop);
+    return False;
+  }
+  pair = *(_XmTextInsertPair *)prop;
+  XFree((void *)prop);
+  insert_select = (DataFInsertSelectRec *)XtMalloc(sizeof(DataFInsertSelectRec));
+  insert_select->select.done_status = False;
+  insert_select->select.success_status = False;
+  insert_select->select.select_type = select_type;
+  insert_select->event = *req_event;
+  insert_select->select.event = &insert_select->event;
+  insert_select->abandoned = False;
+  if (pair.target != locale_atom) {
     /*
      * Make selection request to find out which targets
      * the selection can provide.
      */
     XtGetSelectionValue(w,
-                        pair->selection,
+                        pair.selection,
                         TARGETS,
                         HandleInsertTargets,
-                        (XtPointer)&insert_select,
+                        (XtPointer)insert_select,
                         req_event->time);
   }
   else {
@@ -318,31 +372,37 @@ static Boolean ConvertInsertSelection(Widget w,
      * with the insert selection.
      */
     XtGetSelectionValue(w,
-                        pair->selection,
-                        pair->target,
+                        pair.selection,
+                        pair.target,
                         InsertSelection,
-                        (XtPointer)&insert_select,
+                        (XtPointer)insert_select,
                         req_event->time);
   }
   /*
    * Make sure the above selection request is completed
-   * before returning from the convert proc.
+   * before returning from the convert proc, but do not wait forever:
+   * XtAppProcessEvent() also returns for the timer.
    */
-  for (;;) {
-    XEvent event;
-    if (insert_select.done_status)
-      break;
-    XtAppNextEvent(app, &event);
-    XtDispatchEvent(&event);
-  }
+  timer = XtAppAddTimeOut(app,
+                          XtAppGetSelectionTimeout(app) * INSERT_SELECTION_WAIT_FACTOR,
+                          InsertSelectTimeout,
+                          (XtPointer)&timed_out);
+  while (!insert_select->select.done_status && !timed_out)
+    XtAppProcessEvent(app, XtIMAll);
+  if (!timed_out)
+    XtRemoveTimeOut(timer);
   *type = XmInternAtom(XtDisplay(w), "NULL", False);
   *format = 8;
   *value = NULL;
   *length = 0;
-  if (prop != NULL) {
-    XFree((void *)prop);
+  if (!insert_select->select.done_status) {
+    /* the pending request frees the record when it completes */
+    insert_select->abandoned = True;
+    return False;
   }
-  return (insert_select.success_status);
+  success = insert_select->select.success_status;
+  XtFree((char *)insert_select);
+  return success;
 }
 
 Boolean _XmDataFieldConvert(Widget w,
