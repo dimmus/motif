@@ -746,9 +746,11 @@ _XmReadDragBuffer(xmPropertyBuffer propBuf, BYTE which, BYTE *ptr, CARD32 size)
   else
     buf = &propBuf->heap;
   numCurr = buf->curr - buf->bytes;
-  if (numCurr + size > buf->size) {
+  /* the buffer may come from another client; never read past its end */
+  if (numCurr >= buf->size)
+    return 0;
+  if (size > buf->size - numCurr)
     size = buf->size - numCurr;
-  }
   memcpy(ptr, buf->curr, (size_t)size);
   buf->curr += size;
   return size;
@@ -965,17 +967,26 @@ Boolean _XmGetDragReceiverInfo(Display *display,
                          &format,
                          &lengthRtn,
                          &bytesafter,
-                         (unsigned char **)&iccInfo) == Success)
+                         (unsigned char **)&iccInfo) == Success &&
+      type == drag_hints_atom && format == 8 && lengthRtn >= sizeof(xmDragReceiverInfoStruct))
   {
-    if (lengthRtn >= sizeof(xmDragReceiverInfoStruct)) {
-      if (iccInfo->protocol_version != _MOTIF_DRAG_PROTOCOL_VERSION) {
-        XmeWarning((Widget)dd, MESSAGE2);
-      }
-      if (iccInfo->byte_order != _XmByteOrderChar) {
-        swap2bytes(iccInfo->num_drop_sites);
-        swap4bytes(iccInfo->proxy_window);
-        swap4bytes(iccInfo->heap_offset);
-      }
+    if (iccInfo->protocol_version != _MOTIF_DRAG_PROTOCOL_VERSION) {
+      XmeWarning((Widget)dd, MESSAGE2);
+    }
+    if (iccInfo->byte_order != _XmByteOrderChar) {
+      swap2bytes(iccInfo->num_drop_sites);
+      swap4bytes(iccInfo->proxy_window);
+      swap4bytes(iccInfo->heap_offset);
+    }
+    /*
+     * The property is written by another client, so validate it before
+     * trusting it: the drop site data must lie between the header and
+     * the end of the property, and the protocol style must be one we
+     * know about (it is used as a table index).
+     */
+    if (iccInfo->heap_offset >= sizeof(xmDragReceiverInfoStruct) &&
+        iccInfo->heap_offset <= lengthRtn && iccInfo->drag_protocol_style <= XmDRAG_XDND)
+    {
       dd->display.proxyWindow = iccInfo->proxy_window;
       receiverInfoRtn->dragProtocolStyle = iccInfo->drag_protocol_style;
       dsmInfo = XtNew(XmReceiverDSTreeStruct);
@@ -986,6 +997,7 @@ Boolean _XmGetDragReceiverInfo(Display *display,
       dsmInfo->propBufRec.data.size = (size_t)iccInfo->heap_offset;
       dsmInfo->propBufRec.heap.bytes = (BYTE *)iccInfo + iccInfo->heap_offset;
       dsmInfo->propBufRec.heap.size = (size_t)(lengthRtn - iccInfo->heap_offset);
+      dsmInfo->propBufRec.heap.curr = dsmInfo->propBufRec.heap.bytes;
       /*
        * skip over the info that we've already got
        */
