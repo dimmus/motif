@@ -31,8 +31,8 @@ set(WITH_WML_TOOLS ON CACHE BOOL "Enable WML tools" FORCE)
 set(WITH_SHARED_LIBS ON CACHE BOOL "Build shared libraries" FORCE)
 set(WITH_STATIC_LIBS ON CACHE BOOL "Build static libraries" FORCE)
 
-# Enable all compiler optimizations
-set(WITH_COMPILER_CODE_COVERAGE ON CACHE BOOL "Enable code coverage" FORCE)
+# Enable all compiler optimizations (coverage instrumentation is not one)
+set(WITH_COMPILER_CODE_COVERAGE OFF CACHE BOOL "Enable code coverage" FORCE)
 set(WITH_COMPILER_CCACHE ON CACHE BOOL "Enable ccache" FORCE)
 
 # Enable advanced features
