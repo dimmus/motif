@@ -86,6 +86,8 @@ typedef struct _XmImXICRec {
   XmImRefRec widget_refs;      /* Widgets referencing this XIC. */
   struct _XmImXICRec **source; /* Original source of shared XICs. */
   PreeditBuffer preedit_buffer;
+  XPoint spot;                 /* Last XNSpotLocation given to the XIC, */
+  Boolean spot_valid;          /* ...if this is set. */
 } XmImXICRec, *XmImXICInfo;
 
 typedef struct _XmImShellRec {
@@ -308,6 +310,9 @@ void XmImSetFocusValues(Widget w, ArgList args, Cardinal num_args)
   }
   wind = xic_info->focus_window;
   xic_info->focus_window = XtWindow(w);
+  /* The spot location is relative to the focus window. */
+  if (wind != XtWindow(w))
+    xic_info->spot_valid = False;
   set_values(w, args, num_args, XmINHERIT_POLICY);
   if (wind != XtWindow(w)) {
     /* Safe, since we have a window - so it's no gadget */
@@ -884,6 +889,9 @@ static void set_values(Widget w, ArgList args, Cardinal num_args, XmInputPolicy 
   VaArgListRec status_vlist, preedit_vlist, xic_vlist;
   XVaNestedList va_slist, va_plist, va_vlist;
   XrmName name, area_name = XrmStringToName(XmNarea);
+  XrmName spot_name = XrmStringToName(XmNspotLocation);
+  XPoint spot = {0, 0};
+  Boolean spot_set = False;
   Widget p;
   XmImShellInfo im_info;
   int flags = 0;
@@ -914,6 +922,19 @@ static void set_values(Widget w, ArgList args, Cardinal num_args, XmInputPolicy 
     name = XrmStringToName(argp->name);
     if (name == area_name && !(icp->input_style & XIMPreeditPosition))
       continue;
+    if (name == spot_name && argp->value) {
+      /*
+       * Text widgets set the spot on every cursor move, and with an
+       * input method server XSetICValues is a round trip.  Do not
+       * send the spot the XIC already has.
+       */
+      XPoint *new_spot = (XPoint *)argp->value;
+      if (icp->xic && icp->spot_valid && icp->spot.x == new_spot->x &&
+          icp->spot.y == new_spot->y)
+        continue;
+      spot = *new_spot;
+      spot_set = True;
+    }
     IsCallback(name)
     {
       if (icp->input_style & XIMPreeditCallbacks) {
@@ -989,6 +1010,8 @@ static void set_values(Widget w, ArgList args, Cardinal num_args, XmInputPolicy 
       unset_current_xic(icp, im_info, xim_info, w);
       return;
     }
+    icp->spot = spot;
+    icp->spot_valid = spot_set;
     XGetICValues(icp->xic, XNFilterEvents, &mask, NULL);
     if (mask) {
       XtAddEventHandler(p, (EventMask)mask, False, null_proc, NULL);
@@ -1018,6 +1041,9 @@ static void set_values(Widget w, ArgList args, Cardinal num_args, XmInputPolicy 
         assert(False);
     }
   }
+  else if (preedit_vlist.count == 0 && status_vlist.count == 0 && xic_vlist.count == 0) {
+    /* Nothing to change, e.g. only a spot location the XIC already has. */
+  }
   else {
     /* Try to modify the existing XIC. */
     va_plist = VaCopy(&preedit_vlist);
@@ -1043,6 +1069,10 @@ static void set_values(Widget w, ArgList args, Cardinal num_args, XmInputPolicy 
       XtFree((char *)status_vlist.args);
     if (xic_vlist.args)
       XtFree((char *)xic_vlist.args);
+    if (spot_set) {
+      icp->spot = spot;
+      icp->spot_valid = True;
+    }
     /* ??? Both a write-once and an unrecognized arg might be present. */
     if ((ret != NULL) && unrecognized) {
       unsigned long status_bg, status_fg;
@@ -1116,6 +1146,8 @@ static void set_values(Widget w, ArgList args, Cardinal num_args, XmInputPolicy 
         unset_current_xic(icp, im_info, xim_info, w);
         return;
       }
+      /* The new XIC has the spot only if it was passed this time. */
+      icp->spot_valid = spot_set;
       ImGeoReq(p);
       if (icp->has_focus)
         XSetICFocus(icp->xic);
