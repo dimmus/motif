@@ -966,7 +966,9 @@ static const char ABSOLUTE_PATH[] =
 %S";
 
 /*
- * buf must be of length MAX_DIR_PATH_LEN
+ * buf must be of length MAX_DIR_PATH_LEN.
+ * Returns buf holding the current directory, or $PWD itself (with buf
+ * left unspecified) when it is too long for buf, or NULL.
  */
 static String GetCurrentDir(String buf)
 {
@@ -975,10 +977,11 @@ static String GetCurrentDir(String buf)
   if (pwd && stat(pwd, &stat1) == 0 && stat(".", &stat2) == 0 && stat1.st_dev == stat2.st_dev &&
       stat1.st_ino == stat2.st_ino)
   {
-    /* Use PWD environment variable */
-    strncpy(buf, pwd, MAX_DIR_PATH_LEN - 1);
-    buf[MAX_DIR_PATH_LEN - 1] = '\0'; /* Ensure null termination */
-    return pwd;
+    /* Use PWD environment variable; never hand out a truncated copy. */
+    if (strlen(pwd) >= MAX_DIR_PATH_LEN)
+      return pwd;
+    strcpy(buf, pwd);
+    return buf;
   }
   return getcwd(buf, MAX_DIR_PATH_LEN);
 }
@@ -997,25 +1000,44 @@ if (!pwd)
  */
 Boolean _XmOSAbsolutePathName(String path, String *pathRtn, String buf)
 {
-  Boolean doubleDot = False;
+  Boolean doubleDot;
+  size_t len;
+  String cwd, rest;
   *pathRtn = path;
   if (path[0] == '/')
     return True;
+  /* Only "./...", "../..." and "." are relative to the current
+   * directory; other names starting with '.' (".foo") are plain
+   * relative names. */
   if (path[0] == '.') {
-    if (path[1] == '/')
+    if ((path[1] == '/') || (path[1] == '\0'))
       doubleDot = False;
     else if ((path[1] == '.') && (path[2] == '/'))
       doubleDot = True;
-    if (GetCurrentDir(buf) != NULL) {
+    else
+      return False;
+    if ((cwd = GetCurrentDir(buf)) != NULL) {
+      /* If the current directory or the result does not fit in buf,
+       * keep the relative name: it still names the same file. */
+      if (cwd != buf)
+        return True;
       if (doubleDot) {
         String filePart, suffixPart;
         _XmOSFindPathParts(buf, &filePart, &suffixPart);
-        (void)strcpy(filePart, &path[2]);
+        /* Drop the last component and the '/' before it. */
+        len = filePart - buf;
+        if (len > 0)
+          len--;
+        rest = &path[2];
       }
       else {
-        (void)strcat(buf, &path[1]);
+        len = strlen(buf);
+        rest = &path[1];
       }
-      *pathRtn = buf;
+      if (strlen(rest) < MAX_DIR_PATH_LEN - len) {
+        memcpy(&buf[len], rest, strlen(rest) + 1);
+        *pathRtn = buf;
+      }
       return True;
     }
     else {
