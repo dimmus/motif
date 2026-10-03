@@ -919,6 +919,74 @@ void _XmReadInitiatorInfo(Widget dc)
 
 /************************************************************************
  *
+ *  ReadXdndProxy()
+ *
+ *  Return the window named by the XdndProxy property of window, or
+ *  None if it has no valid one.
+ ***********************************************************************/
+static Window ReadXdndProxy(Display *display, Window window, Atom xdndProxy)
+{
+  Atom type;
+  int format;
+  unsigned long lengthRtn, bytesafter;
+  unsigned char *data = NULL;
+  Window proxy = None;
+  if (XGetWindowProperty(display,
+                         window,
+                         xdndProxy,
+                         0,
+                         1,
+                         False,
+                         XA_WINDOW,
+                         &type,
+                         &format,
+                         &lengthRtn,
+                         &bytesafter,
+                         &data) == Success &&
+      type == XA_WINDOW && format == 32 && lengthRtn == 1)
+    proxy = *(Window *)data;
+  if (data)
+    XFree(data);
+  return proxy;
+}
+
+static int IgnoreXErrors(Display *display, XErrorEvent *event)
+{
+  (void)display;
+  (void)event;
+  return 0;
+}
+
+/************************************************************************
+ *
+ *  GetXdndProxy()
+ *
+ *  Return the window that Xdnd messages for window must be sent to.
+ *  Per the Xdnd specification the proxy must exist and its own
+ *  XdndProxy property must point to itself; otherwise the property is
+ *  a leftover from a crashed client and is ignored.
+ ***********************************************************************/
+static Window GetXdndProxy(Display *display, Window window)
+{
+  Atom xdndProxy = XInternAtom(display, "XdndProxy", False);
+  Window proxy, check;
+  XErrorHandler old_handler;
+  proxy = ReadXdndProxy(display, window, xdndProxy);
+  if (proxy == None || proxy == window)
+    return window;
+  /* the proxy window may be gone: don't let BadWindow be fatal */
+  _XmProcessLock();
+  XSync(display, False);
+  old_handler = XSetErrorHandler(IgnoreXErrors);
+  check = ReadXdndProxy(display, proxy, xdndProxy);
+  XSync(display, False);
+  (void)XSetErrorHandler(old_handler);
+  _XmProcessUnlock();
+  return (check == proxy) ? proxy : window;
+}
+
+/************************************************************************
+ *
  *  _XmGetDragReceiverInfo()
  *
  *  The caller is responsible for freeing (using XFree) the dataRtn
@@ -936,7 +1004,7 @@ Boolean _XmGetDragReceiverInfo(Display *display,
   unsigned int bw;
   unsigned char *data;
   Atom drag_hints_atom, type = None;
-  Atom xdndAware, xdndProxy;
+  Atom xdndAware;
   XmDisplay dd = (XmDisplay)XmGetXmDisplay(display);
   /* get their geometry */
   assert(receiverInfoRtn);
@@ -1017,25 +1085,7 @@ Boolean _XmGetDragReceiverInfo(Display *display,
   receiverInfoRtn->iccInfo = NULL;
   receiverInfoRtn->dragProtocolStyle = XmDRAG_NONE;
   xdndAware = XInternAtom(display, "XdndAware", False);
-  xdndProxy = XInternAtom(display, "XdndProxy", False);
-  dd->display.proxyWindow = window;
-  if (XGetWindowProperty(display,
-                         window,
-                         xdndProxy,
-                         0,
-                         1,
-                         False,
-                         XA_WINDOW,
-                         &type,
-                         &format,
-                         &lengthRtn,
-                         &bytesafter,
-                         &data) == Success)
-  {
-    if (type != None && format == 32 && length == 1)
-      dd->display.proxyWindow = *(Window *)data;
-    XFree(data);
-  }
+  dd->display.proxyWindow = GetXdndProxy(display, window);
   /* Check for XdndAware and protocol version */
   if (XGetWindowProperty(display,
                          dd->display.proxyWindow,
