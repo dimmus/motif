@@ -1,0 +1,200 @@
+.TH "XmTabbedStackList" "library call"
+.nh
+.SH "NAME"
+\fBXmTabbedStackListCreate\fP,
+\fBXmTabbedStackListCopy\fP,
+\fBXmTabbedStackListFree\fP,
+\fBXmTabbedStackListInsert\fP,
+\fBXmTabbedStackListAppend\fP,
+\fBXmTabbedStackListRemove\fP,
+\fBXmTabbedStackListModify\fP,
+\fBXmTabbedStackListQuery\fP,
+\fBXmTabbedStackListFind\fP,
+\fBXmTabbedStackListCompare\fP,
+\fBXmTabbedStackListSimpleInsert\fP,
+\fBXmTabbedStackListSimpleAppend\fP,
+\fBXmTabbedStackListSimpleRemove\fP,
+\fBXmTabbedStackListSimpleModify\fP,
+\fBXmTabbedStackListSimpleQuery\fP,
+\fBXmTabAttributesFree\fP \(em functions that manage the list of tabs of a TabBox
+.iX "XmTabbedStackList"
+.iX "TabBox functions" "XmTabbedStackListCreate"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/TabList\&.h>
+.PP
+\fBXmTabbedStackList \fBXmTabbedStackListCreate\fP\fR(\fBvoid\fR);
+\fBXmTabbedStackList \fBXmTabbedStackListCopy\fP\fR(
+\fBXmTabbedStackList \fBtab_list\fR\fR);
+\fBvoid \fBXmTabbedStackListFree\fP\fR(
+\fBXmTabbedStackList \fBtab_list\fR\fR);
+.PP
+\fBint \fBXmTabbedStackListInsert\fP\fR(
+\fBXmTabbedStackList \fBtab_list\fR\fR,
+\fBint \fBposition\fR\fR,
+\fBXtValueMask \fBmask\fR\fR,
+\fBXmTabAttributes \fBattributes\fR\fR);
+\fBint \fBXmTabbedStackListAppend\fP\fR(
+\fBXmTabbedStackList \fBtab_list\fR\fR,
+\fBXtValueMask \fBmask\fR\fR,
+\fBXmTabAttributes \fBattributes\fR\fR);
+\fBvoid \fBXmTabbedStackListRemove\fP\fR(
+\fBXmTabbedStackList \fBtab_list\fR\fR,
+\fBint \fBposition\fR\fR);
+\fBvoid \fBXmTabbedStackListModify\fP\fR(
+\fBXmTabbedStackList \fBtab_list\fR\fR,
+\fBint \fBposition\fR\fR,
+\fBXtValueMask \fBmask\fR\fR,
+\fBXmTabAttributes \fBattributes\fR\fR);
+\fBvoid \fBXmTabbedStackListQuery\fP\fR(
+\fBXmTabbedStackList \fBtab_list\fR\fR,
+\fBint \fBposition\fR\fR,
+\fBXmTabAttributes \fBattributes\fR\fR);
+\fBint \fBXmTabbedStackListFind\fP\fR(
+\fBXmTabbedStackList \fBtab_list\fR\fR,
+\fBXmString \fBlabel_string\fR\fR);
+\fBXmTabResult \fBXmTabbedStackListCompare\fP\fR(
+\fBXmTabbedStackList \fBlist1\fR\fR,
+\fBXmTabbedStackList \fBlist2\fR\fR);
+.PP
+\fBint \fBXmTabbedStackListSimpleInsert\fP\fR(
+\fBXmTabbedStackList \fBtab_list\fR\fR,
+\fBint \fBposition\fR\fR,
+\fBXmString \fBlabel_string\fR\fR);
+\fBint \fBXmTabbedStackListSimpleAppend\fP\fR(
+\fBXmTabbedStackList \fBtab_list\fR\fR,
+\fBXmString \fBlabel_string\fR\fR);
+\fBvoid \fBXmTabbedStackListSimpleRemove\fP\fR(
+\fBXmTabbedStackList \fBtab_list\fR\fR,
+\fBXmString \fBlabel_string\fR\fR);
+\fBvoid \fBXmTabbedStackListSimpleModify\fP\fR(
+\fBXmTabbedStackList \fBtab_list\fR\fR,
+\fBint \fBposition\fR\fR,
+\fBXmString \fBlabel_string\fR\fR);
+\fBXmString \fBXmTabbedStackListSimpleQuery\fP\fR(
+\fBXmTabbedStackList \fBtab_list\fR\fR,
+\fBint \fBposition\fR\fR);
+.PP
+\fBvoid \fBXmTabAttributesFree\fP\fR(
+\fBXmTabAttributes \fBattributes\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+An \fBXmTabbedStackList\fP is an opaque, ordered list of tab
+descriptions\&. It is the type of the \fBXmNtabList\fP resource of the
+TabBox, the row of tabs that a TabStack displays; a TabBox copies the
+list it is given\&. Positions in the list count from 0\&.
+.PP
+Each tab is described by an \fBXmTabAttributeRec\fP:
+.PP
+.nf
+typedef struct _XmTabAttributeRec {
+    XmString          label_string;      /* NULL */
+    XmStringDirection string_direction;  /* XmSTRING_DIRECTION_L_TO_R */
+    Pixmap            label_pixmap;      /* XmUNSPECIFIED_PIXMAP */
+    int               label_alignment;   /* XmALIGNMENT_CENTER */
+    XmPixmapPlacement pixmap_placement;  /* XmPIXMAP_RIGHT */
+    Pixel             foreground;        /* XmCOLOR_DYNAMIC */
+    Pixel             background;        /* XmCOLOR_DYNAMIC */
+    Pixmap            background_pixmap; /* XmPIXMAP_DYNAMIC */
+    Boolean           sensitive;         /* True */
+    XmTabValueMode    value_mode;        /* XmTAB_VALUE_COPY */
+} XmTabAttributeRec, *XmTabAttributes;
+.fi
+.PP
+The comments give the values of a new tab\&. \fBXmCOLOR_DYNAMIC\fP and
+\fBXmPIXMAP_DYNAMIC\fP make the TabBox use its own colors\&. The
+\fImask\fP argument of \fBXmTabbedStackListInsert\fP,
+\fBXmTabbedStackListAppend\fP and \fBXmTabbedStackListModify\fP selects
+the fields of \fIattributes\fP that are used, as a combination of
+\fBXmTAB_LABEL_STRING\fP, \fBXmTAB_STRING_DIRECTION\fP,
+\fBXmTAB_LABEL_PIXMAP\fP, \fBXmTAB_LABEL_ALIGNMENT\fP,
+\fBXmTAB_PIXMAP_PLACEMENT\fP, \fBXmTAB_FOREGROUND\fP,
+\fBXmTAB_BACKGROUND\fP, \fBXmTAB_BACKGROUND_PIXMAP\fP,
+\fBXmTAB_SENSITIVE\fP and \fBXmTAB_VALUE_MODE\fP, or
+\fBXmTAB_ALL_FLAGS\fP\&.
+.PP
+\fIvalue_mode\fP decides who owns \fIlabel_string\fP\&. With
+\fBXmTAB_VALUE_COPY\fP the list keeps its own copy of the string and
+frees it; with \fBXmTAB_VALUE_SHARE\fP it keeps the caller\&'s string,
+which must then stay valid as long as the list uses it and is never
+freed by the list\&.
+.PP
+\fBXmTabbedStackListCreate\fP returns a new, empty list\&.
+\fBXmTabbedStackListCopy\fP returns a copy of \fItab_list\fP (NULL for
+NULL) in which every label string is copied and every tab is in
+\fBXmTAB_VALUE_COPY\fP mode\&. \fBXmTabbedStackListFree\fP frees a list
+and the label strings it owns; NULL is ignored\&.
+.PP
+\fBXmTabbedStackListInsert\fP inserts a new tab before \fIposition\fP,
+which must be the position of an existing tab, 0, or
+\fBXmTAB_LAST_POSITION\fP to add the tab at the end\&. The fields
+selected by \fImask\fP are taken from \fIattributes\fP and the others
+get the values shown above\&. \fBXmTabbedStackListAppend\fP is
+\fBXmTabbedStackListInsert\fP with \fBXmTAB_LAST_POSITION\fP\&.
+.PP
+\fBXmTabbedStackListRemove\fP removes the tab at \fIposition\fP, which
+must exist, and frees its label string if the list owns it\&.
+.PP
+\fBXmTabbedStackListModify\fP changes the fields selected by \fImask\fP
+of the tab at \fIposition\fP\&. A tab can be changed from
+\fBXmTAB_VALUE_SHARE\fP to \fBXmTAB_VALUE_COPY\fP, which copies
+\fIattributes\fP\->\fIlabel_string\fP, but not back\&.
+.PP
+\fBXmTabbedStackListQuery\fP fills in all fields of \fIattributes\fP
+from the tab at \fIposition\fP and leaves it unchanged if there is no
+such tab\&. For a tab in \fBXmTAB_VALUE_COPY\fP mode the returned
+label string is a new copy, which \fBXmTabAttributesFree\fP frees;
+otherwise it is the shared string\&. \fBXmTabAttributesFree\fP frees
+the label string of \fIattributes\fP if its \fIvalue_mode\fP is
+\fBXmTAB_VALUE_COPY\fP, but not \fIattributes\fP itself\&.
+.PP
+\fBXmTabbedStackListFind\fP returns the position of the first tab
+whose label string is equal to \fIlabel_string\fP (as
+\fBXmStringCompare\fP(3) decides; two NULL strings are equal)\&.
+.PP
+\fBXmTabbedStackListCompare\fP compares two lists\&.
+.PP
+The \fBSimple\fP functions work on label strings only:
+\fBXmTabbedStackListSimpleInsert\fP and
+\fBXmTabbedStackListSimpleAppend\fP add a tab with the given label
+(copied), \fBXmTabbedStackListSimpleRemove\fP removes the first tab
+with that label, \fBXmTabbedStackListSimpleModify\fP changes the label
+of the tab at \fIposition\fP, and \fBXmTabbedStackListSimpleQuery\fP
+returns a copy of its label\&.
+.SH "RETURN"
+.PP
+\fBXmTabbedStackListInsert\fP, \fBXmTabbedStackListAppend\fP,
+\fBXmTabbedStackListSimpleInsert\fP and
+\fBXmTabbedStackListSimpleAppend\fP return the position of the new tab,
+or \fBXmTAB_NOT_FOUND\fP (\-1) if \fItab_list\fP is NULL or
+\fIposition\fP is not valid\&.
+.PP
+\fBXmTabbedStackListFind\fP returns a position, or
+\fBXmTAB_NOT_FOUND\fP if no tab matches\&.
+.PP
+\fBXmTabbedStackListSimpleQuery\fP returns a label string that the
+caller frees with \fBXmStringFree\fP(3), or NULL if the tab has no
+label or does not exist\&.
+.PP
+\fBXmTabbedStackListCompare\fP returns \fBXmTAB_CMP_SIZE\fP if the
+lists have a different number of tabs or tabs with different labels,
+label pixmaps or pixmap placements (changes that can change the size of
+the TabBox), \fBXmTAB_CMP_VISUAL\fP if they differ only in the other
+attributes except \fIvalue_mode\fP, and \fBXmTAB_CMP_EQUAL\fP
+otherwise\&.
+.SH "NOTES"
+.PP
+Earlier releases of \fB<Xm/TabList\&.h>\fP declared
+\fBXmTabAttributesFree\fP only under the misspelt name
+\fBXmTabAttibutesFree\fP, which the library does not provide; that
+name is now a macro for \fBXmTabAttributesFree\fP\&.
+.PP
+\fBXmTabbedStackListRemove\fP and \fBXmTabbedStackListCompare\fP do
+not check all their arguments: do not pass position 0 of an empty list
+to the former, or two NULL lists to the latter\&.
+.SH "RELATED"
+.PP
+\fBXmTabStack\fP(3), \fBXmCreateTabBox\fP(3) and
+\fBXmTabBoxGetNumTabs\fP(3)\&.

@@ -1,0 +1,36 @@
+.TH "XmCreateTabBox" "library call"
+.SH "NAME"
+\fBXmCreateTabBox\fP \(em The TabBox widget creation function
+.iX "XmCreateTabBox"
+.iX "creation functions" "XmCreateTabBox"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/TabBox\&.h>
+\fBWidget \fBXmCreateTabBox\fP\fR(
+\fBWidget \fBparent\fR\fR,
+\fBString \fBname\fR\fR,
+\fBArgList \fBarglist\fR\fR,
+\fBCardinal \fBargcount\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fBXmCreateTabBox\fP creates an instance of a TabBox widget and returns the
+associated widget ID\&.
+A TabBox is the row of tabs that a TabStack creates for itself;
+applications rarely need to create one directly\&.
+.IP "\fIparent\fP" 10
+Specifies the parent widget ID\&.
+.IP "\fIname\fP" 10
+Specifies the name of the created widget\&.
+.IP "\fIarglist\fP" 10
+Specifies the argument list\&.
+.IP "\fIargcount\fP" 10
+Specifies the number of attribute/value pairs in the argument list
+(\fIarglist\fP)\&.
+.SH "RETURN"
+.PP
+Returns the TabBox widget ID\&.
+.SH "RELATED"
+.PP
+\fBXmTabStack\fP(3) and \fBXtCreateWidget\fP(3)\&.
