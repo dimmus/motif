@@ -704,18 +704,28 @@ target_compile_definitions(Xm
 )
 
 # Link libraries.  X11 and Xt are part of the interface of libXm.
+set(XM_PRIVATE_LIBS PkgConfig::MOTIF_XEXT PkgConfig::MOTIF_FONTCONFIG)
+if(MOTIF_XFT_FOUND)
+    list(APPEND XM_PRIVATE_LIBS PkgConfig::MOTIF_XFT)
+endif()
+if(MOTIF_JPEG_FOUND)
+    list(APPEND XM_PRIVATE_LIBS PkgConfig::MOTIF_JPEG)
+endif()
+if(MOTIF_PNG_FOUND)
+    list(APPEND XM_PRIVATE_LIBS PkgConfig::MOTIF_PNG)
+endif()
+if(WITH_PRINTING)
+    list(APPEND XM_PRIVATE_LIBS PkgConfig::MOTIF_XP)
+endif()
+if(ICONV_LIBRARY)
+    list(APPEND XM_PRIVATE_LIBS ${ICONV_LIBRARY})
+endif()
 target_link_libraries(Xm
     PUBLIC
         PkgConfig::MOTIF_XT
         $<BUILD_INTERFACE:motif_build_flags>
     PRIVATE
-        PkgConfig::MOTIF_XEXT
-        PkgConfig::MOTIF_FONTCONFIG
-        $<$<BOOL:${MOTIF_XFT_FOUND}>:PkgConfig::MOTIF_XFT>
-        $<$<BOOL:${MOTIF_JPEG_FOUND}>:PkgConfig::MOTIF_JPEG>
-        $<$<BOOL:${MOTIF_PNG_FOUND}>:PkgConfig::MOTIF_PNG>
-        $<$<BOOL:${WITH_PRINTING}>:PkgConfig::MOTIF_XP>
-        $<$<BOOL:${ICONV_LIBRARY}>:${ICONV_LIBRARY}>
+        ${XM_PRIVATE_LIBS}
         m
         Threads::Threads
 )
