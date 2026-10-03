@@ -73,7 +73,8 @@ Other Unix-like systems with X11 may work but are not tested.
   (required); `xft` 2 or later, `libpng` and `libjpeg` (optional,
   used when found); `xp` (only with `WITH_PRINTING`)
 - `check` (libcheck) for the tests; `xvfb-run` (Xvfb and xauth) to run
-  the tests that need an X server
+  the tests that need an X server; `xdotool` and `Xephyr` for the tests
+  that drive Text and mwm with real input
 - `gencat` to compile message catalogs (part of glibc; optional)
 
 On Debian or Ubuntu:
@@ -82,7 +83,7 @@ On Debian or Ubuntu:
 sudo apt-get install build-essential cmake ninja-build pkg-config flex bison \
     libx11-dev libxt-dev libxext-dev libxmu-dev libxpm-dev libxft-dev \
     libfontconfig-dev libpng-dev libjpeg-dev x11proto-dev xbitmaps \
-    check xvfb xauth
+    check xvfb xauth xdotool xserver-xephyr
 ```
 
 On Fedora:
@@ -92,7 +93,8 @@ sudo dnf install gcc cmake ninja-build pkgconf-pkg-config flex bison \
     'pkgconfig(x11)' 'pkgconfig(xt)' 'pkgconfig(xext)' 'pkgconfig(xmu)' \
     'pkgconfig(xpm)' 'pkgconfig(xft)' 'pkgconfig(fontconfig)' \
     'pkgconfig(libpng)' 'pkgconfig(libjpeg)' 'pkgconfig(xbitmaps)' \
-    'pkgconfig(check)' xorg-x11-server-Xvfb xorg-x11-xauth
+    'pkgconfig(check)' xorg-x11-server-Xvfb xorg-x11-xauth \
+    xdotool xorg-x11-server-Xephyr
 ```
 
 `tools/dev/env/ci/deps.sh` installs everything CI needs on Debian,
@@ -133,10 +135,12 @@ for the list.
 | `WITH_DOCS` | ON | Install the manual pages and `doc/*.md` |
 | `WITH_UIL_DEBUG` | OFF | Debugging output in the UIL compiler |
 | `WITH_HARDENING` | ON | `-fstack-protector-strong`, `-fstack-clash-protection`, `-fcf-protection`, full RELRO, and `_FORTIFY_SOURCE=3` in optimized builds |
-| `WITH_LTO` | OFF | Link-time optimization and `-fno-semantic-interposition` |
+| `WITH_LTO` | OFF | Link-time optimization (optimized builds always use `-fno-semantic-interposition`) |
+| `WITH_PGO` | OFF | Profile-guided optimization: `GENERATE`, then `USE` (see [doc/abi-policy.md](doc/abi-policy.md)) |
 | `WITH_CPU_NATIVE` | OFF | `-march=native` (binaries are not portable) |
 | `WITH_COMPILER_ASAN`, `WITH_UBSAN`, `WITH_TSAN`, `WITH_MSAN` | OFF | Sanitizers (see below) |
-| `WITH_COMPILER_CODE_COVERAGE` | OFF | Coverage instrumentation |
+| `WITH_COMPILER_CODE_COVERAGE` | OFF | Coverage instrumentation and the `coverage` target |
+| `WITH_FUZZERS` | OFF | libFuzzer targets in `src/tests/fuzz` (Clang, with `WITH_TESTS`) |
 | `WITH_COMPILER_CCACHE` | OFF | Compile through ccache |
 | `WITH_NINJA_POOL_JOBS` | OFF | Limit parallel compile and link jobs by available memory (Ninja) |
 | `LOG_LEVEL` | `INFO` | Default level of the `XmLog` functions (`DEBUG`, `INFO`, `WARN`, `ERROR`, `CRITICAL`) |
@@ -178,11 +182,15 @@ ctest --test-dir _build --output-on-failure
 ```
 
 The tests are a libcheck suite (`src/tests`, one CTest test per suite,
-`Xm.<suite>`) and a robustness test of the UIL compiler against
-pathological input (`uil_robustness`).  Suites that need an X server are
-labelled `X11`; when `xvfb-run` is found at configure time CTest runs
-each of them under its own Xvfb, otherwise they use `$DISPLAY` and are
-reported as skipped (exit status 77) when there is none.  See
+`Xm.<suite>`), a robustness test of the UIL compiler against
+pathological input (`uil_robustness`), the compilation and loading of
+every `.uil` file in the tree (`Uil.*`), Text and mwm driven with real
+input through xdotool (`*.xdotool`), a visual regression test against a
+golden image (`Visual.*`) and checks that the libraries export what
+their headers declare (`abi.exports.*`).  Tests that need an X server
+are labelled `X11`; when `xvfb-run` is found at configure time CTest
+runs each of them under its own Xvfb, otherwise they use `$DISPLAY` and
+are reported as skipped (exit status 77) when there is none.  See
 [src/tests/README.md](src/tests/README.md).
 
 ### Sanitizers and coverage
@@ -193,6 +201,9 @@ every linked library, libX11 and libXt included, must be instrumented
 too) build the libraries, programs and tests with that sanitizer.
 ASan and UBSan can be combined; TSan and MSan cannot be combined with
 ASan.  The build's own code generators run with leak detection off.
+UBSan leaves out the alignment check and Clang's function type check
+(`-fsanitize=function`), which the casts of handlers to the Xt and trait
+function types would set off throughout.
 
 With `-DWITH_COMPILER_CODE_COVERAGE=ON`, GCC builds with `--coverage`
 (the `.gcda` files are written next to the objects, for gcov, lcov or

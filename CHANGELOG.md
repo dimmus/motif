@@ -21,6 +21,19 @@ Changes since 2.4.1.  The project version in `CMakeLists.txt` is still
   `XmDataFielddf_ClearSelection` and `XmDataFielddf_SetCursorPosition` are
   no longer exported.  Programs and widgets built against 2.3.8 must be
   rebuilt.
+- The shared libraries export only their API, through version scripts
+  with the version nodes `XM_2.4`, `MRM_2.4` and `UIL_2.4`: libXm went
+  from 3224 to 1742 exported symbols, libMrm from 336 to 218 and libUil
+  from 433 to 50.  The symbols that are gone are internal (`_Xm*` that
+  the old export lists already marked internal, the vendored nanosvg,
+  the Idb/Urm internals, the UIL parser's `yyparse` and `yylex`).  The
+  internal headers (`*I.h`, `Mrm/IDB.h`, `Mrm/Mrm.h`, ...) are no longer
+  installed.  See [doc/abi-policy.md](doc/abi-policy.md).
+- `XmStringCreate`, `XmStringCreateLocalized`, `XmStringLtoRCreate`,
+  `XmStringCreateSimple` and `XmStringCreateLtoR` take `const char *`.
+- Every installed header can be included on its own and from C++
+  (C linkage for `<Xm/obsolete.h>` and `<uil/UilSymGl.h>`, no `register`
+  in prototypes, a fixed `extern "C"` block in `PanedP.h`).
 - New function `MrmOpenHierarchyFromBufferWithSize`, which takes the size
   of the UID buffer so that it can be validated.
 - `<Xm/DataF.h>` now declares the seventeen exported `XmDataField`
@@ -85,6 +98,9 @@ files fixed a large number of memory-safety bugs.  See
   package (`find_package(Motif CONFIG)` with `Motif::Xm`, `Motif::Mrm`
   and `Motif::Uil`), installs only what users need, and installs
   `system.mwmrc` where mwm looks for it.
+- Optimized builds use `-fno-semantic-interposition` and, with
+  immediate binding, `-fno-plt`; `WITH_PGO=GENERATE|USE` builds with
+  profile-guided optimization.
 - `WITH_MESSAGE_CATALOG=ON` generates the C message catalogs from the
   symbolic sources and builds, checks and installs the German, Spanish,
   French, Italian and Japanese translations.  These are now UTF-8 and
@@ -93,13 +109,29 @@ files fixed a large number of memory-safety bugs.  See
 ### Code
 
 - HP-UX and AIX code removed; `demos` renamed to `src/examples`.
+- Performance: `XmForm` sorts and sizes its children in O(n log n) and
+  `XmContainer` appends children without walking their level; `XmList`
+  scrolls by copying the rows that stay visible and no longer rescans
+  every item on selection or deletion; the Xft fonts, colours and draws
+  are cached per display; traits, gadget caches and extension records
+  use cheaper lookups; menus, ScrollBar autorepeat, `XmGetVisibility`
+  and the input method spot location make fewer X requests; the
+  Text gap buffer grows geometrically.  `xmbench` (`--target bench`)
+  measures these.
 
 ### Tests and CI
 
 - Legacy test trees that no longer built were removed; the old
   interactive XmString programs remain, unbuilt, in `src/tests/XmString`.
 - The libcheck suite builds with `WITH_TESTS=ON` and runs under CTest,
-  with the X11 suites under xvfb-run.
+  with the X11 suites under xvfb-run.  It covers XmString, every widget
+  class, Text and TextField, i18n conversions and Form/List/Container
+  layout; every `.uil` file in the tree is compiled and loaded with Mrm;
+  Text and mwm are driven with real input through xdotool (mwm in a
+  nested Xephyr); a visual test compares a rendered scene with a golden
+  image; `abi.exports.*` check the version scripts against the headers.
+- libFuzzer targets for the parsers of untrusted input
+  (`WITH_FUZZERS=ON`, Clang) and a `coverage` target with a ratchet.
 - CI covers glibc and musl Linux, 32-bit x86, big-endian s390x and
   FreeBSD with GCC and Clang, ASan/UBSan builds, packaging on Debian and
   Fedora, static analysis with ratcheted baselines, ABI comparison and
@@ -110,8 +142,9 @@ files fixed a large number of memory-safety bugs.  See
 - New manual pages for the `XmLog`, `XmeXpm`, TabBox, TabStack,
   `XmTabbedStackList`, DataField, DropDown, `XmI18List` and creation
   functions that had none.
-- `CHANGELOG.md`, `CONTRIBUTING.md`, `SECURITY.md` and `AUTHORS`; the
-  README describes the build as it is.
+- `CHANGELOG.md`, `CONTRIBUTING.md`, `SECURITY.md`, `AUTHORS` and the
+  API and ABI policy (`doc/abi-policy.md`); the README describes the
+  build as it is.
 
 ## 2.4.1 (2025-09-03)
 
