@@ -5634,11 +5634,26 @@ unsigned int XmCvtXmStringToByteStream(XmString string, unsigned char **prop_ret
   /* Compute size */
   len = 0;
   while (XmeStringGetComponent(&stack_context, TRUE, FALSE, &length, &value) !=
-         XmSTRING_COMPONENT_END)
+         XmSTRING_COMPONENT_END) {
+    if (length > USHRT_MAX) {
+      len = length;
+      break;
+    }
     len += _asn1_size(length) + length;
+    if (len > USHRT_MAX)
+      break;
+  }
   str_len = len;
   len += _calc_header_size(len);
   _XmStringContextFree(&stack_context);
+  /* The external format has 16-bit length fields: refuse what does */
+  /* not fit rather than produce a truncated, corrupt stream. */
+  if (str_len > USHRT_MAX) {
+    if (prop_return != NULL)
+      *prop_return = NULL;
+    _XmProcessUnlock();
+    return (0);
+  }
   /* We're just computing size. */
   if (prop_return == NULL) {
     _XmProcessUnlock();
