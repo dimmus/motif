@@ -1,14 +1,8 @@
-# Install Xm headers from src/lib/Xm directory
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/lib/Xm/
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Xm
-    FILES_MATCHING PATTERN "*.h"
-)
+# The Xm headers are installed from the explicit lists in src/lib/Xm.
 
-# Install Dt headers
-install(DIRECTORY Dt/
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Dt
-    FILES_MATCHING PATTERN "*.h"
-)
+# The Dt headers are only here so that uil, wml and mwm can be built with
+# CDE support (see Dt/README); CDE provides the real ones.  Do not install
+# them.
 
 # Create include directory
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/include)
@@ -20,12 +14,4 @@ configure_file(
     @ONLY
 )
 
-# Create Xm subdirectory
-file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/include/Xm)
-
-# Generate Xm.h
-configure_file(
-    ${CMAKE_SOURCE_DIR}/src/lib/Xm/Xm.h.in
-    ${CMAKE_BINARY_DIR}/include/Xm/Xm.h
-    @ONLY
-)
+# Xm/Xm.h is generated in src/lib/Xm.

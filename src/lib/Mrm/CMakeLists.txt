@@ -48,6 +48,8 @@ set(MRM_INTERNAL_HEADERS
     Mrm.h
     MrmMsgI.h
     MrmWidget.h
+    # Included by MrmMsgI.h; generated, or the stub without message catalogs
+    ${CMAKE_BINARY_DIR}/include/Mrm/MrmMsgCatI.h
 )
 
 # Generate message catalog header file
@@ -71,47 +73,36 @@ endif()
 # Create the library
 add_library(Mrm ${MOTIF_LIB_TYPE} ${MRM_SRCS})
 
+add_library(Motif::Mrm ALIAS Mrm)
+
 # Ensure message catalog header is generated before building this target
 add_dependencies(Mrm mrm_msgcat_header)
 
 # Set library properties
 set_target_properties(Mrm PROPERTIES
-    VERSION ${ABI_CURRENT}.${ABI_REVISION}.${ABI_AGE}
-    SOVERSION ${ABI_CURRENT}
+    VERSION ${MOTIF_LIBRARY_VERSION}
+    SOVERSION ${MOTIF_SOVERSION}
     OUTPUT_NAME "Mrm"
 )
 
 # Include directories
 target_include_directories(Mrm
     PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/lib/Mrm>
-        $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
     PRIVATE
-        ${CMAKE_SOURCE_DIR}/src/lib/Mrm
         ${CMAKE_SOURCE_DIR}/src/lib/Xm
-        ${CMAKE_BINARY_DIR}/include
-        ${CMAKE_BINARY_DIR}/include/Mrm
-        ${X_INCLUDE_DIRS}
 )
 
 # Link libraries
 target_link_libraries(Mrm
     PUBLIC
         Xm
-        ${X_LIBRARIES}
 )
-
-# Add conditional libraries
-if(XFT_FOUND)
-    target_link_libraries(Mrm PRIVATE ${XFT_LIBRARIES})
-    target_include_directories(Mrm PRIVATE ${XFT_INCLUDE_DIRS})
-endif()
 
 # Install the library
 install(TARGETS Mrm
-    EXPORT MrmTargets
+    EXPORT MotifTargets
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
@@ -127,9 +118,3 @@ install(FILES ${MRM_INTERNAL_HEADERS}
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Mrm
 )
 
-# Export targets
-install(EXPORT MrmTargets
-    FILE MrmTargets.cmake
-    NAMESPACE Mrm::
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Mrm
-)

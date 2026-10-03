@@ -1,12 +1,6 @@
 # Demo programs
 # Individual demo programs that showcase Motif widgets
 
-# Copy pixmaps to build directory for compilation
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/pixmaps")
-    file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/pixmaps 
-         DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/pixmaps)
-endif()
-
 # Find all demo program directories
 file(GLOB DEMO_DIRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/*)
 
@@ -34,34 +28,20 @@ foreach(DEMO_DIR ${DEMO_DIRS})
                 "${CMAKE_CURRENT_SOURCE_DIR}/${DEMO_DIR}/DNDDraw.c"
             )
             add_executable(DNDDemo ${DNDDEMO_SOURCES})
-            target_link_libraries(DNDDemo Xm Mrm ${X_LIBRARIES} m)
+            target_link_libraries(DNDDemo Xm Mrm ${MOTIF_X11_TARGETS} m)
             target_include_directories(DNDDemo PRIVATE
-                ${CMAKE_SOURCE_DIR}/src/lib
-                ${CMAKE_SOURCE_DIR}/include
-                ${CMAKE_BINARY_DIR}/include
                 ${CMAKE_CURRENT_SOURCE_DIR}/${DEMO_DIR}
                 ${CMAKE_SOURCE_DIR}/src/examples/lib
-                ${X_INCLUDE_DIRS}
-            )
-            target_compile_options(DNDDemo PRIVATE
-                -include ${CMAKE_SOURCE_DIR}/include/motif_system.h
             )
             install(TARGETS DNDDemo RUNTIME DESTINATION ${CMAKE_INSTALL_DATADIR}/Xm/${DEMO_DIR})
             
             # Build simpledrop
             set(SIMPLEDROP_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/${DEMO_DIR}/simpledrop.c")
             add_executable(simpledrop ${SIMPLEDROP_SOURCES})
-            target_link_libraries(simpledrop Xm Mrm ${X_LIBRARIES} m)
+            target_link_libraries(simpledrop Xm Mrm ${MOTIF_X11_TARGETS} m)
             target_include_directories(simpledrop PRIVATE
-                ${CMAKE_SOURCE_DIR}/src/lib
-                ${CMAKE_SOURCE_DIR}/include
-                ${CMAKE_BINARY_DIR}/include
                 ${CMAKE_CURRENT_SOURCE_DIR}/${DEMO_DIR}
                 ${CMAKE_SOURCE_DIR}/src/examples/lib
-                ${X_INCLUDE_DIRS}
-            )
-            target_compile_options(simpledrop PRIVATE
-                -include ${CMAKE_SOURCE_DIR}/include/motif_system.h
             )
             install(TARGETS simpledrop RUNTIME DESTINATION ${CMAKE_INSTALL_DATADIR}/Xm/${DEMO_DIR})
             
@@ -92,7 +72,7 @@ foreach(DEMO_DIR ${DEMO_DIRS})
             target_link_libraries(${DEMO_NAME}
                 Xm
                 Mrm
-                ${X_LIBRARIES}
+                ${MOTIF_X11_TARGETS}
                 m
             )
             
@@ -118,19 +98,11 @@ foreach(DEMO_DIR ${DEMO_DIRS})
             # Set include directories
             target_include_directories(${DEMO_NAME} PRIVATE
                 ${CMAKE_SOURCE_DIR}/src/examples/lib
-                ${CMAKE_SOURCE_DIR}/src/lib
-                ${CMAKE_SOURCE_DIR}/include
-                ${CMAKE_BINARY_DIR}/include
                 ${CMAKE_CURRENT_SOURCE_DIR}/${DEMO_DIR}
-                ${CMAKE_CURRENT_SOURCE_DIR}/pixmaps
-                ${CMAKE_CURRENT_BINARY_DIR}/pixmaps
-                ${X_INCLUDE_DIRS}
+                # <pixmaps/...>
+                ${CMAKE_CURRENT_SOURCE_DIR}
             )
             
-            # Add system includes and force-include motif_system.h
-            target_compile_options(${DEMO_NAME} PRIVATE
-                -include ${CMAKE_SOURCE_DIR}/include/motif_system.h
-            )
             
             # Check for UIL files and process them
             file(GLOB UIL_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${DEMO_DIR}/*.uil")
@@ -161,12 +133,12 @@ foreach(DEMO_DIR ${DEMO_DIRS})
                     add_custom_command(
                         OUTPUT ${UID_FILE}
                         COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/${DEMO_DIR}
-                        COMMAND ${CMAKE_BINARY_DIR}/src/bin/uil/uil -o ${UID_FILE} ${UIL_FILE} 
+                        COMMAND ${MOTIF_TOOL_ENV} $<TARGET_FILE:${MOTIF_HOST_TOOL_PREFIX}uil> -o ${UID_FILE} ${UIL_FILE} 
                                 -I${CMAKE_SOURCE_DIR}/src/bin/uil 
                                 -I${CMAKE_BINARY_DIR}/src/bin/uil
                                 -I${CMAKE_SOURCE_DIR}/src/examples/programs/${DEMO_DIR}
                                 -I${CMAKE_SOURCE_DIR}/src/examples/programs/${DEMO_DIR}/english/uid
-                        DEPENDS uil ${UIL_FILE}
+                        DEPENDS ${MOTIF_HOST_TOOL_PREFIX}uil ${UIL_FILE}
                         COMMENT "Compiling UIL file ${UIL_FILE}"
                     )
                     

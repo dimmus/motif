@@ -446,6 +446,12 @@ char            *status_data)
     module_flags = module_flags | compiler_called;
     doing_exit = 0;
 
+#if XM_MSGCAT
+    /* The diagnostics look their texts up in the catalog; common_main()
+       opens it for the uil program, so do the same here. */
+    if (uil_catd == NULL)
+	uil_catd = catopen("Uil", NL_CAT_LOCALE);
+#endif
 
     /* Initialize command line data structure */
 

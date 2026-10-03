@@ -1,0 +1,12 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=${prefix}
+libdir=@MOTIF_PC_LIBDIR@
+includedir=@MOTIF_PC_INCLUDEDIR@
+
+Name: uil
+Description: Motif User Interface Language compiler library
+Version: @PROJECT_VERSION@
+Requires: mrm motif
+Cflags: -I${includedir}
+Libs: -L${libdir} -lUil
+Libs.private: -lm

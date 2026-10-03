@@ -12,7 +12,7 @@ This is a modern, actively maintained implementation of the Motif toolkit, prese
 
 ## Build Status
 
-**🚀 Modern C Standard Support**: This project now fully supports the **C23 standard** and is compatible with **GCC 15**, ensuring cutting-edge compiler features and future-proof development.
+**C standard**: Motif is built as C17 with GNU extensions (`-std=gnu17`). Moving to C23 needs the remaining unprototyped `()` function declarations fixed first.
 
 This project is continuously tested on multiple Linux distributions with both **GCC** and **Clang** compilers to ensure maximum compatibility and reliability across different build environments:
 
@@ -55,8 +55,7 @@ This fusion created a toolkit that powered:
 - **Accessibility**: Built-in keyboard navigation and screen reader support
 
 ### Modern Enhancements
-- **C23 Standard Support**: Built with the latest C language standard for modern development
-- **GCC 15 Compatibility**: Future-ready compiler support with automatic fallback
+- **C17**: Built as C17 with GNU extensions (`-std=gnu17`) by GCC and Clang
 - **Xft Font Rendering**: Anti-aliased text with modern font support
 - **PNG/JPEG Support**: Modern image format integration
 - **UTF-8 Support**: Full Unicode text handling
@@ -97,7 +96,7 @@ The comprehensive Motif widget set includes:
 # Essential build tools
 cmake >= 3.16             # Primary build system
 pkg-config                # Package configuration
-gcc >= 13.0 (supports C23 standard and GCC 15 compatibility)
+gcc >= 11.0 or clang >= 8.0
 make (GNU Make required)  # Build orchestration
 flex/lex                  # Lexical analysis
 yacc/bison                # Parser generation
@@ -108,10 +107,7 @@ ccache                    # Compiler cache for faster rebuilds
 ```
 
 **Compiler Support**:
-- **GCC 13.0+**: Full C23 standard support with `-std=c23` flag
-- **GCC 15**: Future-ready compatibility (uses `-std=c2x` fallback for current GCC versions)
-- **Clang**: Compatible with modern C standards
-- **Legacy Compilers**: Graceful fallback to C99/C11 standards
+- **GCC 11+** and **Clang 8+**, both building with `-std=gnu17`
 
 #### Runtime Dependencies
 ```bash
@@ -149,10 +145,7 @@ sudo yum install gcc cmake pkgconfig flex bison ninja-build ccache \
 For convenience, the project includes an automated dependency checker that supports multiple operating systems:
 
 ```bash
-# Automatic dependency checking and installation
-make deps
-
-# Or run the script directly
+# Automatic dependency checking and installation (uses sudo)
 ./tools/dev/scripts/deps_check.sh
 ```
 
@@ -180,7 +173,7 @@ If you encounter issues during the build process:
 **Missing Dependencies**: Ensure all required packages are installed:
 ```bash
 # Check dependencies
-make deps
+./tools/dev/scripts/deps_check.sh
 
 # Or install manually for your OS (see installation commands above)
 ```
@@ -210,7 +203,7 @@ git clone https://github.com/dimmus/motif.git
 cd motif
 
 # Check and install dependencies (recommended)
-make deps
+./tools/dev/scripts/deps_check.sh
 
 # Or manually install dependencies for your OS
 # (see manual installation commands above)
@@ -218,11 +211,8 @@ make deps
 # Build Motif (CMake-based build system)
 make build
 
-# Install to system
+# Install (to CMAKE_INSTALL_PREFIX, /usr/local unless configured otherwise)
 sudo make install
-
-# Uninstall if needed
-sudo make uninstall
 ```
 
 ### Build System
@@ -233,9 +223,8 @@ This project uses **CMake** as the primary build system, providing modern depend
 ```bash
 # Core build targets
 make build          # Configure and build Motif (no installation)
-make all            # Build and install Motif (legacy behavior)
-make install        # Install to system (requires sudo)
-make uninstall      # Uninstall from system (requires sudo)
+make all            # Same as "make build"
+make install        # Install (run with sudo for a system prefix; DESTDIR=... stages)
 
 # Build variants
 make debug          # Build debug version with symbols
@@ -272,7 +261,7 @@ cmake -H. -Bbuild \
 ```bash
 # Configure installation paths
 cmake -H. -Bbuild \
-    -DCMAKE_INSTALL_PREFIX=/usr          # Installation prefix (default: /usr)
+    -DCMAKE_INSTALL_PREFIX=/usr          # Installation prefix (default: /usr/local)
     -DCMAKE_INSTALL_SYSCONFDIR=/etc      # Configuration files
     -DCMAKE_INSTALL_LIBDIR=lib64         # Library directory
 ```
@@ -300,9 +289,6 @@ sudo make install
 
 # Update library cache
 sudo ldconfig
-
-# Uninstall if needed
-sudo make uninstall
 ```
 
 ## Development and Usage
@@ -345,15 +331,20 @@ int main(int argc, char *argv[])
 
 ### Compilation
 ```bash
-# Using pkg-config (recommended) - automatically uses C23 standard
+# Using pkg-config (recommended); mrm and uil are available as well
 gcc -o myapp myapp.c `pkg-config --cflags --libs motif`
 
-# Manual compilation with C23 standard (add -I<prefix>/include -L<prefix>/lib
-# if Motif was installed to a non-default prefix)
-gcc -std=c23 -o myapp myapp.c -lXm -lXt -lX11
+# Manual compilation (add -I<prefix>/include -L<prefix>/lib if Motif was
+# installed to a non-default prefix)
+gcc -o myapp myapp.c -lXm -lXt -lX11
+```
 
-# For GCC 15 compatibility (automatic fallback to c2x if c23 not supported)
-gcc -std=c2x -o myapp myapp.c -lXm -lXt -lX11
+With CMake, use the installed package (set `CMAKE_PREFIX_PATH` to the Motif
+prefix if it is not a default one).  `CONFIG` is needed because CMake's own
+`FindMotif` module would be used otherwise:
+```cmake
+find_package(Motif 2.4 CONFIG REQUIRED)          # COMPONENTS Xm Mrm Uil
+target_link_libraries(myapp PRIVATE Motif::Xm)   # or Motif::Mrm, Motif::Uil
 ```
 
 ### UIL Development
@@ -515,31 +506,26 @@ make build
 
 # Run tests
 make test
-
-# Generate code coverage reports
-make gcov
 ```
 
 ### Code Coverage
 
-When tests are enabled (`-DWITH_TESTS=ON`), you can generate code coverage reports:
+Configure with `-DWITH_COMPILER_CODE_COVERAGE=ON`, build, and run the tests
+or programs to be measured:
+- **GCC**: builds with `--coverage`; the `.gcda` files are written next to
+  the objects in the build directory, for `gcov`, `lcov` or `gcovr`.
+- **Clang**: builds with source-based coverage
+  (`-fprofile-instr-generate -fcoverage-mapping`); set `LLVM_PROFILE_FILE`,
+  then merge with `llvm-profdata merge` and report with `llvm-cov`.
 
-```bash
-# Generate coverage reports
-make gcov
+### Sanitizers
 
-# Clean up coverage files
-make clean-gcov
-
-# View available targets
-make help
-```
-
-The coverage system automatically detects your compiler:
-- **GCC**: Uses `gcov` for coverage analysis
-- **Clang**: Uses `llvm-cov gcov` for coverage analysis
-
-Coverage reports are generated as `.gcov` files in the source directories.
+`-DWITH_COMPILER_ASAN=ON`, `-DWITH_UBSAN=ON`, `-DWITH_TSAN=ON` and
+`-DWITH_MSAN=ON` (Clang only, needs instrumented X libraries) build
+everything, programs and tests included, with the sanitizer.  Hardening
+flags (`-DWITH_HARDENING`, on by default) add `_FORTIFY_SOURCE=3` in
+optimised builds, the stack protector, stack clash protection, CET and
+full RELRO.
 
 ### Additional Build Commands
 
@@ -553,16 +539,8 @@ make clean
 # Clean everything including build directory
 make clean_all
 
-# Package the build
-make package_archive
-
-# Format source code
-make format PATHS="lib/Xm clients"
-
-# Run static analysis
-make check_cppcheck
-make check_clang_array
-make check_struct_comments
+# Create a compressed archive of the sources
+make source_archive
 ```
 
 ## License
