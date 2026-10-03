@@ -24,6 +24,14 @@
 #define _XpmI_h
 /* Define HAVE_STRDUP since string.h is included */
 #define HAVE_STRDUP 1
+/*
+ * Never pipe files named *.Z / *.gz through external (de)compressors.
+ * The commands were looked up in $PATH (CVE-2022-4883), and a toolkit
+ * loading icons should not run programs in the first place.
+ */
+#ifndef NO_ZPIPE
+#  define NO_ZPIPE 1
+#endif
 #ifdef __cplusplus
 extern "C" {
 #endif
