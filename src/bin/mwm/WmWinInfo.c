@@ -238,6 +238,7 @@ GetClientInfo (WmScreenData *pSD, Window clientWindow, long manageFlags)
     pCD->clientEntry.pCD = NULL;
 
     pCD->smClientID = (String)NULL;
+    pCD->clientTitleWidthFont = NULL;
 
      /*
      * Do special processing for client windows that are controlled by
@@ -2391,6 +2392,7 @@ ProcessWmWindowTitle (ClientData *pCD, Boolean firstTime)
       }
 
       pCD->clientTitle = title_xms;
+      pCD->clientTitleWidthFont = NULL;
       pCD->clientFlags |= CLIENT_HINTS_TITLE;
 
       if (!firstTime)
@@ -2413,6 +2415,7 @@ ProcessWmWindowTitle (ClientData *pCD, Boolean firstTime)
         {
 	    pCD->clientTitle = wmGD.clientDefaultTitle;
         }
+	pCD->clientTitleWidthFont = NULL;
     }
 
     /*
@@ -2439,7 +2442,7 @@ ProcessWmWindowTitle (ClientData *pCD, Boolean firstTime)
 	/*
 	 * Calculations derived from GetTextBox() and GetFramePartInfo()
 	 */
-	minWidth = XmStringWidth(fontList, pCD->clientTitle) +
+	minWidth = GetClientTitleWidth(pCD, fontList) +
 #ifdef PANELIST
 	    ((pCD->dtwmBehaviors & DtWM_BEHAVIOR_SUBPANEL) ? 4 : 0) +
 #endif /* PANELIST */

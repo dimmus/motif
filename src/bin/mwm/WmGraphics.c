@@ -1116,21 +1116,43 @@ void WmDrawString (Display *dpy, Drawable d, GC gc, int x, int y, char *string, 
 void WmDrawXmString (Display *dpy, Window w, XmFontList xmfontlist,
 		     XmString xmstring, GC gc, Position x, Position y,
 		     Dimension width,  XRectangle *pbox, Boolean bCenter)
+{
+    WmDrawXmStringWidth (dpy, w, xmfontlist, xmstring,
+			 XmStringWidth (xmfontlist, xmstring), gc, x, y,
+			 width, pbox, bCenter);
+}
 #else /* WSM */
 void WmDrawXmString (Display *dpy, Window w, XmFontList xmfontlist,
 		     XmString xmstring, GC gc, Position x, Position y,
 		     Dimension width,  XRectangle *pbox)
+{
+    WmDrawXmStringWidth (dpy, w, xmfontlist, xmstring,
+			 XmStringWidth (xmfontlist, xmstring), gc, x, y,
+			 width, pbox);
+}
+#endif /* WSM */
+
+/*
+ *  WmDrawXmStringWidth: same as WmDrawXmString, for callers that already
+ *  know textWidth, the XmStringWidth of xmstring in xmfontlist.
+ */
+#ifdef WSM
+void WmDrawXmStringWidth (Display *dpy, Window w, XmFontList xmfontlist,
+			  XmString xmstring, Dimension textWidth, GC gc,
+			  Position x, Position y, Dimension width,
+			  XRectangle *pbox, Boolean bCenter)
+#else /* WSM */
+void WmDrawXmStringWidth (Display *dpy, Window w, XmFontList xmfontlist,
+			  XmString xmstring, Dimension textWidth, GC gc,
+			  Position x, Position y, Dimension width,
+			  XRectangle *pbox)
 #endif /* WSM */
 {
-    Dimension textWidth;
 #ifdef WSM
     int alignment;
 #else /* WSM */
     int alignment = XmALIGNMENT_BEGINNING;
 #endif /* WSM */
-
-
-    textWidth = XmStringWidth(xmfontlist, xmstring);
 
 #ifdef WSM
     alignment = bCenter ? XmALIGNMENT_CENTER : XmALIGNMENT_BEGINNING;
@@ -1160,7 +1182,7 @@ void WmDrawXmString (Display *dpy, Window w, XmFontList xmfontlist,
 	XmStringDraw (dpy, w, xmfontlist, xmstring, gc, x, y, width,
 		      alignment, XmSTRING_DIRECTION_L_TO_R, pbox);
     }
-} /* END OF FUNCTION WmDrawXmString */
+} /* END OF FUNCTION WmDrawXmStringWidth */
 
 #ifdef WSM
 
