@@ -369,8 +369,8 @@ static void SecondaryConvertHandler(Widget w,
     operation = XmLINK;
   else
     operation = XmOTHER;
-  /* The transfer owns event_copy from here on: ReleaseSecondaryLock()
-     frees it when the transfer is finished. */
+  /* The transfer owns event_copy from here on: FinishTransfer() frees
+     it after ReleaseSecondaryLock() has run. */
   if (_XmDestinationHandler(w,
                             pair->selection,
                             operation,
@@ -430,14 +430,12 @@ static void SecondaryConvertHandler(Widget w,
   }
   if (!timed_out)
     XtRemoveTimeOut(timer);
+  /* If the transfer is still running, give up waiting for it but leave
+     it the lock: XmText and XmTextField keep its state in one static
+     record, so no other secondary transfer may start before its done
+     proc releases the lock. */
   _XmProcessLock();
   done = (secondary_event != event_copy);
-  if (!done) {
-    /* Give up on the transfer: let other requests in again.  Its done
-       proc still frees event_copy but no longer touches the lock. */
-    secondary_lock = 0;
-    secondary_event = NULL;
-  }
   _XmProcessUnlock();
   cs->value = NULL;
   cs->type = atoms[XmANULL];
@@ -459,8 +457,9 @@ static void ReleaseSecondaryLock(Widget w,                         /* unused */
     secondary_event = NULL;
   }
   _XmProcessUnlock();
-  tc->callback_struct->event = NULL;
-  XtFree((char *)event);
+  /* The event is the copy made by SecondaryConvertHandler(); later done
+     procs may still look at it, so FinishTransfer() frees it. */
+  tc->flags |= TC_FREE_EVENT;
 }
 
 /****************************************************************/
@@ -1156,6 +1155,8 @@ static void FinishTransfer(Widget wid, TransferContext tc)
     ts.status = XmTRANSFER_DONE_FAIL;
   ts.client_data = tc->client_data;
   CallDoneProcs(wid, tc, &ts);
+  if (tc->flags & TC_FREE_EVENT)
+    XtFree((char *)tc->callback_struct->event);
   XtFree((char *)tc->callback_struct);
   FreeTransferID(tc);
 }

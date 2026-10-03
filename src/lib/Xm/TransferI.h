@@ -82,7 +82,8 @@ enum {
   TC_CALLED_CALLBACKS = 4,
   TC_EXITED_DH = 8,
   TC_DID_DELETE = 16,
-  TC_IN_MULTIPLE = 32
+  TC_IN_MULTIPLE = 32,
+  TC_FREE_EVENT = 64 /* callback_struct->event is ours to free */
 };
 
 /****************************************************************/
