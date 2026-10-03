@@ -146,10 +146,16 @@ int _XmJpegGetImage(FILE *fp, XImage **ximage)
   img->blue_mask = 0x0000ff;
   img->bitmap_unit = 8;
   img->bitmap_bit_order = MSBFirst;
-  img->bitmap_pad = 32;
+  /* The rows are packed (3 * w bytes), so they're only 8-bit aligned */
+  img->bitmap_pad = 8;
   img->bits_per_pixel = 24;
   img->bytes_per_line = w * 3;
-  XInitImage(img);
+  /* On failure the XImage functions (XGetPixel, XDestroyImage) are unset */
+  if (!XInitImage(img)) {
+    XFree(data);
+    XFree(img);
+    return 4;
+  }
   *ximage = img;
   return 0;
 }

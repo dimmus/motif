@@ -117,7 +117,12 @@ int _XmPngGetImage(FILE *fp, XColor *bg, XImage **ximage)
   img->bitmap_pad = 32;
   img->bits_per_pixel = 32;
   img->bytes_per_line = w * 4;
-  XInitImage(img);
+  /* On failure the XImage functions (XGetPixel, XDestroyImage) are unset */
+  if (!XInitImage(img)) {
+    XFree(data);
+    XFree(img);
+    return 7;
+  }
   *ximage = img;
   return 0;
 }

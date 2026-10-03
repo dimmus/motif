@@ -157,6 +157,35 @@ START_TEST(load_grayscale_multirow)
 }
 END_TEST
 
+START_TEST(load_rgb24_odd_width)
+{
+	FILE *fp;
+	XImage *img = NULL;
+	unsigned char *p;
+	int ret;
+
+	/**
+	 * 3 * 3 bytes per row isn't a multiple of 4, which the XImage must
+	 * accept: XInitImage() has to succeed, or the function pointers that
+	 * XGetPixel() / XDestroyImage() call are left uninitialized.
+	 */
+	ck_assert_msg(fp = fopen("jpeg/rgb24_3x2.jpeg", "rb"), "Failed to open jpeg/rgb24_3x2.jpeg");
+	ret = _XmJpegGetImage(fp, &img);
+	fclose(fp);
+
+	ck_assert_msg(!ret && img, "Failed to load 3x2 RGB test image");
+	ck_assert_msg(img->width == 3 && img->height == 2, "Expected 3x2 image");
+	ck_assert_msg(img->bytes_per_line == 9, "Expected 9 bytes per line");
+	ck_assert_msg(img->f.get_pixel && img->f.destroy_image, "Expected an initialized XImage");
+	ck_assert_msg(pixel_near(img, 2, 0, 0x0000ff, 8), "Expected (2,0) to be blue");
+	ck_assert_msg(pixel_near(img, 0, 1, 0xffffff, 8), "Expected (0,1) to be white");
+	p = (unsigned char *)img->data + 2 * 3;
+	ck_assert_msg(XGetPixel(img, 2, 0) == ((unsigned long)p[0] << 16 | p[1] << 8 | p[2]),
+	              "Expected XGetPixel to read the packed pixel");
+	XDestroyImage(img);
+}
+END_TEST
+
 START_TEST(load_cmyk)
 {
 	FILE *fp;
@@ -190,6 +219,7 @@ void jpeg_suite(SRunner *runner)
 	tcase_add_test(t, load_grayscale);
 	tcase_add_test(t, load_rgb24_multirow);
 	tcase_add_test(t, load_grayscale_multirow);
+	tcase_add_test(t, load_rgb24_odd_width);
 	tcase_add_test(t, load_cmyk);
 	tcase_set_timeout(t, 1);
 	suite_add_tcase(s, t);

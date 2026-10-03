@@ -72,7 +72,11 @@ static XImage *rasterize(XImage *src, int x, int y, unsigned int w, unsigned int
   img->bitmap_pad = 32;
   img->bits_per_pixel = 32;
   img->depth = 32;
-  XInitImage(img);
+  if (!XInitImage(img)) {
+    XFree(data);
+    XFree(img);
+    return NULL;
+  }
   return img;
 }
 
