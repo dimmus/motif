@@ -2183,6 +2183,9 @@ static Boolean CvtStringToXmTabList(Display *dpy,
   }
   if (got_one)
     _XM_CONVERTER_DONE(to, XmTabList, tl, XmTabListFree(tl);)
+  /* The tabs parsed before a malformed one are not returned. */
+  if (tl != NULL)
+    XmTabListFree(tl);
   XtDisplayStringConversionWarning(dpy, (char *)from->addr, XmRTabList);
   return (FALSE);
 }
