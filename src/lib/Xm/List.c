@@ -4576,8 +4576,8 @@ static void DefaultAction(XmListWidget lw, XEvent *event)
   UpdateSelection(lw);
   SLcount = lw->list.selectedItemCount;
   if (lw->list.selectedItems && lw->list.selectedItemCount) {
-    cb.selected_items = (XmString *)ALLOCATE_LOCAL(sizeof(XmString) * SLcount);
-    cb.selected_item_positions = (int *)ALLOCATE_LOCAL(sizeof(int) * SLcount);
+    cb.selected_items = (XmString *)_XmMallocArray(SLcount, sizeof(XmString));
+    cb.selected_item_positions = (int *)_XmMallocArray(SLcount, sizeof(int));
     for (i = 0; i < SLcount; i++) {
       cb.selected_items[i] = XmStringCopy(lw->list.selectedItems[i]);
       cb.selected_item_positions[i] = lw->list.selectedPositions[i];
@@ -4589,8 +4589,8 @@ static void DefaultAction(XmListWidget lw, XEvent *event)
   lw->list.AutoSelectionType = XmAUTO_UNSET;
   for (i = 0; i < SLcount; i++)
     XmStringFree(cb.selected_items[i]);
-  DEALLOCATE_LOCAL((char *)cb.selected_items);
-  DEALLOCATE_LOCAL((char *)cb.selected_item_positions);
+  XtFree((char *)cb.selected_items);
+  XtFree((char *)cb.selected_item_positions);
   XmStringFree(cb.item);
   lw->list.DownCount = 0;
 }
@@ -4637,8 +4637,8 @@ static void ClickElement(XmListWidget lw, XEvent *event, Boolean default_action)
   selection_policy = lw->list.SelectionPolicy;
   if ((selection_policy == XmMULTIPLE_SELECT) || (selection_policy == XmEXTENDED_SELECT)) {
     if (lw->list.selectedItems && lw->list.selectedItemCount) {
-      cb.selected_items = (XmString *)ALLOCATE_LOCAL(sizeof(XmString) * SLcount);
-      cb.selected_item_positions = (int *)ALLOCATE_LOCAL(sizeof(int) * SLcount);
+      cb.selected_items = (XmString *)_XmMallocArray(SLcount, sizeof(XmString));
+      cb.selected_item_positions = (int *)_XmMallocArray(SLcount, sizeof(int));
       for (i = 0; i < SLcount; i++) {
         cb.selected_items[i] = XmStringCopy(lw->list.selectedItems[i]);
         cb.selected_item_positions[i] = lw->list.selectedPositions[i];
@@ -4685,8 +4685,8 @@ static void ClickElement(XmListWidget lw, XEvent *event, Boolean default_action)
         for (i = 0; i < SLcount; i++)
           if (cb.selected_items[i])
             XmStringFree(cb.selected_items[i]);
-      DEALLOCATE_LOCAL((char *)cb.selected_items);
-      DEALLOCATE_LOCAL((char *)cb.selected_item_positions);
+      XtFree((char *)cb.selected_items);
+      XtFree((char *)cb.selected_item_positions);
     }
   }
   XmStringFree(cb.item);
@@ -6349,7 +6349,7 @@ void XmListDeleteItems(Widget w, XmString *items, int item_count)
     return;
   }
   /* Make a copy of items in case of XmNitems from w */
-  copy = (XmString *)ALLOCATE_LOCAL(item_count * sizeof(XmString));
+  copy = (XmString *)_XmMallocArray(item_count, sizeof(XmString));
   for (i = 0; i < item_count; i++)
     copy[i] = XmStringCopy(items[i]);
   DrawHighlight(lw, lw->list.CurrentKbdItem, FALSE);
@@ -6408,7 +6408,7 @@ void XmListDeleteItems(Widget w, XmString *items, int item_count)
   /* Free memory for copied list. */
   for (i = 0; i < item_count; i++)
     XmStringFree(copy[i]);
-  DEALLOCATE_LOCAL((char *)copy);
+  XtFree((char *)copy);
   _XmAppUnlock(app);
 }
 

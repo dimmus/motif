@@ -57,7 +57,6 @@ static char rcsid[] = "$TOG: XmRenderT.c /main/14 1998/10/26 20:14:42 samborn $"
 #include <X11/Xresource.h>
 #include <Xm/Display.h>  /* For XmGetXmDisplay */
 #include <Xm/DisplayP.h> /* For direct access to callback fields */
-#include <Xm/XmosP.h>    /* For ALLOCATE/DEALLOCATE_LOCAL */
 #if USE_XFT
 #  include <X11/Xft/Xft.h>
 #endif
@@ -1116,7 +1115,7 @@ XmRenderTable XmRenderTableAddRenditions(XmRenderTable oldtable,
     }
   }
   else {
-    matches = (Boolean *)ALLOCATE_LOCAL(rendition_count * sizeof(Boolean));
+    matches = (Boolean *)_XmMallocArray(rendition_count, sizeof(Boolean));
     bzero(matches, rendition_count * sizeof(Boolean));
     /* May have to copy table if shared. */
     if (_XmRTRefcount(oldtable) > 1) {
@@ -1206,7 +1205,7 @@ XmRenderTable XmRenderTableAddRenditions(XmRenderTable oldtable,
       SetPtr(newtable, table);
       FreeHandle(oldtable);
     }
-    DEALLOCATE_LOCAL((char *)matches);
+    XtFree((char *)matches);
     oldtable = newtable;
   }
   if (tmptable != NULL)

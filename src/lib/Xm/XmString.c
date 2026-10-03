@@ -3196,7 +3196,7 @@ extern void _XmStringDrawSegment(Display *d,
       char *ltor_text;
       int i, j;
       if (seg_len > 100)
-        p = flip_char_extra = (char *)ALLOCATE_LOCAL(seg_len);
+        p = flip_char_extra = XtMalloc(seg_len);
       draw_text = p;
       ltor_text = (char *)_XmEntryTextGet((_XmStringEntry)seg);
       if (multibyte) /* Have to flip a mb character at time. */ {
@@ -3205,8 +3205,10 @@ extern void _XmStringDrawSegment(Display *d,
         p += seg_len;
         for (i = 0; i < seg_len; i += len) {
           len = mblen(q, MB_CUR_MAX);
-          if (len < 1) /* Something went wrong, just return for now. */
+          if (len < 1) { /* Something went wrong, just return for now. */
+            XtFree(flip_char_extra);
             return;
+          }
           p -= len;
           for (j = 0; j < len; j++) {
             p[j] = q[j];
@@ -3390,9 +3392,7 @@ extern void _XmStringDrawSegment(Display *d,
       xgcv.background = old_bg;
       XChangeGC(d, gc, GCBackground, &xgcv);
     }
-    if (flip_char_extra != NULL) {
-      DEALLOCATE_LOCAL(flip_char_extra);
-    }
+    XtFree(flip_char_extra);
   }
 }
 

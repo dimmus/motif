@@ -32,7 +32,6 @@
 #include <Xm/Scale.h>
 #include <Xm/SeparatoG.h>
 #include <Xm/Xm.h>
-#include <Xm/XmosP.h> /* for allocate local */
 
 /************************************************************************
  *
@@ -85,7 +84,7 @@ void XmScaleSetTicks(Widget scale,
   real_num_med = (real_num_big - 1) * num_med;
   real_num_small = (real_num_big + real_num_med - 1) * num_small;
   sep_num = real_num_big + real_num_med + real_num_small;
-  sep = (Widget *)ALLOCATE_LOCAL(sep_num * sizeof(Widget));
+  sep = (Widget *)_XmMallocArray(sep_num, sizeof(Widget));
   if (orient == XmHORIZONTAL) {
     dim_res = XmNheight;
     orient = XmVERTICAL;
@@ -132,6 +131,6 @@ void XmScaleSetTicks(Widget scale,
     }
   }
   XtManageChildren(sep, sep_num);
-  DEALLOCATE_LOCAL((char *)sep);
+  XtFree((char *)sep);
   _XmAppUnlock(app);
 }
