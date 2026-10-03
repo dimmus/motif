@@ -703,7 +703,12 @@ target_compile_definitions(Xm
         DATADIR="${CMAKE_INSTALL_FULL_DATADIR}"
 )
 
-# Link libraries.  X11 and Xt are part of the interface of libXm.
+# Link libraries.  X11 and Xt are part of the interface of libXm, and so is
+# libXp with printing, as Xm.h then includes <X11/extensions/Print.h>.
+set(XM_PUBLIC_LIBS PkgConfig::MOTIF_XT)
+if(WITH_PRINTING)
+    list(APPEND XM_PUBLIC_LIBS PkgConfig::MOTIF_XP)
+endif()
 set(XM_PRIVATE_LIBS PkgConfig::MOTIF_XEXT PkgConfig::MOTIF_FONTCONFIG)
 if(MOTIF_XFT_FOUND)
     list(APPEND XM_PRIVATE_LIBS PkgConfig::MOTIF_XFT)
@@ -714,15 +719,12 @@ endif()
 if(MOTIF_PNG_FOUND)
     list(APPEND XM_PRIVATE_LIBS PkgConfig::MOTIF_PNG)
 endif()
-if(WITH_PRINTING)
-    list(APPEND XM_PRIVATE_LIBS PkgConfig::MOTIF_XP)
-endif()
 if(ICONV_LIBRARY)
     list(APPEND XM_PRIVATE_LIBS ${ICONV_LIBRARY})
 endif()
 target_link_libraries(Xm
     PUBLIC
-        PkgConfig::MOTIF_XT
+        ${XM_PUBLIC_LIBS}
         $<BUILD_INTERFACE:motif_build_flags>
     PRIVATE
         ${XM_PRIVATE_LIBS}

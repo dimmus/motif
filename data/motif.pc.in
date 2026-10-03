@@ -6,7 +6,7 @@ includedir=@MOTIF_PC_INCLUDEDIR@
 Name: motif
 Description: Motif user interface toolkit
 Version: @PROJECT_VERSION@
-Requires: xt x11
+Requires: @MOTIF_PC_XM_REQUIRES@
 Requires.private: @MOTIF_PC_XM_REQUIRES_PRIVATE@
 Cflags: -I${includedir}
 Libs: -L${libdir} -lXm

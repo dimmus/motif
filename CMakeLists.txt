@@ -665,10 +665,14 @@ endif()
 if(MOTIF_PNG_FOUND)
   list(APPEND _pc_requires libpng)
 endif()
-if(WITH_PRINTING)
-  list(APPEND _pc_requires xp)
-endif()
 string(REPLACE ";" " " MOTIF_PC_XM_REQUIRES_PRIVATE "${_pc_requires}")
+
+# With printing, <Xm/Xm.h> includes <X11/extensions/Print.h>, so libXp is
+# part of the public interface as X11 and Xt are.
+set(MOTIF_PC_XM_REQUIRES "xt x11")
+if(WITH_PRINTING)
+  string(APPEND MOTIF_PC_XM_REQUIRES " xp")
+endif()
 
 set(_pc_libs)
 if(ICONV_LIBRARY)
@@ -712,6 +716,9 @@ set(MOTIF_CMAKE_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/cmake/Motif)
 # as "<prefix>|<modules>".  Static libraries also need their private
 # dependencies.
 set(MOTIF_CONFIG_PKG_DEPS "MOTIF_XT|x11 xt")
+if(WITH_PRINTING)
+  list(APPEND MOTIF_CONFIG_PKG_DEPS "MOTIF_XP|xp")
+endif()
 if(NOT WITH_SHARED_LIBS)
   list(APPEND MOTIF_CONFIG_PKG_DEPS
     "MOTIF_XEXT|xext xmu xpm"
@@ -725,9 +732,6 @@ if(NOT WITH_SHARED_LIBS)
   endif()
   if(MOTIF_PNG_FOUND)
     list(APPEND MOTIF_CONFIG_PKG_DEPS "MOTIF_PNG|libpng")
-  endif()
-  if(WITH_PRINTING)
-    list(APPEND MOTIF_CONFIG_PKG_DEPS "MOTIF_XP|xp")
   endif()
 endif()
 
