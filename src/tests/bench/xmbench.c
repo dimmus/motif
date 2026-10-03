@@ -12,6 +12,8 @@
  *
  * Each case reports, per operation:
  *   - ns       median wall time over REPEAT runs (default 5)
+ *   - cpu      median CPU time of xmbench itself (not of the X server),
+ *              which other load on the machine disturbs less
  *   - mallocs  calls to malloc/calloc/realloc
  *   - requests X requests (XNextRequest delta)
  *   - rtrips   round trips (calls to _XReply, which XSync also uses)
@@ -86,7 +88,7 @@ struct counters {
 };
 
 struct result {
-	double ns, mallocs, requests, rtrips, icvalues;
+	double ns, cpu, mallocs, requests, rtrips, icvalues;
 };
 
 static XtAppContext app;
@@ -100,12 +102,17 @@ static unsigned long *c_mallocs, *c_replies, *c_icvalues;
 /* Harness                                                             */
 /* ------------------------------------------------------------------ */
 
-static double now_ns(void)
+static double clock_ns(clockid_t id)
 {
 	struct timespec ts;
 
-	clock_gettime(CLOCK_MONOTONIC, &ts);
+	clock_gettime(id, &ts);
 	return ts.tv_sec * 1e9 + ts.tv_nsec;
+}
+
+static double now_ns(void)
+{
+	return clock_ns(CLOCK_MONOTONIC);
 }
 
 static void snap(struct counters *c)
@@ -144,7 +151,7 @@ static double median(double *v, int n)
 static void run_case(const struct bench_case *bc, long n, int repeat,
 		     struct result *res)
 {
-	double ns[MAX_REPEAT], ma[MAX_REPEAT], rq[MAX_REPEAT];
+	double ns[MAX_REPEAT], cpu[MAX_REPEAT], ma[MAX_REPEAT], rq[MAX_REPEAT];
 	double rt[MAX_REPEAT], ic[MAX_REPEAT];
 	int r;
 
@@ -152,22 +159,25 @@ static void run_case(const struct bench_case *bc, long n, int repeat,
 		bc->init(n);
 	for (r = 0; r < repeat; r++) {
 		struct counters before, after;
-		double t0, t1;
+		double t0, t1, c0, c1;
 		long ops;
 
 		if (bc->setup)
 			bc->setup(n);
 		drain();
 		snap(&before);
+		c0 = clock_ns(CLOCK_PROCESS_CPUTIME_ID);
 		t0 = now_ns();
 		ops = bc->run(n);
 		snap(&after);
 		if (dpy)
 			XSync(dpy, False);
 		t1 = now_ns();
+		c1 = clock_ns(CLOCK_PROCESS_CPUTIME_ID);
 		if (ops < 1)
 			ops = 1;
 		ns[r] = (t1 - t0) / ops;
+		cpu[r] = (c1 - c0) / ops;
 		ma[r] = (double)(after.mallocs - before.mallocs) / ops;
 		rq[r] = (double)(after.requests - before.requests) / ops;
 		rt[r] = (double)(after.replies - before.replies) / ops;
@@ -180,6 +190,7 @@ static void run_case(const struct bench_case *bc, long n, int repeat,
 		bc->fini();
 	drain();
 	res->ns = median(ns, repeat);
+	res->cpu = median(cpu, repeat);
 	res->mallocs = median(ma, repeat);
 	res->requests = median(rq, repeat);
 	res->rtrips = median(rt, repeat);
@@ -1289,8 +1300,8 @@ int main(int argc, char **argv)
 			threads ? "true" : "false",
 			c_mallocs ? "true" : "false");
 	}
-	printf("%-22s %9s %12s %9s %9s %8s %8s\n", "case", "n", "ns/op",
-	       "mallocs", "requests", "rtrips", "icvalues");
+	printf("%-22s %9s %12s %12s %9s %9s %8s %8s\n", "case", "n", "ns/op",
+	       "cpu-ns/op", "mallocs", "requests", "rtrips", "icvalues");
 	for (i = 0; i < N_CASES; i++) {
 		const struct bench_case *bc = &cases[i];
 		struct result res;
@@ -1307,18 +1318,20 @@ int main(int argc, char **argv)
 			continue;
 		}
 		run_case(bc, n, repeat, &res);
-		printf("%-22s %9ld %12.1f %9.3f %9.3f %8.3f %8.3f\n", bc->name,
-		       n, res.ns, res.mallocs, res.requests, res.rtrips,
-		       res.icvalues);
+		printf("%-22s %9ld %12.1f %12.1f %9.3f %9.3f %8.3f %8.3f\n",
+		       bc->name, n, res.ns, res.cpu, res.mallocs, res.requests,
+		       res.rtrips, res.icvalues);
 		fflush(stdout);
 		if (jf)
 			fprintf(jf, "%s\n    {\"name\": \"%s\", \"group\": \"%s\", "
 				"\"n\": %ld, \"ns_per_op\": %.2f, "
+				"\"cpu_ns_per_op\": %.2f, "
 				"\"mallocs_per_op\": %.4f, "
 				"\"requests_per_op\": %.4f, "
 				"\"round_trips_per_op\": %.4f, "
 				"\"icvalues_per_op\": %.4f}",
 				ran ? "," : "", bc->name, bc->group, n, res.ns,
+				res.cpu,
 				res.mallocs, res.requests, res.rtrips,
 				res.icvalues);
 		ran++;
