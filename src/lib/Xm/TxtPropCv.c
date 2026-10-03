@@ -58,6 +58,19 @@ static Atom GetLocaleEncodingAtom(Display *dpy)
   return (encoding);
 }
 
+/*
+ * Returns a NUL terminated copy of the nitems bytes of a text property
+ * value, which need not be NUL terminated itself.
+ */
+static char *CopyTextPropertyValue(XTextProperty *text_prop)
+{
+  char *value = XtMalloc(text_prop->nitems + 1);
+  if (text_prop->nitems > 0)
+    memcpy(value, text_prop->value, text_prop->nitems);
+  value[text_prop->nitems] = '\0';
+  return (value);
+}
+
 /************************************************************************
  *
  *  TextPropertyToSingleTextItem
@@ -524,6 +537,7 @@ int XmCvtTextPropertyToXmStringTable(Display *display,
 #endif
   };
   int i, elements = 0;
+  char *value;
   XmStringTable string_table;
   XmStringTag tag;
   XmTextType type;
@@ -535,18 +549,21 @@ int XmCvtTextPropertyToXmStringTable(Display *display,
   _XmAppLock(app);
   if (text_prop->encoding == atoms[XmACOMPOUND_TEXT]) {
     char *ptr;
+    /* The value need not be NUL terminated: work on a copy that is. */
+    value = CopyTextPropertyValue(text_prop);
     /* First found how many XmString we need to allocate. */
     for (*count_return = 1, i = 0; i < text_prop->nitems; i++) {
-      if (text_prop->value[i] == '\0')
+      if (value[i] == '\0')
         (*count_return)++;
     }
     string_table = (XmStringTable)XtMalloc(sizeof(XmString) * (*count_return));
     /* Now convert each compound text to an XmString. */
-    for (i = 0, ptr = (char *)text_prop->value; i < *count_return; i++, ptr += strlen(ptr) + 1) {
+    for (i = 0, ptr = value; i < *count_return; i++, ptr += strlen(ptr) + 1) {
       XmString tempstr;
       tempstr = XmCvtCTToXmString(ptr);
       string_table[i] = tempstr;
     }
+    XtFree(value);
     *string_table_return = string_table;
     _XmAppUnlock(app);
     return (Success);
@@ -609,26 +626,28 @@ int XmCvtTextPropertyToXmStringTable(Display *display,
     return (XLocaleNotSupported);
   }
   /* We fell through the else-if's so pull apart the data in the text
-       property and set up a return string table. */
+       property and set up a return string table.  The value need not
+       be NUL terminated: work on a copy that is. */
+  value = CopyTextPropertyValue(text_prop);
   /* First count up how many string elements there are in the value. */
-  for (i = 0, elements = 1; i < text_prop->nitems - 1; ++i) {
+  for (i = 0, elements = 1; i + 1 < text_prop->nitems; ++i) {
     /* The text prop value will have two NULL's at the end,
            one for the end of the last string and one to terminate
            the entire value. The terminating NULL will be excluded
            by looping until i == nitems since the terminating NULL
            is not included in the nitems calculation. */
-    if (text_prop->value[i] == '\0')
+    if (value[i] == '\0')
       ++elements;
   }
   /* Create an appropriately sized array of xmstrings */
   string_table = (XmStringTable)XtMalloc(sizeof(XmString) * (elements));
   /* Create XmStrings from each string in the value field */
-  string_table[0] = XmStringGenerate((XtPointer)text_prop->value, tag, type, NULL);
-  for (i = 0, elements = 1; i < text_prop->nitems - 1; ++i) {
-    if (text_prop->value[i] == '\0')
-      string_table[elements++] = XmStringGenerate(
-          (XtPointer) & (text_prop->value[i + 1]), tag, type, NULL);
+  string_table[0] = XmStringGenerate((XtPointer)value, tag, type, NULL);
+  for (i = 0, elements = 1; i + 1 < text_prop->nitems; ++i) {
+    if (value[i] == '\0')
+      string_table[elements++] = XmStringGenerate((XtPointer) & (value[i + 1]), tag, type, NULL);
   }
+  XtFree(value);
   *string_table_return = string_table;
   *count_return = elements;
   _XmAppUnlock(app);
