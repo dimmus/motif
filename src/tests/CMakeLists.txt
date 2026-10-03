@@ -142,6 +142,7 @@ endfunction()
 
 add_subdirectory(uil)
 add_subdirectory(interactive)
+add_subdirectory(visual)
 if(WITH_FUZZERS)
     add_subdirectory(fuzz)
 endif()
