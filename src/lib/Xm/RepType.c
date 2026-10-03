@@ -1335,8 +1335,9 @@ static String *CopyStringArray(String *StrArray, unsigned char NumEntries, Boole
     PrefixSize = 2;
   Index = 0;
   while (Index < NumEntries) {
-    TmpStr[Index] = XtMalloc(PrefixSize + strlen(StrArray[Index]) + 1);
-    strcpy(TmpStr[Index] + PrefixSize, StrArray[Index]);
+    size_t len = strlen(StrArray[Index]) + 1;
+    TmpStr[Index] = XtMalloc(PrefixSize + len);
+    memcpy(TmpStr[Index] + PrefixSize, StrArray[Index], len);
     Index++;
   }
   if (UppercaseFormat) {
@@ -1666,6 +1667,7 @@ static Boolean ReverseConvertRepType(Display *disp,
   unsigned short NumValues;
   char **OutValue = NULL;
   String in_str;
+  size_t size;
   String reverse_message = MESSAGE0;
   _XmProcessLock();
   Record = GetRepTypeRecord(RepTypeID);
@@ -1707,9 +1709,11 @@ static Boolean ReverseConvertRepType(Display *disp,
   }
 #endif
   /** generate a message and display it */
-  in_str = (char *)XtMalloc(strlen(reverse_message) + 10);
-  sprintf(in_str, "%s %d", reverse_message, in_value);
+  size = strlen(reverse_message) + 10;
+  in_str = (char *)XtMalloc(size);
+  snprintf(in_str, size, "%s %d", reverse_message, in_value);
   XtDisplayStringConversionWarning(disp, in_str, Record->rep_type_name);
+  XtFree(in_str);
   return (FALSE);
 }
 
