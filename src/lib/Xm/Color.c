@@ -169,13 +169,13 @@ static XmColorData *GetDefaultColors(Screen *screen, Colormap color_map)
   /*  See if more space is needed in the array  */
   if (default_set == NULL) {
     default_set_size = 10;
-    default_set = (XmColorData *)XtRealloc((char *)default_set,
-                                           (sizeof(XmColorData) * default_set_size));
+    default_set =
+        (XmColorData *)_XmReallocArray((char *)default_set, default_set_size, sizeof(XmColorData));
   }
   else if (default_set_count == default_set_size) {
     default_set_size += 10;
-    default_set = (XmColorData *)XtRealloc((char *)default_set,
-                                           sizeof(XmColorData) * default_set_size);
+    default_set =
+        (XmColorData *)_XmReallocArray((char *)default_set, default_set_size, sizeof(XmColorData));
   }
   /* Find the background based on the depth of the screen */
   if (DefaultDepthOfScreen(screen) == 1) {
@@ -273,7 +273,7 @@ XmColorData *_XmAddToColorCache(XmColorData *new_rec)
   _XmProcessLock();
   if (Set_Count == Set_Size) {
     Set_Size += 10;
-    Color_Set = (XmColorData *)XtRealloc((char *)Color_Set, sizeof(XmColorData) * Set_Size);
+    Color_Set = (XmColorData *)_XmReallocArray((char *)Color_Set, Set_Size, sizeof(XmColorData));
   }
   *(Color_Set + Set_Count) = *new_rec;
   Set_Count++;

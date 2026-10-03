@@ -76,9 +76,9 @@ void XmeDrawArrow(Display *display,
   }
   if (allocated < size) {
     _XmProcessLock();
-    top = (XRectangle *)XtRealloc((char *)top, sizeof(XRectangle) * (size / 2 + 6));
-    cent = (XRectangle *)XtRealloc((char *)cent, sizeof(XRectangle) * (size / 2 + 6));
-    bot = (XRectangle *)XtRealloc((char *)bot, sizeof(XRectangle) * (size / 2 + 6));
+    top = (XRectangle *)_XmReallocArray((char *)top, size / 2 + 6, sizeof(XRectangle));
+    cent = (XRectangle *)_XmReallocArray((char *)cent, size / 2 + 6, sizeof(XRectangle));
+    bot = (XRectangle *)_XmReallocArray((char *)bot, size / 2 + 6, sizeof(XRectangle));
     allocated = size;
     _XmProcessUnlock();
   }

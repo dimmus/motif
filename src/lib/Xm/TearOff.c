@@ -247,7 +247,7 @@ static Boolean DoPlacement(Widget wid, XEvent *event)
   GC tearoffGC;
   /* Determine which keycodes are bound to osfXK_Cancel. */
   num_keys = XmeVirtualToActualKeysyms(XtDisplay(rc), keysym, &keys);
-  KCancel = (KeyCode *)XtMalloc(num_keys * sizeof(KeyCode));
+  KCancel = (KeyCode *)_XmMallocArray(num_keys, sizeof(KeyCode));
   for (index = 0; index < num_keys; index++)
     KCancel[index] = XKeysymToKeycode(XtDisplay(rc), keys[index].keysym);
   XtFree((char *)keys);

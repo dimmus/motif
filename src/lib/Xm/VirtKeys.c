@@ -294,8 +294,9 @@ static void FillBindingsFromDB(Display *dpy,
       /* Append the new bindings to the end of the table. */
       if (new_num > 0) {
         int tmp;
-        *keys = (XmVKeyBinding)XtRealloc((char *)*keys,
-                                         (*num_keys + new_num) * sizeof(XmVKeyBindingRec));
+        *keys = (XmVKeyBinding)_XmReallocArray((char *)*keys,
+                                               *num_keys + new_num,
+                                               sizeof(XmVKeyBindingRec));
         for (tmp = 0; tmp < new_num; tmp++) {
           (*keys)[*num_keys + tmp].keysym = new_keys[tmp].keysym;
           (*keys)[*num_keys + tmp].modifiers = new_keys[tmp].modifiers;
@@ -626,7 +627,7 @@ int XmeVirtualToActualKeysyms(Display *dpy, KeySym virtKeysym, XmKeyBinding *act
       matches++;
   /* Allocate the return array. */
   if (matches > 0) {
-    *actualKeyData = (XmKeyBinding)XtMalloc(matches * sizeof(XmKeyBindingRec));
+    *actualKeyData = (XmKeyBinding)_XmMallocArray(matches, sizeof(XmKeyBindingRec));
     matches = 0;
     for (index = 0; index < xmDisplay->display.num_bindings; index++)
       if (keyBindings[index].virtkey == virtKeysym) {

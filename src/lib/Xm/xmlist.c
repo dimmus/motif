@@ -22,6 +22,7 @@
  *
  */
 #include "xmlist.h"
+#include "XmI.h"
 /************************************************************
  *
  *  Stack code.
@@ -65,8 +66,8 @@ void _XmStackPush(XmStack stack, XtPointer elem)
 {
   if ((++stack->top) >= stack->alloc) {
     stack->alloc += STACK_INC;
-    stack->elems = (XtPointer *)XtRealloc((XtPointer)stack->elems,
-                                          sizeof(XtPointer) * stack->alloc);
+    stack->elems =
+        (XtPointer *)_XmReallocArray((XtPointer)stack->elems, stack->alloc, sizeof(XtPointer));
   }
   stack->elems[stack->top] = elem;
 #ifdef STACK_DEBUG

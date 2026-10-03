@@ -160,7 +160,8 @@ static unsigned char AddEntryToCache(char *entryName, unsigned entryNameLen)
   unsigned char result = 0;
   if (numCacheEntries == numCacheAlloc) {
     numCacheAlloc += FILE_LIST_BLOCK;
-    dirCache = (XmDirCache)XtRealloc((char *)dirCache, numCacheAlloc * sizeof(XmDirCacheRec *));
+    dirCache =
+        (XmDirCache)_XmReallocArray((char *)dirCache, numCacheAlloc, sizeof(XmDirCacheRec *));
   }
   dirCache[numCacheEntries] = (XmDirCacheRec *)XtMalloc(sizeof(XmDirCacheRec) + entryNameLen);
 #pragma GCC diagnostic push
@@ -676,7 +677,7 @@ void _XmOSGetDirEntries(String qualifiedDir,
         continue;
       if (*pNumEntries == *pNumAlloc) {
         *pNumAlloc += FILE_LIST_BLOCK;
-        *pEntries = (String *)XtRealloc((char *)*pEntries, (*pNumAlloc * sizeof(char *)));
+        *pEntries = (String *)_XmReallocArray((char *)*pEntries, *pNumAlloc, sizeof(char *));
       }
       entryPtr = XtMalloc(dirNameLen + dirLen + 1);
       strncpy(entryPtr, qualifiedDir, dirLen + 1);

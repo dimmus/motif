@@ -28,6 +28,7 @@ static char rcsid[] = "$XConsortium: Desktop.c /main/12 1995/07/14 10:17:30 drk 
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
 #endif
+#include "XmI.h"
 #include <Xm/BaseClassP.h>
 #include <Xm/DesktopP.h>
 #include <Xm/DisplayP.h>
@@ -186,8 +187,8 @@ static void InsertChild(Widget wid)
   if (cw->desktop.num_children == cw->desktop.num_slots) {
     /* Allocate more space */
     cw->desktop.num_slots += (cw->desktop.num_slots / 2) + 2;
-    cw->desktop.children = children = (WidgetList)XtRealloc(
-        (char *)children, (unsigned)(cw->desktop.num_slots) * sizeof(Widget));
+    cw->desktop.children = children =
+        (WidgetList)_XmReallocArray((char *)children, cw->desktop.num_slots, sizeof(Widget));
   }
   /* Ripple children up one space from "position" */
   for (i = cw->desktop.num_children; i > position; i--) {

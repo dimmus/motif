@@ -20,6 +20,7 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
  */
+#include "XmI.h"
 #include <X11/Intrinsic.h>
 #include <Xm/DrawUtils.h>
 #define STATIC_RECTS 20
@@ -76,7 +77,7 @@ void XmDrawBevel(Display *dpy,
      */
     if (size > numAlloced) {
       numAlloced = size;
-      alloced = (XRectangle *)XtRealloc((XtPointer)alloced, sizeof(XRectangle) * numAlloced);
+      alloced = (XRectangle *)_XmReallocArray((XtPointer)alloced, numAlloced, sizeof(XRectangle));
     }
     rt = alloced;
   }

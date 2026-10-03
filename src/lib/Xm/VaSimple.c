@@ -350,7 +350,7 @@ void _XmVaToTypedArgList(va_list var,
   XtTypedArgList args = NULL;
   String attr;
   int count;
-  args = (XtTypedArgList)XtMalloc((unsigned)(max_count * sizeof(XtTypedArg)));
+  args = (XtTypedArgList)_XmMallocArray(max_count, sizeof(XtTypedArg));
   for (attr = va_arg(var, String), count = 0; attr != NULL; attr = va_arg(var, String)) {
     if (strcmp(attr, XtVaTypedArg) == 0) {
       args[count].name = va_arg(var, String);
@@ -387,13 +387,13 @@ static void _XmVaProcessEverything(Widget widget,
   XtTypedArg typed_args;
   String attr;
   int count, bcount;
-  *args = (ArgList)XtMalloc(num_args * sizeof(Arg));
+  *args = (ArgList)_XmMallocArray(num_args, sizeof(Arg));
   /* Process the routine specific args */
-  *buttonTypes = (XmButtonTypeTable)XtMalloc((unsigned)(button_count * sizeof(XmButtonType *)));
-  *buttonStrings = (XmStringTable)XtMalloc((unsigned)(button_count * sizeof(XmString *)));
-  *buttonMnemonics = (XmKeySymTable)XtMalloc((unsigned)(button_count * sizeof(KeySym *)));
-  *buttonAccelerators = (String *)XtMalloc((unsigned)(button_count * sizeof(String *)));
-  *buttonAcceleratorText = (XmStringTable)XtMalloc((unsigned)(button_count * sizeof(XmString *)));
+  *buttonTypes = (XmButtonTypeTable)_XmMallocArray(button_count, sizeof(XmButtonType *));
+  *buttonStrings = (XmStringTable)_XmMallocArray(button_count, sizeof(XmString *));
+  *buttonMnemonics = (XmKeySymTable)_XmMallocArray(button_count, sizeof(KeySym *));
+  *buttonAccelerators = (String *)_XmMallocArray(button_count, sizeof(String *));
+  *buttonAcceleratorText = (XmStringTable)_XmMallocArray(button_count, sizeof(XmString *));
   bcount = 0;
   for (attr = va_arg(var, String), count = 0; attr != NULL; attr = va_arg(var, String)) {
     if (strcmp(attr, XtVaTypedArg) == 0) {
@@ -911,7 +911,7 @@ Widget XmeVLCreateWidget(
   _XmWidgetToAppContext(parent);
   _XmAppLock(app);
   /* The size as specified from count */
-  args = (ArgList)XtMalloc(count * sizeof(Arg));
+  args = (ArgList)_XmMallocArray(count, sizeof(Arg));
   /*
    * go through each element and copy the name and the value
    * (remember the value might be a pointer) to the value field

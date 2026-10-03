@@ -1329,7 +1329,7 @@ static String *CopyStringArray(String *StrArray, unsigned char NumEntries, Boole
   unsigned int Index;
   String *TmpStr;
   int PrefixSize = 0;
-  TmpStr = (String *)XtMalloc((NumEntries + 1) * sizeof(String));
+  TmpStr = (String *)_XmMallocArray(NumEntries + 1, sizeof(String));
   TmpStr[NumEntries] = NULL;
   if (UppercaseFormat)
     PrefixSize = 2;
@@ -1371,7 +1371,7 @@ static void CopyRecord(XmRepTypeEntry OutputEntry,
   /* only when the record is copied out to the app we want to
        create a array of consecutive values */
   if (values || !copy_in)
-    OutputEntry->values = (unsigned char *)XtMalloc(sizeof(unsigned char) * num_values);
+    OutputEntry->values = (unsigned char *)_XmMallocArray(num_values, sizeof(unsigned char));
   else
     OutputEntry->values = NULL;
   if (values) {
@@ -1422,8 +1422,9 @@ XmRepTypeId XmRepTypeRegister(String rep_type_name,
     return (XmREP_TYPE_INVALID);
   _XmProcessLock();
   /** expand the dynamic table */
-  DynamicRepTypes = (XmRepTypeList)XtRealloc(
-      (char *)DynamicRepTypes, (sizeof(XmRepTypeEntryRec) * (DynamicRepTypeNumRecords + 1)));
+  DynamicRepTypes = (XmRepTypeList)_XmReallocArray((char *)DynamicRepTypes,
+                                                   DynamicRepTypeNumRecords + 1,
+                                                   sizeof(XmRepTypeEntryRec));
   /** fill in the new record */
   NewRecord = &DynamicRepTypes[DynamicRepTypeNumRecords];
   /* the new reptype ID values are located after the standard ones */
@@ -1520,7 +1521,7 @@ XmRepTypeList XmRepTypeGetRegistered(void)
   /* Total up the data sizes of the static and run-time lists. */
   _XmProcessLock();
   TotalEntries = StandardNumRecs + DynamicRepTypeNumRecords;
-  OutputList = (XmRepTypeList)XtMalloc((TotalEntries + 1) * sizeof(XmRepTypeEntryRec));
+  OutputList = (XmRepTypeList)_XmMallocArray(TotalEntries + 1, sizeof(XmRepTypeEntryRec));
   for (Index = 0; Index < StandardNumRecs; Index++) {
     XmRepTypeEntry Record = (XmRepTypeEntry) & (StandardRepTypes[Index]);
     CopyRecord(&(OutputList[Index]),

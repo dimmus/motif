@@ -808,13 +808,15 @@ XmColorData *_XmGetDefaultColors(Screen *screen, Colormap color_map)
   /*  See if more space is needed in the array  */
   if (default_set == NULL) {
     default_set_size = 10;
-    default_set = (XmColorData **)XtRealloc((char *)default_set,
-                                            (sizeof(XmColorData *) * default_set_size));
+    default_set = (XmColorData **)_XmReallocArray((char *)default_set,
+                                                  default_set_size,
+                                                  sizeof(XmColorData *));
   }
   else if (default_set_count == default_set_size) {
     default_set_size += 10;
-    default_set = (XmColorData **)XtRealloc((char *)default_set,
-                                            sizeof(XmColorData *) * default_set_size);
+    default_set = (XmColorData **)_XmReallocArray((char *)default_set,
+                                                  default_set_size,
+                                                  sizeof(XmColorData *));
   }
   /* Find the background based on the depth of the screen */
   if (DefaultDepthOfScreen(screen) == 1) {
@@ -1109,7 +1111,7 @@ Cardinal _XmFilterResources(XtResource *resources,
       copyIndexes[j++] = i;
     }
   }
-  filteredResources = (XtResource *)XtMalloc(j * sizeof(XtResource));
+  filteredResources = (XtResource *)_XmMallocArray(j, sizeof(XtResource));
   for (i = 0; i < j; i++) {
     filteredResources[i] = resources[copyIndexes[i]];
   }

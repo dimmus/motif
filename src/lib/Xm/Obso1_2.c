@@ -33,6 +33,7 @@
 #include "SelectioBI.h"
 #include "SyntheticI.h"
 #include "TraversalI.h"
+#include "XmI.h"
 #include "XmStringI.h" /* for _XmStringGetTextConcat() */
 #include <Xm/BaseClassP.h>
 #include <Xm/DesktopP.h>
@@ -199,11 +200,11 @@ void _XmDrawShadow(Display *display,
   if (size <= 0)
     return;
   if (rect_count == 0) {
-    rects = (XRectangle *)XtMalloc(sizeof(XRectangle) * size * 4);
+    rects = (XRectangle *)_XmMallocArray(size, 4 * sizeof(XRectangle));
     rect_count = size;
   }
   if (rect_count < size) {
-    rects = (XRectangle *)XtRealloc((char *)rects, sizeof(XRectangle) * size * 4);
+    rects = (XRectangle *)_XmReallocArray((char *)rects, size, 4 * sizeof(XRectangle));
     rect_count = size;
   }
   size2 = size + size;
@@ -310,9 +311,9 @@ void _XmGetArrowDrawRects(int highlight_thickness,
     xOffset = yOffset;
     yOffset = temp;
   }
-  *top = (XRectangle *)XtMalloc(sizeof(XRectangle) * (size / 2 + 6));
-  *cent = (XRectangle *)XtMalloc(sizeof(XRectangle) * (size / 2 + 6));
-  *bot = (XRectangle *)XtMalloc(sizeof(XRectangle) * (size / 2 + 6));
+  *top = (XRectangle *)_XmMallocArray(size / 2 + 6, sizeof(XRectangle));
+  *cent = (XRectangle *)_XmMallocArray(size / 2 + 6, sizeof(XRectangle));
+  *bot = (XRectangle *)_XmMallocArray(size / 2 + 6, sizeof(XRectangle));
   /*  Set up a loop to generate the segments.  */
   width = size;
   y = size + highlight_thickness + shadow_thickness - 1 + yOffset;
@@ -840,11 +841,11 @@ static void XmDrawEtchedShadow(Display *display,
   size2 = size + size;
   size3 = size2 + size;
   if (rect_count == 0) {
-    rects = (XRectangle *)XtMalloc(sizeof(XRectangle) * size * 4);
+    rects = (XRectangle *)_XmMallocArray(size, 4 * sizeof(XRectangle));
     rect_count = size;
   }
   if (rect_count < size) {
-    rects = (XRectangle *)XtRealloc((char *)rects, sizeof(XRectangle) * size * 4);
+    rects = (XRectangle *)_XmReallocArray((char *)rects, size, 4 * sizeof(XRectangle));
     rect_count = size;
   }
   pos_top = 0;

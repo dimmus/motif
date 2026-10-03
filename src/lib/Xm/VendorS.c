@@ -574,7 +574,7 @@ static void ClassInitialize(void)
   _XmProcessLock();
   wc_num_res = xmVendorShellExtClassRec.object_class.num_resources;
   sc_num_res = xmShellExtClassRec.object_class.num_resources;
-  merged_list = (XtResource *)XtMalloc((sizeof(XtResource) * (wc_num_res + sc_num_res)));
+  merged_list = (XtResource *)_XmMallocArray(wc_num_res + sc_num_res, sizeof(XtResource));
   _XmTransformSubResources(
       xmShellExtClassRec.object_class.resources, sc_num_res, &uncompiled, &num);
   for (i = 0; i < num; i++) {
@@ -770,8 +770,9 @@ static void AddGrab(XmVendorShellExtObject ve,
   if (xmDisplay->display.numModals == xmDisplay->display.maxModals) {
     /* Allocate more space */
     xmDisplay->display.maxModals += (xmDisplay->display.maxModals / 2) + 2;
-    xmDisplay->display.modals = modals = (XmModalData)XtRealloc(
-        (char *)modals, (unsigned)((xmDisplay->display.maxModals) * sizeof(XmModalDataRec)));
+    xmDisplay->display.modals = modals = (XmModalData)_XmReallocArray((char *)modals,
+                                                                      xmDisplay->display.maxModals,
+                                                                      sizeof(XmModalDataRec));
   }
   modals[position].wid = shell;
   modals[position].ve = ve;
@@ -2229,8 +2230,9 @@ static void AddDLEntry(XmVendorShellExtObject ve, Widget shell)
   }
   if (destroy_list_cnt == destroy_list_size) {
     destroy_list_size += 2;
-    destroy_list = (XmDestroyGrabList)XtRealloc((char *)destroy_list,
-                                                destroy_list_size * sizeof(XmDestroyGrabRec));
+    destroy_list = (XmDestroyGrabList)_XmReallocArray((char *)destroy_list,
+                                                      destroy_list_size,
+                                                      sizeof(XmDestroyGrabRec));
   }
   destroy_list[i].shell = shell;
   destroy_list[i].ve = ve;

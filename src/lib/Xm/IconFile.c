@@ -309,8 +309,9 @@ static int CheckDirCache(String path)
        */
       if (cacheList.numDirs == cacheList.maxDirs) {
         cacheList.maxDirs += 16;
-        cacheList.dirs = (DtCachedDir *)XtRealloc((char *)cacheList.dirs,
-                                                  cacheList.maxDirs * sizeof(DtCachedDir));
+        cacheList.dirs = (DtCachedDir *)_XmReallocArray((char *)cacheList.dirs,
+                                                        cacheList.maxDirs,
+                                                        sizeof(DtCachedDir));
       }
       dirName = strncpy(XtMalloc(dirNameLen + 1), path, dirNameLen);
       dirName[dirNameLen] = '\0';

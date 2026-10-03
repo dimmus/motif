@@ -125,8 +125,8 @@ void _XmResizeHashTable(XmHashTable table, Cardinal new_size)
   /* Realloc table */
   oldsize = table->size;
   table->size = size_table[i];
-  table->buckets = (XmHashBucket *)XtRealloc((char *)table->buckets,
-                                             table->size * sizeof(XmHashBucket));
+  table->buckets =
+      (XmHashBucket *)_XmReallocArray((char *)table->buckets, table->size, sizeof(XmHashBucket));
   /* NULL new array entries */
   for (i = oldsize; i < table->size; i++)
     table->buckets[i] = NULL;

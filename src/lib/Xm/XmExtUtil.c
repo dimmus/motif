@@ -226,7 +226,7 @@ void _XmFilterArgs(ArgList args,
                    ArgList *filtered_args,
                    Cardinal *num_filtered_args)
 {
-  ArgList fargs = (ArgList)XtMalloc(sizeof(Arg) * num_args);
+  ArgList fargs = (ArgList)_XmMallocArray(num_args, sizeof(Arg));
   register int i;
   String *ptr;
   *filtered_args = fargs;
@@ -732,9 +732,9 @@ void _XiResolveAllPartOffsets(WidgetClass w_class,
    */
   for (c = w_class; c != NULL; c = c->core_class.superclass)
     classcount++;
-  *offset = (XmOffsetPtr)XtMalloc(classcount * sizeof(XmOffset));
+  *offset = (XmOffsetPtr)_XmMallocArray(classcount, sizeof(XmOffset));
   if (cc)
-    *constraint_offset = (XmOffsetPtr)XtMalloc(classcount * sizeof(XmOffset));
+    *constraint_offset = (XmOffsetPtr)_XmMallocArray(classcount, sizeof(XmOffset));
   else if (constraint_offset != NULL)
     *constraint_offset = NULL;
   /*

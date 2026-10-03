@@ -1169,7 +1169,7 @@ static XtResourceList *CreateIndirectionTable(XtResourceList resources, Cardinal
 {
   register int i;
   XtResourceList *table;
-  table = (XtResourceList *)XtMalloc(num_resources * sizeof(XtResourceList));
+  table = (XtResourceList *)_XmMallocArray(num_resources, sizeof(XtResourceList));
   for (i = 0; i < num_resources; i++)
     table[i] = (XtResourceList)(&(resources[i]));
   return table;
@@ -1242,7 +1242,7 @@ void _XmTransformSubResources(XtResourceList comp_resources,
        /* extension            */ NULL}};
   if (((int)comp_resources[0].resource_offset) >= 0) {
     XtResourceList tmp_resources;
-    tmp_resources = (XtResourceList)XtMalloc(sizeof(XtResource) * num_comp_resources);
+    tmp_resources = (XtResourceList)_XmMallocArray(num_comp_resources, sizeof(XtResource));
     memcpy(tmp_resources, comp_resources, sizeof(XtResource) * num_comp_resources);
     *resources = tmp_resources;
     *num_resources = num_comp_resources;

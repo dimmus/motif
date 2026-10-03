@@ -677,11 +677,11 @@ int _XmMapKeyEvents(String str, int **eventTypes, KeySym **keysyms, Modifiers **
     if (!status)
       break;
     /* Save this event. */
-    *eventTypes = (int *)XtRealloc((char *)*eventTypes, (count + 1) * sizeof(int));
+    *eventTypes = (int *)_XmReallocArray((char *)*eventTypes, count + 1, sizeof(int));
     (*eventTypes)[count] = tmp_type;
-    *keysyms = (KeySym *)XtRealloc((char *)*keysyms, (count + 1) * sizeof(KeySym));
+    *keysyms = (KeySym *)_XmReallocArray((char *)*keysyms, count + 1, sizeof(KeySym));
     (*keysyms)[count] = (KeySym)tmp_sym;
-    *modifiers = (Modifiers *)XtRealloc((char *)*modifiers, (count + 1) * sizeof(Modifiers));
+    *modifiers = (Modifiers *)_XmReallocArray((char *)*modifiers, count + 1, sizeof(Modifiers));
     (*modifiers)[count] = tmp_mods;
     count++;
     /* Skip the separator. */
