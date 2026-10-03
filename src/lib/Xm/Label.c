@@ -2470,8 +2470,12 @@ static void LabelSetValue(Widget w, XtPointer value, int type)
       length = 0;
       while (str2[length] != 0)
         length++;
-      str = (char *)XtMalloc(MB_CUR_MAX * length);
-      wcstombs(str, str2, length * MB_CUR_MAX);
+      /* Room for the terminating NUL too, which wcstombs only writes
+         when it fits: without it an empty or full conversion is left
+         unterminated. */
+      str = _XmMallocArray(length + 1, MB_CUR_MAX);
+      if (wcstombs(str, str2, (length + 1) * MB_CUR_MAX) == (size_t)-1)
+        str[0] = '\0';
       XtFree((char *)value);
       value = str;
     }
