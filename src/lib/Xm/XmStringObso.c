@@ -153,7 +153,7 @@ Boolean XmStringByteCompare(XmString a1, XmString b1)
 {
   unsigned char *a;
   unsigned char *b;
-  unsigned short a_length, b_length;
+  unsigned int a_length, b_length;
   Boolean ret_val;
   _XmProcessLock();
   if ((a1 == NULL) && (b1 == NULL)) {
@@ -166,7 +166,11 @@ Boolean XmStringByteCompare(XmString a1, XmString b1)
   }
   a_length = XmCvtXmStringToByteStream(a1, &a);
   b_length = XmCvtXmStringToByteStream(b1, &b);
-  if ((a_length != b_length) || (memcmp(a, b, a_length) != 0))
+  /* A string too long for the byte stream format has none (a_length */
+  /* or b_length 0): such strings only compare equal to themselves. */
+  if ((a == NULL) || (b == NULL))
+    ret_val = (a1 == b1);
+  else if ((a_length != b_length) || (memcmp(a, b, a_length) != 0))
     ret_val = FALSE;
   else
     ret_val = TRUE;

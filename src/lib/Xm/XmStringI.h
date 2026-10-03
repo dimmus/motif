@@ -274,8 +274,7 @@ typedef struct __XmStringArraySegHdrRec {
   unsigned int type : 2;            /* XmSTRING_ENTRY_ARRAY */
   unsigned int soft_line_break : 1; /* linebreak before is soft */
   unsigned int pad : 5;
-  unsigned int segment_count : 8; /* 256 segments per line */
-  unsigned char pad2byte[2];
+  unsigned int segment_count : 24; /* holds any entry_count */
 } _XmStringArraySegHdrRec;
 
 typedef struct __XmStringArraySegRec {
@@ -892,6 +891,7 @@ extern unsigned char _XmEntryTabsGet(_XmStringEntry entry);
 extern unsigned int _XmEntryTextTypeGet(_XmStringEntry entry);
 extern void _XmEntryTextSet(_XmStringEntry entry, XtPointer val);
 extern unsigned char *_XmStringTruncateASN1(unsigned char *str, int n);
+extern unsigned int _XmStringByteStreamValidLength(unsigned char *stream, unsigned long size);
 extern void _XmStringContextCopy(_XmStringContext target, _XmStringContext source);
 extern void _XmStringContextFree(_XmStringContext target);
 extern XmString _XmStringNCreate(char *text, XmStringTag tag, int len);
