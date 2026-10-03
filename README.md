@@ -12,7 +12,7 @@ This is a modern, actively maintained implementation of the Motif toolkit, prese
 
 ## Build Status
 
-**🚀 Modern C Standard Support**: This project now fully supports the **C23 standard** and is compatible with **GCC 15**, ensuring cutting-edge compiler features and future-proof development.
+**C standard**: Motif is built as C17 with GNU extensions (`-std=gnu17`). Moving to C23 needs the remaining unprototyped `()` function declarations fixed first.
 
 This project is continuously tested on multiple Linux distributions with both **GCC** and **Clang** compilers to ensure maximum compatibility and reliability across different build environments:
 
@@ -55,8 +55,7 @@ This fusion created a toolkit that powered:
 - **Accessibility**: Built-in keyboard navigation and screen reader support
 
 ### Modern Enhancements
-- **C23 Standard Support**: Built with the latest C language standard for modern development
-- **GCC 15 Compatibility**: Future-ready compiler support with automatic fallback
+- **C17**: Built as C17 with GNU extensions (`-std=gnu17`) by GCC and Clang
 - **Xft Font Rendering**: Anti-aliased text with modern font support
 - **PNG/JPEG Support**: Modern image format integration
 - **UTF-8 Support**: Full Unicode text handling
@@ -97,7 +96,7 @@ The comprehensive Motif widget set includes:
 # Essential build tools
 cmake >= 3.16             # Primary build system
 pkg-config                # Package configuration
-gcc >= 13.0 (supports C23 standard and GCC 15 compatibility)
+gcc >= 11.0 or clang >= 8.0
 make (GNU Make required)  # Build orchestration
 flex/lex                  # Lexical analysis
 yacc/bison                # Parser generation
@@ -108,10 +107,7 @@ ccache                    # Compiler cache for faster rebuilds
 ```
 
 **Compiler Support**:
-- **GCC 13.0+**: Full C23 standard support with `-std=c23` flag
-- **GCC 15**: Future-ready compatibility (uses `-std=c2x` fallback for current GCC versions)
-- **Clang**: Compatible with modern C standards
-- **Legacy Compilers**: Graceful fallback to C99/C11 standards
+- **GCC 11+** and **Clang 8+**, both building with `-std=gnu17`
 
 #### Runtime Dependencies
 ```bash
@@ -218,11 +214,8 @@ make deps
 # Build Motif (CMake-based build system)
 make build
 
-# Install to system
+# Install (to CMAKE_INSTALL_PREFIX, /usr/local unless configured otherwise)
 sudo make install
-
-# Uninstall if needed
-sudo make uninstall
 ```
 
 ### Build System
@@ -234,8 +227,7 @@ This project uses **CMake** as the primary build system, providing modern depend
 # Core build targets
 make build          # Configure and build Motif (no installation)
 make all            # Build and install Motif (legacy behavior)
-make install        # Install to system (requires sudo)
-make uninstall      # Uninstall from system (requires sudo)
+make install        # Install (run with sudo for a system prefix; DESTDIR=... stages)
 
 # Build variants
 make debug          # Build debug version with symbols
@@ -272,7 +264,7 @@ cmake -H. -Bbuild \
 ```bash
 # Configure installation paths
 cmake -H. -Bbuild \
-    -DCMAKE_INSTALL_PREFIX=/usr          # Installation prefix (default: /usr)
+    -DCMAKE_INSTALL_PREFIX=/usr          # Installation prefix (default: /usr/local)
     -DCMAKE_INSTALL_SYSCONFDIR=/etc      # Configuration files
     -DCMAKE_INSTALL_LIBDIR=lib64         # Library directory
 ```
@@ -300,9 +292,6 @@ sudo make install
 
 # Update library cache
 sudo ldconfig
-
-# Uninstall if needed
-sudo make uninstall
 ```
 
 ## Development and Usage
@@ -345,15 +334,19 @@ int main(int argc, char *argv[])
 
 ### Compilation
 ```bash
-# Using pkg-config (recommended) - automatically uses C23 standard
+# Using pkg-config (recommended); mrm and uil are available as well
 gcc -o myapp myapp.c `pkg-config --cflags --libs motif`
 
-# Manual compilation with C23 standard (add -I<prefix>/include -L<prefix>/lib
-# if Motif was installed to a non-default prefix)
-gcc -std=c23 -o myapp myapp.c -lXm -lXt -lX11
+# Manual compilation (add -I<prefix>/include -L<prefix>/lib if Motif was
+# installed to a non-default prefix)
+gcc -o myapp myapp.c -lXm -lXt -lX11
+```
 
-# For GCC 15 compatibility (automatic fallback to c2x if c23 not supported)
-gcc -std=c2x -o myapp myapp.c -lXm -lXt -lX11
+With CMake, use the installed package (set `CMAKE_PREFIX_PATH` to the Motif
+prefix if it is not a default one):
+```cmake
+find_package(Motif 2.4 REQUIRED)       # COMPONENTS Xm Mrm Uil
+target_link_libraries(myapp PRIVATE Motif::Xm)   # or Motif::Mrm, Motif::Uil
 ```
 
 ### UIL Development
