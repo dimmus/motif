@@ -122,3 +122,7 @@ install(FILES ${MRM_INTERNAL_HEADERS}
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Mrm
 )
 
+# abi.exports.Mrm: libMrm.map must list what the installed headers declare
+motif_exports_test(Mrm ${CMAKE_CURRENT_SOURCE_DIR}/libMrm.map
+    HEADERS ${MRM_HEADERS}
+)

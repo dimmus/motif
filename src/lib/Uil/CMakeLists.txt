@@ -160,3 +160,11 @@ install(FILES
     UilDBDef.h
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/uil
 )
+
+# abi.exports.Uil: libUil.map must list what the installed headers declare.
+# Uil.h, the header of the generated parser, is left out: of what it
+# declares only the token values are for use outside the compiler.
+motif_exports_test(Uil ${CMAKE_CURRENT_SOURCE_DIR}/libUil.map
+    HEADERS UilSymGl.h UilSymDef.h UilDef.h UilAPI.h UilDBDef.h
+    OBJECTS_OF UilCompiler
+)

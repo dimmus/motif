@@ -787,3 +787,8 @@ configure_file(
     @ONLY
 )
 
+# abi.exports.Xm: libXm.map must list what the installed headers declare
+motif_exports_test(Xm ${CMAKE_CURRENT_SOURCE_DIR}/libXm.map
+    HEADERS ${XM_HEADERS} ${XM_EXTRA_HEADERS} ${XM_SLIDE_HEADERS}
+        ${CMAKE_BINARY_DIR}/include/Xm/Xm.h
+)

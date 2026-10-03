@@ -658,6 +658,41 @@ function(motif_version_script target script)
   endif()
 endfunction()
 
+# motif_exports_test(<target> <script> HEADERS <header>...
+#                    [OBJECTS_OF <object library>...])
+#
+# With WITH_TESTS, add the test abi.exports.<target>: the shared library
+# <target> must export every symbol that the installed <header>s declare,
+# that is <script> must not leave one out.  The objects of <target> and of
+# the OBJECTS_OF libraries are the symbols looked for.
+function(motif_exports_test target script)
+  cmake_parse_arguments(E "" "" "HEADERS;OBJECTS_OF" ${ARGN})
+  if(NOT WITH_TESTS OR NOT MOTIF_HAVE_VERSION_SCRIPT OR NOT CMAKE_NM)
+    return()
+  endif()
+  set(_headers)
+  foreach(_h IN LISTS E_HEADERS)
+    get_filename_component(_h ${_h} ABSOLUTE)
+    list(APPEND _headers ${_h})
+  endforeach()
+  set(_objects "$<TARGET_OBJECTS:${target}>")
+  foreach(_lib IN LISTS E_OBJECTS_OF)
+    string(APPEND _objects ";$<TARGET_OBJECTS:${_lib}>")
+  endforeach()
+  set(_args ${CMAKE_CURRENT_BINARY_DIR}/${target}_exports_test.cmake)
+  file(GENERATE OUTPUT ${_args} CONTENT
+"set(NM \"${CMAKE_NM}\")
+set(LIBRARY \"$<TARGET_FILE:${target}>\")
+set(MAP \"${script}\")
+set(OBJECTS \"${_objects}\")
+set(HEADERS \"${_headers}\")
+")
+  add_test(NAME abi.exports.${target}
+    COMMAND ${CMAKE_COMMAND} -DARGS=${_args}
+      -P ${CMAKE_SOURCE_DIR}/tools/cmake/scripts/check_exports.cmake)
+  set_tests_properties(abi.exports.${target} PROPERTIES LABELS ABI)
+endfunction()
+
 # C17 with GNU extensions (-std=gnu17).  C23 needs the remaining
 # unprototyped () function declarations fixed first.
 set(CMAKE_C_STANDARD 17)
