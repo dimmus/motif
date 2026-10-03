@@ -1,0 +1,27 @@
+# LeakSanitizer suppressions for known leaks.
+#
+# CTest passes this file to the tests in builds with
+# WITH_COMPILER_ASAN=ON (LSAN_OPTIONS=suppressions=...).  Remove an
+# entry when its bug is fixed.  Suppressions match function names, so
+# they need a symbolizer (llvm-symbolizer, or addr2line through
+# ASAN_SYMBOLIZER_PATH, which CTest sets up when there is no
+# llvm-symbolizer).
+
+# libXt: the 104-byte record that XtOwnSelection() and
+# XtDisownSelection() allocate for a selection is not freed when its
+# widget is destroyed.  Seen from every Motif selection owner: the text
+# widgets (PRIMARY through XmeNamedSource, MOTIF_DESTINATION through
+# XmeSecondarySink and df_SetDestination, the destroy callback
+# DisownCallback) and the clipboard (AssertClipboardSelection).  Not
+# known to be Motif's fault.
+leak:XtOwnSelection
+leak:XtDisownSelection
+
+# Notebook.c, Destroy: frees the scroll frame data but not its navigator
+# list (ScrollFrameT.c, _XmSFAddNavigator).
+leak:_XmSFAddNavigator
+
+# CutPaste.c, ClipboardGetByNameItem: the format record it gets from
+# ClipboardFindFormat() is never freed; every conversion of the
+# CLIPBOARD selection by its Motif owner (a paste) leaks one.
+leak:ClipboardGetByNameItem

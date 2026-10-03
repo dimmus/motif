@@ -1,0 +1,32 @@
+# LeakSanitizer suppressions for the fuzzers: known library leaks, so
+# that a fuzzing run is not stopped by them.  Remove an entry when its
+# bug is fixed.  See also ../lsan.supp.
+
+# XmString.c: _XmStringNonOptCreate() leaks the rendition tag arrays of
+# every segment that has rendition components (finish_segment() copies
+# its stack record and resets it without freeing them); the XmString
+# suite's byte_stream_rendition_leak case checks this one.
+leak:_XmStringNonOptCreate
+
+# The same as in ../lsan.supp.
+leak:XtOwnSelection
+leak:XtDisownSelection
+leak:_XmSFAddNavigator
+
+# Mrmappl.c, MrmFetchWidgetOverride: when UrmCreateWidgetTree() fails
+# (a corrupt .uid), the widget reference context made by
+# Urm__CW_InitWRef() and the SetValues list are not freed.
+leak:Urm__CW_InitWRef
+leak:ClipboardGetByNameItem
+
+# XmStringFunc.c, XmStringToXmStringTable: the rendition list of its
+# string context (XmString.c, begin_context_rends) is not freed for some
+# strings with rendition tags; crashes/xmstring/table-rendition-context-leak.
+leak:begin_context_rends
+
+# ResEncod.c, XmCvtCTToXmString: the separator it caches for newlines
+# leaks for some inputs with direction sequences between newlines, for
+# example c9 c9 0a 0a 0a 27 0a 0a 0a 0a 0a 9b 5d 0a 0a ff ff.  Only a
+# leak check right after the conversion sees it (it is not reported at
+# exit), so there is no crashes/ct replay.  Not narrowed down further.
+leak:XmStringSeparatorCreate
