@@ -147,6 +147,8 @@ static Boolean GetResources(XmRendition rend,
 static void SetDefault(XmRendition rend);
 #if USE_XFT
 static XftColor GetCachedXftColor(Display *display, Pixel color);
+static Boolean LookupXftFont(Display *display, XmRendition rend, XftFont **font);
+static void CacheXftFont(Display *display, XmRendition rend);
 #endif
 /********    End Static Function Declarations    ********/
 /* Resource List. */
@@ -1634,39 +1636,6 @@ static void ValidateTag(XmRendition rend, XmStringTag dflt)
     _XmRendTag(rend) = _XmStringCacheTag(dflt, XmSTRING_TAG_STRLEN);
   }
 }
-#if USE_XFT
-static int GetSameRenditions(XmRendition *rend_cache,
-                             XmRendition rend,
-                             int count_rend,
-                             Display *display)
-{
-  int i;
-  for (i = 0; i < count_rend; i++) {
-    if (rend_cache && (rend_cache[i]) && (_XmRendDisplay(rend_cache[i]) == display) &&
-        ((((_XmRendFontName(rend) && _XmRendFontName(rend_cache[i])) &&
-           !strcmp(_XmRendFontName(rend_cache[i]), _XmRendFontName(rend))) ||
-          (!_XmRendFontName(rend) && !_XmRendFontName(rend_cache[i]))) &&
-         (((_XmRendFontFoundry(rend) && _XmRendFontFoundry(rend_cache[i])) &&
-           !strcmp(_XmRendFontFoundry(rend_cache[i]), _XmRendFontFoundry(rend))) ||
-          (!_XmRendFontFoundry(rend) && !_XmRendFontFoundry(rend_cache[i]))) &&
-         (((_XmRendFontEncoding(rend) && _XmRendFontEncoding(rend_cache[i])) &&
-           !strcmp(_XmRendFontEncoding(rend_cache[i]), _XmRendFontEncoding(rend))) ||
-          (!_XmRendFontEncoding(rend) && !_XmRendFontEncoding(rend_cache[i]))) &&
-         (((_XmRendFontStyle(rend) && _XmRendFontStyle(rend_cache[i])) &&
-           !strcmp(_XmRendFontStyle(rend_cache[i]), _XmRendFontStyle(rend))) ||
-          (!_XmRendFontStyle(rend) && !_XmRendFontStyle(rend_cache[i]))) &&
-         _XmRendFontSize(rend) == _XmRendFontSize(rend_cache[i]) &&
-         _XmRendPixelSize(rend) == _XmRendPixelSize(rend_cache[i]) &&
-         _XmRendFontSlant(rend) == _XmRendFontSlant(rend_cache[i]) &&
-         _XmRendFontWeight(rend) == _XmRendFontWeight(rend_cache[i]) &&
-         _XmRendFontSpacing(rend) == _XmRendFontSpacing(rend_cache[i])))
-    {
-      return i;
-    }
-  }
-  return -1;
-}
-#endif
 /* Make sure all the font related resources make sense together and */
 /* then load the font specified by fontName if necessary. */
 static void ValidateAndLoadFont(XmRendition rend, Display *display)
@@ -1721,14 +1690,10 @@ static void ValidateAndLoadFont(XmRendition rend, Display *display)
           case XmFONT_IS_XFT: {
             FcResult res;
             FcPattern *p;
-            static XmRendition *rend_cache;
-            static int count_rend = 0, size_rend = 0, num_rend;
-            num_rend = GetSameRenditions(rend_cache, rend, count_rend, display);
-            if (num_rend >= 0) {
+            XftFont *cached;
+            if (LookupXftFont(display, rend, &cached)) {
               /* FreeRendition closes the font, so take a reference. */
-              _XmRendXftFont(rend) = _XmRendXftFont(rend_cache[num_rend]);
-              if (_XmRendXftFont(rend) != NULL)
-                _XmRendXftFont(rend) = XftFontCopy(display, _XmRendXftFont(rend));
+              _XmRendXftFont(rend) = cached ? XftFontCopy(display, cached) : NULL;
             }
             else {
               _XmRendPattern(rend) = FcPatternCreate();
@@ -1755,14 +1720,11 @@ static void ValidateAndLoadFont(XmRendition rend, Display *display)
               if (_XmRendFontSpacing(rend))
                 FcPatternAddInteger(_XmRendPattern(rend), FC_SPACING, _XmRendFontSpacing(rend));
               p = XftFontMatch(display, 0, _XmRendPattern(rend), &res);
-              _XmRendXftFont(rend) = XftFontOpenPattern(display, p);
-              if (count_rend == size_rend) {
-                size_rend = size_rend ? 2 * size_rend : 8;
-                rend_cache = (XmRendition *)XtRealloc(
-                    (char *)rend_cache, (Cardinal)(sizeof(XmRendition) * size_rend));
-              }
-              rend_cache[count_rend] = _XmRenditionCopy(rend, TRUE);
-              count_rend++;
+              _XmRendXftFont(rend) = p ? XftFontOpenPattern(display, p) : NULL;
+              /* The font owns the pattern only once it is open. */
+              if (p != NULL && _XmRendXftFont(rend) == NULL)
+                FcPatternDestroy(p);
+              CacheXftFont(display, rend);
             }
           }
             result = _XmRendXftFont(rend) != NULL;
@@ -2379,9 +2341,10 @@ static Token ReadToken(char *string, int *position, Token reusetoken)
 #if USE_XFT
 /*
  * Per-display Xft state: the XftDraw of each window that has been drawn
- * into, and the XftColor of each (colormap, pixel) pair, both in hash
- * tables so that every Xft draw does not scan a list or ask the server
- * for the colour of a pixel.  A record lives until its display is closed.
+ * into, the XftColor of each (colormap, pixel) pair, and the font opened
+ * for each font description, all in hash tables so that every Xft draw
+ * does not scan a list or ask the server for the colour of a pixel.  A
+ * record lives until its display is closed.
  *
  * The colour of a pixel is assumed not to change, as it already was for
  * the colours of renditions; an application that stores new colours into
@@ -2398,6 +2361,7 @@ typedef struct _XmXftDisplayRec {
   int extension;
   XmHashTable draws;  /* Window -> XftDraw * */
   XmHashTable colors; /* XmXftColorRec * -> XmXftColorRec * */
+  XmHashTable fonts;  /* XmXftFontRec * -> XmXftFontRec * */
 } XmXftDisplayRec;
 
 static XmXftDisplayRec *_XmXftDisplays = NULL;
@@ -2420,6 +2384,85 @@ static Boolean FreeXftColor(XmHashKey k, XtPointer value, XtPointer data)
   return False;
 }
 
+/*
+ * A font opened by ValidateAndLoadFont, and the rendition resources that
+ * describe it.  The record holds its own reference to the font, and its
+ * own copy of the strings, so that it does not depend on what happens to
+ * the renditions that use the font.
+ */
+typedef struct _XmXftFontRec {
+  char *name, *foundry, *encoding, *style;
+  int size, pixel_size, slant, weight, spacing;
+  XftFont *font; /* NULL if it failed to open */
+} XmXftFontRec;
+
+static void XftFontDesc(XmRendition rend, XmXftFontRec *desc)
+{
+  desc->name = NameIsString(_XmRendFontName(rend)) ? _XmRendFontName(rend) : NULL;
+  desc->foundry = _XmRendFontFoundry(rend);
+  desc->encoding = _XmRendFontEncoding(rend);
+  desc->style = _XmRendFontStyle(rend);
+  desc->size = _XmRendFontSize(rend);
+  desc->pixel_size = _XmRendPixelSize(rend);
+  desc->slant = _XmRendFontSlant(rend);
+  desc->weight = _XmRendFontWeight(rend);
+  desc->spacing = _XmRendFontSpacing(rend);
+  desc->font = NULL;
+}
+
+static Boolean SameString(char *s1, char *s2)
+{
+  return ((s1 == NULL && s2 == NULL) || (s1 != NULL && s2 != NULL && strcmp(s1, s2) == 0));
+}
+
+static Boolean CompareXftFont(XmHashKey k1, XmHashKey k2)
+{
+  XmXftFontRec *f1 = (XmXftFontRec *)k1, *f2 = (XmXftFontRec *)k2;
+  return (f1->size == f2->size && f1->pixel_size == f2->pixel_size && f1->slant == f2->slant &&
+          f1->weight == f2->weight && f1->spacing == f2->spacing &&
+          SameString(f1->name, f2->name) && SameString(f1->foundry, f2->foundry) &&
+          SameString(f1->encoding, f2->encoding) && SameString(f1->style, f2->style));
+}
+
+static unsigned int HashString(unsigned int h, char *s)
+{
+  if (s != NULL)
+    while (*s)
+      h = h * 31 + (unsigned char)*s++;
+  return h * 31;
+}
+
+static XmHashValue HashXftFont(XmHashKey k)
+{
+  XmXftFontRec *f = (XmXftFontRec *)k;
+  unsigned int h = 0;
+  h = HashString(h, f->name);
+  h = HashString(h, f->foundry);
+  h = HashString(h, f->encoding);
+  h = HashString(h, f->style);
+  h = h * 31 + (unsigned int)f->size;
+  h = h * 31 + (unsigned int)f->pixel_size;
+  h = h * 31 + (unsigned int)f->slant;
+  h = h * 31 + (unsigned int)f->weight;
+  h = h * 31 + (unsigned int)f->spacing;
+  return (XmHashValue)(h & 0x7FFFFFFF);
+}
+
+/* Close a font of a display that is being closed; the connection is
+ * still open, and Xft releases the font's server resources. */
+static Boolean FreeXftFont(XmHashKey k, XtPointer value, XtPointer data)
+{
+  XmXftFontRec *f = (XmXftFontRec *)value;
+  if (f->font != NULL)
+    XftFontClose((Display *)data, f->font);
+  XtFree(f->name);
+  XtFree(f->foundry);
+  XtFree(f->encoding);
+  XtFree(f->style);
+  XtFree((char *)f);
+  return False;
+}
+
 static int XftDisplayClose(Display *display, XExtCodes *codes)
 {
   XmXftDisplayRec **prev, *rec;
@@ -2432,6 +2475,8 @@ static int XftDisplayClose(Display *display, XExtCodes *codes)
       _XmFreeHashTable(rec->draws);
       _XmMapHashTable(rec->colors, FreeXftColor, NULL);
       _XmFreeHashTable(rec->colors);
+      _XmMapHashTable(rec->fonts, FreeXftFont, (XtPointer)display);
+      _XmFreeHashTable(rec->fonts);
       XtFree((char *)rec);
       break;
     }
@@ -2461,6 +2506,7 @@ static XmXftDisplayRec *FindXftDisplay(Display *display, Boolean create)
   rec->extension = codes->extension;
   rec->draws = _XmAllocHashTable(64, NULL, NULL);
   rec->colors = _XmAllocHashTable(64, CompareXftColor, HashXftColor);
+  rec->fonts = _XmAllocHashTable(16, CompareXftFont, HashXftFont);
   rec->next = _XmXftDisplays;
   _XmXftDisplays = rec;
   return rec;
@@ -2494,6 +2540,47 @@ static void AddHashEntry(XmHashTable table, XmHashKey key, XtPointer value)
   _XmAddHashEntry(table, key, value);
   if (_XmHashTableCount(table) > _XmHashTableSize(table))
     _XmResizeHashTable(table, 2 * _XmHashTableSize(table));
+}
+
+/*
+ * The font opened earlier on display for the font resources of rend,
+ * which may be NULL if it failed to open; False if there is none.  This
+ * saves building and matching a pattern for every rendition.
+ */
+static Boolean LookupXftFont(Display *display, XmRendition rend, XftFont **font)
+{
+  XmXftDisplayRec *rec;
+  XmXftFontRec key, *found = NULL;
+  XftFontDesc(rend, &key);
+  _XmProcessLock();
+  if ((rec = FindXftDisplay(display, False)) != NULL)
+    found = (XmXftFontRec *)_XmGetHashEntry(rec->fonts, (XmHashKey)&key);
+  if (found != NULL)
+    *font = found->font;
+  _XmProcessUnlock();
+  return (found != NULL);
+}
+
+/* Remember the font just opened for rend, until display is closed. */
+static void CacheXftFont(Display *display, XmRendition rend)
+{
+  XmXftDisplayRec *rec;
+  XmXftFontRec key, *entry;
+  XftFontDesc(rend, &key);
+  _XmProcessLock();
+  if ((rec = FindXftDisplay(display, True)) != NULL &&
+      _XmGetHashEntry(rec->fonts, (XmHashKey)&key) == NULL) {
+    entry = XtNew(XmXftFontRec);
+    *entry = key;
+    entry->name = XtNewString(key.name);
+    entry->foundry = XtNewString(key.foundry);
+    entry->encoding = XtNewString(key.encoding);
+    entry->style = XtNewString(key.style);
+    if (_XmRendXftFont(rend) != NULL)
+      entry->font = XftFontCopy(display, _XmRendXftFont(rend));
+    AddHashEntry(rec->fonts, (XmHashKey)entry, (XtPointer)entry);
+  }
+  _XmProcessUnlock();
 }
 
 /* The colormap of the widget that owns window, else the default one. */
