@@ -164,6 +164,7 @@ extern void _XmWarningMsg(Widget w, char *type, char *message, char **params, Ca
 extern Display *_XmGetDefaultDisplay(void);
 extern Boolean _XmIsISO10646(Display *dpy, XFontStruct *font);
 extern XChar2b *_XmUtf8ToUcs2(char *draw_text, size_t seg_len, size_t *ret_str_len);
+extern size_t _XmUtf8ToUcs2Buf(char *draw_text, size_t seg_len, XChar2b *buf);
 extern Pixel _XmAssignInsensitiveColor(Widget w);
 /********    End Private Function Declarations    ********/
 /********    Conditionally defined macros for thread_safe Motif ******/

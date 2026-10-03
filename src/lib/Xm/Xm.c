@@ -377,27 +377,28 @@ Boolean _XmIsISO10646(Display *dpy, XFontStruct *font)
   return False;
 }
 
-XChar2b *_XmUtf8ToUcs2(char *draw_text, size_t seg_len, size_t *ret_str_len)
+/*
+ * Convert seg_len bytes of UTF-8 to UCS-2 in buf, which has room for
+ * seg_len characters, and return the number of characters.  A sequence
+ * that is not 1 to 3 bytes long, or is cut short by the end of the text,
+ * becomes '?' and consumes one byte.
+ */
+size_t _XmUtf8ToUcs2Buf(char *draw_text, size_t seg_len, XChar2b *buf)
 {
   char *ep;
   unsigned short codepoint;
   XChar2b *ptr;
-  XChar2b *buf2b;
-  /*
-   * Convert to UCS2 string on the fly.
-   */
-  buf2b = (XChar2b *)XtMalloc(seg_len * sizeof(XChar2b));
   ep = draw_text + seg_len;
-  for (ptr = buf2b; draw_text < ep; ptr++) {
+  for (ptr = buf; draw_text < ep; ptr++) {
     if ((draw_text[0] & 0x80) == 0) {
       codepoint = draw_text[0];
       draw_text++;
     }
-    else if ((draw_text[0] & 0x20) == 0) {
+    else if ((draw_text[0] & 0x20) == 0 && ep - draw_text >= 2) {
       codepoint = (draw_text[0] & 0x1F) << 6 | (draw_text[1] & 0x3F);
       draw_text += 2;
     }
-    else if ((draw_text[0] & 0x10) == 0) {
+    else if ((draw_text[0] & 0x30) == 0x20 && ep - draw_text >= 3) {
       codepoint = (draw_text[0] & 0x0F) << 12 | (draw_text[1] & 0x3F) << 6 | (draw_text[2] & 0x3F);
       draw_text += 3;
     }
@@ -406,10 +407,19 @@ XChar2b *_XmUtf8ToUcs2(char *draw_text, size_t seg_len, size_t *ret_str_len)
       draw_text++;
     }
     ptr->byte1 = (codepoint >> 8) & 0xff;
-    ;
     ptr->byte2 = codepoint & 0xff;
   }
-  *ret_str_len = ptr - buf2b;
+  return ptr - buf;
+}
+
+XChar2b *_XmUtf8ToUcs2(char *draw_text, size_t seg_len, size_t *ret_str_len)
+{
+  XChar2b *buf2b;
+  /*
+   * Convert to UCS2 string on the fly.
+   */
+  buf2b = (XChar2b *)XtMalloc(seg_len * sizeof(XChar2b));
+  *ret_str_len = _XmUtf8ToUcs2Buf(draw_text, seg_len, buf2b);
   return buf2b;
 }
 
