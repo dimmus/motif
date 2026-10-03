@@ -133,12 +133,12 @@ foreach(DEMO_DIR ${DEMO_DIRS})
                     add_custom_command(
                         OUTPUT ${UID_FILE}
                         COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/${DEMO_DIR}
-                        COMMAND ${MOTIF_TOOL_ENV} $<TARGET_FILE:uil> -o ${UID_FILE} ${UIL_FILE} 
+                        COMMAND ${MOTIF_TOOL_ENV} $<TARGET_FILE:${MOTIF_HOST_TOOL_PREFIX}uil> -o ${UID_FILE} ${UIL_FILE} 
                                 -I${CMAKE_SOURCE_DIR}/src/bin/uil 
                                 -I${CMAKE_BINARY_DIR}/src/bin/uil
                                 -I${CMAKE_SOURCE_DIR}/src/examples/programs/${DEMO_DIR}
                                 -I${CMAKE_SOURCE_DIR}/src/examples/programs/${DEMO_DIR}/english/uid
-                        DEPENDS uil ${UIL_FILE}
+                        DEPENDS ${MOTIF_HOST_TOOL_PREFIX}uil ${UIL_FILE}
                         COMMENT "Compiling UIL file ${UIL_FILE}"
                     )
                     

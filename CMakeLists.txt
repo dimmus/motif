@@ -179,14 +179,15 @@ endif()
 # -----------------------------------------------------------------------------
 # Build-time tools
 #
-# makestrs, mkcatdefs, wml and wmluiltok run during the build.  When
+# makestrs, mkcatdefs, wml and wmluiltok run during the build, and uil
+# compiles the demos' UIL files (UID files are portable).  When
 # cross-compiling, build Motif natively first and point MOTIF_HOST_TOOLS at
 # the MotifHostTools.cmake that the native build writes to its build
 # directory; the tools are then imported from there instead of being built.
 
 set(MOTIF_HOST_TOOLS "" CACHE FILEPATH
   "MotifHostTools.cmake of a native Motif build, for cross-compiling")
-set(MOTIF_HOST_TOOL_NAMES makestrs mkcatdefs wml wmluiltok)
+set(MOTIF_HOST_TOOL_NAMES makestrs mkcatdefs wml wmluiltok uil)
 if(MOTIF_HOST_TOOLS)
   include("${MOTIF_HOST_TOOLS}")
   foreach(_tool IN LISTS MOTIF_HOST_TOOL_NAMES)
