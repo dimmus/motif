@@ -1885,10 +1885,8 @@ static int GetDepth(WidgetClass wc)
 }
 
 /*
- * These symbols must always be present so applications compiling with
- * -DXTHREADS can still link against libraries built without it.  How
- * those applications recognize non MT-safe libraries is a different
- * issue.
+ * These are exported: the XmIs* macros in the installed headers expand
+ * to calls to them.
  */
 inline void _XmFastSubclassInit(WidgetClass wc, unsigned int bit)
 {

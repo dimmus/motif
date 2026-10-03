@@ -1370,39 +1370,3 @@ int _XmOSKeySymToCharacter(KeySym keysym, char *locale, char *buffer)
   *buffer = (keysym & 0xFF);
   return 1;
 }
-
-/* ****************************************************** **
-** Threading stuff. Stuck here to allow easier debugging.
-** ****************************************************** */
-/*
-static unsigned int _lockCounter = 0;
-static unsigned int _unlockCounter = 0;
-static int _outstandingLockCounter = 0;
-int _debugProcessLocking = 0;
-void _XmProcessLock()
-{
-    _lockCounter++;
-    _outstandingLockCounter++;
-#if defined(XTHREADS) && defined(XUSE_MTSAFE_API)
-    XtProcessLock();
-#endif
-    if(_debugProcessLocking)
-    {
-        fprintf(stderr, "File: %s, line: %d - _XmProcessLock() - _lockCounter = %d,
-_outstandingLockCounter = %d\n", __FILE__, __LINE__, _lockCounter, _outstandingLockCounter);
-    }
-}
-void _XmProcessUnlock()
-{
-    _unlockCounter++;
-    _outstandingLockCounter--;
-#if defined(XTHREADS) && defined(XUSE_MTSAFE_API)
-    XtProcessUnlock();
-#endif
-    if(_debugProcessLocking)
-    {
-        fprintf(stderr, "File: %s, line: %d - _XmProcessUnlock() - _unlockCounter = %d,
-_outstandingLockCounter = %d\n", __FILE__, __LINE__, _unlockCounter, _outstandingLockCounter);
-    }
-}
-*/

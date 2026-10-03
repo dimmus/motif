@@ -145,14 +145,12 @@ XtPointer XmFontListEntryGetFont(XmFontListEntry entry, XmFontType *typeReturn)
   XtAppContext app = NULL;
   if (entry == NULL)
     return (NULL);
-#ifdef XTHREADS
   if (_XmRendDisplay((XmRendition)entry))
     app = XtDisplayToApplicationContext(_XmRendDisplay((XmRendition)entry));
   if (app)
     _XmAppLock(app);
   else
     _XmProcessLock();
-#endif
   n = 0;
   XtSetArg(args[n], XmNfontType, typeReturn);
   n++;
@@ -170,21 +168,17 @@ XtPointer XmFontListEntryGetFont(XmFontListEntry entry, XmFontType *typeReturn)
   if (*typeReturn == XmAS_IS)
     *typeReturn = XmFONT_IS_FONT;
   if (ret_val == (char *)XmAS_IS) {
-#ifdef XTHREADS
     if (app)
       _XmAppUnlock(app);
     else
       _XmProcessUnlock();
-#endif
     return (NULL);
   }
   else {
-#ifdef XTHREADS
     if (app)
       _XmAppUnlock(app);
     else
       _XmProcessUnlock();
-#endif
     return (ret_val);
   }
 }
@@ -195,30 +189,24 @@ char *XmFontListEntryGetTag(XmFontListEntry entry)
   Arg args[1];
   char *tag;
   char *ret_val;
-#ifdef XTHREADS
   XtAppContext app = NULL;
-#endif
   if (entry == NULL)
     return (NULL);
-#ifdef XTHREADS
   if (_XmRendDisplay((XmRendition)entry))
     app = XtDisplayToApplicationContext(_XmRendDisplay((XmRendition)entry));
   if (app)
     _XmAppLock(app);
   else
     _XmProcessLock();
-#endif
   n = 0;
   XtSetArg(args[n], XmNtag, &tag);
   n++;
   XmRenditionRetrieve(entry, args, n);
   ret_val = XtNewString(tag);
-#ifdef XTHREADS
   if (app)
     _XmAppUnlock(app);
   else
     _XmProcessUnlock();
-#endif
   return ret_val;
 }
 
@@ -226,28 +214,22 @@ XmFontList XmFontListAppendEntry(XmFontList old, XmFontListEntry entry)
 {
   XmRendition rends[1];
   XmFontList ret_val;
-#ifdef XTHREADS
   XtAppContext app = NULL;
-#endif
   if (!entry) {
     return (old);
   }
-#ifdef XTHREADS
   if (_XmRendDisplay((XmRendition)entry))
     app = XtDisplayToApplicationContext(_XmRendDisplay((XmRendition)entry));
   if (app)
     _XmAppLock(app);
   else
     _XmProcessLock();
-#endif
   rends[0] = entry;
   ret_val = XmRenderTableAddRenditions(old, rends, 1, XmDUPLICATE);
-#ifdef XTHREADS
   if (app)
     _XmAppUnlock(app);
   else
     _XmProcessUnlock();
-#endif
   return ret_val;
 }
 
@@ -277,19 +259,15 @@ XmFontList XmFontListRemoveEntry(XmFontList old, XmFontListEntry entry)
   XmStringTag tags[1];
   XmFontType type1;
   XtPointer font1;
-#ifdef XTHREADS
   XtAppContext app = NULL;
-#endif
   if ((old == NULL) || (entry == NULL))
     return (old);
-#ifdef XTHREADS
   if (_XmRendDisplay((XmRendition)entry))
     app = XtDisplayToApplicationContext(_XmRendDisplay((XmRendition)entry));
   if (app)
     _XmAppLock(app);
   else
     _XmProcessLock();
-#endif
   n = 0;
   XtSetArg(args[n], XmNtag, &tags[0]);
   n++;
@@ -299,12 +277,10 @@ XmFontList XmFontListRemoveEntry(XmFontList old, XmFontListEntry entry)
   n++;
   XmRenditionRetrieve(entry, args, n);
   old = _XmRenderTableRemoveRenditions(old, tags, 1, TRUE, type1, font1);
-#ifdef XTHREADS
   if (app)
     _XmAppUnlock(app);
   else
     _XmProcessUnlock();
-#endif
   return (old);
 }
 
@@ -450,21 +426,17 @@ XmFontList XmFontListAdd(XmFontList old, XFontStruct *font, XmStringCharSet char
   Arg args[4];
   XmRendition rends[1];
   XmFontList ret_val;
-#ifdef XTHREADS
   XtAppContext app = NULL;
-#endif
   if (!old)
     return ((XmFontList)NULL);
   if (!charset || !font)
     return ((XmFontList)old);
-#ifdef XTHREADS
   if (_XmRTDisplay((XmRenderTable)old))
     app = XtDisplayToApplicationContext(_XmRTDisplay((XmRenderTable)old));
   if (app)
     _XmAppLock(app);
   else
     _XmProcessLock();
-#endif
   if ((charset != XmFONTLIST_DEFAULT_TAG) && (strcmp(charset, XmSTRING_DEFAULT_CHARSET) == 0))
     curcharset = _XmStringGetCurrentCharset();
   else
@@ -478,12 +450,10 @@ XmFontList XmFontListAdd(XmFontList old, XFontStruct *font, XmStringCharSet char
   n++;
   rends[0] = XmRenditionCreate(NULL, _XmStringCacheTag(curcharset, XmSTRING_TAG_STRLEN), args, n);
   ret_val = XmRenderTableAddRenditions(old, rends, 1, XmDUPLICATE);
-#ifdef XTHREADS
   if (app)
     _XmAppUnlock(app);
   else
     _XmProcessUnlock();
-#endif
   return ret_val;
 }
 
@@ -534,7 +504,6 @@ Boolean XmeRenderTableGetDefaultFont(XmFontList fontlist, XFontStruct **font_str
   XmStringTag tag = XmFONTLIST_DEFAULT_TAG;
   short indx = -1;
   Boolean retval;
-#ifdef XTHREADS
   XtAppContext app = NULL;
   if (_XmRTDisplay((XmRenderTable)fontlist))
     app = XtDisplayToApplicationContext(_XmRTDisplay((XmRenderTable)fontlist));
@@ -542,14 +511,11 @@ Boolean XmeRenderTableGetDefaultFont(XmFontList fontlist, XFontStruct **font_str
     _XmAppLock(app);
   else
     _XmProcessLock();
-#endif
   retval = _XmFontListSearch(fontlist, tag, &indx, font_struct);
-#ifdef XTHREADS
   if (app)
     _XmAppUnlock(app);
   else
     _XmProcessUnlock();
-#endif
   return (retval);
 }
 

@@ -1778,9 +1778,6 @@ static Boolean SetValues(Widget cw,
       new_w->rectangle.height += (increase << 1);
       flag = TRUE;
     }
-#ifndef XTHREADS
-    _XmReCacheLabG((Widget)new_w);
-#endif
   }
   if ((PBG_ArmPixmap(new_w) != PBG_ArmPixmap(current)) && (LabG_LabelType(new_w) == XmPIXMAP) &&
       (PBG_Armed(new_w)))

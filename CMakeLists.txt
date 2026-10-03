@@ -317,23 +317,6 @@ else()
 endif()
 unset(CMAKE_REQUIRED_INCLUDES)
 
-# XtAppLock() and XtAppUnlock() indicate a thread-aware libXt
-set(CMAKE_REQUIRED_INCLUDES ${MOTIF_XT_INCLUDE_DIRS})
-set(CMAKE_REQUIRED_LIBRARIES ${MOTIF_XT_LINK_LIBRARIES})
-check_c_source_compiles("
-#include <X11/Intrinsic.h>
-int main(void) {
-    XtAppContext app_context = 0;
-    XtAppLock(app_context);
-    XtAppUnlock(app_context);
-    return 0;
-}" HAVE_XTHREADS)
-unset(CMAKE_REQUIRED_INCLUDES)
-unset(CMAKE_REQUIRED_LIBRARIES)
-if(HAVE_XTHREADS)
-  list(APPEND MOTIF_CONFIG_DEFINITIONS XTHREADS=1)
-endif()
-
 # Configuration of the libraries
 list(APPEND MOTIF_CONFIG_DEFINITIONS
   HAVE_LIBXMU

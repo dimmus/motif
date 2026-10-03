@@ -2574,12 +2574,10 @@ static void InitiatorMainLoop(XtPointer clientData, XtIntervalId *id)
   XtAddCallback(shell, XmNdestroyCallback, noMoreShell, (XtPointer)&contAction);
   while ((*activeDC) && (XtAppGetExitFlag(appContext) == False)) {
     XmDragContext dc = *activeDC;
-#ifdef XTHREADS
     XtInputMask mask;
     while (!(mask = XtAppPending(appContext)))
       ; /* busy wait */
     if (mask & XtIMXEvent) {
-#endif
       XtAppNextEvent(appContext, &event);
       /*
        * make sure evil Focus outs don't confuse Xt and cause the
@@ -2616,11 +2614,9 @@ static void InitiatorMainLoop(XtPointer clientData, XtIntervalId *id)
         DragMotion((Widget)dc, &event, NULL, 0);
       else
         XtDispatchEvent(&event);
-#ifdef XTHREADS
     }
     else
       XtAppProcessEvent(appContext, mask);
-#endif
   }
   /* guard against the possibility that shell was destroyed in the last event
    * loop while the drag operation was going on (e.g. by a timer)

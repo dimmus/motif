@@ -2033,8 +2033,7 @@ extern Cardinal Urm__SwapRGMWidgetRecord _ARGUMENTS(( RGMWidgetRecordPtr widget_
 
 #endif /* UNALIGNED */
 
-/********    Conditionally defined macros for thread_safe DtTerm ******/
-#ifdef XTHREADS
+/********    Macros for thread-safe Mrm    ********/
 #define _MrmWidgetToAppContext(w) \
         XtAppContext app = XtWidgetToApplicationContext(w)
 #define _MrmDisplayToAppContext(d) \
@@ -2043,14 +2042,6 @@ extern Cardinal Urm__SwapRGMWidgetRecord _ARGUMENTS(( RGMWidgetRecordPtr widget_
 #define _MrmAppUnlock(app) XtAppUnlock(app)
 #define _MrmProcessLock() XtProcessLock()
 #define _MrmProcessUnlock() XtProcessUnlock()
-#else /* XTHREADS */
-#define _MrmWidgetToAppContext(w)
-#define _MrmDisplayToAppContext(d)
-#define _MrmAppLock(app)
-#define _MrmAppUnlock(app)
-#define _MrmProcessLock()
-#define _MrmProcessUnlock()
-#endif /* XTHREADS */
 
 #endif /* Mrm_H */
 /* DON'T ADD STUFF AFTER THIS #endif */

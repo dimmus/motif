@@ -182,47 +182,37 @@ extern Boolean _XmGetWindowPropertyChecked(Display *display,
                                            unsigned long *bytes_after_return,
                                            unsigned char **prop_return);
 /********    End Private Function Declarations    ********/
-/********    Conditionally defined macros for thread_safe Motif ******/
-#  if defined(XTHREADS) && defined(XUSE_MTSAFE_API)
+/********    Macros for thread-safe Motif    ********/
 /* Remove use of _XtProcessLock when Xt provides API to query its MT-status */
-extern void (*_XtProcessLock)();
-#    define _XmIsThreadInitialized() (_XtProcessLock)
+extern void (*_XtProcessLock)(void);
+#  define _XmIsThreadInitialized() (_XtProcessLock)
 /*
  * Xt's locks do nothing until XtToolkitThreadInitialize has been called.
  * Test that here, so that the many lock calls on hot paths cost a load
  * and a branch, not a call into libXt, in programs that never call it.
  */
-#    define _XmWidgetToAppContext(w) XtAppContext app = XtWidgetToApplicationContext(w)
-#    define _XmDisplayToAppContext(d) XtAppContext app = XtDisplayToApplicationContext(d)
-#    define _XmAppLock(app) \
+#  define _XmWidgetToAppContext(w) XtAppContext app = XtWidgetToApplicationContext(w)
+#  define _XmDisplayToAppContext(d) XtAppContext app = XtDisplayToApplicationContext(d)
+#  define _XmAppLock(app) \
       do { \
         if (_XmIsThreadInitialized()) \
           XtAppLock(app); \
       } while (0)
-#    define _XmAppUnlock(app) \
+#  define _XmAppUnlock(app) \
       do { \
         if (_XmIsThreadInitialized()) \
           XtAppUnlock(app); \
       } while (0)
-#    define _XmProcessLock() \
+#  define _XmProcessLock() \
       do { \
         if (_XmIsThreadInitialized()) \
           XtProcessLock(); \
       } while (0)
-#    define _XmProcessUnlock() \
+#  define _XmProcessUnlock() \
       do { \
         if (_XmIsThreadInitialized()) \
           XtProcessUnlock(); \
       } while (0)
-#  else
-#    define _XmWidgetToAppContext(w)
-#    define _XmDisplayToAppContext(d)
-#    define _XmAppLock(app)
-#    define _XmAppUnlock(app)
-#    define _XmProcessLock()
-#    define _XmProcessUnlock()
-#    define _XmIsThreadInitialized() (FALSE)
-#  endif /* XTHREADS && XUSE_MTSAFE_API */
 #  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */
 #  endif

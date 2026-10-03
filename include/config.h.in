@@ -170,41 +170,8 @@
 /* 1 if Motif was built with PNG support */
 #undef XM_WITH_PNG
 
-/* Define if multi-thread safe API is not available */
-#undef XNO_MTSAFE_API
-
-/* Define if multi-thread safe password API is not available */
-#undef XNO_MTSAFE_PWDAPI
-
-/* Disable XOS locking for single-threaded builds */
-#undef XOS_USE_NO_LOCKING
-
-/* Use Xlib-only locking */
-#undef XOS_USE_XLIB_LOCKING
-
-/* Use Xt-based locking (auto-detected) */
-#undef XOS_USE_XT_LOCKING
-
-/* Define if libXt was compiled with thread support */
-#undef XTHREADS
-
-/* Enable XTHREADS file/line debugging */
-#undef XTHREADS_FILE_LINE
-
-/* Enable XTHREADS warnings */
-#undef XTHREADS_WARN
-
-/* Define to use multi-thread safe API */
-#undef XUSE_MTSAFE_API
-
-/* Define to use multi-thread safe password API */
-#undef XUSE_MTSAFE_PWDAPI
-
 /* Define to 1 if the X Window System is missing or not being used. */
 #undef X_DISPLAY_MISSING
-
-/* Force use of multi-thread safe API */
-#undef X_FORCE_USE_MTSAFE_API
 
 /* Define if pwd.h should be included */
 #undef X_INCLUDE_PWD_H

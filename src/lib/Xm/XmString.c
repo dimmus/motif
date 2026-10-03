@@ -2494,7 +2494,6 @@ void XmStringExtent(XmRenderTable rendertable,
   *width = 0, *height = 0;
   if ((rendertable == NULL) || (string == NULL))
     return;
-#ifdef XTHREADS
   if (_XmRTDisplay(rendertable))
     app = XtDisplayToApplicationContext(_XmRTDisplay(rendertable));
   if (app) {
@@ -2503,7 +2502,6 @@ void XmStringExtent(XmRenderTable rendertable,
   else {
     _XmProcessLock();
   }
-#endif
   if (_XmStrOptimized(string))
     OptLineMetrics(rendertable, string, NULL, NULL, width, height, NULL, NULL);
   else {
@@ -2542,14 +2540,12 @@ void XmStringExtent(XmRenderTable rendertable,
     if (_XmRendTags(rend) != NULL)
       XtFree((char *)_XmRendTags(rend));
   }
-#ifdef XTHREADS
   if (app) {
     _XmAppUnlock(app);
   }
   else {
     _XmProcessUnlock();
   }
-#endif
 }
 
 Boolean XmStringEmpty(XmString string)
@@ -5741,7 +5737,6 @@ Dimension XmStringBaseline(XmRenderTable rendertable, XmString string)
   XtAppContext app = NULL;
   if ((rendertable == NULL) || (string == NULL))
     return (0);
-#ifdef XTHREADS
   if (_XmRTDisplay(rendertable))
     app = XtDisplayToApplicationContext(_XmRTDisplay(rendertable));
   if (app) {
@@ -5750,7 +5745,6 @@ Dimension XmStringBaseline(XmRenderTable rendertable, XmString string)
   else {
     _XmProcessLock();
   }
-#endif
   bzero((char *)&scratch, sizeof(_XmRenditionRec));
   tmp = &scratch;
   rend = &tmp;

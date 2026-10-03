@@ -916,7 +916,7 @@ static void RefigureLines(XmTextWidget tw)
       XtFree((char *)oldline[j].extra);
       oldline[j].extra = NULL;
     }
-  XtFree((char *)oldline); /* XTHREADS */
+  XtFree((char *)oldline);
   tw->text.in_refigure_lines = FALSE;
   if (tw->text.top_character >= tw->text.last_position &&
       tw->text.last_position > tw->text.first_position && tw->text.output->data->number_lines > 1)
