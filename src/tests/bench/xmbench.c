@@ -560,6 +560,8 @@ static void menu_init(long n)
 		XtVaCreateManagedWidget("item", xmPushButtonWidgetClass,
 					popup, NULL);
 	drain();
+	/* Give the shell the focus, as a window manager would. */
+	XSetInputFocus(dpy, XtWindow(top), RevertToParent, CurrentTime);
 	XmProcessTraversal(work, XmTRAVERSE_CURRENT);
 	drain();
 }

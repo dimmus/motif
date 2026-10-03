@@ -13,6 +13,9 @@
  * dlsym(RTLD_DEFAULT, ...), so it still runs, without these numbers,
  * when the library is not loaded.
  *
+ * With XMBENCH_REPLY_BACKTRACE set, every _XReply prints a backtrace to
+ * stderr, to find where the round trips of a case come from.
+ *
  * The allocator wrappers forward to the glibc __libc_* entry points
  * rather than to dlsym(RTLD_NEXT, ...), since dlsym itself allocates.
  */
@@ -20,8 +23,11 @@
 #define _GNU_SOURCE
 #endif
 #include <dlfcn.h>
+#include <execinfo.h>
 #include <stdarg.h>
 #include <stddef.h>
+#include <stdlib.h>
+#include <unistd.h>
 
 #include <X11/Xlib.h>
 
@@ -68,9 +74,18 @@ typedef int (*xreply_fn)(Display *, void *, int, int);
 int _XReply(Display *dpy, void *rep, int extra, int discard)
 {
 	static xreply_fn real;
+	static int trace = -1;
 
 	if (!real)
 		real = (xreply_fn)dlsym(RTLD_NEXT, "_XReply");
+	if (trace < 0)
+		trace = getenv("XMBENCH_REPLY_BACKTRACE") != NULL;
+	if (trace) {
+		void *bt[32];
+
+		backtrace_symbols_fd(bt, backtrace(bt, 32), 2);
+		write(2, "--\n", 3);
+	}
 	xmbench_replies++;
 	return real(dpy, rep, extra, discard);
 }
