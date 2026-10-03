@@ -31,11 +31,12 @@ set(MOTIF_TEST_SRCS
     Xm/testXmString.c
     Xm/testWidgets.c
     Xm/testText.c
+    Xm/testI18n.c
 )
 
 # Suites that open a display, and suites that do not.
 set(MOTIF_TEST_X_SUITES FontListEntry FontList XmStringCT Widgets Text)
-set(MOTIF_TEST_SUITES Svg Log LogConfig XmString)
+set(MOTIF_TEST_SUITES Svg Log LogConfig XmString I18n)
 set(MOTIF_TEST_DEFS "")
 
 # Suites with test cases tagged "xfail" (known library bugs); these get an

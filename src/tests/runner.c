@@ -38,6 +38,7 @@ static const struct suite_entry {
 	{ "XmStringCT",    xmstring_ct_suite,     1 },
 	{ "Widgets",       widgets_suite,         1 },
 	{ "Text",          text_suite,            1 },
+	{ "I18n",          i18n_suite,            0 },
 };
 
 #define N_SUITES (sizeof suite_table / sizeof suite_table[0])
