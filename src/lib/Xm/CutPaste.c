@@ -98,7 +98,13 @@ typedef struct _ClipboardSelectionInfo {
   Atom type;
   Boolean received;
   Boolean success;
+  Boolean abandoned; /* ClipboardGetSelection() stopped waiting */
 } ClipboardSelectionInfoRec, *ClipboardSelectionInfo;
+
+/* Bound on the nested event loop of ClipboardGetSelection(), in units of
+   the selection timeout.  Xt times out each request on its own; this
+   only guards against an owner that keeps a transfer going forever. */
+#define CLIPBOARD_WAIT_FACTOR 4
 
 /*------------------------------------------------------------*/
 /*   Define the clipboard property destroy information record */
@@ -1829,40 +1835,60 @@ static int ClipboardGetSelection(Display *display,
                                  unsigned long *size,
                                  int *format)
 {
-  ClipboardSelectionInfoRec info;
+  ClipboardSelectionInfo info;
   Widget dest;
   XtAppContext app;
   Atom XmA_CLIPBOARD;
+  XtIntervalId timer;
+  Boolean timed_out = False;
+  *value = NULL;
+  *size = 0;
+  *type = None;
+  *format = 8;
   dest = XtWindowToWidget(display, window);
   if (dest == (Widget)NULL) {
     return (FALSE);
   }
   app = XtWidgetToApplicationContext(dest);
   /* initialize the fields in the info record passed to the */
-  /* predicate function */
-  info.success = FALSE;
-  info.received = FALSE;
-  info.data = NULL;
-  info.count = 0;
-  info.format = 8;
-  info.type = None;
+  /* predicate function; it is on the heap because the request can
+     outlive this function (see below) */
+  info = (ClipboardSelectionInfo)XtMalloc(sizeof(ClipboardSelectionInfoRec));
+  info->success = FALSE;
+  info->received = FALSE;
+  info->abandoned = FALSE;
+  info->data = NULL;
+  info->count = 0;
+  info->format = 8;
+  info->type = None;
   /* ask for the data in the specified format */
   XmA_CLIPBOARD = XInternAtom(display, XmSCLIPBOARD, False);
-  XtGetSelectionValue(
-      dest, XmA_CLIPBOARD, target, ClipboardReceiveData, &info, XtLastTimestampProcessed(display));
+  XtGetSelectionValue(dest,
+                      XmA_CLIPBOARD,
+                      target,
+                      ClipboardReceiveData,
+                      (XtPointer)info,
+                      XtLastTimestampProcessed(display));
+  /* Wait for the answer, but not forever: XtAppProcessEvent() also
+     returns for the timer. */
+  timer = XtAppAddTimeOut(app,
+                          XtAppGetSelectionTimeout(app) * CLIPBOARD_WAIT_FACTOR,
+                          ClipboardTimeout,
+                          (XtPointer)&timed_out);
 #ifdef XTHREADS
   while (XtAppGetExitFlag(app) == False) {
 #else
   for (;;) {
 #endif
+#ifdef XTHREADS
     XEvent event;
-    if (info.received)
+    XtInputMask mask;
+#endif
+    if (info->received || timed_out)
       break;
 #ifndef XTHREADS
-    XtAppNextEvent(app, &event);
-    XtDispatchEvent(&event);
+    XtAppProcessEvent(app, XtIMAll);
 #else
-    XtInputMask mask;
     while (!(mask = XtAppPending(app)))
       ;                      /* Busy waiting - so that we don't lose our lock */
     if (mask & XtIMXEvent) { /* We have an XEvent */
@@ -1877,10 +1903,18 @@ static int ClipboardGetSelection(Display *display,
       XtAppProcessEvent(app, mask); /* non blocking */
 #endif
   }
-  *value = info.data;
-  *size = info.count;
-  *type = info.type;
-  *format = info.format;
+  if (!timed_out)
+    XtRemoveTimeOut(timer);
+  if (!info->received) {
+    /* the late callback frees the record */
+    info->abandoned = TRUE;
+    return FALSE;
+  }
+  *value = info->data;
+  *size = info->count;
+  *type = info->type;
+  *format = info->format;
+  XtFree((char *)info);
   if (*value == NULL || *size == 0)
     return FALSE;
   return TRUE;
@@ -1896,6 +1930,12 @@ static void ClipboardReceiveData(Widget dest, /* unused */
 {
   ClipboardSelectionInfo info;
   info = (ClipboardSelectionInfo)client_data;
+  if (info->abandoned) {
+    /* ClipboardGetSelection() gave up on this request */
+    XtFree((char *)value);
+    XtFree((char *)info);
+    return;
+  }
   info->received = TRUE;
   if (*type != XT_CONVERT_FAIL) {
     info->format = *format;
