@@ -8,10 +8,14 @@
 #include "JpegI.h"
 #include <X11/Xlib.h>
 #include <X11/Xlibint.h>
-#include <jerror.h>
-#include <jpeglib.h>
+#include <limits.h>
 #include <setjmp.h>
+#include <stdint.h>
 #include <stdio.h>
+#include <string.h>
+/* jpeglib.h must come first: jerror.h depends on JPEG_LIB_VERSION */
+#include <jpeglib.h>
+#include <jerror.h>
 
 /**
  * Error handling context info
@@ -45,17 +49,20 @@ int _XmJpegGetImage(FILE *fp, XImage **ximage)
 {
   int ret = 0;
   XImage *img = NULL;
-  int w1, h1;
-  unsigned int i, w, h;
-  unsigned char *data = NULL, *gp;
+  size_t n, stride;
+  unsigned int i, w, h, ncomp;
+  unsigned char *src, *dst;
+  /* Modified after setjmp() and used after longjmp(), so must be volatile */
+  unsigned char *volatile data = NULL;
+  JSAMPARRAY volatile rows = NULL;
   struct jerr err;
   struct jpeg_decompress_struct jpeg;
-  JSAMPARRAY rows = NULL;
   if (!fp || !ximage)
     return 1;
   /* Setup error handling */
   *ximage = NULL;
   memset(&err, 0, sizeof err);
+  memset(&jpeg, 0, sizeof jpeg);
   jpeg.err = jpeg_std_error(&err.jpeg_error);
   err.jpeg_error.error_exit = on_jpeg_error;
   if ((ret = setjmp(err.jmp))) {
@@ -70,11 +77,25 @@ int _XmJpegGetImage(FILE *fp, XImage **ximage)
   jpeg_create_decompress(&jpeg);
   jpeg_stdio_src(&jpeg, fp);
   jpeg_read_header(&jpeg, True);
-  jpeg_calc_output_dimensions(&jpeg);
-  /* Allocate our data buffer */
+  /**
+   * We only know how to deal with RGB and grayscale output, so ask for
+   * that explicitly instead of trusting the colorspace of the file
+   * (e.g. CMYK would yield 4 components per pixel.)
+   */
+  jpeg.out_color_space = (jpeg.jpeg_color_space == JCS_GRAYSCALE) ? JCS_GRAYSCALE : JCS_RGB;
+  jpeg_start_decompress(&jpeg);
   w = jpeg.output_width;
   h = jpeg.output_height;
-  if (!(data = Xmalloc(w * h * 3))) {
+  ncomp = jpeg.output_components;
+  if (!w || !h || ncomp != (jpeg.out_color_space == JCS_GRAYSCALE ? 1U : 3U) ||
+      w > INT_MAX / 3 || h > INT_MAX || h > SIZE_MAX / 3 / w)
+  {
+    jpeg_destroy_decompress(&jpeg);
+    return 2;
+  }
+  /* Allocate our data buffer (always 3 bytes per pixel) */
+  n = (size_t)w * h;
+  if (!(data = Xmalloc(n * 3))) {
     jpeg_destroy_decompress(&jpeg);
     return 2;
   }
@@ -84,22 +105,24 @@ int _XmJpegGetImage(FILE *fp, XImage **ximage)
     jpeg_destroy_decompress(&jpeg);
     return 3;
   }
+  stride = (size_t)w * ncomp;
   for (i = 0; i < h; i++)
-    rows[i] = data + w * i;
+    rows[i] = data + i * stride;
   /* Read scanlines */
-  jpeg_start_decompress(&jpeg);
-  do {
+  while (jpeg.output_scanline < h)
     jpeg_read_scanlines(&jpeg, rows + jpeg.output_scanline, h - jpeg.output_scanline);
-  } while (jpeg.output_scanline < h);
-  /* Do grayscale expansion if needed */
-  if (jpeg.out_color_space == JCS_GRAYSCALE) {
-    gp = data + 3 * w * h;
-    for (h1 = (h - 1) * h; h1 >= 0; h1 -= h) {
-      for (w1 = w - 1; w1 >= 0; --w1) {
-        *(--gp) = data[h1 + w1];
-        *(--gp) = data[h1 + w1];
-        *(--gp) = data[h1 + w1];
-      }
+  /**
+   * Do grayscale expansion if needed: the gray pixels are packed at
+   * the start of the buffer, so expand them in place from the end.
+   */
+  if (ncomp == 1) {
+    src = data + n;
+    dst = data + 3 * n;
+    while (src > data) {
+      --src;
+      *(--dst) = *src;
+      *(--dst) = *src;
+      *(--dst) = *src;
     }
   }
   jpeg_finish_decompress(&jpeg);
