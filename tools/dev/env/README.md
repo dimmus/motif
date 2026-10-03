@@ -21,7 +21,7 @@ tools/dev/env/
 ├── add-os.sh                # Script to add new OS environments
 ├── containers/              # Container definitions
 │   ├── Dockerfile.archlinux # Arch Linux container
-│   └── Dockerfile.freebsd   # FreeBSD container
+│   └── Dockerfile.debian    # Debian container
 ├── scripts/                 # Build scripts
 │   └── build-motif.sh       # Container build script
 ├── templates/               # Template system
@@ -48,8 +48,8 @@ cd tools/dev/env
 # Test on Arch Linux (first run builds image, subsequent runs use cache)
 ./test-motif.sh archlinux
 
-# Test on FreeBSD
-./test-motif.sh freebsd
+# Test on Debian
+./test-motif.sh debian
 
 # Test on all available OS (uses cached images for speed)
 ./test-motif.sh --all
@@ -119,7 +119,7 @@ The system includes pre-configured templates for:
 
 - **archlinux**: Arch Linux (rolling release)
 - **ubuntu**: Ubuntu 22.04 LTS
-- **freebsd**: FreeBSD-like environment (Debian-based)
+- **debian**: Debian 12 (bookworm)
 - **centos**: CentOS Stream 9
 - **fedora**: Fedora 39
 
@@ -212,7 +212,7 @@ Logs are organized by session timestamp:
 logs/
 └── 20240101_120000/          # Session timestamp
     ├── test_archlinux.log    # Arch Linux test log
-    ├── test_freebsd.log      # FreeBSD test log
+    ├── test_debian.log       # Debian test log
     └── ...
 ```
 

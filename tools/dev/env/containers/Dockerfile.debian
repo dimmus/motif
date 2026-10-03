@@ -1,10 +1,14 @@
-# Dockerfile for testing Motif build on FreeBSD
-# Note: This uses FreeBSD in a Linux container via cross-compilation setup
-# For true FreeBSD testing, consider using bhyve or other virtualization
+# Dockerfile for testing Motif build on Debian
+#
+# This file used to be called Dockerfile.freebsd, but it never was FreeBSD:
+# it is Debian with a few FreeBSD-looking environment variables, which no
+# part of the build reads.  FreeBSD cannot run in a Linux container; CI
+# builds and tests Motif in a real FreeBSD VM instead (the "freebsd" job
+# in .github/workflows/build.yml).
 FROM docker.io/debian:bookworm-slim
 
 LABEL maintainer="XDE Motif Development Team"
-LABEL description="FreeBSD-like environment for testing Motif builds"
+LABEL description="Debian environment for testing Motif builds"
 LABEL version="1.0"
 
 # Set environment variables
@@ -23,21 +27,13 @@ WORKDIR /build
 COPY tools/dev/env/scripts/build-motif.sh /usr/local/bin/build-motif.sh
 RUN chmod +x /usr/local/bin/build-motif.sh
 
-# Set up FreeBSD-like build environment
+# Set up build environment
 ENV CC=clang
 ENV CXX=clang++
-ENV CPPFLAGS="-I/usr/local/include"
 ENV CFLAGS="-O2 -pipe -fstack-protector-strong -fno-strict-aliasing"
 ENV CXXFLAGS="-O2 -pipe -fstack-protector-strong -fno-strict-aliasing"
-ENV LDFLAGS="-L/usr/local/lib -Wl,--as-needed"
+ENV LDFLAGS="-Wl,--as-needed"
 ENV MAKEFLAGS="-j$(nproc)"
-
-# FreeBSD-specific environment variables
-ENV OPSYS=FreeBSD
-ENV OSVERSION=1400000
-ENV UNAME_s=FreeBSD
-ENV UNAME_r=14.0-RELEASE
-ENV UNAME_m=amd64
 
 # Create non-root user for building
 RUN useradd -m -s /bin/bash builder && \
