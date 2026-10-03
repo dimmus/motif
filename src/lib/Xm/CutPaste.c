@@ -1127,7 +1127,11 @@ static int ClipboardGetLenFromFormat(Display *display, char *format_name, int *f
                                  &outlength,
                                  &bytes_left,
                                  &outpointer);
-  if (outpointer == 0 || outlength == 0 || ret_value != 0) {
+  /* any client can write this property: it must hold one 32-bit item
+     with a valid format length */
+  if (outpointer == 0 || outlength == 0 || ret_value != 0 || format != 32 ||
+      (*((long *)outpointer) != 8 && *((long *)outpointer) != 16 && *((long *)outpointer) != 32))
+  {
     /* if not successful, return warning that format is not registered */
     ret_value = ClipboardFail;
     *format_length = 8;
@@ -1135,7 +1139,7 @@ static int ClipboardGetLenFromFormat(Display *display, char *format_name, int *f
   else {
     ret_value = ClipboardSuccess;
     /* return the length of the format */
-    *format_length = *((long *)outpointer);
+    *format_length = (int)*((long *)outpointer);
   }
   if (outpointer != NULL)
     XFree((char *)outpointer);
