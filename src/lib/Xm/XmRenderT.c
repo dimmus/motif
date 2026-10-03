@@ -354,7 +354,7 @@ static XrmResourceList CompileResourceTable(XtResourceList resources, Cardinal n
   Cardinal count;
   XrmResourceList table, tPtr;
   XtResourceList rPtr;
-  tPtr = table = (XrmResourceList)XtMalloc(num_resources * sizeof(XrmResource));
+  tPtr = table = (XrmResourceList)_XmMallocArray(num_resources, sizeof(XrmResource));
   rPtr = resources;
   for (count = 0; count < num_resources; count++, tPtr++, rPtr++) {
     tPtr->xrm_name = XrmPermStringToQuark(rPtr->resource_name);
@@ -414,12 +414,12 @@ static Boolean GetResources(XmRendition rend,
 #endif
   /* Initialize quark cache */
   if (quarks == NULL) {
-    quarks = (XrmQuark *)XtMalloc(_XmNumRenditionResources * sizeof(XrmQuark));
+    quarks = (XrmQuark *)_XmMallocArray(_XmNumRenditionResources, sizeof(XrmQuark));
     num_quarks = _XmNumRenditionResources;
   }
   /* Initialize found */
   if (found == NULL)
-    found = (Boolean *)XtMalloc(_XmNumRenditionResources * sizeof(Boolean));
+    found = (Boolean *)_XmMallocArray(_XmNumRenditionResources, sizeof(Boolean));
   bzero(found, _XmNumRenditionResources * sizeof(Boolean));
   /* Compile names and classes. */
   if (wid != NULL)
@@ -436,7 +436,7 @@ static Boolean GetResources(XmRendition rend,
   classes[length] = NULLQUARK;
   /* Cache arglist */
   if (num_quarks < argcount) {
-    quarks = (XrmQuark *)XtRealloc((char *)quarks, argcount * sizeof(XrmQuark));
+    quarks = (XrmQuark *)_XmReallocArray((char *)quarks, argcount, sizeof(XrmQuark));
     num_quarks = argcount;
   }
   for (i = 0; i < argcount; i++)
@@ -469,8 +469,9 @@ static Boolean GetResources(XmRendition rend,
     while (!XrmQGetSearchList(db, names, classes, searchList, searchListSize)) {
       if (searchList == stackSearchList)
         searchList = NULL;
-      searchList = (XrmHashTable *)XtRealloc((char *)searchList,
-                                             sizeof(XrmHashTable) * (searchListSize *= 2));
+      searchList = (XrmHashTable *)_XmReallocArray((char *)searchList,
+                                                   searchListSize *= 2,
+                                                   sizeof(XrmHashTable));
     }
   }
   /* Loop over table */
@@ -1063,7 +1064,7 @@ XmRendition _XmRenditionCopy(XmRendition rend, Boolean shared)
     _XmRendGC(toRend) = _XmRendGC(rend);
     _XmRendTagCount(toRend) = _XmRendTagCount(rend);
     _XmRendHadEnds(toRend) = _XmRendHadEnds(rend);
-    _XmRendTags(toRend) = (XmStringTag *)XtMalloc(sizeof(XmStringTag) * _XmRendTagCount(rend));
+    _XmRendTags(toRend) = (XmStringTag *)_XmMallocArray(_XmRendTagCount(rend), sizeof(XmStringTag));
     for (i = 0; i < _XmRendTagCount(rend); i++)
       _XmRendTags(toRend)[i] = _XmRendTags(rend)[i];
   }
@@ -1533,7 +1534,7 @@ int XmRenderTableGetTags(XmRenderTable table, XmStringTag **tag_list)
   app = XtDisplayToApplicationContext(_XmRTDisplay(table));
   (void)app; /* unused but required for _XmAppLock */
   _XmAppLock(app);
-  *tag_list = (XmStringTag *)XtMalloc(sizeof(XmStringTag) * _XmRTCount(table));
+  *tag_list = (XmStringTag *)_XmMallocArray(_XmRTCount(table), sizeof(XmStringTag));
   for (i = 0; i < _XmRTCount(table); i++)
     (*tag_list)[i] = XtNewString(_XmRendTag(_XmRTRenditions(table)[i]));
   ret_val = _XmRTCount(table);
@@ -1566,7 +1567,7 @@ XmRendition *XmRenderTableGetRenditions(XmRenderTable table, char **tags, Cardin
     _XmAppLock(app);
   }
 #endif
-  rends = (XmRendition *)XtMalloc(tag_count * sizeof(XmRendition));
+  rends = (XmRendition *)_XmMallocArray(tag_count, sizeof(XmRendition));
   count = 0;
   for (i = 0; i < tag_count; i++) {
     rend = _XmRenderTableFindRendition(table, tags[i], FALSE, FALSE, FALSE, NULL);
@@ -1576,7 +1577,7 @@ XmRendition *XmRenderTableGetRenditions(XmRenderTable table, char **tags, Cardin
     }
   }
   if (count < tag_count)
-    rends = (XmRendition *)XtRealloc((char *)rends, count * sizeof(XmRendition));
+    rends = (XmRendition *)_XmReallocArray((char *)rends, count, sizeof(XmRendition));
 #ifdef XTHREADS
   if (app) {
     _XmAppUnlock(app);
@@ -2868,7 +2869,7 @@ XmRenderTable XmRenderTableCvtFromProp(Widget w, char *prop, unsigned int len) /
   scanpointer = 0;
   rarray_max = 10;
   rarray_count = 0;
-  rarray = (XmRendition *)XtMalloc(sizeof(XmRendition) * rarray_max);
+  rarray = (XmRendition *)_XmMallocArray(rarray_max, sizeof(XmRendition));
   name = "";
   tablist = NULL;
   count = 0;
@@ -2921,7 +2922,7 @@ XmRenderTable XmRenderTableCvtFromProp(Widget w, char *prop, unsigned int len) /
       if (rarray_count >= rarray_max) {
         /* Extend array if necessary */
         rarray_max += 10;
-        rarray = (XmRendition *)XtRealloc((char *)rarray, sizeof(XmRendition) * rarray_max);
+        rarray = (XmRendition *)_XmReallocArray((char *)rarray, rarray_max, sizeof(XmRendition));
       }
       rarray[rarray_count] = rendition;
       rarray_count++;

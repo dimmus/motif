@@ -2872,8 +2872,8 @@ static Boolean XmLabelGadgetGetBaselines(Widget wid, Dimension **baselines, int 
     _XmStringGetBaselines(LabG_Font(lw), LabG__label(lw), &(lw->label.baselines), &count);
     assert(lw->label.baselines != NULL);
     /* Store the current offset in an extra location. */
-    lw->label.baselines = (Dimension *)XtRealloc((char *)lw->label.baselines,
-                                                 (count + 1) * sizeof(Dimension));
+    lw->label.baselines =
+        (Dimension *)_XmReallocArray((char *)lw->label.baselines, count + 1, sizeof(Dimension));
     lw->label.baselines[count] = 0;
   }
   else {
@@ -2888,7 +2888,7 @@ static Boolean XmLabelGadgetGetBaselines(Widget wid, Dimension **baselines, int 
   }
   /* Copy the cached data. */
   *line_count = count;
-  *baselines = (Dimension *)XtMalloc(*line_count * sizeof(Dimension));
+  *baselines = (Dimension *)_XmMallocArray(*line_count, sizeof(Dimension));
   memcpy((char *)*baselines, (char *)lw->label.baselines, *line_count * sizeof(Dimension));
   return True;
 }

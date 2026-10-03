@@ -1095,18 +1095,18 @@ static Boolean CvtStringToXmStringTable(Display *dpy,
     return FALSE;
   s = (char *)from_val->addr;
   table_size = 100;
-  table = (XmString *)XtMalloc(sizeof(XmString) * table_size);
+  table = (XmString *)_XmMallocArray(table_size, sizeof(XmString));
   for (str_no = 0; GetNextXmString(&s, &cs); str_no++) {
     if (str_no >= table_size) {
       table_size *= 2;
-      table = (XmString *)XtRealloc((char *)table, sizeof(XmString) * table_size);
+      table = (XmString *)_XmReallocArray((char *)table, table_size, sizeof(XmString));
     }
     table[str_no] = XmStringGenerate(cs, XmFONTLIST_DEFAULT_TAG, XmCHARSET_TEXT, NULL);
     XtFree(cs);
   }
   /* NULL terminate the array... */
   table_size = str_no + 1;
-  table = (XmString *)XtRealloc((char *)table, sizeof(XmString) * table_size);
+  table = (XmString *)_XmReallocArray((char *)table, table_size, sizeof(XmString));
   table[str_no] = (XmString)NULL;
   if (to_val->addr != NULL) {
     if (to_val->size < sizeof(XtPointer)) {
@@ -1158,7 +1158,7 @@ static Boolean CvtStringToStringTable(Display *dpy,       /* unused */
   if ((p = from_val->addr) == NULL) {
     return (False);
   }
-  table = (String *)XtMalloc(sizeof(String) * size);
+  table = (String *)_XmMallocArray(size, sizeof(String));
   for (i = 0; *p; i++) {
     while (isspace((unsigned char)*p) && *p != '\0') {
       p++;
@@ -1166,7 +1166,7 @@ static Boolean CvtStringToStringTable(Display *dpy,       /* unused */
     if (*p == '\0') {
       if (i == size) {
         size++;
-        table = (String *)XtRealloc((char *)table, sizeof(String) * size);
+        table = (String *)_XmReallocArray((char *)table, size, sizeof(String));
       }
       table[i] = XtMalloc(sizeof(char));
       *(table[i]) = '\0';
@@ -1181,7 +1181,7 @@ static Boolean CvtStringToStringTable(Display *dpy,       /* unused */
     }
     if (i == size) {
       size *= 2;
-      table = (String *)XtRealloc((char *)table, sizeof(String) * size);
+      table = (String *)_XmReallocArray((char *)table, size, sizeof(String));
     }
     len = p - top;
     table[i] = XtMalloc(len + 1);
@@ -1190,7 +1190,7 @@ static Boolean CvtStringToStringTable(Display *dpy,       /* unused */
     if (*p != '\0')
       p++;
   }
-  table = (String *)XtRealloc((char *)table, sizeof(String) * (i + 1));
+  table = (String *)_XmReallocArray((char *)table, i + 1, sizeof(String));
   table[i] = NULL;
   if (to_val->addr != NULL) {
     if (to_val->size < sizeof(XPointer)) {
@@ -1248,7 +1248,8 @@ static Boolean CvtStringToCardinalList(Display *dpy,       /* unused */
         p++;
       if (crd_array_size == crd_array_count) {
         crd_array_size *= 2; /* Double array size */
-        crd_array = (Cardinal *)XtRealloc((char *)crd_array, sizeof(Cardinal) * crd_array_size);
+        crd_array =
+            (Cardinal *)_XmReallocArray((char *)crd_array, crd_array_size, sizeof(Cardinal));
       }
       crd_array[crd_array_count] = new_element;
       crd_array_count++;
@@ -1503,7 +1504,7 @@ static Boolean ConvertStringToButtonType(Display *display,
     }
   }
   ++in_str_size;
-  buttonTable = (XmButtonTypeTable)XtMalloc(sizeof(XmButtonType) * (comma_count + 2));
+  buttonTable = (XmButtonTypeTable)_XmMallocArray(comma_count + 2, sizeof(XmButtonType));
   buttonTable[comma_count + 1] = (XmButtonType)0;
   work_str = (String)XtMalloc(in_str_size);
   strncpy(work_str, in_str, in_str_size - 1);
@@ -1568,7 +1569,7 @@ static Boolean CvtStringToKeySymTable(Display *display,
       ++comma_count;
   }
   ++in_str_size;
-  keySymTable = (XmKeySymTable)XtMalloc(sizeof(KeySym) * (comma_count + 2));
+  keySymTable = (XmKeySymTable)_XmMallocArray(comma_count + 2, sizeof(KeySym));
   keySymTable[comma_count + 1] = (KeySym)NULL;
   work_str = XtNewString(in_str);
   for (ks_str = _XStrtok(work_str, ",", strtok_buf), i = 0; ks_str;
@@ -1727,17 +1728,17 @@ static Boolean CvtStringToAtomList(Display *dpy,
     if (atom_count == max_atoms) {
       max_atoms *= 2;
       if (name_list == stack_names) {
-        char **new_names = (char **)XtMalloc(sizeof(char *) * max_atoms);
+        char **new_names = (char **)_XmMallocArray(max_atoms, sizeof(char *));
         memcpy((char *)new_names, (char *)name_list, (sizeof(char *) * atom_count));
         name_list = new_names;
       }
       else {
-        name_list = (char **)XtRealloc((char *)name_list, sizeof(char *) * max_atoms);
+        name_list = (char **)_XmReallocArray((char *)name_list, max_atoms, sizeof(char *));
       }
     }
     name_list[atom_count++] = atom_name;
   }
-  atom_list = (Atom *)XtMalloc(sizeof(Atom) * atom_count);
+  atom_list = (Atom *)_XmMallocArray(atom_count, sizeof(Atom));
   XInternAtoms(dpy, name_list, atom_count, False, atom_list);
   while (--atom_count >= 0)
     XtFree(name_list[atom_count]);

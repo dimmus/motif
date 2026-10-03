@@ -160,7 +160,7 @@ XmStringTable XmStringTableParseStringArray(XtPointer *strings,
     _XmProcessUnlock();
     return (NULL);
   }
-  strs = (XmStringTable)XtMalloc(count * sizeof(XmString));
+  strs = (XmStringTable)_XmMallocArray(count, sizeof(XmString));
   for (i = 0; i < count; i++) {
     strs[i] = XmStringParseText(strings[i], NULL, tag, type, parse, parse_count, call_data);
   }
@@ -184,7 +184,7 @@ XtPointer *XmStringTableUnparse(XmStringTable table,
     _XmProcessUnlock();
     return (NULL);
   }
-  strs = (XtPointer *)XtMalloc(count * sizeof(XtPointer));
+  strs = (XtPointer *)_XmMallocArray(count, sizeof(XtPointer));
   for (i = 0; i < count; i++)
     strs[i] = XmStringUnparse(
         table[i], tag, tag_type, output_type, parse, parse_count, parse_model);
@@ -341,8 +341,9 @@ static void new_line(_XmString string)
   int lc = _XmStrEntryCount(string);
   _XmStringEntry line;
   _XmStrImplicitLine(string) = TRUE;
-  _XmStrEntry(string) = (_XmStringEntry *)XtRealloc((char *)_XmStrEntry(string),
-                                                    sizeof(_XmStringEntry) * (lc + 1));
+  _XmStrEntry(string) = (_XmStringEntry *)_XmReallocArray((char *)_XmStrEntry(string),
+                                                          lc + 1,
+                                                          sizeof(_XmStringEntry));
   _XmEntryCreate(line, XmSTRING_ENTRY_ARRAY);
   _XmStrEntry(string)[lc] = line;
   _XmEntrySegmentCount(line) = 0;
@@ -632,7 +633,7 @@ Cardinal XmStringToXmStringTable(XmString string, XmString break_component, XmSt
   }
   /* Allocate table and insert new strings */
   if (table != NULL) {
-    *table = (XmStringTable)XtMalloc(count * sizeof(XmString));
+    *table = (XmStringTable)_XmMallocArray(count, sizeof(XmString));
     if (count == 1) {
       (*table)[0] = XmStringCopy(string);
     }

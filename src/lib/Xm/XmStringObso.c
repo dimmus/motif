@@ -381,12 +381,12 @@ Boolean _XmStringGetSegment(_XmStringContext context,
             *tag_count = _XmStrContRendCount(local_context);
             if (copy_data) {
               int tmp;
-              *rendition_tags = (XmStringTag *)XtMalloc(sizeof(XmStringTag) * *tag_count);
+              *rendition_tags = (XmStringTag *)_XmMallocArray(*tag_count, sizeof(XmStringTag));
               for (tmp = 0; tmp < *tag_count; tmp++)
                 (*rendition_tags)[tmp] = XtNewString(_XmStrContRendTags(local_context)[tmp]);
             }
             else {
-              perm_rends = (XmStringTag *)XtMalloc(sizeof(XmStringTag) * *tag_count);
+              perm_rends = (XmStringTag *)_XmMallocArray(*tag_count, sizeof(XmStringTag));
               memcpy((char *)perm_rends,
                      _XmStrContRendTags(local_context),
                      sizeof(XmStringTag) * *tag_count);
@@ -435,12 +435,12 @@ Boolean _XmStringGetSegment(_XmStringContext context,
             *tag_count = _XmStrContRendCount(local_context);
             if (copy_data) {
               int tmp;
-              *rendition_tags = (XmStringTag *)XtMalloc(sizeof(XmStringTag) * *tag_count);
+              *rendition_tags = (XmStringTag *)_XmMallocArray(*tag_count, sizeof(XmStringTag));
               for (tmp = 0; tmp < *tag_count; tmp++)
                 (*rendition_tags)[tmp] = XtNewString(_XmStrContRendTags(local_context)[tmp]);
             }
             else {
-              perm_rends = (XmStringTag *)XtMalloc(sizeof(XmStringTag) * *tag_count);
+              perm_rends = (XmStringTag *)_XmMallocArray(*tag_count, sizeof(XmStringTag));
               memcpy((char *)perm_rends,
                      _XmStrContRendTags(local_context),
                      sizeof(XmStringTag) * *tag_count);
