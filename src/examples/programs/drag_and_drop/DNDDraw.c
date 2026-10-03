@@ -144,8 +144,6 @@ GetColor(char *colorstr)
     XrmValue    from, to;
 
     from.size = strlen(colorstr) +1;
-    if (from.size < sizeof(String))
-        from.size = sizeof(String);
     from.addr = colorstr;
     to.addr = NULL;
     XtConvert(topLevel, XmRString, &from, XmRPixel, &to);
