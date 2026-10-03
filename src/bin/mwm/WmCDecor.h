@@ -31,6 +31,7 @@ extern void SetFrameShape (ClientData *pcd);
 extern Boolean ConstructFrame (ClientData *pcd);
 extern void GenerateFrameDisplayLists (ClientData *pcd);
 extern void AdoptClient (ClientData *pcd);
+extern Dimension GetClientTitleWidth (ClientData *pcd, XmFontList fontList);
 extern void GetTextBox (ClientData *pcd, XRectangle *pBox);
 extern void DrawWindowTitle (ClientData *pcd, Boolean eraseFirst);
 extern void CreateStretcherWindows (ClientData *pcd);

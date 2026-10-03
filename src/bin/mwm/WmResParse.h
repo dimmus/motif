@@ -59,7 +59,6 @@ extern unsigned char * GetNextLine (void);
 #endif /* not WSM */
 #ifdef WSM
 extern unsigned char * GetStringC (unsigned char **linePP, Boolean SmBehavior);
-extern void SystemCmd (char *pchCmd);
 #else /* WSM */
 extern unsigned char * GetString (unsigned char **linePP);
 #endif /* WSM */
@@ -74,6 +73,8 @@ extern void            ParseKeyStr (WmScreenData *pSD, unsigned char *keyStr);
 extern Boolean ParseKeyEvent (unsigned char **linePP, unsigned int *eventType,
 		       KeyCode *keyCode,  unsigned int *state);
 extern MenuItem      * ParseMwmMenuStr (WmScreenData *pSD, unsigned char *menuStr);
+extern MenuItem      * ParseClientMwmMenuStr (WmScreenData *pSD,
+					       unsigned char *menuStr);
 #ifdef WSM
 extern void ParseSessionClientState (WmScreenData *pSD, int count,
 			      unsigned char *string);

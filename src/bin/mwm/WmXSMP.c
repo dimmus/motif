@@ -115,7 +115,7 @@ static void smSaveYourselfCallback(Widget, XtPointer, XtPointer);
 static void smDieCallback(Widget, XtPointer, XtPointer);
 
 /* Build client database file name. */
-static void buildDBFileName(char [MAXPATHLEN], Boolean);
+static Boolean buildDBFileName(char [MAXPATHLEN], Boolean);
 #ifndef WSM
 /*
  *Get clientDB name according to argv; set according to dbFileName.
@@ -150,6 +150,7 @@ static Boolean findProxyClientDBMatch(ClientData *, char **);
 static Boolean saveXSMPClient(FILE *, ClientData *);
 static Boolean saveProxyClient(FILE *, ClientData *, int);
 static void dbRemoveProxyClientEntry(char *);
+static void dbPutStrArg(FILE *, const char *);
 
 static void
 smSaveYourselfCallback(Widget w, XtPointer clientData, XtPointer callData)
@@ -250,7 +251,7 @@ smDieCallback(Widget w, XtPointer clientData, XtPointer callData)
     ExitWM(0);
 }
 
-static void
+static Boolean
 buildDBFileName(char fileNameBuf[MAXPATHLEN], Boolean doingSave)
 {
 #ifdef WSM
@@ -292,10 +293,18 @@ buildDBFileName(char fileNameBuf[MAXPATHLEN], Boolean doingSave)
 
 #else
 
-    strcpy(fileNameBuf, (wmGD.dbFileName == (char *)NULL) ?
-	   dtwmFileName : wmGD.dbFileName);
+    const char *fileName = (wmGD.dbFileName == (char *)NULL) ?
+	dtwmFileName : wmGD.dbFileName;
+
+    /* The name comes from -session or the sessionClientDB resource. */
+    if (strlen(fileName) >= MAXPATHLEN)
+	return False;
+
+    strcpy(fileNameBuf, fileName);
 
 #endif
+
+    return True;
 }
 
 #ifndef WSM
@@ -580,8 +589,12 @@ getClientResource(char *clientID, char *fmtStr)
     char resourceBuf[MAX_RESOURCE_LEN];
     char *resourceType;
     XrmValue resourceValue;
+    int len;
 
-    sprintf(resourceBuf, fmtStr, clientID);
+    len = snprintf(resourceBuf, sizeof(resourceBuf), fmtStr, clientID);
+    if ((len < 0) || (len >= (int)sizeof(resourceBuf)))
+	return (char *)NULL;
+
     if (XrmGetResource(wmGD.clientResourceDB, resourceBuf, resourceBuf,
 		       &resourceType, &resourceValue))
 	return (char *)resourceValue.addr;
@@ -1055,13 +1068,13 @@ saveProxyClient(FILE *fp, ClientData *pCD, int clientIDNum)
     fprintf(fp, intArg, proxyClientInfo.screen);
 
     fprintf(fp, wmCommandStr, clientID);
-    fprintf(fp, strArg, proxyClientInfo.wmCommand);
+    dbPutStrArg(fp, proxyClientInfo.wmCommand);
     free(proxyClientInfo.wmCommand);
 
     if (proxyClientInfo.wmClientMachine != (char *)NULL)
     {
 	fprintf(fp, wmClientMachineStr, clientID);
-	fprintf(fp, strArg, proxyClientInfo.wmClientMachine);
+	dbPutStrArg(fp, proxyClientInfo.wmClientMachine);
 	free(proxyClientInfo.wmClientMachine);
     }
 
@@ -1134,12 +1147,43 @@ static void
 dbRemoveProxyClientEntry(char *proxyClientID)
 {
     char resourceBuf[MAX_RESOURCE_LEN];
+    int len;
 
     /* Remove entry from DB.  Since Xrm does not provide a means */
     /* of removing something from the DB, we blank out key info. */
-    sprintf(resourceBuf, wmCommandStr, proxyClientID);
-    strcat(resourceBuf, ":");
+    len = snprintf(resourceBuf, sizeof(resourceBuf), wmCommandStr,
+		   proxyClientID);
+    if ((len < 0) || (len >= (int)sizeof(resourceBuf) - 1))
+	return;
+    resourceBuf[len] = ':';
+    resourceBuf[len + 1] = '\0';
     XrmPutLineResource(&wmGD.clientResourceDB, resourceBuf);
+}
+
+/*
+ *  Write ": <value>\n" to the client database.  The value comes from
+ *  client properties (WM_COMMAND, WM_CLIENT_MACHINE), so escape it in
+ *  resource file syntax: otherwise an embedded newline would let a
+ *  client add arbitrary lines (resources) to the database.  Xrm turns
+ *  the escapes back into the original characters when the file is read.
+ */
+static void
+dbPutStrArg(FILE *fp, const char *str)
+{
+    const unsigned char *p;
+
+    fputs(": ", fp);
+    for (p = (const unsigned char *)str; *p != '\0'; p++)
+    {
+	if (*p == '\\')
+	    fputs("\\\\", fp);
+	else if ((*p < ' ') || (*p == 0x7f) ||
+		 ((p == (const unsigned char *)str) && (*p == ' ')))
+	    fprintf(fp, "\\%03o", (unsigned int)*p);
+	else
+	    putc(*p, fp);
+    }
+    putc('\n', fp);
 }
 
 /*
@@ -1189,7 +1233,8 @@ LoadClientResourceDB(void)
 #ifndef WSM
     getClientDBName();
 #endif
-    buildDBFileName(dbFileName, False);
+    if (!buildDBFileName(dbFileName, False))
+	return (XrmDatabase)NULL;
 
     return XrmGetFileDatabase(dbFileName);
 }
@@ -1214,7 +1259,8 @@ SaveClientResourceDB(void)
 #ifndef WSM
     setClientDBName();
 #endif
-    buildDBFileName(dbFileName, True);
+    if (!buildDBFileName(dbFileName, True))
+	return (XrmDatabase)NULL;
     if ((fp = fopen(dbFileName, "w")) == (FILE *)NULL)
 	return (XrmDatabase)NULL;
 

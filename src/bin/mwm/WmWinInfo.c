@@ -238,6 +238,7 @@ GetClientInfo (WmScreenData *pSD, Window clientWindow, long manageFlags)
     pCD->clientEntry.pCD = NULL;
 
     pCD->smClientID = (String)NULL;
+    pCD->clientTitleWidthFont = NULL;
 
      /*
      * Do special processing for client windows that are controlled by
@@ -918,6 +919,53 @@ ProcessWmClass (ClientData *pCD)
 
 /*************************************<->*************************************
  *
+ *  IsValidSmClientID (clientID, len)
+ *
+ *
+ *  Description:
+ *  -----------
+ *  SM_CLIENT_ID is set by the client and is later used as a resource name
+ *  component in the client database (.mwmclientdb).  XSMP client IDs only
+ *  contain letters and digits, so reject anything that is overlong or
+ *  contains characters that are special in a resource file (newline, ':',
+ *  '.', '*', '!', whitespace, ...).
+ *
+ *************************************<->***********************************/
+
+static Boolean
+IsValidSmClientID (const char *clientID, unsigned long len)
+{
+    unsigned long i;
+
+    /*
+     * The ID is used as a C string, so a terminating NUL that the client
+     * stored as part of the property is harmless.
+     */
+    while ((len > 0) && (clientID[len - 1] == '\0'))
+	len--;
+
+    if ((len == 0) || (len > MAX_SM_CLIENT_ID_LEN))
+	return (False);
+
+    for (i = 0; i < len; i++)
+    {
+	unsigned char c = (unsigned char) clientID[i];
+
+	if (!(((c >= '0') && (c <= '9')) ||
+	      ((c >= 'A') && (c <= 'Z')) ||
+	      ((c >= 'a') && (c <= 'z')) ||
+	      (c == '-') || (c == '_')))
+	    return (False);
+    }
+
+    return (True);
+
+} /* END OF FUNCTION IsValidSmClientID */
+
+
+
+/*************************************<->*************************************
+ *
  *  ProcessSmClientID (pCD)
  *
  *
@@ -955,15 +1003,22 @@ ProcessSmClientID (ClientData *pCD)
 	pCD->smClientID = (String)NULL;
     }
 
+    /* Read up to MAX_SM_CLIENT_ID_LEN bytes plus a terminating NUL. */
+    clientID = NULL;
     if ((XGetWindowProperty(DISPLAY, pCD->client, wmGD.xa_SM_CLIENT_ID,
-			    0L, (long)1000000, False, AnyPropertyType,
-			    &actualType, &actualFormat, &nitems,
-			    &leftover, (unsigned char **)&clientID)
+			    0L, (long)((MAX_SM_CLIENT_ID_LEN + 1 + 3) / 4), False,
+			    AnyPropertyType, &actualType, &actualFormat,
+			    &nitems, &leftover, (unsigned char **)&clientID)
 	 == Success) &&
-	(actualType != None) && (actualFormat == 8))
+	(actualType != None) && (actualFormat == 8) && (leftover == 0) &&
+	IsValidSmClientID (clientID, nitems))
     {
 	/* the SM_CLIENT_ID property exists for the client window */
 	pCD->smClientID = clientID;
+    }
+    else if (clientID != NULL)
+    {
+	XFree (clientID);
     }
 
 } /* END OF FUNCTION ProcessSmClientID */
@@ -1000,14 +1055,19 @@ ProcessWmSaveHint (ClientData *pCD)
     Atom actualType;
     int actualFormat;
     unsigned long nitems, leftover;
-    BITS32 *saveHintFlags = (BITS32 *)NULL;
+    unsigned long *saveHintFlags = (unsigned long *)NULL;
+
+    /*
+     * Format 32 data is returned by Xlib as an array of long, and only
+     * the first element is used.
+     */
 
     if ((XGetWindowProperty(DISPLAY, pCD->client, wmGD.xa_WMSAVE_HINT,
-			    0L, (long)1000000, False, AnyPropertyType,
+			    0L, 1L, False, AnyPropertyType,
 			    &actualType, &actualFormat, &nitems,
 			    &leftover, (unsigned char **)&saveHintFlags)
 	 == Success) &&
-	(actualType != None) && (actualFormat == 32))
+	(actualType != None) && (actualFormat == 32) && (nitems >= 1))
     {
 	/* the WMSAVE_HINT property exists for the client window */
 	pCD->wmSaveHintFlags = (int)*saveHintFlags;
@@ -2340,6 +2400,7 @@ ProcessWmWindowTitle (ClientData *pCD, Boolean firstTime)
       }
 
       pCD->clientTitle = title_xms;
+      pCD->clientTitleWidthFont = NULL;
       pCD->clientFlags |= CLIENT_HINTS_TITLE;
 
       if (!firstTime)
@@ -2362,6 +2423,7 @@ ProcessWmWindowTitle (ClientData *pCD, Boolean firstTime)
         {
 	    pCD->clientTitle = wmGD.clientDefaultTitle;
         }
+	pCD->clientTitleWidthFont = NULL;
     }
 
     /*
@@ -2388,7 +2450,7 @@ ProcessWmWindowTitle (ClientData *pCD, Boolean firstTime)
 	/*
 	 * Calculations derived from GetTextBox() and GetFramePartInfo()
 	 */
-	minWidth = XmStringWidth(fontList, pCD->clientTitle) +
+	minWidth = GetClientTitleWidth(pCD, fontList) +
 #ifdef PANELIST
 	    ((pCD->dtwmBehaviors & DtWM_BEHAVIOR_SUBPANEL) ? 4 : 0) +
 #endif /* PANELIST */

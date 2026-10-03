@@ -1830,6 +1830,8 @@ typedef struct _ClientData
     int		clientHeight;			/* normal window height */
     XPoint	clientOffset;			/* frame to client window */
     XmString	clientTitle;			/* WM_NAME field */
+    Dimension	clientTitleWidth;		/* cached width of clientTitle */
+    XmFontList	clientTitleWidthFont;		/* its font list, NULL if stale */
     Window	clientFrameWin;			/* top-level, frame window */
     Window	clientStretchWin[STRETCH_COUNT];/* for resizing border */
     Window	clientTitleWin;			/* for title bar */
@@ -1991,6 +1993,7 @@ typedef struct _ClientData *PtrClientData;
 #define MAX_CLIENT_PROTOCOL_COUNT	40
 #define MAX_COLORMAP_WINDOWS_COUNT	40
 #define MAX_MWM_MESSAGES_COUNT		40
+#define MAX_SM_CLIENT_ID_LEN		256
 
 /* bevel width limits between window manager frame and client window */
 #define MIN_INTERNAL_BEVEL		0
