@@ -1027,9 +1027,10 @@ int	yylex()
     /*
     **  Call the Status callback routine to report our progress.
     */
-    /* %COMPLETE  (between 0-50) */
-    Uil_percent_complete =
-      CEIL((int)( .5 * ((float)Uil_characters_read/(float)Uil_file_size))*100, 50);
+    /* %COMPLETE  (between 0-50); an empty file would divide by zero */
+    if (Uil_file_size > 0)
+      Uil_percent_complete =
+	CEIL((int)( .5 * ((float)Uil_characters_read/(float)Uil_file_size))*100, 50);
     if (Uil_cmd_z_command.status_cb != (Uil_continue_type(*)())NULL)
 	diag_report_status();
 

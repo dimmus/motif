@@ -131,6 +131,10 @@ uil_case(integer_digits 1 "out of range" ARGS -o a.uid int11.uil)
 file(WRITE "${WORK_DIR}/lstr.uil" "module m\nvalue s : #\"abc\nend module;\n")
 uil_case(localized_string 1 "not terminated" ARGS -o a.uid -s lstr.uil)
 
+# An empty source file divided by its size of zero.
+file(WRITE "${WORK_DIR}/empty.uil" "")
+uil_case(empty_file 1 "invalid module structure" ARGS -o a.uid empty.uil)
+
 # Environment and database names.
 uil_case(lang_codeset 1 "unknown character set"
          ENV LANG=en_US.${x400} ARGS -o a.uid inc_ok.uil)
