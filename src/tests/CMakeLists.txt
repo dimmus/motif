@@ -37,14 +37,14 @@ set(MOTIF_TEST_DEFS "")
 # extra Xm.<suite>.xfail test that passes only while those cases still fail.
 set(MOTIF_TEST_XFAIL_SUITES "")
 
-if(WITH_JPEG AND JPEG_FOUND)
+if(MOTIF_JPEG_FOUND)
     list(APPEND MOTIF_TEST_SRCS Xm/testJpeg.c)
     list(APPEND MOTIF_TEST_SUITES Jpeg)
     list(APPEND MOTIF_TEST_XFAIL_SUITES Jpeg)
     list(APPEND MOTIF_TEST_DEFS XM_WITH_JPEG)
 endif()
 
-if(WITH_PNG AND PNG_FOUND)
+if(MOTIF_PNG_FOUND)
     list(APPEND MOTIF_TEST_SRCS Xm/testPng.c)
     list(APPEND MOTIF_TEST_SUITES Png)
     list(APPEND MOTIF_TEST_DEFS XM_WITH_PNG)
