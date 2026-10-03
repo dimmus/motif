@@ -516,9 +516,15 @@ static Boolean ClipboardConvertProc(Widget wid,
     *type = XA_ATOM;
     /* find the first format for the next paste item, if any remain */
     nextitem = ClipboardFindFormat(display, header, 0, (itemId)NULL, 1, &dummy, &count, &dummy);
+    /* the count comes from the root window: keep the size in range */
+    if (count > (int)((Cardinal)~0 / sizeof(Atom)) - 2) {
+      XtFree((char *)nextitem);
+      rval = False;
+      goto done;
+    }
     /* allocate storage for list of target atoms,
          plus the necessary */
-    ptr = (Atom *)XtMalloc(sizeof(Atom) * (count + 2));
+    ptr = (Atom *)XtMalloc((Cardinal)(sizeof(Atom) * (count + 2)));
     save_ptr = ptr;
     /* Put required ICCCM targets which are supported */
     *ptr = atoms[XmA_TARGETS];
@@ -1287,9 +1293,12 @@ static ClipboardFormatItem ClipboardFindFormat(
                           sizeof(ClipboardDataItemRec),
                           XM_DATA_ITEM_RECORD_TYPE) == ClipboardFail)
     return 0;
-  *count = queryitem->formatCount - queryitem->cancelledFormatCount;
-  if (*count < 0)
-    *count = 0;
+  /* formatCount is known to fit the record (and an int); the cancelled
+     count comes from the same root window property, so bound it too */
+  *count = (int)queryitem->formatCount;
+  if (queryitem->cancelledFormatCount > 0 &&
+      queryitem->cancelledFormatCount <= queryitem->formatCount)
+    *count -= (int)queryitem->cancelledFormatCount;
   /* point to the first format id in the list */
   idptr = (itemId *)((char *)queryitem + queryitem->formatIdList * CONVERT_32_FACTOR);
   matchformat = 0;
@@ -3402,7 +3411,8 @@ int XmClipboardInquirePendingItems(Display *display, /* Display id of applicatio
   ClipboardFormatItem matchformat;
   XmClipboardPendingList itemlist, nextlistptr;
   itemId *id_ptr;
-  int loc_count, i;
+  int loc_count;
+  unsigned long i, nitems;
   unsigned long maxname, loc_matchlength;
   int status;
   _XmDisplayToAppContext(display);
@@ -3423,12 +3433,16 @@ int XmClipboardInquirePendingItems(Display *display, /* Display id of applicatio
   /* get the clipboard header */
   header = ClipboardOpen(display, 0);
   id_ptr = (itemId *)((char *)header + header->dataItemList * CONVERT_32_FACTOR);
+  /* the item count comes from the root window: keep the size in range */
+  nitems = header->currItems;
+  if (nitems > (Cardinal)~0 / sizeof(XmClipboardPendingRec))
+    nitems = 0;
   itemlist = (XmClipboardPendingList)XtMalloc(
-      (size_t)(header->currItems * sizeof(XmClipboardPendingRec)));
+      (Cardinal)(nitems * sizeof(XmClipboardPendingRec)));
   nextlistptr = itemlist;
   /* run through all the items in the clipboard looking
        for matching formats */
-  for (i = 0; i < header->currItems; i++) {
+  for (i = 0; i < nitems; i++) {
     /* if it is marked for delete, skip it */
     if (ClipboardIsMarkedForDelete(display, header, *id_ptr)) {
       matchformat = 0;
