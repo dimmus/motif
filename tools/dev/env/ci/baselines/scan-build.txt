@@ -18,7 +18,7 @@
 3	src/bin/mwm/WmKeyFocus.c	Logic error: Dereference of null pointer
 1	src/bin/mwm/WmMenu.c	API: Argument with 'nonnull' attribute passed null
 5	src/bin/mwm/WmMenu.c	Logic error: Dereference of null pointer
-2	src/bin/mwm/WmResParse.c	Logic error: Dereference of null pointer
+1	src/bin/mwm/WmResParse.c	Logic error: Dereference of null pointer
 1	src/bin/mwm/WmResource.c	Logic error: Dereference of null pointer
 1	src/bin/mwm/WmSignal.c	Unused code: Dead assignment
 4	src/bin/mwm/WmWinInfo.c	Logic error: Dereference of null pointer
@@ -38,22 +38,18 @@
 4	src/bin/wml/wmlsynbld.c	Memory error: Memory leak
 3	src/bin/wml/wmlsynbld.c	Unix API: Allocator sizeof operand mismatch
 1	src/lib/Mrm/MrmIfile.c	Unused code: Dead assignment
-1	src/lib/Mrm/MrmIindex.c	Logic error: Uninitialized argument value
-2	src/lib/Mrm/MrmIindex.c	Unused code: Dead assignment
 3	src/lib/Mrm/MrmIindexw.c	Unused code: Dead assignment
 1	src/lib/Mrm/MrmIrid.c	Unused code: Dead assignment
 1	src/lib/Mrm/MrmItop.c	Unused code: Dead assignment
 1	src/lib/Mrm/Mrmlread.c	API: Argument with 'nonnull' attribute passed null
-1	src/lib/Mrm/Mrmlread.c	Unused code: Dead assignment
 1	src/lib/Mrm/Mrmwcrw.c	Logic error: Assigned value is uninitialized
 2	src/lib/Mrm/Mrmwcrw.c	Logic error: Dereference of null pointer
-3	src/lib/Mrm/Mrmwcrw.c	Logic error: Uninitialized argument value
+2	src/lib/Mrm/Mrmwcrw.c	Logic error: Uninitialized argument value
 2	src/lib/Mrm/Mrmwcrw.c	Unused code: Dead assignment
 6	src/lib/Mrm/Mrmwcrwr.c	Logic error: Assigned value is uninitialized
 2	src/lib/Mrm/Mrmwcrwr.c	Logic error: Dereference of null pointer
 10	src/lib/Mrm/Mrmwcrwr.c	Logic error: Dereference of undefined pointer value
 3	src/lib/Mrm/Mrmwcrwr.c	Logic error: Uninitialized argument value
-2	src/lib/Mrm/Mrmwvalues.c	Unused code: Dead assignment
 1	src/lib/Uil/UilLstLst.c	Logic error: Dereference of null pointer
 3	src/lib/Uil/UilP2Out.c	Logic error: Assigned value is uninitialized
 1	src/lib/Uil/UilP2Out.c	Unused code: Dead assignment
@@ -77,7 +73,6 @@
 2	src/lib/Xm/Column.c	Unused code: Dead assignment
 3	src/lib/Xm/ComboBox.c	Logic error: Result of operation is garbage or undefined
 2	src/lib/Xm/Container.c	Logic error: Dereference of null pointer
-1	src/lib/Xm/CutPaste.c	Logic error: Result of operation is garbage or undefined
 1	src/lib/Xm/DataF.c	API: Argument with 'nonnull' attribute passed null
 1	src/lib/Xm/DataF.c	Logic error: Dereference of undefined pointer value
 1	src/lib/Xm/DataF.c	Logic error: Garbage return value
@@ -85,8 +80,6 @@
 4	src/lib/Xm/DataF.c	Unused code: Dead assignment
 1	src/lib/Xm/DataF.c	Unused code: Dead nested assignment
 3	src/lib/Xm/Desktop.c	Logic error: Dereference of null pointer
-3	src/lib/Xm/DragBS.c	Logic error: Assigned value is uninitialized
-5	src/lib/Xm/DragICC.c	Logic error: Assigned value is uninitialized
 1	src/lib/Xm/DragOverS.c	Unused code: Dead initialization
 1	src/lib/Xm/DragUnder.c	Logic error: Dereference of null pointer
 1	src/lib/Xm/DrawnB.c	Logic error: Dereference of null pointer
@@ -164,8 +157,6 @@
 1	src/lib/Xm/ToggleBG.c	Unused code: Dead initialization
 1	src/lib/Xm/Transfer.c	API: Argument with 'nonnull' attribute passed null
 1	src/lib/Xm/Transfer.c	Logic error: Dereference of null pointer
-1	src/lib/Xm/Transfer.c	Logic error: Result of operation is garbage or undefined
-1	src/lib/Xm/Transfer.c	Logic error: Uninitialized argument value
 6	src/lib/Xm/TraversalI.c	Logic error: Dereference of null pointer
 3	src/lib/Xm/Tree.c	Logic error: Dereference of null pointer
 1	src/lib/Xm/Tree.c	Unused code: Dead assignment
@@ -173,11 +164,9 @@
 1	src/lib/Xm/VendorS.c	API: Argument with 'nonnull' attribute passed null
 4	src/lib/Xm/VendorS.c	Logic error: Dereference of null pointer
 1	src/lib/Xm/VendorS.c	Unused code: Dead nested assignment
-1	src/lib/Xm/VirtKeys.c	API: Argument with 'nonnull' attribute passed null
 1	src/lib/Xm/XmExtUtil.c	Logic error: Dereference of null pointer
 1	src/lib/Xm/XmIm.c	Unused code: Dead initialization
 1	src/lib/Xm/XmRenderT.c	Logic error: Assigned value is uninitialized
-1	src/lib/Xm/XmRenderT.c	Unused code: Dead assignment
 2	src/lib/Xm/XmString.c	API: Argument with 'nonnull' attribute passed null
 3	src/lib/Xm/XmString.c	Logic error: Assigned value is uninitialized
 7	src/lib/Xm/XmString.c	Logic error: Dereference of null pointer
@@ -186,11 +175,9 @@
 1	src/lib/Xm/XmString.c	Unused code: Dead increment
 3	src/lib/Xm/XmString.c	Unused code: Dead nested assignment
 2	src/lib/Xm/XmStringFunc.c	Unused code: Dead assignment
-2	src/lib/Xm/Xmos.c	Unused code: Dead assignment
 1	src/lib/Xm/XpmCrBufFrI.c	Logic error: Dereference of null pointer
 1	src/lib/Xm/XpmCrDatFrI.c	Logic error: Dereference of null pointer
 1	src/lib/Xm/XpmRdFToBuf.c	Stream handling error: Resource leak
-1	src/lib/Xm/XpmRdFToI.c	Logic error: Function call with invalid argument
 1	src/lib/Xm/Xpmcreate.c	Logic error: Dereference of null pointer
 1	src/lib/Xm/Xpmcreate.c	Memory error: Memory leak
 1	src/lib/Xm/Xpmcreate.c	Unused code: Dead assignment
