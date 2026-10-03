@@ -1720,6 +1720,10 @@ static Boolean CvtStringToAtomList(Display *dpy,
   for (atom_name = GetNextToken((char *)from->addr, ",", &context_string); atom_name != NULL;
        atom_name = GetNextToken(NULL, ",", &context_string))
   {
+    if (*atom_name == '\0') {
+      XtFree(atom_name);
+      continue;
+    }
     if (atom_count == max_atoms) {
       max_atoms *= 2;
       if (name_list == stack_names) {
@@ -1812,35 +1816,31 @@ static char *GetNextToken(char *src, char *delim, char **context)
 {
   Boolean terminated = False;
   char *s, *e, *p;
-  char *next_context;
-  char *buf = NULL;
-  int len;
+  char *buf;
   if (src != NULL)
     *context = src;
   if (*context == NULL)
     return (NULL);
-  s = *context;
-  /* find the end of the token */
-  for (e = s; (!terminated) && (*s != '\0'); e = s++) {
-    if ((*s == '\\') && (*(s + 1) != '\0'))
-      s++;
-    else if (OneOf(*s, delim))
+  /* Find the end of the token: e stops on the terminating delimiter or
+   * on the final NUL. A backslash quotes the next character. */
+  for (e = *context; *e != '\0'; e++) {
+    if ((*e == '\\') && (*(e + 1) != '\0'))
+      e++;
+    else if (OneOf(*e, delim)) {
       terminated = True;
+      break;
+    }
   }
-  /* assert (OneOf(*e,delim) || (*e == '\0')) */
-  if (terminated) {
-    next_context = (e + 1);
-    e--;
-  }
-  else
-    next_context = NULL;
-  /* Strip out non-backslashed leading and trailing whitespace */
+  /* The token is [s, e). Always advance the context, even past an
+   * empty token, so that callers looping until NULL terminate. */
   s = *context;
-  while ((s != e) && isspace((unsigned char)*s))
+  *context = terminated ? (e + 1) : NULL;
+  /* Strip out non-backslashed leading and trailing whitespace */
+  while ((s < e) && isspace((unsigned char)*s))
     s++;
-  while ((e != s) && isspace((unsigned char)*e) && ((*e - 1) != '\\'))
+  while ((e - s > 1) && isspace((unsigned char)*(e - 1)) && (*(e - 2) != '\\'))
     e--;
-  if (e == s) {
+  if (s == e) {
     /*
      * Only white-space between the delimiters,
      * if we're at the end of the string anyway, indicate
@@ -1859,16 +1859,14 @@ static char *GetNextToken(char *src, char *delim, char **context)
    * delimiter characters or spaces.  It would be great if we had
    * time to implement full C style backslash processing...
    */
-  len = (e - s) + 1;
-  p = buf = XtMalloc(len + 1);
-  while (s != e) {
-    if ((*s == '\\') && (OneOf(*(s + 1), delim) || isspace((unsigned char)*(s + 1))))
+  p = buf = XtMalloc((e - s) + 1);
+  while (s < e) {
+    if ((*s == '\\') && (s + 1 < e) &&
+        (OneOf(*(s + 1), delim) || isspace((unsigned char)*(s + 1))))
       s++;
     *(p++) = *(s++);
   }
-  *(p++) = *(s++);
   *p = '\0';
-  *context = next_context;
   return (buf);
 }
 
