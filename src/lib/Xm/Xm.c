@@ -293,6 +293,51 @@ void _XmWarningMsg(Widget w, char *type, char *message, char **params, Cardinal 
     XtWarning(message);
 }
 
+/************************************************************************
+ *
+ *  _XmMallocArray, _XmReallocArray
+ *	Allocate room for num elements of size bytes each.
+ *
+ *	XtMalloc and XtRealloc take a Cardinal, so a size the caller
+ *	multiplies itself silently wraps around on overflow, or is
+ *	truncated to 32 bits on LP64, and the caller then writes past the
+ *	end of a short buffer.  These check the multiplication, and fail
+ *	the way XtMalloc does when it runs out of memory if the size does
+ *	not fit.  A negative int count converts to a huge size_t, so it is
+ *	caught as well.
+ *
+ ************************************************************************/
+static void ArrayAllocError(String type)
+{
+  Cardinal num_params = 1;
+  XtErrorMsg("allocError",
+             type,
+             "XtToolkitError",
+             "Cannot perform %s: size overflow",
+             &type,
+             &num_params);
+}
+
+#define MAX_ALLOC_SIZE ((size_t)(Cardinal)~(Cardinal)0)
+
+char *_XmMallocArray(size_t num, size_t size)
+{
+  if (size != 0 && num > MAX_ALLOC_SIZE / size) {
+    ArrayAllocError("malloc");
+    return NULL;
+  }
+  return XtMalloc((Cardinal)(num * size));
+}
+
+char *_XmReallocArray(char *ptr, size_t num, size_t size)
+{
+  if (size != 0 && num > MAX_ALLOC_SIZE / size) {
+    ArrayAllocError("realloc");
+    return NULL;
+  }
+  return XtRealloc(ptr, (Cardinal)(num * size));
+}
+
 /*
  * The atoms _XmIsISO10646 compares a font's CHARSET_REGISTRY property
  * with, interned once per display.  Comparing atoms is the same as
@@ -418,7 +463,7 @@ XChar2b *_XmUtf8ToUcs2(char *draw_text, size_t seg_len, size_t *ret_str_len)
   /*
    * Convert to UCS2 string on the fly.
    */
-  buf2b = (XChar2b *)XtMalloc(seg_len * sizeof(XChar2b));
+  buf2b = (XChar2b *)_XmMallocArray(seg_len, sizeof(XChar2b));
   *ret_str_len = _XmUtf8ToUcs2Buf(draw_text, seg_len, buf2b);
   return buf2b;
 }
