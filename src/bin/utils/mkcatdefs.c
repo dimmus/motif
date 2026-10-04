@@ -522,7 +522,7 @@ insert(char *tname,
   if (rslt == 0)  /* found the symbol already defined */
     return (-1);
   else {          /* symbol not defined yet so put it into symbol table */
-    ptr = (struct name *)calloc(sizeof(struct name), 1);
+    ptr = (struct name *)calloc(1, sizeof(struct name));
     ptr->regname = malloc(strlen(tname) + 1);
     strcpy (ptr->regname, tname);
     ptr->regnr = seqno;
