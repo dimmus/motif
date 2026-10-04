@@ -204,10 +204,15 @@ static void StartProtectedSection(Display *display, Window window)
  *  EndProtectedSection ()
  *
  *  Flushes any generated errors on and restores the original error handler.
+ *  A section that is one request with a reply (reading a property) needs
+ *  no XSync: Xlib has handled the error of that request, if any, when it
+ *  returned the reply.
  ***************************************************************************/
 static void EndProtectedSection(Display *display)
 {
-  XSync(display, False);
+  if (NextRequest(display) != firstProtectRequest + 1 ||
+      LastKnownRequestProcessed(display) != firstProtectRequest)
+    XSync(display, False);
   XSetErrorHandler(oldErrorHandler);
   oldErrorHandler = NULL;
 }

@@ -4,16 +4,19 @@
  * Licensed under the LGPL 2.1 license.
  *
  * Requests and round trips of the startup paths that the profiles of
- * doc/profiling.md found: work that the server is asked to do again
- * although the client already has the answer.
+ * doc/profiling.md found: work that the server is asked to do although
+ * the client already has the answer.
  */
 #include <stdio.h>
 #include <string.h>
 #include <X11/Intrinsic.h>
 #include <X11/Xlib.h>
+#include <X11/Xatom.h>
 #include <X11/keysym.h>
 #include <Xm/XmP.h>
 #include <check.h>
+
+#include "DragBSI.h"
 
 #include "suites.h"
 
@@ -138,6 +141,73 @@ START_TEST(virtual_binding_values)
 }
 END_TEST
 
+/*
+ * Reading a property of the Motif drag window (here its proxy window)
+ * is protected against the window being destroyed meanwhile.  Such a
+ * read is one request with a reply, which Xlib only returns once it has
+ * handled the request's error, so it needs no XSync after it.
+ */
+START_TEST(drag_window_read_no_sync)
+{
+	Display *dpy = XtDisplay(shell);
+	unsigned long before;
+
+	/* Creates the drag window if there is none, and interns the
+	 * atoms. */
+	_XmInitTargetsTable(dpy);
+	(void)_XmGetDragProxyWindow(dpy);
+	XSync(dpy, False);
+
+	/* Two GetProperty requests: the drag window on the root, and its
+	 * proxy on the drag window; no GetInputFocus of an XSync. */
+	before = NextRequest(dpy);
+	(void)_XmGetDragProxyWindow(dpy);
+	ck_assert_uint_eq(NextRequest(dpy) - before, 2);
+}
+END_TEST
+
+static int x_errors;
+
+static int count_error(Display *dpy, XErrorEvent *ev)
+{
+	(void)dpy;
+	(void)ev;
+	x_errors++;
+	return 0;
+}
+
+/*
+ * A read from a drag window that no longer exists still gets its
+ * BadWindow error handled inside the protected section, not by the
+ * program's error handler afterwards.
+ */
+START_TEST(drag_window_read_destroyed)
+{
+	Display *dpy = XtDisplay(shell);
+	Atom drag_window = XInternAtom(dpy, "_MOTIF_DRAG_WINDOW", False);
+	Window w = XCreateSimpleWindow(dpy, DefaultRootWindow(dpy), 0, 0, 1,
+				       1, 0, 0, 0);
+	XErrorHandler old;
+
+	/* Point the root's drag window property at a destroyed window. */
+	XChangeProperty(dpy, DefaultRootWindow(dpy), drag_window, XA_WINDOW,
+			32, PropModeReplace, (unsigned char *)&w, 1);
+	XDestroyWindow(dpy, w);
+	XSync(dpy, False);
+
+	old = XSetErrorHandler(count_error);
+	x_errors = 0;
+	ck_assert_uint_eq(_XmGetDragProxyWindow(dpy), None);
+	XSync(dpy, False);
+	XSetErrorHandler(old);
+	ck_assert_int_eq(x_errors, 0);
+
+	/* Do not leave the stale window to the other tests. */
+	XDeleteProperty(dpy, DefaultRootWindow(dpy), drag_window);
+	XSync(dpy, False);
+}
+END_TEST
+
 void round_trips_suite(SRunner *runner)
 {
 	Suite *s = suite_create("RoundTrips");
@@ -146,6 +216,8 @@ void round_trips_suite(SRunner *runner)
 	tcase_add_checked_fixture(tc, _init_xt, uninit_xt);
 	tcase_add_test(tc, virtual_binding_no_requests);
 	tcase_add_test(tc, virtual_binding_values);
+	tcase_add_test(tc, drag_window_read_no_sync);
+	tcase_add_test(tc, drag_window_read_destroyed);
 	suite_add_tcase(s, tc);
 	srunner_add_suite(runner, s);
 }
