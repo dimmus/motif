@@ -350,7 +350,7 @@
 5	src/lib/Xm/XmString.c	bugprone-unhandled-code-paths
 3	src/lib/Xm/XmString.c	cert-str34-c
 3	src/lib/Xm/XmString.c	clang-analyzer-core.NonNullParamChecker
-7	src/lib/Xm/XmString.c	clang-analyzer-core.NullDereference
+4	src/lib/Xm/XmString.c	clang-analyzer-core.NullDereference
 2	src/lib/Xm/XmString.c	clang-analyzer-core.NullPointerArithm
 8	src/lib/Xm/XmString.c	clang-analyzer-deadcode.DeadStores
 3	src/lib/Xm/XmString.c	clang-analyzer-security.ArrayBound

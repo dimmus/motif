@@ -3437,7 +3437,9 @@ static void recursive_layout(_XmString string,
                              XmDirection p_direction,
                              int depth)
 {
-  _XmStringEntry line = NULL; /* only used if _XmStrImplicitLine(string) */
+  /* each entry is a line, else the entries are the segments of one */
+  Boolean implicit = _XmStrImplicitLine(string);
+  _XmStringEntry line = NULL; /* only used if implicit */
   _XmStringNREntry seg, seg2;
   _XmStringNREntry last;
   XmDirection pop_dir = 0;
@@ -3446,7 +3448,7 @@ static void recursive_layout(_XmString string,
   int push_line;
   if (*line_index >= (nline = _XmStrLineCountGet(string)))
     return;
-  if (_XmStrImplicitLine(string)) {
+  if (implicit) {
     line = _XmStrEntry(string)[*line_index];
     nseg = _XmEntrySegmentCountGet(line);
   }
@@ -3459,21 +3461,21 @@ static void recursive_layout(_XmString string,
       return;
   }
   if (*seg_index > 0)
-    if (_XmStrImplicitLine(string))
+    if (implicit)
       last = _XmEntrySegmentGet(line)[*seg_index - 1];
     else
       last = (_XmStringNREntry)_XmStrEntry(string)[*seg_index - 1];
   else
     last = NULL;
   while (*line_index < nline) {
-    if (_XmStrImplicitLine(string)) {
+    if (implicit) {
       line = _XmStrEntry(string)[*line_index];
       nseg = _XmEntrySegmentCountGet(line);
     }
     else
       nseg = _XmStrEntryCount(string);
     while (*seg_index < nseg) {
-      if (_XmStrImplicitLine(string))
+      if (implicit)
         seg = _XmEntrySegmentGet(line)[*seg_index];
       else
         seg = (_XmStringNREntry)_XmStrEntry(string)[*seg_index];
@@ -3505,7 +3507,7 @@ static void recursive_layout(_XmString string,
           if (pop_index >= 0 && *line_index != push_line) {
             /* the run went on past the end of the push line: lay out
                the pending pop there now, pop_index is for that line */
-            if (_XmStrImplicitLine(string))
+            if (implicit)
               seg2 = _XmEntrySegmentGet(line)[pop_index];
             else
               seg2 = (_XmStringNREntry)_XmStrEntry(string)[pop_index];
@@ -3521,20 +3523,23 @@ static void recursive_layout(_XmString string,
             last = NULL;
           }
           else {
-            if (_XmStrImplicitLine(string)) {
+            if (implicit) {
               line = _XmStrEntry(string)[*line_index];
               nseg = _XmEntrySegmentCountGet(line);
             }
             else
               nseg = _XmStrEntryCount(string);
             if (*seg_index < nseg) {
-              if (_XmStrImplicitLine(string))
+              if (implicit)
                 last = _XmEntrySegmentGet(line)[*seg_index];
               else
                 last = (_XmStringNREntry)_XmStrEntry(string)[*seg_index];
             }
-            else
+            else {
+              /* nothing left on the line */
+              *seg_index = nseg;
               last = NULL;
+            }
           }
         }
         else if (*line_index == push_line) {
@@ -3542,7 +3547,7 @@ static void recursive_layout(_XmString string,
            */
           if (*seg_index >= nseg)
             seg2 = NULL;
-          else if (_XmStrImplicitLine(string))
+          else if (implicit)
             seg2 = _XmEntrySegmentGet(line)[*seg_index];
           else
             seg2 = (_XmStringNREntry)_XmStrEntry(string)[*seg_index];
@@ -3572,7 +3577,7 @@ static void recursive_layout(_XmString string,
                and lay out a pending pop on the line after them
              */
             _XmStringNREntry conn_seg;
-            if (_XmStrImplicitLine(string))
+            if (implicit)
               conn_seg = _XmEntrySegmentGet(line)[nseg - 1];
             else
               conn_seg = (_XmStringNREntry)_XmStrEntry(string)[nseg - 1];
@@ -3597,7 +3602,7 @@ static void recursive_layout(_XmString string,
               }
             }
             if (pop_index >= 0) {
-              if (_XmStrImplicitLine(string))
+              if (implicit)
                 seg2 = _XmEntrySegmentGet(line)[pop_index];
               else
                 seg2 = (_XmStringNREntry)_XmStrEntry(string)[pop_index];
@@ -3606,7 +3611,7 @@ static void recursive_layout(_XmString string,
             }
             last = NULL;
           }
-          if (_XmStrImplicitLine(string)) {
+          if (implicit) {
             if (*line_index < nline) {
               line = _XmStrEntry(string)[*line_index];
               nseg = _XmEntrySegmentCountGet(line);
@@ -3654,7 +3659,7 @@ static void recursive_layout(_XmString string,
            the current level. Vice versa for right-to-left.
            */
         if (pop_index >= 0 && pop_index != *seg_index) {
-          if (_XmStrImplicitLine(string))
+          if (implicit)
             last = _XmEntrySegmentGet(line)[pop_index];
           else
             last = (_XmStringNREntry)_XmStrEntry(string)[pop_index];
@@ -3707,7 +3712,7 @@ static void recursive_layout(_XmString string,
        */
     if (pop_index >= 0 && last) {
       if (pop_index != *seg_index - 1) {
-        if (_XmStrImplicitLine(string))
+        if (implicit)
           seg2 = _XmEntrySegmentGet(line)[pop_index];
         else
           seg2 = (_XmStringNREntry)_XmStrEntry(string)[pop_index];

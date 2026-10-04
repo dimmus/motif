@@ -168,8 +168,8 @@
 1	src/lib/Xm/XmIm.c	Unused code: Dead initialization
 1	src/lib/Xm/XmRenderT.c	Logic error: Assigned value is uninitialized
 2	src/lib/Xm/XmString.c	API: Argument with 'nonnull' attribute passed null
-3	src/lib/Xm/XmString.c	Logic error: Assigned value is uninitialized
-7	src/lib/Xm/XmString.c	Logic error: Dereference of null pointer
+2	src/lib/Xm/XmString.c	Logic error: Assigned value is uninitialized
+4	src/lib/Xm/XmString.c	Logic error: Dereference of null pointer
 2	src/lib/Xm/XmString.c	Logic error: Possibly undefined arithmetic operation involving a null pointer
 4	src/lib/Xm/XmString.c	Unused code: Dead assignment
 1	src/lib/Xm/XmString.c	Unused code: Dead increment
