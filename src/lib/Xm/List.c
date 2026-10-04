@@ -924,6 +924,9 @@ static void Initialize(Widget request,
   ASSIGN_MAX(lw->list.selectedPositionCount, 0);
   if ((lw->list.itemCount && !lw->list.items) || (!lw->list.itemCount && lw->list.items)) {
     XmeWarning((Widget)lw, ListMessage16);
+    /* Keep neither: the items are not ours to keep without a count. */
+    lw->list.items = NULL;
+    lw->list.itemCount = 0;
   }
   if (lw->list.top_position == -1)
     lw->list.top_position = lw->list.itemCount ? lw->list.itemCount - 1 : 0;

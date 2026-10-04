@@ -952,6 +952,29 @@ START_TEST(list_grow_and_shrink)
 }
 END_TEST
 
+/*
+ * XmNitems without XmNitemCount at creation is ignored with a warning:
+ * the list used to keep the caller's array and reallocate it.
+ */
+START_TEST(list_items_without_count)
+{
+	XmString *items = (XmString *)XtMalloc(2 * sizeof(XmString));
+	XmString s = item("item %d", 1);
+	Widget list;
+
+	items[0] = items[1] = s;
+	list = XmCreateScrolledList(shell, "list", (Arg[]){ { XmNitems, (XtArgVal)items } }, 1);
+	XtFree((char *)items);
+	ck_assert_int_eq(warnings, 1);
+	ck_assert_int_eq(item_count(list), 0);
+	XmListAddItemUnselected(list, s, 0);
+	XmListAddItemUnselected(list, s, 0);
+	ck_assert_int_eq(item_count(list), 2);
+	check_lookup(list, s);
+	XmStringFree(s);
+}
+END_TEST
+
 void list_suite(SRunner *runner)
 {
 	Suite *s = suite_create("List");
@@ -965,6 +988,7 @@ void list_suite(SRunner *runner)
 	tcase_add_test(t, list_extents);
 	tcase_add_test(t, list_replace_pos_measures);
 	tcase_add_test(t, list_grow_and_shrink);
+	tcase_add_test(t, list_items_without_count);
 	tcase_add_checked_fixture(t, _init_xt, uninit_xt);
 	tcase_set_timeout(t, 60);
 	suite_add_tcase(s, t);
