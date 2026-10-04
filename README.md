@@ -12,7 +12,7 @@ Foundation from 1988 and became the toolkit of the Common Desktop
 Environment; The Open Group released it under the LGPL in 2012.
 
 This tree continues Motif 2.3.8, the last upstream release, as version
-**2.4.2**.  It keeps the Motif 2.x API but is **not binary compatible**
+**2.5.0**.  It keeps the Motif 2.x API but is **not binary compatible**
 with 2.3.8: the libraries have SONAME 5 (`libXm.so.5`, `libMrm.so.5`,
 `libUil.so.5`) and programs built against 2.3.8 have to be recompiled.
 See [CHANGELOG.md](CHANGELOG.md) for what changed and

@@ -8,9 +8,9 @@ has to break it.  It covers `libXm`, `libMrm` and `libUil`.
 
 | Library | SONAME        | Version node | File version |
 |---------|---------------|--------------|--------------|
-| libXm   | `libXm.so.5`  | `XM_2.4`     | 5.0.0        |
-| libMrm  | `libMrm.so.5` | `MRM_2.4`    | 5.0.0        |
-| libUil  | `libUil.so.5` | `UIL_2.4`    | 5.0.0        |
+| libXm   | `libXm.so.5`  | `XM_2.5`     | 5.0.0        |
+| libMrm  | `libMrm.so.5` | `MRM_2.5`    | 5.0.0        |
+| libUil  | `libUil.so.5` | `UIL_2.5`    | 5.0.0        |
 
 Upstream Motif 2.3 ships SONAME 4.  This tree is not binary compatible
 with it, so it uses SONAME 5; the reasons are listed next to
@@ -120,10 +120,10 @@ working with a newer one.  So:
   previous one, named after the release that adds them:
 
   ```
-  XM_2.5 {
+  XM_2.6 {
     global:
       XmNewFunction;
-  } XM_2.4;
+  } XM_2.5;
   ```
 
   Every function or variable that an installed header declares must be

@@ -4,7 +4,7 @@
  * never remove or move a symbol, add new ones in a new version node.
  */
 
-XM_2.4 {
+XM_2.5 {
   global:
 
     /* The public API, and the widget and trait records and other symbols

@@ -3,9 +3,11 @@
 This file summarises the changes in this tree since Motif 2.3.8, the last
 upstream release (December 2017).  The git history has the details.
 
-## 2.4.2 (2026-10-04)
+## 2.5.0 (2026-10-04)
 
-Changes since 2.4.1.
+Changes since 2.4.1.  The release is 2.5.0 rather than 2.4.2 because
+the libraries no longer export the internal symbols that 2.4.1 did
+(see below), although they keep SONAME 5.
 
 ### Compatibility
 
@@ -21,7 +23,7 @@ Changes since 2.4.1.
   no longer exported.  Programs and widgets built against 2.3.8 must be
   rebuilt.
 - The shared libraries export only their API, through version scripts
-  with the version nodes `XM_2.4`, `MRM_2.4` and `UIL_2.4`: libXm went
+  with the version nodes `XM_2.5`, `MRM_2.5` and `UIL_2.5`: libXm went
   from 3224 to 1742 exported symbols, libMrm from 336 to 218 and libUil
   from 433 to 50.  The symbols that are gone are internal (`_Xm*` that
   the old export lists already marked internal, the vendored nanosvg,

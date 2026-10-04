@@ -47,7 +47,7 @@ Timings:
 
 - The two libraries must have the same SONAME, since the harness is
   loaded against one and run against the other with `LD_LIBRARY_PATH`.
-- libXm has versioned symbols (`XM_2.4`) since the symbol export work.
+- libXm has versioned symbols (`XM_2.5`) since the symbol export work.
   A harness linked against a versioned library will not load an older
   unversioned one, but one linked against an unversioned library runs
   against both; to compare across that change, build the harness

@@ -24,8 +24,8 @@ Verification of this branch (2 CPUs, Arch Linux, GCC 16, Clang 23):
   `src/tests/fuzz/run.sh`).
 - Installed with `cmake --install --prefix`: `pkg-config motif/mrm/uil` and
   `find_package(Motif CONFIG)` hello worlds build and run; SONAMEs
-  `libXm.so.5`, `libMrm.so.5`, `libUil.so.5`, versioned `XM_2.4` /
-  `MRM_2.4` / `UIL_2.4`; 1737 / 219 / 51 exported symbols; no internal
+  `libXm.so.5`, `libMrm.so.5`, `libUil.so.5`, versioned `XM_2.5` /
+  `MRM_2.5` / `UIL_2.5`; 1737 / 219 / 51 exported symbols; no internal
   `*I.h` installed apart from `Mrm/MrmosI.h`, which Motif 2.3 installs too.
   abidiff against the master baseline: 0 changed functions or variables,
   only removals of symbols hidden by the version scripts.
@@ -320,7 +320,7 @@ Priority legend:
 - [x] Hardening flags behind `WITH_HARDENING=ON` by default: `-D_FORTIFY_SOURCE=3`, `-fstack-protector-strong`, `-fstack-clash-protection`, `-fcf-protection`, `-Wl,-z,relro,-z,now`.
 
 ### 2.2 Symbol hygiene and ABI
-- [x] `libXm` exports **3,224** dynamic symbols, and **2,149** of them are `_Xm*`. Among them are vendored `nsvg*`, `xpmPipeThrough`, empty `dump_fontlist` stubs, `NumLockMask`, `SetMwmStuff` and `XME_WARNING`. *(status: version scripts (XM_2.4/MRM_2.4/UIL_2.4) instead of -fvisibility=hidden: libXm exports 1737 symbols, libMrm 219, libUil 51)*
+- [x] `libXm` exports **3,224** dynamic symbols, and **2,149** of them are `_Xm*`. Among them are vendored `nsvg*`, `xpmPipeThrough`, empty `dump_fontlist` stubs, `NumLockMask`, `SetMwmStuff` and `XME_WARNING`. *(status: version scripts (XM_2.5/MRM_2.5/UIL_2.5) instead of -fvisibility=hidden: libXm exports 1737 symbols, libMrm 219, libUil 51)*
   - Fix:
     - `-fvisibility=hidden` plus `XM_EXPORT`, or a versioned linker script generated from the existing (unused) `libXm.elist`, `libMrm.elist` and `libUil.elist`.
     - Keep the roughly 10 `_Xm*` symbols that Mrm and the clients actually need.
