@@ -353,8 +353,8 @@ Pixmap MakeIconPixmap (ClientData *pCD, Pixmap bitmap, Pixmap mask, unsigned int
 
     /* don't make icon pixmap if bitmap is too small */
 
-    if ((width < pSD->iconImageMinimum.width) ||
-	(height < pSD->iconImageMinimum.height))
+    if (((int)width < pSD->iconImageMinimum.width) ||
+	((int)height < pSD->iconImageMinimum.height))
     {
 	/* bitmap is too small */
 	return ((Pixmap)NULL);
@@ -362,7 +362,7 @@ Pixmap MakeIconPixmap (ClientData *pCD, Pixmap bitmap, Pixmap mask, unsigned int
 #ifndef NO_CLIP_CENTER
 
     /* copy the center of the icon if too big */
-    if (width > pSD->iconImageMaximum.width)
+    if ((int)width > pSD->iconImageMaximum.width)
     {
 	src_x = (width - pSD->iconImageMaximum.width)/2;
     }
@@ -370,7 +370,7 @@ Pixmap MakeIconPixmap (ClientData *pCD, Pixmap bitmap, Pixmap mask, unsigned int
     {
 	src_x = 0;
     }
-    if (height > pSD->iconImageMaximum.height)
+    if ((int)height > pSD->iconImageMaximum.height)
     {
 	src_y = (height - pSD->iconImageMaximum.height)/2;
     }
@@ -460,11 +460,11 @@ Pixmap MakeIconPixmap (ClientData *pCD, Pixmap bitmap, Pixmap mask, unsigned int
 
     /* center the image */
 
-    if (width > pSD->iconImageMaximum.width)
+    if ((int)width > pSD->iconImageMaximum.width)
     {
 	width = pSD->iconImageMaximum.width;
     }
-    if (height > pSD->iconImageMaximum.height)
+    if ((int)height > pSD->iconImageMaximum.height)
     {
 	height = pSD->iconImageMaximum.height;
     }
@@ -512,7 +512,7 @@ Pixmap MakeIconPixmap (ClientData *pCD, Pixmap bitmap, Pixmap mask, unsigned int
     /* copy the bitmap to the pixmap */
 #ifndef DISALLOW_DEEP_ICONS
     if ((depth > 1) &&
-        (depth == DefaultDepth(DISPLAY, pSD->screen)))
+        ((int)depth == DefaultDepth(DISPLAY, pSD->screen)))
     {
 #ifndef NO_CLIP_CENTER
         XCopyArea (DISPLAY, bitmap, iconPixmap, imageGC, src_x, src_y,

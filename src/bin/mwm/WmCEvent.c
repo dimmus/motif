@@ -1607,7 +1607,7 @@ Boolean HandleCKeyPress (ClientData *pCD, XKeyEvent *keyEvent)
 	    int n;
 
 	    for (n = 0; ((keyEvent->keycode != 0) &&
-			 (n < ACTIVE_PSD->acceleratorMenuCount)); n++)
+			 ((unsigned int)n < ACTIVE_PSD->acceleratorMenuCount)); n++)
 	    {
 		if (!HandleKeyPress (keyEvent,
 		           ACTIVE_PSD->acceleratorMenuSpecs[n]->accelKeySpecs,

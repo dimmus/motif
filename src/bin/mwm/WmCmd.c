@@ -447,7 +447,7 @@ IncludeCommand (
 	{
 	  ShowWaitState (TRUE);
 
-	  for (i=0; i<count; i++)
+	  for (i=0; (CARD32)i<count; i++)
 	    {
 	      ClientData *pCD;
 
@@ -524,7 +524,7 @@ EnableCommand (
       tPtr = FindCmd (commandID, CCI_TREE(w));
       if (tPtr != NULL)
 	{
-	  for (i=0; i<count; i++)
+	  for (i=0; (CARD32)i<count; i++)
 	  {
 	      activeContext = F_CONTEXT_ROOT;
 	      pNext = tPtr->next;
@@ -570,7 +570,7 @@ EnableCommand (
       tPtr = FindCmd (commandID, CCI_TREE(w));
       if (tPtr != NULL)
 	{
-	  for (i=0; i<count; i++)
+	  for (i=0; (CARD32)i<count; i++)
 	    {
 	      ClientData *pCD;
 
@@ -646,7 +646,7 @@ DisableCommand (
       tPtr = FindCmd (commandID, CCI_TREE(w));
       if (tPtr != NULL)
 	{
-	  for (i=0; i<count; i++)
+	  for (i=0; (CARD32)i<count; i++)
 	  {
 	      activeContext = F_CONTEXT_ROOT;
 	      pNext = tPtr->next;
@@ -692,7 +692,7 @@ DisableCommand (
       tPtr = FindCmd (commandID, CCI_TREE(w));
       if (tPtr != NULL)
 	{
-	  for (i=0; i<count; i++)
+	  for (i=0; (CARD32)i<count; i++)
 	    {
 	      ClientData *pCD;
 
@@ -770,7 +770,7 @@ RenameCommand (
       tPtr = FindCmd (commandID, CCI_TREE(w));
       if (tPtr != NULL)
 	{
-	  for (i=0; i<count; i++)
+	  for (i=0; (CARD32)i<count; i++)
 	  {
 	      activeContext = F_CONTEXT_ROOT;
 	      pNext = tPtr->next;
@@ -816,7 +816,7 @@ RenameCommand (
       tPtr = FindCmd (commandID, CCI_TREE(w));
       if (tPtr != NULL)
 	{
-	  for (i=0; i<count; i++)
+	  for (i=0; (CARD32)i<count; i++)
 	    {
 	      ClientData *pCD;
 
@@ -892,7 +892,7 @@ RemoveCommand (
       tPtr = FindCmd (commandID, CCI_TREE(w));
       if (tPtr != NULL)
 	{
-	  for (i=0; i<count; i++)
+	  for (i=0; (CARD32)i<count; i++)
 	  {
 	      activeContext = F_CONTEXT_ROOT;
 	      pNext = tPtr->next;
@@ -938,7 +938,7 @@ RemoveCommand (
       tPtr = FindCmd (commandID, CCI_TREE(w));
       if (tPtr != NULL)
 	{
-	  for (i=0; i<count; i++)
+	  for (i=0; (CARD32)i<count; i++)
 	  {
 	      ClientData *pCD;
 
@@ -1716,7 +1716,7 @@ GetIconMenuItemSelectInfo(ClientData *pcd, XtPointer reply, Boolean use_icon_box
       sensitiveCount = 0;
 
       for (n = 0, NewMenuButton = menuSpec->menuButtons;
-	   n < menuSpec->menuButtonCount;
+	   (unsigned int)n < menuSpec->menuButtonCount;
 	   n++, NewMenuButton++)
 	{
 	  if (NewMenuButton->managed == FALSE)
@@ -1913,7 +1913,7 @@ GetWindowItemSelectInfo(ClientData *pcd, XtPointer reply)
    sensitiveCount = 0;
 
       for (n = 0, NewMenuButton = menuSpec->menuButtons;
-	   n < menuSpec->menuButtonCount;
+	   (unsigned int)n < menuSpec->menuButtonCount;
 	   n++, NewMenuButton++)
 	{
 	  if (NewMenuButton->managed == FALSE)
@@ -1977,7 +1977,7 @@ GetItemCheckInfo(ClientData *pcd, XtPointer reply)
   menuWin = XtWindow (menuSpec->menuWidget);
 
       for (i = 0, NewMenuButton = menuSpec->menuButtons;
-	   i < menuSpec->menuButtonCount;
+	   (unsigned int)i < menuSpec->menuButtonCount;
 	   i++, NewMenuButton++)
 	{
 	  if (NewMenuButton->managed == FALSE)

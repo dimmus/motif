@@ -343,7 +343,7 @@ SetupLockingModifierMask(void)
         kc = modifier_map->modifiermap[i];
         if (kc)
 	{
-	    for (j=0; j<NUM_LOCKING_MODS; j++)
+	    for (j=0; j<(int)NUM_LOCKING_MODS; j++)
 	    {
 		if (pkcLockingMods[j] == kc)
 		{
@@ -2450,12 +2450,12 @@ GetReplacementList(
   kc_count *= ks_per_kc ;
 
   i = 0 ;
-  while(    i < count    )
+  while(    (int)i < count    )
     {
       KeySym ks = XStringToKeysym( std_xref[i].default_name) ;
       unsigned j = 0 ;
 
-      while(    j < kc_count    )
+      while(    (int)j < kc_count    )
         {
           if(    key_map[j] == ks    )
             {
@@ -2466,7 +2466,7 @@ GetReplacementList(
             }
           ++j ;
         }
-      if(    j == kc_count    )
+      if(    (int)j == kc_count    )
         {
           /* Didn't find keysym of virtkey table, so add record to
            *   returned list which will later cause replacement in

@@ -1850,8 +1850,8 @@ ProcessWmNormalHints (ClientData *pCD, Boolean firstTime, long manageFlags)
 	     * size (if not specified in the hints).
 	     */
 	    if (!firstTime &&
-		((oldBaseWidth != pCD->baseWidth) ||
-		 (oldWidthInc != pCD->widthInc)))
+		(((int)oldBaseWidth != pCD->baseWidth) ||
+		 ((int)oldWidthInc != pCD->widthInc)))
 	    {
 		incWidth = (pCD->maxWidth - oldBaseWidth) / oldWidthInc;
 		pCD->maxWidth =
@@ -1939,8 +1939,8 @@ ProcessWmNormalHints (ClientData *pCD, Boolean firstTime, long manageFlags)
 	     * size (if not specified in the hints).
 	     */
 	    if (!firstTime &&
-		((oldBaseHeight != pCD->baseHeight) ||
-		 (oldHeightInc != pCD->heightInc)))
+		(((int)oldBaseHeight != pCD->baseHeight) ||
+		 ((int)oldHeightInc != pCD->heightInc)))
 	    {
 		incHeight = (pCD->maxHeight - oldBaseHeight) / oldHeightInc;
 		pCD->maxHeight =
@@ -2052,7 +2052,7 @@ ProcessWmNormalHints (ClientData *pCD, Boolean firstTime, long manageFlags)
      *     & an integral number of heightInc from baseHeight.
      */
 
-    if (pCD->minWidth < tmpMin)
+    if (pCD->minWidth < (int)tmpMin)
     {
         if ((diff = ((tmpMin - pCD->baseWidth)%pCD->widthInc)) != 0)
         {
@@ -2163,10 +2163,10 @@ ProcessWmNormalHints (ClientData *pCD, Boolean firstTime, long manageFlags)
 	 * we may need to adjust the normalized size of the window.
 	 */
 	if (!firstTime &&
-	    ((oldBaseWidth != pCD->baseWidth) ||
-	     (oldBaseHeight != pCD->baseHeight) ||
-	     (oldWidthInc != pCD->widthInc) ||
-	     (oldHeightInc != pCD->heightInc)))
+	    (((int)oldBaseWidth != pCD->baseWidth) ||
+	     ((int)oldBaseHeight != pCD->baseHeight) ||
+	     ((int)oldWidthInc != pCD->widthInc) ||
+	     ((int)oldHeightInc != pCD->heightInc)))
 	{
 	    incWidth = (pCD->clientWidth - oldBaseWidth) / oldWidthInc;
 	    incHeight = (pCD->clientHeight - oldBaseHeight) / oldHeightInc;
@@ -3526,7 +3526,7 @@ FixWindowSize (ClientData *pCD, unsigned int *pWidth, unsigned int *pHeight, uns
     {
 	*pWidth = pCD->minWidth;
     }
-    else if (*pWidth > pCD->maxWidthLimit &&
+    else if ((int) *pWidth > pCD->maxWidthLimit &&
              pSD->limitResize &&
 	     !(pCD->clientFlags & CLIENT_WM_CLIENTS))
     {
@@ -3537,7 +3537,7 @@ FixWindowSize (ClientData *pCD, unsigned int *pWidth, unsigned int *pHeight, uns
     {
 	*pHeight = pCD->minHeight;
     }
-    else if (*pHeight > pCD->maxHeightLimit &&
+    else if ((int) *pHeight > pCD->maxHeightLimit &&
              pSD->limitResize &&
 	     !(pCD->clientFlags & CLIENT_WM_CLIENTS))
     {
@@ -3556,8 +3556,8 @@ FixWindowSize (ClientData *pCD, unsigned int *pWidth, unsigned int *pHeight, uns
      *   If this fails, use minimum width and try to increase its height.
      */
     {
-        if ((*pHeight >= pCD->clientHeight) ||
-            (*pWidth > pCD->clientWidth))
+        if (((int) *pHeight >= pCD->clientHeight) ||
+            ((int) *pWidth > pCD->clientWidth))
         /*
          * Candidate height >= client height:
          *   Try to increase the client's height without violating bounds.
@@ -3566,7 +3566,7 @@ FixWindowSize (ClientData *pCD, unsigned int *pWidth, unsigned int *pHeight, uns
         {
             deltaH = makemult (*pWidth * pCD->maxAspect.y / pCD->maxAspect.x -
 		               *pHeight, heightInc);
-	    if (*pHeight + deltaH <= pCD->maxHeightLimit ||
+	    if ((int) *pHeight + deltaH <= pCD->maxHeightLimit ||
                 !pSD->limitResize ||
 		pCD->clientFlags & CLIENT_WM_CLIENTS)
 	    {
@@ -3577,7 +3577,7 @@ FixWindowSize (ClientData *pCD, unsigned int *pWidth, unsigned int *pHeight, uns
 	        *pHeight = pCD->maxHeightLimit;
 	        deltaW = makemult (*pWidth - *pHeight * pCD->maxAspect.x /
 			           pCD->maxAspect.y, widthInc);
-	        if (*pWidth - deltaW >= pCD->minWidth)
+	        if ((int) *pWidth - deltaW >= pCD->minWidth)
 	        {
 	            *pWidth -= deltaW;
                 }
@@ -3597,7 +3597,7 @@ FixWindowSize (ClientData *pCD, unsigned int *pWidth, unsigned int *pHeight, uns
 	    deltaW = makemult (*pWidth - *pHeight * pCD->maxAspect.x /
 			       pCD->maxAspect.y, widthInc);
 
-	    if (*pWidth - deltaW >= pCD->minWidth)
+	    if ((int) *pWidth - deltaW >= pCD->minWidth)
 	    {
 	        *pWidth -= deltaW;
             }
@@ -3606,7 +3606,7 @@ FixWindowSize (ClientData *pCD, unsigned int *pWidth, unsigned int *pHeight, uns
 	        *pWidth = pCD->minWidth;
                 deltaH = makemult (*pWidth * pCD->maxAspect.y /
 				   pCD->maxAspect.x - *pHeight, heightInc);
-	        if (*pHeight + deltaH <= pCD->maxHeightLimit ||
+	        if ((int) *pHeight + deltaH <= pCD->maxHeightLimit ||
                      !pSD->limitResize ||
 	             pCD->clientFlags & CLIENT_WM_CLIENTS)
 	        {
@@ -3632,8 +3632,8 @@ FixWindowSize (ClientData *pCD, unsigned int *pWidth, unsigned int *pHeight, uns
      *   If this fails, use minimum height and try to increase its width.
      */
     {
-        if ((*pWidth >= pCD->clientWidth) ||
-            (*pHeight > pCD->clientHeight))
+        if (((int) *pWidth >= pCD->clientWidth) ||
+            ((int) *pHeight > pCD->clientHeight))
         /*
          * Candidate width >= client width:
          *   Try to increase the client's width without violating bounds.
@@ -3642,7 +3642,7 @@ FixWindowSize (ClientData *pCD, unsigned int *pWidth, unsigned int *pHeight, uns
 	{
             deltaW = makemult (*pHeight * pCD->minAspect.x / pCD->minAspect.y -
 			       *pWidth, widthInc);
-	    if (*pWidth + deltaW <= pCD->maxWidthLimit ||
+	    if ((int) *pWidth + deltaW <= pCD->maxWidthLimit ||
                 !pSD->limitResize ||
 	        pCD->clientFlags & CLIENT_WM_CLIENTS)
 	    {
@@ -3653,7 +3653,7 @@ FixWindowSize (ClientData *pCD, unsigned int *pWidth, unsigned int *pHeight, uns
 	        *pWidth = pCD->maxWidthLimit;
 	        deltaH = makemult (*pHeight - *pWidth * pCD->minAspect.y /
 			           pCD->minAspect.x, heightInc);
-	        if (*pHeight - deltaH >= pCD->minHeight)
+	        if ((int) *pHeight - deltaH >= pCD->minHeight)
 	        {
 	            *pHeight -= deltaH;
                 }
@@ -3672,7 +3672,7 @@ FixWindowSize (ClientData *pCD, unsigned int *pWidth, unsigned int *pHeight, uns
 	{
 	    deltaH = makemult (*pHeight - *pWidth * pCD->minAspect.y /
 			       pCD->minAspect.x, heightInc);
-	    if (*pHeight - deltaH >= pCD->minHeight)
+	    if ((int) *pHeight - deltaH >= pCD->minHeight)
 	    {
 	        *pHeight -= deltaH;
             }
@@ -3681,7 +3681,7 @@ FixWindowSize (ClientData *pCD, unsigned int *pWidth, unsigned int *pHeight, uns
 	        *pHeight = pCD->minHeight;
                 deltaW = makemult (*pHeight * pCD->minAspect.x /
 				   pCD->minAspect.y - *pWidth, widthInc);
-	        if (*pWidth + deltaW <= pCD->maxWidthLimit ||
+	        if ((int) *pWidth + deltaW <= pCD->maxWidthLimit ||
                      !pSD->limitResize ||
 	             pCD->clientFlags & CLIENT_WM_CLIENTS)
 	        {

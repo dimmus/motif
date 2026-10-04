@@ -303,9 +303,9 @@ void ShowFeedbackWindow (WmScreenData *pSD, int x, int y, unsigned int width, un
     if (mask & (XValue|YValue))
     {
 	winX = (mask & XNegative) ?
-	    DisplayWidth(DISPLAY, pSD->screen)  + tmpX - pSD->fbWinWidth : tmpX;
+	    DisplayWidth(DISPLAY, pSD->screen)  + tmpX - (int)pSD->fbWinWidth : tmpX;
 	winY = (mask & YNegative) ?
-	    DisplayHeight(DISPLAY, pSD->screen) + tmpY -pSD->fbWinHeight : tmpY;
+	    DisplayHeight(DISPLAY, pSD->screen) + tmpY - (int)pSD->fbWinHeight : tmpY;
     }
     else
     {

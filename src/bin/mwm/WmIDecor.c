@@ -1525,26 +1525,26 @@ void ReparentIconWindow (ClientData *pcd, int xOffset, int yOffset)
 	mask = 0;
     }
 
-    if (width > ((ICON_IMAGE_MAXIMUM(pcd).width) +
+    if ((int)width > ((ICON_IMAGE_MAXIMUM(pcd).width) +
 		 ((wmGD.frameStyle == WmSLAB) ? 2 : 0)))
     {
 	width = windowChanges.width = ICON_IMAGE_MAXIMUM(pcd).width +
 				     ((wmGD.frameStyle == WmSLAB) ? 2 : 0);
 	mask |= CWWidth;
     }
-    else if (width < ICON_IMAGE_MINIMUM(pcd).width) {
+    else if ((int)width < ICON_IMAGE_MINIMUM(pcd).width) {
 	width = windowChanges.width = ICON_IMAGE_MINIMUM(pcd).width;
 	mask |= CWWidth;
     }
 
-    if (height > ((ICON_IMAGE_MAXIMUM(pcd).height) +
+    if ((int)height > ((ICON_IMAGE_MAXIMUM(pcd).height) +
 		 ((wmGD.frameStyle == WmSLAB) ? 2 : 0)))
     {
 	height = windowChanges.height = ICON_IMAGE_MAXIMUM(pcd).height +
 				     ((wmGD.frameStyle == WmSLAB) ? 2 : 0);
 	mask |= CWHeight;
     }
-    else if (height < ICON_IMAGE_MINIMUM(pcd).height) {
+    else if ((int)height < ICON_IMAGE_MINIMUM(pcd).height) {
 	height = windowChanges.height = ICON_IMAGE_MINIMUM(pcd).height;
 	mask |= CWHeight;
     }
@@ -1613,10 +1613,10 @@ void PutBoxOnScreen (int screen, int *px, int *py, unsigned int width, unsigned 
      * Place active label text nicely on screen
      */
 
-    if (*px+width+1 > DisplayWidth (DISPLAY, screen))
+    if (*px+(int)width+1 > DisplayWidth (DISPLAY, screen))
 	*px -= (*px+width+1) - DisplayWidth (DISPLAY, screen);
 
-    if (*py+height+1 > DisplayHeight (DISPLAY, screen))
+    if (*py+(int)height+1 > DisplayHeight (DISPLAY, screen))
 	*py -= (*py+height+1) - DisplayHeight (DISPLAY, screen);
 
     if (*px < 1) *px = 1;
@@ -1676,10 +1676,10 @@ void PutBoxInIconBox (ClientData *pCD, int *px, int *py, unsigned int *width, un
     clipWidth = (int) bBoardWidth;
     clipHeight = (int) bBoardHeight;
 
-    if (*px + *width-1 > clipWidth)
+    if (*px + (int)*width-1 > clipWidth)
 	*px -= (*px + *width-1) - clipWidth;
 
-    if (*py + *height-1 > clipHeight)
+    if (*py + (int)*height-1 > clipHeight)
 	*py -= (*py + *height-1) - clipHeight;
 
     if (*px < 0) *px = 0;

@@ -1291,7 +1291,7 @@ void SetGeometry (WmWorkspaceData *pWS, ClientData *pCD, IconBoxData *pIBD)
      *     & an integral number of widthInc from baseWidth.
      */
 
-    if (pCD->minWidth < tmpMin)
+    if (pCD->minWidth < (int)tmpMin)
     {
         if ((diff = ((tmpMin - pCD->baseWidth)%pCD->widthInc)) != 0)
         {

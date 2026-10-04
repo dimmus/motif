@@ -140,7 +140,7 @@ void InitEventHandling (void)
     /* handle entry of root window */
     base_mask |= EnterWindowMask | LeaveWindowMask;
 
-    for (scr=0; scr<wmGD.numScreens; scr++)
+    for (scr=0; (int)scr<wmGD.numScreens; scr++)
     {
 	pSD = &(wmGD.Screens[scr]);
 
@@ -749,7 +749,7 @@ Boolean WmDispatchMenuEvent (XButtonEvent *event)
 		     ~wmGD.clickData.time + ((XButtonEvent *)event)->time + 1;
 		 }
 
-		 if (timeDiff < wmGD.doubleClickTime)
+		 if (timeDiff < (Time)wmGD.doubleClickTime)
 		 {
 		   _XmGetMenuState (XtParent(wmGD.menuActive->menuWidget))
 		       ->MS_LastManagedMenuTime =
@@ -1488,7 +1488,7 @@ Boolean CheckForButtonAction (XButtonEvent *buttonEvent, Context context, Contex
 	     * See if the event context matches the binding context.
 	     */
 
-	    if ((buttonEvent->type == buttonSpec->eventType) &&
+	    if (((unsigned int)buttonEvent->type == buttonSpec->eventType) &&
 	        (context & buttonSpec->context) &&
 		(subContext & buttonSpec->subContext))
 	    {
@@ -1746,7 +1746,7 @@ void ProcessClickBPress (XButtonEvent *buttonEvent, ClientData *pCD, Context con
 	    timeDiff = ~wmGD.clickData.time + buttonEvent->time + 1;
 	}
 
-	if (timeDiff < wmGD.doubleClickTime)
+	if (timeDiff < (Time)wmGD.doubleClickTime)
 	{
 	    /*
 	     * A double-click has been done; save the context.

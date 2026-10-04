@@ -717,7 +717,7 @@ Boolean HandleResizeKeyPress (ClientData *pcd, XEvent *pev)
 		    ReGrabPointer(pcd->clientFrameWin, pev->xkey.time);
 		    warpY = resizeY + resizeHeight/2;
 		    warpX = resizeX + ((control) ?
-					  (-resizeBigWidthInc) :
+					  (-(int)resizeBigWidthInc) :
 					  (-pcd->widthInc));
 		    break;
 
@@ -725,7 +725,7 @@ Boolean HandleResizeKeyPress (ClientData *pcd, XEvent *pev)
 		    wmGD.configPart = FRAME_RESIZE_NW;
 		    ReGrabPointer(pcd->clientFrameWin, pev->xkey.time);
 		    warpX = resizeX + ((control) ?
-					  (-resizeBigWidthInc) :
+					  (-(int)resizeBigWidthInc) :
 					  (-pcd->widthInc));
 		    warpY = pointerY;
 		    break;
@@ -734,14 +734,14 @@ Boolean HandleResizeKeyPress (ClientData *pcd, XEvent *pev)
 		    wmGD.configPart = FRAME_RESIZE_SW;
 		    ReGrabPointer(pcd->clientFrameWin, pev->xkey.time);
 		    warpX = resizeX + ((control) ?
-					  (-resizeBigWidthInc) :
+					  (-(int)resizeBigWidthInc) :
 					  (-pcd->widthInc));
 		    warpY = pointerY;
 		    break;
 
 		default:
 		    warpX = pointerX + ((control) ?
-					(-resizeBigWidthInc * keyMult) :
+					(-(int)resizeBigWidthInc * keyMult) :
 					(-pcd->widthInc * keyMult));
 		    warpY = pointerY;
 		    break;
@@ -754,7 +754,7 @@ Boolean HandleResizeKeyPress (ClientData *pcd, XEvent *pev)
 		    wmGD.configPart = FRAME_RESIZE_N;
 		    warpX = resizeX + resizeWidth/2;
 		    warpY = resizeY + ((control) ?
-					  (-resizeBigHeightInc) :
+					  (-(int)resizeBigHeightInc) :
 					  (-pcd->heightInc));
 		    ReGrabPointer(pcd->clientFrameWin, pev->xkey.time);
 		    break;
@@ -764,7 +764,7 @@ Boolean HandleResizeKeyPress (ClientData *pcd, XEvent *pev)
 		    ReGrabPointer(pcd->clientFrameWin, pev->xkey.time);
 		    warpX = pointerX;
 		    warpY = resizeY + ((control) ?
-					  (-resizeBigHeightInc) :
+					  (-(int)resizeBigHeightInc) :
 					  (-pcd->heightInc));
 		    break;
 
@@ -773,14 +773,14 @@ Boolean HandleResizeKeyPress (ClientData *pcd, XEvent *pev)
 		    ReGrabPointer(pcd->clientFrameWin, pev->xkey.time);
 		    warpX = pointerX;
 		    warpY = resizeY + ((control) ?
-					      (-resizeBigHeightInc) :
+					      (-(int)resizeBigHeightInc) :
 					      (-pcd->heightInc));
 		    break;
 
 		default:
 		    warpX = pointerX;
 		    warpY = pointerY + ((control) ?
-					(-resizeBigHeightInc * keyMult) :
+					(-(int)resizeBigHeightInc * keyMult) :
 					(-pcd->heightInc * keyMult));
 		    break;
 	    }
@@ -792,7 +792,7 @@ Boolean HandleResizeKeyPress (ClientData *pcd, XEvent *pev)
 		    wmGD.configPart = FRAME_RESIZE_E;
 		    warpY = resizeY + resizeHeight/2;
 		    warpX = resizeX + resizeWidth - 1 +
-			       ((control) ? resizeBigWidthInc :
+			       ((control) ? (int)resizeBigWidthInc :
 					    pcd->widthInc);
 		    ReGrabPointer(pcd->clientFrameWin, pev->xkey.time);
 		    break;
@@ -801,7 +801,7 @@ Boolean HandleResizeKeyPress (ClientData *pcd, XEvent *pev)
 		    wmGD.configPart = FRAME_RESIZE_NE;
 		    ReGrabPointer(pcd->clientFrameWin, pev->xkey.time);
 		    warpX = resizeX + resizeWidth - 1 +
-			       ((control) ? resizeBigWidthInc :
+			       ((control) ? (int)resizeBigWidthInc :
 					    pcd->widthInc);
 		    warpY = pointerY;
 		    break;
@@ -810,14 +810,14 @@ Boolean HandleResizeKeyPress (ClientData *pcd, XEvent *pev)
 		    wmGD.configPart = FRAME_RESIZE_SE;
 		    ReGrabPointer(pcd->clientFrameWin, pev->xkey.time);
 		    warpX = resizeX + resizeWidth - 1 +
-			       ((control) ? resizeBigWidthInc :
+			       ((control) ? (int)resizeBigWidthInc :
 					    pcd->widthInc);
 		    warpY = pointerY;
 		    break;
 
 		default:
 		    warpX = pointerX + ((control) ?
-				 	(resizeBigWidthInc * keyMult) :
+				 	((int)resizeBigWidthInc * keyMult) :
 				  	(pcd->widthInc * keyMult));
 		    warpY = pointerY;
 		    break;
@@ -830,7 +830,7 @@ Boolean HandleResizeKeyPress (ClientData *pcd, XEvent *pev)
 		    wmGD.configPart = FRAME_RESIZE_S;
 		    warpX = resizeX + resizeWidth/2;
 		    warpY = resizeY + resizeHeight - 1 +
-			       ((control) ? resizeBigHeightInc :
+			       ((control) ? (int)resizeBigHeightInc :
 					    pcd->heightInc);
 		    ReGrabPointer(pcd->clientFrameWin, pev->xkey.time);
 		    break;
@@ -840,7 +840,7 @@ Boolean HandleResizeKeyPress (ClientData *pcd, XEvent *pev)
 		    ReGrabPointer(pcd->clientFrameWin, pev->xkey.time);
 		    warpX = pointerX;
 		    warpY = resizeY + resizeHeight - 1 +
-			       ((control) ? resizeBigHeightInc :
+			       ((control) ? (int)resizeBigHeightInc :
 					    pcd->heightInc);
 		    break;
 
@@ -849,14 +849,14 @@ Boolean HandleResizeKeyPress (ClientData *pcd, XEvent *pev)
 		    ReGrabPointer(pcd->clientFrameWin, pev->xkey.time);
 		    warpX = pointerX;
 		    warpY = resizeY + resizeHeight - 1 +
-			       ((control) ? resizeBigHeightInc :
+			       ((control) ? (int)resizeBigHeightInc :
 					    pcd->heightInc);
 		    break;
 
 		default:
 		    warpX = pointerX;
 		    warpY = pointerY + ((control) ?
-					(resizeBigHeightInc * keyMult) :
+					((int)resizeBigHeightInc * keyMult) :
 					(pcd->heightInc * keyMult));
 		    break;
 	    }
@@ -1771,7 +1771,7 @@ void WindowOutline (int x, int y, unsigned int width, unsigned int height)
     }
 
     if (x == lastOutlineX && y == lastOutlineY &&
-	width == lastOutlineWidth && height == lastOutlineHeight)
+	(int)width == lastOutlineWidth && (int)height == lastOutlineHeight)
     {
 	return;		/* no change */
     }
@@ -1875,7 +1875,7 @@ void DrawOutline (int x, int y, unsigned int width, unsigned int height)
 
 
     if (x == lastOutlineX && y == lastOutlineY &&
-	width == lastOutlineWidth && height == lastOutlineHeight)
+	(int)width == lastOutlineWidth && (int)height == lastOutlineHeight)
     {
 	return;		/* no change */
     }
@@ -2033,15 +2033,15 @@ void ProcessNewConfiguration (ClientData *pCD, int x, int y, unsigned int width,
     if (pCD->maxConfig)
     {
 	if (newMax &&
-	    (pCD->maxWidth == width) &&
-	    (pCD->maxHeight == height))
+	    (pCD->maxWidth == (int)width) &&
+	    (pCD->maxHeight == (int)height))
 	{
 	    /* we're changing to the new max size */
 	    toNewMax = True;
 	}
 
-	changedValues |= (width != pCD->oldMaxWidth) ? CWWidth : 0;
-	changedValues |= (height != pCD->oldMaxHeight) ? CWHeight : 0;
+	changedValues |= ((int)width != pCD->oldMaxWidth) ? CWWidth : 0;
+	changedValues |= ((int)height != pCD->oldMaxHeight) ? CWHeight : 0;
 
 	if (!toNewMax && (changedValues & CWWidth)) {
 	    /*
@@ -2076,7 +2076,7 @@ void ProcessNewConfiguration (ClientData *pCD, int x, int y, unsigned int width,
 	}
     }
     else {
-	if (width != pCD->clientWidth)
+	if ((int)width != pCD->clientWidth)
 	{
 	    /*
 	     * Hacked to update maxWidth for 'vertical' max clients
@@ -2090,7 +2090,7 @@ void ProcessNewConfiguration (ClientData *pCD, int x, int y, unsigned int width,
 
 	}
 
-	if (height != pCD->clientHeight)
+	if ((int)height != pCD->clientHeight)
 	{
 	    /*
 	     * Hacked to update maxHeight for 'horizontal' max client
@@ -3412,8 +3412,8 @@ int ResizeType (ClientData *pcd, XEvent *pev)
     /* if inside all resize areas, then forget it */
     if ( (x > resizeX) &&
 	 (y > resizeY) &&
-	 (x < (resizeX + resizeWidth - 1)) &&
-	 (y < (resizeY + resizeHeight - 1)) )
+	 (x < (resizeX + (int)resizeWidth - 1)) &&
+	 (y < (resizeY + (int)resizeHeight - 1)) )
     {
 	return(FRAME_NONE);
     }
@@ -3422,17 +3422,17 @@ int ResizeType (ClientData *pcd, XEvent *pev)
     if (x <= resizeX) {
 	if (y < resizeY + (int)pcd->frameInfo.cornerHeight)
 	    return (FRAME_RESIZE_NW);
-	else if (y >= resizeY + resizeHeight -(int)pcd->frameInfo.cornerHeight)
+	else if (y >= resizeY + (int)resizeHeight -(int)pcd->frameInfo.cornerHeight)
 	    return (FRAME_RESIZE_SW);
 	else
 	    return (FRAME_RESIZE_W);
     }
 
     /* right side */
-    if (x >= resizeX + resizeWidth - 1) {
+    if (x >= resizeX + (int)resizeWidth - 1) {
 	if (y < resizeY + (int)pcd->frameInfo.cornerHeight)
 	    return (FRAME_RESIZE_NE);
-	else if (y >= resizeY + resizeHeight -(int)pcd->frameInfo.cornerHeight)
+	else if (y >= resizeY + (int)resizeHeight -(int)pcd->frameInfo.cornerHeight)
 	    return (FRAME_RESIZE_SE);
 	else
 	    return (FRAME_RESIZE_E);
@@ -3442,17 +3442,17 @@ int ResizeType (ClientData *pcd, XEvent *pev)
     if (y <= resizeY) {
 	if (x < resizeX + (int)pcd->frameInfo.cornerWidth)
 	    return (FRAME_RESIZE_NW);
-	else if (x >= resizeX + resizeWidth - (int)pcd->frameInfo.cornerWidth)
+	else if (x >= resizeX + (int)resizeWidth - (int)pcd->frameInfo.cornerWidth)
 	    return (FRAME_RESIZE_NE);
 	else
 	    return (FRAME_RESIZE_N);
     }
 
     /* bottom side */
-    if (y >= resizeY + resizeHeight - 1) {
+    if (y >= resizeY + (int)resizeHeight - 1) {
 	if (x < resizeX + (int)pcd->frameInfo.cornerWidth)
 	    return (FRAME_RESIZE_SW);
-	else if (x >= resizeX + resizeWidth - (int)pcd->frameInfo.cornerWidth)
+	else if (x >= resizeX + (int)resizeWidth - (int)pcd->frameInfo.cornerWidth)
 	    return (FRAME_RESIZE_SE);
 	else
 	    return (FRAME_RESIZE_S);
@@ -4074,7 +4074,7 @@ HandleMarqueeSelect (WmScreenData *pSD, XEvent *pev)
 
 	    GetConfigEvent(DISPLAY, grab_win, CONFIG_MASK,
 		pointerX, pointerY, resizeX, resizeY,
-		resizeWidth, resizeHeight, &event);
+		(int)resizeWidth, (int)resizeHeight, &event);
 	}
 
 	if (pev->type == MotionNotify)

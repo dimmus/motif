@@ -2796,7 +2796,7 @@ static MenuItem *ParseMenuItems (WmScreenData *pSD
 		continue;
 	    }
 
-	    for (ix = 0; ix < WMFUNCTIONTABLESIZE - 1; ++ix)
+	    for (ix = 0; ix < (int)WMFUNCTIONTABLESIZE - 1; ++ix)
 	      if (functionTable[ix].wmFunction == F_InvokeCommand)
 		break;
 
@@ -6171,7 +6171,7 @@ static Boolean ParseKeySym (unsigned char **linePP, unsigned int closure,
 	 (mblen (keySymName, MB_CUR_MAX) == 1))
     {
         if (!isdigit (keySymName[0]) ||
-            ((*detail = StrToNum ((unsigned char *)&keySymName[0])) == -1))
+            ((*detail = StrToNum ((unsigned char *)&keySymName[0])) == (unsigned int)-1))
         {
             *detail = NoSymbol;
             return (FALSE);
