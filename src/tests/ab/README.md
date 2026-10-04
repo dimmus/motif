@@ -12,11 +12,15 @@ here is registered with CTest or built by default.
   prints child geometry, selection and scroll state, callbacks and a hash
   of the window pixels after every step.  Modes: `form`, `formcyc`
   (attachment cycles), `formgrid`, `formcolumn`, `formwide`, `container`,
-  `list`, `listscroll`.
+  `list`, `listscroll`, and `listapi` (the List API alone, without
+  input: lookups, selection and replacement by value with many
+  duplicates, and the item and selection resources).
 - `ab.sh OLD_LIBDIR NEW_LIBDIR MODE FIRST LAST [SIZE]` runs a range of
   seeds against both libraries and reports seeds whose output differs.
-- `xm_layoutbench form|container|list N` times the phases of a layout
-  with N children or items.
+- `xm_layoutbench form|container|list|listops N` times the phases of a
+  layout with N children or items; `listops` times the List item and
+  selection operations (adds at both ends, lookups, selection and
+  deletion by value and by position, replacements).
 
 ## Usage
 
