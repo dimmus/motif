@@ -165,6 +165,54 @@ types.  With `--no-added-syms` left out it also lists what was added,
 which should be what the new version node lists.  Run `ctest -L ABI`
 for the version scripts.
 
+`tools/dev/env/ci/abi-check.sh REF...` does this for libXm, libMrm and
+libUil (the CI "ABI check" job runs it against the previous tag and
+`upstream-2.3.8`).  It also compares the types that no exported function
+reaches, which is where the instance and class records of the `*P.h`
+headers are: it compiles every installed header into one object with
+all their types in its debug information
+(`-fno-eliminate-unused-debug-types`) and compares those objects with
+`abidiff --non-reachable-types`.  And it checks that every string of the
+`_XmStrings` tables is still at its offset.
+
+## Differences from Motif 2.3.8
+
+What `abi-check.sh upstream-2.3.8` finds between upstream 2.3.8, in its
+default configuration (which defines `OM22_COMPATIBILITY`), and this
+tree, on x86-64.  These are the differences that SONAME 5 stands for;
+the script and `tools/dev/env/ci/abi/upstream-2.3.8.suppr` suppress
+them, so that the CI job reports any other one.
+
+- The SONAMEs: `libXm.so.4`, `libMrm.so.4`, `libUil.so.4` upstream.
+- The exported symbols: of upstream's 3181 libXm, 329 libMrm and 434
+  libUil symbols, 1476, 112 and 384 are local here ("What is exported"
+  above), among them `_XmEditResCheckMessages`,
+  `XmDataFielddf_ClearSelection` and `XmDataFielddf_SetCursorPosition`.
+  The comparison only considers the symbols of the version scripts.
+- `XmPrimitivePart` and `XmGadgetPart` have no `tool_tip_string` member
+  (8 bytes), so every widget and gadget instance record is smaller, and
+  the offset of every part after them differs.  The comparison does not
+  compare the instance records and their parts with upstream (they are
+  compared with the previous release).
+- `XmMessageBoxPart` ends with a `Dimension baseline` (8 bytes more with
+  the padding).
+- `XmDragReceiverInfoStruct` (`DragCP.h`) has `Position xLast, yLast`
+  after `yOrigin`: 64 bytes instead of 56.
+- `XmTopLevelEnterCallbackStruct` (`DragC.h`) ends with `Atom
+  targets[3]` and `unsigned char n_targets`, the XDND targets: 88 bytes
+  instead of 56.  The widget passes it to the callbacks; a callback built
+  against 2.3.8 reads the members it knows.
+- The drag protocol styles of `Display.h` have `XmDRAG_XDND` (6) before
+  `XmDRAG_PREFER_RECEIVER`, which is 7 instead of 6.
+- `XmTextFieldPart` has an `unsigned char alignment` in what was padding
+  at its end (the size did not change).
+- The `getActivateCBName` method of the menu savvy trait has a
+  prototype, `char *(*)(void)`; the calling convention is the same.
+- The string tables: 1346 of the 1353 strings of `_XmStrings` and all
+  291 strings of `_XmStrings22` are at other offsets, so the `XmN*`,
+  `XmC*`, `XmR*` and `XmS*` names compiled into a 2.3.8 program are other
+  strings here.  `_XmStrings23` did not change.
+
 ## Toolchain settings
 
 The version scripts make internal calls and references bind inside the

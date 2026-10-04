@@ -1,0 +1,8 @@
+# libabigail suppression for the header types comparison of abi-check.sh:
+# the object that includes every installed Motif header also describes
+# the types of the X11, Xt, Xft, fontconfig, FreeType and C library
+# headers they include.  Those are not Motif's ABI, and which of them
+# appear depends on what the Motif headers include.
+[suppress_type]
+  label = types of other packages
+  source_location_not_regexp = /usr/include/(Xm|Mrm|uil)/[^/]*$

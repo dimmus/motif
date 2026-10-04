@@ -263,8 +263,10 @@ jobs:
           if-no-files-found: ignore
 
   abi:
-    # Informational: report ABI changes of libXm and libMrm against the
-    # previous release tag and, for pull requests, against the base.
+    # Informational: report ABI changes of libXm, libMrm and libUil against
+    # the previous release tag, against upstream Motif 2.3.8 (with the
+    # documented differences suppressed, tools/dev/env/ci/abi/) and, for
+    # pull requests, against the base.
     name: ABI check (non-blocking)
     runs-on: ubuntu-24.04
     timeout-minutes: 60
@@ -274,17 +276,33 @@ jobs:
         with:
           fetch-depth: 0
       - name: Install dependencies
-        run: tools/dev/env/ci/deps.sh abigail-tools autoconf automake libtool autoconf-archive
+        run: tools/dev/env/ci/deps.sh abigail-tools autoconf automake libtool autoconf-archive curl
+      # The build of the upstream 2.3.8 tarball.  abi-check.sh rebuilds it
+      # when its stamp (tarball checksum and options) does not match.
+      - name: Restore the upstream 2.3.8 build
+        id: upstream-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: _abi/upstream-2.3.8
+          key: abi-upstream-2.3.8-${{ hashFiles('tools/dev/env/ci/abi-check.sh') }}
       - name: Compare ABI
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
-          set -- "$(git describe --tags --abbrev=0 "$(git rev-parse HEAD)^")"
+          set -- "$(git describe --tags --abbrev=0 "$(git rev-parse HEAD)^")" upstream-2.3.8
           if [ -n "$BASE_SHA" ]; then
             set -- "$@" "$BASE_SHA"
           fi
           echo "Comparing with: $*"
           tools/dev/env/ci/abi-check.sh "$@"
+      # Saved even when the comparison fails, so that the next run does
+      # not build upstream again.
+      - name: Save the upstream 2.3.8 build
+        if: always() && steps.upstream-cache.outputs.cache-hit != 'true' && hashFiles('_abi/upstream-2.3.8/stamp') != ''
+        uses: actions/cache/save@v4
+        with:
+          path: _abi/upstream-2.3.8
+          key: ${{ steps.upstream-cache.outputs.cache-primary-key }}
       - name: Upload ABI dumps and reports
         if: always()
         uses: actions/upload-artifact@v4
