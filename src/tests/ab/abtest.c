@@ -3,7 +3,8 @@
  *
  * Licensed under the LGPL 2.1 license.
  *
- * xm_abtest: A/B harness for the Form, Container and List layout code.
+ * xm_abtest: A/B harness for the Form, Container and List layout code
+ * and for XmString.
  * Builds pseudo-random configurations, drives them through the API and
  * through real input (xdotool), and prints child geometry, selection
  * state, scroll state, callbacks and a hash of the window pixels after
@@ -13,7 +14,8 @@
  *   xm_abtest MODE SEED [SIZE]
  *
  * MODE is form, formcyc, formgrid, formcolumn, formwide, container,
- * list or listscroll.  SIZE 0 (the default) lets the seed choose.
+ * list, listscroll or xmstring.  SIZE 0 (the default) lets the seed
+ * choose.
  * Setting ABT_DESTROY_UNMANAGED also destroys unmanaged Form children.
  */
 #include <Xm/XmP.h>
@@ -1003,6 +1005,371 @@ static void list_test(int nitems)
   }
 }
 
+/* ------------------------------------------------------------ XmString */
+
+/*
+ * Builds strings from random pieces with XmStringConcatAndFree (append
+ * and prepend), XmStringConcat, XmStringCopy, XmStringGenerate and
+ * XmStringParseText, and prints what the API says of them: the byte
+ * stream, the text, the line count and the extents with a core font, a
+ * font set and an Xft render table, the last also after the render
+ * tables change.  No line gets more than 250 bytes of text until a long
+ * piece makes the string unoptimized: older libraries truncated text
+ * merged past 255 bytes into an optimized segment.
+ */
+#define STR_RTS 3
+static XmRenderTable str_rt[STR_RTS];
+static XmParseTable str_table;
+static int str_last_bytes, str_first_bytes, str_one_line = 1, str_long;
+
+static unsigned long long fnv(unsigned long long h, const void *p, size_t n)
+{
+  const unsigned char *c = p;
+  while (n--) {
+    h ^= *c++;
+    h *= 1099511628211ULL;
+  }
+  return h;
+}
+
+static XmRenderTable str_make_rt(const char *font, XmFontType type, const char *tag, int tabs)
+{
+  XmRendition rend;
+  XmRenderTable rt;
+  Arg args[3];
+  Cardinal n = 0;
+  XmTabList tl = NULL;
+  XtSetArg(args[n], XmNfontName, font), n++;
+  XtSetArg(args[n], XmNfontType, type), n++;
+  if (tabs) {
+    XmTab tab[2];
+    tab[0] = XmTabCreate(40.0, XmPIXELS, XmABSOLUTE, XmALIGNMENT_BEGINNING, NULL);
+    tab[1] = XmTabCreate(1.5, XmCENTIMETERS, XmRELATIVE, XmALIGNMENT_BEGINNING, NULL);
+    tl = XmTabListInsertTabs(NULL, tab, 2, 0);
+    XmTabFree(tab[0]);
+    XmTabFree(tab[1]);
+    XtSetArg(args[n], XmNtabList, tl), n++;
+  }
+  rend = XmRenditionCreate(top, (XmStringTag)tag, args, n);
+  rt = XmRenderTableAddRenditions(NULL, &rend, 1, XmMERGE_NEW);
+  XmRenditionFree(rend);
+  if (tl)
+    XmTabListFree(tl);
+  return rt;
+}
+
+/* Replace or add the rendition for tag in str_rt[i] */
+static void str_add_rend(int i, const char *font, XmFontType type, const char *tag,
+                         XmMergeMode mode)
+{
+  XmRenderTable one = str_make_rt(font, type, tag, 0);
+  XmRendition rend = XmRenderTableGetRendition(one, (XmStringTag)tag);
+  str_rt[i] = XmRenderTableAddRenditions(str_rt[i], &rend, 1, mode);
+  XmRenditionFree(rend);
+  XmRenderTableFree(one);
+}
+
+static const char *str_tag(void)
+{
+  return pick(3, 0, 1, 2) == 0 ? XmFONTLIST_DEFAULT_TAG : rn(2) ? "tagA" : "tagB";
+}
+
+/* Random text of 0..max bytes */
+static char *str_text(int max, int specials)
+{
+  static const char chars[] = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJ0123456789.,";
+  int len = rn(max + 1), i;
+  char *t = XtMalloc(len + 1);
+  for (i = 0; i < len; i++) {
+    int r = rn(40);
+    t[i] = specials && r == 0 ? '\t' : specials && r == 1 ? '\n' : specials && r == 2 ? '|' :
+                                                                       chars[rn(sizeof chars - 1)];
+  }
+  t[len] = '\0';
+  return t;
+}
+
+/* A random piece; *bytes is how much text it has, *seps whether it has
+ * separators */
+static XmString str_piece(int *bytes)
+{
+  XmString s = NULL;
+  char *t = NULL;
+  XmStringDirection dir;
+  XmDirection ldir;
+  *bytes = 0;
+  switch (rn(13)) {
+  case 0:
+  case 1:
+    t = str_text(12, 0);
+    s = XmStringCreateLocalized(t);
+    break;
+  case 2:
+  case 3:
+    t = str_text(12, 0);
+    s = XmStringCreate(t, (XmStringTag)str_tag());
+    break;
+  case 4:
+    t = str_text(12, 0);
+    s = XmStringComponentCreate(pick(2, XmSTRING_COMPONENT_TEXT, XmSTRING_COMPONENT_LOCALE_TEXT),
+                                strlen(t), t);
+    break;
+  case 5:
+    s = XmStringSeparatorCreate();
+    break;
+  case 6:
+    s = XmStringComponentCreate(XmSTRING_COMPONENT_TAB, 0, NULL);
+    break;
+  case 7:
+    dir = pick(3, XmSTRING_DIRECTION_L_TO_R, XmSTRING_DIRECTION_R_TO_L, XmSTRING_DIRECTION_UNSET);
+    s = rn(2) ? XmStringDirectionCreate(dir) :
+                XmStringComponentCreate(XmSTRING_COMPONENT_DIRECTION, sizeof dir, &dir);
+    break;
+  case 8:
+    s = XmStringComponentCreate(rn(2) ? XmSTRING_COMPONENT_RENDITION_BEGIN :
+                                        XmSTRING_COMPONENT_RENDITION_END,
+                                2, rn(2) ? "r1" : "r2");
+    break;
+  case 9:
+    /* Balanced: XmStringExtent loops forever on some unbalanced
+     * pushes ("text push text push"), old and new libraries alike */
+    ldir = rn(2) ? XmLEFT_TO_RIGHT : XmRIGHT_TO_LEFT;
+    t = str_text(12, 0);
+    s = XmStringConcatAndFree(
+        XmStringConcatAndFree(
+            XmStringComponentCreate(XmSTRING_COMPONENT_LAYOUT_PUSH, sizeof ldir, &ldir),
+            XmStringCreateLocalized(t)),
+        XmStringComponentCreate(XmSTRING_COMPONENT_LAYOUT_POP, 0, NULL));
+    break;
+  case 10:
+    t = str_text(40, 1);
+    s = XmStringGenerate(t, rn(2) ? NULL : (XmStringTag)str_tag(), XmCHARSET_TEXT,
+                         rn(3) ? NULL : "r1");
+    break;
+  case 11:
+    t = str_text(40, 1);
+    s = XmStringParseText(t, NULL, NULL, XmCHARSET_TEXT, str_table, 3, NULL);
+    *bytes = 3 * strlen(t); /* "|" becomes "BAR" */
+    break;
+  case 12:
+    if (rn(4) == 0) {
+      /* Unoptimized from the start; makes the whole string so */
+      t = str_text(400, 0);
+      while (strlen(t) < 256) {
+        XtFree(t);
+        t = str_text(400, 0);
+      }
+      s = XmStringComponentCreate(XmSTRING_COMPONENT_TEXT, strlen(t), t);
+      str_long = 1;
+    }
+    else
+      s = XmStringComponentCreate(XmSTRING_COMPONENT_TAG, 4, rn(2) ? "tagA" : "tagB");
+    break;
+  }
+  if (t) {
+    if (*bytes == 0)
+      *bytes = strlen(t);
+    XtFree(t);
+  }
+  return s;
+}
+
+static void str_measure(const char *what, XmString s)
+{
+  Dimension w, h;
+  int i;
+  printf("  %s:", what);
+  for (i = 0; i < STR_RTS; i++) {
+    XmStringExtent(str_rt[i], s, &w, &h);
+    printf(" %ux%u/%u", w, h, XmStringBaseline(str_rt[i], s));
+  }
+  printf("\n");
+}
+
+static void str_dump(const char *what, XmString s)
+{
+  unsigned char *stream = NULL;
+  unsigned int len = XmCvtXmStringToByteStream(s, &stream);
+  char *text = XmStringUnparse(s, NULL, XmCHARSET_TEXT, XmCHARSET_TEXT, NULL, 0, XmOUTPUT_ALL);
+  char *parsed = XmStringUnparse(s, NULL, XmCHARSET_TEXT, XmCHARSET_TEXT, str_table, 3,
+                                 XmOUTPUT_ALL);
+  printf("=== step %d: %s\n", step++, what);
+  printf("  stream %u %016llx lines %d empty %d void %d\n", len,
+         stream ? fnv(1469598103934665603ULL, stream, len) : 0ULL, XmStringLineCount(s),
+         XmStringEmpty(s), XmStringIsVoid(s));
+  printf("  text %zu %016llx parsed %016llx\n", text ? strlen(text) : 0,
+         text ? fnv(1469598103934665603ULL, text, strlen(text)) : 0ULL,
+         parsed ? fnv(1469598103934665603ULL, parsed, strlen(parsed)) : 0ULL);
+  if (stream) {
+    XmString back = XmCvtByteStreamToXmString(stream);
+    printf("  back compare %d\n", XmStringCompare(s, back));
+    XmStringFree(back);
+  }
+  if (len < 2000 && text)
+    printf("  \"%s\"\n", text);
+  str_measure("extent", s);
+  XtFree((char *)stream);
+  XtFree(text);
+  XtFree(parsed);
+}
+
+static XmString str_cat(XmString a, XmString b) { return XmStringConcatAndFree(a, b); }
+
+/* Append a piece to s, or prepend it, keeping lines under 250 bytes */
+static XmString str_step(XmString s, int i)
+{
+  /* Copying the whole string at each step would make long runs
+   * quadratic: after 300 pieces, only append and prepend */
+  int bytes, op = i < 300 ? rn(20) : pick(2, 0, 10);
+  XmString piece = str_piece(&bytes), t;
+  /* Bytes on the first and last lines, counted as if a piece's text
+   * were all on one line and the string had one line until we add a
+   * separator here */
+  if (op < 3) {
+    /* Prepend */
+    if (!str_long && str_first_bytes + bytes > 250) {
+      piece = str_cat(piece, XmStringSeparatorCreate());
+      str_first_bytes = 0;
+      str_one_line = 0;
+    }
+    str_first_bytes += bytes;
+    if (str_one_line)
+      str_last_bytes += bytes;
+    return str_cat(piece, s);
+  }
+  if (!str_long && str_last_bytes + bytes > 250) {
+    s = str_cat(s, XmStringSeparatorCreate());
+    str_last_bytes = 0;
+    str_one_line = 0;
+  }
+  str_last_bytes += bytes;
+  if (str_one_line)
+    str_first_bytes += bytes;
+  if (op < 6) {
+    /* Concat, which copies both */
+    t = XmStringConcat(s, piece);
+    XmStringFree(s);
+    XmStringFree(piece);
+    return t;
+  }
+  if (op < 8) {
+    /* Append to a shared string */
+    XmString copy = XmStringCopy(s);
+    unsigned char *before = NULL, *after = NULL;
+    unsigned int len = XmCvtXmStringToByteStream(copy, &before);
+    s = str_cat(s, piece);
+    printf("  copy unchanged %d\n", XmCvtXmStringToByteStream(copy, &after) == len &&
+                                         (len == 0 || !memcmp(before, after, len)));
+    XtFree((char *)before);
+    XtFree((char *)after);
+    XmStringFree(copy);
+    return s;
+  }
+  return str_cat(s, piece);
+}
+
+static void xmstring_test(int pieces)
+{
+  XmString s = NULL, small[8];
+  XmParseMapping map[3];
+  XmString sub;
+  Arg args[4];
+  Cardinal n;
+  int i;
+  str_rt[0] = str_make_rt("fixed", XmFONT_IS_FONT, XmFONTLIST_DEFAULT_TAG, 1);
+  str_rt[1] = str_make_rt("fixed", XmFONT_IS_FONTSET, XmFONTLIST_DEFAULT_TAG, 0);
+  str_rt[2] = str_make_rt("Sans-10", XmFONT_IS_XFT, XmFONTLIST_DEFAULT_TAG, 1);
+  sub = XmStringComponentCreate(XmSTRING_COMPONENT_TAB, 0, NULL);
+  n = 0;
+  XtSetArg(args[n], XmNpattern, "\t"), n++;
+  XtSetArg(args[n], XmNsubstitute, sub), n++;
+  XtSetArg(args[n], XmNincludeStatus, XmINSERT), n++;
+  map[0] = XmParseMappingCreate(args, n);
+  XmStringFree(sub);
+  sub = XmStringSeparatorCreate();
+  n = 0;
+  XtSetArg(args[n], XmNpattern, "\n"), n++;
+  XtSetArg(args[n], XmNsubstitute, sub), n++;
+  XtSetArg(args[n], XmNincludeStatus, XmINSERT), n++;
+  map[1] = XmParseMappingCreate(args, n);
+  XmStringFree(sub);
+  sub = XmStringCreate("BAR", "tagA");
+  n = 0;
+  XtSetArg(args[n], XmNpattern, "|"), n++;
+  XtSetArg(args[n], XmNsubstitute, sub), n++;
+  XtSetArg(args[n], XmNincludeStatus, XmINSERT), n++;
+  map[2] = XmParseMappingCreate(args, n);
+  XmStringFree(sub);
+  str_table = map;
+
+  for (i = 0; i < pieces; i++) {
+    s = str_step(s, i);
+    if (rn(pieces / 4 + 1) == 0)
+      str_dump("build", s);
+  }
+  str_dump("built", s);
+
+  /* Optimized strings, measured twice, then after render table changes */
+  for (i = 0; i < 8; i++) {
+    char *t = str_text(20, 0);
+    small[i] = i < 3   ? XmStringCreateLocalized(t) :
+               i < 6   ? XmStringCreate(t, (XmStringTag)str_tag()) :
+               i == 6 ? str_cat(XmStringComponentCreate(XmSTRING_COMPONENT_TAB, 0, NULL),
+                                 XmStringCreateLocalized(t)) :
+                         XmStringGenerate(t, NULL, XmCHARSET_TEXT, "r1");
+    XtFree(t);
+  }
+  for (i = 0; i < 6; i++) {
+    int j;
+    printf("=== step %d: render tables %d\n", step++, i);
+    switch (i) {
+    case 1:
+      str_add_rend(0, "9x15", XmFONT_IS_FONT, XmFONTLIST_DEFAULT_TAG, XmMERGE_REPLACE);
+      str_add_rend(1, "6x13", XmFONT_IS_FONTSET, XmFONTLIST_DEFAULT_TAG, XmMERGE_REPLACE);
+      str_add_rend(2, "Sans-14", XmFONT_IS_XFT, XmFONTLIST_DEFAULT_TAG, XmMERGE_REPLACE);
+      break;
+    case 2:
+      str_add_rend(0, "6x13", XmFONT_IS_FONT, "tagA", XmMERGE_NEW);
+      str_add_rend(2, "Sans-8", XmFONT_IS_XFT, "tagB", XmMERGE_NEW);
+      str_add_rend(1, "9x15", XmFONT_IS_FONTSET, "r1", XmMERGE_NEW);
+      break;
+    case 3: {
+      XmStringTag tags[1] = {"tagA"};
+      str_rt[0] = XmRenderTableRemoveRenditions(str_rt[0], tags, 1);
+      break;
+    }
+    case 4:
+      /* A new table, likely at the address of the old one */
+      XmRenderTableFree(str_rt[0]);
+      str_rt[0] = str_make_rt("9x15", XmFONT_IS_FONT, XmFONTLIST_DEFAULT_TAG, 0);
+      XmRenderTableFree(str_rt[2]);
+      str_rt[2] = str_make_rt("Sans-12", XmFONT_IS_XFT, XmFONTLIST_DEFAULT_TAG, 0);
+      break;
+    case 5: {
+      XmRenderTable copy = XmRenderTableCopy(str_rt[1], NULL, 0);
+      XmRenderTableFree(str_rt[1]);
+      str_rt[1] = copy;
+      str_add_rend(1, "fixed", XmFONT_IS_FONTSET, XmFONTLIST_DEFAULT_TAG, XmMERGE_REPLACE);
+      break;
+    }
+    }
+    for (j = 0; j < 8; j++) {
+      char what[16];
+      snprintf(what, sizeof what, "small %d", j);
+      str_measure(what, small[j]);
+      str_measure(what, small[j]);
+    }
+    str_measure("built", s);
+  }
+  for (i = 0; i < 8; i++)
+    XmStringFree(small[i]);
+  XmStringFree(s);
+  for (i = 0; i < 3; i++)
+    XmParseMappingFree(map[i]);
+  for (i = 0; i < STR_RTS; i++)
+    XmRenderTableFree(str_rt[i]);
+}
+
 static void quiet(String msg) { printf("  warning: %s\n", msg); }
 static int xerr(Display *d, XErrorEvent *e)
 {
@@ -1044,6 +1411,8 @@ int main(int argc, char **argv)
     scroll_mode = 1;
     list_test(size ? size : 20 + rn(400));
   }
+  else if (!strcmp(mode, "xmstring"))
+    xmstring_test(size ? size : 1 + rn(rn(8) ? 60 : 3000));
   printf("done\n");
   return 0;
 }

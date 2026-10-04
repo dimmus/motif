@@ -1,9 +1,10 @@
-# Layout A/B harness
+# Layout and XmString A/B harness
 
 Tools for checking that a change to the Form, Container or List layout
-code keeps their behaviour identical, and for timing it.  They were used
-to validate the layout performance work (the Form sort and sizing, the
-Container insert fast path and the List selection and scrolling changes).
+code, or to XmString, keeps their behaviour identical, and for timing
+it.  They were used to validate the layout performance work (the Form
+sort and sizing, the Container insert fast path and the List selection
+and scrolling changes) and the XmString building and extent cache work.
 They are not tests: a comparison needs two builds of libXm, so nothing
 here is registered with CTest or built by default.
 
@@ -12,7 +13,11 @@ here is registered with CTest or built by default.
   prints child geometry, selection and scroll state, callbacks and a hash
   of the window pixels after every step.  Modes: `form`, `formcyc`
   (attachment cycles), `formgrid`, `formcolumn`, `formwide`, `container`,
-  `list`, `listscroll`.
+  `list`, `listscroll`, and `xmstring`, which builds strings from SIZE
+  random pieces (concatenation, copies, XmStringGenerate,
+  XmStringParseText) and prints their byte streams, text and extents
+  with a core font, a font set and Xft, also after the render tables
+  change.
 - `ab.sh OLD_LIBDIR NEW_LIBDIR MODE FIRST LAST [SIZE]` runs a range of
   seeds against both libraries and reports seeds whose output differs.
 - `xm_layoutbench form|container|list N` times the phases of a layout
