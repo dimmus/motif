@@ -299,6 +299,7 @@ XtGeometryResult _XmHandleGeometryManager(Widget wid,
         break;
       }
     }
+      XM_FALLTHROUGH;
     default: {
       _XmGeoMatrixFree(geoSpec);
       break;

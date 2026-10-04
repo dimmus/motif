@@ -2685,8 +2685,10 @@ static Boolean RemoveItem(Widget wid, Widget cwid)
       XUnionRectWithRegion(&cwid_rect, cwid_region, cwid_region);
       XSubtractRegion(cw->container.cells_region, cwid_region, cw->container.cells_region);
       XDestroyRegion(cwid_region);
+      XM_FALLTHROUGH;
     case XmGRID:
       cw->container.cells[c->cell_idx]--;
+      XM_FALLTHROUGH;
     case XmNONE:
       c->cell_idx = NO_CELL;
   }
@@ -6407,6 +6409,7 @@ static void RecalcMarquee(Widget wid, Widget cwid, Position x, Position y)
         x = cw->container.anchor_point.x;
         y = cw->container.anchor_point.y;
       }
+      XM_FALLTHROUGH;
     case XmMARQUEE_EXTEND_START:
       if CtrTechIsMARQUEE_ES (cw) {
         if (cw->container.started_in_anchor)
@@ -6442,6 +6445,7 @@ static void RecalcMarquee(Widget wid, Widget cwid, Position x, Position y)
         }
         break;
       }
+      XM_FALLTHROUGH;
     case XmMARQUEE:
     case XmTOUCH_OVER:
       cw->container.marquee_start.x = MIN(x, cw->container.anchor_point.x);
@@ -7047,6 +7051,7 @@ static void CallSelectCB(Widget wid, XEvent *event, unsigned char auto_selection
   switch (cw->container.selection_policy) {
     case XmSINGLE_SELECT:
       cbs.reason = XmCR_SINGLE_SELECT;
+      XM_FALLTHROUGH;
     case XmBROWSE_SELECT:
       if (CtrPolicyIsBROWSE(cw))
         cbs.reason = XmCR_BROWSE_SELECT;
@@ -7058,6 +7063,7 @@ static void CallSelectCB(Widget wid, XEvent *event, unsigned char auto_selection
       break;
     case XmMULTIPLE_SELECT:
       cbs.reason = XmCR_MULTIPLE_SELECT;
+      XM_FALLTHROUGH;
     case XmEXTENDED_SELECT:
       if (CtrPolicyIsEXTENDED(cw))
         cbs.reason = XmCR_EXTENDED_SELECT;

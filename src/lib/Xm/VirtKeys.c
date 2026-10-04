@@ -540,6 +540,7 @@ static Modifiers EffectiveStdModMask(Display *dpy, KeySym *kc_map, int ks_per_kc
          */
         break;
       }
+      XM_FALLTHROUGH;
     case 3:
       if (kc_map[2] == NoSymbol) {
         /* Both Group 2 keysyms are NoSymbol, so the group
@@ -560,6 +561,7 @@ static Modifiers EffectiveStdModMask(Display *dpy, KeySym *kc_map, int ks_per_kc
       /* At this fall-through, the group modifier bits have been
        * decided, while the case is still out on Shift/Lock.
        */
+      XM_FALLTHROUGH;
     case 2:
       if (kc_map[1] != NoSymbol) {
         /* Shift/Lock modifier selects keysym from Group 1,
@@ -568,6 +570,7 @@ static Modifiers EffectiveStdModMask(Display *dpy, KeySym *kc_map, int ks_per_kc
          */
         break;
       }
+      XM_FALLTHROUGH;
     case 1:
       if (kc_map[0] != NoSymbol) {
         XtConvertCase(dpy, kc_map[0], &lc, &uc);

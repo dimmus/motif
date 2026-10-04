@@ -1271,6 +1271,7 @@ static void ListFix(XmGeoMatrix geoSpec,
         break;
       }
     }
+      XM_FALLTHROUGH;
     case XmGET_ACTUAL_SIZE: {
       if (FS_PathMode(geoSpec->composite) == XmPATH_MODE_FULL) {
         extension->prefer_width = fileListGeo->box.width;

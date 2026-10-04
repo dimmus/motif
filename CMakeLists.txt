@@ -397,6 +397,7 @@ if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
     -Wrestrict
     -Wabsolute-value
     -Wshadow
+    -Wimplicit-fallthrough
     -Wstrict-prototypes
     -Wold-style-definition
     -Werror=implicit-function-declaration

@@ -172,6 +172,20 @@ extern Boolean _XmGetWindowPropertyChecked(Display *display,
                                            unsigned long *bytes_after_return,
                                            unsigned char **prop_return);
 /********    End Private Function Declarations    ********/
+/*
+ * Marks a deliberate fall-through to the next case label, for
+ * -Wimplicit-fallthrough (Clang does not accept comments for it).
+ */
+#  if defined(__has_attribute)
+#    if __has_attribute(fallthrough)
+#      define XM_FALLTHROUGH __attribute__((fallthrough))
+#    endif
+#  endif
+#  ifndef XM_FALLTHROUGH
+#    define XM_FALLTHROUGH \
+      do { \
+      } while (0)
+#  endif
 /********    Macros for thread-safe Motif    ********/
 /* Remove use of _XtProcessLock when Xt provides API to query its MT-status */
 extern void (*_XtProcessLock)(void);

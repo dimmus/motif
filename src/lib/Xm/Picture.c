@@ -385,6 +385,7 @@ static void _XmPictureParseNode(XmPictureRec *picture,
         /*
          * It's not a special character, so it must be a literal
          */
+        XM_FALLTHROUGH;
       default:
         newnode = _XiGetNewNode(picture);
         newtrans = _XiGetNewTransition(LiteralCharacter, current_node, newnode);

@@ -741,6 +741,7 @@ static void GetIconPosition(XmDragOverShellWidget dos,
   switch ((int)icon->drag.attachment) {
     default:
       XmeWarning((Widget)icon, MESSAGE2); /* cast ok here */
+      XM_FALLTHROUGH;
     case XmATTACH_NORTH_WEST:
       *iconX = icon->drag.offset_x;
       *iconY = icon->drag.offset_y;
@@ -1455,6 +1456,7 @@ static Boolean GetDragIconColors(XmDragOverShellWidget dos)
       break;
     default:
       XmeWarning((Widget)dos, MESSAGE3);
+      XM_FALLTHROUGH;
     case XmNO_DROP_SITE:
       fg = dc->drag.noneCursorForeground;
       break;
@@ -2562,6 +2564,7 @@ void _XmDragOverChange(Widget w, unsigned char dropSiteStatus)
   switch ((int)dc->drag.blendModel) {
     default:
       XmeWarning((Widget)dc, MESSAGE4);
+      XM_FALLTHROUGH;
     case XmBLEND_ALL:
       /*
        *  Get the operation icon bitmap.

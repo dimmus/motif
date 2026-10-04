@@ -102,6 +102,19 @@ typedef int boolean;
 #define XmConst const
 #endif /* XmConst */
 
+/*
+ * Marks a deliberate fall-through to the next case label, for
+ * -Wimplicit-fallthrough (Clang does not accept comments for it).
+ */
+#if defined(__has_attribute)
+#if __has_attribute(fallthrough)
+#define XM_FALLTHROUGH __attribute__((fallthrough))
+#endif
+#endif
+#ifndef XM_FALLTHROUGH
+#define XM_FALLTHROUGH do {} while (0)
+#endif
+
 /* Uil will automatically strip this prefix when saving name of automatically
  * created child.  This is used to prevent name conflicts in existing uil
  * files.  Children names without this prefix will be saved as is.

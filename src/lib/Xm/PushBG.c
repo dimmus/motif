@@ -1166,6 +1166,7 @@ static void BorderUnhighlight(Widget wid)
           break;
         }
         /* else fall through to XmEXTERNAL_HIGHLIGHT. */
+        XM_FALLTHROUGH;
       case XmEXTERNAL_HIGHLIGHT:
         (*(xmGadgetClassRec.gadget_class.border_unhighlight))(wid);
         break;

@@ -672,6 +672,7 @@ static XtGeometryResult GeometryManager(Widget widget,
           width = alw.width;
         if (alw.request_mode & CWHeight)
           height = alw.height;
+        XM_FALLTHROUGH;
       case XtGeometryNo:
       default:
         Layout(cw, widget, allowed, width, height);
@@ -703,6 +704,7 @@ static XtGeometryResult GeometryManager(Widget widget,
       case XtGeometryAlmost:
         cur_width = width_return;
         cur_height = height_return;
+        XM_FALLTHROUGH;
       case XtGeometryNo:
       default:
         Layout(cw, widget, allowed, cur_width, cur_height);

@@ -1706,6 +1706,7 @@ found_primitive_string:
 		  src_az_current_source_buffer->w_current_position - 1,
 		  "character string",
 		  "before end of line" );
+	XM_FALLTHROUGH;
 
     case token_gstr:
 

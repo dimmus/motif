@@ -2347,6 +2347,7 @@ static float CheckBottomBase(Widget sibling, Boolean opposite, FormLayout *layou
             break;
           case XmATTACH_OPPOSITE_WIDGET:
             flag = TRUE;
+            XM_FALLTHROUGH;
           case XmATTACH_WIDGET:
             if (SIBLINGS(c->att[BOTTOM].w, sibling))
               return_val = CheckBase(layout, BASE_BOTTOM, CheckBottomBase, c->att[BOTTOM].w, flag);
@@ -2383,6 +2384,7 @@ static float CheckBottomBase(Widget sibling, Boolean opposite, FormLayout *layou
         break;
       case XmATTACH_OPPOSITE_WIDGET:
         flag = TRUE;
+        XM_FALLTHROUGH;
       case XmATTACH_WIDGET:
         if (SIBLINGS(c->att[BOTTOM].w, sibling))
           return_val = CheckBase(layout, BASE_BOTTOM, CheckBottomBase, c->att[BOTTOM].w, flag);
@@ -2430,6 +2432,7 @@ static float CheckRightBase(Widget sibling, Boolean opposite, FormLayout *layout
             break;
           case XmATTACH_OPPOSITE_WIDGET:
             flag = TRUE;
+            XM_FALLTHROUGH;
           case XmATTACH_WIDGET:
             if (SIBLINGS(c->att[RIGHT].w, sibling))
               return_val = CheckBase(layout, BASE_RIGHT, CheckRightBase, c->att[RIGHT].w, flag);
@@ -2466,6 +2469,7 @@ static float CheckRightBase(Widget sibling, Boolean opposite, FormLayout *layout
         break;
       case XmATTACH_OPPOSITE_WIDGET:
         flag = TRUE;
+        XM_FALLTHROUGH;
       case XmATTACH_WIDGET:
         if (SIBLINGS(c->att[RIGHT].w, sibling))
           return_val = CheckBase(layout, BASE_RIGHT, CheckRightBase, c->att[RIGHT].w, flag);
@@ -2513,6 +2517,7 @@ static float CheckLeftBase(Widget sibling, Boolean opposite, FormLayout *layout)
             break;
           case XmATTACH_OPPOSITE_WIDGET:
             flag = TRUE;
+            XM_FALLTHROUGH;
           case XmATTACH_WIDGET:
             if (SIBLINGS(c->att[LEFT].w, sibling))
               return_val = CheckBase(layout, BASE_LEFT, CheckLeftBase, c->att[LEFT].w, flag);
@@ -2549,6 +2554,7 @@ static float CheckLeftBase(Widget sibling, Boolean opposite, FormLayout *layout)
         break;
       case XmATTACH_OPPOSITE_WIDGET:
         flag = TRUE;
+        XM_FALLTHROUGH;
       case XmATTACH_WIDGET:
         if (SIBLINGS(c->att[LEFT].w, sibling))
           return_val = CheckBase(layout, BASE_LEFT, CheckLeftBase, c->att[LEFT].w, flag);

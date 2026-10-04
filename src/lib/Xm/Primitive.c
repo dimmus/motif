@@ -907,6 +907,7 @@ static void FocusChange(Widget wid, XmFocusChange change)
         break;
       }
       /* Drop through. */
+      XM_FALLTHROUGH;
     case XmFOCUS_IN:
       if (change == XmFOCUS_IN) /* Because of drop-though. */ {
         ((XmPrimitiveWidget)wid)->primitive.have_traversal = TRUE;
@@ -920,6 +921,7 @@ static void FocusChange(Widget wid, XmFocusChange change)
         break;
       }
       /* Drop through. */
+      XM_FALLTHROUGH;
     case XmFOCUS_OUT:
       if (change == XmFOCUS_OUT) /* Because of drop-though. */ {
         ((XmPrimitiveWidget)wid)->primitive.have_traversal = FALSE;
