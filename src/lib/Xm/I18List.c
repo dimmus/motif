@@ -74,7 +74,7 @@ static char gray_bits[] = {0x01, 0x02};
  *	GLOBAL DECLARATIONS
  *************************************************************/
 extern Boolean XmeRenderTableGetDefaultFont(XmFontList, XFontStruct **);
-static Widget global_current_widget; /* static global to hold
+static _Thread_local Widget global_current_widget; /* per thread, to hold
                                                  widget id for qsort. */
 /************************************************************
  *	STATIC FUNCTION DECLARATIONS

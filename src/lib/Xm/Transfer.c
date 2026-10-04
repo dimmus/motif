@@ -89,14 +89,17 @@ static void ClipboardLoseProc(Widget w, Atom *selection);
 #define XmSCLIPBOARD_MANAGER "CLIPBOARD_MANAGER"
 #define BYTELENGTH(length, format) \
   ((format == 8) ? length : ((format == 16) ? length * sizeof(short) : (length * sizeof(long))))
-static int local_convert_flag = 0;
+/*
+ * Set by _XmConvertHandlerSetLocal for the next _XmConvertHandler call,
+ * which is made by the same thread: so the flag is per thread, or a
+ * request that another thread is converting would take it.
+ */
+static _Thread_local int local_convert_flag = 0;
 static XmHashTable DataIdDictionary = NULL;
 
 void _XmConvertHandlerSetLocal(void)
 {
-  _XmProcessLock();
   local_convert_flag = 1;
-  _XmProcessUnlock();
 }
 
 /************************************************************************/
@@ -146,9 +149,7 @@ Boolean _XmConvertHandler(Widget wid,
   int my_local_convert_flag;
   assert(XtNumber(atom_names) == NUM_ATOMS);
   XInternAtoms(XtDisplay(wid), atom_names, XtNumber(atom_names), False, atoms);
-  _XmProcessLock();
   my_local_convert_flag = local_convert_flag;
-  _XmProcessUnlock();
   /* Find the context block */
   cc = LookupContextBlock(XtDisplay(wid), *selection);
   /* Setup the callback structure */
@@ -224,10 +225,8 @@ Boolean _XmConvertHandler(Widget wid,
   {
     cbstruct.flags |= XmCONVERTING_SAME;
   }
-  _XmProcessLock();
   /* Reset bypass flag */
   local_convert_flag = 0;
-  _XmProcessUnlock();
   if (*selection != atoms[XmA_MOTIF_DESTINATION] || *target == atoms[XmA_MOTIF_LOSE_SELECTION]) {
     /* First we call any convert callbacks */
     if (XtHasCallbacks(wid, XmNconvertCallback) == XtCallbackHasSome)
@@ -985,8 +984,9 @@ Widget XmeDragSource(
 /* Destination section						*/
 /* 								*/
 /****************************************************************/
-/* internal flag for transfer block setup */
-static int TB_internal = 0;
+/* internal flag for transfer block setup, while this thread calls a
+   widget's destinationProc */
+static _Thread_local int TB_internal = 0;
 
 Boolean _XmDestinationHandler(Widget wid,
                               Atom selection,
@@ -1085,15 +1085,11 @@ Boolean _XmDestinationHandler(Widget wid,
   if (ttrait != NULL && tc->status == XmTRANSFER_DONE_DEFAULT &&
       ((tc->count == 0) || (tc->outstanding == 0 && !(TC_CALLED_WIDGET))))
   {
-    _XmProcessLock();
     TB_internal = 1;
-    _XmProcessUnlock();
     tc->flags |= TC_CALLED_WIDGET;
     if (ttrait->destinationProc != 0)
       ttrait->destinationProc(wid, NULL, cbstruct);
-    _XmProcessLock();
     TB_internal = 0;
-    _XmProcessUnlock();
   }
   if (tc->count == 0 && tc->selection == MOTIF_DROP) {
     XmDropProcCallbackStruct *ds = (XmDropProcCallbackStruct *)location_data;
@@ -1559,14 +1555,10 @@ static void SelectionCallbackWrapper(Widget wid,
     /* Now lookup the trait on this widget and call the
        internal routine. */
     if (ttrait != NULL) {
-      _XmProcessLock();
       TB_internal = 1;
-      _XmProcessUnlock();
       if (ttrait->destinationProc != 0)
         ttrait->destinationProc(wid, NULL, tc->callback_struct);
-      _XmProcessLock();
       TB_internal = 0;
-      _XmProcessUnlock();
     }
   }
   /* Send a delete if this is a move operation and we've complete
@@ -1737,12 +1729,10 @@ static TransferBlock AddTransferBlock(TransferContext tc)
     (tc->last)->next = (XtPointer)tb;
     tc->last = tb;
   }
-  _XmProcessLock();
   if (TB_internal)
     tb->flags = TB_INTERNAL;
   else
     tb->flags = TB_NONE;
-  _XmProcessUnlock();
   return (tb);
 }
 

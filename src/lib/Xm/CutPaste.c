@@ -2353,17 +2353,14 @@ int XmClipboardStartCopy(Display *display, /* display id for application passing
 
 /* The following code is a workaround for UTM to pass in the type of the
    to be copied data.  It is a bug in the clipboard interface that the
-   type information cannot be passed in.  Note that when Motif goes to
-   multithread safety,  anything calling _XmClipboardPassType will need
-   to have a critical section around that call and the call to
-   XmClipboardCopy or XmClipboardCopyByName */
-static Atom _passed_type = None;
+   type information cannot be passed in.  The type is kept per thread,
+   for the next XmClipboardCopy or XmClipboardCopyByName that the
+   thread calling _XmClipboardPassType makes. */
+static _Thread_local Atom _passed_type = None;
 
 void _XmClipboardPassType(Atom type)
 {
-  _XmProcessLock();
   _passed_type = type;
-  _XmProcessUnlock();
 }
 
 int XmClipboardCopy(Display *display, /* Display id of application passing data */
@@ -2386,7 +2383,6 @@ int XmClipboardCopy(Display *display, /* Display id of application passing data 
   Atom type;
   _XmDisplayToAppContext(display);
   _XmAppLock(app);
-  _XmProcessLock();
   if (_passed_type != None) {
     type = _passed_type;
     _passed_type = None;
@@ -2394,7 +2390,6 @@ int XmClipboardCopy(Display *display, /* Display id of application passing data 
   else {
     type = GetTypeFromTarget(display, XInternAtom(display, format, False));
   }
-  _XmProcessUnlock();
   status = ClipboardLock(display, window);
   if (status == ClipboardLocked) {
     _XmAppUnlock(app);
@@ -2753,7 +2748,6 @@ int XmClipboardCopyByName(Display *display, /* Display id of application passing
     /* If we've passed in a new type from UTM,  use it,  otherwise
            we'll use the type on the clipboard (for compatibility with
            old mechanism) */
-    _XmProcessLock();
     if (_passed_type != None) {
       type = _passed_type;
       _passed_type = None;
@@ -2761,7 +2755,6 @@ int XmClipboardCopyByName(Display *display, /* Display id of application passing
     else {
       type = formattype;
     }
-    _XmProcessUnlock();
     /* create the property on the root window for the format data */
     ClipboardReplaceItem(display,
                          formatheader->formatDataId,

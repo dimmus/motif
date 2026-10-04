@@ -817,7 +817,8 @@ static void RefigureLines(XmTextWidget tw)
   Line line = tw->text.line;
   LineNum i, j;
   Line oldline = NULL;
-  static XmTextPosition tell_output_force_display = -1;
+  /* Passed from a call to the recursive call it makes, so per thread */
+  static _Thread_local XmTextPosition tell_output_force_display = -1;
   LineNum oldNumLines = tw->text.number_lines;
   int startcopy, endcopy, destcopy, lastcopy; /* %%% Document! */
   if (tw->text.in_refigure_lines || !tw->text.needs_refigure_lines)
@@ -942,9 +943,7 @@ static void RefigureLines(XmTextWidget tw)
       tw->text.pending_scroll -= (tw->text.number_lines - 1);
     }
     tw->text.needs_refigure_lines = TRUE;
-    _XmProcessLock();
     tell_output_force_display = tw->text.force_display;
-    _XmProcessUnlock();
     tw->text.force_display = -1;
   }
   if (tw->text.needs_refigure_lines) {
@@ -955,12 +954,11 @@ static void RefigureLines(XmTextWidget tw)
   }
   AddRedraw(tw, tw->text.forget_past, tw->text.bottom_position);
   tw->text.forget_past = LONG_MAX;
-  _XmProcessLock();
   if (tell_output_force_display >= 0) {
-    (*tw->text.output->MakePositionVisible)(tw, tell_output_force_display);
+    XmTextPosition position = tell_output_force_display;
     tell_output_force_display = -1;
+    (*tw->text.output->MakePositionVisible)(tw, position);
   }
-  _XmProcessUnlock();
   if (XtIsRealized((Widget)tw))
     TextDrawInsertionPoint(tw);
 }

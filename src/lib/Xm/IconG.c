@@ -158,7 +158,7 @@ static Boolean PointIn(Widget widget, Position x, Position y);
    IconConverter. */
 static XContext largeIconContext = 0;
 static XContext smallIconContext = 0;
-static XPointer dummy;
+static _Thread_local XPointer dummy; /* XFindContext output only */
 #define OwnLargeMask(widget) \
   (XFindContext(XtDisplay(widget), (Window)widget, largeIconContext, &dummy) == 0)
 #define OwnSmallMask(widget) \

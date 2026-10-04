@@ -2606,8 +2606,10 @@ static void GetMnemonicCharset(Widget wid,
  *     fields and set them, instead of doing a SetValues.
  *
  ************************************************************************/
-static XmLabelGCacheObjPart local_cache;
-static Boolean local_cache_inited = FALSE;
+/* The changes _XmAssignLabG_* collect for the next _XmReCacheLabG made by
+   the same thread */
+static _Thread_local XmLabelGCacheObjPart local_cache;
+static _Thread_local Boolean local_cache_inited = FALSE;
 
 /*
  * QualifyLabelLocalCache
