@@ -36,9 +36,10 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
+      # dist.sh reads the tag through git and not the working tree, so the
+      # workflow's own copy also releases tags older than the script.
       - uses: actions/checkout@v5
         with:
-          ref: refs/tags/${{ env.TAG }}
           fetch-depth: 0
       - name: Make the tarball and the notes
         env:
