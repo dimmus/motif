@@ -795,6 +795,34 @@ START_TEST(list_selected_positions_replace_selection)
 }
 END_TEST
 
+/*
+ * More elements selected than the selected items name, then replaced
+ * without selecting: the selected positions used to be counted below
+ * zero, and the list ran out of memory.
+ */
+START_TEST(list_replace_unselected_duplicates)
+{
+	Widget list = make_list(XmMULTIPLE_SELECT, 0, "", 0);
+	XmString a = item("dup %d", 0), b = item("other %d", 0);
+	int i;
+
+	for (i = 0; i < 100; i++)
+		XmListAddItemUnselected(list, b, 0);
+	XmListSelectPos(list, 1, False);
+	XmListReplaceItemsPos(list, &a, 1, 1);
+	for (i = 0; i < 3; i++)
+		XmListAddItem(list, a, 0); /* selected: they match */
+	/* This counts the selected positions from the selected items. */
+	XmListDeletePos(list, 50);
+	XmListReplaceItemsUnselected(list, &a, 1, &b);
+	ck_assert_int_eq(XmListItemPos(list, a), 0);
+	for (i = 1; i <= 102; i++)
+		ck_assert(!XmListPosSelected(list, i));
+	XmStringFree(a);
+	XmStringFree(b);
+}
+END_TEST
+
 /* Many items added and deleted one at a time, at both ends. */
 START_TEST(list_grow_and_shrink)
 {
@@ -860,6 +888,7 @@ void list_suite(SRunner *runner)
 	tcase_add_test(t, list_replace_selected);
 	tcase_add_test(t, list_selection_resources);
 	tcase_add_test(t, list_selected_positions_replace_selection);
+	tcase_add_test(t, list_replace_unselected_duplicates);
 	tcase_add_checked_fixture(t, _init_xt, uninit_xt);
 	tcase_set_timeout(t, 60);
 	suite_add_tcase(s, t);

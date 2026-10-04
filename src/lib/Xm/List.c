@@ -3269,7 +3269,9 @@ static void BuildSelectedPositions(XmListWidget lw, int count)
   int pos;
   int nsel = count;
   int nitems = lw->list.itemCount;
-  if (nsel == RECOUNT_SELECTION) {
+  /* Callers that count changes to the selection can come out below zero
+   * when the count they started from was stale: count afresh then. */
+  if (nsel < 0) {
     for (pos = 0, nsel = 0; pos < nitems; pos++)
       if (lw->list.InternalList[pos]->selected)
         nsel++;
