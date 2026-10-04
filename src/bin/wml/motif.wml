@@ -1202,6 +1202,7 @@ Class
             {
             ! new resources
             XmNactivateCallback;
+            XmNalignment;
             XmNcursorPosition;
             XmNdestinationCallback;
             XmNeditable;
@@ -6502,7 +6503,6 @@ Class
             {
 		XmNpicture;
 		XmNautoFill;
-		XmNalignment;
 		XmNpictureErrorCallback;
 		XmNvalidateCallback;
             };

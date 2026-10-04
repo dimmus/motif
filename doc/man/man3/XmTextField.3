@@ -258,6 +258,8 @@ l| l| l| l| l.
 _____
 XmNactivateCallbackXmCCallbackXtCallbackListNULLC
 _____
+XmNalignmentXmCAlignmentunsigned charXmALIGNMENT_BEGINNINGCSG
+_____
 XmNblinkRateXmCBlinkRateint500CSG
 _____
 XmNcolumnsXmCColumnsshortdynamicCSG
@@ -322,6 +324,14 @@ activate() action\&.
 The type of the structure whose address is passed to this callback is
 \fBXmAnyCallbackStruct\fR\&.
 The reason sent by the callback is \fBXmCR_ACTIVATE\fP\&.
+.IP "\fBXmNalignment\fP" 10
+Specifies the alignment of the text\&.
+With \fBXmALIGNMENT_END\fP the end of the text stays at the right
+margin: a text that fits is right-aligned, and the text grows to the left
+as characters are added\&.
+A text wider than the widget can be scrolled as usual\&.
+\fBXmALIGNMENT_BEGINNING\fP, the default, and \fBXmALIGNMENT_CENTER\fP
+start the text at the left margin\&.
 .IP "\fBXmNblinkRate\fP" 10
 Specifies the blink rate of the text cursor in milliseconds\&.
 The time indicated in the blink rate relates to the

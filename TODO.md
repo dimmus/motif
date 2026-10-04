@@ -79,8 +79,6 @@ What remains, by priority:
     from what GCC sees as a 1-byte buffer. The same code is on `master`.
     Check whether `_XmStringSourceGetChar` can return a 1-byte buffer for
     wide sources.
-  - `-Wmaybe-uninitialized` for `cursorPos`/`nextPos` in `DataF.c` (about
-    3392-3466).
   - `-Wstringop-truncation` in `Mrmwci.c:886`.
   Make the CI `-Werror` job build `Release` as well as `RelWithDebInfo`.
 
@@ -311,7 +309,7 @@ Priority legend:
   - Uil: 96 `sprintf`.
   - Ban them with `-Werror=deprecated-declarations` through a poisoning header.
 - [x] Strict-aliasing: there are 37 `(XtPointer *)&typed_ptr` out-parameters (30 in `CutPaste.c`), and function pointers are stored through `XtPointer*` (`XmString.c:6206, 6428, 7260`). This is the same class as the `_XmEntrySegmentGet` miscompile (`97547c53`). Fix them, or build with `-fno-strict-aliasing` until they are fixed. *(status: the XtPointer * out-parameters are fixed; about 90 other type-punned out-parameters remain, so the build uses -fno-strict-aliasing)*
-- [ ] Thread safety: about 166 file-scope and 160 function-scope mutable statics, many not protected by `_XmProcessLock` (e.g. `DataFSel.c:261`, `DropTrans.c:404`, `ResConvert.c:582,1092,1741`, `ClipWindow.c:225`). Audit them, and add a TSan test with two `XtAppContext`s. *(status: partial: the locks are now real (they compiled to nothing before) and DataField, DrawUtils, Obso1_2, TabBox and IconG statics were fixed; the full audit and a TSan test with two XtAppContexts are not done)*
+- [ ] Thread safety: about 166 file-scope and 160 function-scope mutable statics, many not protected by `_XmProcessLock` (e.g. `DropTrans.c:404`, `ResConvert.c:582,1092,1741`, `ClipWindow.c:225`). Audit them, and add a TSan test with two `XtAppContext`s. *(status: partial: the locks are now real (they compiled to nothing before) and DataField, DrawUtils, Obso1_2, TabBox and IconG statics were fixed; the full audit and a TSan test with two XtAppContexts are not done)*
 - [x] Fix the logic bugs found along the way:
   - XdndProxy is never honoured (`DragICC.c:1015`; `length` should be `lengthRtn`).
   - XdndTypeList is only read when `XGetWindowProperty` itself fails (`DragICC.c:861-893`).

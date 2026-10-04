@@ -15,7 +15,8 @@ Core (Xt Intrinsics)
 │   ├── XmPushButton (Clickable buttons)
 │   ├── XmToggleButton (Checkboxes and radio buttons)
 │   ├── XmText (Text input fields)
-│   └── XmDataField (Advanced data entry)
+│   └── XmTextField (Single-line text input)
+│       └── XmDataField (Data entry with input masks)
 ├── XmGadget (Lightweight primitive widgets)
 │   ├── XmLabelGadget
 │   ├── XmPushButtonGadget
@@ -34,66 +35,69 @@ Core (Xt Intrinsics)
 
 ## Core Widget Implementation Patterns
 
-### 1. DataField Widget - Advanced Text Input
+### 1. DataField Widget - Extending a Widget by Subclassing
 
-The `DataField` widget (`DataF.c`) represents one of Motif's most sophisticated text input components. Let's examine its architecture:
+The `DataField` widget (`DataF.c`) is an `XmTextField` with an input
+mask (`XmNpicture`, `XmNautoFill`, `XmNpictureErrorCallback`) and a
+check of the value before Tab moves the focus on (`XmNvalidateCallback`
+and the `ValidateAndMove` action).  It is a small example of how an Xt
+subclass adds to its superclass instead of copying it.
 
-#### Header Dependencies
-
-```c
-#include <Xm/AtomMgr.h>
-#include <Xm/CutPaste.h>
-#include <Xm/DragC.h>
-#include <Xm/DragIcon.h>
-#include <Xm/DropSMgr.h>
-#include <Xm/DropTrans.h>
-#include <Xm/Display.h>
-#include <Xm/ManagerP.h>
-#include <Xm/ScreenP.h>
-#include <Xm/DragIconP.h>
-#include <Xm/TransltnsP.h>
-#include <Xm/DrawP.h>
-#include <Xm/Ext.h>
-```
-
-This demonstrates the comprehensive integration with Motif's advanced features:
-- **Drag and Drop** - Full drag-and-drop support
-- **Cut and Paste** - Clipboard integration
-- **Display Management** - Screen and display handling
-- **Drawing System** - Integration with the drawing primitives we explored earlier
-
-#### Message System
+#### The Class Record
 
 ```c
-#define MSG1	        _XmMMsgDataF_0000
-#define MSG2	        _XmMMsgDataF_0001
-#define MSG3	        _XmMMsgDataF_0002
-#define MSG4	        _XmMMsgDataF_0003
-#define MSG5	        _XmMMsgDataF_0004
-#define MSG6	        _XmMMsgDataF_0005
-#define MSG7	        _XmMMsgDataF_0006
-#define WC_MSG1	        _XmMMsgDataFWcs_0000
-#define WC_MSG2	        _XmMMsgDataFWcs_0001
+externaldef(xmdatafieldclassrec) XmDataFieldClassRec xmDataFieldClassRec = {
+    {
+        (WidgetClass)&xmTextFieldClassRec, /* superclass         */
+        "XmDataField",                     /* class_name         */
+        sizeof(XmDataFieldRec),            /* widget_size        */
+        ...
+        Initialize,                        /* initialize         */
+        ...
+        XtInheritRealize,                  /* realize            */
+        actions,                           /* actions            */
+        ...
+        Destroy,                           /* destroy            */
+        XtInheritResize,                   /* resize             */
+        XtInheritExpose,                   /* expose             */
+        SetValues,                         /* set_values         */
+        ...
 ```
 
-The widget uses a sophisticated message system for internationalization and error handling, supporting both regular and wide-character messages.
+- `initialize`, `set_values` and `destroy` are *chained*: Xt calls
+  `XmTextField`'s first (last for `destroy`), so DataField's only handle
+  the picture.
+- `realize`, `resize`, `expose` and `query_geometry` are *inherited* with
+  the `XtInherit*` constants: drawing, scrolling and geometry are
+  TextField's.
+- The `actions` table holds only `ValidateAndMove`; Xt looks the other
+  actions up in the superclass.
 
-#### External Function Integration
+#### The Instance Record
 
 ```c
-extern Boolean _XmParentProcess(Widget, XmParentProcessData);
-extern Boolean _XmMgrTraversal(Widget, XmTraversalDirection);
-extern unsigned char _XmGetFocusPolicy(Widget);
-extern void _XmPrimitiveFocusIn(Widget, XEvent *, String *, Cardinal *);
-extern void _XmPrimitiveEnter(Widget, XEvent *, String *, Cardinal *);
-extern void _XmPrimitiveLeave(Widget, XEvent *, String *, Cardinal *);
+typedef struct _XmDataFieldRec {
+  CorePart core;
+  XmPrimitivePart primitive;
+  XmTextFieldPart text;
+  XmDataFieldPart data;
+} XmDataFieldRec;
 ```
 
-This shows how widgets integrate with the broader Motif system:
-- **Parent Processing** - Hierarchical widget management
-- **Traversal** - Keyboard navigation between widgets
-- **Focus Management** - Input focus handling
-- **Event Processing** - Mouse and keyboard event handling
+Each class appends its part, so a DataField can be passed to every
+`XmTextField*` function, and the `XmDataField*` functions are thin
+wrappers around them.
+
+#### What Is Not Inherited
+
+Two things have to be set up by hand in `ClassPartInitialize`:
+
+- **Traits.** `XmeTraitGet` looks up the exact class, and `XmTextField`
+  installs its transfer and accessTextual traits on its own class only,
+  so DataField copies them.
+- **Translations.** DataField puts its Tab bindings in front of
+  `XmTextField`'s (`_XmTextF_EventBindings1`..`3`) and parses the result
+  into its own `tm_table`.
 
 ### 2. Container Widget - Complex Layout Management
 

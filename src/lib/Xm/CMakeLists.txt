@@ -200,7 +200,6 @@ set(XM_EXTRA_SRCS
     ButtonBox.c
     ColorS.c
     Picture.c
-    DataFSel.c
     DataF.c
     MultiList.c
     I18List.c

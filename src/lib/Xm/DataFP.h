@@ -39,6 +39,11 @@ extern "C" {
 #endif
 #define XmDataFieldIndex (XmTextFieldIndex)
 
+/*
+ * XmDataField is a subclass of XmTextField.  Its class part takes the
+ * place of XmTextField's text_class part, which holds the same single
+ * extension pointer.
+ */
 typedef struct _XmDataFieldClassPart {
   XtPointer extension;
 } XmDataFieldClassPart;
@@ -50,7 +55,7 @@ typedef struct _XmDataFieldClassRec {
 } XmDataFieldClassRec;
 
 typedef struct _XmDataFieldPart {
-  unsigned char alignment; /* XmALIGNMENT_BEGINNING by default */
+  unsigned char alignment; /* unused: XmNalignment is text.alignment */
   String picture_source;
   XmPicture picture;
   Boolean auto_fill;
@@ -165,7 +170,7 @@ extern XmDataFieldClassRec xmDataFieldClassRec;
 #  define XmTextF_xft_font(w) (((XftFont *)((XmDataFieldWidget)(w))->text.font))
 #endif
 #define XmTextF_changed_visible(w) (((XmDataFieldWidget)(w))->text.changed_visible)
-#define XmDataField_alignment(w) (((XmDataFieldWidget)(w))->data.alignment)
+#define XmDataField_alignment(w) (((XmDataFieldWidget)(w))->text.alignment)
 #define XmDataField_picture_source(w) (((XmDataFieldWidget)(w))->data.picture_source)
 #define XmDataField_picture(w) (((XmDataFieldWidget)(w))->data.picture)
 #define XmDataField_picture_state(w) (((XmDataFieldWidget)(w))->data.picture_state)

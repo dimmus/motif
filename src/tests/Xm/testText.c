@@ -4,20 +4,25 @@
  * Copyright (c) 2026 The Motif contributors.
  * Licensed under the LGPL 2.1 license.
  *
- * XmText and XmTextField through their API: editing, positions,
- * search, the primary selection, cut/copy/paste through the clipboard,
- * and a 10 MB document.  Real keyboard and mouse input is driven by
+ * XmText, XmTextField and XmDataField through their API: editing,
+ * positions, alignment, search, the primary selection, cut/copy/paste
+ * through the clipboard, DataField pictures and validation, and a 10 MB
+ * document.  Real keyboard and mouse input is driven by
  * text_xdotool.sh with xdotool.
  */
 #include <stdlib.h>
 #include <string.h>
 #include <X11/Intrinsic.h>
 #include <X11/Xatom.h>
+#include <X11/keysym.h>
 #include <Xm/Xm.h>
+#include <Xm/AccTextT.h>
 #include <Xm/BulletinB.h>
 #include <Xm/DataF.h>
 #include <Xm/Text.h>
 #include <Xm/TextF.h>
+#include <Xm/TraitP.h>
+#include <Xm/TransferT.h>
 #include <check.h>
 
 #include "suites.h"
@@ -140,6 +145,9 @@ START_TEST(textfield_unconvertible_wcs)
 	XtRealizeWidget(top);
 	XmTextFieldSetString(tf, "keep");
 	XmTextFieldSetStringWcs(tf, bad);
+	assert_tf(tf, "");
+	XmTextFieldSetString(tf, "keep");
+	XmTextFieldReplaceWcs(tf, 0, 4, bad);
 	assert_tf(tf, "");
 
 	XmDataFieldSetString(df, "keep");
@@ -339,6 +347,222 @@ START_TEST(large_document)
 }
 END_TEST
 
+/* The left and right edges of the text area of a text field */
+static void text_edges(Widget w, Position *left, Position *right)
+{
+	Dimension width, margin, shadow, highlight;
+
+	XtVaGetValues(w, XmNwidth, &width, XmNmarginWidth, &margin,
+		      XmNshadowThickness, &shadow,
+		      XmNhighlightThickness, &highlight, NULL);
+	*left = margin + shadow + highlight;
+	*right = width - *left;
+}
+
+static Position pos_x(Widget w, XmTextPosition pos)
+{
+	Position x, y;
+
+	ck_assert(XmTextFieldPosToXY(w, pos, &x, &y));
+	return x;
+}
+
+/*
+ * XmNalignment: XmALIGNMENT_END keeps the end of the text at the right
+ * margin, while the text fits and after it was scrolled; XmTextField has
+ * it since XmDataField became its subclass.
+ */
+static void check_alignment(Widget w)
+{
+	Position left, right;
+	XmTextPosition last;
+	char long_text[201];
+
+	XtManageChild(w);
+	XtRealizeWidget(top);
+	pump();
+	text_edges(w, &left, &right);
+
+	XmTextFieldSetString(w, "abc");
+	ck_assert_int_eq(pos_x(w, 3), right);
+	ck_assert_int_gt(pos_x(w, 0), left);
+	XmTextFieldInsert(w, 3, "def");
+	ck_assert_int_eq(pos_x(w, 6), right);
+	XmTextFieldReplace(w, 0, 4, "");
+	ck_assert_int_eq(pos_x(w, 2), right);
+
+	memset(long_text, 'm', 200);
+	long_text[200] = '\0';
+	XmTextFieldSetString(w, long_text);
+	last = XmTextFieldGetLastPosition(w);
+	XmTextFieldShowPosition(w, last);
+	ck_assert_int_eq(pos_x(w, last), right);
+	XmTextFieldShowPosition(w, 0);
+	ck_assert_int_eq(pos_x(w, 0), left);
+	XmTextFieldReplace(w, 0, last - 2, "");
+	ck_assert_int_eq(pos_x(w, 2), right);
+
+	XtVaSetValues(w, XmNalignment, XmALIGNMENT_BEGINNING, NULL);
+	pump();
+	ck_assert_int_eq(pos_x(w, 0), left);
+	XtVaSetValues(w, XmNalignment, XmALIGNMENT_END, NULL);
+	pump();
+	ck_assert_int_eq(pos_x(w, 2), right);
+}
+
+START_TEST(textfield_alignment)
+{
+	Arg args[1];
+
+	XtSetArg(args[0], XmNalignment, XmALIGNMENT_END);
+	check_alignment(XmCreateTextField(bb, "tf", args, 1));
+}
+END_TEST
+
+START_TEST(datafield_alignment)
+{
+	Arg args[1];
+
+	XtSetArg(args[0], XmNalignment, XmALIGNMENT_END);
+	check_alignment(XmCreateDataField(bb, "df", args, 1));
+}
+END_TEST
+
+/* XmDataField is an XmTextField, so the XmTextField API applies */
+START_TEST(datafield_is_textfield)
+{
+	Widget df = XmCreateDataField(bb, "df", NULL, 0);
+	char *s;
+
+	XtManageChild(df);
+	XtRealizeWidget(top);
+	ck_assert(XtIsSubclass(df, xmTextFieldWidgetClass));
+	ck_assert(XmIsTextField(df));
+	ck_assert_ptr_eq(
+	    XmeTraitGet((XtPointer)xmDataFieldWidgetClass, XmQTaccessTextual),
+	    XmeTraitGet((XtPointer)xmTextFieldWidgetClass, XmQTaccessTextual));
+	ck_assert_ptr_eq(
+	    XmeTraitGet((XtPointer)xmDataFieldWidgetClass, XmQTtransfer),
+	    XmeTraitGet((XtPointer)xmTextFieldWidgetClass, XmQTtransfer));
+
+	XmDataFieldSetString(df, "data");
+	assert_tf(df, "data");
+	s = XmTextGetString(df);
+	ck_assert_str_eq(s, "data");
+	XtFree(s);
+	XmTextFieldInsert(df, 4, "field");
+	s = XmDataFieldGetString(df);
+	ck_assert_str_eq(s, "datafield");
+	XtFree(s);
+	pump();
+}
+END_TEST
+
+static int picture_errors;
+
+static void picture_error(Widget w, XtPointer client, XtPointer call)
+{
+	picture_errors++;
+}
+
+START_TEST(datafield_picture)
+{
+	Widget df, fill, nofill;
+	Arg args[2];
+
+	XtSetArg(args[0], XmNpicture, "###");
+	df = XmCreateDataField(bb, "df", args, 1);
+	XtAddCallback(df, XmNpictureErrorCallback, picture_error, NULL);
+	XtSetArg(args[0], XmNpicture, "##-##");
+	fill = XmCreateDataField(bb, "fill", args, 1);
+	XtSetArg(args[1], XmNautoFill, False);
+	nofill = XmCreateDataField(bb, "nofill", args, 2);
+	XtManageChild(df);
+	XtManageChild(fill);
+	XtManageChild(nofill);
+	XtRealizeWidget(top);
+
+	picture_errors = 0;
+	XmDataFieldInsert(df, 0, "12");
+	assert_tf(df, "12");
+	XmDataFieldSetInsertionPosition(df, 2);
+	XmDataFieldInsert(df, 2, "x");
+	assert_tf(df, "12");
+	ck_assert_int_eq(picture_errors, 1);
+	XmDataFieldInsert(df, 2, "3");
+	assert_tf(df, "123");
+
+	/* A new picture replaces the old one, and is checked only once. */
+	XtVaSetValues(df, XmNpicture, "####", NULL);
+	XmDataFieldSetInsertionPosition(df, 3);
+	XmDataFieldInsert(df, 3, "x");
+	ck_assert_int_eq(picture_errors, 2);
+	XmDataFieldInsert(df, 3, "4");
+	assert_tf(df, "1234");
+
+	/* No picture, no checks */
+	XtVaSetValues(df, XmNpicture, NULL, NULL);
+	XmDataFieldInsert(df, 0, "x");
+	assert_tf(df, "x1234");
+	ck_assert_int_eq(picture_errors, 2);
+
+	XmDataFieldInsert(fill, 0, "12");
+	assert_tf(fill, "12-");
+	XmDataFieldInsert(nofill, 0, "12");
+	assert_tf(nofill, "12");
+	pump();
+}
+END_TEST
+
+static char *validated;
+
+static void reject(Widget w, XtPointer client, XtPointer call)
+{
+	XmDataFieldCallbackStruct *cbs = call;
+
+	ck_assert_ptr_eq(cbs->w, w);
+	validated = XtNewString(cbs->text);
+	cbs->accept = False;
+}
+
+START_TEST(datafield_validate)
+{
+	Widget df = XmCreateDataField(bb, "df", NULL, 0);
+	String params[1] = { "next" };
+
+	XtAddCallback(df, XmNvalidateCallback, reject, NULL);
+	XtManageChild(df);
+	XtRealizeWidget(top);
+	XmDataFieldSetString(df, "value");
+	validated = NULL;
+	XtCallActionProc(df, "ValidateAndMove", NULL, params, 1);
+	ck_assert_ptr_nonnull(validated);
+	ck_assert_str_eq(validated, "value");
+	XtFree(validated);
+
+	/* Tab is bound to ValidateAndMove ahead of TextField's binding. */
+	{
+		XKeyEvent key;
+
+		memset(&key, 0, sizeof(key));
+		key.type = KeyPress;
+		key.display = XtDisplay(df);
+		key.window = XtWindow(df);
+		key.root = RootWindowOfScreen(XtScreen(df));
+		key.time = server_time(df);
+		key.keycode = XKeysymToKeycode(key.display, XK_Tab);
+		key.same_screen = True;
+		XmDataFieldSetString(df, "tab");
+		validated = NULL;
+		XtDispatchEvent((XEvent *)&key);
+		ck_assert_ptr_nonnull(validated);
+		ck_assert_str_eq(validated, "tab");
+		XtFree(validated);
+	}
+	pump();
+}
+END_TEST
+
 void text_suite(SRunner *runner)
 {
 	Suite *s = suite_create("Text");
@@ -349,6 +573,16 @@ void text_suite(SRunner *runner)
 	tcase_add_test(t, textfield_editing);
 	tcase_add_test(t, textfield_selection_and_clipboard);
 	tcase_add_test(t, textfield_unconvertible_wcs);
+	tcase_add_test(t, textfield_alignment);
+	tcase_set_timeout(t, 60);
+	suite_add_tcase(s, t);
+
+	t = tcase_create("DataField");
+	tcase_add_checked_fixture(t, setup, teardown);
+	tcase_add_test(t, datafield_is_textfield);
+	tcase_add_test(t, datafield_alignment);
+	tcase_add_test(t, datafield_picture);
+	tcase_add_test(t, datafield_validate);
 	tcase_set_timeout(t, 60);
 	suite_add_tcase(s, t);
 

@@ -141,9 +141,11 @@ static void DrawTextSegment(XmTextFieldWidget tf,
                             int y,
                             int *x);
 static void RedisplayText(XmTextFieldWidget tf, XmTextPosition start, XmTextPosition end);
+static XmTextPosition AlignedHOffset(XmTextFieldWidget tf);
 static void ComputeSize(XmTextFieldWidget tf, Dimension *width, Dimension *height);
 static XtGeometryResult TryResize(XmTextFieldWidget tf, Dimension width, Dimension height);
 static Boolean AdjustText(XmTextFieldWidget tf, XmTextPosition position, Boolean flag);
+static Boolean ScrollText(XmTextFieldWidget tf, XmTextPosition position, Boolean flag);
 static void AdjustSize(XmTextFieldWidget tf);
 static Boolean ModifyVerify(XmTextFieldWidget tf,
                             XEvent *event,
@@ -569,6 +571,13 @@ static XtResource resources[] = {
      XtOffsetOf(struct _XmTextFieldRec, text.resize_width),
      XmRImmediate,
      (XtPointer)False},
+    {XmNalignment,
+     XmCAlignment,
+     XmRAlignment,
+     sizeof(unsigned char),
+     XtOffsetOf(struct _XmTextFieldRec, text.alignment),
+     XmRImmediate,
+     (XtPointer)XmALIGNMENT_BEGINNING},
     {XmNpendingDelete,
      XmCPendingDelete,
      XmRBoolean,
@@ -1544,6 +1553,7 @@ static void RedisplayText(XmTextFieldWidget tf, XmTextPosition start, XmTextPosi
 {
   _XmHighlightRec *l = tf->text.highlight.list;
   XRectangle rect;
+  XmTextPosition h_offset;
   int x, y, i;
   Dimension margin_width = TextF_MarginWidth(tf) + tf->primitive.shadow_thickness +
                            tf->primitive.highlight_thickness;
@@ -1563,11 +1573,29 @@ static void RedisplayText(XmTextFieldWidget tf, XmTextPosition start, XmTextPosi
   if ((int)tf->core.height - (int)(margin_top + margin_bottom) <= 0)
     return;
   _XmTextFieldDrawInsertionPoint(tf, False);
+  /* With XmALIGNMENT_END a change of the text width moves all of it. */
+  h_offset = AlignedHOffset(tf);
+  if (h_offset != tf->text.h_offset) {
+    tf->text.h_offset = h_offset;
+    start = 0;
+    end = tf->text.string_length;
+  }
   /* Get the current rectangle.
    */
   GetRect(tf, &rect);
   x = (int)tf->text.h_offset;
   y = margin_top + TextF_FontAscent(tf);
+  /* Clear what is left of a text that does not start at the margin. */
+  if (x > rect.x) {
+    SetInvGC(tf, tf->text.gc);
+    XFillRectangle(XtDisplay(tf),
+                   XtWindow(tf),
+                   tf->text.gc,
+                   rect.x,
+                   rect.y,
+                   MIN(x, rect.x + rect.width) - rect.x,
+                   rect.height);
+  }
   if (!XtIsSensitive((Widget)tf))
     stipple = True;
   /* search through the highlight array and draw the text */
@@ -1683,15 +1711,62 @@ static XtGeometryResult TryResize(XmTextFieldWidget tf, Dimension width, Dimensi
 }
 
 /*
+ * The h_offset that keeps the text at its XmNalignment.  With
+ * XmALIGNMENT_END the end of the text stays at the right margin: a text
+ * that fits is right-aligned, a longer one can be scrolled, but not so
+ * far that a gap opens at either margin.  Otherwise the h_offset is
+ * returned as it is.
+ */
+static XmTextPosition AlignedHOffset(XmTextFieldWidget tf)
+{
+  int margin_width, text_width, home;
+  XmTextPosition h_offset = tf->text.h_offset;
+  if (TextF_Alignment(tf) != XmALIGNMENT_END)
+    return h_offset;
+  margin_width = TextF_MarginWidth(tf) + tf->primitive.shadow_thickness +
+                 tf->primitive.highlight_thickness;
+  if (tf->text.max_char_size != 1)
+    text_width = FindPixelLength(tf, (char *)TextF_WcValue(tf), tf->text.string_length);
+  else
+    text_width = FindPixelLength(tf, TextF_Value(tf), tf->text.string_length);
+  home = (int)tf->core.width - margin_width - text_width;
+  if (h_offset < home)
+    h_offset = home;
+  if (h_offset > MAX(home, margin_width))
+    h_offset = MAX(home, margin_width);
+  return h_offset;
+}
+
+/*
  * Function AdjustText
  *
- * AdjustText ensures that the character at the given position is entirely
- * visible in the Text Field widget.  If the character is not already entirely
- * visible, AdjustText changes the Widget's h_offset appropriately.  If
- * the text must be redrawn, AdjustText calls RedisplayText.
- *
+ * AdjustText keeps the text at its XmNalignment and ensures that the
+ * character at the given position is entirely visible in the Text Field
+ * widget, changing the Widget's h_offset as needed.  If the text must be
+ * redrawn, AdjustText calls RedisplayText.  It returns True if it moved
+ * the text.
  */
 static Boolean AdjustText(XmTextFieldWidget tf, XmTextPosition position, Boolean flag)
+{
+  Boolean realized = XtIsRealized((Widget)tf);
+  XmTextPosition h_offset = AlignedHOffset(tf);
+  if (h_offset == tf->text.h_offset)
+    return ScrollText(tf, position, flag);
+  if (realized)
+    _XmTextFieldDrawInsertionPoint(tf, False);
+  tf->text.h_offset = h_offset;
+  if (!ScrollText(tf, position, False) && realized)
+    RedisplayText(tf, 0, tf->text.string_length);
+  if (realized)
+    _XmTextFieldDrawInsertionPoint(tf, True);
+  return True;
+}
+
+/*
+ * ScrollText ensures that the character at the given position is entirely
+ * visible, and returns True if it had to scroll the text.
+ */
+static Boolean ScrollText(XmTextFieldWidget tf, XmTextPosition position, Boolean flag)
 {
   int left_edge = 0;
   int diff;
@@ -5148,6 +5223,8 @@ static void Validates(XmTextFieldWidget tf)
     XmeWarning((Widget)tf, MSG2);
     TextF_Columns(tf) = 20;
   }
+  if (!XmRepTypeValidValue(XmRID_ALIGNMENT, TextF_Alignment(tf), (Widget)tf))
+    TextF_Alignment(tf) = XmALIGNMENT_BEGINNING;
   if (TextF_SelectionArray(tf) == NULL)
     TextF_SelectionArray(tf) = (XmTextScanType *)sarray;
   if (TextF_SelectionArrayCount(tf) <= 0)
@@ -5968,6 +6045,7 @@ static void Initialize(Widget request, Widget new_w, ArgList args, Cardinal *num
     new_tf->core.width = width;
   if (req_tf->core.height == 0)
     new_tf->core.height = height;
+  new_tf->text.h_offset = AlignedHOffset(new_tf);
   RegisterDropSite(new_w);
   if (new_tf->text.verify_bell == (Boolean)XmDYNAMIC_BOOL) {
     if (_XmGetAudibleWarning(new_w) == XmBELL)
@@ -6442,6 +6520,17 @@ static Boolean SetValues(
   if (TextF_MarginHeight(new_tf) != TextF_MarginHeight(old_tf)) {
     new_tf->text.margin_top = TextF_MarginHeight(new_tf);
     new_tf->text.margin_bottom = TextF_MarginHeight(new_tf);
+  }
+  if (TextF_Alignment(new_tf) != TextF_Alignment(old_tf)) {
+    if (!XmRepTypeValidValue(XmRID_ALIGNMENT, TextF_Alignment(new_tf), new_w))
+      TextF_Alignment(new_tf) = TextF_Alignment(old_tf);
+    else {
+      /* Start at the left margin; AdjustText applies XmALIGNMENT_END. */
+      new_tf->text.h_offset = TextF_MarginWidth(new_tf) + new_tf->primitive.shadow_thickness +
+                              new_tf->primitive.highlight_thickness;
+      (void)AdjustText(new_tf, TextF_CursorPosition(new_tf), False);
+      redisplay = True;
+    }
   }
   new_size = TextF_MarginWidth(new_tf) != TextF_MarginWidth(old_tf) ||
              TextF_MarginHeight(new_tf) != TextF_MarginHeight(old_tf) ||
@@ -7799,8 +7888,8 @@ static void TextFieldReplace(
     else { /* need to convert to char* before calling Replace */
       value = _XmMallocArray(length + 1, tf->text.max_char_size);
       length = wcstombs(value, wc_value, (length + 1) * tf->text.max_char_size);
-      if (length < 0) { /* if wcstombs fails, it returns -1 */
-        value = "";     /* if invalid data, pass in the empty string */
+      if (length < 0) { /* invalid data: insert the empty string */
+        value[0] = '\0';
         length = 0;
       }
       rep_result = _XmTextFieldReplaceText(
