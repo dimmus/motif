@@ -201,15 +201,20 @@ static void MergeEnds(_XmStringEntry a, _XmStringEntry b);
 static void MergeBegins(_XmStringEntry a, _XmStringEntry b);
 static Boolean _is_asn1(unsigned char *string);
 static XmString Clone(XmString string, int lines);
-static void OptLineMetrics(XmRenderTable rendertable,
-                           _XmString line,
-                           XmRendition *rend_io,
-                           XmRendition base_rend,
-                           Dimension *width,
-                           Dimension *height,
-                           Dimension *ascender,
-                           Dimension *descender);
-static Dimension OptLineAscender(XmRenderTable f, _XmStringOpt opt);
+static Boolean OptLineMetrics(XmRenderTable rendertable,
+                              _XmString line,
+                              XmRendition *rend_io,
+                              XmRendition base_rend,
+                              Dimension *width,
+                              Dimension *height,
+                              Dimension *ascender,
+                              Dimension *descender);
+static void OptLineExtent(XmRenderTable rendertable,
+                          _XmString opt,
+                          Dimension *width,
+                          Dimension *height,
+                          Dimension *ascent,
+                          Dimension *descent);
 static void LineMetrics(_XmStringEntry line,
                         XmRenderTable r,
                         XmRendition *rend_io,
@@ -1181,6 +1186,7 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
         opt_str = (_XmString)b;
       else
         _XmStrCreate(opt_str, XmSTRING_OPTIMIZED, a_len + b_len);
+      _XmStrExtentsReset(opt_str);
       _XmStrByteCount((_XmString)opt_str) = a_len + b_len;
       _XmStrTextType((_XmString)opt_str) = (a_type == XmNO_TEXT) ? b_type : a_type;
       _XmStrTagIndex((_XmString)opt_str) = (a_index == TAG_INDEX_UNSET) ? b_index : a_index;
@@ -1851,14 +1857,46 @@ static Boolean _is_asn1(unsigned char *string)
  * optimized internal TCS structure handling routines
  */
 /*
- * find the ascender for the given optimized line
+ * The extent of an optimized string by itself (no base or scratch
+ * rendition).  It depends on nothing but the string and the render
+ * table, so it is cached in the string under the table's stamp.  The
+ * stamp is checked again afterwards: loading a deferred font changes
+ * the table, and a result computed across a change is not kept.
  */
-static Dimension OptLineAscender(XmRenderTable f, _XmStringOpt opt)
+static void OptLineExtent(XmRenderTable r,
+                          _XmString opt,
+                          Dimension *width,
+                          Dimension *height,
+                          Dimension *ascent,
+                          Dimension *descent)
 {
+  _XmStringOpt str = (_XmStringOpt)opt;
+  unsigned long long stamp = _XmRenderTableStamp(r);
   /* OptLineMetrics leaves them alone when there is no font */
-  Dimension width = 0, height = 0, ascent = 0, descent = 0;
-  OptLineMetrics(f, (_XmString)opt, NULL, NULL, &width, &height, &ascent, &descent);
-  return (ascent);
+  Dimension w = 0, h = 0, asc = 0, dsc = 0;
+  if (str->extent_stamp == stamp) {
+    w = str->width;
+    h = str->height;
+    asc = str->ascent;
+    dsc = str->descent;
+  }
+  else if (OptLineMetrics(r, opt, NULL, NULL, &w, &h, &asc, &dsc) &&
+           _XmRenderTableStamp(r) == stamp)
+  {
+    str->width = w;
+    str->height = h;
+    str->ascent = asc;
+    str->descent = dsc;
+    str->extent_stamp = stamp;
+  }
+  if (width != NULL)
+    *width = w;
+  if (height != NULL)
+    *height = h;
+  if (ascent != NULL)
+    *ascent = asc;
+  if (descent != NULL)
+    *descent = dsc;
 }
 
 int _XmConvertFactor(unsigned char units, float *factor)
@@ -1932,15 +1970,18 @@ static int TabVal(Display *d, Screen **pscreen, Window w, XmTab tab)
 
 /*
  * Find width, height, ascent and descent for the given optimized line.
+ * Return whether they were found from the render table alone, with no
+ * callback and no tab in units that can change, so that they can be
+ * cached under its stamp.
  */
-static void OptLineMetrics(XmRenderTable r,
-                           _XmString opt,
-                           XmRendition *rend_io,
-                           XmRendition base_rend,
-                           Dimension *width,
-                           Dimension *height,
-                           Dimension *ascent,
-                           Dimension *descent)
+static Boolean OptLineMetrics(XmRenderTable r,
+                              _XmString opt,
+                              XmRendition *rend_io,
+                              XmRendition base_rend,
+                              Dimension *width,
+                              Dimension *height,
+                              Dimension *ascent,
+                              Dimension *descent)
 {
   short rend_index;
   XmRendition rend = NULL;
@@ -1953,6 +1994,7 @@ static void OptLineMetrics(XmRenderTable r,
   unsigned short tab_cnt;
   Dimension tab_w = 0;
   _XmRendition rend_int;
+  Boolean cacheable = True;
   /* compute rendition */
   /* Find font as per I 198. */
   /* 1. Find font from rendition tags. */
@@ -1999,6 +2041,8 @@ static void OptLineMetrics(XmRenderTable r,
       cb.rendition = rend;
       cb.font_name = XmS;
       XtCallCallbackList((Widget)dsp, dsp->display.noFontCallback, &cb);
+      _XmRenderTableChanged(); /* the callback may change renditions */
+      cacheable = False;
       if (rend_int != *rend) /* Changed in callback. */ {
         /* Need to split ref counts. */
         _XmRendRefcount(&rend_int) = ref_cnt - rt_ref_cnt;
@@ -2034,6 +2078,8 @@ static void OptLineMetrics(XmRenderTable r,
       cb.rendition = rend;
       cb.font_name = XmS;
       XtCallCallbackList((Widget)dsp, dsp->display.noFontCallback, &cb);
+      _XmRenderTableChanged(); /* the callback may change renditions */
+      cacheable = False;
       if (rend_int != *rend) /* Changed in callback. */ {
         /* Need to split ref counts. */
         _XmRendRefcount(&rend_int) = ref_cnt - rt_ref_cnt;
@@ -2050,7 +2096,7 @@ static void OptLineMetrics(XmRenderTable r,
       if ((base_rend != NULL) && (rend_io == NULL))
         XmRenditionFree(rend);
       rend = NULL;
-      return;
+      return False;
     }
     else if (rend_io != NULL) {
       _XmRendFont(*rend_io) = _XmRendFont(rend);
@@ -2095,6 +2141,8 @@ static void OptLineMetrics(XmRenderTable r,
          tab = _XmTabNext(tab), tab_cnt++, i++)
     {
       val = TabVal(d, &screen, None, tab);
+      if (_XmTabUnits(tab) != XmPIXELS)
+        cacheable = False; /* font units follow the XmScreen */
       if (_XmTabModel(tab) == XmABSOLUTE) {
         tab_w = val;
         prev_val = val;
@@ -2108,6 +2156,7 @@ static void OptLineMetrics(XmRenderTable r,
   (*width) += tab_w;
   if ((base_rend != NULL) && (rend_io == NULL))
     XmRenditionFree(rend);
+  return cacheable;
 }
 
 /*
@@ -2589,7 +2638,7 @@ void XmStringExtent(XmRenderTable rendertable,
     _XmProcessLock();
   }
   if (_XmStrOptimized(string))
-    OptLineMetrics(rendertable, string, NULL, NULL, width, height, NULL, NULL);
+    OptLineExtent(rendertable, string, width, height, NULL, NULL);
   else {
     _XmRenditionRec scratch;
     _XmRendition tmp;
@@ -5427,6 +5476,7 @@ static Boolean SpecifiedSegmentExtents(_XmStringEntry entry,
         cb.rendition = def_rend;
         cb.font_name = XmS;
         XtCallCallbackList((Widget)dsp, dsp->display.noFontCallback, &cb);
+        _XmRenderTableChanged(); /* the callback may change renditions */
         if (rend_int != *def_rend) /* Changed in callback. */ {
           /* Need to split ref counts. */
           _XmRendRefcount(&rend_int) = ref_cnt - rt_ref_cnt;
@@ -5468,6 +5518,7 @@ static Boolean SpecifiedSegmentExtents(_XmStringEntry entry,
         cb.rendition = def_rend;
         cb.font_name = XmS;
         XtCallCallbackList((Widget)dsp, dsp->display.noFontCallback, &cb);
+        _XmRenderTableChanged(); /* the callback may change renditions */
         if (rend_int != *def_rend) /* Changed in callback. */ {
           /* Need to split ref counts. */
           _XmRendRefcount(&rend_int) = ref_cnt - rt_ref_cnt;
@@ -5712,11 +5763,8 @@ static XmString Clone(XmString string, int lines)
 {
   XmString new_string;
   if (_XmStrOptimized(string)) {
-    _XmStringOpt n_o_string = (_XmStringOpt)_XmStrMalloc(
-        sizeof(_XmStringOptRec) + _XmStrByteCount(string) - TEXT_BYTES_IN_STRUCT);
-    memcpy(n_o_string,
-           string,
-           sizeof(_XmStringOptRec) + _XmStrByteCount(string) - TEXT_BYTES_IN_STRUCT);
+    _XmStringOpt n_o_string = (_XmStringOpt)_XmStrMalloc(_XmStrOptSize(_XmStrByteCount(string)));
+    memcpy(n_o_string, string, _XmStrOptSize(_XmStrByteCount(string)));
     new_string = (XmString)n_o_string;
   }
   else {
@@ -5859,7 +5907,7 @@ Dimension XmStringBaseline(XmRenderTable rendertable, XmString string)
       XtFree((char *)_XmRendTags(rend));
   }
   else
-    asc = OptLineAscender(rendertable, (_XmStringOpt)string);
+    OptLineExtent(rendertable, string, NULL, NULL, &asc, NULL);
   if (app) {
     _XmAppUnlock(app);
   }
@@ -7222,11 +7270,8 @@ XmString XmStringComponentCreate(XmStringComponentType c_type,
   /* Convert one of the proto-segments into a real _XmString. */
   if (optimized) {
     /* Convert opt into an optimized XmString. */
-    str = (_XmString)_XmStrMalloc(sizeof(_XmStringOptRec) +
-                                  (_XmStrByteCount((_XmString)&opt) ?
-                                       (_XmStrByteCount((_XmString)&opt) - TEXT_BYTES_IN_STRUCT) :
-                                       0));
-    memcpy(str, &opt, sizeof(_XmStringOptRec) - TEXT_BYTES_IN_STRUCT);
+    str = (_XmString)_XmStrMalloc(_XmStrOptSize(_XmStrByteCount((_XmString)&opt)));
+    memcpy(str, &opt, _XmStrOptSize(0));
     if (_XmStrByteCount((_XmString)&opt) > 0)
       memcpy(_XmStrText(str), value, _XmStrByteCount((_XmString)&opt));
     _XmStrRefCountSet(str, 1);
@@ -7760,6 +7805,7 @@ XmString XmStringGenerate(XtPointer text, XmStringTag tag, XmTextType type, XmSt
     if (rend_index < REND_INDEX_MAX) {
       _XmStrRendIndex(result) = rend_index;
       _XmStrRendBegin(result) = _XmStrRendEnd(result) = True;
+      _XmStrExtentsReset(result);
       _XmProcessUnlock();
       return result;
     }

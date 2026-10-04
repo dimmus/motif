@@ -1459,18 +1459,36 @@ static void _uninit_xt_extent(void)
 	uninit_xt();
 }
 
-/* A render table of one rendition, with no font if font is NULL */
-static XmRenderTable make_rt(const char *tag, const char *font,
+/* A rendition, with no font if font is NULL */
+static XmRendition make_rend(const char *tag, const char *font,
 			     XmFontType type)
 {
-	XmRendition rend;
-	XmRenderTable rt;
 	Arg args[2];
 
 	XtSetArg(args[0], XmNfontName, font);
 	XtSetArg(args[1], XmNfontType, type);
-	rend = XmRenditionCreate(ext_shell, (XmStringTag)tag, args,
+	return XmRenditionCreate(ext_shell, (XmStringTag)tag, args,
 				 font ? 2 : 0);
+}
+
+/* Add a rendition to rt, or replace the one with its tag */
+static XmRenderTable add_rend(XmRenderTable rt, const char *tag,
+			      const char *font, XmMergeMode mode)
+{
+	XmRendition rend = make_rend(tag, font, XmFONT_IS_FONT);
+
+	rt = XmRenderTableAddRenditions(rt, &rend, 1, mode);
+	XmRenditionFree(rend);
+	return rt;
+}
+
+/* A render table of one rendition, with no font if font is NULL */
+static XmRenderTable make_rt(const char *tag, const char *font,
+			     XmFontType type)
+{
+	XmRendition rend = make_rend(tag, font, type);
+	XmRenderTable rt;
+
 	rt = XmRenderTableAddRenditions(NULL, &rend, 1, XmMERGE_NEW);
 	XmRenditionFree(rend);
 	return rt;
@@ -1536,6 +1554,216 @@ START_TEST(baseline_rendition_leak)
 END_TEST
 #endif
 
+/* The extent and baseline of s with rt */
+struct extent {
+	Dimension w, h, base;
+};
+
+static struct extent extent_of(XmRenderTable rt, XmString s)
+{
+	struct extent e;
+
+	XmStringExtent(rt, s, &e.w, &e.h);
+	e.base = XmStringBaseline(rt, s);
+	return e;
+}
+
+static void assert_extent_eq(struct extent a, struct extent b)
+{
+	ck_assert_uint_eq(a.w, b.w);
+	ck_assert_uint_eq(a.h, b.h);
+	ck_assert_uint_eq(a.base, b.base);
+}
+
+/* What a string that was never measured measures, with rt */
+static struct extent fresh_extent(XmRenderTable rt, const char *text,
+				  const char *tag)
+{
+	XmString s = tag ? XmStringCreate((char *)text, (XmStringTag)tag) :
+			   XmStringCreateLocalized((char *)text);
+	struct extent e;
+
+	ck_assert(_XmStrOptimized(s));
+	ck_assert(((_XmStringOpt)s)->extent_stamp == 0);
+	e = extent_of(rt, s);
+	XmStringFree(s);
+	return e;
+}
+
+/*
+ * Optimized strings cache their extent under the render table's stamp:
+ * the cached extent is the computed one, with a core font, a font set
+ * and Xft.
+ */
+START_TEST(extent_cache_hits)
+{
+	static const XmFontType types[] = {
+		XmFONT_IS_FONT, XmFONT_IS_FONTSET,
+#if USE_XFT
+		XmFONT_IS_XFT
+#endif
+	};
+	static const char *const texts[] = { "", "a", "The quick brown fox" };
+	unsigned int i, j;
+
+	for (i = 0; i < XtNumber(types); i++) {
+		XmRenderTable rt = make_rt(XmFONTLIST_DEFAULT_TAG,
+					   types[i] == XmFONT_IS_XFT ?
+						   "Sans-10" : "fixed",
+					   types[i]);
+
+		for (j = 0; j < XtNumber(texts); j++) {
+			XmString s = XmStringCreateLocalized((char *)texts[j]);
+			struct extent first = extent_of(rt, s);
+
+			ck_assert(((_XmStringOpt)s)->extent_stamp != 0);
+			assert_extent_eq(extent_of(rt, s), first);
+			assert_extent_eq(fresh_extent(rt, texts[j], NULL), first);
+			if (j > 0)
+				ck_assert_uint_gt(first.w, 0);
+			XmStringFree(s);
+		}
+		XmRenderTableFree(rt);
+	}
+}
+END_TEST
+
+/*
+ * A cached extent must not survive a change of the render table: one
+ * replaced in place, one added, a table removed and another one
+ * allocated (likely at the same address), and a copy.
+ */
+START_TEST(extent_cache_follows_table)
+{
+	XmRenderTable rt = make_rt(XmFONTLIST_DEFAULT_TAG, "fixed",
+				   XmFONT_IS_FONT), copy;
+	XmString s = XmStringCreateLocalized("The quick brown fox");
+	XmString t = XmStringCreate("jumps over", "tagA");
+	XmStringTag tags[1] = { "tagA" };
+	struct extent before = extent_of(rt, s), after;
+
+	(void)extent_of(rt, t);
+
+	/* Replace the default rendition, in place since rt is not shared */
+	rt = add_rend(rt, XmFONTLIST_DEFAULT_TAG, "9x15", XmMERGE_REPLACE);
+	after = extent_of(rt, s);
+	ck_assert_uint_ne(after.w, before.w);
+	assert_extent_eq(after, fresh_extent(rt, "The quick brown fox", NULL));
+	assert_extent_eq(extent_of(rt, t), fresh_extent(rt, "jumps over", "tagA"));
+
+	/* Add a rendition for t's tag */
+	rt = add_rend(rt, "tagA", "fixed", XmMERGE_NEW);
+	assert_extent_eq(extent_of(rt, t), fresh_extent(rt, "jumps over", "tagA"));
+
+	/* And remove it */
+	rt = XmRenderTableRemoveRenditions(rt, tags, 1);
+	assert_extent_eq(extent_of(rt, t), fresh_extent(rt, "jumps over", "tagA"));
+
+	/* A copy measures the same, and so does a table that replaced it */
+	copy = XmRenderTableCopy(rt, NULL, 0);
+	assert_extent_eq(extent_of(copy, s), after);
+	XmRenderTableFree(copy);
+	XmRenderTableFree(rt);
+	rt = make_rt(XmFONTLIST_DEFAULT_TAG, "fixed", XmFONT_IS_FONT);
+	assert_extent_eq(extent_of(rt, s), before);
+	assert_extent_eq(extent_of(rt, t), fresh_extent(rt, "jumps over", "tagA"));
+
+	XmRenderTableFree(rt);
+	XmStringFree(s);
+	XmStringFree(t);
+}
+END_TEST
+
+/*
+ * XmStringConcatAndFree reuses an optimized string it owns when the
+ * other one adds no text: its cached extent must go, as a tab or a
+ * rendition in front of the text changes it.
+ */
+START_TEST(extent_cache_string_changed)
+{
+	XmRendition rend[2];
+	XmRenderTable rt;
+	XmTabList tabs;
+	XmTab xtab;
+	XmString s, reused;
+	struct extent e;
+	Arg args[3];
+
+	xtab = XmTabCreate(100.0, XmPIXELS, XmABSOLUTE, XmALIGNMENT_BEGINNING,
+			  NULL);
+	tabs = XmTabListInsertTabs(NULL, &xtab, 1, 0);
+	XmTabFree(xtab);
+	XtSetArg(args[0], XmNfontName, "fixed");
+	XtSetArg(args[1], XmNfontType, XmFONT_IS_FONT);
+	XtSetArg(args[2], XmNtabList, tabs);
+	rend[0] = XmRenditionCreate(ext_shell, XmFONTLIST_DEFAULT_TAG, args, 3);
+	XtSetArg(args[0], XmNfontName, "9x15");
+	rend[1] = XmRenditionCreate(ext_shell, "r1", args, 2);
+	rt = XmRenderTableAddRenditions(NULL, rend, 2, XmMERGE_NEW);
+	XmRenditionFree(rend[0]);
+	XmRenditionFree(rend[1]);
+	XmTabListFree(tabs);
+
+	/* A tab */
+	s = XmStringCreateLocalized("abc");
+	e = extent_of(rt, s);
+	reused = XmStringConcatAndFree(tab(), s);
+	ck_assert_ptr_eq(reused, s);
+	ck_assert_uint_eq(extent_of(rt, reused).w, 100 + e.w);
+	XmStringFree(reused);
+
+	/* A rendition */
+	s = XmStringCreateLocalized("abc");
+	e = extent_of(rt, s);
+	reused = XmStringConcatAndFree(
+		XmStringComponentCreate(XmSTRING_COMPONENT_RENDITION_BEGIN, 2,
+					"r1"), s);
+	ck_assert_ptr_eq(reused, s);
+	ck_assert_uint_gt(extent_of(rt, reused).w, e.w);
+	ck_assert_uint_gt(extent_of(rt, reused).h, e.h);
+	XmStringFree(reused);
+
+	XmRenderTableFree(rt);
+}
+END_TEST
+
+/*
+ * Tabs in units other than pixels depend on the screen (font units on
+ * the XmScreen's resources), so their extent is not cached.
+ */
+START_TEST(extent_cache_skips_tab_units)
+{
+	XmRendition rend;
+	XmRenderTable rt;
+	XmTabList tabs;
+	XmTab xtab;
+	XmString s;
+	Arg args[3];
+	Dimension w1, w2, h;
+
+	xtab = XmTabCreate(2.0, XmFONT_UNITS, XmABSOLUTE, XmALIGNMENT_BEGINNING,
+			  NULL);
+	tabs = XmTabListInsertTabs(NULL, &xtab, 1, 0);
+	XmTabFree(xtab);
+	XtSetArg(args[0], XmNfontName, "fixed");
+	XtSetArg(args[1], XmNfontType, XmFONT_IS_FONT);
+	XtSetArg(args[2], XmNtabList, tabs);
+	rend = XmRenditionCreate(ext_shell, XmFONTLIST_DEFAULT_TAG, args, 3);
+	rt = XmRenderTableAddRenditions(NULL, &rend, 1, XmMERGE_NEW);
+	XmRenditionFree(rend);
+	XmTabListFree(tabs);
+
+	s = XmStringConcatAndFree(tab(), XmStringCreateLocalized("abc"));
+	ck_assert(_XmStrOptimized(s));
+	XmStringExtent(rt, s, &w1, &h);
+	ck_assert(((_XmStringOpt)s)->extent_stamp == 0);
+	XmStringExtent(rt, s, &w2, &h);
+	ck_assert_uint_eq(w1, w2);
+	XmStringFree(s);
+	XmRenderTableFree(rt);
+}
+END_TEST
+
 void xmstring_extent_suite(SRunner *runner)
 {
 	TCase *t;
@@ -1543,6 +1771,10 @@ void xmstring_extent_suite(SRunner *runner)
 
 	t = tcase_create("Extents");
 	tcase_add_test(t, baseline_without_font);
+	tcase_add_test(t, extent_cache_hits);
+	tcase_add_test(t, extent_cache_follows_table);
+	tcase_add_test(t, extent_cache_string_changed);
+	tcase_add_test(t, extent_cache_skips_tab_units);
 #ifdef HAVE_LSAN
 	tcase_add_test(t, baseline_rendition_leak);
 #endif

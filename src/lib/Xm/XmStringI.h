@@ -136,6 +136,12 @@ typedef struct __XmParseMappingRec {
   (_XmStringOptSegHdrRec): XmStringConcatAndFree turns a string it owns
   into a segment in place.  pad must stay zero for that, as it overlays
   the segment's permanent, soft_line_break and immediate bits.
+
+  The extent of the string with the render table whose stamp
+  (_XmRenderTableStamp) is extent_stamp is cached after the header; 0
+  means none.  Whatever changes a string in place resets it with
+  _XmStrExtentsReset.  (The cache is not in the header so that
+  _XmStringRec stays as small as a multi-entry string.)
  ****************************************************************/
 typedef struct __XmStringOptHeader {
   unsigned int type : 2;                     /* XmSTRING_OPTIMIZED */
@@ -154,8 +160,12 @@ typedef struct __XmStringOptHeader {
 
 typedef struct __XmStringOpt {
   _XmStringOptHeader header;
+  unsigned long long extent_stamp;          /* render table of the extent */
+  Dimension width, height, ascent, descent; /* cached extent */
   char text[TEXT_BYTES_IN_STRUCT];
 } _XmStringOptRec, *_XmStringOpt;
+/* Bytes taken by an optimized string with len bytes of text */
+#define _XmStrOptSize(len) (XtOffsetOf(_XmStringOptRec, text) + (len))
 /****************************************************************
   XmStringMulti specifies a string consisting of multiple entries.
   Each entry is a segment, either an optimized single segment, an
@@ -398,6 +408,7 @@ typedef struct __XmStringArraySegRec *_XmStringLine;
   (_XmStrMultiple(str) ? --((str)->multi_str.refcount) : \
                          (_XmStrOptimized(str) ? --((str)->opt_str.refcount) : 0))
 /* Optimized, one-segment XmStrings */
+#define _XmStrExtentsReset(str) (((_XmStringOpt)(str))->extent_stamp = 0)
 #define _XmStrTextType(str) ((str)->opt_str.text_type)
 #define _XmStrTagIndex(str) ((str)->opt_str.tag_index)
 #define _XmStrTagGet(str) \
@@ -457,9 +468,8 @@ typedef struct __XmStringArraySegRec *_XmStringLine;
   { \
     switch (type) { \
       case XmSTRING_OPTIMIZED: \
-        (str) = (_XmString)_XmStrMalloc(sizeof(_XmStringOptRec) + \
-                                        (text_len ? (text_len - TEXT_BYTES_IN_STRUCT) : 0)); \
-        bzero((char *)str, sizeof(_XmStringOptRec)); \
+        (str) = (_XmString)_XmStrMalloc(_XmStrOptSize(text_len)); \
+        bzero((char *)str, _XmStrOptSize(0)); \
         _XmStrType(str) = type; \
         _XmStrTextType(str) = XmNO_TEXT; \
         _XmStrDirection(str) = XmSTRING_DIRECTION_UNSET; \
@@ -534,13 +544,14 @@ typedef struct __XmStringArraySegRec *_XmStringLine;
 /* The segment array of an array entry, or the text of an unoptimized
  * segment, was sized by _XmStringGrowArray (never for optimized ones). */
 #define _XmEntryGrown(entry) \
-  (_XmEntryMultiple(entry) ? ((_XmStringEntry)(entry))->multiple.grown : \
-                             (_XmEntryUnoptimized(entry) ? \
-                                  ((_XmStringEntry)(entry))->unopt_single.grown : 0))
+  (_XmEntryMultiple(entry) ? \
+       ((_XmStringEntry)(entry))->multiple.grown : \
+       (_XmEntryUnoptimized(entry) ? ((_XmStringEntry)(entry))->unopt_single.grown : 0))
 #define _XmEntryGrownSet(entry, val) \
-  (_XmEntryMultiple(entry) ? (((_XmStringEntry)(entry))->multiple.grown = (val)) : \
-                             (_XmEntryUnoptimized(entry) ? \
-                                  (((_XmStringEntry)(entry))->unopt_single.grown = (val)) : 0))
+  (_XmEntryMultiple(entry) ? \
+       (((_XmStringEntry)(entry))->multiple.grown = (val)) : \
+       (_XmEntryUnoptimized(entry) ? (((_XmStringEntry)(entry))->unopt_single.grown = (val)) : \
+                                     0))
 #define _XmEntryPushSet(entry, val) \
   (_XmEntryUnoptimized(entry) ? (((_XmStringEntry)(entry))->unopt_single.push_before = (val)) : 0)
 #define _XmEntryPopSet(entry, val) \
