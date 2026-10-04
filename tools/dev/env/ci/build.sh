@@ -166,7 +166,15 @@ fi
 xvfb_pid=
 if [ -z "${DISPLAY:-}" ] && ! command -v xvfb-run >/dev/null 2>&1 &&
    command -v Xvfb >/dev/null 2>&1; then
-  Xvfb :99 -screen 0 1280x1024x24 +extension RENDER -nolisten tcp >/dev/null 2>&1 &
+  # The default font path of FreeBSD's Xvfb does not include the bitmap
+  # fonts deps.sh installs (the tests use "fixed" and "8x13bold").
+  fp=
+  for d in /usr/local/share/fonts/misc /usr/share/fonts/X11/misc; do
+    if [ -f "$d/fonts.dir" ]; then fp="$fp$d/,"; fi
+  done
+  # shellcheck disable=SC2086
+  Xvfb :99 -screen 0 1280x1024x24 +extension RENDER -nolisten tcp -noreset \
+    ${fp:+-fp ${fp}built-ins} >/dev/null 2>&1 &
   xvfb_pid=$!
   DISPLAY=:99
   export DISPLAY

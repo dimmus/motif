@@ -130,18 +130,20 @@ endfunction()
 # motif_x_test(<name> <command> [args...]): a test that needs an X server.
 # It runs under its own Xvfb when xvfb-run was found, and otherwise uses
 # $DISPLAY; the programs exit with 77 (skipped) when there is no display.
+# The X tests run one at a time: xvfb-run -a picks a free display number
+# racily, and tests sharing $DISPLAY would take each other's keyboard
+# focus and cover each other's windows.
 function(motif_x_test name)
     if(XVFB_RUN_EXECUTABLE)
         add_test(NAME ${name}
             COMMAND ${XVFB_RUN_EXECUTABLE} ${XVFB_RUN_ARGS} ${ARGN}
             WORKING_DIRECTORY ${MOTIF_TEST_WORKDIR})
-        # xvfb-run -a picks a free display number racily; serialise them.
-        set_tests_properties(${name} PROPERTIES RESOURCE_LOCK xvfb)
     else()
         add_test(NAME ${name} COMMAND ${ARGN}
             WORKING_DIRECTORY ${MOTIF_TEST_WORKDIR})
     endif()
-    set_tests_properties(${name} PROPERTIES LABELS X11 SKIP_RETURN_CODE 77)
+    set_tests_properties(${name} PROPERTIES LABELS X11 SKIP_RETURN_CODE 77
+        RESOURCE_LOCK xvfb)
 endfunction()
 
 add_subdirectory(uil)

@@ -89,7 +89,7 @@ case "$os:$id" in
       cmake ninja pkgconf ccache bison flex \
       libX11 libXt libXmu libXext libXft libXpm libXrender fontconfig \
       freetype2 png jpeg-turbo xorgproto xbitmaps check \
-      xorg-vfbserver xauth xorg-fonts-miscbitmaps xdotool xephyr \
+      xorg-vfbserver xauth xorg-fonts-miscbitmaps font-alias xdotool xephyr \
       "$@"
     ;;
   *)
