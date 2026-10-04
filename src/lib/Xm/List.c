@@ -6708,7 +6708,7 @@ static void APIReplaceItems(
   if (reset_height && !replaced_first &&
       (lw->list.InternalList[0]->height == lw->list.MaxItemHeight))
     reset_height = FALSE;
-  if (reset_width && reset_height)
+  if (reset_width || reset_height)
     ResetExtents(lw, False);
   if (redraw)
     DrawList(lw, NULL, TRUE);
@@ -6783,7 +6783,7 @@ static void APIReplaceItemsPos(
   if (reset_height && (position > 1) &&
       (lw->list.InternalList[0]->height == lw->list.MaxItemHeight))
     reset_height = FALSE;
-  if (reset_width && reset_height)
+  if (reset_width || reset_height)
     ResetExtents(lw, False);
   if (intern_pos < (lw->list.top_position + lw->list.visibleItemCount))
     DrawList(lw, NULL, TRUE);

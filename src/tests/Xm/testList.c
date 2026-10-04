@@ -831,6 +831,71 @@ static Dimension list_width(Widget list)
 	return w;
 }
 
+/*
+ * A variable size list is as wide as its widest item, through adds,
+ * deletes in any order, replacements and a font change.
+ */
+START_TEST(list_extents)
+{
+	Widget list = make_list(XmMULTIPLE_SELECT, 300, "item %d", 0);
+	XmString wide = item("a much, much wider item %d", 1);
+	XmString wider = item("an even much, much, much wider item %d", 2);
+	XmString narrow = item("i %d", 3);
+	Dimension base, w1, w2;
+	XmFontListEntry entry;
+	XmFontList fonts;
+	int p[2];
+
+	XtRealizeWidget(shell);
+	base = list_width(list);
+	XmListAddItemUnselected(list, wide, 100);
+	w1 = list_width(list);
+	ck_assert_int_gt(w1, base);
+	XmListAddItemUnselected(list, wider, 200);
+	XmListAddItemUnselected(list, wider, 0);
+	w2 = list_width(list);
+	ck_assert_int_gt(w2, w1);
+	XmListDeletePos(list, 0);
+	ck_assert_int_eq(list_width(list), w2);
+	p[0] = 200;
+	p[1] = 5;
+	XmListDeletePositions(list, p, 2);
+	ck_assert_int_eq(list_width(list), w1);
+	XmListReplaceItemsPos(list, &narrow, 1, 99);
+	ck_assert_int_eq(list_width(list), base);
+	XmListAddItemUnselected(list, wide, 1);
+	ck_assert_int_eq(list_width(list), w1);
+	XmListDeleteItemsPos(list, 2, 1);
+	ck_assert_int_eq(list_width(list), base);
+	XmListAddItemUnselected(list, wide, 7);
+	XmListDeleteItem(list, wide);
+	ck_assert_int_eq(list_width(list), base);
+	XmListAddItemUnselected(list, wide, 7);
+	XmListReplaceItemsUnselected(list, &wide, 1, &narrow);
+	ck_assert_int_eq(list_width(list), base);
+	/* A new font, if only the same, measures every item again. */
+	XmListAddItemUnselected(list, wide, 7);
+	entry = XmFontListEntryLoad(XtDisplay(list), "fixed", XmFONT_IS_FONT,
+				    XmFONTLIST_DEFAULT_TAG);
+	ck_assert_ptr_nonnull(entry);
+	fonts = XmFontListAppendEntry(NULL, entry);
+	XmFontListEntryFree(&entry);
+	XtVaSetValues(list, XmNfontList, fonts, NULL);
+	XmFontListFree(fonts);
+	w2 = list_width(list);
+	XmListDeleteItem(list, wide);
+	base = list_width(list);
+	ck_assert_int_lt(base, w2);
+	XmListAddItemUnselected(list, wide, 0);
+	ck_assert_int_eq(list_width(list), w2);
+	XmListDeletePos(list, 0);
+	ck_assert_int_eq(list_width(list), base);
+	XmStringFree(wide);
+	XmStringFree(wider);
+	XmStringFree(narrow);
+}
+END_TEST
+
 /* Items replaced by position are measured again without a selection. */
 START_TEST(list_replace_pos_measures)
 {
@@ -897,6 +962,7 @@ void list_suite(SRunner *runner)
 	tcase_add_test(t, list_duplicates_long);
 	tcase_add_test(t, list_lookup_compare_semantics);
 	tcase_add_test(t, list_items_resource);
+	tcase_add_test(t, list_extents);
 	tcase_add_test(t, list_replace_pos_measures);
 	tcase_add_test(t, list_grow_and_shrink);
 	tcase_add_checked_fixture(t, _init_xt, uninit_xt);
