@@ -67,7 +67,10 @@ It runs in every build (it found the crashes listed below) and is the
 ThreadSanitizer test of a `WITH_TSAN` build, where any report fails it.
 `src/tests/threads/tsan.supp` is used for that run; it suppresses
 nothing at present (see the file for the policy: only libX11 and libXt
-internals may be suppressed, each with its reason).
+internals may be suppressed, each with its reason).  Under
+AddressSanitizer the program turns off ASan's strict memcmp check (for
+libX11's quark lookup) and suppresses three leaks that also happen
+without threads; mtapps.c says which.
 
 ThreadSanitizer only reports accesses not ordered by a lock both threads
 took in between.  Xt takes the process lock very often, so many real
