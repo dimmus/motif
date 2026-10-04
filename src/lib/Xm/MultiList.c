@@ -1,6 +1,7 @@
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
 #endif
+#include "I18ListI.h"
 #include "MessagesI.h"
 #include "XmI.h"
 #include <Xm/Ext18List.h>
@@ -21,14 +22,6 @@
 #define H_MARGIN 5
 #define V_MARGIN 5
 #define FIND_STRING _XmMMsgResource_0013
-extern XmMultiListRowInfo *XmI18ListFindRow(Widget, String, int *, Boolean, Boolean);
-extern int *XmI18ListGetSelectedRowArray(XmI18ListWidget, int *);
-extern void XmI18ListMakeRowVisible(XmI18ListWidget, int);
-extern void XmI18ListDeselectRow(XmI18ListWidget, int);
-extern void XmI18ListSelectRow(XmI18ListWidget, int, Boolean);
-extern void XmI18ListSelectAllItems(XmI18ListWidget, Boolean);
-extern void XmI18ListDeselectItems(XmI18ListWidget, XmString, int);
-extern void XmI18ListSelectItems(XmI18ListWidget, XmString, int, Boolean);
 static Widget CreateTitle(Widget, XmString, ArgList, Cardinal);
 static Widget CreateScrollbar(Widget, Boolean, ArgList, Cardinal);
 static Widget CreateFindButton(Widget, ArgList, Cardinal);

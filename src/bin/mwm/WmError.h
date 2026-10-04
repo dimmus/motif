@@ -35,6 +35,7 @@ extern int WmXIOErrorHandler (Display *display);
 extern _X_NORETURN void WmXtErrorHandler (char *message);
 extern void WmXtWarningHandler (char *message);
 extern void Warning (char *message);
+extern void MWarning (char *format, char *message);
 #if XM_MSGCAT
 extern char * GetMessage(int set, int n, char * s);
 #endif

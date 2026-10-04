@@ -240,7 +240,7 @@ Boolean F_Beep (String args, ClientData *pCD, XEvent *event)
  * is to restack the dirty transient relative to the second to the
  * top transient.  This function is used to support freeFamily stacking.
  */
-ClientData * FindSecondToTopTransient (ClientData *pcd)
+static ClientData * FindSecondToTopTransient (ClientData *pcd)
 
 {
     ClientData *pcdNext;
@@ -270,7 +270,7 @@ ClientData * FindSecondToTopTransient (ClientData *pcd)
 
 
 
-Boolean ForceLowerWindow (ClientData *pcd)
+static Boolean ForceLowerWindow (ClientData *pcd)
 {
     XWindowChanges changes;
     Boolean restack = False;
@@ -3790,7 +3790,7 @@ Boolean F_Separator (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Separator */
 
 
-Boolean ForceRaiseWindow (ClientData *pcd)
+static Boolean ForceRaiseWindow (ClientData *pcd)
 {
     XWindowChanges changes;
     Boolean restack = False;

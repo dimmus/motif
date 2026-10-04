@@ -19,52 +19,23 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/
-#ifdef REV_INFO
-#ifndef lint
-static char rcsid[] = "$XConsortium: wmloutp1.c /main/7 1995/07/13 21:04:31 drk $"
-#endif
-#endif
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
-
-/*
- * This is the standard output module for creating the UIL compiler
- * .h files.
  */
-
-
-#include "wml.h"
-
-/* External functions declaraion */
-
-
-
-void wmlOutput (void)
-
-{
-
-/*
- * Output the .h files
- */
-wmlOutputHFiles ();
-if ( wml_err_count > 0 ) return;
-
-/*
- * Output the keyword (token) tables
- */
-wmlOutputKeyWordFiles ();
-if ( wml_err_count > 0 ) return;
-
-/*
- * Output the .mm files
- */
-wmlOutputMmFiles ();
-if ( wml_err_count > 0 ) return;
-
-return;
-
+#ifndef _XmI18ListI_h
+#  define _XmI18ListI_h
+#  include <Xm/MultiListP.h>
+#  ifdef __cplusplus
+extern "C" {
+#  endif
+/* Defined in I18List.c, used by MultiList.c (and exported). */
+extern XmMultiListRowInfo *XmI18ListFindRow(Widget, String, int *, Boolean, Boolean);
+extern int *XmI18ListGetSelectedRowArray(XmI18ListWidget, int *);
+extern void XmI18ListMakeRowVisible(XmI18ListWidget, int);
+extern void XmI18ListDeselectRow(XmI18ListWidget, int);
+extern void XmI18ListSelectRow(XmI18ListWidget, int, Boolean);
+extern void XmI18ListSelectAllItems(XmI18ListWidget, Boolean);
+extern void XmI18ListDeselectItems(XmI18ListWidget, XmString, int);
+extern void XmI18ListSelectItems(XmI18ListWidget, XmString, int, Boolean);
+#  ifdef __cplusplus
 }
+#  endif
+#endif /* _XmI18ListI_h */

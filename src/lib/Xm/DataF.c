@@ -24,6 +24,7 @@
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
 #endif
+#include "DataFI.h"
 #include "ImageCachI.h"
 #include "TextFI.h"
 #include "TextFSelI.h"
@@ -98,10 +99,6 @@ extern unsigned char _XmGetFocusPolicy(Widget);
 extern void _XmPrimitiveFocusIn(Widget, XEvent *, String *, Cardinal *);
 extern void _XmPrimitiveEnter(Widget, XEvent *, String *, Cardinal *);
 extern void _XmPrimitiveLeave(Widget, XEvent *, String *, Cardinal *);
-extern Boolean _XmGetIconControlInfo(Screen *screen,
-                                     Boolean *useMaskRtn,
-                                     Boolean *useMultiColorIconsRtn,
-                                     Boolean *useIconFileCacheRtn);
 extern unsigned char _XmGetAudibleWarning(Widget);
 extern void _XmSetDestination(Display *, Widget);
 /*
@@ -1037,7 +1034,7 @@ static TextFGCData df_GetTextFGCData(Widget w)
   return gc_data;
 }
 
-void _XmDataFToggleCursorGC(Widget widget)
+static void _XmDataFToggleCursorGC(Widget widget)
 {
   XmDataFieldWidget tf = (XmDataFieldWidget)widget;
   XGCValues values;

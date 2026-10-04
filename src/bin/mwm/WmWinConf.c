@@ -421,7 +421,7 @@ void HandleClientFrameMove (ClientData *pcd, XEvent *pev)
  *  Comments:
  *  --------
  *************************************<->***********************************/
-void UpdateAndDrawResize (ClientData *pcd)
+static void UpdateAndDrawResize (ClientData *pcd)
 {
     int tmpHeight, tmpWidth;
 
@@ -1939,7 +1939,7 @@ void DrawOutline (int x, int y, unsigned int width, unsigned int height)
  *
  *************************************<->***********************************/
 
-Boolean WindowIsOnScreen (ClientData *pCD, int *dx, int *dy)
+static Boolean WindowIsOnScreen (ClientData *pCD, int *dx, int *dy)
 {
   int x1 = pCD->clientX;
   int x2 = pCD->clientX + pCD->clientWidth;

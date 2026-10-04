@@ -517,7 +517,7 @@ void XmCopyISOLatin1Lowered(char *dst, char *src)
 #define pixmap_width 2
 #define pixmap_height 2
 
-Pixmap XiCreateStippledPixmap(Screen *screen, Pixel fore, Pixel back, unsigned int depth)
+static Pixmap XiCreateStippledPixmap(Screen *screen, Pixel fore, Pixel back, unsigned int depth)
 {
   register Display *display = DisplayOfScreen(screen);
   CacheEntry *cachePtr;
@@ -555,7 +555,7 @@ Pixmap XiCreateStippledPixmap(Screen *screen, Pixel fore, Pixel back, unsigned i
   return (stippled_pixmap);
 }
 
-void XiReleaseStippledPixmap(Screen *screen, Pixmap pixmap)
+static void XiReleaseStippledPixmap(Screen *screen, Pixmap pixmap)
 {
   register Display *display = DisplayOfScreen(screen);
   CacheEntry *cachePtr, **prevP;
@@ -679,10 +679,10 @@ static Boolean IsSubclassOf(WidgetClass wc, WidgetClass sc)
 /*
  *  end FIX for 5178.
  */
-void _XiResolveAllPartOffsets(WidgetClass w_class,
-                              XmOffsetPtr *offset,
-                              XmOffsetPtr *constraint_offset,
-                              Boolean align64)
+static void _XiResolveAllPartOffsets(WidgetClass w_class,
+                                     XmOffsetPtr *offset,
+                                     XmOffsetPtr *constraint_offset,
+                                     Boolean align64)
 {
   WidgetClass c, super = w_class->core_class.superclass;
   ConstraintWidgetClass cc = NULL, scc = NULL;
@@ -791,9 +791,9 @@ void _XiResolveAllPartOffsets(WidgetClass w_class,
   _XmProcessUnlock();
 }
 
-void XiResolveAllPartOffsets(WidgetClass w_class,
-                             XmOffsetPtr *offset,
-                             XmOffsetPtr *constraint_offset)
+static void XiResolveAllPartOffsets(WidgetClass w_class,
+                                    XmOffsetPtr *offset,
+                                    XmOffsetPtr *constraint_offset)
 {
   _XiResolveAllPartOffsets(w_class, offset, constraint_offset, False);
 }

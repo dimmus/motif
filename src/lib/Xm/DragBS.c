@@ -1191,7 +1191,7 @@ Atom _XmAllocMotifAtom(Widget shell, Time time)
  *  Get the atom from the atoms table with nonzero timestamp less than but
  *  closest to the specified value.
  ***************************************************************************/
-Atom _XmGetMotifAtom(Widget shell, Time time)
+static Atom _XmGetMotifAtom(Widget shell, Time time)
 {
   Display *display = XtDisplay(shell);
   xmAtomsTable atomsTable;

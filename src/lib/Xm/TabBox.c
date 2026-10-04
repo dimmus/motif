@@ -37,6 +37,7 @@
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
 #endif
+#include "TabBoxI.h"
 #include "XmI.h"
 #include <Xm/TabBoxP.h>
 #include <stdlib.h>
@@ -71,9 +72,6 @@ typedef struct _XmCache {
 #  undef _ARGS
 #endif
 #define _ARGS(a) a
-extern XmTabAttributes _XmTabbedStackListGet(XmTabbedStackList, int);
-extern XmTabAttributes _XmTabbedStackListArray(XmTabbedStackList);
-extern int _XmTabbedStackListCount(XmTabbedStackList);
 static void ClassInitialize(void);
 static void ClassPartInitialize(WidgetClass w_class);
 static void TabCanvasClassInitialize(void);

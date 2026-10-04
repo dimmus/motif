@@ -24,6 +24,7 @@
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
 #endif
+#include "I18ListI.h"
 #include "RepTypeI.h"
 #include "TransferI.h" /* for _XmConvertComplete() */
 #include "XmI.h"

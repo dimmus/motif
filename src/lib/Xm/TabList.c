@@ -21,6 +21,7 @@
  * Floor, Boston, MA 02110-1301 USA
  *
  */
+#include "TabBoxI.h"
 #include "XmI.h"
 #include <Xm/Ext.h>
 #include <Xm/TabList.h>

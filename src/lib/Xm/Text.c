@@ -67,11 +67,6 @@ static char rcsid[] = "$TOG: Text.c /main/47 1999/01/26 15:18:26 mgreess $"
      * this change prohibits the scroll bars from being updated until redisplay
      * is re-enabled.
      */
-    extern void
-    _XmChangeVSB(XmTextWidget widget);
-extern void _XmRedisplayHBar(XmTextWidget widget);
-extern void _XmChangeHSB(XmTextWidget widget);
-extern void _XmRedisplayVBar(XmTextWidget widget);
 /********    Static Function Declarations    ********/
 static void NullAddWidget(XmTextSource source, XmTextWidget tw);
 static void NullRemoveWidget(XmTextSource source, XmTextWidget tw);

@@ -61,7 +61,7 @@ static unsigned long cmdKillListIndex;
 /*----------------------------------------------------------------------*
  |                              NewCommand                              |
  *----------------------------------------------------------------------*/
-CmdTree *
+static CmdTree *
 NewCommand (
      CARD32  commandID,
      CARD32  notifyWindow,
@@ -90,7 +90,7 @@ NewCommand (
 /*---------------------------------------------------------------------------*
  |                                  FindCmd                                  |
  *---------------------------------------------------------------------------*/
-CmdTree *
+static CmdTree *
 FindCmd(
      CARD32    commandID,
      CmdTree  *menuTree)
@@ -124,7 +124,7 @@ FindCmd(
  | can be found. If no match is found, 0 is returned.  This should NEVER be  |
  | the value of a command defined by a client.                               |
  *---------------------------------------------------------------------------*/
-CARD32
+static CARD32
 FindDuplicateName(
      CmdTree  *menuTree,
      char     *name)
@@ -152,7 +152,7 @@ FindDuplicateName(
  | Note that toplevel commands have 0 as their commandSet.  This will   |
  | always match the top entry in the command tree since it is 0.        |
  *----------------------------------------------------------------------*/
-Boolean
+static Boolean
 AddCommand (
      int      scr,
      CARD32   commandSet,
@@ -210,7 +210,7 @@ AddCommand (
  |                          RemoveCommandBranch                              |
  | This routine all commands at the specified node in the command tree.      |
  *---------------------------------------------------------------------------*/
-void
+static void
 RemoveCommandBranch (CmdTree *menuTree)
 {
   CmdTree *tmp = menuTree;
@@ -975,7 +975,7 @@ RemoveCommand (
  | command tree.                                                             |
  *---------------------------------------------------------------------------*/
 /*ARGSUSED*/
-void
+static void
 RemoveMatchingCommands (
      int    scr,
      Window clientWindow,
@@ -1002,7 +1002,7 @@ RemoveMatchingCommands (
  |                           RemoveCommandsForClient                         |
  | This function will remove any command that was inserted by this client.   |
  *---------------------------------------------------------------------------*/
-void
+static void
 RemoveCommandsForClient (
      int    scr,
      Window clientWindow)
@@ -1054,7 +1054,7 @@ RemoveCommandsForClient (
  |                            InvokeMessageReply                             |
  *---------------------------------------------------------------------------*/
 /*ARGSUSED*/
-void
+static void
 InvokeMessageReply (Widget w, XtPointer clientData, XtPointer callData)
 {
   PRINT("Invoke message reply received.\n");

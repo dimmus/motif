@@ -336,7 +336,7 @@ MenuSpec *MakeMenu (WmScreenData *pSD,
 
 
 /*************************************<->***********************************/
-void CheckTerminalSeparator(MenuSpec *menuSpec, Widget buttonWidget, Boolean manage)
+static void CheckTerminalSeparator(MenuSpec *menuSpec, Widget buttonWidget, Boolean manage)
 {
     CompositeWidget cw;
     WidgetList      children;

@@ -26,6 +26,7 @@
 static char rcsid[] = "$RCSfile: DataFSel.c,v $ $Revision: 1.6 $ $Date: 2003/10/06 10:10:23 $"
 #  endif
 #endif
+#include "DataFI.h"
 #include "XmI.h"
 #include <X11/Xatom.h>
 #include <Xm/AtomMgr.h>
@@ -59,12 +60,6 @@ static void HandleInsertTargets(Widget w,
                                 unsigned long *length,
                                 int *format);
 /********    End Static Function Declarations    ********/
-extern void _XmDataFieldDeselectSelection(Widget, Boolean, Time);
-extern void _XmDataFieldStartSelection(XmDataFieldWidget, XmTextPosition, XmTextPosition, Time);
-extern int _XmDataFieldCountBytes(XmDataFieldWidget, wchar_t *, int);
-extern Boolean _XmDataFielddf_SetDestination(Widget, XmTextPosition, Time);
-extern void _XmDataFielddf_SetCursorPosition(
-    XmDataFieldWidget, XEvent *, XmTextPosition, Boolean, Boolean);
 
 /* State of one INSERT_SELECTION conversion.  It lives on the heap because
    ConvertInsertSelection() may stop waiting while a request is still

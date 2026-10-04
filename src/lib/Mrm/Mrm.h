@@ -1719,6 +1719,10 @@ extern Cardinal UrmCreateWidgetInstance
 					   URMResourceContextPtr wref_id ,
 					   Widget *w_return,
 					   char **w_name));
+extern Cardinal UrmCreateWidgetInstanceCleanup
+                               _ARGUMENTS((URMResourceContextPtr context_id ,
+					   Widget child ,
+					   IDBFile file_id ));
 extern Cardinal UrmCreateOrSetWidgetInstance
                                _ARGUMENTS((URMResourceContextPtr context_id ,
 					   Widget parent ,

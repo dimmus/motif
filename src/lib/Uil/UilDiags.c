@@ -119,7 +119,7 @@ static	void 	(*fpe_handler)(int);
 **--
 **/
 
-void    diag_store_handlers
+static void    diag_store_handlers
             ( void )
 {
 /*

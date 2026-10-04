@@ -30,6 +30,7 @@
  * positioned on the side to simulate a folder tab.
  *
  */
+#include "TabBoxI.h"
 #include "XmI.h"
 #include <Xm/BulletinBP.h>
 #include <Xm/DialogS.h>
@@ -54,17 +55,6 @@
 #  undef _ARGS
 #endif
 #define _ARGS(a) a
-extern int _XiGetTabIndex _ARGS((Widget, int, int));
-extern int _GetTabWidth _ARGS((Widget, int));
-extern int _XmTabBoxGetTabHeight _ARGS((Widget, int));
-extern Widget _XmTabBoxCanvas _ARGS((Widget));
-extern void _XmTabBoxGetNumRowColumns _ARGS((Widget, int, int *, int *));
-extern int _XmTabBoxGetMaxTabWidth _ARGS((Widget));
-extern int _XmTabBoxGetMaxTabHeight _ARGS((Widget));
-extern void _XmTabBoxSelectTab _ARGS((Widget, int));
-extern void _XmTabBoxGetNumRowsColumns _ARGS((Widget, int, int *, int *));
-extern void _XmTabBoxStackedGeometry _ARGS((XmTabBoxWidget, Dimension, XRectangle *));
-extern int _XmTabbedStackListCount _ARGS((XmTabbedStackList));
 static void ClassInitialize(void);
 #ifdef TEAR_OFF_TABS
 static void ClassPartInitialize _ARGS((WidgetClass));

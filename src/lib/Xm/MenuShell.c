@@ -401,7 +401,7 @@ void _XmPopupSpringLoaded(Widget shell)
   _XmPopupI(shell, XtGrabExclusive, True);
 }
 
-void _XmPopup(Widget shell, XtGrabKind grab_kind)
+static void _XmPopup(Widget shell, XtGrabKind grab_kind)
 {
   _XmPopupI(shell, grab_kind, FALSE);
 }

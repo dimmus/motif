@@ -158,7 +158,7 @@ Pixmap MakeClientIconPixmap (
  *
  *************************************<->***********************************/
 
-Pixmap GetNamedPixmap (Screen *scr, String iconName,
+static Pixmap GetNamedPixmap (Screen *scr, String iconName,
 		       Pixel fg, Pixel bg, int depth)
 {
   Pixmap       pixmap = XmUNSPECIFIED_PIXMAP;

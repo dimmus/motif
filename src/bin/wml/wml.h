@@ -713,5 +713,8 @@ extern void wmlOutputDatFiles (void);
  * Define in wmloutp1 or wmloutp2
  */
 extern void wmlOutput (void);
+extern void wmlOutputKeyWordFiles (void);
+extern void wmlOutputMmFiles (void);
+extern int yywrap (void);
 
 #endif /* _WML_H_ */
