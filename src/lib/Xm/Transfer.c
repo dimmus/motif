@@ -2113,18 +2113,6 @@ XmDestinationCallbackStruct *_XmTransferGetDestinationCBStruct(XtPointer tid)
   return (tc->callback_struct);
 }
 
-/* Error handler for XGetAtomName */
-static int SIF_ErrorFlag;
-
-static int SIF_ErrorHandler(Display *display, /* unused */
-                            XErrorEvent *event)
-{
-  _XmProcessLock();
-  SIF_ErrorFlag = event->type;
-  _XmProcessUnlock();
-  return 0;
-}
-
 /* NOTE! XGetAtomName return value MUST be freed with XFree; however, there
  ** isn't a good way to allocate data which can be freed with XFree. We could
  ** cache a static character pointer to NULL and check it to decide whether or
@@ -2133,23 +2121,17 @@ static int SIF_ErrorHandler(Display *display, /* unused */
  */
 static char *GetSafeAtomName(Display *display, Atom a, FreeType *howFree)
 {
-  XErrorHandler old_Handler;
+  XmErrorTrapRec trap;
   char *returnvalue;
-  /* Setup error proc and reset error flag */
-  old_Handler = XSetErrorHandler((XErrorHandler)SIF_ErrorHandler);
-  _XmProcessLock();
-  SIF_ErrorFlag = 0;
-  _XmProcessUnlock();
+  _XmStartErrorTrap(&trap, display, 0, 0);
   returnvalue = XGetAtomName(display, a);
   *howFree = DoXFree;
-  XSetErrorHandler(old_Handler);
-  _XmProcessLock();
-  if (SIF_ErrorFlag != 0) {
+  /* XGetAtomName was a round trip */
+  if (_XmEndErrorTrap(&trap, False) != 0) {
     returnvalue = XtMalloc(1); /* does not return NULL */
     returnvalue[0] = 0;        /* Create empty string to return */
     *howFree = DoFree;
     TransferWarning(NULL, ATOM, ARG, BAD_ATOM_MESSAGE);
   }
-  _XmProcessUnlock();
   return (returnvalue);
 }

@@ -36,6 +36,7 @@
 #include <Xm/LabelGP.h>
 #include <Xm/ManagerP.h>
 #include <Xm/PrimitiveP.h>
+#include <stdatomic.h>
 /**************************************************************************
  *   This is Xm.c
  *    It contains global API that:
@@ -435,6 +436,83 @@ Boolean _XmGetWindowPropertyChecked(Display *display,
   *nitems_return = nitems;
   *prop_return = data;
   return ok;
+}
+
+/************************************************************************
+ *
+ *  _XmStartErrorTrap, _XmEndErrorTrap
+ *	Catch the X errors that the requests made on a display between
+ *	the two calls cause, instead of letting them reach the
+ *	application's error handler (which by default exits).
+ *
+ *	Xlib has one error handler for the whole process, so code that
+ *	installs its own around a request and then puts the old one back
+ *	loses or misroutes errors when two threads do so at once.  Here
+ *	TrapErrorHandler stays installed while any thread has a trap, and
+ *	keeps an error only when the thread that reads it from the
+ *	connection has a trap that matches it; any other error goes to the
+ *	handler that was installed before.  With Xt's locking that thread
+ *	is the one holding the application lock, which made the requests.
+ *
+ *	error_code and resource restrict the errors trapped (0: any).
+ *	_XmEndErrorTrap first makes a round trip when sync is True (pass
+ *	False when the last request was itself a round trip) and returns
+ *	the error code of the first error trapped, or 0.  Traps nest.
+ *
+ ************************************************************************/
+static _Thread_local XmErrorTrap threadErrorTraps = NULL;
+static _Atomic(XErrorHandler) trapPreviousHandler = NULL;
+static int numErrorTraps = 0; /* traps of all threads; process lock */
+
+static int TrapErrorHandler(Display *display, XErrorEvent *event)
+{
+  XmErrorTrap trap;
+  XErrorHandler previous;
+  for (trap = threadErrorTraps; trap != NULL; trap = trap->prev) {
+    if (trap->display == display && event->serial >= trap->first_request &&
+        (trap->error_code == 0 || event->error_code == trap->error_code) &&
+        (trap->resource == 0 || event->resourceid == trap->resource))
+    {
+      if (trap->error == 0)
+        trap->error = event->error_code;
+      return 0;
+    }
+  }
+  previous = atomic_load(&trapPreviousHandler);
+  return previous ? (*previous)(display, event) : 0;
+}
+
+void _XmStartErrorTrap(XmErrorTrap trap, Display *display, int error_code, XID resource)
+{
+  trap->display = display;
+  trap->error_code = (unsigned char)error_code;
+  trap->resource = resource;
+  trap->error = 0;
+  _XmProcessLock();
+  if (numErrorTraps++ == 0)
+    atomic_store(&trapPreviousHandler, XSetErrorHandler(TrapErrorHandler));
+  _XmProcessUnlock();
+  trap->first_request = NextRequest(display);
+  trap->prev = threadErrorTraps;
+  threadErrorTraps = trap;
+}
+
+int _XmEndErrorTrap(XmErrorTrap trap, Boolean sync)
+{
+  XmErrorTrap *link;
+  if (sync)
+    XSync(trap->display, False);
+  for (link = &threadErrorTraps; *link != NULL; link = &(*link)->prev) {
+    if (*link == trap) {
+      *link = trap->prev;
+      break;
+    }
+  }
+  _XmProcessLock();
+  if (--numErrorTraps == 0)
+    (void)XSetErrorHandler(atomic_load(&trapPreviousHandler));
+  _XmProcessUnlock();
+  return trap->error;
 }
 
 /*
