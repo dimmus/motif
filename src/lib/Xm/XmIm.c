@@ -916,8 +916,24 @@ static void set_values(Widget w, ArgList args, Cardinal num_args, XmInputPolicy 
      */
     im_info->current_widget = w;
   }
-  if (icp->xic && icp->focus_window && icp->focus_window != XtWindow(w))
+  if (icp->xic && icp->focus_window && icp->focus_window != XtWindow(w)) {
+    /*
+     * The XIC is shared and another widget has it: leave its values
+     * alone, but keep this widget's preedit callbacks for when the XIC
+     * comes to it (they are kept per widget, see regist_real_callback).
+     */
+    if (icp->input_style & XIMPreeditCallbacks) {
+      bzero((char *)&preedit_vlist, sizeof(VaArgListRec));
+      for (i = num_args; i > 0; i--, argp++) {
+        name = XrmStringToName(argp->name);
+        IsCallback(name)
+        set_callback_values(
+            w, argp->name, (XIMCallback *)(argp->value), &preedit_vlist, input_policy);
+      }
+      XtFree((char *)preedit_vlist.args);
+    }
     return;
+  }
   bzero((char *)&status_vlist, sizeof(VaArgListRec));
   bzero((char *)&preedit_vlist, sizeof(VaArgListRec));
   bzero((char *)&xic_vlist, sizeof(VaArgListRec));
@@ -1425,16 +1441,18 @@ static int NameToSwitch(String name)
 static void set_callback_values(
     Widget w, String name, XIMCallback *value, VaArgList vlp, XmInputPolicy input_policy)
 {
-  XIMProc call = value->callback;
+  XIMProc call;
   int s = NameToSwitch(name);
   XmInputPolicy ip = input_policy;
-  Widget p = NULL;
-  if (input_policy == XmINHERIT_POLICY) {
-    p = w;
-    while (!XtIsShell(p))
-      p = XtParent(p);
+  Widget p = w;
+  if (value == NULL)
+    return;
+  call = value->callback;
+  /* The XmPER_SHELL callbacks get the shell, whatever the policy given */
+  while (!XtIsShell(p))
+    p = XtParent(p);
+  if (input_policy == XmINHERIT_POLICY)
     XtVaGetValues(p, XmNinputPolicy, &ip, NULL);
-  }
   switch (s) {
     case PREEDIT_START:
       if (ip == XmPER_SHELL) {
