@@ -599,7 +599,7 @@ static Boolean ConstraintSetValues(
   OutlineConstraints old_node = GetNodeInfo(current);
   Boolean insert_change = False, redisplay = False;
   int i;
-  for (i = 0; i < *num_args; i++)
+  for (i = 0; (Cardinal)i < *num_args; i++)
     if (streq(args[i].name, XmNinsertBefore)) {
       insert_change = True;
       break;
@@ -744,7 +744,7 @@ static void CalcLocations(Widget w, Boolean allow_resize)
   /*
    * Reset each node to be hidden;
    */
-  for (i = 0; i < ow->composite.num_children; ++i) {
+  for (i = 0; (Cardinal)i < ow->composite.num_children; ++i) {
     node = GetNodeInfo(ow->composite.children[i]);
     XmHierarchyC_status(node) |= IS_COMPRESSED;
   }
@@ -938,7 +938,7 @@ static void LayoutChildren(Widget w, Widget assign_child)
    * Find the first node to be displayed, and unmap all nodes that would be
    * above that one.
    */
-  for (cur_node = 0; cur_node < num_nodes; cur_node++, node_table++) {
+  for (cur_node = 0; (Cardinal)cur_node < num_nodes; cur_node++, node_table++) {
     if (*node_table == (HierarchyConstraints)disp_top)
       break;
     UnmapNode(ow, (OutlineConstraints)*node_table);
@@ -1068,7 +1068,7 @@ static void GetNodeHeightAndWidth(
    */
   if (XmHierarchyC_state(node) != XmHidden)
     outline_depth++;
-  for (i = 0; i < XmHierarchyC_num_children(node); i++) {
+  for (i = 0; (Cardinal)i < XmHierarchyC_num_children(node); i++) {
     GetNodeHeightAndWidth(
         w, (OutlineConstraints)XmHierarchyC_children(node)[i], outline_depth, TRUE, num);
   }

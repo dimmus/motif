@@ -385,7 +385,7 @@ IncludeCommand (
   count     = UnpackCARD32(&data);
 
   if (count > 0) windowIDs = (Window *) XtMalloc(sizeof(Window)*count);
-  for (win=0; win<count; win++)
+  for (win=0; (CARD32)win<count; win++)
   {
       windowIDs[win] = UnpackCARD32(&data);
       PRINT("Got window ID %d.\n", windowIDs[win]);
@@ -510,7 +510,7 @@ EnableCommand (
   count     = UnpackCARD32(&data);
 
   if (count > 0) windowIDs = (Window *) XtMalloc(sizeof(Window)*count);
-  for (win=0; win<count; win++)
+  for (win=0; (CARD32)win<count; win++)
     {
       windowIDs[win] = UnpackCARD32(&data);
       PRINT("Got window ID %d.\n", windowIDs[win]);
@@ -632,7 +632,7 @@ DisableCommand (
   count     = UnpackCARD32(&data);
 
   if (count > 0) windowIDs = (Window *) XtMalloc(sizeof(Window)*count);
-  for (win=0; win<count; win++)
+  for (win=0; (CARD32)win<count; win++)
     {
       windowIDs[win] = UnpackCARD32(&data);
       PRINT("Got window ID %d.\n", windowIDs[win]);
@@ -756,7 +756,7 @@ RenameCommand (
   count     = UnpackCARD32(&data);
 
   if (count > 0) windowIDs = (Window *) XtMalloc(sizeof(Window)*count);
-  for (win=0; win<count; win++)
+  for (win=0; (CARD32)win<count; win++)
     {
       windowIDs[win] = UnpackCARD32(&data);
       PRINT("Got window ID %d.\n", windowIDs[win]);
@@ -878,7 +878,7 @@ RemoveCommand (
   count     = UnpackCARD32(&data);
 
   if (count > 0) windowIDs = (Window *) XtMalloc(sizeof(Window)*count);
-  for (win=0; win<count; win++)
+  for (win=0; (CARD32)win<count; win++)
     {
       windowIDs[win] = UnpackCARD32(&data);
       PRINT("Got window ID %d.\n", windowIDs[win]);
@@ -1017,7 +1017,7 @@ RemoveCommandsForClient (
   /*
    * Remove any matching commands on the root menu.
    */
-  for (i = 0;  i < cmdKillListIndex;  i++)
+  for (i = 0;  (long unsigned int)i < cmdKillListIndex;  i++)
     {
       CmdTree *tPtr, *pNext;
       MenuSpec *pMS;
@@ -1146,7 +1146,7 @@ GetMinimizeInfo(ClientData *pcd, XtPointer reply)
    frameWin = pcd->clientFrameWin;
 
 
-   for (i=0; i < filledCount; i++)
+   for (i=0; (CARD32)i < filledCount; i++)
  	if (pcd->pTitleGadgets[i].id == FRAME_MINIMIZE)
 	   {
 	        CopyMwmGadget (&(pcd->pTitleGadgets[i]), &minimize_button);
@@ -1193,7 +1193,7 @@ GetMaximizeInfo(ClientData *pcd, XtPointer reply)
       frameWin = pcd->clientFrameWin;
 
 
-      for (i=0; i < filledCount; i++)
+      for (i=0; (CARD32)i < filledCount; i++)
 	{
 
         if (pcd->pTitleGadgets[i].id == FRAME_MAXIMIZE)
@@ -1408,7 +1408,7 @@ GetMoveInfo(ClientData *pcd, XtPointer reply)
       windowY = pcd->clientY;
       frameWin = pcd->clientFrameWin;
 
-      for (i=0; i < filledCount; i++)
+      for (i=0; (CARD32)i < filledCount; i++)
 	{
 	  if (pcd->pTitleGadgets[i].id == FRAME_TITLE)
 	    {
@@ -1569,7 +1569,7 @@ GetFocusInfo(ClientData *pcd, XtPointer reply)
       filledCount = pcd->cTitleGadgets;
       frameWin = pcd->clientFrameWin;
 
-      for (i=0; i < filledCount; i++)
+      for (i=0; (CARD32)i < filledCount; i++)
         {
           if (pcd->pTitleGadgets[i].id == FRAME_TITLE)
             {
@@ -1616,7 +1616,7 @@ GetWindowMenuPostInfo(ClientData *pcd, XtPointer reply)
       filledCount = pcd->cTitleGadgets;
       frameWin = pcd->clientFrameWin;
 
-      for (i=0; i < filledCount; i++)
+      for (i=0; (CARD32)i < filledCount; i++)
         {
           if (pcd->pTitleGadgets[i].id == FRAME_TITLE)
             {
@@ -1901,7 +1901,7 @@ GetWindowItemSelectInfo(ClientData *pcd, XtPointer reply)
 
   menuItemCount = menuSpec->menuButtonCount;
 
-  for (n = 0; n < menuItemCount && n < MAX_MENU_ITEMS; n++)
+  for (n = 0; (CARD32)n < menuItemCount && n < MAX_MENU_ITEMS; n++)
     {
       itemName[n][0] = '\0';
       sensitive[n] = FALSE;
@@ -1933,7 +1933,7 @@ GetWindowItemSelectInfo(ClientData *pcd, XtPointer reply)
       reply = PackCARD32 (reply, (CARD32)sensitiveCount);
       reply = PackCARD32 (reply, (CARD32)menuWin);
       reply = PackCARD32 (reply, (CARD32)frameWin);
-      for (n=0; n < menuItemCount && n < MAX_MENU_ITEMS; n++)
+      for (n=0; (CARD32)n < menuItemCount && n < MAX_MENU_ITEMS; n++)
 	{
 	  reply = PackCARD32 (reply, (CARD32)sensitive[n]);
 	  reply = PackCARD32 (reply, (CARD32)itemY[n]);

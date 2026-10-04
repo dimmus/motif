@@ -873,7 +873,7 @@ void _XmRCArmAndActivate(Widget w, XEvent *event, String *parms, Cardinal *num_p
       m->manager.traversal_on = True;
       /* First look for a non-Help menu child.  If this fails
             we'll use the help menu */
-      for (i = 0; i < m->composite.num_children; i++) {
+      for (i = 0; (Cardinal)i < m->composite.num_children; i++) {
         child = (XmCascadeButtonWidget)m->composite.children[i];
         if (!IsHelp(m, (Widget)child) && XmIsTraversable((Widget)child))
           break;
@@ -1077,7 +1077,7 @@ static void ProcessMenuTree(XmRowColumnWidget w, int mode)
   Widget child;
   if (w == NULL)
     return;
-  for (i = 0; i < w->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < w->composite.num_children; i++) {
     if (XtIsManaged((child = w->composite.children[i]))) {
       _XmRC_ProcessSingleWidget(child, mode);
       if (XmIsCascadeButtonGadget(child)) {
@@ -1613,7 +1613,7 @@ static void DismissTearOffSubMenu(XmRowColumnWidget menu)
   int i;
   if ((menu == NULL) || !XmIsRowColumn(menu) || !IsPulldown(menu) || (menu->core.being_destroyed))
     return;
-  for (i = 0; i < menu->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < menu->composite.num_children; i++) {
     Widget child = menu->composite.children[i];
     if (XmIsCascadeButtonGadget(child)) {
       if (CBG_Submenu(child))

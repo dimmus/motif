@@ -289,7 +289,7 @@ static void _XmFastExpose(register XmManagerWidget rowcol)
   RC_SetExpose(rowcol, True);
   (*(XtClass(rowcol)->core_class.expose))((Widget)rowcol, NULL, NULL);
   /* Process each windowed child */
-  for (i = 0; i < rowcol->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < rowcol->composite.num_children; i++) {
     child = rowcol->composite.children[i];
     if (XtIsWidget(child) && XtIsManaged(child)) {
       (*(XtClass(child)->core_class.expose))(child, NULL, NULL);
@@ -783,7 +783,7 @@ static void PopupSharedMenuShell(Widget cbwid, Widget smwid, XEvent *event)
   XmMenuSystemTrait menuSTrait;
   menuSTrait = (XmMenuSystemTrait)XmeTraitGet((XtPointer)XtClass((Widget)submenu), XmQTmenuSystem);
   /* Find out which child is trying to get posted */
-  for (i = 0; i < popup->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < popup->composite.num_children; i++) {
     if (popup->composite.children[i] == (Widget)submenu) {
       _index = i;
       break;
@@ -870,7 +870,7 @@ static void PopupSharedMenuShell(Widget cbwid, Widget smwid, XEvent *event)
    * traversal code set it to the toc.
    */
   if (RC_TearOffControl(submenu) && XtIsManaged(RC_TearOffControl(submenu))) {
-    for (i = 0; i < submenu->composite.num_children; i++) {
+    for (i = 0; (Cardinal)i < submenu->composite.num_children; i++) {
       if (XmIsTraversable(submenu->composite.children[i])) {
         _XmSetInitialOfTabGroup((Widget)submenu, submenu->composite.children[i]);
         break;
@@ -1105,7 +1105,7 @@ static void ChangeManaged(Widget w)
      * traversal code set it to the toc.
      */
     if (RC_TearOffControl(rowcol) && XtIsManaged(RC_TearOffControl(rowcol))) {
-      for (i = 0; i < rowcol->composite.num_children; i++) {
+      for (i = 0; (Cardinal)i < rowcol->composite.num_children; i++) {
         if (XmIsTraversable(rowcol->composite.children[i])) {
           _XmSetInitialOfTabGroup((Widget)rowcol, rowcol->composite.children[i]);
           break;

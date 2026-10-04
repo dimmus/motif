@@ -670,7 +670,7 @@ static int FindResolution(Widget w)
    */
   min = 32000;
   pref = resolutions[0]; /* We have to have some default. */
-  for (i = 0; i < XtNumber(resolutions); i++) {
+  for (i = 0; (unsigned int)i < XtNumber(resolutions); i++) {
     int diffx = (xres - resolutions[i] * resolutions[i]);
     int diffy = (yres - resolutions[i] * resolutions[i]);
     int tdiff; /* the total difference. */
@@ -1059,7 +1059,7 @@ static LongFlag SizeMapping(short size)
 {
   register int count;
   size /= POINT_DIVIDE;
-  for (count = 0; count < XtNumber(GValidSizes); count++) {
+  for (count = 0; (unsigned int)count < XtNumber(GValidSizes); count++) {
     if (GValidSizes[count] == size)
       return (((LongFlag)1) << count);
   }
@@ -1492,7 +1492,7 @@ static void UpdateSizes(XmFontSelectorWidget fsw)
     strs[count++] = XmStringCreateLocalized(" ");
   else
     strs[count++] = XmStringCopy(ANY_STRING(fsw));
-  for (i = 0; i < XtNumber(GValidSizes); i++) {
+  for (i = 0; (unsigned int)i < XtNumber(GValidSizes); i++) {
     char buf[10];
     LongFlag flag = ((LongFlag)1) << i;
     if (!CheckLongFlag(size_flag, flag) && !IsScaled(fsw, family))
@@ -3323,7 +3323,7 @@ static void GetValuesHook(Widget w, ArgList args, Cardinal *num_args)
   FontData *cf;
   String *str_ptr;
   register int i;
-  for (i = 0; i < *num_args; i++) {
+  for (i = 0; (Cardinal)i < *num_args; i++) {
     if (streq(args[i].name, XmNcurrentFont)) {
       cf = XmFontS_font_info(fsw)->current_font;
       str_ptr = (String *)args[i].value;

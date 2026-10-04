@@ -429,7 +429,7 @@ static Boolean GetResources(XmRendition rend,
     quarks = (XrmQuark *)_XmReallocArray((char *)quarks, argcount, sizeof(XrmQuark));
     num_quarks = argcount;
   }
-  for (i = 0; i < argcount; i++)
+  for (i = 0; (Cardinal)i < argcount; i++)
     quarks[i] = XrmStringToQuark(arglist[i].name);
   /* Compile resource description into XrmResourceList if not already done. */
   if (table == NULL) {
@@ -1054,7 +1054,7 @@ XmRendition _XmRenditionCopy(XmRendition rend, Boolean shared)
     _XmRendTagCount(toRend) = _XmRendTagCount(rend);
     _XmRendHadEnds(toRend) = _XmRendHadEnds(rend);
     _XmRendTags(toRend) = (XmStringTag *)_XmMallocArray(_XmRendTagCount(rend), sizeof(XmStringTag));
-    for (i = 0; i < _XmRendTagCount(rend); i++)
+    for (i = 0; (unsigned int)i < _XmRendTagCount(rend); i++)
       _XmRendTags(toRend)[i] = _XmRendTags(rend)[i];
   }
   return (toRend);
@@ -1096,7 +1096,7 @@ XmRenderTable XmRenderTableAddRenditions(XmRenderTable oldtable,
     _XmRTDisplay(oldtable) = NULL;
     _XmRTRefcount(oldtable) = 1;
     /* Copy renditions */
-    for (i = 0; i < rendition_count; i++) {
+    for (i = 0; (Cardinal)i < rendition_count; i++) {
       _XmRTRenditions(oldtable)[i] = CopyRendition(renditions[i]);
       if (_XmRTDisplay(oldtable) == NULL)
         _XmRTDisplay(oldtable) = _XmRendDisplay(renditions[i]);
@@ -1125,7 +1125,7 @@ XmRenderTable XmRenderTableAddRenditions(XmRenderTable oldtable,
       oldtable = newtable;
     }
     /* Merge matching renditions */
-    for (i = 0; i < rendition_count; i++) {
+    for (i = 0; (Cardinal)i < rendition_count; i++) {
       rend = renditions[i];
       match = _XmRenderTableFindRendition(oldtable, _XmRendTag(rend), TRUE, FALSE, FALSE, &idx);
       if ((match != NULL) && (merge_mode != XmDUPLICATE)) {
@@ -1173,7 +1173,7 @@ XmRenderTable XmRenderTableAddRenditions(XmRenderTable oldtable,
         _XmRTRenditions(newtable)[i] = _XmRTRenditions(oldtable)[i];
       /* Copy new renditions. */
       next = _XmRTCount(oldtable);
-      for (i = 0; i < rendition_count; i++) {
+      for (i = 0; (Cardinal)i < rendition_count; i++) {
         if (!matches[i]) {
           _XmRTRenditions(newtable)[next] = CopyRendition(renditions[i]);
           if (_XmRTDisplay(newtable) == NULL)
@@ -1544,7 +1544,7 @@ XmRendition *XmRenderTableGetRenditions(XmRenderTable table, char **tags, Cardin
   }
   rends = (XmRendition *)_XmMallocArray(tag_count, sizeof(XmRendition));
   count = 0;
-  for (i = 0; i < tag_count; i++) {
+  for (i = 0; (Cardinal)i < tag_count; i++) {
     rend = _XmRenderTableFindRendition(table, tags[i], FALSE, FALSE, FALSE, NULL);
     if (rend != NULL) {
       rends[count] = CopyRendition(rend);
@@ -1919,9 +1919,9 @@ void XmRenditionRetrieve(XmRendition rendition, ArgList arglist, Cardinal argcou
     return;
   _XmProcessLock();
   /* Get resources */
-  for (i = 0; i < argcount; i++) {
+  for (i = 0; (Cardinal)i < argcount; i++) {
     arg = &(arglist[i]);
-    for (j = 0; j < _XmNumRenditionResources; j++) {
+    for (j = 0; (Cardinal)j < _XmNumRenditionResources; j++) {
       res = &(_XmRenditionResources[j]);
       if (strcmp(res->resource_name, arg->name) == 0) {
         /* CR 7890: Font hook - if there's a fontName but the
@@ -2002,9 +2002,9 @@ void XmRenditionUpdate(XmRendition rendition, ArgList arglist, Cardinal argcount
     RenewRendition(rendition);
     can_free = FALSE;
   }
-  for (i = 0; i < argcount; i++) {
+  for (i = 0; (Cardinal)i < argcount; i++) {
     arg = &(arglist[i]);
-    for (j = 0; j < _XmNumRenditionResources; j++) {
+    for (j = 0; (Cardinal)j < _XmNumRenditionResources; j++) {
       res = &(_XmRenditionResources[j]);
       if (strcmp(res->resource_name, arg->name) == 0) {
         CopyFromArg(

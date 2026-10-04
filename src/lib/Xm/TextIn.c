@@ -741,7 +741,7 @@ static void InsertString(Widget w, XEvent *event, String *params, Cardinal *num_
     nextPos = right;
     pending_delete = True;
   }
-  for (i = 0; i < *num_params; i++) {
+  for (i = 0; (Cardinal)i < *num_params; i++) {
     str = params[i];
     block.ptr = str;
     block.length = strlen(str);

@@ -2883,7 +2883,7 @@ static Boolean XmLabelGadgetGetBaselines(Widget wid, Dimension **baselines, int 
   delta = LabG_TextRect_y(lw) - lw->label.baselines[count];
   if (delta) {
     int tmp;
-    for (tmp = 0; tmp <= count; tmp++)
+    for (tmp = 0; (Cardinal)tmp <= count; tmp++)
       lw->label.baselines[tmp] += delta;
   }
   /* Copy the cached data. */

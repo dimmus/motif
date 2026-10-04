@@ -1154,7 +1154,7 @@ XmVisibility XmGetVisibility(Widget wid)
   }
   windowptr = children;
   /* walk through those which are under the window of interest */
-  for (i = 0; i < numchildren; i++) {
+  for (i = 0; (unsigned int)i < numchildren; i++) {
     if (*windowptr == XtWindow(wid)) {
       break;
     }

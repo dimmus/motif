@@ -358,7 +358,7 @@ void _XmSortResourceList(XrmResource *list[], Cardinal len)
     unitQ = XrmPermStringToQuark(XmNunitType);
     first_time = FALSE;
   }
-  for (n = 0; n < len; n++)
+  for (n = 0; (Cardinal)n < len; n++)
     if (list[n]->xrm_name == unitQ) {
       p = list[n];
       break;

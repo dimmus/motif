@@ -853,7 +853,7 @@ XmGeoMatrix _XmSelectionBoxGeoMatrixCreate(Widget wid,
   layoutPtr = &(geoSpec->layouts->row);
   boxPtr = geoSpec->boxes;
   /* menu bar */
-  for (i = 0; i < sb->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < sb->composite.num_children; i++) {
     Widget w = sb->composite.children[i];
     if (XmIsRowColumn(w) && ((XmRowColumnWidget)w)->row_column.type == XmMENU_BAR &&
         w != SB_WorkArea(sb) && _XmGeoSetupKid(boxPtr, w))
@@ -934,7 +934,7 @@ XmGeoMatrix _XmSelectionBoxGeoMatrixCreate(Widget wid,
     if (_XmGeoSetupKid(boxPtr, SB_ApplyButton(sb))) {
       ++boxPtr;
     }
-    for (i = 0; i < sb->composite.num_children; i++) {
+    for (i = 0; (Cardinal)i < sb->composite.num_children; i++) {
       Widget w = sb->composite.children[sb->composite.num_children - i - 1];
       if (IsButton(w) && !IsAutoButton(sb, w) && w != SB_WorkArea(sb)) {
         if (_XmGeoSetupKid(boxPtr, w)) {
@@ -950,7 +950,7 @@ XmGeoMatrix _XmSelectionBoxGeoMatrixCreate(Widget wid,
     if (_XmGeoSetupKid(boxPtr, SB_OkButton(sb))) {
       ++boxPtr;
     }
-    for (i = 0; i < sb->composite.num_children; i++) {
+    for (i = 0; (Cardinal)i < sb->composite.num_children; i++) {
       Widget w = sb->composite.children[i];
       if (IsButton(w) && !IsAutoButton(sb, w) && w != SB_WorkArea(sb)) {
         if (_XmGeoSetupKid(boxPtr, w)) {

@@ -49,7 +49,7 @@ Boolean _XmNotifyChildrenVisual(Widget cur, Widget new_w, Mask visual_flag)
   Boolean redisplay = False;
   XmCareVisualTrait care_visual;
   CompositeWidget cw = (CompositeWidget)new_w;
-  for (i = 0; i < cw->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < cw->composite.num_children; i++) {
     child = cw->composite.children[i];
     if ((care_visual = (XmCareVisualTrait)XmeTraitGet((XtPointer)XtClass(child),
                                                       XmQTcareParentVisual)) != NULL)

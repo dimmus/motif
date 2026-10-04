@@ -698,7 +698,7 @@ XmString XmStringDirectionCreate(XmStringDirection direction)
   _XmProcessLock();
   /* Find the static cache index and string for this direction. */
   assert(XtNumber(dir_index) == XtNumber(cache_str));
-  for (index = 0; index < XtNumber(dir_index); index++)
+  for (index = 0; (unsigned int)index < XtNumber(dir_index); index++)
     if (dir_index[index] == direction) {
       opt_str = cache_str[index];
       break;
@@ -1197,7 +1197,7 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
       _XmStrEntryCount(a) = a_lc;
       if (segs) {
         segs = (_XmStringEntry *)_XmMallocArray(a_lc, sizeof(_XmStringEntry));
-        for (i = 0; i < a_lc; i++)
+        for (i = 0; (unsigned int)i < a_lc; i++)
           segs[i] = _XmStringEntryCopy(_XmStrEntry(a)[i]);
       }
     }
@@ -1270,7 +1270,7 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
   if (!a_needs_unopt) {
     b_needs_unopt = IsUnopt(b_str, _XmStrEntryCount(b_str));
     if (b_needs_unopt)
-      for (i = 0; i < a_lc; i++)
+      for (i = 0; (unsigned int)i < a_lc; i++)
         _XmStrEntry(a_str)[i] = Unoptimize(_XmStrEntry(a_str)[i], True);
   }
   _XmStrEntryCount(a_str) = lc;
@@ -1430,7 +1430,7 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
       _XmStrEntry(a_str)[a_lc - 1] = a_line;
       _XmStrImplicitLine(a_str) = True;
     }
-    for (i = 0; i < (b_sc - merged); i++) {
+    for (i = 0; (unsigned int)i < (b_sc - merged); i++) {
       b_seg = _XmEntrySegmentGet(b_line)[i + merged];
       if (a_needs_unopt && !b_needs_unopt)
         b_seg = (_XmStringNREntry)Unoptimize((_XmStringEntry)b_seg, modify_b);
@@ -1451,7 +1451,7 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
     }
   }
   else if (b_sc - merged > 0 && !_XmStrImplicitLine(a_str)) {
-    for (i = 0; i < (b_sc - merged); i++) {
+    for (i = 0; (unsigned int)i < (b_sc - merged); i++) {
       /* Check if b_str is a singleton (b_tmp) or a real array */
       if (b_str == (XmString)&b_tmp) {
         /* b_str is singleton, only one entry at index 0 */
@@ -1473,7 +1473,7 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
     }
   }
   /* Add rest of b's lines to a */
-  for (i = 0; i < (b_lc - 1); i++) {
+  for (i = 0; (unsigned int)i < (b_lc - 1); i++) {
     /* Check if b_str is a singleton (b_tmp) or a real array */
     if (b_str == (XmString)&b_tmp) {
       /* b_str is singleton, skip this loop as there's only one entry */
@@ -1487,7 +1487,7 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
     else if (!modify_b)
       b_line = _XmStringEntryCopy(b_line);
     b_sc = _XmEntrySegmentCountGet(b_line);
-    for (j = 0; j < b_sc; j++) {
+    for (j = 0; (unsigned int)j < b_sc; j++) {
       b_seg = _XmEntrySegmentGet(b_line)[j];
       if (_XmEntryDirectionGet((_XmStringEntry)b_seg) == XmSTRING_DIRECTION_UNSET)
         _XmEntryDirectionSet((_XmStringEntry)b_seg, last);
@@ -2801,7 +2801,7 @@ static void SubStringPosition(Boolean one_byte,
       for (i = 0; i <= max; i++) {
         fail = FALSE;
         begin = i;
-        for (j = 0; j < under_seg_len; j++) {
+        for (j = 0; (unsigned int)j < under_seg_len; j++) {
           if (a[i + j] != b[j]) {
             fail = TRUE;
             break;
@@ -2852,7 +2852,7 @@ static void SubStringPosition(Boolean one_byte,
       for (i = 0; i <= max; i += 2) {
         fail = FALSE;
         begin = i;
-        for (j = 0; j < under_seg_len; j += 2) {
+        for (j = 0; (unsigned int)j < under_seg_len; j += 2) {
           if ((a[i + j] != b[j]) || (a[i + j + 1] != b[j + 1])) {
             fail = TRUE;
             break;
@@ -3211,7 +3211,7 @@ extern void _XmStringDrawSegment(Display *d,
       }
       else if (!text16) {
         q = (ltor_text + seg_len - 1);
-        for (i = 0; i < seg_len; i++)
+        for (i = 0; (unsigned int)i < seg_len; i++)
           *p++ = *q--;
       }
       else
@@ -3219,7 +3219,7 @@ extern void _XmStringDrawSegment(Display *d,
       {
         char tmp;
         q = (ltor_text + seg_len - 1);
-        for (i = 0; i < Half(seg_len); i++) {
+        for (i = 0; (unsigned int)i < Half(seg_len); i++) {
           tmp = *q--;
           *p++ = *q--;
           *p++ = tmp;

@@ -577,7 +577,7 @@ static void ClassInitialize(void)
   merged_list = (XtResource *)_XmMallocArray(wc_num_res + sc_num_res, sizeof(XtResource));
   _XmTransformSubResources(
       xmShellExtClassRec.object_class.resources, sc_num_res, &uncompiled, &num);
-  for (i = 0; i < num; i++) {
+  for (i = 0; (Cardinal)i < num; i++) {
     merged_list[i] = uncompiled[i];
   }
   _XmProcessUnlock();
@@ -1058,7 +1058,7 @@ static void PopupCallback(Widget shellParent, XtPointer closure, XtPointer callD
     xmDisplay = (XmDisplay)XmGetXmDisplay(XtDisplay(shellParent));
     modals = xmDisplay->display.modals;
     numModals = xmDisplay->display.numModals;
-    for (i = 0; i < numModals; i++) {
+    for (i = 0; (Cardinal)i < numModals; i++) {
       if (xmMenuShellWidgetClass == XtClass((Widget)modals[i].wid))
         (*(((XmMenuShellClassRec *)xmMenuShellWidgetClass)->menu_shell_class.popdownOne))(
             modals[i].wid, NULL, NULL, NULL);
@@ -1668,7 +1668,7 @@ static Boolean SetValues(
   ttp = (XmToolTipConfigTrait)XmeTraitGet(new_w, XmQTtoolTipConfig);
   if (ttp != NULL) {
     _XmProcessLock();
-    for (i = 0; i < *num_args; i++) {
+    for (i = 0; (Cardinal)i < *num_args; i++) {
       if (strcmp(args[i].name, XmNtoolTipPostDelay) == 0) {
         ttp->post_delay = args[i].value;
       }
@@ -1746,7 +1746,7 @@ static void GetValuesHook(Widget w, ArgList args, Cardinal *num_args)
   ttp = (XmToolTipConfigTrait)XmeTraitGet(w, XmQTtoolTipConfig);
   if (ttp != NULL) {
     _XmProcessLock();
-    for (i = 0; i < *num_args; i++) {
+    for (i = 0; (Cardinal)i < *num_args; i++) {
       if (strcmp(args[i].name, XmNtoolTipPostDelay) == 0) {
         ip = (int *)args[i].value;
         *ip = ttp->post_delay;
@@ -1861,7 +1861,7 @@ static void Resize(Widget w)
   vendorExt = (XmVendorShellExtObject)extData->widget;
   _XmImResize((Widget)sw);
   y = sw->core.height - vendorExt->vendor.im_height;
-  for (i = 0; i < sw->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < sw->composite.num_children; i++) {
     if (XtIsManaged(sw->composite.children[i])) {
       childwid = sw->composite.children[i];
       XmeConfigureObject(childwid,

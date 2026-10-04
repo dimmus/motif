@@ -100,7 +100,7 @@ void XmeRedisplayGadgets(Widget w, register XEvent *event, Region region)
   XtExposeProc expose;
   _XmWidgetToAppContext(w);
   _XmAppLock(app);
-  for (i = 0; i < mw->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < mw->composite.num_children; i++) {
     child = mw->composite.children[i];
     if (XmIsGadget(child) && XtIsManaged(child)) {
       if (region == NULL) {

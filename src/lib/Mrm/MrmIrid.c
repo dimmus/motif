@@ -405,7 +405,7 @@ Idb__RID_AddRecord (IDBFile		file_id)
   /*
    * Initialize the record contents
    */
-  for (ndx=0 ; ndx<IDBridPtrVecMax ; ndx++)
+  for (ndx=0 ; (long unsigned int)ndx<IDBridPtrVecMax ; ndx++)
     {
       recptr->pointers[ndx].internal_id.rec_no = 0;
       recptr->pointers[ndx].internal_id.item_offs = 0;

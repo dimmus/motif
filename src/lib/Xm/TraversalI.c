@@ -975,7 +975,7 @@ static void GetNodeList(
       trav_children = ((CompositeWidget)wid)->composite.children;
       num_trav_children = ((CompositeWidget)wid)->composite.num_children;
     }
-    for (i = 0; i < num_trav_children; i++)
+    for (i = 0; (Cardinal)i < num_trav_children; i++)
       GetNodeList(
           trav_children[i], list_entry_rect, trav_list, list_entry_offset, controls_graph_offset);
     if (free_child_list)

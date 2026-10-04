@@ -322,7 +322,7 @@ SetupLockingModifierMask(void)
 
     int kcq, kc;
 
-    for (i=0; i<NUM_LOCKING_MODS; i++)
+    for (i=0; (long unsigned int)i<NUM_LOCKING_MODS; i++)
     {
 	pkcLockingMods[i] = XKeysymToKeycode(dpy, pksLockingMods[i]);
     }

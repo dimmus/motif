@@ -277,7 +277,7 @@ void _XmWarningMsg(Widget w, char *type, char *message, char **params, Cardinal 
   int i;
   if (num_new_params > 11)
     num_new_params = 11;
-  for (i = 0; i < num_new_params - 1; i++)
+  for (i = 0; (Cardinal)i < num_new_params - 1; i++)
     new_params[i] = params[i];
   new_params[num_new_params - 1] = XME_WARNING;
   if (w != NULL) {

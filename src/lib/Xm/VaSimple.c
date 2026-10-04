@@ -223,7 +223,7 @@ static int _XmTypedArgToArg(Widget widget,
     return (0);
   }
   /* again we assume that the XtResourceList is un-compiled */
-  for (i = 0; i < num_resources; i++) {
+  for (i = 0; (Cardinal)i < num_resources; i++) {
     if (StringToName(typed_arg->name) == StringToName(resources[i].resource_name)) {
       to_type = resources[i].resource_type;
       break;

@@ -1716,7 +1716,7 @@ static XtGeometryResult GeometryManager(Widget instigator,
     /* set in ConstraintSetValues */
     int i;
     /* first reset the value of positionIndex to its real value */
-    for (i = 0; i < m->composite.num_children; i++)
+    for (i = 0; (Cardinal)i < m->composite.num_children; i++)
       if (m->composite.children[i] == instigator) {
         RCIndex(instigator) = i;
         break;
@@ -2454,7 +2454,7 @@ static Widget create(Widget p, /* parent widget */
     XtSetArg(al[ac], XmNentryClass, xmToggleButtonGadgetClass);
     ac++;
   }
-  for (i = 0; i < old_ac; i++)
+  for (i = 0; (Cardinal)i < old_ac; i++)
     al[ac++] = old_al[i]; /* copy into our list */
   if (type != UNDEFINED_TYPE) {
     XtSetArg(al[ac], XmNrowColumnType, type);
@@ -2483,7 +2483,7 @@ static Widget create(Widget p, /* parent widget */
      * already present; if so, then we'll use it.
      */
     if (XmIsRowColumn(p) && (IsBar(p) || IsPopup(p) || IsPulldown(p))) {
-      for (i = 0; i < pw->core.num_popups; i++) {
+      for (i = 0; (Cardinal)i < pw->core.num_popups; i++) {
         if ((XmIsMenuShell(pw->core.popup_list[i])) &&
             (((XmMenuShellWidget)pw->core.popup_list[i])->menu_shell.private_shell) &&
             (!(pw->core.popup_list[i])->core.being_destroyed))
@@ -2498,7 +2498,7 @@ static Widget create(Widget p, /* parent widget */
       char *b;
       size_t size;
       /* should pass in the old al */
-      for (i = 0; i < old_ac; i++)
+      for (i = 0; (Cardinal)i < old_ac; i++)
         s_al[s_ac++] = old_al[i];
       XtSetArg(s_al[s_ac], XmNwidth, 5);
       s_ac++;
@@ -2612,7 +2612,7 @@ Widget XmOptionLabelGadget(Widget m)
       _XmAppUnlock(app);
       return NULL;
     }
-    for (i = 0; i < rowcol->composite.num_children; i++) {
+    for (i = 0; (Cardinal)i < rowcol->composite.num_children; i++) {
       child = rowcol->composite.children[i];
       if (XtClass(child) == xmLabelGadgetClass) {
         _XmAppUnlock(app);
@@ -2637,7 +2637,7 @@ Widget XmOptionButtonGadget(Widget m)
       _XmAppUnlock(app);
       return NULL;
     }
-    for (i = 0; i < rowcol->composite.num_children; i++) {
+    for (i = 0; (Cardinal)i < rowcol->composite.num_children; i++) {
       child = rowcol->composite.children[i];
       if (XmIsCascadeButtonGadget(child)) {
         _XmAppUnlock(app);
@@ -2775,7 +2775,7 @@ static Boolean TraversalChildren(Widget wid, Widget **childList, Cardinal *numCh
      */
     *childList = (WidgetList)_XmMallocArray(rc->composite.num_children + 1, sizeof(Widget));
     (*childList)[0] = RC_TearOffControl(rc);
-    for (i = 1; i <= rc->composite.num_children; i++) {
+    for (i = 1; (Cardinal)i <= rc->composite.num_children; i++) {
       (*childList)[i] = rc->composite.children[i - 1];
     }
     *numChildren = rc->composite.num_children + 1;

@@ -674,7 +674,7 @@ static void Initialize(Widget request, Widget new_w, ArgList args, Cardinal *num
     /* This indicates that layoutDirection was set in the arglist, but
          stringDirection defaulting overwrote the value */
     int i;
-    for (i = 0; i < *num_args; i++)
+    for (i = 0; (Cardinal)i < *num_args; i++)
       if (strcmp(args[i].name, XmNlayoutDirection) == 0)
         mw->manager.string_direction = (XmDirection)args[i].value;
   }
@@ -1107,7 +1107,7 @@ static void CheckRemoveMotionHandlers(XmManagerWidget mw)
   register Widget child;
   /*  If there are any gadgets which need motion events, return.  */
   if (!mw->core.being_destroyed) {
-    for (i = 0; i < mw->composite.num_children; i++) {
+    for (i = 0; (Cardinal)i < mw->composite.num_children; i++) {
       child = mw->composite.children[i];
       if (XmIsGadget(child)) {
         if (((XmGadget)child)->gadget.event_mask &

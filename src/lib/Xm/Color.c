@@ -918,7 +918,7 @@ Pixmap _XmConvertToBW(Widget w, Pixmap pm)
     }
     else {
       char e[5];
-      for (i = 0; i < im.ncolors; i++) {
+      for (i = 0; (unsigned int)i < im.ncolors; i++) {
         col = im.colorTable[i].c_color;
         if (IsRGB16(col)) {
           bw = FromColorToBlackAndWhite(col + 1);

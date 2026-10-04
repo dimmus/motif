@@ -1881,7 +1881,7 @@ int _XmGeoCount_kids(register CompositeWidget c)
 {
   register int i, n = 0;
   /****************/
-  for (i = 0; i < c->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < c->composite.num_children; i++) {
     if (c->composite.children[i]->core.managed) {
       n++;
     }
@@ -1914,7 +1914,7 @@ XmKidGeometry _XmGetKidGeo(Widget wid,                 /* Widget w/ children. */
   /****************/
   geo = (XmKidGeometry)_XmMallocArray(_XmGeoCount_kids(c) + 1, sizeof(XmKidGeometryRec));
   /* load all managed kids */
-  for (i = 0; i < c->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < c->composite.num_children; i++) {
     kidWid = c->composite.children[i];
     if (XtIsManaged(kidWid)) {
       if (kidWid == help) { /* Save to put help widget at the end of the widget list.*/

@@ -159,7 +159,7 @@ static unsigned char xdnd_version_min = 3; /**< Xdnd minimum version  */
 unsigned char _XmReasonToMessageType(int reason)
 {
   int i;
-  for (i = 0; i < XtNumber(reasonTable); i++)
+  for (i = 0; (unsigned int)i < XtNumber(reasonTable); i++)
     if (reasonTable[i].reason == reason)
       return ((unsigned char)i);
   return 0xFF;

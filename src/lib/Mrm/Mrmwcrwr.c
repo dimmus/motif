@@ -369,7 +369,7 @@ UrmCWRInitArglist (URMResourceContextPtr	context_id,
    */
   argdesc->count = nargs ;
   argdesc->extra = 0 ;
-  for ( ndx=0 ; ndx<nargs ; ndx++ )
+  for ( ndx=0 ; (Cardinal)ndx<nargs ; ndx++ )
     {
       argdesc->args[ndx].tag_code = 0 ;
       argdesc->args[ndx].stg_or_relcode.tag_offs = 0 ;
@@ -1145,7 +1145,7 @@ UrmCWRSetArgCallback (URMResourceContextPtr	context_id ,
   cbdesc->validation = URMCallbackDescriptorValid ;
   cbdesc->count = nitems ;
   cbdesc->unres_ref_count = 0 ;
-  for ( ndx=0 ; ndx<nitems ; ndx++ )
+  for ( ndx=0 ; (Cardinal)ndx<nitems ; ndx++ )
     {
       cbdesc->item[ndx].cb_item.routine = 0 ;
       cbdesc->item[ndx].cb_item.rep_type = 0 ;
@@ -1582,7 +1582,7 @@ UrmCWRInitChildren (URMResourceContextPtr	context_id ,
    */
   listdesc->count = nchildren ;
   listdesc->annex1 = 0 ;
-  for ( ndx=0 ; ndx<nchildren ; ndx++ )
+  for ( ndx=0 ; (Cardinal)ndx<nchildren ; ndx++ )
     {
       listdesc->child[ndx].manage = 0 ;
       listdesc->child[ndx].access = 0 ;
@@ -1851,7 +1851,7 @@ UrmCWRSetCreationCallback (URMResourceContextPtr	context_id ,
   cbdesc->validation = URMCallbackDescriptorValid ;
   cbdesc->count = nitems ;
   cbdesc->unres_ref_count = 0 ;
-  for ( ndx=0 ; ndx<nitems ; ndx++ )
+  for ( ndx=0 ; (Cardinal)ndx<nitems ; ndx++ )
     {
       cbdesc->item[ndx].cb_item.routine = 0 ;
       cbdesc->item[ndx].cb_item.rep_type = 0 ;

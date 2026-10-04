@@ -582,7 +582,7 @@ static Boolean SetValues(
   Boolean readjust = False;
   Boolean check_pos = False;
   Boolean copyTitles = False;
-  for (i = 0; i < *num_args; i++) {
+  for (i = 0; (Cardinal)i < *num_args; i++) {
     String name = args[i].name;
     if (streq(XmNcolumnTitles, name)) {
       copyTitles = True;

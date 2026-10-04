@@ -2540,7 +2540,7 @@ static Boolean ModifyClientCommandForMenuSpec (MenuSpec *menuSpec,
 
     /* Search through all the menu buttons of the menuspec for buttons
        which match the command ID to be removed. */
-    for (i = 0; i < menuSpec->menuButtonCount; ++i)
+    for (i = 0; (unsigned int)i < menuSpec->menuButtonCount; ++i)
     {
 	curMenuItem = menuSpec->menuButtons[i].menuItem;
 

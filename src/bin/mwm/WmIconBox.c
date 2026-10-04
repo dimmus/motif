@@ -3247,7 +3247,7 @@ void SetNewBounds (IconBoxData *pIBD)
     cw = (CompositeWidget) pIBD->bBoardWidget;
     children = cw->composite.children;
 
-    for (i = 0; i < cw->composite.num_children; i++)
+    for (i = 0; (Cardinal)i < cw->composite.num_children; i++)
     {
         if (children[i]->core.x > X)
         {

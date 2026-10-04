@@ -398,7 +398,7 @@ void _XmAddTearOffEventHandlers(Widget wid)
   int i;
   Cursor cursor = _XmGetMenuCursorByScreen(XtScreen(wid));
   XmMenuSavvyTrait mtrait;
-  for (i = 0; i < rc->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < rc->composite.num_children; i++) {
     child = rc->composite.children[i];
     mtrait = (XmMenuSavvyTrait)XmeTraitGet(XtClass(child), XmQTmenuSavvy);
     /*
@@ -438,7 +438,7 @@ static void RemoveTearOffEventHandlers(Widget wid)
   XmRowColumnWidget rc = (XmRowColumnWidget)wid;
   Widget child;
   int i;
-  for (i = 0; i < rc->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < rc->composite.num_children; i++) {
     child = rc->composite.children[i];
     /*
      * Remove the event handlers on the label and separator widgets.
@@ -981,7 +981,7 @@ void _XmRestoreTearOffToMenuShell(Widget wid, XEvent *event)
       if (expose)
         (*expose)((Widget)submenu, NULL, NULL);
       /* Redraw the submenu's widgets */
-      for (i = 0; i < submenu->composite.num_children; i++) {
+      for (i = 0; (Cardinal)i < submenu->composite.num_children; i++) {
         child = submenu->composite.children[i];
         if (XtIsWidget(child)) {
           _XmProcessLock();

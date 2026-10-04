@@ -886,7 +886,7 @@ static Boolean SetValuesHook(Widget wid, ArgList args, Cardinal *num_args)
   /* look the comments on MAGIC in DialogSavvyT.h */
   if (!shell)
     return (False);
-  for (i = 0; i < *num_args; i++) {
+  for (i = 0; (Cardinal)i < *num_args; i++) {
     if (strcmp(args[i].name, XmNx) == 0) {
       if ((args[i].value == 0) && (XtX(bb) == 0)) {
         XtX(bb) = XmDIALOG_SAVVY_FORCE_ORIGIN;

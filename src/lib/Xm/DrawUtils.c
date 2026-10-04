@@ -72,7 +72,7 @@ void XmDrawBevel(Display *dpy,
    * top half of the beveled corner ...
    */
   if (option == XmBEVEL_TOP) {
-    for (i = 0; i < size; ++i) {
+    for (i = 0; (unsigned int)i < size; ++i) {
       rt[i].x = x;
       rt[i].y = y + i;
       rt[i].width = size - i;
@@ -87,7 +87,7 @@ void XmDrawBevel(Display *dpy,
    * ... And the the bottom half of the beveled corner.
    */
   if (option == XmBEVEL_BOTH || option == XmBEVEL_BOTTOM) {
-    for (i = 0; i < size; ++i) {
+    for (i = 0; (unsigned int)i < size; ++i) {
       rt[i].x = x + size - i;
       rt[i].y = y + i;
       rt[i].width = i;

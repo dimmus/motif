@@ -589,7 +589,7 @@ static void _XmFastExpose(Widget widg)
   (*(XtClass(widg)->core_class.expose))(widg, NULL, NULL);
   _XmProcessUnlock();
   /* Process each windowed child */
-  for (i = 0; i < gs->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < gs->composite.num_children; i++) {
     child = gs->composite.children[i];
     if (XtIsWidget(child) && XtIsManaged(child)) {
       _XmProcessLock();

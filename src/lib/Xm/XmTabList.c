@@ -115,7 +115,7 @@ XmTabList XmTabListInsertTabs(XmTabList oldlist, XmTab *tabs, Cardinal tab_count
     _XmTabLCount(tl) = tab_count;
     prev_tab = _XmTabCopy(tabs[0]);
     _XmTabLStart(tl) = prev_tab;
-    for (i = 1; i < tab_count; i++) {
+    for (i = 1; (Cardinal)i < tab_count; i++) {
       tab = _XmTabCopy(tabs[i]);
       _XmTabPrev(tab) = prev_tab;
       _XmTabNext(prev_tab) = tab;
@@ -136,7 +136,7 @@ XmTabList XmTabListInsertTabs(XmTabList oldlist, XmTab *tabs, Cardinal tab_count
     _XmTabPrev(tab) = prev_tab;
     prev_tab = tab;
     /* Hook in rest of tabs. */
-    for (i = 1; i < tab_count; i++) {
+    for (i = 1; (Cardinal)i < tab_count; i++) {
       tab = _XmTabCopy(tabs[i]);
       _XmTabNext(prev_tab) = tab;
       _XmTabPrev(tab) = prev_tab;
@@ -222,7 +222,7 @@ void XmTabListFree(XmTabList tablist)
     return;
   }
   tab = _XmTabLStart(tablist);
-  for (i = 1; i < _XmTabLCount(tablist); i++) {
+  for (i = 1; (unsigned int)i < _XmTabLCount(tablist); i++) {
     next = _XmTabNext(tab);
     if (_XmTabMark(tab))
       _XmTabMark(tab) = FALSE;
@@ -334,7 +334,7 @@ XmTabList XmTabListRemoveTabs(XmTabList oldlist, Cardinal *position_list, Cardin
   cur_tab = _XmTabLStart(oldlist);
   cur_pos = 0;
   /* Get position, set mark */
-  for (i = 0; i < position_count; i++) {
+  for (i = 0; (Cardinal)i < position_count; i++) {
     cur_tab = GetNthTab(oldlist, position_list[i], cur_tab, cur_pos);
     cur_pos = position_list[i];
     _XmTabMark(cur_tab) = TRUE;
@@ -426,7 +426,7 @@ Widget _XmCreateTab(Widget parent,
     quarks[4] = XrmPermStringToQuark(XmNdecimal);
   }
   /* Get arguments from arglist */
-  for (i = 0; i < argcount; i++) {
+  for (i = 0; (Cardinal)i < argcount; i++) {
     qarg = XrmStringToQuark(arglist[i].name);
     if (qarg == quarks[0])
       value = (float)arglist[i].value;

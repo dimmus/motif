@@ -1022,7 +1022,7 @@ static void set_values(Widget w, ArgList args, Cardinal num_args, XmInputPolicy 
     if (XtIsRealized(p)) {
       im_info->current_widget = w;
       if (XmIsDialogShell(p)) {
-        for (i = 0; i < ((CompositeWidget)p)->composite.num_children; i++)
+        for (i = 0; (Cardinal)i < ((CompositeWidget)p)->composite.num_children; i++)
           if (XtIsManaged(((CompositeWidget)p)->composite.children[i])) {
             ImGeoReq(p);
             break;
@@ -1369,7 +1369,7 @@ static XICProc get_real_callback(Widget w, int swc, Widget *real_widget)
     *real_widget = XtWindowToWidget(XtDisplay(w), icp->focus_window);
   refs = icp->widget_refs;
   target = refs.num_refs;
-  for (i = 0; i < refs.num_refs; i++) {
+  for (i = 0; (Cardinal)i < refs.num_refs; i++) {
     if (refs.refs[i] == *real_widget) {
       target = i;
       break;
@@ -1398,7 +1398,7 @@ static void regist_real_callback(Widget w, XIMProc call, int swc)
     return;
   }
   refs = icp->widget_refs;
-  for (i = 0; i < refs.num_refs; i++) {
+  for (i = 0; (Cardinal)i < refs.num_refs; i++) {
     if (refs.refs[i] == w) {
       target = i;
       break;

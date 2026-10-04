@@ -2331,7 +2331,7 @@ static void CreateInfo(XmDropSiteManagerObject dsm, Widget widget, ArgList args,
   else {
     int i;
     XRectangle *rects = fullInfoRec.rectangles;
-    for (i = 0; i < fullInfoRec.num_rectangles; i++)
+    for (i = 0; (Cardinal)i < fullInfoRec.num_rectangles; i++)
       _XmRegionUnionRectWithRegion(&(rects[i]), region, region);
     fullInfoRec.region = region;
     fullInfoRec.status.has_region = True;
@@ -2518,7 +2518,7 @@ static void RetrieveInfo(XmDropSiteManagerObject dsm,
                  (ArgList)(args),
                  (Cardinal)(argCount));
   freeRects = True;
-  for (i = 0; i < argCount; i++) {
+  for (i = 0; (Cardinal)i < argCount; i++) {
     if (strcmp(args[i].name, "dropRectangles") == 0)
       freeRects = False;
   }
@@ -2618,7 +2618,7 @@ static void UpdateInfo(XmDropSiteManagerObject dsm, Widget widget, ArgList args,
     if (type == XmDROP_SITE_SIMPLE) {
       int i;
       XmRegion new_region = _XmRegionCreate();
-      for (i = 0; i < full_info->num_rectangles; i++)
+      for (i = 0; (Cardinal)i < full_info->num_rectangles; i++)
         _XmRegionUnionRectWithRegion(&(full_info->rectangles[i]), new_region, new_region);
       full_info->region = new_region;
       full_info->status.has_region = True;
@@ -2950,7 +2950,7 @@ static Boolean HasDropSiteDescendant(XmDropSiteManagerObject dsm, Widget widget)
   if (!XtIsComposite(widget))
     return (False);
   cw = (CompositeWidget)widget;
-  for (i = 0; i < cw->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < cw->composite.num_children; i++) {
     child = cw->composite.children[i];
     if ((DSMWidgetToInfo(dsm, child) != NULL) || (HasDropSiteDescendant(dsm, child))) {
       return (True);

@@ -789,8 +789,8 @@ static Boolean SetToEmptyCell(Widget child)
   GetMinCells((Widget)ibw, &max_x, &max_y);
   cur_x = cur_y = XmIconBoxAnyCell;
   cur_square = max_x * max_x + max_y * max_y;
-  for (y = 0; y <= max_y; y++)
-    for (x = 0; x <= max_x; x++) {
+  for (y = 0; (Cardinal)y <= max_y; y++)
+    for (x = 0; (Cardinal)x <= max_x; x++) {
       square = x * x + y * y;
       if (square <= cur_square && XmIconBoxIsCellEmpty(XtParent(child), x, y, NULL)) {
         cur_square = square;

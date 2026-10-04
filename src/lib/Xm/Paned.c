@@ -2123,7 +2123,7 @@ static void ReManageChildren(XmPanedWidget pw)
 {
   int i;
   XmPaned_num_panes(pw) = 0;
-  for (i = 0; i < pw->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < pw->composite.num_children; i++) {
     if (XtIsManaged(pw->composite.children[i]) && IsPane(pw->composite.children[i])) {
       Pane pane = PaneInfo(pw->composite.children[i]);
       /* expand our storage area if needed */

@@ -307,7 +307,7 @@ Widget XmCreateSimplePulldownMenu(Widget parent, String name, ArgList args, Card
       return (rc);
     }
     else {
-      for (i = 0; i < num_buttons; i++) {
+      for (i = 0; (Cardinal)i < num_buttons; i++) {
         if (((XmIsCascadeButtonGadget(buttons[i])) || (XmIsCascadeButton(buttons[i]))) &&
             (i == mr.post_from_button))
           break;
@@ -371,7 +371,7 @@ Widget XmCreateSimpleOptionMenu(Widget parent, String name, ArgList args, Cardin
     }
     else {
       button_count = 0;
-      for (i = 0; i < num_buttons; i++) { /* count only PushB */
+      for (i = 0; (Cardinal)i < num_buttons; i++) { /* count only PushB */
         if ((XmIsPushButtonGadget(buttons[i])) || (XmIsPushButton(buttons[i]))) {
           if (button_count == mr.button_set)
             break;

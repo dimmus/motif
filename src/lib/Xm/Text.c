@@ -629,7 +629,7 @@ static void AddRedraw(XmTextWidget tw, XmTextPosition left, XmTextPosition right
   if (left == tw->text.last_position && tw->text.output->data->number_lines >= 1)
     left = (*tw->text.source->Scan)(tw->text.source, left, XmSELECT_POSITION, XmsdLeft, 1, TRUE);
   if (left < right) {
-    for (i = 0; i < tw->text.repaint.number; i++) {
+    for (i = 0; (Cardinal)i < tw->text.repaint.number; i++) {
       if (left <= r[i].to && right >= r[i].from) {
         r[i].from = MIN(left, r[i].from);
         r[i].to = MAX(right, r[i].to);
@@ -723,7 +723,7 @@ static void RedrawChanges(XmTextWidget tw)
   while (tw->text.repaint.number != 0) {
     updateFrom = r[0].from;
     w = 0;
-    for (i = 1; i < tw->text.repaint.number; i++) {
+    for (i = 1; (Cardinal)i < tw->text.repaint.number; i++) {
       if (r[i].from < updateFrom) {
         updateFrom = r[i].from;
         w = i;
@@ -1582,7 +1582,7 @@ LineNum _XmTextPosToLine(XmTextWidget tw, XmTextPosition position)
     RefigureLines(tw);
   if (position < tw->text.top_character || position > tw->text.bottom_position)
     return NOLINE;
-  for (i = 0; i < tw->text.number_lines; i++)
+  for (i = 0; (Cardinal)i < tw->text.number_lines; i++)
     if (tw->text.line[i + 1].start > position)
       return i;
   if (position == tw->text.line[tw->text.number_lines].start)
@@ -1650,11 +1650,11 @@ void _XmTextInvalidate(XmTextWidget tw, XmTextPosition position, XmTextPosition 
     tw->text.forget_past = MIN(tw->text.forget_past, position);
   }
   else {
-    for (i = 0; i < tw->text.repaint.number; i++) {
+    for (i = 0; (Cardinal)i < tw->text.repaint.number; i++) {
       radjust(tw->text.repaint.range[i].from);
       ladjust(tw->text.repaint.range[i].to);
     }
-    for (i = 1; i < tw->text.highlight.number; i++) {
+    for (i = 1; (Cardinal)i < tw->text.highlight.number; i++) {
       if (delta < 0 && tw->text.highlight.list[i].position >= position - delta)
         ladjust(tw->text.highlight.list[i].position);
       if (delta > 0 && ((tw->text.highlight.list[i].position > position) ||
@@ -1662,7 +1662,7 @@ void _XmTextInvalidate(XmTextWidget tw, XmTextPosition position, XmTextPosition 
                          (tw->text.highlight.list[i].mode != XmHIGHLIGHT_NORMAL))))
         radjust(tw->text.highlight.list[i].position);
     }
-    for (i = 1; i < tw->text.old_highlight.number; i++) {
+    for (i = 1; (Cardinal)i < tw->text.old_highlight.number; i++) {
       if (delta < 0 && tw->text.old_highlight.list[i].position >= position - delta)
         ladjust(tw->text.old_highlight.list[i].position);
       if (delta > 0 && ((tw->text.old_highlight.list[i].position > position) ||
@@ -1670,7 +1670,7 @@ void _XmTextInvalidate(XmTextWidget tw, XmTextPosition position, XmTextPosition 
                          (tw->text.old_highlight.list[i].mode != XmHIGHLIGHT_NORMAL))))
         radjust(tw->text.old_highlight.list[i].position);
     }
-    for (i = 0; i <= tw->text.number_lines && tw->text.line[i].start != PASTENDPOS; i++) {
+    for (i = 0; (Cardinal)i <= tw->text.number_lines && tw->text.line[i].start != PASTENDPOS; i++) {
       if (delta > 0) {
         radjust(tw->text.line[i].start);
       }
@@ -1867,7 +1867,7 @@ static void InitializeHook(Widget wid, ArgList args, Cardinal *num_args_ptr)
     else if (tw->text.value != NULL) {
       /* Default value or argument ? */
       int i;
-      for (i = 0; i < num_args; i++)
+      for (i = 0; (Cardinal)i < num_args; i++)
         if (tw->text.value == (char *)args[i].value &&
             (args[i].name == XmNvalue || strcmp(args[i].name, XmNvalue) == 0))
         {
@@ -2031,7 +2031,7 @@ static void Destroy(Widget w)
     (*tw->text.input->destroy)(w);
   if (tw->text.output->destroy)
     (*tw->text.output->destroy)(w);
-  for (j = 0; j < tw->text.number_lines; j++) {
+  for (j = 0; (Cardinal)j < tw->text.number_lines; j++) {
     if (tw->text.line[j].extra)
       XtFree((char *)tw->text.line[j].extra);
   }
@@ -2073,12 +2073,12 @@ static void GetValuesHook(Widget w, ArgList args, Cardinal *num_args_ptr)
   Cardinal num_args = *num_args_ptr;
   int i;
   XtGetSubvalues((XtPointer)tw, resources, XtNumber(resources), args, num_args);
-  for (i = 0; i < num_args; i++) {
+  for (i = 0; (Cardinal)i < num_args; i++) {
     if (!strcmp(args[i].name, XmNvalue)) {
       *((XtPointer *)args[i].value) = (XtPointer)_XmStringSourceGetValue(GetSrc(tw), False);
     }
   }
-  for (i = 0; i < num_args; i++) {
+  for (i = 0; (Cardinal)i < num_args; i++) {
     if (!strcmp(args[i].name, XmNvalueWcs)) {
       *((XtPointer *)args[i].value) = (XtPointer)_XmStringSourceGetValue(GetSrc(tw), True);
     }
@@ -2244,7 +2244,7 @@ static Boolean SetValues(Widget oldw, Widget reqw, Widget new_w, ArgList args, C
   else if (need_new_cursorPos) {
     XmTextPosition cursorPos = -1;
     int ix;
-    for (ix = 0; ix < *num_args; ix++)
+    for (ix = 0; (Cardinal)ix < *num_args; ix++)
       if (strcmp(args[ix].name, XmNcursorPosition) == 0) {
         cursorPos = (XmTextPosition)args[ix].value;
         break;
@@ -3461,7 +3461,7 @@ Widget XmCreateScrolledText(Widget parent, char *name, ArgList arglist, Cardinal
    * creating the scrolled window portion of the scroll text.
    */
   merged_args = (ArgList)XmStackAlloc(arg_size * sizeof(Arg), args_cache);
-  for (n = 0; n < argcount; n++) {
+  for (n = 0; (Cardinal)n < argcount; n++) {
     merged_args[n].name = arglist[n].name;
     merged_args[n].value = arglist[n].value;
   }

@@ -96,7 +96,7 @@ void _XmFreeHashTable(XmHashTable table)
 {
   int i;
   XmHashBucket bucket, next;
-  for (i = 0; i < table->size; i++) {
+  for (i = 0; (Cardinal)i < table->size; i++) {
     bucket = table->buckets[i];
     while (bucket) {
       next = bucket->next;
@@ -132,7 +132,7 @@ void _XmResizeHashTable(XmHashTable table, Cardinal new_size)
     table->buckets[i] = NULL;
   /* Rearrange buckets,  this is a slow method,  but always
      correct.  We will end up rescanning any moved buckets */
-  for (i = 0; i < table->size; i++) {
+  for (i = 0; (Cardinal)i < table->size; i++) {
     last = NULL;
     current = table->buckets[i];
     while (current) {
@@ -280,7 +280,7 @@ void _XmMapHashTable(XmHashTable table, XmHashMapProc proc, XtPointer client_dat
 {
   int i;
   XmHashBucket entry, next;
-  for (i = 0; i < table->size; i++) {
+  for (i = 0; (Cardinal)i < table->size; i++) {
     entry = table->buckets[i];
     while (entry) {
       /* Can free key and value in this proc */

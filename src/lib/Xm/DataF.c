@@ -842,7 +842,7 @@ static void PictureVerifyCallback(Widget w, XtPointer client_d, XtPointer call_d
    * Run it through the picture, and bail if it isn't accepted
    */
   ps = XmGetNewPictureState(XmDataField_picture(w));
-  for (i = 0; i < strlen(newptr); i++) {
+  for (i = 0; (size_t)i < strlen(newptr); i++) {
     changed = XmPictureProcessCharacter(ps, newptr[i], &done);
     if (changed == NULL || done)
       break;
@@ -3426,7 +3426,7 @@ static void df_InsertString(Widget w, XEvent *event, char **params, Cardinal *nu
     if (XmTextF_verify_bell(tf))
       XBell(XtDisplay((Widget)tf), 0);
   }
-  for (i = 0; i < *num_params; i++) {
+  for (i = 0; (Cardinal)i < *num_params; i++) {
     strncpy(insert_string, params[i], TEXT_MAX_INSERT_SIZE - 1);
     insert_string[TEXT_MAX_INSERT_SIZE - 1] = '\0';
     insert_length = strlen(insert_string);
@@ -7192,7 +7192,7 @@ static Boolean df_SetValues(
   }
   else {
     int ix;
-    for (ix = 0; ix < *num_args; ix++)
+    for (ix = 0; (Cardinal)ix < *num_args; ix++)
       if (strcmp(args[ix].name, XmNcursorPosition) == 0) {
         cursor_pos_set = True;
         new_position = XmTextF_cursor_position(new_tf);

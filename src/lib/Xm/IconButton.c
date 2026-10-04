@@ -641,7 +641,7 @@ static Boolean SetValues(
   Boolean pixmapGeoChanged = False;
   Boolean resetPixmapValues = False;
   reinit_l = reinit_ls = resetGCs = recalc = redisplay = False;
-  for (i = 0; i < *num_args; i++) {
+  for (i = 0; (Cardinal)i < *num_args; i++) {
     String name = args[i].name;
     if (streq(XmNlabel, name))
       reinit_l = resetGCs = recalc = redisplay = TRUE;

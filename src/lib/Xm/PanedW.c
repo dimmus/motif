@@ -609,7 +609,7 @@ static void AdjustGC(XmPanedWindowWidget pw)
     sash_region = XCreateRegion();
     clip_region = XCreateRegion();
     /* find all the managed sashes and add their area to the sash region */
-    for (i = 0; i < pw->composite.num_children; i++) {
+    for (i = 0; (Cardinal)i < pw->composite.num_children; i++) {
       if (XmIsSash(pw->composite.children[i]) && XtIsManaged(pw->composite.children[i])) {
         clip_rect.width = pw->composite.children[i]->core.width;
         clip_rect.height = pw->composite.children[i]->core.height;
@@ -669,7 +669,7 @@ static void ReManageChildren(XmPanedWindowWidget pw)
 {
   int i;
   pw->paned_window.num_managed_children = 0;
-  for (i = 0; i < pw->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < pw->composite.num_children; i++) {
     if (XtIsManaged(pw->composite.children[i])) {
       if ((pw->paned_window.num_managed_children + 1) > pw->paned_window.num_slots) {
         pw->paned_window.num_slots += XmBLOCK;
@@ -1332,7 +1332,7 @@ static XtGeometryResult GeometryManager(Widget w,
   if (PanePosIndex(w) == XmLAST_POSITION) {
     /* as set in ConstraintSetValues */
     /* first reset the value of positionIndex to its real value */
-    for (i = 0; i < pw->composite.num_children; i++)
+    for (i = 0; (Cardinal)i < pw->composite.num_children; i++)
       if (pw->composite.children[i] == w) {
         PanePosIndex(w) = i;
         break;

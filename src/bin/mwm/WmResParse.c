@@ -7812,7 +7812,7 @@ Boolean SetGreyedContextAndMgtMask (MenuItem *menuItem,
 {
     int ix;
 
-    for (ix = 0; ix < WMFUNCTIONTABLESIZE - 1; ++ix)
+    for (ix = 0; (long unsigned int)ix < WMFUNCTIONTABLESIZE - 1; ++ix)
     {
 	if (functionTable[ix].wmFunction == wmFunction)
 	{

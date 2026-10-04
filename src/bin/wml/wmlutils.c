@@ -77,7 +77,7 @@ int		ndx;		/* loop index */
 
 
 if ( stg == NULL ) return;
-for ( ndx=0 ; ndx<strlen(stg) ; ndx++ )
+for ( ndx=0 ; (size_t)ndx<strlen(stg) ; ndx++ )
     stg[ndx] = _upper (stg[ndx]);
 
 }

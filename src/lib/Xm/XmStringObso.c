@@ -382,7 +382,7 @@ Boolean _XmStringGetSegment(_XmStringContext context,
             if (copy_data) {
               int tmp;
               *rendition_tags = (XmStringTag *)_XmMallocArray(*tag_count, sizeof(XmStringTag));
-              for (tmp = 0; tmp < *tag_count; tmp++)
+              for (tmp = 0; (unsigned int)tmp < *tag_count; tmp++)
                 (*rendition_tags)[tmp] = XtNewString(_XmStrContRendTags(local_context)[tmp]);
             }
             else {
@@ -436,7 +436,7 @@ Boolean _XmStringGetSegment(_XmStringContext context,
             if (copy_data) {
               int tmp;
               *rendition_tags = (XmStringTag *)_XmMallocArray(*tag_count, sizeof(XmStringTag));
-              for (tmp = 0; tmp < *tag_count; tmp++)
+              for (tmp = 0; (unsigned int)tmp < *tag_count; tmp++)
                 (*rendition_tags)[tmp] = XtNewString(_XmStrContRendTags(local_context)[tmp]);
             }
             else {

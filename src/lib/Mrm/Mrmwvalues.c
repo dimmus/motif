@@ -166,7 +166,7 @@ UrmFetchSetValues (MrmHierarchy		hierarchy_id ,
    * Find the longest literal index, and allocate a resource descriptor
    * which can hold it. Set the fixed fields of the descriptor.
    */
-  for ( ndx=0 ; ndx<num_args ; ndx++ )
+  for ( ndx=0 ; (Cardinal)ndx<num_args ; ndx++ )
     indexlen = MAX (indexlen, strlen((char*)args[ndx].value)) ;
 
   /*
@@ -183,7 +183,7 @@ UrmFetchSetValues (MrmHierarchy		hierarchy_id ,
    * the local arglist. Create a new context to hold the literal, then
    * try to read it from the hierarchy.
    */
-  for ( ndx=0 ; ndx<num_args ; ndx++ )
+  for ( ndx=0 ; (Cardinal)ndx<num_args ; ndx++ )
     {
       locargs[num_used].name = args[ndx].name ;
       strncpy (resptr->key.index, (char*)args[ndx].value, indexlen) ;

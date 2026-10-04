@@ -312,7 +312,7 @@ static void HandleInsertTargets(Widget w,
   assert(XtNumber(atom_names) == NUM_ATOMS);
   XInternAtoms(XtDisplay(w), atom_names, XtNumber(atom_names), False, atoms);
   atom_ptr = (Atom *)value;
-  for (i = 0; i < *length; i++, atom_ptr++) {
+  for (i = 0; (long unsigned int)i < *length; i++, atom_ptr++) {
     if (*atom_ptr == atoms[XmATEXT])
       supports_text = True;
     if (*atom_ptr == CS_OF_ENCODING)
@@ -1208,7 +1208,7 @@ static void HandleTargets(Widget w, XtPointer closure, XmSelectionCallbackStruct
   assert(XtNumber(atom_names) == NUM_ATOMS);
   XInternAtoms(XtDisplay(w), atom_names, XtNumber(atom_names), False, atoms);
   atom_ptr = (Atom *)ds->value;
-  for (i = 0; i < ds->length; i++, atom_ptr++) {
+  for (i = 0; (long unsigned int)i < ds->length; i++, atom_ptr++) {
     if (*atom_ptr == atoms[XmATEXT])
       supports_text = True;
     if (*atom_ptr == CS_OF_ENCODING)

@@ -3341,7 +3341,7 @@ static void SizeFromRowsCols(XmTextWidget tw, Dimension *width, Dimension *heigh
       LineTableExtra extra = NULL;
       Boolean past_end = False;
       int i;
-      for (i = 0; i < tw->text.number_lines && !past_end; i++) {
+      for (i = 0; (Cardinal)i < tw->text.number_lines && !past_end; i++) {
         past_end = !MeasureLine(tw, i, tw->text.line[i].start, &nextpos, &extra);
         if (extra) {
           if (extra->width > *height)
@@ -3359,7 +3359,7 @@ static void SizeFromRowsCols(XmTextWidget tw, Dimension *width, Dimension *heigh
       LineTableExtra extra = NULL;
       Boolean past_end = False;
       int i;
-      for (i = 0; i < tw->text.number_lines && !past_end; i++) {
+      for (i = 0; (Cardinal)i < tw->text.number_lines && !past_end; i++) {
         past_end = !MeasureLine(tw, i, tw->text.line[i].start, &nextpos, &extra);
         if (extra) {
           if (extra->width > *width)
@@ -5217,7 +5217,7 @@ void _XmTextChangeHOffset(XmTextWidget tw, int length)
   /* subtract margins from the offset: Fixes CR 3187 */
   length += (length < 0 ? (2 * margin_width) : -(2 * margin_width));
   new_offset += length;
-  for (i = 0; i < tw->text.number_lines; i++) {
+  for (i = 0; (Cardinal)i < tw->text.number_lines; i++) {
     last_position = (*tw->text.source->Scan)(
         tw->text.source, tw->text.line[i].start, XmSELECT_LINE, XmsdRight, 1, False);
     nextpos = (*tw->text.source->Scan)(
@@ -5259,7 +5259,7 @@ void _XmTextChangeVOffset(XmTextWidget tw, int length)
   /* subtract margins from the offset: Fixes CR 3187 */
   length += (length < 0 ? (2 * margin_height) : -(2 * margin_height));
   new_offset += length;
-  for (i = 0; i < tw->text.number_lines; i++) {
+  for (i = 0; (Cardinal)i < tw->text.number_lines; i++) {
     last_position = (*tw->text.source->Scan)(
         tw->text.source, tw->text.line[i].start, XmSELECT_LINE, XmsdRight, 1, False);
     nextpos = (*tw->text.source->Scan)(

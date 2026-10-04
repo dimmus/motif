@@ -289,7 +289,7 @@ static Widget FindBestMatchWidget(Widget wid, XEvent *event)
     if (XtIsComposite(target)) {
       ctarget = (CompositeRec *)target;
       found = 0;
-      for (i = 0; i < ctarget->composite.num_children; i++) {
+      for (i = 0; (Cardinal)i < ctarget->composite.num_children; i++) {
         possible = ctarget->composite.children[i];
         if (XtIsManaged(possible)) {
           delx = appx - XtX(possible);
@@ -330,7 +330,7 @@ static Widget FindPopupMenu(Widget toplevel, Widget target, XEvent *event, int l
   if (target == NULL)
     return (NULL);
   if (!XmIsGadget(target)) {
-    for (i = 0; i < thiswid->core.num_popups; i++) {
+    for (i = 0; (Cardinal)i < thiswid->core.num_popups; i++) {
       possible = thiswid->core.popup_list[i];
       if ((possible = MenuMatches(possible, level, event)) != NULL)
         break;
@@ -345,7 +345,7 @@ static Widget FindPopupMenu(Widget toplevel, Widget target, XEvent *event, int l
       }
       _XmProcessUnlock();
       if (list) {
-        for (i = 0; i < list->num_popups; i++) {
+        for (i = 0; (Cardinal)i < list->num_popups; i++) {
           possible = list->popups[i];
           if ((possible = MenuMatches(possible, level, event)) != NULL)
             break;

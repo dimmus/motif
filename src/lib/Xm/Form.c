@@ -1356,7 +1356,7 @@ static XtGeometryResult QueryGeometry(Widget widget,
       int i;
       Widget child;
       XmFormConstraint c;
-      for (i = 0; i < fw->composite.num_children; i++) {
+      for (i = 0; (Cardinal)i < fw->composite.num_children; i++) {
         child = fw->composite.children[i];
         c = GetFormConstraint(child);
         c->preferred_width = XtWidth(child);
@@ -1597,7 +1597,7 @@ static void ChangeManaged(Widget wid)
    * else (destroy callbacks) so we have to handle the destroy
    * inside of changemanaged instead of in a destroy callback
    */
-  for (k = 0; k < fw->composite.num_children; k++) {
+  for (k = 0; (Cardinal)k < fw->composite.num_children; k++) {
     child = fw->composite.children[k];
     if (child->core.being_destroyed)
       DetachFrom(fw, child);
@@ -1608,7 +1608,7 @@ static void ChangeManaged(Widget wid)
        kid, everything goes to the ground.
        Here we initialize a field if it hasn't been done already,
        the XmINVALID_DIMENSION has been set in ConstraintInitialize */
-  for (i = 0; i < fw->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < fw->composite.num_children; i++) {
     child = fw->composite.children[i];
     c = GetFormConstraint(child);
     if (c->preferred_width == XmINVALID_DIMENSION)

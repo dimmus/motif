@@ -162,7 +162,7 @@ static void ClassInitialize(void)
   merged_list = (XtResource *)_XmMallocArray(wc_unique_res + sc_num_res, sizeof(XtResource));
   _XmTransformSubResources(
       xmVendorShellExtClassRec.object_class.resources, sc_num_res, &uncompiled, &num);
-  for (i = 0; i < num; i++) {
+  for (i = 0; (Cardinal)i < num; i++) {
     merged_list[i] = uncompiled[i];
   }
   XtFree((char *)uncompiled);
@@ -522,10 +522,10 @@ static void ChangeManaged(Widget wid)
      * For nested Dialog Shells, it is necessary to unmanage
      * dialog shell popups of the child of this dialog shell.
      */
-    for (i = 0; i < child->core.num_popups; i++) {
+    for (i = 0; (Cardinal)i < child->core.num_popups; i++) {
       if (XmIsDialogShell(child->core.popup_list[i])) {
         XmDialogShellWidget next_shell = (XmDialogShellWidget)(child->core.popup_list[i]);
-        for (j = 0; j < next_shell->composite.num_children; j++) {
+        for (j = 0; (Cardinal)j < next_shell->composite.num_children; j++) {
           XtUnmanageChild(next_shell->composite.children[j]);
         }
       }

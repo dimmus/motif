@@ -937,7 +937,7 @@ static void Initialize(Widget rw,
   if (ncw->container.detail_order_count && ncw->container.detail_order) {
     ncw->container.detail_order =
         (Cardinal *)_XmMallocArray(ncw->container.detail_order_count, sizeof(Cardinal));
-    for (i = 0; i < ncw->container.detail_order_count; i++)
+    for (i = 0; (Cardinal)i < ncw->container.detail_order_count; i++)
       ncw->container.detail_order[i] = rcw->container.detail_order[i];
   }
   /*
@@ -1406,7 +1406,7 @@ static Boolean SetValues(Widget cw,
    * Hide all non-level-0 children if we've switched to SPATIAL layout.
    */
   if (CtrLayoutIsSPATIAL(ncw) && !CtrLayoutIsSPATIAL(ccw)) {
-    for (i = 0; i < ncw->composite.num_children; i++) {
+    for (i = 0; (Cardinal)i < ncw->composite.num_children; i++) {
       cwid = ncw->composite.children[i];
       c = GetContainerConstraint(cwid);
       if (!CtrICON(cwid) || (c->entry_parent))
@@ -1478,7 +1478,7 @@ static Boolean SetValues(Widget cw,
       Cardinal *detail_order;
       detail_order =
           (Cardinal *)_XmMallocArray(ncw->container.detail_order_count, sizeof(Cardinal));
-      for (i = 0; i < ncw->container.detail_order_count; i++)
+      for (i = 0; (Cardinal)i < ncw->container.detail_order_count; i++)
         detail_order[i] = ncw->container.detail_order[i];
       ncw->container.detail_order = detail_order;
     }
@@ -2099,7 +2099,7 @@ static void ChangeManaged(Widget wid)
    */
   if (cw->container.self)
     return;
-  for (i = 0; i < cw->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < cw->composite.num_children; i++) {
     cwid = cw->composite.children[i];
     c = GetContainerConstraint(cwid);
     if (CtrICON(cwid))
@@ -6922,7 +6922,7 @@ static void ChangeOutlineButtons(Widget wid)
   Pixmap pm;
   Arg wargs[2];
   int n;
-  for (i = 0; i < cw->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < cw->composite.num_children; i++) {
     cwid = cw->composite.children[i];
     if (CtrOUTLINE_BUTTON(cwid)) {
       c = GetContainerConstraint(cwid);

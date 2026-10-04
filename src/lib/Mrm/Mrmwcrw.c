@@ -775,7 +775,7 @@ UrmCreateWidgetInstance (URMResourceContextPtr	context_id,
   /*
    * Copy in any override args
    */
-  for ( ndx=0 ; ndx<ov_num_args ; ndx++ )
+  for ( ndx=0 ; (Cardinal)ndx<ov_num_args ; ndx++ )
     {
       args[ndx+num_used].name = ov_args[ndx].name ;
       args[ndx+num_used].value = ov_args[ndx].value ;
@@ -1067,7 +1067,7 @@ UrmSetWidgetInstance (URMResourceContextPtr	context_id,
   /*
    * Copy in any override args
    */
-  for ( ndx=0 ; ndx<ov_num_args ; ndx++ )
+  for ( ndx=0 ; (Cardinal)ndx<ov_num_args ; ndx++ )
     {
       args[ndx+num_used].name = ov_args[ndx].name ;
       args[ndx+num_used].value = ov_args[ndx].value ;
@@ -2125,7 +2125,7 @@ Urm__CW_DisplayToString (char                       *val,
       return (return_val);
     }
 
-  for (ndx=0 ; ndx<dpysize ; ndx++)
+  for (ndx=0 ; (unsigned int)ndx<dpysize ; ndx++)
     {
       /* SUPPRESS 112 */
       if (val[ndx] != '\0')

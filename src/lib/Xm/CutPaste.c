@@ -2172,7 +2172,7 @@ static int ClipboardSearchForWindow(Display *display, Window parentwindow, Windo
   found = 0;
   windowptr = children;
   /* now search through the list for the window */
-  for (i = 0; i < numchildren; i++) {
+  for (i = 0; (unsigned int)i < numchildren; i++) {
     if (*windowptr == window) {
       found = 1;
     }

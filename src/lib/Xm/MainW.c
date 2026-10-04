@@ -834,7 +834,7 @@ static void ChangeManaged(Widget wid)
       (mw->swindow.WorkWindow != NULL))
   {
     /* loop over the clip window child list and treat the bogus */
-    for (i = 0; i < cw->composite.num_children; i++) {
+    for (i = 0; (Cardinal)i < cw->composite.num_children; i++) {
       XmScrolledWindowConstraint swc;
       int j;
       w = cw->composite.children[i];

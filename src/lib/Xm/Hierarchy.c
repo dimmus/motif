@@ -659,7 +659,7 @@ static Boolean ConstraintSetValues(
   HierarchyConstraints old_node = GetNodeInfo(current);
   Boolean insert_change = False;
   int i;
-  for (i = 0; i < *num_args; i++)
+  for (i = 0; (Cardinal)i < *num_args; i++)
     if (streq(args[i].name, XmNinsertBefore)) {
       insert_change = True;
       break;
@@ -845,7 +845,7 @@ static void _BuildNodeTable(Widget w, HierarchyConstraints node, Cardinal *curre
   }
   if (XmHierarchyC_state(node) == XmClosed)
     return;
-  for (i = 0; i < XmHierarchyC_num_children(node); i++)
+  for (i = 0; (Cardinal)i < XmHierarchyC_num_children(node); i++)
     _BuildNodeTable(w, XmHierarchyC_children(node)[i], current_index);
 }
 
@@ -1112,7 +1112,7 @@ static void DestroyFolderImages(Widget w)
 static void RemoveChildren(HierarchyConstraints *list, Cardinal num)
 {
   register int i;
-  for (i = 0; i < num; i++, list++) {
+  for (i = 0; (Cardinal)i < num; i++, list++) {
     /*
      * Our parent is already gone.
      */
@@ -1220,7 +1220,7 @@ static void RemoveNodeFromParent(HierarchyConstraints node)
   }
   else
     pnode = GetNodeInfo(XmHierarchyC_parent(node));
-  for (i = 0; i < XmHierarchyC_num_children(pnode); i++) {
+  for (i = 0; (Cardinal)i < XmHierarchyC_num_children(pnode); i++) {
     if (XmHierarchyC_children(pnode)[i] == node) {
       BumpChildren(XmHierarchyC_children(pnode), i, (int)XmHierarchyC_num_children(pnode));
       XmHierarchyC_num_children(pnode)--;
@@ -1294,7 +1294,7 @@ WidgetList XmHierarchyGetChildNodes(Widget nw)
     return retval;
   }
   retval = (WidgetList)_XmMallocArray(XmHierarchyC_num_children(node) + 1, sizeof(Widget));
-  for (i = 0; i < XmHierarchyC_num_children(node); i++)
+  for (i = 0; (Cardinal)i < XmHierarchyC_num_children(node); i++)
     retval[i] = XmHierarchyC_widget(XmHierarchyC_children(node)[i]);
   retval[i] = (Widget)NULL;
   _XmAppUnlock(app);

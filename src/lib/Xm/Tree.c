@@ -724,7 +724,7 @@ static Boolean ConstraintSetValues(
   Boolean redisplay = False;
   Boolean insert_change = False;
   int i;
-  for (i = 0; i < *num_args; i++)
+  for (i = 0; (Cardinal)i < *num_args; i++)
     if (streq(args[i].name, XmNinsertBefore)) {
       insert_change = True;
       break;
@@ -1278,7 +1278,7 @@ static void CalcLocations(Widget w, Boolean resize_it)
   /*
    * Reset each node to be hidden;
    */
-  for (i = 0; i < tw->composite.num_children; ++i) {
+  for (i = 0; (Cardinal)i < tw->composite.num_children; ++i) {
     node = GetNodeInfo(tw->composite.children[i]);
     XmHierarchyC_status(node) |= IS_COMPRESSED;
   }
@@ -1374,7 +1374,7 @@ static void LayoutChildren(Widget w, Widget assign_child)
    * Go through all nodes that can possibly be displayed, putting those
    * that will be visible on the screen and unmapping all others.
    */
-  for (i = 0; i < num_nodes; i++, node_table++) {
+  for (i = 0; (Cardinal)i < num_nodes; i++, node_table++) {
     TreeConstraints t_node = (TreeConstraints)*node_table;
     Widget child = XmHierarchyC_widget(t_node);
     Widget open_close = XmHierarchyC_open_close_button(t_node);

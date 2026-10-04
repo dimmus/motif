@@ -718,7 +718,7 @@ static void ChangeManaged(Widget w)
    * not be used to confirm the child to be text or text_field as this trait
    * is held by other widgets such as label as well.
    */
-  for (i = 0; i < SB_ChildCount(spinW); i++) {
+  for (i = 0; (Cardinal)i < SB_ChildCount(spinW); i++) {
     if (XtIsManaged(spinW->composite.children[i])) {
       if (XmIsTextField(spinW->composite.children[i]) || XmIsText(spinW->composite.children[i])) {
         spinW->spinBox.textw = spinW->composite.children[i];
@@ -1224,7 +1224,7 @@ static int NumericChildCount(XmSpinBoxWidget spinW)
   int childCount;
   childCount = 0;
   if (SB_WithChild(spinW))
-    for (i = 0; i < SB_ChildCount(spinW); i++) {
+    for (i = 0; (Cardinal)i < SB_ChildCount(spinW); i++) {
       spinC = SB_GetConstraintRec(spinW->composite.children[i]);
       if (SB_ChildIsNumeric(spinC))
         childCount++;
@@ -1242,7 +1242,7 @@ static Boolean WidgetIsChild(XmSpinBoxWidget spinW, Widget child)
   int i;
   childFlag = False;
   if (SB_WithChild(spinW))
-    for (i = 0; i < SB_ChildCount(spinW); i++)
+    for (i = 0; (Cardinal)i < SB_ChildCount(spinW); i++)
       if (spinW->composite.children[i] == child) {
         childFlag = True;
         break;
@@ -1411,7 +1411,7 @@ static void LayoutSpinBox(Widget w, XtWidgetGeometry *spinG, Widget child) /* un
   /*
    * Now position the managed children of the SpinBox.
    */
-  for (i = 0; i < SB_ChildCount(spinW); i++) {
+  for (i = 0; (Cardinal)i < SB_ChildCount(spinW); i++) {
     Widget childW = spinW->composite.children[i];
     if (w != childW && XtIsManaged(childW)) {
       posY = (spinG->height - XtHeight(childW)) / 2;
@@ -1953,7 +1953,7 @@ static void GetSpinSize(Widget w, Dimension *wide, Dimension *high)
     *wide += 2 * spinW->spinBox.margin_width;
     *wide += 2 * SB_ShadowPixels(spinW);
     if (SB_WithChild(spinW))
-      for (i = 0; i < SB_ChildCount(spinW); i++) {
+      for (i = 0; (Cardinal)i < SB_ChildCount(spinW); i++) {
         childW = spinW->composite.children[i];
         if (XtIsManaged(childW))
           *wide += XtWidth(childW) + spinW->spinBox.spacing;
@@ -1966,7 +1966,7 @@ static void GetSpinSize(Widget w, Dimension *wide, Dimension *high)
     *high += (arrowsHigh - 1) * spacing;
     *high += 2 * spinW->spinBox.margin_height;
     if (SB_WithChild(spinW))
-      for (i = 0; i < SB_ChildCount(spinW); i++) {
+      for (i = 0; (Cardinal)i < SB_ChildCount(spinW); i++) {
         childW = spinW->composite.children[i];
         if (XtIsManaged(childW)) {
           childHeight = XtHeight(childW);

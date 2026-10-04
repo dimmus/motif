@@ -940,7 +940,7 @@ Widget XmeDragSource(
   /* merge and copy arg list */
   arg_count = in_arg_count + 10;
   args = (Arg *)_XmMallocArray(arg_count, sizeof(Arg));
-  for (arg_count = 0; arg_count < in_arg_count; arg_count++)
+  for (arg_count = 0; (Cardinal)arg_count < in_arg_count; arg_count++)
     args[arg_count] = in_args[arg_count];
   arg_count = in_arg_count;
   ClearContextBlock(XtDisplay(w), atoms[XmA_MOTIF_DROP]);

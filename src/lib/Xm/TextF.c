@@ -6210,7 +6210,7 @@ static Boolean SetValues(
   }
   else {
     int ix;
-    for (ix = 0; ix < *num_args; ix++)
+    for (ix = 0; (Cardinal)ix < *num_args; ix++)
       if (strcmp(args[ix].name, XmNcursorPosition) == 0) {
         cursor_pos_set = True;
         new_position = TextF_CursorPosition(new_tf);
@@ -8270,7 +8270,7 @@ static Boolean TrimHighlights(XmTextFieldWidget tf, int *low, int *high)
   Boolean justChanged = False;
   _XmHighlightRec *l = tf->text.highlight.list;
   int i;
-  for (i = 0; i < tf->text.highlight.number; i++) {
+  for (i = 0; (Cardinal)i < tf->text.highlight.number; i++) {
     /* iterate through list, resetting spurious back to normal;
      ** unfortunately, we can have has_primary even when there is
      ** no primary selection anymore, so check pending-deleteness

@@ -1240,7 +1240,7 @@ static void ClassInitialize(void)
   merged_list = (XtResource *)_XmMallocArray(wc_num_res + sc_num_res, sizeof(XtResource));
   _XmTransformSubResources(
       xmLabelGCacheObjClassRec.object_class.resources, sc_num_res, &uncompiled, &num);
-  for (i = 0; i < num; i++)
+  for (i = 0; (Cardinal)i < num; i++)
     merged_list[i] = uncompiled[i];
   XtFree((char *)uncompiled);
   for (i = 0, j = num; i < wc_num_res; i++, j++)

@@ -1302,7 +1302,7 @@ static Dimension MaxLabelWidth(XmScaleWidget sw)
   register Widget c;
   Dimension max = 0;
   /* start at 2 to skip the title and the scrollbar */
-  for (i = 2; i < sw->composite.num_children; i++) {
+  for (i = 2; (Cardinal)i < sw->composite.num_children; i++) {
     c = sw->composite.children[i];
     if (XtIsManaged(c) && !((Object)c)->object.being_destroyed)
       ASSIGN_MAX(max, TotalWidth(c));
@@ -1316,7 +1316,7 @@ static Dimension MaxLabelHeight(XmScaleWidget sw)
   register Widget c;
   Dimension max = 0;
   /* start at 2 to skip the title and the scrollbar */
-  for (i = 2; i < sw->composite.num_children; i++) {
+  for (i = 2; (Cardinal)i < sw->composite.num_children; i++) {
     c = sw->composite.children[i];
     if (XtIsManaged(c) && !((Object)c)->object.being_destroyed)
       ASSIGN_MAX(max, TotalHeight(c));

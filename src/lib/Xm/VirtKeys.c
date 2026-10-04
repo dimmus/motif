@@ -297,7 +297,7 @@ static void FillBindingsFromDB(Display *dpy,
         *keys = (XmVKeyBinding)_XmReallocArray((char *)*keys,
                                                *num_keys + new_num,
                                                sizeof(XmVKeyBindingRec));
-        for (tmp = 0; tmp < new_num; tmp++) {
+        for (tmp = 0; (Cardinal)tmp < new_num; tmp++) {
           (*keys)[*num_keys + tmp].keysym = new_keys[tmp].keysym;
           (*keys)[*num_keys + tmp].modifiers = new_keys[tmp].modifiers;
           (*keys)[*num_keys + tmp].virtkey = virtualKeysyms[vk_num].keysym;
