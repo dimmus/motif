@@ -52,3 +52,8 @@ It is not part of CTest and is not built by default; `cmake --build
 `xmbench -l` lists the cases; each reports ns, mallocs, X requests, round
 trips and `XSetICValues` calls per operation (the counters come from a
 small `LD_PRELOAD` library that `xmbench` loads itself).
+
+`ab/` holds the A/B harness for the Form, Container and List layout code
+(`xm_abtest`, `xm_layoutbench` and `ab.sh`).  It is not part of CTest
+either, since a comparison needs two builds of libXm; `cmake --build
+<build> --target ab` builds it.  See `ab/README.md`.

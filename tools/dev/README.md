@@ -30,190 +30,69 @@ A comprehensive script that automatically detects your operating system, checks 
 7. **Security Features** - Non-root execution, sudo verification, package verification
 8. **Clear Feedback** - Provides detailed status messages and next steps
 
-### Required Dependencies
+### Dependencies Checked
 
-The script checks for and installs these essential build dependencies:
+The lists are `REQUIRED_DEPS` and `OPTIONAL_DEPS`, defined just before
+`get_package_names()` in the script, which maps each name to the package of every
+supported OS.
 
-#### Build Tools
-- `autoconf` - Configuration script generator
-- `automake` - Makefile generator
-- `autopoint` - Gettext infrastructure
-- `pkg-config` - Package configuration tool
-- `gcc` - C compiler (or equivalent)
-- `make` - Build automation tool
-- `flex` - Fast lexical analyzer
-- `bison` - Parser generator
+#### Required
+- Build tools: `cmake`, `ninja`, `pkg-config`, `gcc`, `make`, `flex`,
+  `bison`
+- X11 and image libraries (development packages): `libX11`, `libXt`,
+  `libXmu`, `libXext`, `libXpm`, `libXft`, `libjpeg`, `libpng`
+- `check` (libcheck), for the tests
 
-#### X11 Development Libraries
-- `libX11-dev` - Core X11 library
-- `libXt-dev` - X Toolkit Intrinsics
-- `libXmu-dev` - X11 miscellaneous utilities
-- `libXext-dev` - X11 extensions
-- `libXpm-dev` - X11 pixmap library
-- `libXft-dev` - X11 font rendering
-- `libjpeg-dev` - JPEG image support
-- `libpng-dev` - PNG image support
+#### Optional
+- `libXp`, for printing support (`WITH_PRINTING`); missing on newer
+  distributions, which the script handles
+- `Xvfb` and `xvfb-run`, to run the X11 test suites without a display
+- `Xephyr`, a nested X server, used by the mwm test and to watch or
+  debug the tests in a window
+- `xdotool`, which the Text and mwm tests use to drive real input
+- `abidiff` (libabigail), for `tools/dev/env/ci/abi-check.sh`
 
-#### Optional Dependencies
-- `libXp-dev` - X11 printing support (handled gracefully if not available)
-
-#### Testing Framework
-- `check` - Unit testing framework
+Optional dependencies that are not packaged for an OS are skipped.  The
+script does not install the core X fonts that the X11 test suites use
+(`xfonts-base` on Debian and Ubuntu, `xorg-x11-fonts-misc` on Fedora,
+`xorg-fonts-misc` on Arch Linux, `font-misc-misc` on Alpine);
+`tools/dev/env/ci/deps.sh` installs the complete set CI uses.
 
 ### Usage
 
-#### Basic Usage
+Run it from the project root:
 
-#### Direct Script Execution
 ```bash
-# Run from the project root directory
 ./tools/dev/scripts/deps_check.sh
 ```
 
-#### Using Make Target
-```bash
-# Use the convenient make target (recommended)
-make deps
-```
-
-The `make deps` target provides the same functionality as running the script directly, but integrates seamlessly with the build system.
-
-#### What It Does
-1. Detects your operating system
-2. Checks which dependencies are already installed
-3. Identifies missing packages
-4. Automatically installs missing dependencies
-5. Verifies successful installation
-6. Provides build instructions
-
-#### Example Output
-```
-==========================================
-    Motif Dependency Checker & Installer
-==========================================
-
-[INFO] Detecting operating system...
-[SUCCESS] Detected: ubuntu 24.04
-[INFO] Package manager: apt
-
-[INFO] Starting dependency check...
-[INFO] Checking project dependencies...
-[SUCCESS] ✓ autoconf (autoconf) - installed
-[SUCCESS] ✓ pkg-config (pkg-config) - installed
-[WARNING] ✗ libXp (libxp-dev) - not available (optional, not in repositories)
-[INFO] Dependency check complete: 17/18 packages installed
-[SUCCESS] All dependencies are installed!
-
-[INFO] You can now build Motif with:
-  ./autogen.sh
-  ./configure
-  make
-```
+It detects the OS and package manager, reports which dependencies are
+installed, installs the missing required ones, tries the missing
+optional ones, and checks the result.  When everything is present it
+suggests `make build` (see the `GNUmakefile`) to build Motif.
 
 ### Requirements
 
-- **Non-root user**: The script should not be run as root
-- **sudo access**: Required for package installation
-- **Internet connection**: For downloading packages
+- **Non-root user** on the host: the script refuses to run as root,
+  except inside a container
+- **sudo access**, to install packages
+- **Network access**, to download packages
 
 ### Error Handling
 
-#### Graceful Degradation
-- **Required dependencies missing**: Script fails with clear error message
-- **Optional dependencies missing**: Script continues with warning
-- **Package not available**: Script notes unavailability and continues
-
-#### Common Scenarios
-- **libXp not available**: Common on newer Ubuntu/Debian versions, handled gracefully
-- **Package installation fails**: Clear error messages and exit codes
-- **Unsupported OS**: Helpful error message with suggestions
-
-### Security Features
-
-- **Non-root execution**: Script refuses to run as root
-- **Sudo verification**: Checks for sudo availability before proceeding
-- **Package verification**: Verifies successful installation after package management
-
-### Integration with Build System
-
-The dependency checker is fully integrated with the Motif build system:
-
-- **`make deps`**: Automatically checks and installs dependencies
-- **`make clean`**: Cleans build artifacts (dependencies remain installed)
-- **`make distclean`**: Full cleanup (dependencies remain installed)
-
-This integration ensures that dependencies are properly managed as part of the build workflow.
-
-### Troubleshooting
-
-#### Permission Denied
-```bash
-# Make sure the script is executable
-chmod +x tools/dev/scripts/deps_check.sh
-```
-
-#### Sudo Not Available
-```bash
-# Install sudo first (if not available)
-su -
-# Then install sudo for your distribution
-```
-
-#### Package Installation Fails
-- Check your internet connection
-- Verify package repository configuration
-- Some distributions may require additional repositories for development packages
-
-#### Unsupported OS
-The script will exit with an error if your operating system is not supported. You can:
-- Check if your OS is a variant of a supported distribution
-- Modify the script to add support for your OS
-- Install dependencies manually using your package manager
+- **Required dependency missing**: the script fails with an error.
+- **Optional dependency missing or not available**: the script warns and
+  continues.
+- **Unsupported OS**: the script exits with an error; add the OS to
+  `detect_os()` and `get_package_names()`, or install the packages by
+  hand.
 
 ### Manual Installation
 
-If you prefer to install dependencies manually, here are the commands for each supported OS:
-
-#### Ubuntu/Debian
-```bash
-sudo apt-get update
-sudo apt-get install build-essential autoconf automake autopoint pkg-config \
-                     flex bison libx11-dev libxt-dev libxmu-dev libxext-dev \
-                     libxpm-dev libxft-dev libjpeg-dev libpng-dev libxp-dev check
-```
-
-#### Arch Linux
-```bash
-sudo pacman -Sy base-devel autoconf automake gettext pkgconf flex bison \
-                libx11 libxt libxmu libxext libxpm libxft libjpeg-turbo libpng libxp check
-```
-
-#### RHEL/CentOS/Fedora
-```bash
-sudo dnf install gcc autoconf automake gettext pkgconfig flex bison \
-                 libX11-devel libXt-devel libXmu-devel libXext-devel \
-                 libXpm-devel libXft-devel libjpeg-devel libpng-devel libXp-devel check-devel
-```
-
-#### Alpine Linux
-```bash
-sudo apk add build-base autoconf automake gettext pkgconf flex bison \
-            libx11-dev libxt-dev libxmu-dev libxext-dev \
-            libxpm-dev libxft-dev libjpeg-turbo-dev libpng-dev check-dev
-```
-
-#### Void Linux
-```bash
-sudo xbps-install base-devel autoconf automake gettext pkg-config flex bison \
-                  libX11-devel libXt-devel libXmu-devel libXext-devel \
-                  libXpm-devel libXft-devel libjpeg-turbo-devel libpng-devel check-devel
-```
-
-#### FreeBSD
-```bash
-sudo pkg install gcc autoconf automake gettext pkgconf gmake flex bison \
-                 libX11 libXt libXmu libXext libXpm libXft jpeg libpng libXp check
-```
+The package commands for Debian/Ubuntu and Fedora are in the
+[top-level README](../../README.md#requirements), and
+`tools/dev/env/ci/deps.sh` has the lists for Debian, Ubuntu, Fedora,
+Alpine, Arch Linux and FreeBSD.
 
 ## Development Environment (`env/`)
 

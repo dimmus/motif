@@ -72,9 +72,11 @@ Other Unix-like systems with X11 may work but are not tested.
 - X11 libraries: `x11`, `xt`, `xext`, `xmu`, `xpm` and `fontconfig`
   (required); `xft` 2 or later, `libpng` and `libjpeg` (optional,
   used when found); `xp` (only with `WITH_PRINTING`)
-- `check` (libcheck) for the tests; `xvfb-run` (Xvfb and xauth) to run
-  the tests that need an X server; `xdotool` and `Xephyr` for the tests
-  that drive Text and mwm with real input
+- `check` (libcheck) for the tests; `xvfb-run` (Xvfb and xauth) and the
+  core X fonts to run the tests that need an X server; `xdotool` and
+  `Xephyr` for the tests that drive Text and mwm with real input
+- `abidiff` (libabigail) for the ABI comparison in
+  `tools/dev/env/ci/abi-check.sh` (optional)
 - `gencat` to compile message catalogs (part of glibc; optional)
 
 On Debian or Ubuntu:
@@ -83,7 +85,7 @@ On Debian or Ubuntu:
 sudo apt-get install build-essential cmake ninja-build pkg-config flex bison \
     libx11-dev libxt-dev libxext-dev libxmu-dev libxpm-dev libxft-dev \
     libfontconfig-dev libpng-dev libjpeg-dev x11proto-dev xbitmaps \
-    check xvfb xauth xdotool xserver-xephyr
+    check xvfb xauth xfonts-base xdotool xserver-xephyr abigail-tools
 ```
 
 On Fedora:
@@ -94,11 +96,14 @@ sudo dnf install gcc cmake ninja-build pkgconf-pkg-config flex bison \
     'pkgconfig(xpm)' 'pkgconfig(xft)' 'pkgconfig(fontconfig)' \
     'pkgconfig(libpng)' 'pkgconfig(libjpeg)' 'pkgconfig(xbitmaps)' \
     'pkgconfig(check)' xorg-x11-server-Xvfb xorg-x11-xauth \
-    xdotool xorg-x11-server-Xephyr
+    xorg-x11-fonts-misc xdotool xorg-x11-server-Xephyr libabigail
 ```
 
 `tools/dev/env/ci/deps.sh` installs everything CI needs on Debian,
 Ubuntu, Fedora, Alpine, Arch Linux and FreeBSD.
+`tools/dev/scripts/deps_check.sh` reports which build and test
+dependencies are missing on your system and offers to install them; see
+[tools/dev/README.md](tools/dev/README.md).
 
 ## Building
 
@@ -191,8 +196,19 @@ golden image (`Visual.*`) and checks that the libraries export what
 their headers declare (`abi.exports.*`).  Tests that need an X server
 are labelled `X11`; when `xvfb-run` is found at configure time CTest
 runs each of them under its own Xvfb, otherwise they use `$DISPLAY` and
-are reported as skipped (exit status 77) when there is none.  See
+are reported as skipped (exit status 77) when there is none.  With
+`-DWITH_FUZZERS=ON` (Clang) CTest also runs each fuzzer over its seed
+corpus (`Fuzz.<name>`), and over the reproducers of known bugs that are
+not fixed yet, which are expected to fail (`Fuzz.<name>.crashes`).  See
 [src/tests/README.md](src/tests/README.md).
+
+Two targets build tools that CTest does not run.  `bench` builds and
+runs `xmbench`, the micro- and macro-benchmarks in `src/tests/bench`,
+and writes `xmbench.json`.  `ab` builds the A/B harness in
+`src/tests/ab`, which runs the same pseudo-random Form, Container and
+List configurations against two builds of libXm and reports any
+difference in geometry, selection, callbacks or pixels; use it to check
+that a change to the layout code keeps their behaviour identical.
 
 ### Sanitizers and coverage
 
@@ -292,7 +308,7 @@ src/bin/xmbind   xmbind, which installs virtual key bindings
 src/bin/wml      the WML tools that generate the UIL compiler tables
 src/bin/utils    build-time tools (makestrs, mkcatdefs, mkmsgcat)
 src/examples     example programs
-src/tests        the libcheck test suite
+src/tests        the tests, fuzzers, benchmarks and layout A/B harness
 include          config.h.in and stub CDE headers for the build
 data             key bindings, bitmaps and the pkg-config templates
 localized        translated message catalogs
