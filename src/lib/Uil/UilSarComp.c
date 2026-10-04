@@ -134,7 +134,7 @@ extern yystype		yylval;
 **--
 **/
 
-sym_value_entry_type 	*sem_create_cstr()
+sym_value_entry_type 	*sem_create_cstr(void)
 
 {
     sym_value_entry_type    *az_cstr_entry;
@@ -189,7 +189,7 @@ sym_value_entry_type 	*sem_create_cstr()
 **--
 **/
 
-sym_value_entry_type 	*sem_create_wchar_str()
+sym_value_entry_type 	*sem_create_wchar_str(void)
 
 {
     sym_value_entry_type    *az_wchar_str_entry;

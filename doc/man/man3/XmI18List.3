@@ -1,0 +1,123 @@
+'\" t
+.TH "XmI18List" "library call"
+.nh
+.SH "NAME"
+\fBXmI18ListGetSelectedRows\fP,
+\fBXmI18ListGetSelectedRowArray\fP,
+\fBXmI18ListSelectItems\fP,
+\fBXmI18ListDeselectItems\fP,
+\fBXmI18ListSelectAllItems\fP,
+\fBXmI18ListSelectRow\fP,
+\fBXmI18ListDeselectRow\fP,
+\fBXmI18ListToggleRow\fP,
+\fBXmI18ListMakeRowVisible\fP,
+\fBXmI18ListDoSearch\fP,
+\fBXmI18ListFindRow\fP,
+\fBXm18IListUnselectItem\fP,
+\fBXm18IListUnselectAllItems\fP \(em internal functions of the list inside a MultiList
+.iX "XmI18List"
+.iX "MultiList functions" "XmI18ListSelectRow"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/MultiListP\&.h>
+.PP
+\fBXmMultiListRowInfo **\fBXmI18ListGetSelectedRows\fP\fR(
+\fBWidget \fBw\fR\fR);
+\fBint *\fBXmI18ListGetSelectedRowArray\fP\fR(
+\fBXmI18ListWidget \fBw\fR\fR,
+\fBint *\fBnum_rows\fR\fR);
+\fBvoid \fBXmI18ListSelectItems\fP\fR(
+\fBXmI18ListWidget \fBw\fR\fR,
+\fBXmString \fBitem\fR\fR,
+\fBint \fBcolumn\fR\fR,
+\fBBoolean \fBnotify\fR\fR);
+\fBvoid \fBXmI18ListDeselectItems\fP\fR(
+\fBXmI18ListWidget \fBw\fR\fR,
+\fBXmString \fBitem\fR\fR,
+\fBint \fBcolumn\fR\fR);
+\fBvoid \fBXmI18ListSelectAllItems\fP\fR(
+\fBXmI18ListWidget \fBw\fR\fR,
+\fBBoolean \fBnotify\fR\fR);
+\fBvoid \fBXmI18ListSelectRow\fP\fR(
+\fBXmI18ListWidget \fBw\fR\fR,
+\fBint \fBrow\fR\fR,
+\fBBoolean \fBnotify\fR\fR);
+\fBvoid \fBXmI18ListDeselectRow\fP\fR(
+\fBXmI18ListWidget \fBw\fR\fR,
+\fBint \fBrow\fR\fR);
+\fBvoid \fBXmI18ListToggleRow\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBshort \fBrow\fR\fR);
+\fBvoid \fBXmI18ListMakeRowVisible\fP\fR(
+\fBXmI18ListWidget \fBw\fR\fR,
+\fBint \fBrow\fR\fR);
+\fBBoolean \fBXmI18ListDoSearch\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBString \fBstr\fR\fR,
+\fBBoolean \fBreset\fR\fR);
+\fBXmMultiListRowInfo *\fBXmI18ListFindRow\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBString \fBstr\fR\fR,
+\fBint *\fBfound_column\fR\fR,
+\fBBoolean \fBreset\fR\fR,
+\fBBoolean \fBdo_visual\fR\fR);
+\fBvoid \fBXm18IListUnselectItem\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBXmMultiListRowInfo *\fBrow_info\fR\fR);
+\fBvoid \fBXm18IListUnselectAllItems\fP\fR(
+\fBWidget \fBw\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+A MultiList (and an Ext18List, its older name) displays its rows in a
+child widget of the private class \fBXmI18List\fP\&. These functions
+operate on that child, not on the MultiList, and are exported only
+because the MultiList calls them from another file\&. They are not part
+of the supported interface: \fB<Xm/MultiListP\&.h>\fP declares only
+\fBXmI18ListGetSelectedRows\fP, \fBXmI18ListToggleRow\fP and the two
+\fBXm18IList\fP functions, and none of them checks the class of its
+widget argument\&. Applications should call the MultiList function
+listed below instead, which takes the MultiList widget, locks the
+application context and passes the request on:
+.PP
+.TS
+tab(;);
+lB lB
+l l.
+Internal function;Use instead
+_
+XmI18ListGetSelectedRows;\fBXmMultiListGetSelectedRows\fP(3)
+XmI18ListGetSelectedRowArray;\fBXmMultiListGetSelectedRowArray\fP(3)
+XmI18ListSelectItems;\fBXmMultiListSelectItems\fP(3)
+XmI18ListDeselectItems;\fBXmMultiListDeselectItems\fP(3)
+XmI18ListSelectAllItems;\fBXmMultiListSelectAllItems\fP(3)
+XmI18ListSelectRow;\fBXmMultiListSelectRow\fP(3)
+XmI18ListDeselectRow;\fBXmMultiListDeselectRow\fP(3)
+XmI18ListToggleRow;\fBXmMultiListToggleRow\fP(3)
+XmI18ListMakeRowVisible;\fBXmMultiListMakeRowVisible\fP(3)
+Xm18IListUnselectItem;\fBXmMultiListUnselectItem\fP(3)
+Xm18IListUnselectAllItems;\fBXmMultiListUnselectAllItems\fP(3)
+.TE
+.PP
+Each of these behaves as described on the page of its MultiList
+counterpart\&.
+.PP
+\fBXmI18ListDoSearch\fP and \fBXmI18ListFindRow\fP implement the find
+button of the MultiList (\fBXmNshowFind\fP)\&. Both search the cells
+of the list, starting at the first selected row (or the first row), for
+\fIstr\fP\&. When \fIreset\fP is True the search starts again at the
+first column; otherwise it continues after the column where the
+previous search stopped\&. \fBXmI18ListDoSearch\fP selects the row it
+finds and scrolls the matching cell into view\&.
+\fBXmI18ListFindRow\fP stores the column of the match in
+\fI*found_column\fP and does the same only when \fIdo_visual\fP is
+True\&.
+.SH "RETURN"
+.PP
+\fBXmI18ListDoSearch\fP returns True if a match was found\&.
+\fBXmI18ListFindRow\fP returns the row of the match, or NULL\&. The
+other functions return what their MultiList counterparts return\&.
+.SH "RELATED"
+.PP
+\fBXmMultiList\fP(3) and \fBXmExt18List\fP(3)\&.

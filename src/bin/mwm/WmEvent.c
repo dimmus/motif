@@ -84,7 +84,7 @@ typedef struct {
    unsigned int   resource;
    long           mgtMask;
    WmFunction     wmFunction;
-   Boolean       (*parseProc)();
+   Boolean       (*parseProc)(unsigned char **linePP, WmFunction wmFunction, String *pArgs);
 } FunctionTableEntry;
 
 #endif /* WSM */
@@ -101,9 +101,7 @@ extern FunctionTableEntry functionTable[];
 extern int F_NOP_INDEX;
 #endif /* WSM */
 
-#ifndef MOTIF_ONE_DOT_ONE
 #include <Xm/MenuShellP.h>
-#endif
 
 
 
@@ -142,7 +140,7 @@ void InitEventHandling (void)
     /* handle entry of root window */
     base_mask |= EnterWindowMask | LeaveWindowMask;
 
-    for (scr=0; scr<wmGD.numScreens; scr++)
+    for (scr=0; (int)scr<wmGD.numScreens; scr++)
     {
 	pSD = &(wmGD.Screens[scr]);
 
@@ -718,14 +716,9 @@ Boolean WmDispatchMenuEvent (XButtonEvent *event)
 	    {
 		PopGadgetOut (pCD, FRAME_SYSTEM);
 	    }
-#ifdef MOTIF_ONE_DOT_ONE
-	    TraversalOn (pCD->systemMenuSpec);
-	    doXtDispatchEvent = False;
-#else
  	    _XmGetMenuState(XtParent(pCD->systemMenuSpec->menuWidget))
 		->MS_LastManagedMenuTime = ((XButtonEvent *)event)->time;
 	    doXtDispatchEvent = True;
-#endif
 #ifdef WSM
           }
 	  else if ((!wmGD.clickData.pCD) &&
@@ -756,17 +749,12 @@ Boolean WmDispatchMenuEvent (XButtonEvent *event)
 		     ~wmGD.clickData.time + ((XButtonEvent *)event)->time + 1;
 		 }
 
-		 if (timeDiff < wmGD.doubleClickTime)
+		 if (timeDiff < (Time)wmGD.doubleClickTime)
 		 {
-#ifdef MOTIF_ONE_DOT_ONE
-		   TraversalOn (wmGD.menuActive);
-		   doXtDispatchEvent = False;
-#else
 		   _XmGetMenuState (XtParent(wmGD.menuActive->menuWidget))
 		       ->MS_LastManagedMenuTime =
 			   ((XButtonEvent *)event)->time;
 		   doXtDispatchEvent = True;
-#endif
 		 }
 	    wmGD.clickData.clickPending = False;
 	    }
@@ -1500,7 +1488,7 @@ Boolean CheckForButtonAction (XButtonEvent *buttonEvent, Context context, Contex
 	     * See if the event context matches the binding context.
 	     */
 
-	    if ((buttonEvent->type == buttonSpec->eventType) &&
+	    if (((unsigned int)buttonEvent->type == buttonSpec->eventType) &&
 	        (context & buttonSpec->context) &&
 		(subContext & buttonSpec->subContext))
 	    {
@@ -1758,7 +1746,7 @@ void ProcessClickBPress (XButtonEvent *buttonEvent, ClientData *pCD, Context con
 	    timeDiff = ~wmGD.clickData.time + buttonEvent->time + 1;
 	}
 
-	if (timeDiff < wmGD.doubleClickTime)
+	if (timeDiff < (Time)wmGD.doubleClickTime)
 	{
 	    /*
 	     * A double-click has been done; save the context.
@@ -2617,7 +2605,7 @@ Time GetTimestamp (void)
  *
  *************************************<->***********************************/
 
-Time LastTime ()
+Time LastTime (void)
 {
   Time evTime;
 

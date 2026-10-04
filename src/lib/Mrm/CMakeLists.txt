@@ -23,6 +23,7 @@ set(MRM_SRCS
     Mrmptrlist.c
     Mrmtable.c
     Mrmtime.c
+    Mrmvalid.c
     Mrmvm.c
     Mrmwci.c
     Mrmwcrw.c
@@ -34,20 +35,14 @@ set(MRM_SRCS
     MrmMessages.c
 )
 
-# Mrm headers
+# Mrm headers.  The internal ones (IDB.h, Mrm.h, MrmMsgI.h, MrmWidget.h)
+# are not installed.  MrmosI.h is, as in Motif 2.3: it declares the
+# exported _MrmOS functions that the UIL compiler uses.
 set(MRM_HEADERS
     MrmDecls.h
     MrmPublic.h
     MrmAppl.h
     MrmosI.h
-)
-
-# Internal headers
-set(MRM_INTERNAL_HEADERS
-    IDB.h
-    Mrm.h
-    MrmMsgI.h
-    MrmWidget.h
 )
 
 # Generate message catalog header file
@@ -71,47 +66,40 @@ endif()
 # Create the library
 add_library(Mrm ${MOTIF_LIB_TYPE} ${MRM_SRCS})
 
+add_library(Motif::Mrm ALIAS Mrm)
+
+# Export only the symbols of libMrm.map (see doc/abi-policy.md)
+motif_version_script(Mrm ${CMAKE_CURRENT_SOURCE_DIR}/libMrm.map)
+motif_ban_unsafe_string_functions(Mrm)
+
 # Ensure message catalog header is generated before building this target
 add_dependencies(Mrm mrm_msgcat_header)
 
 # Set library properties
 set_target_properties(Mrm PROPERTIES
-    VERSION ${ABI_CURRENT}.${ABI_REVISION}.${ABI_AGE}
-    SOVERSION ${ABI_CURRENT}
+    VERSION ${MOTIF_LIBRARY_VERSION}
+    SOVERSION ${MOTIF_SOVERSION}
     OUTPUT_NAME "Mrm"
 )
 
 # Include directories
 target_include_directories(Mrm
     PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/lib/Mrm>
-        $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
     PRIVATE
-        ${CMAKE_SOURCE_DIR}/src/lib/Mrm
         ${CMAKE_SOURCE_DIR}/src/lib/Xm
-        ${CMAKE_BINARY_DIR}/include
-        ${CMAKE_BINARY_DIR}/include/Mrm
-        ${X_INCLUDE_DIRS}
 )
 
 # Link libraries
 target_link_libraries(Mrm
     PUBLIC
         Xm
-        ${X_LIBRARIES}
 )
-
-# Add conditional libraries
-if(XFT_FOUND)
-    target_link_libraries(Mrm PRIVATE ${XFT_LIBRARIES})
-    target_include_directories(Mrm PRIVATE ${XFT_INCLUDE_DIRS})
-endif()
 
 # Install the library
 install(TARGETS Mrm
-    EXPORT MrmTargets
+    EXPORT MotifTargets
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
@@ -122,14 +110,7 @@ install(FILES ${MRM_HEADERS}
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Mrm
 )
 
-# Install internal headers (for development)
-install(FILES ${MRM_INTERNAL_HEADERS}
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Mrm
-)
-
-# Export targets
-install(EXPORT MrmTargets
-    FILE MrmTargets.cmake
-    NAMESPACE Mrm::
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Mrm
+# abi.exports.Mrm: libMrm.map must list what the installed headers declare
+motif_exports_test(Mrm ${CMAKE_CURRENT_SOURCE_DIR}/libMrm.map
+    HEADERS ${MRM_HEADERS}
 )

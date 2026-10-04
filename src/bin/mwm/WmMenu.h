@@ -49,7 +49,6 @@ extern Widget CreateMenuWidget (WmScreenData *pSD,
 				Boolean fTopLevelPane, MenuSpec *topMenuSpec,
 				MenuItem *moreMenuItems);
 extern void FreeCustomMenuSpec (MenuSpec *menuSpec);
-extern void MWarning (char *format, char *message);
 extern MenuSpec *MakeMenu (WmScreenData *pSD,
 #if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
 			   ClientData *pCD,

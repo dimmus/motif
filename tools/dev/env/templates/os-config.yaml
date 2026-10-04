@@ -248,9 +248,9 @@ ubuntu:
     ldflags: "-Wl,-z,relro -Wl,--as-needed"
     custom_vars: []
 
-freebsd:
+debian:
   base_image: "docker.io/debian:bookworm-slim"
-  description: "FreeBSD-like environment (Debian-based)"
+  description: "Debian 12 (bookworm)"
   package_manager: "apt"
   commands:
     update: "apt-get update"
@@ -358,13 +358,8 @@ freebsd:
     compiler: "clang"
     cflags: "-O2 -pipe -fstack-protector-strong -fno-strict-aliasing"
     cxxflags: "-O2 -pipe -fstack-protector-strong -fno-strict-aliasing"
-    ldflags: "-L/usr/local/lib -Wl,--as-needed"
-    custom_vars:
-      - "OPSYS=FreeBSD"
-      - "OSVERSION=1400000"
-      - "UNAME_s=FreeBSD"
-      - "UNAME_r=14.0-RELEASE"
-      - "UNAME_m=amd64"
+    ldflags: "-Wl,--as-needed"
+    custom_vars: []
 
 centos:
   base_image: "quay.io/centos/centos:stream9"

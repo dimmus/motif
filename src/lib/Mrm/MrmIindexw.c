@@ -278,7 +278,7 @@ Idb__INX_EnterLeafIndex (IDBFile		file_id,
   ndxsiz = _FULLWORD(ndxsiz);
   entsiz = IDBIndexLeafEntrySize + ndxsiz ;
   nfree = hdrptr->free_bytes ;
-  if ( entsiz > nfree )
+  if ( (int)entsiz > nfree )
     {
       result = Idb__INX_SplitLeafRecord (file_id, buffer) ;
       if ( result != MrmSUCCESS ) return result ;
@@ -412,7 +412,7 @@ Idb__INX_EnterNodeIndex (IDBFile		file_id,
   ndxsiz = _FULLWORD(ndxsiz);
   entsiz = IDBIndexNodeEntrySize + ndxsiz ;
   nfree = hdrptr->free_bytes ;
-  if ( entsiz > nfree )
+  if ( (int)entsiz > nfree )
     {
       result = Idb__INX_SplitNodeRecord (file_id, buffer) ;
       if ( result != MrmSUCCESS ) return result ;
@@ -1228,7 +1228,7 @@ Idb__INX_CollapseLeafRecord (IDBIndexLeafRecordPtr	recptr,
     {
       dstvec[ndx].data = srcvec[ndx].data ;
       ndxstg = (char *) stgbase + srcvec[ndx].index_stg ;
-      strcpy (cur_heap, ndxstg) ;
+      memcpy (cur_heap, ndxstg, strlen(ndxstg) + 1) ;
       dstvec[ndx].index_stg = (MrmOffset) (cur_heap - temp_heap) ;
       stgsiz = strlen(cur_heap) + 1 ;
       stgsiz = _FULLWORD(stgsiz);
@@ -1336,7 +1336,7 @@ Idb__INX_CollapseNodeRecord (IDBIndexNodeRecordPtr	recptr,
       dstvec[ndx].LT_record = srcvec[ndx].LT_record ;
       dstvec[ndx].GT_record = srcvec[ndx].GT_record ;
       ndxstg = (char *) stgbase + srcvec[ndx].index_stg ;
-      strcpy (cur_heap, ndxstg) ;
+      memcpy (cur_heap, ndxstg, strlen(ndxstg) + 1) ;
       dstvec[ndx].index_stg = (MrmOffset) (cur_heap - temp_heap) ;
       stgsiz = strlen(cur_heap) + 1 ;
       stgsiz = _FULLWORD(stgsiz);
@@ -1415,7 +1415,7 @@ Idb__INX_ConfirmNodeSpace (IDBFile		file_id,
    * Check the size. If there is enough, OK. Else split this record and
    * return a retry.
    */
-  if ( hdrptr->free_bytes >= IDBIndexNodeEntryMax ) return MrmSUCCESS ;
+  if ( hdrptr->free_bytes >= (int)IDBIndexNodeEntryMax ) return MrmSUCCESS ;
 
   result = Idb__INX_SplitNodeRecord (file_id, buffer) ;
   if ( result == MrmSUCCESS ) result = MrmINDEX_RETRY ;

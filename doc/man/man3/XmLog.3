@@ -1,0 +1,243 @@
+.TH "XmLog" "library call"
+.nh
+.SH "NAME"
+\fBXmLogInit\fP,
+\fBXmLogShutdown\fP,
+\fBXmLogDomainRegister\fP,
+\fBXmLogDomainUnregister\fP,
+\fBXmLogDomainLevelSet\fP,
+\fBXmLogDomainLevelGet\fP,
+\fBXmLogDomainRegisteredLevelSet\fP,
+\fBXmLogDomainRegisteredLevelGet\fP,
+\fBXmLogLevelSet\fP,
+\fBXmLogLevelGet\fP,
+\fBXmLogLevelColorGet\fP,
+\fBXmLogPrint\fP,
+\fBXmLogPrintCbSet\fP,
+\fBXmLogPrintCbStdErr\fP,
+\fBXmLogPrintCbStdOut\fP,
+\fBXmLogPrintCbFile\fP,
+\fBXmLogSetOutput\fP,
+\fBXmLogThreadsInit\fP,
+\fBXmLogThreadsEnable\fP,
+\fBXmLogThreadsShutdown\fP,
+\fBXmLogThreadsMainCheck\fP,
+\fBXmLogColorDisableSet\fP,
+\fBXmLogColorDisableGet\fP,
+\fBXmLogFileDisableSet\fP,
+\fBXmLogFileDisableGet\fP,
+\fBXmLogFunctionDisableSet\fP,
+\fBXmLogFunctionDisableGet\fP \(em the Motif logging functions
+.iX "XmLog"
+.iX "logging functions" "XmLogInit"
+.iX "logging functions" "XmLogPrint"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/Log\&.h>
+.PP
+\fBXmBool \fBXmLogInit\fP\fR(\fBvoid\fR);
+\fBXmBool \fBXmLogShutdown\fP\fR(\fBvoid\fR);
+.PP
+\fBint \fBXmLogDomainRegister\fP\fR(
+\fBconst char *\fBname\fR\fR,
+\fBconst char *\fBcolor\fR\fR);
+\fBvoid \fBXmLogDomainUnregister\fP\fR(
+\fBint \fBdomain\fR\fR);
+\fBvoid \fBXmLogDomainLevelSet\fP\fR(
+\fBconst char *\fBdomain_name\fR\fR,
+\fBint \fBlevel\fR\fR);
+\fBint \fBXmLogDomainLevelGet\fP\fR(
+\fBconst char *\fBdomain_name\fR\fR);
+\fBvoid \fBXmLogDomainRegisteredLevelSet\fP\fR(
+\fBint \fBdomain\fR\fR,
+\fBint \fBlevel\fR\fR);
+\fBint \fBXmLogDomainRegisteredLevelGet\fP\fR(
+\fBint \fBdomain\fR\fR);
+.PP
+\fBvoid \fBXmLogLevelSet\fP\fR(
+\fBint \fBlevel\fR\fR);
+\fBint \fBXmLogLevelGet\fP\fR(\fBvoid\fR);
+\fBconst char *\fBXmLogLevelColorGet\fP\fR(
+\fBint \fBlevel\fR\fR);
+.PP
+\fBvoid \fBXmLogPrint\fP\fR(
+\fBint \fBdomain\fR\fR,
+\fBXmLogLevel \fBlevel\fR\fR,
+\fBconst char *\fBfile\fR\fR,
+\fBconst char *\fBfnc\fR\fR,
+\fBint \fBline\fR\fR,
+\fBconst char *\fBfmt\fR\fR,
+\fB\&.\&.\&.\fR);
+.PP
+\fBtypedef void (*\fBXmLogPrintCb\fP)\fR(
+\fBconst XmLogDomain *\fBd\fR\fR,
+\fBXmLogLevel \fBlevel\fR\fR,
+\fBconst char *\fBfile\fR\fR,
+\fBconst char *\fBfnc\fR\fR,
+\fBint \fBline\fR\fR,
+\fBconst char *\fBfmt\fR\fR,
+\fBvoid *\fBdata\fR\fR,
+\fBva_list \fBargs\fR\fR);
+.PP
+\fBvoid \fBXmLogPrintCbSet\fP\fR(
+\fBXmLogPrintCb \fBcb\fR\fR,
+\fBvoid *\fBdata\fR\fR);
+\fBvoid \fBXmLogPrintCbStdErr\fP\fR(\fIas XmLogPrintCb\fP);
+\fBvoid \fBXmLogPrintCbStdOut\fP\fR(\fIas XmLogPrintCb\fP);
+\fBvoid \fBXmLogPrintCbFile\fP\fR(\fIas XmLogPrintCb\fP);
+\fBXmBool \fBXmLogSetOutput\fP\fR(
+\fBconst char *\fBoutput\fR\fR,
+\fBconst char *\fBfilename\fR\fR);
+.PP
+\fBvoid \fBXmLogThreadsInit\fP\fR(\fBvoid\fR);
+\fBvoid \fBXmLogThreadsEnable\fP\fR(\fBvoid\fR);
+\fBvoid \fBXmLogThreadsShutdown\fP\fR(\fBvoid\fR);
+\fBXmBool \fBXmLogThreadsMainCheck\fP\fR(\fBvoid\fR);
+.PP
+\fBvoid \fBXmLogColorDisableSet\fP\fR(
+\fBXmBool \fBdisabled\fR\fR);
+\fBXmBool \fBXmLogColorDisableGet\fP\fR(\fBvoid\fR);
+\fBvoid \fBXmLogFileDisableSet\fP\fR(
+\fBXmBool \fBdisabled\fR\fR);
+\fBXmBool \fBXmLogFileDisableGet\fP\fR(\fBvoid\fR);
+\fBvoid \fBXmLogFunctionDisableSet\fP\fR(
+\fBXmBool \fBdisabled\fR\fR);
+\fBXmBool \fBXmLogFunctionDisableGet\fP\fR(\fBvoid\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+These functions form a small logging facility in \fBlibXm\fP, which
+applications can use for their own diagnostics\&. Messages are sent to
+\fIdomains\fP, each of which has a name, an optional color and a
+level, and are printed through a replaceable print callback\&. Motif
+itself does not log through this interface; its warnings still go
+through \fBXtAppWarningMsg\fP(3)\&.
+.SS "Levels"
+.PP
+A message has one of the levels of the \fBXmLogLevel\fP enumeration,
+from the most to the least severe:
+\fBXM_LOG_LEVEL_CRITICAL\fP (0), \fBXM_LOG_LEVEL_ERR\fP (1),
+\fBXM_LOG_LEVEL_WARN\fP (2), \fBXM_LOG_LEVEL_INFO\fP (3) and
+\fBXM_LOG_LEVEL_DBG\fP (4)\&. \fBXM_LOG_LEVEL_UNKNOWN\fP (\-1) is
+returned for an unknown domain\&. A message is printed when its level
+is less than or equal to the level of its domain and the level of the
+domain is not 0\&.
+.PP
+The default level is set when Motif is built, with the CMake option
+\fBLOG_LEVEL\fP (\fBDEBUG\fP, \fBINFO\fP, \fBWARN\fP, \fBERROR\fP or
+\fBCRITICAL\fP; \fBINFO\fP by default)\&.
+\fBXmLogLevelSet\fP changes this default level, which new domains
+start with, and the level of the global domain; existing domains keep
+their level\&. \fBXmLogLevelGet\fP returns it\&.
+.SS "Initialization"
+.PP
+\fBXmLogInit\fP selects the print callback named by the build option
+\fBLOG_OUTPUT\fP (\fBstderr\fP, the default, \fBstdout\fP or
+\fBfile\fP, which appends to \fBmotif\&.log\fP in the current
+directory) and registers the global domain \fB"XM"\fP, whose identifier
+it stores in the variable \fBXM_LOG_DOMAIN_GLOBAL\fP\&. It must be
+called before any message is printed\&. Call it only once\&.
+.PP
+\fBXmLogShutdown\fP frees all domains\&. Domain identifiers obtained
+before it are invalid afterwards\&.
+.SS "Domains"
+.PP
+\fBXmLogDomainRegister\fP registers a domain called \fIname\fP and
+returns its identifier, a small non-negative integer, or \-1 if
+\fIname\fP is NULL or memory is exhausted\&. \fIcolor\fP is a terminal
+escape sequence (for example \fBLOG_COLOR_GREEN\fP) printed before the
+domain name, or NULL; the string is not copied and must stay valid
+while the domain exists\&. A new domain starts at the default level\&.
+.PP
+\fBXmLogDomainUnregister\fP removes a domain\&. Its identifier may be
+reused by a later registration\&.
+.PP
+\fBXmLogDomainLevelSet\fP and \fBXmLogDomainLevelGet\fP set and return
+the level of the first registered domain called \fIdomain_name\fP;
+\fBXmLogDomainRegisteredLevelSet\fP and
+\fBXmLogDomainRegisteredLevelGet\fP do the same for a domain
+identifier\&. The getters return \fBXM_LOG_LEVEL_UNKNOWN\fP for an
+unknown domain\&.
+.SS "Printing"
+.PP
+\fBXmLogPrint\fP prints the message formatted from \fIfmt\fP and the
+following arguments as by \fBprintf\fP(3), at \fIlevel\fP, to
+\fIdomain\fP\&. \fIfile\fP, \fIfnc\fP and \fIline\fP identify the
+caller\&. The macros \fBXM_LOG_CRIT\fP, \fBXM_LOG_ERR\fP,
+\fBXM_LOG_WARN\fP, \fBXM_LOG_INFO\fP and \fBXM_LOG_DBG\fP print
+to the global domain, and \fBXM_LOG_DOM_CRIT\fP through
+\fBXM_LOG_DOM_DBG\fP to the domain given as their first argument; they
+pass \fB__FILE__\fP, \fB__func__\fP and \fB__LINE__\fP\&. An unknown
+or unregistered domain is reported on standard error instead\&.
+.PP
+The print callbacks \fBXmLogPrintCbStdErr\fP and
+\fBXmLogPrintCbStdOut\fP write a line of the form
+.PP
+.nf
+\fILVL\fP<\fIpid\fP>:\fIdomain\fP \fIfile\fP:\fIline\fP \fIfunction\fP() \fImessage\fP
+.fi
+.PP
+to standard error or standard output, where \fILVL\fP is one of
+\fBCRI\fP, \fBERR\fP, \fBWRN\fP, \fBINF\fP and \fBDBG\fP\&. The level
+is printed in the color of its level, and the part from \fI<pid>\fP to
+\fIfunction\fP() in the color of the domain, if it has one, each
+followed by a terminal color reset sequence\&. \fBXmLogPrintCbFile\fP writes the same line to the
+file whose name is its \fIdata\fP argument: it opens the file for
+appending, writes, and closes it again for every message\&.
+.PP
+\fBXmLogPrintCbSet\fP makes \fIcb\fP the print callback, which is
+passed \fIdata\fP with every message; a NULL \fIcb\fP selects
+\fBXmLogPrintCbStdErr\fP\&. \fBXmLogSetOutput\fP selects one of the
+three callbacks above by name: \fIoutput\fP is \fB"stderr"\fP,
+\fB"stdout"\fP or \fB"file"\fP\&. For \fB"file"\fP, \fIfilename\fP
+names the file (\fBmotif\&.log\fP when NULL); the string is not copied
+and must stay valid while it is in use\&.
+.PP
+\fBXmLogLevelColorGet\fP returns the color escape sequence used for
+\fIlevel\fP, or an empty string for an invalid level\&.
+.SS "Threads"
+.PP
+\fBXmLogThreadsInit\fP records the calling thread as the main thread
+and \fBXmLogThreadsEnable\fP marks thread support as enabled (calling
+\fBXmLogThreadsInit\fP first if needed)\&. \fBXmLogThreadsMainCheck\fP
+returns \fBXM_TRUE\fP when thread support is not enabled or when
+called from the main thread\&. \fBXmLogThreadsShutdown\fP, which must
+be called from the main thread, disables thread support again\&.
+.SS "Obsolete functions"
+.PP
+\fBXmLogColorDisableSet\fP, \fBXmLogFileDisableSet\fP and
+\fBXmLogFunctionDisableSet\fP do nothing, and
+\fBXmLogColorDisableGet\fP, \fBXmLogFileDisableGet\fP and
+\fBXmLogFunctionDisableGet\fP always return \fBXM_FALSE\fP\&. They are
+kept for binary compatibility\&.
+.SH "RETURN"
+.PP
+\fBXmLogInit\fP returns \fBXM_FALSE\fP if the global domain cannot be
+registered and \fBXM_TRUE\fP otherwise; \fBXmLogShutdown\fP always
+returns \fBXM_TRUE\fP\&. \fBXmLogSetOutput\fP returns \fBXM_FALSE\fP
+for an unknown \fIoutput\fP\&. The other return values are described
+above\&.
+.SH "NOTES"
+.PP
+The logging functions do not lock anything: they must not be called
+from several threads at the same time, and
+\fBXmLogThreadsEnable\fP does not change that\&. Messages are printed
+with the colors described above whatever the destination, including
+files\&.
+.SH "EXAMPLE"
+.PP
+.nf
+#include <Xm/Log\&.h>
+
+int dom;
+
+XmLogInit();
+dom = XmLogDomainRegister("myapp", LOG_COLOR_CYAN);
+XmLogDomainRegisteredLevelSet(dom, XM_LOG_LEVEL_DBG);
+XM_LOG_DOM_INFO(dom, "loaded %d items", n);
+XmLogShutdown();
+.fi
+.SH "RELATED"
+.PP
+\fBXtAppWarningMsg\fP(3) and \fBprintf\fP(3)\&.

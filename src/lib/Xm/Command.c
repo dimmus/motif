@@ -715,11 +715,6 @@ static Boolean SetValues(Widget ow,
       old_blank = old->selection_box.list_items[new_count - 2];
       if (XmStringCompare(new_error, old_error) && XmStringCompare(new_blank, old_blank)) {
         new_w->command.error = FALSE;
-#if 0
-                XmListDeletePos(SB_List(old), 0);   /* Delete error message.*/
-                XmListDeletePos(SB_List(old), 0) ;   /* Delete blank line.*/
-                old->command.error = FALSE ;
-#endif
       }
     }
     else
@@ -740,8 +735,9 @@ Widget XmCreateCommand(Widget parent, String name, ArgList al, Cardinal ac)
   /* big time bad stuff will happen if they use prompt type...  */
   /* (like, no list gets created, but used all through command) */
   /*  allocate arglist, copy args, add dialog type arg */
-  argsNew = (ArgList)XtMalloc(sizeof(Arg) * (ac + 1));
-  memcpy(argsNew, al, sizeof(Arg) * ac);
+  argsNew = (ArgList)_XmMallocArray(ac + 1, sizeof(Arg));
+  if (ac > 0)
+    memcpy(argsNew, al, sizeof(Arg) * ac);
   XtSetArg(argsNew[ac], XmNdialogType, XmDIALOG_COMMAND);
   ac++;
   /*  create Command, free argsNew, return */
@@ -752,7 +748,7 @@ Widget XmCreateCommand(Widget parent, String name, ArgList al, Cardinal ac)
 
 Widget XmVaCreateCommand(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

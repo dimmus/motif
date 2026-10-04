@@ -45,6 +45,7 @@ static char rcsid[] = "$TOG: ImageCache.c /main/44 1998/10/06 17:26:25 samborn $
 #include <X11/Xlibint.h>
 #include <X11/Xresource.h>
 #include <Xm/XpmP.h>
+#include <strings.h>
 #if XM_WITH_JPEG
 #  include "JpegI.h"
 #endif
@@ -142,6 +143,7 @@ static void InitializeImageSet(void);
 static void InitializePixmapSets(void);
 static Boolean UninstallImageMapProc(XmHashKey key, XtPointer value, XtPointer image);
 static Boolean SymbolicColorUsed(String color_name, XpmColor *xpm_colors, unsigned int ncolors);
+static Boolean TransparentColorUsed(XpmColor *xpm_colors, unsigned int ncolors);
 static void CompleteUnspecColors(Screen *screen, XpmColorSymbol *override_colors);
 static int GetOverrideColors(Screen *screen,
                              XmAccessColorData acc_color,
@@ -199,7 +201,7 @@ static XmHashValue HashString(XmHashKey key)
  ************************************************************************/
 static void InitializeImageSet(void)
 {
-  register int i;
+  int i;
   /* Allocate the hash table. */
   assert(image_set == NULL);
   _XmProcessLock();
@@ -332,10 +334,29 @@ static Boolean SymbolicColorUsed(String color_name, XpmColor *xpm_colors, unsign
        colorTable */
   for (i = 0; i < ncolors; i++, xpm_colors++) {
     if (xpm_colors->symbolic && !strcmp(xpm_colors->symbolic, color_name))
-      break;
+      return True;
   }
-  if (i == ncolors)
-    return False;
+  return False;
+}
+
+/************************************************************************
+ *
+ * TransparentColorUsed
+ *  Used to determine if an Xpm image has a "None" color. Like the
+ *   symbolic background, this is replaced by the background pixel
+ *   (see GetOverrideColors), so the background matters for caching.
+ *
+ ************************************************************************/
+static Boolean TransparentColorUsed(XpmColor *xpm_colors, unsigned int ncolors)
+{
+  Cardinal i;
+  for (i = 0; i < ncolors; i++, xpm_colors++) {
+    if ((xpm_colors->m_color && !strcasecmp(xpm_colors->m_color, "None")) ||
+        (xpm_colors->g4_color && !strcasecmp(xpm_colors->g4_color, "None")) ||
+        (xpm_colors->g_color && !strcasecmp(xpm_colors->g_color, "None")) ||
+        (xpm_colors->c_color && !strcasecmp(xpm_colors->c_color, "None")))
+      return True;
+  }
   return False;
 }
 
@@ -512,7 +533,7 @@ static XtEnum GetXpmImage(Screen *screen,
   int num_override_colors;
   XImage *mask_image = NULL;
   int hot_x = 0, hot_y = 0;
-  register Display *display = DisplayOfScreen(screen);
+  Display *display = DisplayOfScreen(screen);
   /* init so that we can call safely XpmFreeAttributes. */
   attrib.valuemask = 0;
   /* Init the Xpm attributes to be passed to the reader */
@@ -561,12 +582,18 @@ static XtEnum GetXpmImage(Screen *screen,
     /* if the XPM file contained a embedded mask,
            install it using our mask name scheme if the color object
            tell us to do so */
-    if (mask_image && useMask) {
-      char mask_name[255];
-      _XmOSGenerateMaskName(image_name, mask_name, sizeof mask_name);
-      /* if an image already exist under that
-               name, nothing will be done */
-      _XmInstallImage(mask_image, mask_name, hot_x, hot_y);
+    if (mask_image) {
+      Boolean installed = False;
+      if (useMask) {
+        char mask_name[255];
+        _XmOSGenerateMaskName(image_name, mask_name, sizeof mask_name);
+        /* if an image already exist under that
+                 name, nothing will be done */
+        installed = _XmInstallImage(mask_image, mask_name, hot_x, hot_y);
+      }
+      /* the image cache only owns the mask once it is installed */
+      if (!installed)
+        XDestroyImage(mask_image);
     }
     /* now we have to adjust the passed acc_color */
     if (acc_color) {
@@ -591,7 +618,8 @@ static XtEnum GetXpmImage(Screen *screen,
                    colors were actually used during the read,
                    we don't want to remember the unused one
                    for the pixmap caching */
-        if (!SymbolicColorUsed(XmNbackground, attrib.colorTable, attrib.ncolors))
+        if (!SymbolicColorUsed(XmNbackground, attrib.colorTable, attrib.ncolors) &&
+            !TransparentColorUsed(attrib.colorTable, attrib.ncolors))
           acc_color->background = XmUNSPECIFIED_PIXEL;
         if (!SymbolicColorUsed(XmNforeground, attrib.colorTable, attrib.ncolors))
           acc_color->foreground = XmUNSPECIFIED_PIXEL;
@@ -610,18 +638,13 @@ static XtEnum GetXpmImage(Screen *screen,
            for we don't want to keep them in the image
            cache, since they need color lookup,
            which is done one level up in the pixmap cache */
+    if (xpmStatus >= 0)
+      XmeXpmFreeAttributes(&attrib);
     if (((*image)->depth == 1) && acc_color && (acc_color->foreground == 1) &&
-        (acc_color->background == 0))
-    {
-      _XmInstallImage(*image, image_name, hot_x, hot_y);
+        (acc_color->background == 0) && _XmInstallImage(*image, image_name, hot_x, hot_y))
       return TRUE;
-    }
-    else {
-      if (xpmStatus >= 0)
-        XmeXpmFreeAttributes(&attrib);
-      return NOT_CACHED; /* mean the image can be destroyed
-                                   after it is used */
-    }
+    return NOT_CACHED; /* mean the image can be destroyed
+                                 after it is used */
   }
   if (xpmStatus >= 0)
     XmeXpmFreeAttributes(&attrib);
@@ -664,11 +687,8 @@ static XtEnum LoadImage(Screen *screen,
   rewind(fp);
   switch (header[0]) {
     case '<': /* SVG */
-      if (!_XmSvgGetImage(fp, image)) {
-        fclose(fp);
-        XtFree(fname);
-        return True;
-      }
+      /* Not installed in the image cache: destroy it once it's used */
+      ret = !_XmSvgGetImage(fp, image) ? NOT_CACHED : False;
       break;
     case 0xff: /* 0xff 0xd8 - JPEG/Exif SOI */
 #if XM_WITH_JPEG
@@ -1115,16 +1135,14 @@ Pixmap _XmGetScaledPixmap(Screen *screen,
         /* Assume black == fg in the image. */
         if ((BlackPixelOfScreen(screen) == 0) || (WhitePixelOfScreen(screen) == 1)) {
           /* Flip the bits so fg == 1 in the image. */
-          register int nbytes = image->height * image->bytes_per_line;
-          register int byte;
+          int nbytes = image->height * image->bytes_per_line;
+          int byte;
           /* Image data may be constant, so we must copy it. */
           old_image_data = image->data;
           image->data = XtMalloc(nbytes);
           for (byte = 0; byte < nbytes; byte++)
             image->data[byte] = ~old_image_data[byte];
         }
-        if (ret != NOT_CACHED)
-          _XmProcessUnlock();
         /* In this depth-1 case the image formats are equivalent. */
         image->format = XYBitmap;
         break;
@@ -1210,9 +1228,12 @@ Pixmap _XmGetScaledPixmap(Screen *screen,
                     pix_entry->height);
   /* Destroy non-cached XImage now that we've cached the pixmap. */
   if (ret == NOT_CACHED) {
-    XDestroyImage(image);
-    if (old_image_data)
+    /* Give the image back its own data, then destroy both */
+    if (old_image_data) {
       XtFree(image->data);
+      image->data = old_image_data;
+    }
+    XDestroyImage(image);
   }
   else if (image->format != old_image_format) {
     /* Undo the XYPixmap to XYBitmap conversion done earlier. */
@@ -1633,6 +1654,9 @@ void _XmCleanPixmapCache(Screen *screen, Widget shell)
  */
 static unsigned int ctz(unsigned long n)
 {
+  /* e.g. the (empty) color masks of a PseudoColor visual */
+  if (!n)
+    return 0;
 #if defined(__has_builtin) && __has_builtin(__builtin_ctzl)
   return __builtin_ctzl(n);
 #else
@@ -1689,11 +1713,24 @@ static void render_image(Screen *screen,
   XGCValues gcv;
   int psz, x, y, ox, oy, r, g, b, a;
   psz = depth > 16 ? 32 : depth < 16 ? 8 : 16;
-  if (!(data = Xmalloc(dw * dh * (psz >> 3)))) {
+  if (dw <= 0 || dh <= 0)
+    return;
+  vis = DefaultVisualOfScreen(screen);
+  /**
+   * Let Xlib pick the server's bits per pixel for this depth (e.g. 16
+   * for depth 15, which psz would undersize) and size the data from it.
+   * XPutPixel() computes y * bytes_per_line in int, so stay below INT_MAX.
+   */
+  if (!(dest_image = XCreateImage(display, vis, depth, ZPixmap, 0, NULL, dw, dh, psz, 0)) ||
+      dest_image->bytes_per_line <= 0 || dest_image->bytes_per_line > INT_MAX / dh ||
+      !(data = Xmalloc((size_t)dest_image->bytes_per_line * dh)))
+  {
+    if (dest_image)
+      XDestroyImage(dest_image);
     XmeWarning(NULL, "render_image: Out of memory");
     return;
   }
-  vis = DefaultVisualOfScreen(screen);
+  dest_image->data = data;
   gcv.foreground = ULONG_MAX;
   gcv.background = ULONG_MAX;
   XGetGCValues(display, gc, GCBackground | GCForeground, &gcv);
@@ -1704,7 +1741,7 @@ static void render_image(Screen *screen,
   }
   bg.pixel = gcv.background;
   XQueryColor(display, screen->cmap, &bg);
-  dest_image = XCreateImage(display, vis, depth, ZPixmap, 0, data, dw, dh, psz, 0);
+  /* dest_image only covers the destination rectangle at (dx, dy) */
   for (y = 0; y < dh; y++) {
     for (x = 0; x < dw; x++) {
       r = g = b = 0;
@@ -1712,7 +1749,7 @@ static void render_image(Screen *screen,
       oy = sy + (int)(y / (double)dh * sh);
       /* Anything out of bounds is background */
       if (ox < sx || oy < sy || ox > sx + sw || oy > sy + sh) {
-        XPutPixel(dest_image, dx + x, dy + y, gcv.background);
+        XPutPixel(dest_image, x, y, gcv.background);
         continue;
       }
       /* Extract the color components */
@@ -1762,11 +1799,11 @@ static void render_image(Screen *screen,
           }
       }
       if (src->depth == 1 || vis->class == TrueColor || vis->class == DirectColor) {
-        XPutPixel(dest_image, dx + x, dy + y, pixel);
+        XPutPixel(dest_image, x, y, pixel);
         continue;
       }
       if (depth == 1 || vis->map_entries <= 2) {
-        XPutPixel(dest_image, dx + x, dy + y, (r | g | b) ? gcv.foreground : gcv.background);
+        XPutPixel(dest_image, x, y, (r | g | b) ? gcv.foreground : gcv.background);
         continue;
       }
       /* Colormap time */
@@ -1778,7 +1815,7 @@ static void render_image(Screen *screen,
       /* Slowly interrogate the colormap for Pixel values */
       if (XAllocColor(display, screen->cmap, &xc))
         pixel = xc.pixel;
-      XPutPixel(dest_image, dx + x, dy + y, pixel);
+      XPutPixel(dest_image, x, y, pixel);
     }
   }
   XPutImage(display, d, gc, dest_image, 0, 0, dx, dy, dw, dh);
@@ -1804,8 +1841,13 @@ void _XmPutScaledImage(Screen *screen,
   Visual *vis = DefaultVisualOfScreen(screen);
   /* svg: Rasterize to the given size */
   if (XImageIsSVG(src)) {
+    if (dw <= 0 || dh <= 0)
+      return;
     ++free_src;
-    src = src->f.sub_image(src, sx, sy, dw, dh);
+    if (!(src = src->f.sub_image(src, sx, sy, dw, dh))) {
+      XmeWarning(NULL, "_XmPutScaledImage: Unable to rasterize SVG image");
+      return;
+    }
     sx = 0;
     sy = 0;
     sw = dw;
@@ -1897,8 +1939,9 @@ static void CacheColorPixel(Display *display, Colormap colormap, char *colorname
   int numEntries = colorCacheList.numEntries;
   if (numEntries == colorCacheList.maxEntries) {
     colorCacheList.maxEntries += 25;
-    colorCacheList.cache = (CachedColor *)XtRealloc(
-        (char *)colorCacheList.cache, colorCacheList.maxEntries * sizeof(CachedColor));
+    colorCacheList.cache = (CachedColor *)_XmReallocArray((char *)colorCacheList.cache,
+                                                          colorCacheList.maxEntries,
+                                                          sizeof(CachedColor));
   }
   colorCacheList.cache[numEntries].display = display;
   colorCacheList.cache[numEntries].colormap = colormap;

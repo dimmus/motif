@@ -233,7 +233,7 @@ EnqueueUtmData(XtPointer data)
  | was called. Just grab the last entry in the queue.             |
  *----------------------------------------------------------------*/
 static XtPointer
-DequeueUtmData()
+DequeueUtmData(void)
 {
   DataQueueRec *ptr = dataQueueTail;
   XtPointer dataPtr = NULL;

@@ -869,7 +869,7 @@ Boolean _XmGetPointVisibility(Widget w, int root_x, int root_y)
   return False;
 }
 
-void _XmSetRect(register XRectangle *rect, Widget w)
+void _XmSetRect(XRectangle *rect, Widget w)
 {
   /* Initialize the rectangle structure to the specified values.
    * The widget must be realized.
@@ -884,9 +884,9 @@ void _XmSetRect(register XRectangle *rect, Widget w)
   rect->height = w->core.height;
 }
 
-int _XmIntersectRect(register XRectangle *srcRectA,
-                     register Widget widget,
-                     register XRectangle *dstRect)
+int _XmIntersectRect(XRectangle *srcRectA,
+                     Widget widget,
+                     XRectangle *dstRect)
 {
   /* Intersects the specified rectangle with the rectangle describing the
    * passed-in widget.  Returns True if they intersect, or False if they
@@ -897,14 +897,14 @@ int _XmIntersectRect(register XRectangle *srcRectA,
   return ((int)_XmIntersectionOf(srcRectA, &srcRectB, dstRect));
 }
 
-int _XmEmptyRect(register XRectangle *r)
+int _XmEmptyRect(XRectangle *r)
 {
   if (r->width <= 0 || r->height <= 0)
     return (TRUE);
   return (FALSE);
 }
 
-void _XmClearRect(register XRectangle *r)
+void _XmClearRect(XRectangle *r)
 {
   r->x = 0;
   r->y = 0;
@@ -1091,13 +1091,45 @@ Boolean XmIsTraversable(Widget wid)
   return traversable;
 }
 
+/*
+ * Get the geometry and map state of a sibling window for XmGetVisibility.
+ * For the window of a child of parent, Xt knows the geometry, and a
+ * realized widget that is mapped when managed is mapped exactly when it is
+ * managed (the same assumption _XmIsViewable makes); only other windows
+ * need a round trip.  Shells are left out: menu shells map and unmap the
+ * windows of their managed children themselves.
+ */
+static Boolean SiblingGeometry(Widget parent, Window window, XRectangle *rect)
+{
+  XWindowAttributes xwa;
+  Display *dpy = XtDisplay(parent);
+  Widget sib = XtWindowToWidget(dpy, window);
+  if (sib && XtParent(sib) == parent && !XtIsShell(parent) && XtIsRealized(sib) &&
+      sib->core.mapped_when_managed && !sib->core.being_destroyed)
+  {
+    if (!XtIsManaged(sib))
+      return False;
+    rect->x = sib->core.x + sib->core.border_width;
+    rect->y = sib->core.y + sib->core.border_width;
+    rect->width = sib->core.width;
+    rect->height = sib->core.height;
+    return True;
+  }
+  if (!XGetWindowAttributes(dpy, window, &xwa) || xwa.map_state != IsViewable)
+    return False;
+  rect->x = xwa.x + xwa.border_width;
+  rect->y = xwa.y + xwa.border_width;
+  rect->width = xwa.width;
+  rect->height = xwa.height;
+  return True;
+}
+
 XmVisibility XmGetVisibility(Widget wid)
 {
   XRectangle rect;
   Window rootwindow, parent_window, p_window, *children;
   unsigned int numchildren;
   int i;
-  Window *windowptr;
   _XmWidgetToAppContext(wid);
   _XmAppLock(app);
   if (!wid || !_XmComputeVisibilityRect(wid, &rect, FALSE, TRUE)) {
@@ -1119,42 +1151,32 @@ XmVisibility XmGetVisibility(Widget wid)
     _XmAppUnlock(app);
     return (XmVISIBILITY_UNOBSCURED);
   }
-  windowptr = children;
   /* walk through those which are under the window of interest */
-  for (i = 0; i < numchildren; i++) {
-    if (*windowptr == XtWindow(wid)) {
+  for (i = 0; (unsigned int)i < numchildren; i++) {
+    if (children[i] == XtWindow(wid)) {
       break;
     }
-    windowptr++;
   }
   i++;
-  windowptr++;
   /* process windows above the window of interest */
-  if (i < numchildren) {
+  if ((unsigned int)i < numchildren) {
     XRectangle parent_rect, srcRectB, intersect_rect;
-    XWindowAttributes window_attributes_return;
     Region region = XCreateRegion();
     Region tmp_region = XCreateRegion();
     Region left_region = XCreateRegion();
     XmVisibility value;
     XUnionRectWithRegion(&rect, region, region);
-    while (i < numchildren) {
-      XGetWindowAttributes(XtDisplay(wid), *windowptr, &window_attributes_return);
-      if (window_attributes_return.map_state == IsViewable) {
-        _XmSetRect(&parent_rect, XtParent(wid));
-        srcRectB.x = parent_rect.x + window_attributes_return.x +
-                     window_attributes_return.border_width;
-        srcRectB.y = parent_rect.y + window_attributes_return.y +
-                     window_attributes_return.border_width;
-        srcRectB.width = window_attributes_return.width;
-        srcRectB.height = window_attributes_return.height;
+    _XmSetRect(&parent_rect, XtParent(wid));
+    while ((unsigned int)i < numchildren) {
+      if (SiblingGeometry(XtParent(wid), children[i], &srcRectB)) {
+        srcRectB.x += parent_rect.x;
+        srcRectB.y += parent_rect.y;
         /* accumulate all the region covered by siblings */
         if (_XmIntersectionOf(&rect, &srcRectB, &intersect_rect)) {
           XUnionRectWithRegion(&intersect_rect, tmp_region, tmp_region);
         }
       }
       i++;
-      windowptr++;
     }
     XSubtractRegion(region, tmp_region, left_region);
     if (XEqualRegion(region, left_region)) {

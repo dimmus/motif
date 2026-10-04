@@ -48,7 +48,7 @@ typedef enum { DoXFree, DoFree } FreeType;
     if (DoXFree == how) \
       XFree(val); \
     else \
-      free(val); \
+      XtFree(val); \
   }
 static ConvertContext LookupContextBlock(Display *, Atom);
 static void ClearContextBlock(Display *, Atom);
@@ -164,6 +164,10 @@ Boolean _XmConvertHandler(Widget wid,
   cbstruct.type = XA_INTEGER;
   cbstruct.format = 8;
   cbstruct.length = 0;
+  cbstruct.parm = NULL;
+  cbstruct.parm_length = 0;
+  cbstruct.parm_format = 8;
+  cbstruct.parm_type = None;
   _XmProcessLock();
   /* Get the request event if we can */
   if (my_local_convert_flag == 0) {
@@ -288,6 +292,20 @@ static Boolean DragConvertHandler(Widget drag_context,
 }
 
 static int secondary_lock = 0;
+/* Copy of the request event of the transfer holding secondary_lock; the
+   transfer may outlive the convert proc, and with it Xt's copy. */
+static XSelectionRequestEvent *secondary_event = NULL;
+
+/* Bound on the nested event loop of SecondaryConvertHandler(), in units
+   of the selection timeout.  Xt times out each request of the transfer
+   on its own; this only guards against a peer that keeps a transfer
+   going forever. */
+#define SECONDARY_WAIT_FACTOR 4
+
+static void SecondaryTimeout(XtPointer closure, XtIntervalId *id)
+{
+  *(Boolean *)closure = True;
+}
 
 /********************************************************************/
 /* SecondaryConvertHandler handles the detail of                    */
@@ -303,10 +321,13 @@ static void SecondaryConvertHandler(Widget w,
   static char *atom_names[] = {XmSNULL, XmSINSERT_SELECTION, XmSLINK_SELECTION};
   XtAppContext app = XtWidgetToApplicationContext(w);
   _XmTextInsertPair *pair;
-  XSelectionRequestEvent *req_event;
+  XSelectionRequestEvent *req_event, *event_copy;
   static unsigned long old_serial = 0;
   Atom atoms[XtNumber(atom_names)];
   XtEnum operation;
+  XtIntervalId timer;
+  Boolean timed_out = False;
+  Boolean done;
   _XmProcessLock();
   if (secondary_lock != 0) {
     cs->status = XmCONVERT_REFUSE;
@@ -326,14 +347,19 @@ static void SecondaryConvertHandler(Widget w,
     return;
   }
   _XmProcessUnlock();
-  if (cs->parm_length == 0) {
+  /* The parameter is the ATOM_PAIR (selection, target) written by the
+     requestor, another client. */
+  if (cs->parm == NULL || cs->parm_format != 32 || cs->parm_length < 2) {
     cs->status = XmCONVERT_REFUSE;
     return;
   }
   pair = (_XmTextInsertPair *)cs->parm;
+  event_copy = (XSelectionRequestEvent *)XtMalloc(sizeof(XSelectionRequestEvent));
+  *event_copy = *req_event;
   _XmProcessLock();
   /* Lock */
   secondary_lock = 1;
+  secondary_event = event_copy;
   _XmProcessUnlock();
   assert(XtNumber(atom_names) == NUM_ATOMS);
   XInternAtoms(XtDisplay(w), atom_names, XtNumber(atom_names), False, atoms);
@@ -343,34 +369,42 @@ static void SecondaryConvertHandler(Widget w,
     operation = XmLINK;
   else
     operation = XmOTHER;
+  /* The transfer owns event_copy from here on: FinishTransfer() frees
+     it after ReleaseSecondaryLock() has run. */
   if (_XmDestinationHandler(w,
                             pair->selection,
                             operation,
                             ReleaseSecondaryLock,
                             (XtPointer)pair->target,
                             req_event->time,
-                            req_event) != True)
+                            event_copy) != True)
   {
+    _XmProcessLock();
+    if (secondary_event == event_copy) {
+      secondary_lock = 0;
+      secondary_event = NULL;
+    }
+    _XmProcessUnlock();
     cs->status = XmCONVERT_REFUSE;
     return;
   }
   /*
    * Make sure the above selection request is completed
-   * before returning from the convert proc.
+   * before returning from the convert proc, but do not wait forever.
+   * XtAppProcessEvent() also returns for the timer.
    */
-#ifdef XTHREADS
+  timer = XtAppAddTimeOut(app,
+                          XtAppGetSelectionTimeout(app) * SECONDARY_WAIT_FACTOR,
+                          SecondaryTimeout,
+                          (XtPointer)&timed_out);
   while (XtAppGetExitFlag(app) == False) {
-#else
-  for (;;) {
-#endif
     XEvent event;
     XtInputMask mask;
-    if (secondary_lock == 0)
+    _XmProcessLock();
+    done = (secondary_event != event_copy);
+    _XmProcessUnlock();
+    if (done || timed_out)
       break;
-#ifndef XTHREADS
-    XtAppNextEvent(app, &event);
-    XtDispatchEvent(&event);
-#else
     while (!(mask = XtAppPending(app)))
       ;                      /* Busy waiting - so that we don't lose our lock */
     if (mask & XtIMXEvent) { /* We have an XEvent */
@@ -383,22 +417,39 @@ static void SecondaryConvertHandler(Widget w,
     }
     else                            /* not an XEvent, process it */
       XtAppProcessEvent(app, mask); /* non blocking */
-#endif
   }
+  if (!timed_out)
+    XtRemoveTimeOut(timer);
+  /* If the transfer is still running, give up waiting for it but leave
+     it the lock: XmText and XmTextField keep its state in one static
+     record, so no other secondary transfer may start before its done
+     proc releases the lock. */
+  _XmProcessLock();
+  done = (secondary_event != event_copy);
+  _XmProcessUnlock();
   cs->value = NULL;
   cs->type = atoms[XmANULL];
   cs->format = 8;
   cs->length = 0;
-  cs->status = XmCONVERT_DONE;
+  cs->status = done ? XmCONVERT_DONE : XmCONVERT_REFUSE;
 }
 
 static void ReleaseSecondaryLock(Widget w,                         /* unused */
                                  XtEnum a,                         /* unused */
-                                 XmTransferDoneCallbackStruct *ts) /* unused */
+                                 XmTransferDoneCallbackStruct *ts)
 {
+  TransferContext tc = (TransferContext)ts->transfer_id;
+  XEvent *event = tc->callback_struct->event;
   _XmProcessLock();
-  secondary_lock = 0;
+  /* only release the lock if it still belongs to this transfer */
+  if (event != NULL && event == (XEvent *)secondary_event) {
+    secondary_lock = 0;
+    secondary_event = NULL;
+  }
   _XmProcessUnlock();
+  /* The event is the copy made by SecondaryConvertHandler(); later done
+     procs may still look at it, so FinishTransfer() frees it. */
+  tc->flags |= TC_FREE_EVENT;
 }
 
 /****************************************************************/
@@ -496,8 +547,9 @@ void XmeTransferAddDoneProc(XtPointer id, XmSelectionFinishedProc done_proc)
   if (tid->numDoneProcs == 1)
     tid->doneProcs = (XmSelectionFinishedProc *)XtMalloc(sizeof(XmSelectionFinishedProc *));
   else
-    tid->doneProcs = (XmSelectionFinishedProc *)XtRealloc(
-        (char *)tid->doneProcs, sizeof(XmSelectionFinishedProc *) * tid->numDoneProcs);
+    tid->doneProcs = (XmSelectionFinishedProc *)_XmReallocArray((char *)tid->doneProcs,
+                                                                tid->numDoneProcs,
+                                                                sizeof(XmSelectionFinishedProc *));
   tid->doneProcs[tid->numDoneProcs - 1] = done_proc;
   _XmProcessUnlock();
 }
@@ -604,7 +656,7 @@ static void SecondaryDone(Widget wid,
   /* Call the convertCallback with target DELETE if successful */
   if (success && cc->op == XmMOVE) {
     _XmConvertHandlerSetLocal();
-    _XmConvertHandler(wid, &convert_selection, &DELETE, type, (XtPointer *)&value, length, format);
+    _XmConvertHandler(wid, &convert_selection, &DELETE, type, &value, length, format);
     XtFree((char *)value);
   }
   XtDisownSelection(wid, convert_selection, XtLastTimestampProcessed(XtDisplay(wid)));
@@ -887,8 +939,8 @@ Widget XmeDragSource(
   XInternAtoms(XtDisplay(w), atom_names, XtNumber(atom_names), False, atoms);
   /* merge and copy arg list */
   arg_count = in_arg_count + 10;
-  args = (Arg *)XtMalloc(sizeof(Arg) * arg_count);
-  for (arg_count = 0; arg_count < in_arg_count; arg_count++)
+  args = (Arg *)_XmMallocArray(arg_count, sizeof(Arg));
+  for (arg_count = 0; (Cardinal)arg_count < in_arg_count; arg_count++)
     args[arg_count] = in_args[arg_count];
   arg_count = in_arg_count;
   ClearContextBlock(XtDisplay(w), atoms[XmA_MOTIF_DROP]);
@@ -1094,6 +1146,8 @@ static void FinishTransfer(Widget wid, TransferContext tc)
     ts.status = XmTRANSFER_DONE_FAIL;
   ts.client_data = tc->client_data;
   CallDoneProcs(wid, tc, &ts);
+  if (tc->flags & TC_FREE_EVENT)
+    XtFree((char *)tc->callback_struct->event);
   XtFree((char *)tc->callback_struct);
   FreeTransferID(tc);
 }
@@ -1202,7 +1256,7 @@ void XmeDropSink(Widget w, ArgList in_args, Cardinal in_arg_count)
   _XmAppLock(app);
   /* merge and copy arg list */
   arg_count = in_arg_count + 2;
-  args = (Arg *)XtMalloc(sizeof(Arg) * arg_count);
+  args = (Arg *)_XmMallocArray(arg_count, sizeof(Arg));
   for (arg_count = 0; arg_count < in_arg_count; arg_count++)
     args[arg_count] = in_args[arg_count];
   arg_count = in_arg_count;
@@ -1766,7 +1820,7 @@ Atom *XmeStandardTargets(Widget w, int count, int *tcount)
   targets[i] = atoms[XmA_MOTIF_ENCODING_REGISTRY];
   i++;
   /* Realloc the full size now */
-  targets = (Atom *)XtRealloc((char *)targets, sizeof(Atom) * (count + i));
+  targets = (Atom *)_XmReallocArray((char *)targets, count + i, sizeof(Atom));
   *tcount = i; /* Return the builtin target count */
   _XmAppUnlock(app);
   return (targets);
@@ -1853,57 +1907,62 @@ void XmeStandardConvert(Widget w,
   }
   else if (atoms[XmACLASS] == cs->target) {
     Widget current;
-    unsigned long bytesAfter;
+    Atom type;
+    int format;
+    unsigned long length;
+    unsigned char *value;
     cs->value = NULL;
     cs->format = 32;
     cs->length = 0;
     cs->type = XA_INTEGER;
     for (current = w; current != (Widget)NULL; current = XtParent(current)) {
-      if (XtIsShell(current)) {
-        XGetWindowProperty(XtDisplay(current),
-                           XtWindow(current),
-                           XA_WM_CLASS,
-                           0L,
-                           100000L,
-                           False,
-                           (Atom)AnyPropertyType,
-                           &cs->type,
-                           &cs->format,
-                           &cs->length,
-                           &bytesAfter,
-                           (unsigned char **)&cs->value);
-        if (cs->value != NULL)
-          break;
+      if (XtIsShell(current) && _XmGetWindowPropertyChecked(XtDisplay(current),
+                                                            XtWindow(current),
+                                                            XA_WM_CLASS,
+                                                            100000L,
+                                                            (Atom)AnyPropertyType,
+                                                            0,
+                                                            0,
+                                                            &type,
+                                                            &format,
+                                                            &length,
+                                                            NULL,
+                                                            &value))
+      {
+        cs->value = (XtPointer)value;
+        cs->type = type;
+        cs->format = format;
+        cs->length = length;
+        break;
       }
     }
   }
   else if (atoms[XmANAME] == cs->target) {
     Widget current;
-    unsigned long bytesAfter;
-    Atom type;
-    int format;
+    Atom type = None;
+    int format = 8;
     unsigned char *value = NULL;
-    char *total_value;
-    unsigned long length;
+    char *total_value = NULL;
+    unsigned long length = 0;
     for (current = w; current != (Widget)NULL; current = XtParent(current)) {
-      if (XtIsShell(current)) {
-        XGetWindowProperty(XtDisplay(current),
-                           XtWindow(current),
-                           XA_WM_NAME,
-                           0L,
-                           100000L,
-                           False,
-                           (Atom)AnyPropertyType,
-                           &type,
-                           &format,
-                           &length,
-                           &bytesAfter,
-                           &value);
-        if (value != NULL)
-          break;
-      }
+      if (XtIsShell(current) && _XmGetWindowPropertyChecked(XtDisplay(current),
+                                                            XtWindow(current),
+                                                            XA_WM_NAME,
+                                                            100000L,
+                                                            (Atom)AnyPropertyType,
+                                                            0,
+                                                            0,
+                                                            &type,
+                                                            &format,
+                                                            &length,
+                                                            NULL,
+                                                            &value))
+        break;
     }
-    total_value = _XmTextToLocaleText(w, (XtPointer)value, type, format, length, NULL);
+    if (value != NULL) {
+      total_value = _XmTextToLocaleText(w, (XtPointer)value, type, format, length, NULL);
+      XFree((char *)value);
+    }
     cs->value = (XtPointer)total_value;
     cs->format = 8;
     cs->length = total_value != NULL ? strlen(total_value) : 0;
@@ -1991,7 +2050,6 @@ char *_XmTextToLocaleText(
   char **values;
   int num_values = 0;
   char *total_value = NULL;
-  int malloc_size = 0;
   int i;
   if (type == XA_STRING || type == COMPOUND_TEXT
 #if XM_UTF8
@@ -2011,12 +2069,7 @@ char *_XmTextToLocaleText(
         *success = False;
     }
     if (num_values) {
-      for (i = 0; i < num_values; i++)
-        malloc_size += strlen(values[i]);
-      total_value = XtMalloc((unsigned)malloc_size + 1);
-      total_value[0] = '\0';
-      for (i = 0; i < num_values; i++)
-        strcat(total_value, values[i]);
+      total_value = _XmConcatStrings(values, num_values);
       XFreeStringList(values);
     }
   }
@@ -2092,8 +2145,8 @@ static char *GetSafeAtomName(Display *display, Atom a, FreeType *howFree)
   XSetErrorHandler(old_Handler);
   _XmProcessLock();
   if (SIF_ErrorFlag != 0) {
-    returnvalue = (char *)malloc(1);
-    returnvalue[0] = 0; /* Create empty string to return */
+    returnvalue = XtMalloc(1); /* does not return NULL */
+    returnvalue[0] = 0;        /* Create empty string to return */
     *howFree = DoFree;
     TransferWarning(NULL, ATOM, ARG, BAD_ATOM_MESSAGE);
   }

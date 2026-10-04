@@ -35,24 +35,11 @@
 
 #include "wml.h"
 
-#if defined(__STDC__)
 #include <string.h>		/* for strcpy() */
-#endif
 
 #ifndef XmConst
-#if defined(__STDC__) || !defined( NO_CONST )
 #define XmConst const
-#else
-#define XmConst
-#endif /* __STDC__ */
 #endif /* XmConst */
-
-#if !defined(__STDC__)
-/*
- * Undefine NULL, since it is defined in stdio
- */
-#undef NULL
-#endif
 
 /* Function declarations */
 int yylex(void);
@@ -746,7 +733,9 @@ int yyerror(char *s)
 }
 
 
+#ifndef _POSIX_C_SOURCE
 #define _POSIX_C_SOURCE 200809L
+#endif
 #include <unistd.h>
 #include "wmllex.c"
 

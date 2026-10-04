@@ -303,9 +303,9 @@ void ShowFeedbackWindow (WmScreenData *pSD, int x, int y, unsigned int width, un
     if (mask & (XValue|YValue))
     {
 	winX = (mask & XNegative) ?
-	    DisplayWidth(DISPLAY, pSD->screen)  + tmpX - pSD->fbWinWidth : tmpX;
+	    DisplayWidth(DISPLAY, pSD->screen)  + tmpX - (int)pSD->fbWinWidth : tmpX;
 	winY = (mask & YNegative) ?
-	    DisplayHeight(DISPLAY, pSD->screen) + tmpY -pSD->fbWinHeight : tmpY;
+	    DisplayHeight(DISPLAY, pSD->screen) + tmpY - (int)pSD->fbWinHeight : tmpY;
     }
     else
     {
@@ -738,7 +738,7 @@ static void CancelCB(Widget w, XtPointer client_data, XtPointer call_data)
 void ConfirmAction (WmScreenData *pSD, int nbr)
 {
     Arg           args[8];
-    register int  n;
+    int  n;
     int           x, y;
     Dimension     width, height;
     Widget        dialogShellW = NULL;

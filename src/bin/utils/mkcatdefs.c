@@ -95,8 +95,8 @@ int
 main (int argc,
       char *argv[])
 {
-  register int i;
-  register char *cp;
+  int i;
+  char *cp;
   int count;
   char *t;
 
@@ -220,10 +220,10 @@ mkcatdefs(char *fname)
 {
   char msgname [PATH_MAX];
   char line [MAXLINELEN];
-  register char *cp;
-  register char *cpt;
-  register int m;
-  register int n;
+  char *cp;
+  char *cpt;
+  int m;
+  int n;
   int contin = 0;
   int len;		/* # bytes in a character */
 
@@ -504,7 +504,7 @@ insert(char *tname,
        */
 
 {
-  register struct name *ptr,*optr;
+  struct name *ptr,*optr;
   int rslt = -1,i,hashval;
 
   hashval = hash(tname);
@@ -522,7 +522,7 @@ insert(char *tname,
   if (rslt == 0)  /* found the symbol already defined */
     return (-1);
   else {          /* symbol not defined yet so put it into symbol table */
-    ptr = (struct name *)calloc(sizeof(struct name), 1);
+    ptr = (struct name *)calloc(1, sizeof(struct name));
     ptr->regname = malloc(strlen(tname) + 1);
     strcpy (ptr->regname, tname);
     ptr->regnr = seqno;
@@ -563,7 +563,7 @@ nsearch (char *tname)
        */
 
 {
-  register struct name *ptr,*optr;
+  struct name *ptr,*optr;
   int rslt = -1,i,hashval;
 
   hashval = hash(tname);
@@ -602,7 +602,7 @@ nsearch (char *tname)
 static int
 hash (char *name) /* pointer to symbol */
 {
-  register int hashval = 0;
+  int hashval = 0;
 
   while (*name)
     hashval += *name++;

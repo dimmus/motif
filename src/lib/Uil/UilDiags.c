@@ -119,7 +119,7 @@ static	void 	(*fpe_handler)(int);
 **--
 **/
 
-void    diag_store_handlers
+static void    diag_store_handlers
             ( void )
 {
 /*
@@ -189,8 +189,9 @@ void	diag_issue_diagnostic
     int		severity;		/* severity of message */
     int		message_number;		/* message number */
     char	msg_buffer[132];	/* buffer to construct message */
-    char	ptr_buffer[buf_size];	/* buffer to construct pointer */
-    char	loc_buffer[132];	/* buffer to construct location */
+    char	ptr_buffer[buf_size+1];	/* buffer to construct pointer */
+    char	loc_buffer[132+256];	/* buffer to construct location */
+					/* (file names are up to 255) */
     char	src_buffer[buf_size];	/* buffer to hold source line */
 
     /*
@@ -298,13 +299,13 @@ void	diag_issue_diagnostic
 	    */
 
 #if XM_MSGCAT
-	    sprintf( loc_buffer,
+	    snprintf( loc_buffer, sizeof(loc_buffer),
 		     catgets(uil_catd, UIL_SET_MISC,
 			     UIL_MISC_0, "\t\t line: %d  file: %s"),
 		     az_src_rec->w_line_number,
 		     src_get_file_name( az_src_rec ) );
 #else
-	    sprintf( loc_buffer,
+	    snprintf( loc_buffer, sizeof(loc_buffer),
 		     "\t\t line: %d  file: %s",
 		     az_src_rec->w_line_number,
 		     src_get_file_name( az_src_rec ) );
@@ -328,7 +329,13 @@ void	diag_issue_diagnostic
 	    **	create the column pointer if a source position was given
 	    */
 
-	    if (l_start_column != diag_k_no_column)
+	    /*
+	    **	the pointer takes l_start_column+1 blanks or tabs (the
+	    **	source line starts with a tab), the '*' and a null
+	    */
+
+	    if (l_start_column != diag_k_no_column &&
+		l_start_column + 2 < (int)sizeof(ptr_buffer))
 	    {
 		int	i;
 
@@ -352,7 +359,7 @@ void	diag_issue_diagnostic
 
 	    if (l_start_column != diag_k_no_column)
 #if XM_MSGCAT
-	      sprintf(loc_buffer,
+	      snprintf(loc_buffer, sizeof(loc_buffer),
 		      catgets(uil_catd, UIL_SET_MISC,
 			      UIL_MISC_1,
 			      "\t\t line: %d  position: %d  file: %s"),
@@ -360,7 +367,7 @@ void	diag_issue_diagnostic
 		      l_start_column + 1,
 		      src_get_file_name( az_src_rec ) );
 #else
-	      sprintf(loc_buffer,
+	      snprintf(loc_buffer, sizeof(loc_buffer),
 		      "\t\t line: %d  position: %d  file: %s",
 		      az_src_rec->w_line_number,
 		      l_start_column + 1,
@@ -368,13 +375,14 @@ void	diag_issue_diagnostic
 #endif
 	    else
 #if XM_MSGCAT
-		sprintf( loc_buffer, catgets(uil_catd, UIL_SET_MISC,
-					     UIL_MISC_0,
-					     "\t\t line: %d  file: %s"),
+		snprintf( loc_buffer, sizeof(loc_buffer),
+			  catgets(uil_catd, UIL_SET_MISC,
+				  UIL_MISC_0,
+				  "\t\t line: %d  file: %s"),
 			 az_src_rec->w_line_number,
 			 src_get_file_name( az_src_rec ) );
 #else
-		sprintf( loc_buffer,
+		snprintf( loc_buffer, sizeof(loc_buffer),
 			 "\t\t line: %d  file: %s",
 			 az_src_rec->w_line_number,
 			 src_get_file_name( az_src_rec ) );
@@ -441,7 +449,7 @@ void	diag_issue_diagnostic
 **--
 **/
 
-void	diag_issue_summary()
+void	diag_issue_summary(void)
 
 {
 
@@ -811,7 +819,7 @@ void	diag_initialize_diagnostics(void)
 **--
 **/
 
-void	diag_reset_overflow_handler()
+void	diag_reset_overflow_handler(void)
 
 {
 
@@ -1012,7 +1020,7 @@ void	write_msg_to_standard_error
     **  If message callback was supplied, call it with the description of the
     **  error instead of writing it to standard output.
     */
-    if (Uil_cmd_z_command.message_cb != (Uil_continue_type(*)())NULL)
+    if (Uil_cmd_z_command.message_cb != NULL)
     {
 	Uil_status_type return_status;
 /*
@@ -1020,7 +1028,7 @@ void	write_msg_to_standard_error
  *                and restore the Uil signal handlers immediately afterwards
  */
         diag_restore_diagnostics();
-	return_status = ((Uil_continue_type (*)(char *, int, int, char *, char *, char *, char *, int *))Uil_cmd_z_command.message_cb)(
+	return_status = (*Uil_cmd_z_command.message_cb)(
 			    Uil_cmd_z_command.message_data,
 			    message_number,
 			    diag_rz_msg_table[ message_number ].l_severity,
@@ -1169,7 +1177,7 @@ void	diag_report_status(void)
     /*
     **  If no status callback was supplied, just return.
     */
-    if (Uil_cmd_z_command.status_cb == (Uil_continue_type(*)())NULL) return;
+    if (Uil_cmd_z_command.status_cb == NULL) return;
 
     /*
     **	If delay is used up (less than or equal to zero) then invoke the
@@ -1184,7 +1192,7 @@ void	diag_report_status(void)
  *                   immediately after.
  */
         diag_restore_diagnostics();
-	return_status = ((Uil_continue_type (*)(char *, int, int, char *, int *))Uil_cmd_z_command.status_cb)(
+	return_status = (*Uil_cmd_z_command.status_cb)(
 			    Uil_cmd_z_command.status_data,
 			    Uil_percent_complete,
 			    Uil_lines_processed,

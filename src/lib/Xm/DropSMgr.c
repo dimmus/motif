@@ -116,11 +116,11 @@ static void Destroy(Widget w);
 static Boolean SetValues(Widget cw, Widget rw, Widget nw, ArgList args, Cardinal *num_args);
 static void CreateTable(XmDropSiteManagerObject dsm);
 static void DestroyTable(XmDropSiteManagerObject dsm);
-static void RegisterInfo(register XmDropSiteManagerObject dsm,
-                         register Widget widget,
-                         register XtPointer info);
-static void UnregisterInfo(register XmDropSiteManagerObject dsm, register XtPointer info);
-static XtPointer WidgetToInfo(register XmDropSiteManagerObject dsm, register Widget widget);
+static void RegisterInfo(XmDropSiteManagerObject dsm,
+                         Widget widget,
+                         XtPointer info);
+static void UnregisterInfo(XmDropSiteManagerObject dsm, XtPointer info);
+static XtPointer WidgetToInfo(XmDropSiteManagerObject dsm, Widget widget);
 static Boolean Coincident(XmDropSiteManagerObject dsm, Widget w, XmDSClipRect *r);
 static Boolean IsDescendent(Widget parentW, Widget childW);
 static void DetectAncestorClippers(XmDropSiteManagerObject dsm,
@@ -181,7 +181,10 @@ static XmDSInfo GetDSFromStream(XmDropSiteManagerObject dsm,
                                 XtPointer dataPtr,
                                 Boolean *close,
                                 unsigned char *type);
-static void GetNextDS(XmDropSiteManagerObject dsm, XmDSInfo parentInfo, XtPointer dataPtr);
+static Boolean GetNextDS(XmDropSiteManagerObject dsm,
+                         XmDSInfo parentInfo,
+                         XtPointer dataPtr,
+                         int depth);
 static XmDSInfo ReadTree(XmDropSiteManagerObject dsm, XtPointer dataPtr);
 static void FreeDSTree(XmDSInfo tree);
 static void ChangeRoot(XmDropSiteManagerObject dsm, XtPointer clientData, XtPointer callData);
@@ -382,11 +385,11 @@ static void DestroyTable(XmDropSiteManagerObject dsm)
 
 #define DSTABLE(dsm) ((XmHashTable)(dsm->dropManager.dsTable))
 
-static void RegisterInfo(register XmDropSiteManagerObject dsm,
-                         register Widget widget,
-                         register XtPointer info)
+static void RegisterInfo(XmDropSiteManagerObject dsm,
+                         Widget widget,
+                         XtPointer info)
 {
-  register XmHashTable tab;
+  XmHashTable tab;
   if (GetDSRegistered(info))
     return;
   DPRINT(("(RegI) Widget %p (%s) info %p (internal %d widget %p)\n",
@@ -405,7 +408,7 @@ static void RegisterInfo(register XmDropSiteManagerObject dsm,
   SetDSRegistered(info, True);
 }
 
-static void UnregisterInfo(register XmDropSiteManagerObject dsm, register XtPointer info)
+static void UnregisterInfo(XmDropSiteManagerObject dsm, XtPointer info)
 {
   XmHashTable tab;
   XtPointer iterator;
@@ -432,7 +435,7 @@ static void UnregisterInfo(register XmDropSiteManagerObject dsm, register XtPoin
   SetDSRegistered(info, False);
 }
 
-static XtPointer WidgetToInfo(register XmDropSiteManagerObject dsm, register Widget widget)
+static XtPointer WidgetToInfo(XmDropSiteManagerObject dsm, Widget widget)
 {
   XmHashTable tab;
   XmDSInfo info;
@@ -1775,6 +1778,7 @@ static void PutDSToStream(XmDropSiteManagerObject dsm,
         else
           info->animation_data.borderWidth = 0;
       }
+        break;
       default: {
         /*EMPTY*/
       } break;
@@ -1863,6 +1867,7 @@ static void PutDSToStream(XmDropSiteManagerObject dsm,
         else
           info->animation_data.borderWidth = 0;
       }
+        break;
       default: {
         /*EMPTY*/
       } break;
@@ -1961,6 +1966,7 @@ static void PutDSToStream(XmDropSiteManagerObject dsm,
         else
           info->animation_data.borderWidth = 0;
       }
+        break;
       default: {
         /*EMPTY*/
       } break;
@@ -2022,7 +2028,8 @@ static XmDSInfo GetDSFromStream(XmDropSiteManagerObject dsm,
   XmDSInfo info;
   XmICCDropSiteInfoStruct iccInfo;
   size_t size;
-  _XmReadDSFromStream(dsm, dataPtr, &iccInfo);
+  if (!_XmReadDSFromStream(dsm, dataPtr, &iccInfo))
+    return NULL;
   switch (iccInfo.header.animationStyle) {
     case XmDRAG_UNDER_HIGHLIGHT:
       if (iccInfo.header.dropType & XmDSM_DS_LEAF)
@@ -2129,29 +2136,49 @@ static XmDSInfo GetDSFromStream(XmDropSiteManagerObject dsm,
   return (info);
 }
 
-static void GetNextDS(XmDropSiteManagerObject dsm, XmDSInfo parentInfo, XtPointer dataPtr)
+/*
+ * The drop site stream comes from another client.  Bound the nesting
+ * depth so a hostile peer cannot exhaust the stack; real drop site
+ * trees are nowhere near this deep.
+ */
+#define MAX_REMOTE_DS_DEPTH 256
+
+/*
+ * Read the children of parentInfo (a composite drop site) from the
+ * stream, recursively.  Returns False if the stream ended early or was
+ * malformed; whatever was read up to that point stays in the tree.
+ */
+static Boolean GetNextDS(XmDropSiteManagerObject dsm,
+                         XmDSInfo parentInfo,
+                         XtPointer dataPtr,
+                         int depth)
 {
-  Boolean close = TRUE;
+  Boolean close;
   unsigned char type;
-  XmDSInfo new_w = GetDSFromStream(dsm, dataPtr, &close, &type);
-  while (!close) {
+  XmDSInfo new_w;
+  if (depth >= MAX_REMOTE_DS_DEPTH)
+    return False;
+  do {
+    if ((new_w = GetDSFromStream(dsm, dataPtr, &close, &type)) == NULL)
+      return False;
     AddDSChild(parentInfo, new_w, GetDSNumChildren(parentInfo));
-    if (!(type & XmDSM_DS_LEAF))
-      GetNextDS(dsm, new_w, dataPtr);
-    new_w = GetDSFromStream(dsm, dataPtr, &close, &type);
-  }
-  AddDSChild(parentInfo, new_w, GetDSNumChildren(parentInfo));
-  if (!(type & XmDSM_DS_LEAF))
-    GetNextDS(dsm, new_w, dataPtr);
+    if (!(type & XmDSM_DS_LEAF) && !GetNextDS(dsm, new_w, dataPtr, depth + 1))
+      return False;
+  } while (!close);
+  return True;
 }
 
 static XmDSInfo ReadTree(XmDropSiteManagerObject dsm, XtPointer dataPtr)
 {
   Boolean junkb;
-  unsigned char junkc;
-  XmDSInfo root = GetDSFromStream(dsm, dataPtr, &junkb, &junkc);
+  unsigned char type;
+  XmDSInfo root;
+  if ((root = GetDSFromStream(dsm, dataPtr, &junkb, &type)) == NULL)
+    return NULL;
   SetDSShell(root, True);
-  GetNextDS(dsm, root, dataPtr);
+  /* only a composite root has children (and room to store them) */
+  if (!(type & XmDSM_DS_LEAF))
+    (void)GetNextDS(dsm, root, dataPtr, 0);
   return root;
 }
 
@@ -2304,7 +2331,7 @@ static void CreateInfo(XmDropSiteManagerObject dsm, Widget widget, ArgList args,
   else {
     int i;
     XRectangle *rects = fullInfoRec.rectangles;
-    for (i = 0; i < fullInfoRec.num_rectangles; i++)
+    for (i = 0; (Cardinal)i < fullInfoRec.num_rectangles; i++)
       _XmRegionUnionRectWithRegion(&(rects[i]), region, region);
     fullInfoRec.region = region;
     fullInfoRec.status.has_region = True;
@@ -2491,7 +2518,7 @@ static void RetrieveInfo(XmDropSiteManagerObject dsm,
                  (ArgList)(args),
                  (Cardinal)(argCount));
   freeRects = True;
-  for (i = 0; i < argCount; i++) {
+  for (i = 0; (Cardinal)i < argCount; i++) {
     if (strcmp(args[i].name, "dropRectangles") == 0)
       freeRects = False;
   }
@@ -2591,7 +2618,7 @@ static void UpdateInfo(XmDropSiteManagerObject dsm, Widget widget, ArgList args,
     if (type == XmDROP_SITE_SIMPLE) {
       int i;
       XmRegion new_region = _XmRegionCreate();
-      for (i = 0; i < full_info->num_rectangles; i++)
+      for (i = 0; (Cardinal)i < full_info->num_rectangles; i++)
         _XmRegionUnionRectWithRegion(&(full_info->rectangles[i]), new_region, new_region);
       full_info->region = new_region;
       full_info->status.has_region = True;
@@ -2889,6 +2916,7 @@ static void Update(XmDropSiteManagerObject dsm, XtPointer clientData, XtPointer 
       break;
     case XmCR_OPERATION_CHANGED:
       DSMOperationChanged(dsm, clientData, callData);
+      break;
     default:
       break;
   }
@@ -2922,7 +2950,7 @@ static Boolean HasDropSiteDescendant(XmDropSiteManagerObject dsm, Widget widget)
   if (!XtIsComposite(widget))
     return (False);
   cw = (CompositeWidget)widget;
-  for (i = 0; i < cw->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < cw->composite.num_children; i++) {
     child = cw->composite.children[i];
     if ((DSMWidgetToInfo(dsm, child) != NULL) || (HasDropSiteDescendant(dsm, child))) {
       return (True);
@@ -3081,7 +3109,7 @@ Status XmDropSiteQueryStackingOrder(Widget widget,
         num_visible_children++;
     }
     if (num_visible_children) {
-      *children_rtn = (Widget *)XtMalloc(sizeof(Widget) * num_visible_children);
+      *children_rtn = (Widget *)_XmMallocArray(num_visible_children, sizeof(Widget));
       /* Remember to reverse the order */
       for (j = 0, i = (GetDSNumChildren(info) - 1); i >= 0; i--) {
         XmDSInfo child = (XmDSInfo)GetDSChild(info, i);
@@ -3143,18 +3171,18 @@ void XmDropSiteConfigureStackingOrder(Widget widget, Widget sibling, Cardinal st
     switch (stack_mode) {
       case XmABOVE:
         if (index > sib_index)
-          for (i = index; i > sib_index; i--)
+          for (i = index; i > (int)sib_index; i--)
             SwapDSChildren(parent, i, i - 1);
         else
-          for (i = index; i < (sib_index - 1); i++)
+          for (i = index; i < (int)sib_index - 1; i++)
             SwapDSChildren(parent, i, i + 1);
         break;
       case XmBELOW:
         if (index > sib_index)
-          for (i = index; i > (sib_index + 1); i--)
+          for (i = index; i > (int)sib_index + 1; i--)
             SwapDSChildren(parent, i, i - 1);
         else
-          for (i = index; i < sib_index; i++)
+          for (i = index; i < (int)sib_index; i++)
             SwapDSChildren(parent, i, i + 1);
         break;
       default:

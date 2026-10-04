@@ -908,7 +908,7 @@ static Boolean SetValues(Widget cw,
  **************************************************************************/
 static void Resize(Widget w)
 {
-  register XmPushButtonWidget tb = (XmPushButtonWidget)w;
+  XmPushButtonWidget tb = (XmPushButtonWidget)w;
   if (Lab_IsPixmap(w) || Lab_IsPixmapAndText(w))
     SetPushButtonSize((XmPushButtonWidget)tb);
   else {
@@ -1459,6 +1459,7 @@ static void BorderUnhighlight(Widget wid)
           break;
         }
         /* else fall through to XmEXTERNAL_HIGHLIGHT. */
+        XM_FALLTHROUGH;
       case XmEXTERNAL_HIGHLIGHT:
         (*(xmLabelClassRec.primitive_class.border_unhighlight))(wid);
         break;
@@ -1659,7 +1660,7 @@ static void MultiActivate(Widget wid, XEvent *buttonEvent, String *params, Cardi
    */
   if (pb->pushbutton.multiClick == XmMULTICLICK_KEEP) {
     if ((buttonEvent->xbutton.time - pb->pushbutton.armTimeStamp) >
-        XtGetMultiClickTime(XtDisplay(pb)))
+        (Time)XtGetMultiClickTime(XtDisplay(pb)))
       pb->pushbutton.click_count = 1;
     else
       pb->pushbutton.click_count++;
@@ -2381,7 +2382,7 @@ Widget XmCreatePushButton(Widget parent, char *name, ArgList arglist, Cardinal a
 
 Widget XmVaCreatePushButton(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

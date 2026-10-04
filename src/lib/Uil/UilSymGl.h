@@ -40,6 +40,13 @@
 #ifndef UilSymGl_h
 #define UilSymGl_h
 
+#include <X11/Intrinsic.h>	/* externalref */
+#include "UilDBDef.h"		/* key_keytable_entry_type, UilEnumSetDescDef */
+
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
 /*
  * Defined in files included in UilData.c
  */
@@ -93,6 +100,10 @@ externalref unsigned short int uil_sym_isolatin1_charset;
 
 externalref int uil_max_value;
 externalref char *uil_datatype_names[];
+
+#if defined(__cplusplus)
+}
+#endif
 
 #endif /* UilSymGl_h */
 /* DON'T ADD STUFF AFTER THIS #endif */

@@ -53,7 +53,7 @@ void XmeDrawArrow(Display *display,
   static XRectangle *bot = NULL;
   XRectangle *rect_tmp;
   int size, xOffset = 0, yOffset = 0, wwidth, start;
-  register int temp, yy, i, h, w;
+  int temp, yy, i, h, w;
   short t = 0, b = 0, c = 0;
   XtAppContext app;
   if (!d)
@@ -74,11 +74,11 @@ void XmeDrawArrow(Display *display,
     _XmAppUnlock(app);
     return;
   }
-  if (allocated < size) {
+  if (allocated < (unsigned int)size) {
     _XmProcessLock();
-    top = (XRectangle *)XtRealloc((char *)top, sizeof(XRectangle) * (size / 2 + 6));
-    cent = (XRectangle *)XtRealloc((char *)cent, sizeof(XRectangle) * (size / 2 + 6));
-    bot = (XRectangle *)XtRealloc((char *)bot, sizeof(XRectangle) * (size / 2 + 6));
+    top = (XRectangle *)_XmReallocArray((char *)top, size / 2 + 6, sizeof(XRectangle));
+    cent = (XRectangle *)_XmReallocArray((char *)cent, size / 2 + 6, sizeof(XRectangle));
+    bot = (XRectangle *)_XmReallocArray((char *)bot, size / 2 + 6, sizeof(XRectangle));
     allocated = size;
     _XmProcessUnlock();
   }

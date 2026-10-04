@@ -181,11 +181,11 @@ void AdoptInitialClients (WmScreenData *pSD)
 	 */
 	XWMHints *tmphint;
 
-	for (i = 0; i < nclients; i++) {
+	for (i = 0; (unsigned int)i < nclients; i++) {
 	    if (clients[i]) {
 		if ((tmphint = XGetWMHints (DISPLAY, clients[i])) != NULL) {
 		    if (tmphint->flags & IconWindowHint) {
-			for (j = 0; j < nclients; j++) {
+			for (j = 0; (unsigned int)j < nclients; j++) {
 			    if (clients[j] == tmphint->icon_window) {
 				clients[j] = None;
 				break;
@@ -198,7 +198,7 @@ void AdoptInitialClients (WmScreenData *pSD)
 	}
 #endif
 
-	for (i = 0; i < nclients; i++)
+	for (i = 0; (unsigned int)i < nclients; i++)
 	{
 	    /* determine if the client window should be managed by wm */
 #ifdef WSM
@@ -394,13 +394,6 @@ ManageWindow (WmScreenData *pSD, Window clientWindow, long manageFlags)
      *  Handle case of transients that derive from embedded clients.
      *  !!!!
      */
-#if 0
-    if (pCD->transientLeader && pCD->transientLeader->pAccessPanel)
-    {
-        pCD->transientLeader =
-	    pCD->transientLeader->pAccessPanel->pCD_accessPanel;
-    }
-#endif
 #endif /* PANELIST */
 #ifdef WSM
     if (pCD->inputMode == MWM_INPUT_SYSTEM_MODAL)
@@ -699,7 +692,7 @@ ManageWindow (WmScreenData *pSD, Window clientWindow, long manageFlags)
 	    int n;
 
 	    iconAccelSpec = 0;
-	    for (n= 0; n < pSD->acceleratorMenuCount; n++)
+	    for (n= 0; (unsigned int)n < pSD->acceleratorMenuCount; n++)
 	    {
 #ifdef WSM
 	        iconAccelSpec += SetupKeyBindings (

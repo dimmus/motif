@@ -1,0 +1,28 @@
+.TH "XmDataFieldGetAddMode" "library call"
+.SH "NAME"
+\fBXmDataFieldGetAddMode\fP \(em A DataField function that returns the state of Add mode
+.iX "XmDataFieldGetAddMode"
+.iX "DataField functions" "XmDataFieldGetAddMode"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/DataF\&.h>
+\fBBoolean \fBXmDataFieldGetAddMode\fP\fR(
+\fBWidget \fBwidget\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fBXmDataFieldGetAddMode\fP returns whether the DataField widget is in
+Add mode\&. In Add mode, the insertion cursor can be moved without
+disturbing the primary selection\&.
+.IP "\fIwidget\fP" 10
+Specifies the DataField widget ID
+.PP
+For a complete definition of DataField and its associated resources, see
+\fBXmDataField\fP(3)\&.
+.SH "RETURN"
+.PP
+Returns True if the DataField is in Add mode and False otherwise\&.
+.SH "RELATED"
+.PP
+\fBXmDataField\fP(3) and \fBXmDataFieldSetAddMode\fP(3)\&.

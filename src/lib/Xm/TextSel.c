@@ -315,7 +315,8 @@ static void HandleInsertTargets(Widget w,
   Boolean supports_text = False;
   Boolean supports_utf8_string = False;
   int i;
-  if (0 == *length) {
+  /* a reply that is not an atom list is treated as an empty one */
+  if (0 == *length || *type != XA_ATOM || *format != 32) {
     XtFree((char *)value);
     _insert_select->done_status = True;
     return; /* Supports no targets, so don't bother sending anything */
@@ -323,7 +324,7 @@ static void HandleInsertTargets(Widget w,
   assert(XtNumber(atom_names) == NUM_ATOMS);
   XInternAtoms(XtDisplay(w), atom_names, XtNumber(atom_names), False, atoms);
   atom_ptr = (Atom *)value;
-  for (i = 0; i < *length; i++, atom_ptr++) {
+  for (i = 0; (long unsigned int)i < *length; i++, atom_ptr++) {
     if (*atom_ptr == atoms[XmATEXT])
       supports_text = True;
     if (*atom_ptr == CS_OF_ENCODING)
@@ -508,7 +509,7 @@ Boolean _XmTextConvert(Widget w,
       if (0 >= tmp_prop.nitems)
         *value = (XtPointer)XtMalloc(1);
       else
-        *value = (XtPointer)XtMalloc((unsigned)tmp_prop.nitems);
+        *value = (XtPointer)_XmMallocArray(tmp_prop.nitems, 1);
       memcpy((void *)*value, (void *)tmp_prop.value, (size_t)tmp_prop.nitems);
       if (tmp_prop.value != NULL)
         XFree((char *)tmp_prop.value);
@@ -540,7 +541,7 @@ Boolean _XmTextConvert(Widget w,
     XtFree(tmp_value);
     if (status == Success || status > 0) {
       /* NOTE: casting tmp_prop.nitems could result in a truncated long. */
-      *value = (XtPointer)XtMalloc((unsigned)tmp_prop.nitems);
+      *value = (XtPointer)_XmMallocArray(tmp_prop.nitems, 1);
       memcpy((void *)*value, (void *)tmp_prop.value, (size_t)tmp_prop.nitems);
       if (tmp_prop.value != NULL)
         XFree((char *)tmp_prop.value);
@@ -565,7 +566,7 @@ Boolean _XmTextConvert(Widget w,
     XtFree(tmp_value);
     if (status == Success || status > 0) {
       /* NOTE: casting tmp_prop.nitems could result in a truncated long. */
-      *value = (XtPointer)XtMalloc((unsigned)tmp_prop.nitems);
+      *value = (XtPointer)_XmMallocArray(tmp_prop.nitems, 1);
       memcpy((void *)*value, (void *)tmp_prop.value, (size_t)tmp_prop.nitems);
       if (tmp_prop.value != NULL)
         XFree((char *)tmp_prop.value);
@@ -814,7 +815,8 @@ static void HandleTargets(Widget w, XtPointer closure, XmSelectionCallbackStruct
   XmTextPosition select_pos;
   XmTextPosition left, right;
   int i;
-  if (!ds->length) {
+  /* a reply that is not an atom list is treated as an empty one */
+  if (!ds->length || ds->type != XA_ATOM || ds->format != 32) {
     XtFree((char *)ds->value);
     ds->value = NULL;
     return;
@@ -823,7 +825,7 @@ static void HandleTargets(Widget w, XtPointer closure, XmSelectionCallbackStruct
   XInternAtoms(XtDisplay(w), atom_names, XtNumber(atom_names), False, atoms);
   CS_OF_ENCODING = XmeGetEncodingAtom(w);
   atom_ptr = (Atom *)ds->value;
-  for (i = 0; i < ds->length; i++, atom_ptr++) {
+  for (i = 0; (long unsigned int)i < ds->length; i++, atom_ptr++) {
     if (*atom_ptr == atoms[XmATEXT])
       supports_text = True;
     if (*atom_ptr == CS_OF_ENCODING)

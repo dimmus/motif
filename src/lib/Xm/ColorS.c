@@ -721,7 +721,7 @@ static void SelectColor(XmColorSelectorWidget csw)
  */
 static int EndsInDigits(char *str)
 {
-  register char *c = str;
+  char *c = str;
   while (*c != '\0')
     c++; /* advance to end of string marker */
   c--;   /* back to the last character */
@@ -742,8 +742,8 @@ static int EndsInDigits(char *str)
  */
 static Boolean FindColor(XmColorSelectorWidget csw, int *color_num)
 {
-  register ColorInfo *ptr;
-  register int i, red, green, blue;
+  ColorInfo *ptr;
+  int i, red, green, blue;
   /*
    * Obtain the color settings from the ColorSelector
    * data structure
@@ -822,18 +822,19 @@ static Boolean UpdateColorWindow(XmColorSelectorWidget csw, Boolean use_name)
   if (!use_name) /* Update color names */ {
     char *freeMe;
     freeMe = XmColorS_color_name(csw);
-    sprintf(buf,
-            "#%02x%02x%02x",
-            (unsigned int)XmColorS_slider_red(csw),
-            (unsigned int)XmColorS_slider_green(csw),
-            (unsigned int)XmColorS_slider_blue(csw));
+    snprintf(buf,
+             sizeof(buf),
+             "#%02x%02x%02x",
+             (unsigned int)XmColorS_slider_red(csw),
+             (unsigned int)XmColorS_slider_green(csw),
+             (unsigned int)XmColorS_slider_blue(csw));
     if (FindColor(csw, &index)) {
       XmColorS_color_name(csw) = XtNewString(XmColorS_colors(csw)[index].name);
-      sprintf(new_label, "%s (%s)", XmColorS_color_name(csw), buf);
+      snprintf(new_label, sizeof(new_label), "%s (%s)", XmColorS_color_name(csw), buf);
     }
     else {
       XmColorS_color_name(csw) = XtNewString(buf);
-      sprintf(new_label, "%s", buf);
+      snprintf(new_label, sizeof(new_label), "%s", buf);
     }
     XtFree((XtPointer)freeMe);
     color.red = XmColorS_slider_red(csw) * 256;
@@ -855,8 +856,13 @@ static Boolean UpdateColorWindow(XmColorSelectorWidget csw, Boolean use_name)
       XtFree(XmColorS_color_name(csw));
       XmColorS_color_name(csw) = XtNewString(XmColorS_colors(csw)[index].name);
     }
-    sprintf(buf, "#%02x%02x%02x", color.red / 256, color.green / 256, color.blue / 256);
-    sprintf(new_label, "%s (%s)", XmColorS_color_name(csw), buf);
+    snprintf(buf,
+             sizeof(buf),
+             "#%02x%02x%02x",
+             (unsigned int)color.red / 256,
+             (unsigned int)color.green / 256,
+             (unsigned int)color.blue / 256);
+    snprintf(new_label, sizeof(new_label), "%s (%s)", XmColorS_color_name(csw), buf);
   }
   {
     long test = (long)color.red;
@@ -1025,7 +1031,7 @@ static void read_rgb_file(XmColorSelectorWidget csw,
   char string_buffer[BUFSIZ + (BUFSIZ >> 1)];
   char *color_name;
   ColorInfo *color_info = NULL;
-  register int i;
+  int i;
   Arg *margs, args[20];
   /*
    * Create new list if needed, or delete any old list items.
@@ -1065,8 +1071,8 @@ static void read_rgb_file(XmColorSelectorWidget csw,
    * Read in all the colornames.
    */
   if ((file = fopen(XmColorS_rgb_file(csw), "r")) != NULL) {
-    register int alloc, count, len;
-    register char *name;
+    int alloc, count, len;
+    char *name;
     alloc = count = 0;
     while (fgets(buf, BUFSIZ, file)) {
       /*
@@ -1081,7 +1087,7 @@ static void read_rgb_file(XmColorSelectorWidget csw,
         else {
           alloc += 20;
         }
-        color_info = (ColorInfo *)XtRealloc((XtPointer)color_info, sizeof(ColorInfo) * alloc);
+        color_info = (ColorInfo *)_XmReallocArray((XtPointer)color_info, alloc, sizeof(ColorInfo));
       }
       sscanf(buf,
              "%hu %hu %hu",
@@ -1091,19 +1097,22 @@ static void read_rgb_file(XmColorSelectorWidget csw,
       if ((color_name = find_name(buf)) == NULL)
         continue;
       len = strlen(color_name);
-      if (len > XmColorSelector_COLOR_NAME_SIZE) {
-        color_name[XmColorSelector_COLOR_NAME_SIZE - 1] = '\0';
+      if (len >= XmColorSelector_COLOR_NAME_SIZE) {
+        /* Both name buffers hold COLOR_NAME_SIZE bytes with the NUL. */
+        len = XmColorSelector_COLOR_NAME_SIZE - 1;
+        color_name[len] = '\0';
         snprintf(string_buffer, sizeof string_buffer, XmNcolorNameTooLongMsg, buf, color_name);
         XmeWarning((Widget)csw, string_buffer);
       }
       name = color_info[count].no_space_lower_name;
       for (i = 0; i < len; i++) {
-        register char c = color_name[i];
+        char c = color_name[i];
         /*
          * Copy in all characters that are ascii and non-spaces.
          */
         if (!(c >= 0 && c <= 127))
           continue;
+        /* NOLINTNEXTLINE(clang-analyzer-security.ArrayBound): 0 <= c <= 127 */
         if (!isspace(c))
           *name++ = tolower(c);
       }
@@ -1111,12 +1120,13 @@ static void read_rgb_file(XmColorSelectorWidget csw,
       name = color_info[count].name;
       color_name[0] = toupper(color_name[0]);
       for (i = 0; i < len; i++) {
-        register char c = color_name[i];
+        char c = color_name[i];
         /*
          * Capitalize all characters after a space.
          */
         if (!(c >= 0 && c <= 127))
           continue;
+        /* NOLINTNEXTLINE(clang-analyzer-security.ArrayBound): 0 <= c <= 127 */
         if (isspace(c) && ((i + 1) < len)) {
           color_name[i + 1] = toupper(color_name[i + 1]);
         }
@@ -1133,8 +1143,8 @@ static void read_rgb_file(XmColorSelectorWidget csw,
     i = 0;
     while (i < (count - 1)) {
       if (streq(color_info[i].no_space_lower_name, color_info[i + 1].no_space_lower_name)) {
-        register int j;
-        register ColorInfo *ptr;
+        int j;
+        ColorInfo *ptr;
         ptr = color_info + i;
         j = i;
         /*
@@ -1155,7 +1165,7 @@ static void read_rgb_file(XmColorSelectorWidget csw,
         i++;
     }
     {
-      XmString *strs = (XmString *)XtMalloc(sizeof(XmString) * count);
+      XmString *strs = (XmString *)_XmMallocArray(count, sizeof(XmString));
       for (i = 0; i < count; i++)
         strs[i] = XmStringCreateLocalized(color_info[i].name);
       XtVaSetValues(XmColorS_list(csw), XmNitems, strs, XmNitemCount, count, NULL);
@@ -1209,15 +1219,18 @@ static int CmpColors(const void *ptr_1, const void *ptr_2)
  */
 static char *find_name(char *buffer)
 {
-  register char *curr, *temp; /* current pointer */
+  char *curr, *temp; /* current pointer */
   for (curr = buffer; curr != NULL && *curr != '\0'; curr++) {
     /*
      * Look for first non number, non space or tab.
      */
+    /* NOLINTNEXTLINE(clang-analyzer-security.ArrayBound): 0 <= *curr <= 127 */
     if ((*curr >= 0 && *curr <= 127) && (isdigit(*curr) || isspace(*curr)))
       continue;
-    temp = (char *)strchr(curr, '\n');
-    *temp = '\0';
+    /* The last line of the file, or a line longer than the
+     * buffer, has no newline. */
+    if ((temp = (char *)strchr(curr, '\n')) != NULL)
+      *temp = '\0';
     return (curr);
   }
   return (NULL);
@@ -1232,7 +1245,7 @@ static char *find_name(char *buffer)
  */
 static void CreateColorSliders(XmColorSelectorWidget csw, ArgList cargs, Cardinal cnum_args)
 {
-  register int i;
+  int i;
   Cardinal num_args, title;
   Arg *margs, args[10];
   num_args = 0;
@@ -1525,7 +1538,7 @@ Widget XmCreateColorSelector(Widget parent, String name, ArgList args, Cardinal 
 
 Widget XmVaCreateColorSelector(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

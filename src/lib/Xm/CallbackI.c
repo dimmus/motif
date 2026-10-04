@@ -42,9 +42,9 @@ static char rcsid[] = "$XConsortium: CallbackI.c /main/8 1995/07/14 10:13:10 drk
     void
     _XmAddCallback(InternalCallbackList * callbacks, XtCallbackProc callback, XtPointer closure)
 {
-  register XtCallbackList cl;
-  register InternalCallbackList icl = *callbacks;
-  register int count = icl ? icl->count : 0;
+  XtCallbackList cl;
+  InternalCallbackList icl = *callbacks;
+  int count = icl ? icl->count : 0;
   if (icl && icl->call_state) {
     icl->call_state |= _XtCBFreeAfterCalling;
     icl = (InternalCallbackList)XtMalloc(sizeof(InternalCallbackRec) +
@@ -66,9 +66,9 @@ static char rcsid[] = "$XConsortium: CallbackI.c /main/8 1995/07/14 10:13:10 drk
 
 void _XmRemoveCallback(InternalCallbackList *callbacks, XtCallbackProc callback, XtPointer closure)
 {
-  register int i, j;
-  register XtCallbackList cl, ncl, ocl;
-  register InternalCallbackList icl = *callbacks;
+  int i, j;
+  XtCallbackList cl, ncl, ocl;
+  InternalCallbackList icl = *callbacks;
   if (!icl)
     return;
   cl = ToList(icl);
@@ -117,7 +117,7 @@ void _XmRemoveCallback(InternalCallbackList *callbacks, XtCallbackProc callback,
 
 void _XmRemoveAllCallbacks(InternalCallbackList *callbacks)
 {
-  register InternalCallbackList icl = *callbacks;
+  InternalCallbackList icl = *callbacks;
   if (icl) {
     if (icl->call_state)
       icl->call_state |= _XtCBFreeAfterCalling;
@@ -129,9 +129,9 @@ void _XmRemoveAllCallbacks(InternalCallbackList *callbacks)
 
 void _XmCallCallbackList(Widget widget, XtCallbackList callbacks, XtPointer call_data)
 {
-  register InternalCallbackList icl;
-  register XtCallbackList cl;
-  register int i;
+  InternalCallbackList icl;
+  XtCallbackList cl;
+  int i;
   char ostate;
   if (!callbacks)
     return;

@@ -212,7 +212,7 @@ static void InsertSelection(Widget w,
       }
       else { /* must convert to wchar_t before passing to Replace */
         int len = strlen(total_value) + 1;
-        wc_value = (wchar_t *)XtMalloc((unsigned)len * sizeof(wchar_t));
+        wc_value = (wchar_t *)_XmMallocArray(len, sizeof(wchar_t));
         num_chars = mbstowcs(wc_value, total_value, len);
         if (num_chars < 0)
           num_chars = 0;
@@ -237,11 +237,11 @@ static void InsertSelection(Widget w,
                                             True);
     }
     else {
-      temp = XtMalloc((unsigned)*length + 1);
+      temp = _XmMallocArray(*length + 1, sizeof(char));
       /* NOTE: casting *length could result in a truncated long. */
       (void)memcpy((void *)temp, (void *)value, (size_t)*length);
       temp[*length] = '\0';
-      wc_value = (wchar_t *)XtMalloc((unsigned)(*length + 1) * sizeof(wchar_t));
+      wc_value = (wchar_t *)_XmMallocArray(*length + 1, sizeof(wchar_t));
       /* NOTE: casting *length could result in a truncated long. */
       num_chars = mbstowcs(wc_value, temp, (unsigned)*length + 1);
       if (num_chars < 0)
@@ -303,7 +303,8 @@ static void HandleInsertTargets(Widget w,
   Boolean supports_text = False;
   Boolean supports_utf8_string = False;
   int i;
-  if (0 == *length) {
+  /* a reply that is not an atom list is treated as an empty one */
+  if (0 == *length || *type != XA_ATOM || *format != 32) {
     XtFree((char *)value);
     _insert_select->done_status = True;
     return; /* Supports no targets, so don't bother sending anything */
@@ -311,7 +312,7 @@ static void HandleInsertTargets(Widget w,
   assert(XtNumber(atom_names) == NUM_ATOMS);
   XInternAtoms(XtDisplay(w), atom_names, XtNumber(atom_names), False, atoms);
   atom_ptr = (Atom *)value;
-  for (i = 0; i < *length; i++, atom_ptr++) {
+  for (i = 0; (long unsigned int)i < *length; i++, atom_ptr++) {
     if (*atom_ptr == atoms[XmATEXT])
       supports_text = True;
     if (*atom_ptr == CS_OF_ENCODING)
@@ -493,7 +494,7 @@ Boolean _XmTextFieldConvert(Widget w,
       int stat;
       /* NOTE: casting (right - left) could result in a truncated long. */
       *length = _XmTextFieldCountBytes(tf, TextF_WcValue(tf) + left, (int)(right - left));
-      tmp_value = XtMalloc((unsigned)*length + 1);
+      tmp_value = _XmMallocArray(*length + 1, sizeof(char));
       stat = wcstombs(tmp_value, TextF_WcValue(tf) + left, (unsigned)*length); /* NOTE: casting
                                    *length could result in a truncated long. */
       if (stat < 0) /* wcstombs will return neg value on conv failure */
@@ -503,7 +504,7 @@ Boolean _XmTextFieldConvert(Widget w,
     }
     else {
       *length = right - left;
-      tmp_value = XtMalloc((unsigned)*length + 1);
+      tmp_value = _XmMallocArray(*length + 1, sizeof(char));
       /* get the selection value */
       (void)memcpy((void *)tmp_value, (void *)(TextF_Value(tf) + left), (size_t)*length); /* NOTE:
                                           casting *length could result in a truncated long. */
@@ -533,7 +534,7 @@ Boolean _XmTextFieldConvert(Widget w,
       int stat;
       /* NOTE: casting (right - left) could result in a truncated long. */
       *length = _XmTextFieldCountBytes(tf, TextF_WcValue(tf) + left, (int)(right - left));
-      *value = XtMalloc((unsigned)*length + 1);
+      *value = _XmMallocArray(*length + 1, sizeof(char));
       stat = wcstombs((char *)*value, TextF_WcValue(tf) + left, (unsigned)*length); /* NOTE:
                                        casting *length could result in a truncated long */
       if (stat < 0) /* wcstombs return neg value on conv failure */
@@ -543,7 +544,7 @@ Boolean _XmTextFieldConvert(Widget w,
     }
     else {
       *length = right - left;
-      *value = XtMalloc((unsigned)*length + 1);
+      *value = _XmMallocArray(*length + 1, sizeof(char));
       /* get the selection value */
       (void)memcpy((void *)*value, (void *)(TextF_Value(tf) + left), (size_t)*length); /* NOTE:
                                           casting *length could result in a truncated long. */
@@ -561,7 +562,7 @@ Boolean _XmTextFieldConvert(Widget w,
        * (right - left) could result in a truncated long.
        */
       *length = _XmTextFieldCountBytes(tf, TextF_WcValue(tf) + left, (int)(right - left));
-      tmp_value = XtMalloc((unsigned)*length + 1);
+      tmp_value = _XmMallocArray(*length + 1, sizeof(char));
       stat = wcstombs(tmp_value, TextF_WcValue(tf) + left, (unsigned)*length); /* NOTE: casting
                                    *length could result in a truncated long. */
       if (stat < 0) /* wcstombs will return neg value on conv failure */
@@ -571,7 +572,7 @@ Boolean _XmTextFieldConvert(Widget w,
     }
     else { /* malloc the space and copy the data to be converted */
       *length = right - left;
-      tmp_value = XtMalloc((unsigned)*length + 1);
+      tmp_value = _XmMallocArray(*length + 1, sizeof(char));
       /* get the selection value */
       (void)memcpy((void *)tmp_value, (void *)(TextF_Value(tf) + left), (size_t)*length); /* NOTE:
                                           casting *length could result in a truncated long. */
@@ -604,7 +605,7 @@ Boolean _XmTextFieldConvert(Widget w,
        * (right - left) could result in a truncated long.
        */
       *length = _XmTextFieldCountBytes(tf, TextF_WcValue(tf) + left, (int)(right - left));
-      tmp_value = XtMalloc((unsigned)*length + 1);
+      tmp_value = _XmMallocArray(*length + 1, sizeof(char));
       stat = wcstombs(tmp_value, TextF_WcValue(tf) + left, (unsigned)*length); /* NOTE: casting
                                    *length could result in a truncated long. */
       if (stat < 0) /* wcstombs will return neg value on conv failure */
@@ -614,7 +615,7 @@ Boolean _XmTextFieldConvert(Widget w,
     }
     else { /* malloc the space and copy the data to be converted */
       *length = right - left;
-      tmp_value = XtMalloc((unsigned)*length + 1);
+      tmp_value = _XmMallocArray(*length + 1, sizeof(char));
       /* get the selection value */
       (void)memcpy((void *)tmp_value, (void *)(TextF_Value(tf) + left), (size_t)*length); /* NOTE:
                                           casting *length could result in a truncated long. */
@@ -871,7 +872,7 @@ static void DropTransferProc(Widget w, XtPointer closure, XmSelectionCallbackStr
   }
   else {
     wc_total_length = _XmTextFieldCountCharacters(tf, total_value, total_length);
-    wc_total_value = (wchar_t *)XtMalloc((unsigned)(wc_total_length + 1) * sizeof(wchar_t));
+    wc_total_value = (wchar_t *)_XmMallocArray(wc_total_length + 1, sizeof(wchar_t));
     wc_total_length = mbstowcs(wc_total_value, total_value, wc_total_length + 1);
     if (wc_total_length > 0)
       replace = _XmTextFieldReplaceText(tf,
@@ -1041,7 +1042,7 @@ static void DoStuff(Widget w, XtPointer closure, XmSelectionCallbackStruct *ds)
           int tmp_len = strlen(total_value) + 1;
           _XmProcessLock();
           _prim_select->num_chars = 0;
-          wc_value = (wchar_t *)XtMalloc((unsigned)tmp_len * sizeof(wchar_t));
+          wc_value = (wchar_t *)_XmMallocArray(tmp_len, sizeof(wchar_t));
           _prim_select->num_chars = mbstowcs(wc_value, total_value, tmp_len);
           if (_prim_select->num_chars < 0)
             _prim_select->num_chars = 0;
@@ -1081,10 +1082,10 @@ static void DoStuff(Widget w, XtPointer closure, XmSelectionCallbackStruct *ds)
       else {
         wchar_t *wc_value;
         char *temp;
-        temp = XtMalloc((unsigned)ds->length + 1);
+        temp = _XmMallocArray(ds->length + 1, sizeof(char));
         (void)memcpy((void *)temp, (void *)ds->value, (size_t)ds->length);
         temp[(size_t)ds->length] = '\0';
-        wc_value = (wchar_t *)XtMalloc((unsigned)((ds->length + 1) * sizeof(wchar_t)));
+        wc_value = (wchar_t *)_XmMallocArray(ds->length + 1, sizeof(wchar_t));
         _XmProcessLock();
         _prim_select->num_chars = mbstowcs(wc_value, (char *)temp, (size_t)ds->length + 1);
         if (_prim_select->num_chars < 0)
@@ -1113,8 +1114,8 @@ static void DoStuff(Widget w, XtPointer closure, XmSelectionCallbackStruct *ds)
         if (_prim_select->num_chars > 0 && !tf->text.selection_move) {
           _XmTextFieldSetCursorPosition(tf, NULL, cursorPos, True, True);
           (void)_XmTextFieldSetDestination(w, cursorPos, _prim_select->time);
-          _XmProcessUnlock();
         }
+        _XmProcessUnlock();
       }
       else {
         _XmProcessLock();
@@ -1125,11 +1126,12 @@ static void DoStuff(Widget w, XtPointer closure, XmSelectionCallbackStruct *ds)
       right = tf->text.prim_pos_right;
       if (tf->text.has_primary) {
         if (ds->selection == atoms[XmACLIPBOARD]) {
-          if (left != right && (!dest_disjoint || !tf->text.add_mode))
+          if (left != right && (!dest_disjoint || !tf->text.add_mode)) {
             _XmProcessLock();
-          _XmTextFieldStartSelection(
-              tf, TextF_CursorPosition(tf), TextF_CursorPosition(tf), _prim_select->time);
-          _XmProcessUnlock();
+            _XmTextFieldStartSelection(
+                tf, TextF_CursorPosition(tf), TextF_CursorPosition(tf), _prim_select->time);
+            _XmProcessUnlock();
+          }
         }
         else {
           _XmProcessLock();
@@ -1197,7 +1199,8 @@ static void HandleTargets(Widget w, XtPointer closure, XmSelectionCallbackStruct
   Atom targets[2];
   XmTextPosition select_pos;
   int i;
-  if (!ds->length) {
+  /* a reply that is not an atom list is treated as an empty one */
+  if (!ds->length || ds->type != XA_ATOM || ds->format != 32) {
     XtFree((char *)ds->value);
     ds->value = NULL;
     return; /* Supports no targets, so don't bother sending anything */
@@ -1205,7 +1208,7 @@ static void HandleTargets(Widget w, XtPointer closure, XmSelectionCallbackStruct
   assert(XtNumber(atom_names) == NUM_ATOMS);
   XInternAtoms(XtDisplay(w), atom_names, XtNumber(atom_names), False, atoms);
   atom_ptr = (Atom *)ds->value;
-  for (i = 0; i < ds->length; i++, atom_ptr++) {
+  for (i = 0; (long unsigned int)i < ds->length; i++, atom_ptr++) {
     if (*atom_ptr == atoms[XmATEXT])
       supports_text = True;
     if (*atom_ptr == CS_OF_ENCODING)

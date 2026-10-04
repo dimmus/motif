@@ -21,6 +21,8 @@
  * Floor, Boston, MA 02110-1301 USA
  *
  */
+#include "TabBoxI.h"
+#include "XmI.h"
 #include <Xm/Ext.h>
 #include <Xm/TabList.h>
 #include <Xm/Xm.h>
@@ -104,7 +106,7 @@ XmTabbedStackList XmTabbedStackListCopy(XmTabbedStackList tab_list)
      * First allocate the memory for all the entries. and then copy
      * item by item the list.
      */
-    newList->tabs = (XmTabAttributes)XtMalloc(sizeof(XmTabAttributeRec) * newList->used);
+    newList->tabs = (XmTabAttributes)_XmMallocArray(newList->used, sizeof(XmTabAttributeRec));
     for (i = 0; i < newList->used; ++i) {
       newList->tabs[i].label_string = XiXmStringCopy(tab_list->tabs[i].label_string);
       newList->tabs[i].label_pixmap = tab_list->tabs[i].label_pixmap;
@@ -239,8 +241,9 @@ int XmTabbedStackListInsert(XmTabbedStackList tab_list,
      * grow the list by XmLIST_GROWTH_FACTOR.
      */
     tab_list->allocated += XmLIST_GROWTH_FACTOR;
-    tab_list->tabs = (XmTabAttributes)XtRealloc((XtPointer)tab_list->tabs,
-                                                sizeof(XmTabAttributeRec) * tab_list->allocated);
+    tab_list->tabs = (XmTabAttributes)_XmReallocArray((XtPointer)tab_list->tabs,
+                                                      tab_list->allocated,
+                                                      sizeof(XmTabAttributeRec));
   }
   /*
    * Once here we know that the list is large enough to hold our new

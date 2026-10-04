@@ -272,6 +272,7 @@ static void Initialize(Widget request, /* unused */
                        Cardinal *n_user_args) /* unused */
 {
   char *widget_name;
+  size_t size;
   XmSimpleSpinBoxWidget ssb_w;
   XmSimpleSpinBoxPart *ssb_p;
   XmSpinBoxConstraint textf_c;
@@ -283,8 +284,9 @@ static void Initialize(Widget request, /* unused */
   /*
    * Create and insert the text field child widget;
    */
-  widget_name = XtMalloc(strlen(XtName(new)) + 10);
-  sprintf(widget_name, SSB_TEXTFIELD_NAME_FORMAT, XtName(new));
+  size = strlen(XtName(new)) + sizeof(SSB_TEXTFIELD_NAME_FORMAT);
+  widget_name = XtMalloc(size);
+  snprintf(widget_name, size, SSB_TEXTFIELD_NAME_FORMAT, XtName(new));
   /*
    * Collect all the resources that apply to the TextField child,
    * and push include them in the creation call.
@@ -526,7 +528,7 @@ Widget XmCreateSimpleSpinBox(Widget parent, String name, ArgList arglist, Cardin
 
 Widget XmVaCreateSimpleSpinBox(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);
@@ -625,7 +627,7 @@ void XmSimpleSpinBoxAddItem(Widget ssb_w, XmString item, int pos)
   /*
    * Copy the current array of values adding in the new item.
    */
-  values = (XmStringTable)XtRealloc((char *)NULL, sizeof(XmString) * new_nvalues);
+  values = (XmStringTable)_XmReallocArray((char *)NULL, new_nvalues, sizeof(XmString));
   if (values == (XmStringTable)NULL) {
     _XmAppUnlock(app);
     return;
@@ -729,7 +731,7 @@ void XmSimpleSpinBoxDeletePos(Widget ssb_w, int pos)
   /*
    * Copy the current array of values skipping the item in position 'pos'.
    */
-  values = (XmStringTable)XtRealloc((char *)NULL, sizeof(XmString) * new_nvalues);
+  values = (XmStringTable)_XmReallocArray((char *)NULL, new_nvalues, sizeof(XmString));
   if (values == (XmStringTable)NULL) {
     _XmAppUnlock(app);
     return;

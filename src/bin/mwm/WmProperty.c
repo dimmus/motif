@@ -165,13 +165,17 @@ GetNormalHints(
 	sizeHints.max_aspect.y = (int)property->maxAspectY;
 
 
-	if (nitems == (PROP_SIZE_HINTS_ELEMENTS - 3))
+	if (nitems < PROP_SIZE_HINTS_ELEMENTS)
 	{
 	    /*
-	     *  This is ICCC_R2.
+	     *  This is ICCC_R2.  (A property with 16 or 17 elements is
+	     *  treated the same way.)  The base size and gravity fields
+	     *  are missing or incomplete: do not read them, and drop the
+	     *  flags so that stale values are never used.
 	     */
 
 	    sizeHints.icccVersion = ICCC_R2;
+	    sizeHints.flags &= ~(P_BASE_SIZE | P_WIN_GRAVITY);
 	}
 	else
 	{
@@ -307,7 +311,7 @@ void ProcessWmProtocols (ClientData *pCD)
 
     	    pCD->clientProtocolCount = nitems;
 
-    	    for (i = 0; i < nitems; i++)
+    	    for (i = 0; (unsigned long)i < nitems; i++)
     	    {
 		pCD->clientProtocols[i] = property[i];
 		if (property[i] == wmGD.xa_WM_SAVE_YOURSELF)
@@ -422,9 +426,9 @@ void ProcessMwmMessages (ClientData *pCD)
 
     	    pCD->mwmMessagesCount = nitems;
 
-    	    for (i = 0; i < nitems; i++)
+    	    for (i = 0; (unsigned long)i < nitems; i++)
     	    {
-		if ((pCD->mwmMessages[i] = property[i]) == wmGD.xa_MWM_OFFSET)
+		if ((Atom)(pCD->mwmMessages[i] = property[i]) == wmGD.xa_MWM_OFFSET)
 		{
 		    pCD->protocolFlags |= PROTOCOL_MWM_OFFSET;
 		}
@@ -569,7 +573,7 @@ GetWMState(
 		  &nitems, &leftover, (unsigned char **)&property);
 
     if (!((ret_val == Success) && (actual_type == wmGD.xa_WM_STATE) &&
-         (nitems == PROP_WM_STATE_ELEMENTS)))
+         (actual_format == 32) && (nitems == PROP_WM_STATE_ELEMENTS)))
     {
         /*
          * The property could not be retrieved or is not correctly set up.
@@ -696,8 +700,24 @@ GetMwmHints(
      *    since Mwm 1.1.n won't try to access the extra elements.
      */
 
-    if ((ret_val == Success) && (actual_type == wmGD.xa_MWM_HINTS))
+    if ((ret_val == Success) && (actual_type == wmGD.xa_MWM_HINTS) &&
+	(actual_format == 32) && (nitems >= 1))
     {
+	/*
+	 * The property may be shorter than PropMwmHints.  Drop the flags
+	 * for any field the client did not supply so that the caller
+	 * never reads past the end of the returned data.
+	 */
+
+	if (nitems < 2)
+	    property->flags &= ~MWM_HINTS_FUNCTIONS;
+	if (nitems < 3)
+	    property->flags &= ~MWM_HINTS_DECORATIONS;
+	if (nitems < 4)
+	    property->flags &= ~MWM_HINTS_INPUT_MODE;
+	if (nitems < 5)
+	    property->flags &= ~MWM_HINTS_STATUS;
+
 	return (property);			/* indicate success */
     }
 
@@ -758,7 +778,7 @@ PropMwmInfo *GetMwmInfo (Window rootWindowOfScreen)
                                      (unsigned char **)&property);
 
     if ((ret_val == Success) && (actual_type == wmGD.xa_MWM_INFO) &&
-        (nitems == PROP_MWM_INFO_ELEMENTS))
+        (actual_format == 32) && (nitems == PROP_MWM_INFO_ELEMENTS))
     {
 	return (property);			/* indicate success */
     }
@@ -845,8 +865,13 @@ void ProcessWmColormapWindows (ClientData *pCD)
 	 * WM_COLORMAP_WINDOWS exists and is a valid type.
 	 */
 
-        if (!(pWindows = (Window *)XtMalloc ((nitems * sizeof (Window)) + 1)) ||
-            !(pColormaps = (Colormap *)XtMalloc ((nitems*sizeof(Colormap)) + 1)))
+	/*
+	 * Allocate one extra element: the top-level client window is put at
+	 * the head of the list if the client did not include it.
+	 */
+
+        if (!(pWindows = (Window *)XtMalloc ((nitems + 1) * sizeof (Window))) ||
+            !(pColormaps = (Colormap *)XtMalloc ((nitems + 1) * sizeof (Colormap))))
         {
 	    /* unable to allocate space */
 	    Warning (((char *)GETMESSAGE(54, 3, "Insufficient memory for window management data")));
@@ -856,8 +881,6 @@ void ProcessWmColormapWindows (ClientData *pCD)
 	    }
         }
 #ifndef OLD_COLORMAP /* colormap */
-	/* Is the above OSF code a bug -- allocates one extra byte, rather */
-	/* than one extra element, for the top window if needed? */
 	else if ( ! (pCmapFlags = (int *)XtCalloc(nitems+1,sizeof(int)))) {
 			/* unable to allocate space */
 			Warning (((char *)GETMESSAGE(54, 4, "Insufficient memory for window manager flags")));
@@ -871,7 +894,7 @@ void ProcessWmColormapWindows (ClientData *pCD)
 	     * If it is not then add it to the head of the list.
 	     */
 
-    	    for (i = 0; i < nitems; i++)
+    	    for (i = 0; (unsigned long)i < nitems; i++)
 	    {
 		if (property[i] == pCD->client)
 		{
@@ -880,7 +903,7 @@ void ProcessWmColormapWindows (ClientData *pCD)
 	    }
 
 	    colormapCount = 0;
-	    if (i == nitems)
+	    if ((unsigned long)i == nitems)
 	    {
 		/* add the client window to the colormap window list */
 		pWindows[0] = pCD->client;
@@ -889,7 +912,7 @@ void ProcessWmColormapWindows (ClientData *pCD)
 	    }
 
 	    sAttributes.event_mask = (ColormapChangeMask);
-    	    for (i = 0; i < nitems; i++)
+    	    for (i = 0; (unsigned long)i < nitems; i++)
     	    {
 		if ((pColormaps[colormapCount] =
 		     FindColormap (pCD, property[i])) != None)
@@ -1095,7 +1118,7 @@ GetMwmMenuItems(
 	{
 	    if(textList)
 	    {
-		menuItems = ParseMwmMenuStr (PSD_FOR_CLIENT(pCD),
+		menuItems = ParseClientMwmMenuStr (PSD_FOR_CLIENT(pCD),
 					 (unsigned char *)textList[0]);
 		XFreeStringList(textList);
 	    }

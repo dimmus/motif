@@ -47,9 +47,9 @@ static char rcsid[] = "$XConsortium: XmStringObso.c /main/6 1995/09/19 23:13:52 
      * Latin1.  This imposes the semantic of \n meaning separator.
      */
     XmString
-    XmStringLtoRCreate(char *text, XmStringTag tag)
+    XmStringLtoRCreate(const char *text, XmStringTag tag)
 {
-  char *start, *end;
+  const char *start, *end;
   Boolean done;
   XmString string;
   _XmProcessLock();
@@ -70,7 +70,7 @@ static char rcsid[] = "$XConsortium: XmStringObso.c /main/6 1995/09/19 23:13:52 
     /* Don't convert empty string unless it's an initial newline. */
     /* Done so StringHeight has clue to size of empty lines. */
     if ((start != end) || (start == text))
-      string = XmStringConcatAndFree(string, _XmStringNCreate(start, tag, end - start));
+      string = XmStringConcatAndFree(string, _XmStringNCreate((char *)start, tag, end - start));
     /* Make a separator if this isn't the last segment. */
     if (!done) {
       string = XmStringConcatAndFree(string, XmStringSeparatorCreate());
@@ -81,7 +81,7 @@ static char rcsid[] = "$XConsortium: XmStringObso.c /main/6 1995/09/19 23:13:52 
   return (string);
 }
 
-XmString XmStringCreateLtoR(char *text, XmStringTag tag)
+XmString XmStringCreateLtoR(const char *text, XmStringTag tag)
 {
   return (XmStringLtoRCreate(text, tag));
 }
@@ -104,7 +104,7 @@ XmString XmStringSegmentCreate(char *text,
 /*
  * Convenience routine to create an XmString from a NULL terminated string.
  */
-XmString XmStringCreateSimple(char *text)
+XmString XmStringCreateSimple(const char *text)
 {
   return (XmStringCreate(text, XmSTRING_DEFAULT_CHARSET));
 }
@@ -136,7 +136,7 @@ XmString XmStringNCopy(XmString str, int n)
   XmString ret_val;
   _XmProcessLock();
   len = XmCvtXmStringToByteStream(str, &tmp);
-  if (n >= len) /* No need to truncate */ {
+  if ((unsigned int)n >= len) /* No need to truncate */ {
     ret_val = XmStringCopy(str);
   }
   else /* Truncate and convert */ {
@@ -153,7 +153,7 @@ Boolean XmStringByteCompare(XmString a1, XmString b1)
 {
   unsigned char *a;
   unsigned char *b;
-  unsigned short a_length, b_length;
+  unsigned int a_length, b_length;
   Boolean ret_val;
   _XmProcessLock();
   if ((a1 == NULL) && (b1 == NULL)) {
@@ -166,7 +166,11 @@ Boolean XmStringByteCompare(XmString a1, XmString b1)
   }
   a_length = XmCvtXmStringToByteStream(a1, &a);
   b_length = XmCvtXmStringToByteStream(b1, &b);
-  if ((a_length != b_length) || (memcmp(a, b, a_length) != 0))
+  /* A string too long for the byte stream format has none (a_length */
+  /* or b_length 0): such strings only compare equal to themselves. */
+  if ((a == NULL) || (b == NULL))
+    ret_val = (a1 == b1);
+  else if ((a_length != b_length) || (memcmp(a, b, a_length) != 0))
     ret_val = FALSE;
   else
     ret_val = TRUE;
@@ -377,12 +381,12 @@ Boolean _XmStringGetSegment(_XmStringContext context,
             *tag_count = _XmStrContRendCount(local_context);
             if (copy_data) {
               int tmp;
-              *rendition_tags = (XmStringTag *)XtMalloc(sizeof(XmStringTag) * *tag_count);
-              for (tmp = 0; tmp < *tag_count; tmp++)
+              *rendition_tags = (XmStringTag *)_XmMallocArray(*tag_count, sizeof(XmStringTag));
+              for (tmp = 0; (unsigned int)tmp < *tag_count; tmp++)
                 (*rendition_tags)[tmp] = XtNewString(_XmStrContRendTags(local_context)[tmp]);
             }
             else {
-              perm_rends = (XmStringTag *)XtMalloc(sizeof(XmStringTag) * *tag_count);
+              perm_rends = (XmStringTag *)_XmMallocArray(*tag_count, sizeof(XmStringTag));
               memcpy((char *)perm_rends,
                      _XmStrContRendTags(local_context),
                      sizeof(XmStringTag) * *tag_count);
@@ -431,12 +435,12 @@ Boolean _XmStringGetSegment(_XmStringContext context,
             *tag_count = _XmStrContRendCount(local_context);
             if (copy_data) {
               int tmp;
-              *rendition_tags = (XmStringTag *)XtMalloc(sizeof(XmStringTag) * *tag_count);
-              for (tmp = 0; tmp < *tag_count; tmp++)
+              *rendition_tags = (XmStringTag *)_XmMallocArray(*tag_count, sizeof(XmStringTag));
+              for (tmp = 0; (unsigned int)tmp < *tag_count; tmp++)
                 (*rendition_tags)[tmp] = XtNewString(_XmStrContRendTags(local_context)[tmp]);
             }
             else {
-              perm_rends = (XmStringTag *)XtMalloc(sizeof(XmStringTag) * *tag_count);
+              perm_rends = (XmStringTag *)_XmMallocArray(*tag_count, sizeof(XmStringTag));
               memcpy((char *)perm_rends,
                      _XmStrContRendTags(local_context),
                      sizeof(XmStringTag) * *tag_count);
@@ -533,7 +537,7 @@ Boolean _XmStringGetNextSegment(_XmStringContext context,
       len = ((*char_count) * MB_CUR_MAX) / sizeof(wchar_t);
       *text = (char *)XtMalloc(len + 1);
       *char_count = wcstombs(*text, wtext, len);
-      if ((*char_count) == (size_t)-1) {
+      if ((*char_count) == -1) {
         result = False;
         XtFree(*text);
         *text = NULL;

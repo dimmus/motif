@@ -42,7 +42,7 @@ WSMWinData *data, int num
 void
 FreeRequest(WSMRequest *request)
 {
-    register int i;
+    int i;
 
     if (!request->any.allocated)
 	return;			/* Nothing to free. */
@@ -53,8 +53,8 @@ FreeRequest(WSMRequest *request)
 	break;
     case WSM_EXTENSIONS:
         {
-	    register int num = request->extensions.num_extensions;
-	    register String *ptr;
+	    int num = request->extensions.num_extensions;
+	    String *ptr;
 
 	    num = request->extensions.num_extensions;
 	    ptr = request->extensions.extension_suggestions;
@@ -66,7 +66,7 @@ FreeRequest(WSMRequest *request)
 	break;
     case WSM_SET_STATE:
         {
-	    register int num = request->set_state.num_win_info_list;
+	    int num = request->set_state.num_win_info_list;
 	    WSMWinInfo *win_info = request->set_state.win_info_list;
 
 	    for (i = 0; i < num; i++, win_info++)
@@ -89,7 +89,7 @@ FreeRequest(WSMRequest *request)
 void
 FreeReply(WSMReply *reply)
 {
-    register int i;
+    int i;
 
     if (!reply->any.allocated)
 	return;			/* Nothing to free. */
@@ -97,8 +97,8 @@ FreeReply(WSMReply *reply)
     switch(reply->any.type) {
     case WSM_EXTENSIONS:
         {
-	    register int num = reply->extensions.num_extensions;
-	    register String *ptr;
+	    int num = reply->extensions.num_extensions;
+	    String *ptr;
 
 	    num = reply->extensions.num_extensions;
 	    ptr = reply->extensions.extensions;
@@ -111,7 +111,7 @@ FreeReply(WSMReply *reply)
     case WSM_GET_STATE:
         {
 	    WSMWinInfo *win_info = reply->get_state.win_info_list;
-	    register int num = reply->get_state.num_win_info_list;
+	    int num = reply->get_state.num_win_info_list;
 
 	    for (i = 0; i < num; i++, win_info++)
 		FreeWinData(win_info->data_list, win_info->num_data_list);
@@ -144,7 +144,7 @@ FreeReply(WSMReply *reply)
 static void
 FreeWinData(WSMWinData *data, int num)
 {
-    register int i;
+    int i;
     WSMWinData *top = data;
 
     for (i = 0; i < num; i++, data++) {

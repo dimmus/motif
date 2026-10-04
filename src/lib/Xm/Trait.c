@@ -28,7 +28,6 @@
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
 #endif
-#include "HashI.h"
 #include "TraitI.h"
 #include "XmI.h"
 #include <X11/IntrinsicP.h>
@@ -39,19 +38,39 @@
 #include <Xm/XmP.h>
 /*
  * Internal data structures
+ *
+ * Traits are installed on widget classes and, for tool tips, on widget
+ * instances, and are looked up very often (XmeTraitGet has well over a
+ * hundred callers, many of them on every child or every event).  They
+ * live in an open addressing hash table keyed by (object, trait name),
+ * with linear probing in a power of two sized array that grows as it
+ * fills, so that a lookup, hit or miss, is a few probes into one array.
+ *
+ * A slot is in use when its data is not NULL (XmeTraitSet with NULL data
+ * removes the trait).  A removed slot keeps the tombstone marker as its
+ * object so that probing goes on past it.
  */
-static XmHashTable TraitTable;
-
-typedef struct _XmTraitEntry {
+typedef struct _XmTraitSlot {
   XtPointer obj;
   XrmQuark name;
-} XmTraitEntryRec, *XmTraitEntry;
+  XtPointer data;
+} XmTraitSlotRec, *XmTraitSlot;
+
+#define TRAIT_INITIAL_SIZE 512 /* a power of two */
+
+static XmTraitSlot TraitSlots;
+static Cardinal TraitMask;   /* size - 1 */
+static Cardinal TraitInUse;  /* slots holding a trait */
+static Cardinal TraitFilled; /* slots in use or holding a tombstone */
+static char TraitTombstone;
+#define TOMBSTONE ((XtPointer)&TraitTombstone)
 
 /*
  * Static functions
  */
-static Boolean TraitCompare(XmHashKey, XmHashKey);
-static XmHashValue TraitHash(XmHashKey);
+static Cardinal TraitHash(XtPointer obj, XrmQuark name);
+static XmTraitSlot TraitFind(XtPointer obj, XrmQuark name, Boolean for_insert);
+static void TraitResize(Cardinal size);
 /*
  * List all quarks here
  */
@@ -86,13 +105,16 @@ externaldef(traits) XrmQuark XmQTtoolTip = NULLQUARK;
  * This routine sets up all quarks used by the traits in
  * Motif
  */
-void _XmInitializeTraits()
+void _XmInitializeTraits(void)
 {
+  static Boolean initialized = False;
   /* avoid initializing more than once */
-  if (TraitTable != NULL)
+  if (initialized)
     return;
+  initialized = True;
   /* Create Hash Table */
-  TraitTable = _XmAllocHashTable(200, TraitCompare, TraitHash);
+  if (TraitSlots == NULL)
+    TraitResize(TRAIT_INITIAL_SIZE);
   XmQTmotifTrait = XrmPermStringToQuark("XmQTmotifTrait");
   /* Menu system manipulation and status */
   XmQTmenuSystem = XrmPermStringToQuark("XmTmenuSystem");
@@ -139,47 +161,101 @@ void _XmInitializeTraits()
 
 XtPointer XmeTraitGet(XtPointer obj, XrmQuark name)
 {
-  XtPointer trait;
-  XmTraitEntryRec entry;
-  entry.obj = obj;
-  entry.name = name;
+  XtPointer trait = NULL;
+  XmTraitSlot slot;
   _XmProcessLock();
-  trait = _XmGetHashEntry(TraitTable, &entry);
+  if (TraitSlots && (slot = TraitFind(obj, name, False)) != NULL)
+    trait = slot->data;
   _XmProcessUnlock();
   return (trait);
 }
 
 Boolean XmeTraitSet(XtPointer object, XrmQuark name, XtPointer data)
 {
-  XmTraitEntry entry;
-  /* Create key,  this will be freed if the record is removed */
-  entry = (XmTraitEntry)XtMalloc(sizeof(XmTraitEntryRec));
-  entry->obj = object;
-  entry->name = name;
+  XmTraitSlot slot;
   _XmProcessLock();
   if (data != NULL) {
-    _XmAddHashEntry(TraitTable, entry, data);
+    /* Keep the load under 3/4, counting tombstones. */
+    if ((TraitFilled + 1) * 4 > (TraitMask + 1) * 3 || !TraitSlots) {
+      Cardinal size = TraitSlots ? TraitMask + 1 : TRAIT_INITIAL_SIZE;
+      /* Grow if mostly full of traits, else just drop the tombstones. */
+      if ((TraitInUse + 1) * 2 > size)
+        size *= 2;
+      TraitResize(size);
+    }
+    slot = TraitFind(object, name, True);
+    if (slot->data == NULL) {
+      if (slot->obj != TOMBSTONE)
+        TraitFilled++;
+      TraitInUse++;
+      slot->obj = object;
+      slot->name = name;
+    }
+    slot->data = data;
   }
-  else { /* if data == NULL then remove the context */
-    XtPointer key;
-    key = _XmRemoveHashEntry(TraitTable, entry);
-    XtFree((char *)entry);
-    XtFree((char *)key);
+  else if (TraitSlots && (slot = TraitFind(object, name, False)) != NULL) {
+    /* if data == NULL then remove the trait */
+    slot->obj = TOMBSTONE;
+    slot->name = NULLQUARK;
+    slot->data = NULL;
+    TraitInUse--;
   }
   _XmProcessUnlock();
   return True;
 }
 
-static Boolean TraitCompare(XmHashKey key1, XmHashKey key2)
+static Cardinal TraitHash(XtPointer obj, XrmQuark name)
 {
-  XmTraitEntry entry1, entry2;
-  entry1 = (XmTraitEntry)key1;
-  entry2 = (XmTraitEntry)key2;
-  return (entry1->obj == entry2->obj && entry1->name == entry2->name);
+  /* Objects come from malloc or are static classes: mix in the high
+   * bits, the low ones are mostly alignment. */
+  unsigned long h = (unsigned long)obj;
+  h ^= h >> 15;
+  h += (unsigned long)name * 0x9e3779b1UL;
+  h ^= h >> 13;
+  h *= 0x85ebca6bUL;
+  h ^= h >> 16;
+  return (Cardinal)h;
 }
 
-static XmHashValue TraitHash(XmHashKey key)
+/*
+ * Return the slot that holds (obj, name), or NULL if there is none; with
+ * for_insert, return the slot to store it in instead of NULL (the first
+ * tombstone met, else the empty slot that ended the probe).  The table
+ * always has an empty slot, so the probe terminates.
+ */
+static XmTraitSlot TraitFind(XtPointer obj, XrmQuark name, Boolean for_insert)
 {
-  XmTraitEntry entry = (XmTraitEntry)key;
-  return (((long)entry->obj) + ((long)entry->name));
+  Cardinal i = TraitHash(obj, name) & TraitMask;
+  XmTraitSlot tomb = NULL;
+  for (;; i = (i + 1) & TraitMask) {
+    XmTraitSlot slot = &TraitSlots[i];
+    if (slot->data != NULL) {
+      if (slot->obj == obj && slot->name == name)
+        return slot;
+    }
+    else if (slot->obj == TOMBSTONE) {
+      if (!tomb)
+        tomb = slot;
+    }
+    else
+      return for_insert ? (tomb ? tomb : slot) : NULL;
+  }
+}
+
+/* Move the traits into a new array of size slots (a power of two). */
+static void TraitResize(Cardinal size)
+{
+  XmTraitSlot old = TraitSlots;
+  Cardinal i, old_size = old ? TraitMask + 1 : 0;
+  TraitSlots = (XmTraitSlot)XtCalloc(size, sizeof(XmTraitSlotRec));
+  TraitMask = size - 1;
+  TraitInUse = TraitFilled = 0;
+  for (i = 0; i < old_size; i++)
+    if (old[i].data != NULL) {
+      XmTraitSlot slot = TraitFind(old[i].obj, old[i].name, True);
+      *slot = old[i];
+      TraitInUse++;
+      TraitFilled++;
+    }
+  XtFree((char *)old);
 }

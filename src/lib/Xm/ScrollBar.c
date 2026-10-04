@@ -916,9 +916,9 @@ static void GetSliderPixmap(XmScrollBarWidget sbw)
  ************************************************************************/
 static void DrawSliderPixmap(XmScrollBarWidget sbw)
 {
-  register int slider_width = sbw->scrollBar.slider_width;
-  register int slider_height = sbw->scrollBar.slider_height;
-  register Drawable slider = sbw->scrollBar.pixmap;
+  int slider_width = sbw->scrollBar.slider_width;
+  int slider_height = sbw->scrollBar.slider_height;
+  Drawable slider = sbw->scrollBar.pixmap;
   if ((sbw->scrollBar.slider_visual == XmFOREGROUND_COLOR) ||
       (sbw->scrollBar.slider_visual == XmTROUGH_COLOR))
   {
@@ -1397,8 +1397,8 @@ static void Redisplay(Widget wid, XEvent *event, Region region)
 static void Resize(Widget wid)
 {
   XmScrollBarWidget sbw = (XmScrollBarWidget)wid;
-  register int ht = sbw->primitive.highlight_thickness;
-  register int st = sbw->primitive.shadow_thickness;
+  int ht = sbw->primitive.highlight_thickness;
+  int st = sbw->primitive.shadow_thickness;
 #define CHECK(x) \
   if (x <= 0) \
   x = 1
@@ -2189,7 +2189,8 @@ static void Select(Widget wid, XEvent *event, String *params, Cardinal *num_para
   if (slider_moved) {
     ScrollCallback(
         sbw, sbw->scrollBar.change_type, sbw->scrollBar.value, 0, 0, (XEvent *)buttonEvent);
-    XSync(XtDisplay((Widget)sbw), False);
+    /* The server catches up during the initial delay; no need to wait. */
+    XFlush(XtDisplay((Widget)sbw));
     sbw->scrollBar.flags |= FIRST_SCROLL_FLAG;
     sbw->scrollBar.flags &= ~END_TIMER;
     if (!sbw->scrollBar.timer)
@@ -3138,10 +3139,10 @@ static void MoveSlider(XmScrollBarWidget sbw, int currentX, int currentY)
  ************************************************************************/
 static Boolean ChangeScrollBarValue(XmScrollBarWidget sbw)
 {
-  register unsigned char change_type = sbw->scrollBar.change_type;
-  register int change_amount = 0;
-  register Boolean returnFlag = TRUE;
-  register int old_value = sbw->scrollBar.value;
+  unsigned char change_type = sbw->scrollBar.change_type;
+  int change_amount = 0;
+  Boolean returnFlag = TRUE;
+  int old_value = sbw->scrollBar.value;
   if (!(sbw->scrollBar.flags & SLIDER_AVAILABLE))
     return (FALSE);
   /*  Get the amount to change the scroll bar value based on  */
@@ -3184,7 +3185,7 @@ static void TimerEvent(XtPointer closure, XtIntervalId *id) /* unused */
     return;
   }
   if (sbw->scrollBar.flags & FIRST_SCROLL_FLAG) {
-    XSync(XtDisplay(sbw), False);
+    /* Xt flushed the output before it waited for this timer. */
     sbw->scrollBar.flags &= ~FIRST_SCROLL_FLAG;
     sbw->scrollBar.timer = XtAppAddTimeOut(XtWidgetToApplicationContext((Widget)sbw),
                                            (unsigned long)sbw->scrollBar.repeat_delay,
@@ -3483,7 +3484,7 @@ Widget XmCreateScrollBar(Widget parent, char *name, ArgList arglist, Cardinal ar
 
 Widget XmVaCreateScrollBar(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

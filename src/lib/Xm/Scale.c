@@ -31,46 +31,8 @@ static char rcsid[] = "$TOG: Scale.c /main/31 1999/10/13 16:18:07 mgreess $"
 #include <X11/Xos.h>
 #include <limits.h>
 #include <stdio.h>
-#ifndef CSRG_BASED
-/*
- * Modification by Integrated Computer Solutions, Inc.  May 2000
- *
- * Original:
- *
- * # ifdef linux
- * #  define RADIXCHAR MON_DECIMAL_POINT
- * # endif
- * # include <langinfo.h>
- *
- * glibc >= 2.0 defines RADIXCHAR in langinfo.h, simply make sure
- * that it is not redefined here.
- */
-#  include <langinfo.h>
-#  if defined(linux) && !defined(RADIXCHAR)
-#    define RADIXCHAR DECIMAL_POINT
-#  endif
-#  ifdef X_LOCALE
-#    ifdef linux
-/* avoid conflicting with <X11/Xlocale.h> defines */
-#      undef LC_ALL
-#      undef LC_COLLATE
-#      undef LC_CTYPE
-#      undef LC_MONETARY
-#      undef LC_NUMERIC
-#      undef LC_TIME
-#    endif
-#  endif
-#else
-#  define nl_langinfo(radixchar) "."
-#endif /* !CSRG_BASED */
-#ifdef __cplusplus
-    extern "C"
-{ /* some 'locale.h' do not have prototypes (sun) */
-#endif
+#include <langinfo.h>
 #include <X11/Xlocale.h>
-#ifdef __cplusplus
-} /* Close scope of 'extern "C"' declaration */
-#endif /* __cplusplus */
 #include "GMUtilsI.h"
 #include "GeoUtilsI.h"
 #include "MessagesI.h"
@@ -143,7 +105,7 @@ static void ValidateInputs(XmScaleWidget cur, XmScaleWidget new_w);
 static void HandleTitle(XmScaleWidget cur, XmScaleWidget req, XmScaleWidget new_w);
 static void HandleScrollBar(XmScaleWidget cur, XmScaleWidget req, XmScaleWidget new_w);
 static Boolean SetValues(Widget cw, Widget rw, Widget nw, ArgList args_in, Cardinal *num_args_in);
-static void Realize(register Widget w, XtValueMask *p_valueMask, XSetWindowAttributes *attributes);
+static void Realize(Widget w, XtValueMask *p_valueMask, XSetWindowAttributes *attributes);
 static void Destroy(Widget wid);
 static XtGeometryResult GeometryManager(Widget w,
                                         XtWidgetGeometry *request,
@@ -173,7 +135,7 @@ static void LayoutVerticalLabels(XmScaleWidget sw,
                                  Widget instigator);
 static void LayoutVerticalScale(XmScaleWidget sw, XtWidgetGeometry *desired, Widget instigator);
 static void ChangeManaged(Widget wid);
-static void GetValueString(XmScaleWidget sw, int value, String buffer);
+static void GetValueString(XmScaleWidget sw, int value, char *buffer, size_t size);
 static void ShowValue(XmScaleWidget sw);
 static void SetScrollBarData(XmScaleWidget sw);
 static void ValueChanged(Widget wid, XtPointer closure, XtPointer call_data);
@@ -832,13 +794,11 @@ static void Initialize(Widget rw,
   if (new_w->scale.font_list) {
     if (!XmeRenderTableGetDefaultFont(new_w->scale.font_list, &new_w->scale.font_struct))
       new_w->scale.font_struct = NULL;
-#if !USE_XFT
   }
   else {
     new_w->scale.font_struct = XLoadQueryFont(XtDisplay(new_w), XmDEFAULT_FONT);
     if (new_w->scale.font_struct == NULL)
       new_w->scale.font_struct = XLoadQueryFont(XtDisplay(new_w), "*");
-#endif
   }
   (void)CreateScaleTitle(new_w);
   (void)CreateScaleScrollBar(new_w);
@@ -1085,10 +1045,8 @@ static Boolean SetValues(Widget cw,
   HandleScrollBar(cur, req, new_w);
   /*  Set the font struct for the value displayed  */
   if (DIFF(scale.font_list)) {
-#if !USE_XFT
     if ((cur->scale.font_list == NULL) && (cur->scale.font_struct != NULL))
       XFreeFont(XtDisplay(cur), cur->scale.font_struct);
-#endif
     if (cur->scale.font_list)
       XmFontListFree(cur->scale.font_list);
     if (new_w->scale.font_list == NULL)
@@ -1097,14 +1055,11 @@ static Boolean SetValues(Widget cw,
     if (new_w->scale.font_list != NULL) {
       if (!XmeRenderTableGetDefaultFont(new_w->scale.font_list, &new_w->scale.font_struct))
         new_w->scale.font_struct = NULL;
-#if USE_XFT
-      /* TODO: should it be ifndef? */
     }
     else {
       new_w->scale.font_struct = XLoadQueryFont(XtDisplay(new_w), XmDEFAULT_FONT);
       if (new_w->scale.font_struct == NULL)
         new_w->scale.font_struct = XLoadQueryFont(XtDisplay(new_w), "*");
-#endif
     }
     XtReleaseGC((Widget)new_w, new_w->scale.foreground_GC);
     GetForegroundGC(new_w);
@@ -1173,7 +1128,7 @@ the new_w field equal to cur */
  *      scale wants a gravity of None.
  *
  ************************************************************************/
-static void Realize(register Widget w, XtValueMask *p_valueMask, XSetWindowAttributes *attributes)
+static void Realize(Widget w, XtValueMask *p_valueMask, XSetWindowAttributes *attributes)
 {
   Mask valueMask = *p_valueMask;
   /*	Make sure height and width are not zero.
@@ -1199,10 +1154,8 @@ static void Destroy(Widget wid)
 {
   XmScaleWidget sw = (XmScaleWidget)wid;
   XtReleaseGC((Widget)sw, sw->scale.foreground_GC);
-#if USE_XFT
   if (sw->scale.font_list == NULL && sw->scale.font_struct != NULL)
     XFreeFont(XtDisplay(sw), sw->scale.font_struct);
-#endif
   if (sw->scale.font_list)
     XmFontListFree(sw->scale.font_list);
   if (sw->scale.value_region)
@@ -1345,11 +1298,11 @@ static void GetScaleSize(XmScaleWidget sw, Dimension *w, Dimension *h)
 
 static Dimension MaxLabelWidth(XmScaleWidget sw)
 {
-  register int i;
-  register Widget c;
+  int i;
+  Widget c;
   Dimension max = 0;
   /* start at 2 to skip the title and the scrollbar */
-  for (i = 2; i < sw->composite.num_children; i++) {
+  for (i = 2; (Cardinal)i < sw->composite.num_children; i++) {
     c = sw->composite.children[i];
     if (XtIsManaged(c) && !((Object)c)->object.being_destroyed)
       ASSIGN_MAX(max, TotalWidth(c));
@@ -1359,11 +1312,11 @@ static Dimension MaxLabelWidth(XmScaleWidget sw)
 
 static Dimension MaxLabelHeight(XmScaleWidget sw)
 {
-  register int i;
-  register Widget c;
+  int i;
+  Widget c;
   Dimension max = 0;
   /* start at 2 to skip the title and the scrollbar */
-  for (i = 2; i < sw->composite.num_children; i++) {
+  for (i = 2; (Cardinal)i < sw->composite.num_children; i++) {
     c = sw->composite.children[i];
     if (XtIsManaged(c) && !((Object)c)->object.being_destroyed)
       ASSIGN_MAX(max, TotalHeight(c));
@@ -1381,15 +1334,15 @@ static Dimension ValueTroughHeight(XmScaleWidget sw)
   return (Dimension)ret_val;
 #else
   char buff[15];
-  register Dimension tmp_max, tmp_min, result;
+  Dimension tmp_max, tmp_min, result;
   int direction, ascent, descent;
   XCharStruct overall_return;
 #  define GET_MAX(tmp, max_or_min_value) \
     { \
       if (sw->scale.decimal_points) \
-        sprintf(buff, "%d%c", max_or_min_value, nl_langinfo(RADIXCHAR)[0]); \
+        snprintf(buff, sizeof(buff), "%d%c", max_or_min_value, nl_langinfo(RADIXCHAR)[0]); \
       else \
-        sprintf(buff, "%d", max_or_min_value); \
+        snprintf(buff, sizeof(buff), "%d", max_or_min_value); \
 \
       XTextExtents(sw->scale.font_struct, \
                    buff, \
@@ -1423,15 +1376,15 @@ static Dimension ValueTroughAscent(XmScaleWidget sw)
   return (Dimension)ret_val;
 #else
   char buff[15];
-  register Dimension tmp_max, tmp_min, result;
+  Dimension tmp_max, tmp_min, result;
   int direction, ascent, descent;
   XCharStruct overall_return;
 #  define GET_MAX(tmp, max_or_min_value) \
     { \
       if (sw->scale.decimal_points) \
-        sprintf(buff, "%d%c", max_or_min_value, nl_langinfo(RADIXCHAR)[0]); \
+        snprintf(buff, sizeof(buff), "%d%c", max_or_min_value, nl_langinfo(RADIXCHAR)[0]); \
       else \
-        sprintf(buff, "%d", max_or_min_value); \
+        snprintf(buff, sizeof(buff), "%d", max_or_min_value); \
 \
       XTextExtents(sw->scale.font_struct, \
                    buff, \
@@ -1465,15 +1418,15 @@ static Dimension ValueTroughDescent(XmScaleWidget sw)
   return (Dimension)ret_val;
 #else
   char buff[15];
-  register Dimension tmp_max, tmp_min, result;
+  Dimension tmp_max, tmp_min, result;
   int direction, ascent, descent;
   XCharStruct overall_return;
 #  define GET_MAX(tmp, max_or_min_value) \
     { \
       if (sw->scale.decimal_points) \
-        sprintf(buff, "%d%c", max_or_min_value, nl_langinfo(RADIXCHAR)[0]); \
+        snprintf(buff, sizeof(buff), "%d%c", max_or_min_value, nl_langinfo(RADIXCHAR)[0]); \
       else \
-        sprintf(buff, "%d", max_or_min_value); \
+        snprintf(buff, sizeof(buff), "%d", max_or_min_value); \
 \
       XTextExtents(sw->scale.font_struct, \
                    buff, \
@@ -1500,7 +1453,7 @@ static Dimension ValueTroughDescent(XmScaleWidget sw)
 static Dimension ValueTroughWidth(XmScaleWidget sw)
 {
   char buff[15];
-  register Dimension tmp_max, tmp_min, result;
+  Dimension tmp_max, tmp_min, result;
   int direction, ascent, descent;
   XCharStruct overall_return;
   (void)direction;
@@ -1512,9 +1465,9 @@ static Dimension ValueTroughWidth(XmScaleWidget sw)
     { \
       XmString tmp_str; \
       if (sw->scale.decimal_points) \
-        sprintf(buff, "%d%c", max_or_min_value, nl_langinfo(RADIXCHAR)[0]); \
+        snprintf(buff, sizeof(buff), "%d%c", max_or_min_value, nl_langinfo(RADIXCHAR)[0]); \
       else \
-        sprintf(buff, "%d", max_or_min_value); \
+        snprintf(buff, sizeof(buff), "%d", max_or_min_value); \
 \
       tmp = XmStringWidth(sw->scale.font_list, tmp_str = XmStringCreateLocalized(buff)); \
       XmStringFree(tmp_str); \
@@ -1523,9 +1476,9 @@ static Dimension ValueTroughWidth(XmScaleWidget sw)
 #  define GET_MAX(tmp, max_or_min_value) \
     { \
       if (sw->scale.decimal_points) \
-        sprintf(buff, "%d%c", max_or_min_value, nl_langinfo(RADIXCHAR)[0]); \
+        snprintf(buff, sizeof(buff), "%d%c", max_or_min_value, nl_langinfo(RADIXCHAR)[0]); \
       else \
-        sprintf(buff, "%d", max_or_min_value); \
+        snprintf(buff, sizeof(buff), "%d", max_or_min_value); \
 \
       XTextExtents(sw->scale.font_struct, \
                    buff, \
@@ -1553,8 +1506,8 @@ static Dimension ValueTroughWidth(XmScaleWidget sw)
 
 static Dimension TitleWidth(XmScaleWidget sw)
 {
-  register Dimension tmp = 0;
-  register Widget title_widget = sw->composite.children[0];
+  Dimension tmp = 0;
+  Widget title_widget = sw->composite.children[0];
   if (XtIsManaged(title_widget)) {
     tmp = TotalWidth(title_widget);
     if (sw->scale.orientation == XmVERTICAL)
@@ -1565,8 +1518,8 @@ static Dimension TitleWidth(XmScaleWidget sw)
 
 static Dimension TitleHeight(XmScaleWidget sw)
 {
-  register Dimension tmp = 0;
-  register Widget title_widget = sw->composite.children[0];
+  Dimension tmp = 0;
+  Widget title_widget = sw->composite.children[0];
   if (XtIsManaged(title_widget)) {
     tmp = TotalHeight(title_widget);
     if (sw->scale.orientation == XmHORIZONTAL)
@@ -1714,7 +1667,7 @@ static Dimension ScrollWidth(XmScaleWidget sw)
         if (num_managed > 3) {
           Dimension tic, diff;
           XmScrollBarWidget sb = (XmScrollBarWidget)sw->composite.children[1];
-          tmp = MAX((num_managed - 2) * MaxLabelWidth(sw), SCALE_DEFAULT_MAJOR_SIZE);
+          tmp = MAX((int)((num_managed - 2) * MaxLabelWidth(sw)), SCALE_DEFAULT_MAJOR_SIZE);
           tic = sb->primitive.highlight_thickness + sb->primitive.shadow_thickness +
                 (Dimension)(((float)SLIDER_SIZE(sw) / 2.0) + 0.5);
           diff = tic - ((int)MaxLabelWidth(sw) / 2);
@@ -1767,7 +1720,7 @@ static Dimension ScrollHeight(XmScaleWidget sw)
         if (num_managed > 3) {
           Dimension tic, diff;
           XmScrollBarWidget sb = (XmScrollBarWidget)sw->composite.children[1];
-          tmp = MAX((num_managed - 2) * MaxLabelHeight(sw), SCALE_DEFAULT_MAJOR_SIZE);
+          tmp = MAX((int)((num_managed - 2) * MaxLabelHeight(sw)), SCALE_DEFAULT_MAJOR_SIZE);
           tic = sb->primitive.highlight_thickness + sb->primitive.shadow_thickness +
                 (Dimension)(((float)SLIDER_SIZE(sw) / 2.0) + 0.5);
           diff = tic - (MaxLabelHeight(sw) / 2);
@@ -1802,7 +1755,7 @@ static void LayoutHorizontalLabels(XmScaleWidget sw,
     first_tic_dim = scrollBox->x + LeadXTic(sb, sw);
     last_tic_dim = (scrollBox->x + sb->core.width) - TrailXTic(sb, sw);
     tic_interval = (float)(last_tic_dim - first_tic_dim) / (num_managed - 3);
-    for (i = 2, tmp = first_tic_dim; i < sw->composite.num_children; i++) {
+    for (i = 2, tmp = first_tic_dim; (Cardinal)i < sw->composite.num_children; i++) {
       if (LayoutIsRtoLM(sw) && sw->scale.processing_direction == XmMAX_ON_LEFT)
         w = sw->composite.children[sw->composite.num_children - i + 1];
       else
@@ -1984,7 +1937,7 @@ static void LayoutVerticalLabels(XmScaleWidget sw,
     first_tic_dim = scrollBox->y + LeadYTic(sb, sw);
     last_tic_dim = (scrollBox->y + sb->core.height) - TrailYTic(sb, sw);
     tic_interval = (float)(last_tic_dim - first_tic_dim) / (num_managed - 3);
-    for (i = 2, tmp = first_tic_dim; i < sw->composite.num_children; i++) {
+    for (i = 2, tmp = first_tic_dim; (Cardinal)i < sw->composite.num_children; i++) {
       w = sw->composite.children[i];
       if (!XtIsManaged(w) || ((Object)w)->object.being_destroyed)
         continue;
@@ -2194,25 +2147,31 @@ static void LayoutVerticalScale(XmScaleWidget sw, XtWidgetGeometry *desired, Wid
 }
 
 /************************************************************************/
-static void GetValueString(XmScaleWidget sw, int value, String buffer)
+static void GetValueString(XmScaleWidget sw, int value, char *buffer, size_t size)
 {
-  register int i;
-  int diff, dec_point_size;
+  int i;
+  int len, diff, dec_point_size;
   struct lconv *loc_values;
   if (sw->scale.decimal_points > 0) {
-    /* Add one to decimal points to get leading zero, since
-         only US sometimes skips this zero, not other countries */
-    sprintf(buffer, "%.*d", sw->scale.decimal_points + 1, value);
-    diff = strlen(buffer) - sw->scale.decimal_points;
     loc_values = localeconv();
     dec_point_size = strlen(loc_values->decimal_point);
-    for (i = strlen(buffer); i >= diff; i--)
+    /* Add one to decimal points to get leading zero, since
+         only US sometimes skips this zero, not other countries */
+    len = snprintf(buffer, size, "%.*d", sw->scale.decimal_points + 1, value);
+    /* XmNdecimalPoints is not bounded: without room for the digits and
+       the decimal point, show the value without it */
+    if (len < 0 || (size_t)len + dec_point_size >= size) {
+      snprintf(buffer, size, "%d", value);
+      return;
+    }
+    diff = len - sw->scale.decimal_points;
+    for (i = len; i >= diff; i--)
       buffer[i + dec_point_size] = buffer[i];
     for (i = 0; i < dec_point_size; i++)
       buffer[diff + i] = loc_values->decimal_point[i];
   }
   else
-    sprintf(buffer, "%d", value);
+    snprintf(buffer, size, "%d", value);
 }
 
 /************************************************************************
@@ -2273,7 +2232,7 @@ static void ShowValue(XmScaleWidget sw)
     XmeRedisplayGadgets((Widget)sw, NULL, value_region);
   }
   /*  Get a string representation of the new value  */
-  GetValueString(sw, sw->scale.value, buffer);
+  GetValueString(sw, sw->scale.value, buffer, sizeof(buffer));
   /*  Calculate the x, y, width, and height of the string to display  */
 #if USE_XFT
   XmStringExtent(sw->scale.font_list, tmp_str = XmStringCreateLocalized(buffer), &width, &height);
@@ -2381,8 +2340,8 @@ static void CalcScrollBarData(
   Dimension scrollbar_size;
   float sb_value, tmp;
   XmScrollBarWidget scrollbar = (XmScrollBarWidget)sw->composite.children[1];
-  register int ht = scrollbar->primitive.highlight_thickness;
-  register int st = scrollbar->primitive.shadow_thickness;
+  int ht = scrollbar->primitive.highlight_thickness;
+  int st = scrollbar->primitive.shadow_thickness;
   int size;
   /*  Adjust the slider size to take SLIDER_SIZE area.    */
   /*  Adjust value to be in the bounds of the scrollbar.  */
@@ -2397,7 +2356,13 @@ static void CalcScrollBarData(
   else
     /* this looks suspicious to me, but it is bc to let it in */
     scrollbar_size -= 2 * (sw->scale.highlight_thickness + sw->manager.shadow_thickness);
-  slider_size = (SCROLLBAR_MAX / scrollbar_size) * SLIDER_SIZE(sw);
+  /* (SCROLLBAR_MAX / scrollbar_size) * SLIDER_SIZE, clamped to
+     SCROLLBAR_MAX before the product can overflow. */
+  slider_size = SLIDER_SIZE(sw);
+  if (slider_size > 0 && SCROLLBAR_MAX / scrollbar_size > SCROLLBAR_MAX / slider_size)
+    slider_size = SCROLLBAR_MAX;
+  else
+    slider_size = (SCROLLBAR_MAX / scrollbar_size) * slider_size;
   /*
    * Now error check our arithmetic
    */
@@ -2565,7 +2530,7 @@ static void DragConvertCallback(Widget w,
   XInternAtoms(XtDisplay(w), atom_names, XtNumber(atom_names), False, atoms);
   /* Begin fixing the bug OSF 4846 */
   /* get the value of the scale and convert it to compound text */
-  GetValueString(sw, sw->scale.value, tmpstring);
+  GetValueString(sw, sw->scale.value, tmpstring, sizeof(tmpstring));
   if (cs->target == atoms[XmATARGETS] || cs->target == atoms[XmA_MOTIF_EXPORT_TARGETS] ||
       cs->target == atoms[XmA_MOTIF_CLIPBOARD_TARGETS])
   {
@@ -2688,7 +2653,7 @@ Widget XmCreateScale(Widget parent, char *name, ArgList arglist, Cardinal argcou
 
 Widget XmVaCreateScale(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

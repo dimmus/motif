@@ -43,7 +43,7 @@
 /************************************************************
  *	STATIC FUNCTION DECLARATIONS
  *************************************************************/
-static void ClassInitialize();
+static void ClassInitialize(void);
 static void ClassPartInitialize(WidgetClass w_class);
 static void Realize(Widget, Mask *, XSetWindowAttributes *);
 static void Resize(Widget), ChangeManaged(Widget), InsertChild(Widget);
@@ -228,7 +228,7 @@ WidgetClass xmIconBoxWidgetClass = (WidgetClass)&xmIconBoxClassRec;
  *                                      the creation call.
  *	Returns:       none.
  */
-static void ClassInitialize()
+static void ClassInitialize(void)
 {
   /* do nothing */
 }
@@ -730,9 +730,9 @@ static void GetMinCells(Widget w, Cardinal *min_x, Cardinal *min_y)
     info = GetIconInfo(*childp);
     x = (info->cell_x < 0) ? 0 : info->cell_x;
     y = (info->cell_y < 0) ? 0 : info->cell_y;
-    if (x > *min_x)
+    if ((Cardinal)x > *min_x)
       *min_x = x;
-    if (y > *min_y)
+    if ((Cardinal)y > *min_y)
       *min_y = y;
   }
 }
@@ -749,7 +749,7 @@ static void GetMaxCellSize(Widget w, Widget ignore, Dimension *max_w, Dimension 
   Widget *childp;
   XmIconBoxWidget ibw = (XmIconBoxWidget)w;
   XtWidgetGeometry preferred;
-  register Dimension temp;
+  Dimension temp;
   *max_w = XmIconBox_min_cell_width(ibw);
   *max_h = XmIconBox_min_cell_height(ibw);
   ForAllChildren(ibw, childp)
@@ -783,14 +783,14 @@ static void GetMaxCellSize(Widget w, Widget ignore, Dimension *max_w, Dimension 
 static Boolean SetToEmptyCell(Widget child)
 {
   XmIconBoxWidget ibw = (XmIconBoxWidget)XtParent(child);
-  register Position x, y, cur_x, cur_y;
-  register unsigned long square, cur_square;
+  Position x, y, cur_x, cur_y;
+  unsigned long square, cur_square;
   Cardinal max_x, max_y;
   GetMinCells((Widget)ibw, &max_x, &max_y);
   cur_x = cur_y = XmIconBoxAnyCell;
   cur_square = max_x * max_x + max_y * max_y;
-  for (y = 0; y <= max_y; y++)
-    for (x = 0; x <= max_x; x++) {
+  for (y = 0; (Cardinal)y <= max_y; y++)
+    for (x = 0; (Cardinal)x <= max_x; x++) {
       square = x * x + y * y;
       if (square <= cur_square && XmIconBoxIsCellEmpty(XtParent(child), x, y, NULL)) {
         cur_square = square;

@@ -1409,13 +1409,13 @@ extern int XmConvertStringToUnits(
     Screen *screen, String spec, int orientation, int to_type, XtEnum *parse_error);
 extern int XmConvertUnits(Widget widget,
                           int dimension,
-                          register int from_type,
-                          register int from_val,
-                          register int to_type);
-extern int XmCvtToHorizontalPixels(Screen *screen, register int from_val, register int from_type);
-extern int XmCvtToVerticalPixels(Screen *screen, register int from_val, register int from_type);
-extern int XmCvtFromHorizontalPixels(Screen *screen, register int from_val, register int to_type);
-extern int XmCvtFromVerticalPixels(Screen *screen, register int from_val, register int to_type);
+                          int from_type,
+                          int from_val,
+                          int to_type);
+extern int XmCvtToHorizontalPixels(Screen *screen, int from_val, int from_type);
+extern int XmCvtToVerticalPixels(Screen *screen, int from_val, int from_type);
+extern int XmCvtFromHorizontalPixels(Screen *screen, int from_val, int to_type);
+extern int XmCvtFromVerticalPixels(Screen *screen, int from_val, int to_type);
 
 /********    End Public Function Declarations    ********/
 
@@ -1483,11 +1483,11 @@ extern void XmChangeColor(Widget widget, Pixel background);
 
 /********    Public Function Declarations for XmString.c    ********/
 
-extern XmString XmStringCreate(char *text, XmStringCharSet charset);
-extern XmString XmStringCreateLocalized(String text);
+extern XmString XmStringCreate(const char *text, XmStringCharSet charset);
+extern XmString XmStringCreateLocalized(const char *text);
 extern XmString XmStringDirectionCreate(XmStringDirection direction);
 extern XmString XmStringSeparatorCreate(void);
-extern XmString XmStringLtoRCreate(char *text, XmStringCharSet charset);
+extern XmString XmStringLtoRCreate(const char *text, XmStringCharSet charset);
 extern Boolean XmStringInitContext(XmStringContext *context, XmString string);
 extern void XmStringFreeContext(XmStringContext context);
 extern XmFontListEntry XmFontListEntryCreate(char *tag, XmFontType type, XtPointer font);

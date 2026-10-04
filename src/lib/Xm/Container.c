@@ -220,6 +220,7 @@ static Widget GetRealIconHeader(Widget wid);
 static void UpdateIconHeader(Widget wid, Boolean count_only);
 static void ChangeView(Widget wid, unsigned char view);
 static CwidNode NewNode(Widget cwid);
+static CwidNode FindLevelTail(XmContainerWidget cw, CwidNode node, CwidNode parent_node);
 static void InsertNode(CwidNode node);
 static void SeverNode(CwidNode node);
 static void DeleteNode(Widget cwid);
@@ -813,8 +814,8 @@ static void GetDetailHeader(Widget wid,
            done in Destroy */
     if (cw->container.cache_detail_heading)
       XtFree((char *)cw->container.cache_detail_heading);
-    cw->container.cache_detail_heading = (XmStringTable)XtMalloc(sizeof(XmString) *
-                                                                 (icon_detail_header_count + 1));
+    cw->container.cache_detail_heading =
+        (XmStringTable)_XmMallocArray(icon_detail_header_count + 1, sizeof(XmString));
     for (i = 0; i < icon_detail_header_count; i++)
       cw->container.cache_detail_heading[i + 1] = icon_detail_header[i];
     cw->container.cache_detail_heading[0] = label_string;
@@ -934,9 +935,9 @@ static void Initialize(Widget rw,
    * deal with XmNdetailOrder & XmNdetailOrderCount
    */
   if (ncw->container.detail_order_count && ncw->container.detail_order) {
-    ncw->container.detail_order = (Cardinal *)XtMalloc(sizeof(Cardinal) *
-                                                       ncw->container.detail_order_count);
-    for (i = 0; i < ncw->container.detail_order_count; i++)
+    ncw->container.detail_order =
+        (Cardinal *)_XmMallocArray(ncw->container.detail_order_count, sizeof(Cardinal));
+    for (i = 0; (Cardinal)i < ncw->container.detail_order_count; i++)
       ncw->container.detail_order[i] = rcw->container.detail_order[i];
   }
   /*
@@ -1405,7 +1406,7 @@ static Boolean SetValues(Widget cw,
    * Hide all non-level-0 children if we've switched to SPATIAL layout.
    */
   if (CtrLayoutIsSPATIAL(ncw) && !CtrLayoutIsSPATIAL(ccw)) {
-    for (i = 0; i < ncw->composite.num_children; i++) {
+    for (i = 0; (Cardinal)i < ncw->composite.num_children; i++) {
       cwid = ncw->composite.children[i];
       c = GetContainerConstraint(cwid);
       if (!CtrICON(cwid) || (c->entry_parent))
@@ -1475,8 +1476,9 @@ static Boolean SetValues(Widget cw,
     }
     if (ncw->container.detail_order_count && ncw->container.detail_order) {
       Cardinal *detail_order;
-      detail_order = (Cardinal *)XtMalloc(sizeof(Cardinal) * ncw->container.detail_order_count);
-      for (i = 0; i < ncw->container.detail_order_count; i++)
+      detail_order =
+          (Cardinal *)_XmMallocArray(ncw->container.detail_order_count, sizeof(Cardinal));
+      for (i = 0; (Cardinal)i < ncw->container.detail_order_count; i++)
         detail_order[i] = ncw->container.detail_order[i];
       ncw->container.detail_order = detail_order;
     }
@@ -2097,7 +2099,7 @@ static void ChangeManaged(Widget wid)
    */
   if (cw->container.self)
     return;
-  for (i = 0; i < cw->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < cw->composite.num_children; i++) {
     cwid = cw->composite.children[i];
     c = GetContainerConstraint(cwid);
     if (CtrICON(cwid))
@@ -2400,6 +2402,23 @@ static void ConstraintDestroy(Widget cwid)
   if (!CtrICON(cwid))
     return;
   cw->container.icon_header = NULL;
+  if (cw->core.being_destroyed) {
+    /*
+     * The whole container is going away with all its children, so
+     * nobody looks at the positions, the outline or the selection any
+     * more.  Do not move the children up and renumber the remaining
+     * ones for each child destroyed: unlink and free the node, and
+     * leave the nodes below it as a detached list.
+     */
+    CwidNode node = c->node_ptr, child;
+    for (child = node->child_ptr; child != NULL; child = child->next_ptr)
+      child->parent_ptr = NULL;
+    node->child_ptr = NULL;
+    SeverNode(node);
+    XtFree((char *)node);
+    c->node_ptr = NULL;
+    return;
+  }
   {
     CwidNode node = c->node_ptr->child_ptr;
     while (node) {
@@ -2442,8 +2461,13 @@ static Boolean ConstraintSetValues(Widget ccwid,
   /*
    * SetValues called from inside Container - let's get out of here!
    */
-  if (cw->container.self)
+  if (cw->container.self) {
+    /* The node stays where it is, so its index may not match its
+     * position any more: InsertNode cannot trust the indices. */
+    if (nc->position_index != cc->position_index)
+      cw->container.dynamic_resource |= STALE_POSITIONS;
     return (False);
+  }
   if (!CtrICON(ncwid))
     return (False);
   /*
@@ -2661,8 +2685,10 @@ static Boolean RemoveItem(Widget wid, Widget cwid)
       XUnionRectWithRegion(&cwid_rect, cwid_region, cwid_region);
       XSubtractRegion(cw->container.cells_region, cwid_region, cw->container.cells_region);
       XDestroyRegion(cwid_region);
+      XM_FALLTHROUGH;
     case XmGRID:
       cw->container.cells[c->cell_idx]--;
+      XM_FALLTHROUGH;
     case XmNONE:
       c->cell_idx = NO_CELL;
   }
@@ -4495,12 +4521,12 @@ static XmTabList GetDumbTabList(int tab_size, Cardinal asked_num_tab)
   XmTabList Tab_list = NULL;
   Cardinal i, prev_num_tab = Num_tab;
   _XmProcessLock();
-  if (Num_tab < asked_num_tab) {
+  if ((Cardinal)Num_tab < asked_num_tab) {
     Num_tab = MAX(asked_num_tab, 100); /* HACKKKK */
-    Tab_pool = (XmTab *)XtRealloc((char *)Tab_pool, Num_tab * sizeof(XmTab));
+    Tab_pool = (XmTab *)_XmReallocArray((char *)Tab_pool, Num_tab, sizeof(XmTab));
   }
   /* create more tabs */
-  for (i = prev_num_tab; i < Num_tab; i++)
+  for (i = prev_num_tab; i < (Cardinal)Num_tab; i++)
     Tab_pool[i] = XmTabCreate(0.0, XmPIXELS, XmABSOLUTE, XmALIGNMENT_BEGINNING, XmS);
   /* update the values */
   for (i = 0; i < asked_num_tab; i++)
@@ -4942,8 +4968,9 @@ static void LayoutSpatial(Widget wid, Boolean growth_req_allowed, CwidNode stop_
           cw->container.cell_count += height_in_cells;
         else
           cw->container.cell_count += width_in_cells;
-        cw->container.cells = (int *)XtRealloc((char *)cw->container.cells,
-                                               (sizeof(int) * (cw->container.cell_count)));
+        cw->container.cells = (int *)_XmReallocArray((char *)cw->container.cells,
+                                                     cw->container.cell_count,
+                                                     sizeof(int));
         for (i = old_cell_count; i < cw->container.cell_count; i++)
           cw->container.cells[i] = 0;
       }
@@ -5485,6 +5512,36 @@ static CwidNode NewNode(Widget cwid)
 }
 
 /************************************************************************
+ * FindLevelTail (Private Function)
+ *	The last node of the level below parent_node (the top level when
+ *	NULL), found from the most recently created child without walking
+ *	the level, or NULL.
+ ************************************************************************/
+static CwidNode FindLevelTail(XmContainerWidget cw, CwidNode node, CwidNode parent_node)
+{
+  Cardinal i, last = cw->composite.num_children;
+  Widget kid = NULL;
+  CwidNode n;
+  /* look at a few children only: there may be many outline buttons */
+  for (i = last; (kid == NULL) && (i > 0) && (last - i < 8); i--) {
+    if ((cw->composite.children[i - 1] != node->widget_ptr) &&
+        CtrICON(cw->composite.children[i - 1]))
+      kid = cw->composite.children[i - 1];
+  }
+  if (kid == NULL)
+    return NULL;
+  /* Children are usually added in order, so the last one created, or
+   * its ancestor on the level we insert into, ends that level. */
+  for (n = GetContainerConstraint(kid)->node_ptr; n != NULL; n = n->parent_ptr) {
+    if (n == node)
+      return NULL;
+    if (n->parent_ptr == parent_node)
+      return (n->next_ptr == NULL) ? n : NULL;
+  }
+  return NULL;
+}
+
+/************************************************************************
  * InsertNode (Private Function)
  ************************************************************************/
 static void InsertNode(CwidNode node)
@@ -5519,6 +5576,29 @@ static void InsertNode(CwidNode node)
     pc = GetContainerConstraint(c->entry_parent);
     parent_node = pc->node_ptr;
     prev_node = parent_node->child_ptr;
+  }
+  /*
+   * Appending: link the node after the last one of its level directly.
+   * The loop below would also leave the indices of the others as they
+   * are, since they are already 0, 1, 2...; except that a lone node
+   * may have been given any XmNpositionIndex (see ConstraintSetValues).
+   */
+  if ((prev_node != NULL) && !CtrIsDynamic(cw, STALE_POSITIONS) &&
+      ((next_node = FindLevelTail(cw, node, parent_node)) != NULL))
+  {
+    sc = GetContainerConstraint(next_node->widget_ptr);
+    if ((c->position_index == XmLAST_POSITION) || (c->position_index > sc->position_index)) {
+      if (next_node->prev_ptr == NULL)
+        sc->position_index = 0;
+      c->position_index = sc->position_index + 1;
+      node->parent_ptr = parent_node;
+      node->prev_ptr = next_node;
+      node->next_ptr = NULL;
+      next_node->next_ptr = node;
+      if (node->next_ptr == cw->container.first_node)
+        cw->container.first_node = node;
+      return;
+    }
   }
   if (prev_node == NULL) {
     /*
@@ -5891,7 +5971,7 @@ static Boolean SetupDrag(Widget wid,
   multi_click_time = XtGetMultiClickTime(XtDisplay(wid));
   click_time = event->xbutton.time;
   if ((cw->container.anchor_cwid == current_cwid) &&
-      ((click_time - cw->container.last_click_time) < multi_click_time))
+      ((click_time - cw->container.last_click_time) < (Time)multi_click_time))
   {
     cw->container.last_click_time = click_time;
     if (cw->container.anchor_cwid)
@@ -6329,6 +6409,7 @@ static void RecalcMarquee(Widget wid, Widget cwid, Position x, Position y)
         x = cw->container.anchor_point.x;
         y = cw->container.anchor_point.y;
       }
+      XM_FALLTHROUGH;
     case XmMARQUEE_EXTEND_START:
       if CtrTechIsMARQUEE_ES (cw) {
         if (cw->container.started_in_anchor)
@@ -6364,6 +6445,7 @@ static void RecalcMarquee(Widget wid, Widget cwid, Position x, Position y)
         }
         break;
       }
+      XM_FALLTHROUGH;
     case XmMARQUEE:
     case XmTOUCH_OVER:
       cw->container.marquee_start.x = MIN(x, cw->container.anchor_point.x);
@@ -6840,7 +6922,7 @@ static void ChangeOutlineButtons(Widget wid)
   Pixmap pm;
   Arg wargs[2];
   int n;
-  for (i = 0; i < cw->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < cw->composite.num_children; i++) {
     cwid = cw->composite.children[i];
     if (CtrOUTLINE_BUTTON(cwid)) {
       c = GetContainerConstraint(cwid);
@@ -6969,6 +7051,7 @@ static void CallSelectCB(Widget wid, XEvent *event, unsigned char auto_selection
   switch (cw->container.selection_policy) {
     case XmSINGLE_SELECT:
       cbs.reason = XmCR_SINGLE_SELECT;
+      XM_FALLTHROUGH;
     case XmBROWSE_SELECT:
       if (CtrPolicyIsBROWSE(cw))
         cbs.reason = XmCR_BROWSE_SELECT;
@@ -6980,6 +7063,7 @@ static void CallSelectCB(Widget wid, XEvent *event, unsigned char auto_selection
       break;
     case XmMULTIPLE_SELECT:
       cbs.reason = XmCR_MULTIPLE_SELECT;
+      XM_FALLTHROUGH;
     case XmEXTENDED_SELECT:
       if (CtrPolicyIsEXTENDED(cw))
         cbs.reason = XmCR_EXTENDED_SELECT;
@@ -7006,7 +7090,7 @@ static WidgetList GetSelectedCwids(Widget wid)
   XmContainerConstraint c;
   if (cw->container.selected_item_count == 0)
     return (NULL);
-  selected_items = (WidgetList)XtMalloc(cw->container.selected_item_count * sizeof(Widget));
+  selected_items = (WidgetList)_XmMallocArray(cw->container.selected_item_count, sizeof(Widget));
   /*
    * Search through all the visible items first - it'll work 99% of
    * the time and it's faster than searching through all the items.
@@ -7719,7 +7803,7 @@ int XmContainerGetItemChildren(Widget wid, Widget item, WidgetList *item_childre
     clist_count++;
     node = node->next_ptr;
   }
-  clist = (WidgetList)XtMalloc(clist_count * sizeof(Widget));
+  clist = (WidgetList)_XmMallocArray(clist_count, sizeof(Widget));
   node = first_child_node;
   for (i = 0; i < clist_count; i++) {
     clist[i] = node->widget_ptr;
@@ -7778,7 +7862,7 @@ void XmContainerReorder(Widget wid, WidgetList cwid_list, int cwid_count)
   _XmAppLock(app);
   c = GetContainerConstraint(cwid_list[0]);
   pcwid = c->entry_parent;
-  pi_list = (int *)XtMalloc(cwid_count * sizeof(int));
+  pi_list = (int *)_XmMallocArray(cwid_count, sizeof(int));
   pi_count = 0;
   for (i = 0; i < cwid_count; i++) {
     c = GetContainerConstraint(cwid_list[i]);
@@ -7826,7 +7910,7 @@ Widget XmCreateContainer(Widget parent, String name, ArgList arglist, Cardinal a
 
 Widget XmVaCreateContainer(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

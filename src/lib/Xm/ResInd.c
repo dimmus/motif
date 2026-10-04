@@ -270,16 +270,16 @@ static XmParseResult ParseUnitString(String spec,
  **********************************************************************/
 int _XmConvertUnits(Screen *screen,
                     int dimension,
-                    register int from_type,
-                    register int from_val,
-                    register int to_type)
+                    int from_type,
+                    int from_val,
+                    int to_type)
 {
   /*
    * from_val_in_mm is actually from_val_in_1000thmillimeters for accuracy
    *     likewise for mm_per_pixel
    */
-  register int from_val_in_mm = 0;
-  register int mm_per_pixel = 0; /* time 100000 */
+  int from_val_in_mm = 0;
+  int mm_per_pixel = 0; /* time 100000 */
   int font_unit;
   /*  Do error checking  */
   if (!XmRepTypeValidValue(XmRID_ORIENTATION, (unsigned char)dimension, (Widget)NULL))
@@ -314,6 +314,10 @@ int _XmConvertUnits(Screen *screen,
     else
       mm_per_pixel = (HeightMMOfScreen(screen) * 1000) / HeightOfScreen(screen);
   }
+  /* Some servers report a physical size of 0 mm; assume 96 dpi rather
+   * than dividing by zero below. */
+  if (mm_per_pixel <= 0)
+    mm_per_pixel = 25400 / 96;
   if (from_type == XmPIXELS)
     from_val_in_mm = from_val * mm_per_pixel;
   else if (from_type == Xm100TH_POINTS)
@@ -356,10 +360,14 @@ int _XmConvertUnits(Screen *screen,
     return (from_val_in_mm / 10000);
   else if (to_type == Xm100TH_FONT_UNITS) {
     font_unit = _XmGetFontUnit(screen, dimension);
+    if (font_unit <= 0)
+      return (0);
     return ((from_val_in_mm * 100) / (mm_per_pixel * font_unit));
   }
   else /* to_type == XmFONT_UNITS */ {
     font_unit = _XmGetFontUnit(screen, dimension);
+    if (font_unit <= 0)
+      return (0);
     return ((from_val_in_mm) / (mm_per_pixel * font_unit));
   }
 }
@@ -375,9 +383,9 @@ int _XmConvertUnits(Screen *screen,
  **********************************************************************/
 int XmConvertUnits(Widget widget,
                    int dimension,
-                   register int from_type,
-                   register int from_val,
-                   register int to_type)
+                   int from_type,
+                   int from_val,
+                   int to_type)
 {
   int value;
   Screen *screen;
@@ -396,7 +404,7 @@ int XmConvertUnits(Widget widget,
  *      the vertical resolution of the screen.
  *
  *********************************************************************/
-int XmCvtToHorizontalPixels(Screen *screen, register int from_val, register int from_type)
+int XmCvtToHorizontalPixels(Screen *screen, int from_val, int from_type)
 {
   int value;
   _XmDisplayToAppContext(DisplayOfScreen(screen));
@@ -420,7 +428,7 @@ static XmImportOperator ToPixels(Widget widget,
                                  unsigned char orientation)
 {
   Screen *screen = XtScreen(widget);
-  register unsigned char unit_type;
+  unsigned char unit_type;
   /*  Get the unit type of the widget  */
   unit_type = _XmGetUnitType(widget);
   /*  Check for type to same type conversions  */
@@ -456,7 +464,7 @@ XmImportOperator XmeToHorizontalPixels(Widget widget, int offset, XtArgVal *valu
  *      the vertical resolution of the screen.
  *
  *********************************************************************/
-int XmCvtToVerticalPixels(Screen *screen, register int from_val, register int from_type)
+int XmCvtToVerticalPixels(Screen *screen, int from_val, int from_type)
 {
   int value;
   _XmDisplayToAppContext(DisplayOfScreen(screen));
@@ -492,7 +500,7 @@ XmImportOperator XmeToVerticalPixels(Widget widget, int offset, XtArgVal *value)
  *      the horizontal resolution of the screen.
  *
  **********************************************************************/
-int XmCvtFromHorizontalPixels(Screen *screen, register int from_val, register int to_type)
+int XmCvtFromHorizontalPixels(Screen *screen, int from_val, int to_type)
 {
   int value;
   _XmDisplayToAppContext(DisplayOfScreen(screen));
@@ -550,7 +558,7 @@ void XmeFromHorizontalPixels(Widget widget, int offset, XtArgVal *value)
  *      the horizontal resolution of the screen.
  *
  **********************************************************************/
-int XmCvtFromVerticalPixels(Screen *screen, register int from_val, register int to_type)
+int XmCvtFromVerticalPixels(Screen *screen, int from_val, int to_type)
 {
   int value;
   _XmDisplayToAppContext(DisplayOfScreen(screen));

@@ -23,7 +23,7 @@
 #
 # Examples:
 #   ./test-motif.sh archlinux     # Test on Arch Linux
-#   ./test-motif.sh freebsd       # Test on FreeBSD
+#   ./test-motif.sh debian        # Test on Debian
 #   ./test-motif.sh --all         # Test on all available OS
 #   ./test-motif.sh -v archlinux  # Test with verbose output
 #
@@ -119,7 +119,7 @@ $(list_available_os | sed 's/^/  - /')
 
 Examples:
   $(basename "$0") archlinux              # Test on Arch Linux
-  $(basename "$0") freebsd                # Test on FreeBSD
+  $(basename "$0") debian                 # Test on Debian
   $(basename "$0") --all                  # Test on all available OS
   $(basename "$0") -v -r archlinux        # Verbose test with rebuild
   $(basename "$0") --logs-only            # Show previous test logs

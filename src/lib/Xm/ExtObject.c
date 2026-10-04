@@ -70,8 +70,15 @@ static XtResource extResources[] = {{XmNlogicalParent,
                                      XmRImmediate,
                                      (XtPointer)XmDEFAULT_EXTENSION}};
 #undef Offset
-#define XmNUM_ELEMENTS 4
-#define XmNUM_BYTES 255
+/*
+ * Scratch records for the secondary objects that gadgets build around
+ * every Get/SetValues call.  They must hold the largest gadget cache
+ * object (ToggleButtonGadget's, about 310 bytes with 64-bit pointers;
+ * with the old 255 bytes PushButtonGadget's and ToggleButtonGadget's went
+ * to malloc), and a SetValues on a subclass uses several at once.
+ */
+#define XmNUM_ELEMENTS 8
+#define XmNUM_BYTES 512
 
 typedef struct _XmExtCache {
   char data[XmNUM_BYTES];
@@ -384,7 +391,7 @@ static void Destroy(Widget wid)
 
 char *_XmExtObjAlloc(int size)
 {
-  register int i;
+  int i;
   if (size <= XmNUM_BYTES) {
     for (i = 0; i < XmNUM_ELEMENTS; i++)
       if (!extarray[i].cache.inuse) {
@@ -397,7 +404,7 @@ char *_XmExtObjAlloc(int size)
 
 void _XmExtObjFree(XtPointer element)
 {
-  register int i;
+  int i;
   for (i = 0; i < XmNUM_ELEMENTS; i++)
     if (extarray[i].cache.data == (char *)element) {
       extarray[i].cache.inuse = FALSE;

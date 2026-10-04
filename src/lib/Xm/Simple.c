@@ -174,7 +174,7 @@ static void EvaluateConvenienceStructure(Widget wid, XmSimpleMenu sm)
     }
     switch (btype) {
       case XmTITLE:
-        sprintf(name_buf, "label_%d", label_count++);
+        snprintf(name_buf, sizeof(name_buf), "label_%d", label_count++);
         child = XtCreateManagedWidget(name_buf, xmLabelGadgetClass, (Widget)rc, args, n);
         (void)child; /* Suppress unused value warning */
         break;
@@ -183,13 +183,14 @@ static void EvaluateConvenienceStructure(Widget wid, XmSimpleMenu sm)
           XtSetArg(args[n], XmNseparatorType, XmDOUBLE_LINE);
           n++;
         }
+        XM_FALLTHROUGH;
       case XmSEPARATOR:
-        sprintf(name_buf, "separator_%d", separator_count++);
+        snprintf(name_buf, sizeof(name_buf), "separator_%d", separator_count++);
         child = XtCreateManagedWidget(name_buf, xmSeparatorGadgetClass, (Widget)rc, args, n);
         (void)child; /* Suppress unused value warning */
         break;
       case XmPUSHBUTTON:
-        sprintf(name_buf, "button_%d", button_count++);
+        snprintf(name_buf, sizeof(name_buf), "button_%d", button_count++);
         child = XtCreateManagedWidget(name_buf, xmPushButtonGadgetClass, (Widget)rc, args, n);
         if (sm->callback)
           XtAddCallback(child,
@@ -202,8 +203,9 @@ static void EvaluateConvenienceStructure(Widget wid, XmSimpleMenu sm)
           XtSetArg(args[n], XmNindicatorType, XmONE_OF_MANY);
           n++;
         }
+        XM_FALLTHROUGH;
       case XmCHECKBUTTON:
-        sprintf(name_buf, "button_%d", button_count++);
+        snprintf(name_buf, sizeof(name_buf), "button_%d", button_count++);
         if (n < 7) {
           XtSetArg(args[n], XmNindicatorOn, TRUE);
           n++;
@@ -216,7 +218,7 @@ static void EvaluateConvenienceStructure(Widget wid, XmSimpleMenu sm)
                         (XtPointer)(unsigned long)(button_count - 1));
         break;
       case XmCASCADEBUTTON:
-        sprintf(name_buf, "button_%d", button_count++);
+        snprintf(name_buf, sizeof(name_buf), "button_%d", button_count++);
         child = XtCreateManagedWidget(name_buf, xmCascadeButtonGadgetClass, (Widget)rc, args, n);
         if (sm->callback)
           XtAddCallback(child,
@@ -305,12 +307,12 @@ Widget XmCreateSimplePulldownMenu(Widget parent, String name, ArgList args, Card
       return (rc);
     }
     else {
-      for (i = 0; i < num_buttons; i++) {
+      for (i = 0; (Cardinal)i < num_buttons; i++) {
         if (((XmIsCascadeButtonGadget(buttons[i])) || (XmIsCascadeButton(buttons[i]))) &&
             (i == mr.post_from_button))
           break;
       }
-      if (i < num_buttons) {
+      if ((Cardinal)i < num_buttons) {
         n = 0;
         XtSetArg(local_args[n], XmNsubMenuId, rc);
         n++;
@@ -369,14 +371,14 @@ Widget XmCreateSimpleOptionMenu(Widget parent, String name, ArgList args, Cardin
     }
     else {
       button_count = 0;
-      for (i = 0; i < num_buttons; i++) { /* count only PushB */
+      for (i = 0; (Cardinal)i < num_buttons; i++) { /* count only PushB */
         if ((XmIsPushButtonGadget(buttons[i])) || (XmIsPushButton(buttons[i]))) {
           if (button_count == mr.button_set)
             break;
           button_count++;
         }
       }
-      if (i < num_buttons) {
+      if ((Cardinal)i < num_buttons) {
         n = 0;
         XtSetArg(local_args[n], XmNmenuHistory, buttons[i]);
         n++;
@@ -405,7 +407,7 @@ Widget XmCreateSimpleRadioBox(Widget parent, String name, ArgList args, Cardinal
                     args,
                     arg_count);
   for (i = 0; i < mr.count; i++) {
-    sprintf(name_buf, "button_%d", i);
+    snprintf(name_buf, sizeof(name_buf), "button_%d", i);
     n = 0;
     if (mr.label_string && mr.label_string[i]) {
       XtSetArg(local_args[n], XmNlabelString, mr.label_string[i]);
@@ -443,7 +445,7 @@ Widget XmCreateSimpleCheckBox(Widget parent, String name, ArgList args, Cardinal
                     args,
                     arg_count);
   for (i = 0; i < mr.count; i++) {
-    sprintf(name_buf, "button_%d", i);
+    snprintf(name_buf, sizeof(name_buf), "button_%d", i);
     n = 0;
     if (mr.label_string && mr.label_string[i]) {
       XtSetArg(local_args[n], XmNlabelString, mr.label_string[i]);

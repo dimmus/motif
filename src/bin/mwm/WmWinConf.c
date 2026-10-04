@@ -37,6 +37,7 @@ static char rcsid[] = "$XConsortium: WmWinConf.c /main/8 1996/10/30 11:15:17 drk
  */
 #include "WmGlobal.h"	/* This should be the first include */
 #include <X11/X.h>
+#include <poll.h>
 
 #define XK_MISCELLANY
 #include <X11/keysymdef.h>
@@ -68,9 +69,14 @@ static char rcsid[] = "$XConsortium: WmWinConf.c /main/8 1996/10/30 11:15:17 drk
 #endif /* ABS */
 #endif /* WSM */
 
-/* number of times to poll before blocking on a config event */
+/*
+ * With freezeOnConfig off the server is not grabbed, so the XOR outline
+ * is never left on the screen: it is drawn and erased repeatedly while
+ * waiting for input.  These are the on and off times in milliseconds.
+ */
 
-#define CONFIG_POLL_COUNT	300
+#define FLASH_ON_MS		30
+#define FLASH_OFF_MS		20
 
 /* mask for all buttons */
 #define ButtonMask	\
@@ -415,7 +421,7 @@ void HandleClientFrameMove (ClientData *pcd, XEvent *pev)
  *  Comments:
  *  --------
  *************************************<->***********************************/
-void UpdateAndDrawResize (ClientData *pcd)
+static void UpdateAndDrawResize (ClientData *pcd)
 {
     int tmpHeight, tmpWidth;
 
@@ -711,7 +717,7 @@ Boolean HandleResizeKeyPress (ClientData *pcd, XEvent *pev)
 		    ReGrabPointer(pcd->clientFrameWin, pev->xkey.time);
 		    warpY = resizeY + resizeHeight/2;
 		    warpX = resizeX + ((control) ?
-					  (-resizeBigWidthInc) :
+					  (-(int)resizeBigWidthInc) :
 					  (-pcd->widthInc));
 		    break;
 
@@ -719,7 +725,7 @@ Boolean HandleResizeKeyPress (ClientData *pcd, XEvent *pev)
 		    wmGD.configPart = FRAME_RESIZE_NW;
 		    ReGrabPointer(pcd->clientFrameWin, pev->xkey.time);
 		    warpX = resizeX + ((control) ?
-					  (-resizeBigWidthInc) :
+					  (-(int)resizeBigWidthInc) :
 					  (-pcd->widthInc));
 		    warpY = pointerY;
 		    break;
@@ -728,14 +734,14 @@ Boolean HandleResizeKeyPress (ClientData *pcd, XEvent *pev)
 		    wmGD.configPart = FRAME_RESIZE_SW;
 		    ReGrabPointer(pcd->clientFrameWin, pev->xkey.time);
 		    warpX = resizeX + ((control) ?
-					  (-resizeBigWidthInc) :
+					  (-(int)resizeBigWidthInc) :
 					  (-pcd->widthInc));
 		    warpY = pointerY;
 		    break;
 
 		default:
 		    warpX = pointerX + ((control) ?
-					(-resizeBigWidthInc * keyMult) :
+					(-(int)resizeBigWidthInc * keyMult) :
 					(-pcd->widthInc * keyMult));
 		    warpY = pointerY;
 		    break;
@@ -748,7 +754,7 @@ Boolean HandleResizeKeyPress (ClientData *pcd, XEvent *pev)
 		    wmGD.configPart = FRAME_RESIZE_N;
 		    warpX = resizeX + resizeWidth/2;
 		    warpY = resizeY + ((control) ?
-					  (-resizeBigHeightInc) :
+					  (-(int)resizeBigHeightInc) :
 					  (-pcd->heightInc));
 		    ReGrabPointer(pcd->clientFrameWin, pev->xkey.time);
 		    break;
@@ -758,7 +764,7 @@ Boolean HandleResizeKeyPress (ClientData *pcd, XEvent *pev)
 		    ReGrabPointer(pcd->clientFrameWin, pev->xkey.time);
 		    warpX = pointerX;
 		    warpY = resizeY + ((control) ?
-					  (-resizeBigHeightInc) :
+					  (-(int)resizeBigHeightInc) :
 					  (-pcd->heightInc));
 		    break;
 
@@ -767,14 +773,14 @@ Boolean HandleResizeKeyPress (ClientData *pcd, XEvent *pev)
 		    ReGrabPointer(pcd->clientFrameWin, pev->xkey.time);
 		    warpX = pointerX;
 		    warpY = resizeY + ((control) ?
-					      (-resizeBigHeightInc) :
+					      (-(int)resizeBigHeightInc) :
 					      (-pcd->heightInc));
 		    break;
 
 		default:
 		    warpX = pointerX;
 		    warpY = pointerY + ((control) ?
-					(-resizeBigHeightInc * keyMult) :
+					(-(int)resizeBigHeightInc * keyMult) :
 					(-pcd->heightInc * keyMult));
 		    break;
 	    }
@@ -786,7 +792,7 @@ Boolean HandleResizeKeyPress (ClientData *pcd, XEvent *pev)
 		    wmGD.configPart = FRAME_RESIZE_E;
 		    warpY = resizeY + resizeHeight/2;
 		    warpX = resizeX + resizeWidth - 1 +
-			       ((control) ? resizeBigWidthInc :
+			       ((control) ? (int)resizeBigWidthInc :
 					    pcd->widthInc);
 		    ReGrabPointer(pcd->clientFrameWin, pev->xkey.time);
 		    break;
@@ -795,7 +801,7 @@ Boolean HandleResizeKeyPress (ClientData *pcd, XEvent *pev)
 		    wmGD.configPart = FRAME_RESIZE_NE;
 		    ReGrabPointer(pcd->clientFrameWin, pev->xkey.time);
 		    warpX = resizeX + resizeWidth - 1 +
-			       ((control) ? resizeBigWidthInc :
+			       ((control) ? (int)resizeBigWidthInc :
 					    pcd->widthInc);
 		    warpY = pointerY;
 		    break;
@@ -804,14 +810,14 @@ Boolean HandleResizeKeyPress (ClientData *pcd, XEvent *pev)
 		    wmGD.configPart = FRAME_RESIZE_SE;
 		    ReGrabPointer(pcd->clientFrameWin, pev->xkey.time);
 		    warpX = resizeX + resizeWidth - 1 +
-			       ((control) ? resizeBigWidthInc :
+			       ((control) ? (int)resizeBigWidthInc :
 					    pcd->widthInc);
 		    warpY = pointerY;
 		    break;
 
 		default:
 		    warpX = pointerX + ((control) ?
-				 	(resizeBigWidthInc * keyMult) :
+				 	((int)resizeBigWidthInc * keyMult) :
 				  	(pcd->widthInc * keyMult));
 		    warpY = pointerY;
 		    break;
@@ -824,7 +830,7 @@ Boolean HandleResizeKeyPress (ClientData *pcd, XEvent *pev)
 		    wmGD.configPart = FRAME_RESIZE_S;
 		    warpX = resizeX + resizeWidth/2;
 		    warpY = resizeY + resizeHeight - 1 +
-			       ((control) ? resizeBigHeightInc :
+			       ((control) ? (int)resizeBigHeightInc :
 					    pcd->heightInc);
 		    ReGrabPointer(pcd->clientFrameWin, pev->xkey.time);
 		    break;
@@ -834,7 +840,7 @@ Boolean HandleResizeKeyPress (ClientData *pcd, XEvent *pev)
 		    ReGrabPointer(pcd->clientFrameWin, pev->xkey.time);
 		    warpX = pointerX;
 		    warpY = resizeY + resizeHeight - 1 +
-			       ((control) ? resizeBigHeightInc :
+			       ((control) ? (int)resizeBigHeightInc :
 					    pcd->heightInc);
 		    break;
 
@@ -843,14 +849,14 @@ Boolean HandleResizeKeyPress (ClientData *pcd, XEvent *pev)
 		    ReGrabPointer(pcd->clientFrameWin, pev->xkey.time);
 		    warpX = pointerX;
 		    warpY = resizeY + resizeHeight - 1 +
-			       ((control) ? resizeBigHeightInc :
+			       ((control) ? (int)resizeBigHeightInc :
 					    pcd->heightInc);
 		    break;
 
 		default:
 		    warpX = pointerX;
 		    warpY = pointerY + ((control) ?
-					(resizeBigHeightInc * keyMult) :
+					((int)resizeBigHeightInc * keyMult) :
 					(pcd->heightInc * keyMult));
 		    break;
 	    }
@@ -1533,6 +1539,7 @@ void MoveOutline (int x, int y, unsigned int width, unsigned int height)
  *  --------
  *  o get display, root window ID, and xorGC out of global data.
  *  o draw on root and erase "atomically"
+ *  o GetConfigEvent keeps flashing the outline while it waits for input.
  *
  *************************************<->***********************************/
 void FlashOutline (int x, int y, unsigned int width, unsigned int height)
@@ -1553,20 +1560,79 @@ void FlashOutline (int x, int y, unsigned int width, unsigned int height)
     memcpy ( (char *) &outline[SEGS_PER_DRAW], (char *) &outline[0],
 	SEGS_PER_DRAW*sizeof(XSegment));
 
-    /*
-     * Flash the outline at least once, then as long as there's
-     * nothing else going on
-     */
     DrawSegments(DISPLAY, ACTIVE_ROOT, ACTIVE_PSD->xorGC,
 			outline, SEGS_PER_FLASH);
-    XSync(DISPLAY, FALSE);
+    XFlush(DISPLAY);
 
-    while (!XtAppPending(wmGD.mwmAppContext)) {
-    	DrawSegments(DISPLAY, ACTIVE_ROOT, ACTIVE_PSD->xorGC,
-			outline, SEGS_PER_FLASH);
-	XSync(DISPLAY, FALSE);
-    }
 } /* END OF FUNCTION  FlashOutline */
+
+
+
+/*************************************<->*************************************
+ *
+ *  WaitForConfigEvent (display, window, mask, x, y, width, height, pev)
+ *
+ *
+ *  Description:
+ *  -----------
+ *  Block until an event matching mask arrives for window.  If an outline
+ *  is given, flash it (draw, wait, erase, wait) while waiting, so that it
+ *  is visible but never left on the screen when we return.
+ *
+ *
+ *  Inputs:
+ *  ------
+ *  display	- pointer to display
+ *  window	- window to get event relative to
+ *  mask	- event mask - acceptable events to return
+ *  x, y, width, height - outline to flash, or all zero for none
+ *
+ *  Outputs:
+ *  -------
+ *  *pev	- event returned.
+ *
+ *************************************<->***********************************/
+static void
+WaitForConfigEvent (Display *display, Window window, unsigned long mask,
+		    int x, int y, unsigned int width, unsigned int height,
+		    XEvent *pev)
+{
+    XSegment outline[SEGS_PER_DRAW];
+    struct pollfd pfd;
+
+    if (x == 0 && y == 0 && width == 0 && height == 0)
+    {
+	XWindowEvent (display, window, mask, pev);
+	return;
+    }
+
+    SetOutline (outline, x, y, width, height, OUTLINE_WIDTH);
+    pfd.fd = ConnectionNumber (display);
+    pfd.events = POLLIN;
+
+    /*
+     * XCheckWindowEvent reads whatever the server has sent, so poll()
+     * only has to wake us up for new input; the timeouts drive the
+     * flashing.  Events for other windows stay queued and do not wake
+     * us up again.
+     */
+    while (!XCheckWindowEvent (display, window, mask, pev))
+    {
+	DrawSegments (display, ACTIVE_ROOT, ACTIVE_PSD->xorGC,
+		      outline, SEGS_PER_DRAW);
+	XFlush (display);
+	(void) poll (&pfd, 1, FLASH_ON_MS);
+
+	DrawSegments (display, ACTIVE_ROOT, ACTIVE_PSD->xorGC,
+		      outline, SEGS_PER_DRAW);
+	XFlush (display);
+
+	if (XCheckWindowEvent (display, window, mask, pev))
+	    break;
+	(void) poll (&pfd, 1, FLASH_OFF_MS);
+    }
+
+} /* END OF FUNCTION WaitForConfigEvent */
 
 #ifdef WSM
 
@@ -1705,7 +1771,7 @@ void WindowOutline (int x, int y, unsigned int width, unsigned int height)
     }
 
     if (x == lastOutlineX && y == lastOutlineY &&
-	width == lastOutlineWidth && height == lastOutlineHeight)
+	(int)width == lastOutlineWidth && (int)height == lastOutlineHeight)
     {
 	return;		/* no change */
     }
@@ -1809,7 +1875,7 @@ void DrawOutline (int x, int y, unsigned int width, unsigned int height)
 
 
     if (x == lastOutlineX && y == lastOutlineY &&
-	width == lastOutlineWidth && height == lastOutlineHeight)
+	(int)width == lastOutlineWidth && (int)height == lastOutlineHeight)
     {
 	return;		/* no change */
     }
@@ -1873,7 +1939,7 @@ void DrawOutline (int x, int y, unsigned int width, unsigned int height)
  *
  *************************************<->***********************************/
 
-Boolean WindowIsOnScreen (ClientData *pCD, int *dx, int *dy)
+static Boolean WindowIsOnScreen (ClientData *pCD, int *dx, int *dy)
 {
   int x1 = pCD->clientX;
   int x2 = pCD->clientX + pCD->clientWidth;
@@ -1967,15 +2033,15 @@ void ProcessNewConfiguration (ClientData *pCD, int x, int y, unsigned int width,
     if (pCD->maxConfig)
     {
 	if (newMax &&
-	    (pCD->maxWidth == width) &&
-	    (pCD->maxHeight == height))
+	    (pCD->maxWidth == (int)width) &&
+	    (pCD->maxHeight == (int)height))
 	{
 	    /* we're changing to the new max size */
 	    toNewMax = True;
 	}
 
-	changedValues |= (width != pCD->oldMaxWidth) ? CWWidth : 0;
-	changedValues |= (height != pCD->oldMaxHeight) ? CWHeight : 0;
+	changedValues |= ((int)width != pCD->oldMaxWidth) ? CWWidth : 0;
+	changedValues |= ((int)height != pCD->oldMaxHeight) ? CWHeight : 0;
 
 	if (!toNewMax && (changedValues & CWWidth)) {
 	    /*
@@ -2010,7 +2076,7 @@ void ProcessNewConfiguration (ClientData *pCD, int x, int y, unsigned int width,
 	}
     }
     else {
-	if (width != pCD->clientWidth)
+	if ((int)width != pCD->clientWidth)
 	{
 	    /*
 	     * Hacked to update maxWidth for 'vertical' max clients
@@ -2024,7 +2090,7 @@ void ProcessNewConfiguration (ClientData *pCD, int x, int y, unsigned int width,
 
 	}
 
-	if (height != pCD->clientHeight)
+	if ((int)height != pCD->clientHeight)
 	{
 	    /*
 	     * Hacked to update maxHeight for 'horizontal' max client
@@ -3346,8 +3412,8 @@ int ResizeType (ClientData *pcd, XEvent *pev)
     /* if inside all resize areas, then forget it */
     if ( (x > resizeX) &&
 	 (y > resizeY) &&
-	 (x < (resizeX + resizeWidth - 1)) &&
-	 (y < (resizeY + resizeHeight - 1)) )
+	 (x < (resizeX + (int)resizeWidth - 1)) &&
+	 (y < (resizeY + (int)resizeHeight - 1)) )
     {
 	return(FRAME_NONE);
     }
@@ -3356,17 +3422,17 @@ int ResizeType (ClientData *pcd, XEvent *pev)
     if (x <= resizeX) {
 	if (y < resizeY + (int)pcd->frameInfo.cornerHeight)
 	    return (FRAME_RESIZE_NW);
-	else if (y >= resizeY + resizeHeight -(int)pcd->frameInfo.cornerHeight)
+	else if (y >= resizeY + (int)resizeHeight -(int)pcd->frameInfo.cornerHeight)
 	    return (FRAME_RESIZE_SW);
 	else
 	    return (FRAME_RESIZE_W);
     }
 
     /* right side */
-    if (x >= resizeX + resizeWidth - 1) {
+    if (x >= resizeX + (int)resizeWidth - 1) {
 	if (y < resizeY + (int)pcd->frameInfo.cornerHeight)
 	    return (FRAME_RESIZE_NE);
-	else if (y >= resizeY + resizeHeight -(int)pcd->frameInfo.cornerHeight)
+	else if (y >= resizeY + (int)resizeHeight -(int)pcd->frameInfo.cornerHeight)
 	    return (FRAME_RESIZE_SE);
 	else
 	    return (FRAME_RESIZE_E);
@@ -3376,17 +3442,17 @@ int ResizeType (ClientData *pcd, XEvent *pev)
     if (y <= resizeY) {
 	if (x < resizeX + (int)pcd->frameInfo.cornerWidth)
 	    return (FRAME_RESIZE_NW);
-	else if (x >= resizeX + resizeWidth - (int)pcd->frameInfo.cornerWidth)
+	else if (x >= resizeX + (int)resizeWidth - (int)pcd->frameInfo.cornerWidth)
 	    return (FRAME_RESIZE_NE);
 	else
 	    return (FRAME_RESIZE_N);
     }
 
     /* bottom side */
-    if (y >= resizeY + resizeHeight - 1) {
+    if (y >= resizeY + (int)resizeHeight - 1) {
 	if (x < resizeX + (int)pcd->frameInfo.cornerWidth)
 	    return (FRAME_RESIZE_SW);
-	else if (x >= resizeX + resizeWidth - (int)pcd->frameInfo.cornerWidth)
+	else if (x >= resizeX + (int)resizeWidth - (int)pcd->frameInfo.cornerWidth)
 	    return (FRAME_RESIZE_SE);
 	else
 	    return (FRAME_RESIZE_S);
@@ -3682,8 +3748,6 @@ void GetConfigEvent (Display *display, Window window, unsigned long mask, int cu
     Window root_ret, child_ret;
     int root_x, root_y, win_x, win_y;
     unsigned int mask_ret;
-    Boolean polling;
-    int pollCount;
     Boolean gotEvent;
     Boolean eventToReturn = False;
 
@@ -3700,127 +3764,62 @@ void GetConfigEvent (Display *display, Window window, unsigned long mask, int cu
 		break;
 	}
 
-	/*
-	 * Only poll if we are warping the pointer.
-	 * (uses PointerMotionHints exclusively).
-	 */
-	polling = wmGD.enableWarp;
-	pollCount = CONFIG_POLL_COUNT;
-
-	if (!gotEvent && (polling || !wmGD.freezeOnConfig))
+	if (!gotEvent)
 	{
 	    /*
-             * poll for events and flash the frame outline
-	     * if not move opaque
+	     * Block until the next event.  The pointer is grabbed with
+	     * PointerMotionHintMask, so a motion hint arrives as soon as
+	     * the pointer moves; there is no need to poll its position.
+	     * If the server is not grabbed, flash the frame outline while
+	     * waiting (unless moving opaquely).
 	     */
 
-	    while (True)
-	    {
-		if (XCheckWindowEvent(display, window,
-				      (mask & ~PointerMotionMask), pev))
-		{
-		    gotEvent = True;
-		    break;
-		}
-
-		if (!wmGD.freezeOnConfig && !wmGD.pActiveSD->moveOpaque)
-		{
-                    /* flash the outline if server is not grabbed */
-		    MoveOutline (oX, oY, oWidth, oHeight);
-		}
-
-		if (!XQueryPointer (display, window, &root_ret, &child_ret,
-			&root_x, &root_y, &win_x, &win_y, &mask_ret))
-		{
-		    continue;	/* query failed, try again */
-		}
-
-		if ((root_x != curX) || (root_y != curY))
-		{
-		    /*
-		     * Pointer moved to a new position.
-		     * Cobble a motion event together.
-		     * NOTE: SOME FIELDS NOT SET !!!
-		     */
-
-		    pev->type = MotionNotify;
-		    /* pev->xmotion.serial = ??? */
-		    pev->xmotion.send_event = False;
-		    pev->xmotion.display = display;
-		    pev->xmotion.window = root_ret;
-		    pev->xmotion.subwindow = child_ret;
-		    pev->xmotion.time = CurrentTime;		/* !!! !!! */
-		    pev->xmotion.x = root_x;
-		    pev->xmotion.y = root_y;
-		    pev->xmotion.x_root = root_x;
-		    pev->xmotion.y_root = root_y;
-		    /* pev->xmotion.state = ??? */
-		    /* pev->xmotion.is_hint  = ???? */
-		    /* pev->xmotion.same_screen = ??? */
-
-		    eventToReturn = True;
-		    break;	/* from while loop */
-		}
-		else if (wmGD.freezeOnConfig)
-		{
-		    if (!(--pollCount))
-		    {
-			/*
-			 * No pointer motion in some time. Stop polling
-			 * and wait for next event.
-			 */
-			polling = False;
-			break; /* from while loop */
-		    }
-		}
-	    }  /* end while */
+	    if (!wmGD.freezeOnConfig && !wmGD.pActiveSD->moveOpaque
+#ifdef WSM
+		&& !wmGD.useWindowOutline	/* outline is a real window */
+#endif /* WSM */
+		)
+		WaitForConfigEvent (display, window, mask,
+				    oX, oY, oWidth, oHeight, pev);
+	    else
+		XWindowEvent (display, window, mask, pev);
 	}
 
-	if (!gotEvent && !polling && wmGD.freezeOnConfig)
+	eventToReturn = True;
+	if (pev->type == MotionNotify &&
+	    pev->xmotion.is_hint == NotifyHint)
 	{
 	    /*
-	     * Wait for next event on window
+	     * "Ack" the motion notify hint.  This also asks the server
+	     * for the next hint.
 	     */
-
-	    XWindowEvent (display, window, mask, pev);
-	    gotEvent = True;
-	}
-
-	if (gotEvent)
-	{
-	    eventToReturn = True;
-	    if (pev->type == MotionNotify &&
-		pev->xmotion.is_hint == NotifyHint)
+	    if ((XQueryPointer (display, window, &root_ret,
+		    &child_ret, &root_x, &root_y, &win_x,
+		    &win_y, &mask_ret)) &&
+		((root_x != curX) ||
+		 (root_y != curY)))
 	    {
 		/*
-		 * "Ack" the motion notify hint
+		 * The query pointer values say that the pointer
+		 * moved to a new location.
 		 */
-		if ((XQueryPointer (display, window, &root_ret,
-			&child_ret, &root_x, &root_y, &win_x,
-			&win_y, &mask_ret)) &&
-		    ((root_x != curX) ||
-		     (root_y != curY)))
-		{
-		    /*
-		     * The query pointer values say that the pointer
-		     * moved to a new location.
-		     */
-		    pev->xmotion.window = root_ret;
-		    pev->xmotion.subwindow = child_ret;
-		    pev->xmotion.x = root_x;
-		    pev->xmotion.y = root_y;
-		    pev->xmotion.x_root = root_x;
-		    pev->xmotion.y_root = root_y;
+		pev->xmotion.window = root_ret;
+		pev->xmotion.subwindow = child_ret;
+		pev->xmotion.x = root_x;
+		pev->xmotion.y = root_y;
+		pev->xmotion.x_root = root_x;
+		pev->xmotion.y_root = root_y;
 
-		}
-		else {
-		    /*
-		     * Query failed. Change curX to force position
-		     * to be returned on first sucessful query.
-		     */
-		    eventToReturn = False;
-		    curX++;
-		}
+	    }
+	    else {
+		/*
+		 * Query failed or the pointer did not move: wait
+		 * for the next event.  Change curX to force the
+		 * position to be returned on the first successful
+		 * query.
+		 */
+		eventToReturn = False;
+		curX++;
 	    }
 	}
     } /* end while */
@@ -4075,7 +4074,7 @@ HandleMarqueeSelect (WmScreenData *pSD, XEvent *pev)
 
 	    GetConfigEvent(DISPLAY, grab_win, CONFIG_MASK,
 		pointerX, pointerY, resizeX, resizeY,
-		resizeWidth, resizeHeight, &event);
+		(int)resizeWidth, (int)resizeHeight, &event);
 	}
 
 	if (pev->type == MotionNotify)

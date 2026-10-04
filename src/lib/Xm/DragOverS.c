@@ -394,7 +394,7 @@ static Boolean CacheMixedIcon(XmDragOverShellWidget dos,
                               Position opY,
                               XmDragIconObject mixedIcon)
 {
-  register MixedIconCache *cache_ptr;
+  MixedIconCache *cache_ptr;
   if (mixedIcon == NULL)
     return False;
   cache_ptr = XtNew(MixedIconCache);
@@ -447,7 +447,7 @@ static XmDragIconObject GetMixedIcon(XmDragOverShellWidget dos,
                                      Position opX,
                                      Position opY)
 {
-  register MixedIconCache *cache_ptr;
+  MixedIconCache *cache_ptr;
   for (cache_ptr = mixed_cache; cache_ptr; cache_ptr = cache_ptr->next) {
     if (cache_ptr->depth == depth && cache_ptr->width == width && cache_ptr->height == height &&
         cache_ptr->cursorForeground == dos->drag.cursorForeground &&
@@ -741,6 +741,7 @@ static void GetIconPosition(XmDragOverShellWidget dos,
   switch ((int)icon->drag.attachment) {
     default:
       XmeWarning((Widget)icon, MESSAGE2); /* cast ok here */
+      XM_FALLTHROUGH;
     case XmATTACH_NORTH_WEST:
       *iconX = icon->drag.offset_x;
       *iconY = icon->drag.offset_y;
@@ -1455,6 +1456,7 @@ static Boolean GetDragIconColors(XmDragOverShellWidget dos)
       break;
     default:
       XmeWarning((Widget)dos, MESSAGE3);
+      XM_FALLTHROUGH;
     case XmNO_DROP_SITE:
       fg = dc->drag.noneCursorForeground;
       break;
@@ -1525,7 +1527,7 @@ static Cursor GetDragIconCursor(XmDragOverShellWidget dos,
   Screen *screen = XtScreen(dos);
   Display *display = XtDisplay(dos);
   XmDragCursorCache *cursorCachePtr = NULL;
-  register XmDragCursorCache cursorCache = NULL;
+  XmDragCursorCache cursorCache = NULL;
   XColor colors[2];
   Boolean useCache = True;
   Cursor cursor;
@@ -2562,6 +2564,7 @@ void _XmDragOverChange(Widget w, unsigned char dropSiteStatus)
   switch ((int)dc->drag.blendModel) {
     default:
       XmeWarning((Widget)dc, MESSAGE4);
+      XM_FALLTHROUGH;
     case XmBLEND_ALL:
       /*
        *  Get the operation icon bitmap.
@@ -2576,6 +2579,7 @@ void _XmDragOverChange(Widget w, unsigned char dropSiteStatus)
         }
       }
       /* fall through */
+      XM_FALLTHROUGH;
     case XmBLEND_STATE_SOURCE:
       /*
        *  Get the state icon bitmap.
@@ -2797,8 +2801,8 @@ static void InstallColormap(XmDragOverShellWidget dw)
     }
     /* there was a property, add myself to the beginning */
     else {
-      Window *windows = (Window *)XtMalloc((sizeof(Window)) * (countReturn + 1));
-      register int i;
+      Window *windows = (Window *)_XmMallocArray(countReturn + 1, sizeof(Window));
+      int i;
       windows[0] = XtWindow(dw);
       for (i = 0; i < countReturn; i++)
         windows[i + 1] = windowsReturn[i];
@@ -2833,7 +2837,7 @@ static void UninstallColormap(XmDragOverShellWidget dos)
   Status status;
   Window *windowsReturn;
   int countReturn;
-  register int i;
+  int i;
   if (!dos->drag.colormapShell)
     FindColormapShell(dos);
   if (dos->drag.colormapShell) {

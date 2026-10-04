@@ -193,7 +193,8 @@ Urm__UT_Error (char			*module,
    * sprintf (msg, "%s detected error %s - %s", module, error,
    *	      Urm__UT_UrmCodeString(status)) ;
    */
-  sprintf (msg, "%s: %s - %s", module, error, Urm__UT_UrmCodeString(status)) ;
+  snprintf (msg, sizeof(msg), "%s: %s - %s", module, error,
+	    Urm__UT_UrmCodeString(status)) ;
 
   /*
    * Print or save the message depending on the reporting style
@@ -205,8 +206,7 @@ Urm__UT_Error (char			*module,
     case URMErrOutMemory:
       if ( urm__latest_error_msg != NULL )
 	XtFree (urm__latest_error_msg) ;
-      urm__latest_error_msg = (String) XtMalloc (strlen(msg)+1) ;
-      strcpy (urm__latest_error_msg, msg) ;
+      urm__latest_error_msg = XtNewString (msg) ;
       return status ;
     case URMErrOutStdout:
     default:

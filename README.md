@@ -1,592 +1,324 @@
-# Motif - The Industrial-Class UI Toolkit
+# Motif
 
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/dimmus/motif)
-[![License](https://img.shields.io/badge/license-LGPL--2.1-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-2.4.0-orange.svg)](https://github.com/dimmus/motif)
+[![Build](https://github.com/dimmus/motif/actions/workflows/build.yml/badge.svg)](https://github.com/dimmus/motif/actions/workflows/build.yml)
+[![CodeQL](https://github.com/dimmus/motif/actions/workflows/codeql.yml/badge.svg)](https://github.com/dimmus/motif/actions/workflows/codeql.yml)
+[![Latest tag](https://img.shields.io/github/v/tag/dimmus/motif)](https://github.com/dimmus/motif/tags)
+[![License: LGPL-2.1-or-later](https://img.shields.io/badge/license-LGPL--2.1--or--later-blue.svg)](LICENSE)
 
-## Overview
+Motif is the X11 user interface toolkit (libXm), with the Motif Resource
+Manager (libMrm), the User Interface Language compiler (uil, libUil) and
+the Motif Window Manager (mwm).  Motif was developed by the Open Software
+Foundation from 1988 and became the toolkit of the Common Desktop
+Environment; The Open Group released it under the LGPL in 2012.
 
-**Motif** is the legendary user interface toolkit that defined the Unix desktop era and powered countless industrial, enterprise, and scientific applications throughout the 1990s and 2000s. Originally developed by the Open Software Foundation (OSF) in 1988, Motif became the de facto standard for professional Unix workstations and mission-critical applications.
-
-This is a modern, actively maintained implementation of the Motif toolkit, preserving its industrial-strength reliability while adding contemporary features like UTF-8 support, Xft font rendering, and modern image format support. The project uses a modern CMake-based build system for improved cross-platform compatibility and developer experience.
-
-## Build Status
-
-**🚀 Modern C Standard Support**: This project now fully supports the **C23 standard** and is compatible with **GCC 15**, ensuring cutting-edge compiler features and future-proof development.
-
-This project is continuously tested on multiple Linux distributions with both **GCC** and **Clang** compilers to ensure maximum compatibility and reliability across different build environments:
-
-### GitHub Actions (GitHub)
-- **🏔️ Alpine Linux + GCC**: Tests compilation with GNU Compiler Collection on minimal Alpine Linux
-- **🏔️ Alpine Linux + Clang**: Tests compilation with LLVM Clang compiler on Alpine Linux
-
-### Gitverse Workflows (Gitverse)  
-- **🐧 Ubuntu Linux + GCC**: Tests compilation with GNU Compiler Collection on Ubuntu Linux
-- **🐧 Ubuntu Linux + Clang**: Tests compilation with LLVM Clang compiler on Ubuntu Linux
-
-This comprehensive testing approach ensures robust compatibility:
-- **Alpine Linux** provides minimal base system testing with musl libc and strict compiler settings
-- **Ubuntu Linux** provides mainstream glibc testing with comprehensive development libraries
-- **Dual Compiler Testing** verifies compatibility with both GNU and LLVM toolchains
-- **Container Ready** builds work correctly in constrained environments and Docker containers
-
-### Historical Significance
-
-Motif was born from the collaboration of industry giants including Digital Equipment Corporation, Hewlett-Packard, and IBM. It combined:
-- **DEC's Widget Technology**: Robust, enterprise-grade UI components
-- **HP's 3D Visual Style**: The iconic beveled, professional appearance
-- **Microsoft's Presentation Manager Behavior**: Consistent interaction patterns
-
-This fusion created a toolkit that powered:
-- **CAD/CAM Applications**: AutoCAD, Pro/ENGINEER, CATIA
-- **Scientific Computing**: MATLAB, Mathematica, LabVIEW
-- **Enterprise Software**: Oracle databases, SAP systems
-- **Unix Workstations**: Sun, SGI, HP, DEC, IBM AIX systems
-- **Common Desktop Environment (CDE)**: The standard Unix desktop
+This tree continues Motif 2.3.8, the last upstream release, as version
+**2.4.1**.  It keeps the Motif 2.x API but is **not binary compatible**
+with 2.3.8: the libraries have SONAME 5 (`libXm.so.5`, `libMrm.so.5`,
+`libUil.so.5`) and programs built against 2.3.8 have to be recompiled.
+See [CHANGELOG.md](CHANGELOG.md) for what changed and
+[SECURITY.md](SECURITY.md) for the security fixes and how to report
+vulnerabilities.
 
 ## Features
 
-### Core Capabilities
-- **Industrial-Strength Widgets**: Over 50 production-ready UI components
-- **Motif Window Manager (MWM)**: Professional window management
-- **User Interface Language (UIL)**: Declarative UI development
-- **Motif Resource Manager (MRM)**: Dynamic resource management
-- **Internationalization**: Full i18n support including UTF-8
-- **Accessibility**: Built-in keyboard navigation and screen reader support
+- The Motif 2.x widget set: `XmLabel`, `XmPushButton`, `XmToggleButton`,
+  `XmText`, `XmTextField`, `XmList`, `XmScale`, `XmScrollBar`, `XmForm`,
+  `XmRowColumn`, `XmPanedWindow`, `XmMainWindow`, `XmNotebook`,
+  `XmContainer`, `XmComboBox`, `XmSpinBox`, the dialogs, and the widgets
+  merged from the ICS extensions: `XmButtonBox`, `XmColorSelector`,
+  `XmColumn`, `XmDataField`, `XmDropDown`, `XmFontSelector`,
+  `XmIconBox`, `XmIconButton`, `XmMultiList`, `XmOutline`, `XmPaned`,
+  `XmTabStack` and `XmTree`.
+- Keyboard traversal, virtual key bindings and drag and drop (Motif and
+  XDND).
+- Internationalized text input and output, with UTF-8 support
+  (`WITH_UTF8`) and anti-aliased fonts through Xft (`WITH_XFT`).
+- XPM, PNG, JPEG and SVG images for pixmap resources.
+- X/Open message catalogs for the library messages, with German,
+  Spanish, French, Italian and Japanese translations
+  (`WITH_MESSAGE_CATALOG`).
+- Optional printing through libXp (`WITH_PRINTING`).
 
-### Modern Enhancements
-- **C23 Standard Support**: Built with the latest C language standard for modern development
-- **GCC 15 Compatibility**: Future-ready compiler support with automatic fallback
-- **Xft Font Rendering**: Anti-aliased text with modern font support
-- **PNG/JPEG Support**: Modern image format integration
-- **UTF-8 Support**: Full Unicode text handling
-- **Printing Support**: Direct print integration
-- **Message Catalogs**: X/Open compliant localization
+There is no assistive technology (AT-SPI/ATK) support: screen readers
+cannot read Motif applications.
 
-### Widget Set
-The comprehensive Motif widget set includes:
+## Platforms
 
-**Primitive Widgets**:
-- `XmArrowButton`, `XmLabel`, `XmPushButton`, `XmToggleButton`
-- `XmText`, `XmTextField`, `XmList`, `XmScale`, `XmScrollBar`
+CI builds and tests every change on:
 
-**Manager Widgets**:
-- `XmBulletinBoard`, `XmForm`, `XmFrame`, `XmPanedWindow`
-- `XmRowColumn`, `XmScrolledWindow`, `XmMainWindow`
+| System | Compilers | Notes |
+|--------|-----------|-------|
+| Ubuntu 24.04 (glibc, x86_64) | GCC, Clang | Debug with ASan and UBSan; Release with LTO |
+| Alpine Linux 3.22 (musl, x86_64 and x86) | GCC, Clang | Debug; Release with LTO on x86_64 |
+| Debian stable on s390x (big-endian, under qemu) | GCC | Debug |
+| FreeBSD | Clang | Debug |
+| Debian stable, Fedora | GCC | Distribution packaging and install-and-consume test |
 
-**Dialog Widgets**:
-- `XmMessageBox`, `XmFileSelectionBox`, `XmSelectionBox`
-- `XmCommand`, `XmPromptDialog`
+CI also runs warnings-as-errors builds (informational), scan-build,
+clang-tidy and cppcheck against committed baselines, an ABI comparison
+(informational), a reproducible-build check and CodeQL.  The workflows
+are in `.github/workflows`; `.gitverse/workflows` mirrors the main Linux
+jobs.  The scripts they run are in `tools/dev/env/ci` and can be run
+locally.
 
-**Advanced Widgets** (Motif 2.x):
-- `XmNotebook`, `XmContainer`, `XmSpinBox`, `XmComboBox`
-- `XmIconBox`, `XmOutline`, `XmTree`, `XmColumn`
+Other Unix-like systems with X11 may work but are not tested.
 
-## System Requirements
+## Requirements
 
-### Supported Platforms
-- **Linux**: 2.6+ (tested on modern distributions)
-- **Solaris**: 10+
-- **FreeBSD**: 10+
-- **Other Unix**: Any POSIX-compliant system with X11
+- CMake 3.16 or later, and Ninja or make
+- A C17 compiler: GCC 11 or later, or Clang 8 or later (CMake rejects
+  older versions); the code is built with `-std=gnu17`
+- pkg-config, flex (or lex) and bison (or yacc)
+- X11 libraries: `x11`, `xt`, `xext`, `xmu`, `xpm` and `fontconfig`
+  (required); `xft` 2 or later, `libpng` and `libjpeg` (optional,
+  used when found); `xp` (only with `WITH_PRINTING`)
+- `check` (libcheck) for the tests; `xvfb-run` (Xvfb and xauth) to run
+  the tests that need an X server; `xdotool` and `Xephyr` for the tests
+  that drive Text and mwm with real input
+- `gencat` to compile message catalogs (part of glibc; optional)
 
-### Dependencies
+On Debian or Ubuntu:
 
-#### Build Dependencies
-```bash
-# Essential build tools
-cmake >= 3.16             # Primary build system
-pkg-config                # Package configuration
-gcc >= 13.0 (supports C23 standard and GCC 15 compatibility)
-make (GNU Make required)  # Build orchestration
-flex/lex                  # Lexical analysis
-yacc/bison                # Parser generation
-
-# Optional but recommended
-ninja                     # Faster build tool
-ccache                    # Compiler cache for faster rebuilds
+```sh
+sudo apt-get install build-essential cmake ninja-build pkg-config flex bison \
+    libx11-dev libxt-dev libxext-dev libxmu-dev libxpm-dev libxft-dev \
+    libfontconfig-dev libpng-dev libjpeg-dev x11proto-dev xbitmaps \
+    check xvfb xauth xdotool xserver-xephyr
 ```
 
-**Compiler Support**:
-- **GCC 13.0+**: Full C23 standard support with `-std=c23` flag
-- **GCC 15**: Future-ready compatibility (uses `-std=c2x` fallback for current GCC versions)
-- **Clang**: Compatible with modern C standards
-- **Legacy Compilers**: Graceful fallback to C99/C11 standards
+On Fedora:
 
-#### Runtime Dependencies
-```bash
-# Core X11 libraries
-libX11-dev
-libXt-dev
-libXmu-dev
-libXext-dev
-libXpm-dev
-
-# Optional but recommended
-libXft-dev >= 2.0    # Anti-aliased fonts
-libjpeg-dev          # JPEG image support
-libpng-dev           # PNG image support
-libXp-dev            # Printing support (if available)
+```sh
+sudo dnf install gcc cmake ninja-build pkgconf-pkg-config flex bison \
+    'pkgconfig(x11)' 'pkgconfig(xt)' 'pkgconfig(xext)' 'pkgconfig(xmu)' \
+    'pkgconfig(xpm)' 'pkgconfig(xft)' 'pkgconfig(fontconfig)' \
+    'pkgconfig(libpng)' 'pkgconfig(libjpeg)' 'pkgconfig(xbitmaps)' \
+    'pkgconfig(check)' xorg-x11-server-Xvfb xorg-x11-xauth \
+    xdotool xorg-x11-server-Xephyr
 ```
 
-#### Ubuntu/Debian Installation
-```bash
-sudo apt-get update
-sudo apt-get install build-essential cmake pkg-config flex bison \
-                     libx11-dev libxt-dev libxmu-dev libxext-dev \
-                     libxpm-dev libxft-dev libjpeg-dev libpng-dev \
-                     ninja-build ccache
+`tools/dev/env/ci/deps.sh` installs everything CI needs on Debian,
+Ubuntu, Fedora, Alpine, Arch Linux and FreeBSD.
+
+## Building
+
+```sh
+cmake -S . -B _build -G Ninja -DCMAKE_BUILD_TYPE=Release
+cmake --build _build
+sudo cmake --install _build
 ```
 
-#### RHEL/CentOS/Fedora Installation
-```bash
-sudo yum install gcc cmake pkgconfig flex bison ninja-build ccache \
-                 libX11-devel libXt-devel libXmu-devel libXext-devel \
-                 libXpm-devel libXft-devel libjpeg-devel libpng-devel
+The default install prefix is `/usr/local`; packagers pass
+`-DCMAKE_INSTALL_PREFIX=/usr` and the usual `CMAKE_INSTALL_*DIR`
+variables (GNUInstallDirs), and `DESTDIR` for staging.  In-source builds
+are refused.
+
+The `GNUmakefile` is a thin wrapper for people who prefer `make`: `make`
+configures and builds in `../build_<os>`, `make install` and `make test`
+install and test that build, and the targets `debug`, `release`, `full`,
+`lite` and `developer` seed a new build directory from the presets in
+`tools/cmake/config` (for example `make release ninja`).  Run `make help`
+for the list.
+
+### Options
+
+| Option | Default | Effect |
+|--------|---------|--------|
+| `WITH_SHARED_LIBS` | ON | Shared libraries (static if OFF) |
+| `WITH_UTF8` | ON | UTF-8 text support |
+| `WITH_XFT` | ON | Xft fonts, if Xft 2 is found |
+| `WITH_PNG`, `WITH_JPEG` | ON | PNG and JPEG images, if the libraries are found |
+| `WITH_PRINTING` | OFF | Printing through libXp |
+| `WITH_MESSAGE_CATALOG` | OFF | X/Open message catalogs (see below) |
+| `WITH_DEMOS` | ON | Build the example programs in `src/examples` |
+| `WITH_TESTS` | OFF | Build the tests (needs libcheck) |
+| `WITH_DOCS` | ON | Install the manual pages and `doc/*.md` |
+| `WITH_UIL_DEBUG` | OFF | Debugging output in the UIL compiler |
+| `WITH_HARDENING` | ON | `-fstack-protector-strong`, `-fstack-clash-protection`, `-fcf-protection`, full RELRO, and `_FORTIFY_SOURCE=3` in optimized builds |
+| `WITH_LTO` | OFF | Link-time optimization (optimized builds always use `-fno-semantic-interposition`) |
+| `WITH_PGO` | OFF | Profile-guided optimization: `GENERATE`, then `USE` (see [doc/abi-policy.md](doc/abi-policy.md)) |
+| `WITH_CPU_NATIVE` | OFF | `-march=native` (binaries are not portable) |
+| `WITH_WERROR` | OFF | Warnings are errors everywhere but in the examples (CMake 3.24 or later) |
+| `WITH_COMPILER_ASAN`, `WITH_UBSAN`, `WITH_TSAN`, `WITH_MSAN` | OFF | Sanitizers (see below) |
+| `WITH_COMPILER_CODE_COVERAGE` | OFF | Coverage instrumentation and the `coverage` target |
+| `WITH_FUZZERS` | OFF | libFuzzer targets in `src/tests/fuzz` (Clang, with `WITH_TESTS`) |
+| `WITH_COMPILER_CCACHE` | OFF | Compile through ccache |
+| `WITH_NINJA_POOL_JOBS` | OFF | Limit parallel compile and link jobs by available memory (Ninja) |
+| `LOG_LEVEL` | `INFO` | Default level of the `XmLog` functions (`DEBUG`, `INFO`, `WARN`, `ERROR`, `CRITICAL`) |
+| `LOG_OUTPUT` | `stderr` | Default destination of the `XmLog` functions (`stderr`, `stdout`, `file`) |
+| `MOTIF_HOST_TOOLS` | | `MotifHostTools.cmake` of a native build, for cross-compiling |
+
+The configuration summary at the end of the cmake run lists the options
+in effect.
+
+### Cross-compiling
+
+The build runs some of the programs it builds (makestrs, mkcatdefs, wml,
+wmluiltok and uil).  To cross-compile, build Motif natively first, then
+point the cross build at the `MotifHostTools.cmake` that the native
+build wrote:
+
+```sh
+cmake -S . -B _cross -DCMAKE_TOOLCHAIN_FILE=... \
+    -DMOTIF_HOST_TOOLS=/path/to/native/_build/MotifHostTools.cmake
 ```
 
-#### Automatic Dependency Management
-For convenience, the project includes an automated dependency checker that supports multiple operating systems:
+### Message catalogs
 
-```bash
-# Automatic dependency checking and installation
-make deps
+With `-DWITH_MESSAGE_CATALOG=ON` the library messages are looked up with
+`catgets()`.  The C catalogs are generated from `src/lib/{Xm,Mrm,Uil}/*.msg`
+and the translations in `localized/<lang>/msg` are checked against them
+(same message ids, same printf conversions); when `gencat` is found
+they are compiled and installed as `<localedir>/<lang>/LC_MESSAGES/Xm`,
+`Mrm` and `Uil`.  glibc finds them through its default `NLSPATH`; on
+musl set `NLSPATH=<localedir>/%l/LC_MESSAGES/%N`.  The translations are
+UTF-8.  See [doc/LOCALIZATION.md](doc/LOCALIZATION.md).
 
-# Or run the script directly
-./tools/dev/scripts/deps_check.sh
+## Testing
+
+```sh
+cmake -S . -B _build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DWITH_TESTS=ON
+cmake --build _build
+ctest --test-dir _build --output-on-failure
 ```
 
-**Supported Operating Systems:**
-- Ubuntu, Debian, Linux Mint (apt)
-- Arch Linux, Manjaro (pacman)
-- RHEL, CentOS, Fedora, Rocky, Alma (dnf)
-- Alpine Linux (apk)
-- Void Linux (xbps)
-- OpenIndiana, OmniOS (pkg)
-- FreeBSD (pkg)
+The tests are a libcheck suite (`src/tests`, one CTest test per suite,
+`Xm.<suite>`), a robustness test of the UIL compiler against
+pathological input (`uil_robustness`), the compilation and loading of
+every `.uil` file in the tree (`Uil.*`), Text and mwm driven with real
+input through xdotool (`*.xdotool`), a visual regression test against a
+golden image (`Visual.*`) and checks that the libraries export what
+their headers declare (`abi.exports.*`).  Tests that need an X server
+are labelled `X11`; when `xvfb-run` is found at configure time CTest
+runs each of them under its own Xvfb, otherwise they use `$DISPLAY` and
+are reported as skipped (exit status 77) when there is none.  See
+[src/tests/README.md](src/tests/README.md).
 
-The dependency checker automatically:
-- Detects your operating system
-- Identifies missing packages
-- Installs required dependencies
-- Handles optional dependencies gracefully
-- Provides clear feedback and next steps
+### Sanitizers and coverage
 
-### Troubleshooting
+`-DWITH_COMPILER_ASAN=ON` (AddressSanitizer with LeakSanitizer),
+`-DWITH_UBSAN=ON`, `-DWITH_TSAN=ON` and `-DWITH_MSAN=ON` (Clang only;
+every linked library, libX11 and libXt included, must be instrumented
+too) build the libraries, programs and tests with that sanitizer.
+ASan and UBSan can be combined; TSan and MSan cannot be combined with
+ASan.  The build's own code generators run with leak detection off.
+UBSan leaves out the alignment check and Clang's function type check
+(`-fsanitize=function`), which the casts of handlers to the Xt and trait
+function types would set off throughout.
 
-#### CMake Build Issues
-If you encounter issues during the build process:
+With `-DWITH_COMPILER_CODE_COVERAGE=ON`, GCC builds with `--coverage`
+(the `.gcda` files are written next to the objects, for gcov, lcov or
+gcovr) and Clang with source-based coverage (set `LLVM_PROFILE_FILE`,
+merge with `llvm-profdata merge` and report with `llvm-cov`).
 
-**Missing Dependencies**: Ensure all required packages are installed:
-```bash
-# Check dependencies
-make deps
+## Using Motif
 
-# Or install manually for your OS (see installation commands above)
+The install provides pkg-config files for the three libraries:
+
+```sh
+cc -o myapp myapp.c $(pkg-config --cflags --libs motif)   # libXm
+cc -o myuil myuil.c $(pkg-config --cflags --libs mrm)     # libMrm and libXm
 ```
 
-**Build Directory Issues**: Clean and rebuild if you encounter strange build errors:
-```bash
-make clean
-make build
+and a CMake package.  `CONFIG` is needed, because CMake's own
+`FindMotif` module would be used otherwise:
+
+```cmake
+find_package(Motif 2.4 CONFIG REQUIRED)          # COMPONENTS Xm Mrm Uil
+target_link_libraries(myapp PRIVATE Motif::Xm)   # or Motif::Mrm, Motif::Uil
 ```
 
-**Permission Issues**: Ensure you have proper permissions for installation:
-```bash
-# Use sudo for system installation
-sudo make install
+Set `CMAKE_PREFIX_PATH` to the Motif prefix if it is not a default one.
 
-# Or install to user directory
-cmake -H. -Bbuild -DCMAKE_INSTALL_PREFIX=$HOME/.local
-make build
-make install
-```
+A minimal program:
 
-## Building and Installation
-
-### Quick Start
-```bash
-git clone https://github.com/dimmus/motif.git
-cd motif
-
-# Check and install dependencies (recommended)
-make deps
-
-# Or manually install dependencies for your OS
-# (see manual installation commands above)
-
-# Build Motif (CMake-based build system)
-make build
-
-# Install to system
-sudo make install
-
-# Uninstall if needed
-sudo make uninstall
-```
-
-### Build System
-
-This project uses **CMake** as the primary build system, providing modern dependency management and cross-platform compatibility.
-
-#### Available Build Targets
-```bash
-# Core build targets
-make build          # Configure and build Motif (no installation)
-make all            # Build and install Motif (legacy behavior)
-make install        # Install to system (requires sudo)
-make uninstall      # Uninstall from system (requires sudo)
-
-# Build variants
-make debug          # Build debug version with symbols
-make release        # Build optimized release version
-make lite           # Build minimal version (faster, smaller)
-make full           # Build with all optional features
-make developer      # Build with development tools and checks
-
-# Build tools
-make ninja          # Use Ninja build tool for faster builds
-make ccache         # Use ccache for faster rebuilds
-make config         # Run CMake configuration tool
-```
-
-#### Feature Control
-```bash
-# Configure with specific features
-make config
-
-# Or use CMake directly with feature flags
-cmake -H. -Bbuild \
-    -DWITH_UTF8=ON                    # UTF-8 text support (recommended)
-    -DWITH_PRINTING=ON                # Print support (if libXp available)
-    -DWITH_MESSAGE_CATALOG=ON         # X/Open message catalogs
-    -DWITH_XFT=ON                     # Xft font rendering (recommended)
-    -DWITH_JPEG=ON                    # JPEG image support
-    -DWITH_PNG=ON                     # PNG image support
-    -DWITH_DEMOS=ON                   # Build demonstration programs
-    -DWITH_TESTS=ON                   # Build automated tests
-    -DCMAKE_BUILD_TYPE=Debug          # Debug build with symbols
-```
-
-#### Installation Paths
-```bash
-# Configure installation paths
-cmake -H. -Bbuild \
-    -DCMAKE_INSTALL_PREFIX=/usr          # Installation prefix (default: /usr)
-    -DCMAKE_INSTALL_SYSCONFDIR=/etc      # Configuration files
-    -DCMAKE_INSTALL_LIBDIR=lib64         # Library directory
-```
-
-### Complete Build Example
-```bash
-# Build with all modern features using CMake
-make full release ninja ccache
-
-# Or configure manually with specific features
-cmake -H. -Bbuild \
-    -DCMAKE_INSTALL_PREFIX=/usr \
-    -DWITH_UTF8=ON \
-    -DWITH_DEMOS=ON \
-    -DWITH_XFT=ON \
-    -DWITH_JPEG=ON \
-    -DWITH_PNG=ON \
-    -DCMAKE_BUILD_TYPE=Release
-
-# Build with parallel jobs
-make build
-
-# Install
-sudo make install
-
-# Update library cache
-sudo ldconfig
-
-# Uninstall if needed
-sudo make uninstall
-```
-
-## Development and Usage
-
-### Basic Application Structure
 ```c
 #include <Xm/Xm.h>
-#include <Xm/MainW.h>
 #include <Xm/PushB.h>
-#include <Xm/Form.h>
 
-int main(int argc, char *argv[])
+static void
+activate(Widget w, XtPointer client_data, XtPointer call_data)
 {
-    XtAppContext app_context;
-    Widget toplevel, main_window, form, button;
-    
-    // Initialize toolkit
-    toplevel = XtVaAppInitialize(&app_context, "MyApp", 
-                                 NULL, 0, &argc, argv, NULL, NULL);
-    
-    // Create main window
-    main_window = XmCreateMainWindow(toplevel, "main", NULL, 0);
-    XtManageChild(main_window);
-    
-    // Create form container
-    form = XmCreateForm(main_window, "form", NULL, 0);
-    XtManageChild(form);
-    
-    // Create push button
-    button = XmCreatePushButton(form, "Hello World", NULL, 0);
-    XtManageChild(button);
-    
-    // Realize and run
-    XtRealizeWidget(toplevel);
-    XtAppMainLoop(app_context);
-    
-    return 0;
+  XtAppSetExitFlag(XtWidgetToApplicationContext(w));
+}
+
+int
+main(int argc, char *argv[])
+{
+  XtAppContext app;
+  Widget toplevel, button;
+
+  toplevel = XtVaOpenApplication(&app, "Hello", NULL, 0, &argc, argv, NULL,
+                                 sessionShellWidgetClass, NULL);
+  button = XmCreatePushButton(toplevel, "hello", NULL, 0);
+  XtAddCallback(button, XmNactivateCallback, activate, NULL);
+  XtManageChild(button);
+  XtRealizeWidget(toplevel);
+  XtAppMainLoop(app);
+  return 0;
 }
 ```
 
-### Compilation
-```bash
-# Using pkg-config (recommended) - automatically uses C23 standard
-gcc -o myapp myapp.c `pkg-config --cflags --libs motif`
+The same interface in UIL, compiled with `uil -o hello.uid hello.uil`
+and loaded with `MrmOpenHierarchy` and `MrmFetchWidget`:
 
-# Manual compilation with C23 standard (add -I<prefix>/include -L<prefix>/lib
-# if Motif was installed to a non-default prefix)
-gcc -std=c23 -o myapp myapp.c -lXm -lXt -lX11
-
-# For GCC 15 compatibility (automatic fallback to c2x if c23 not supported)
-gcc -std=c2x -o myapp myapp.c -lXm -lXt -lX11
-```
-
-### UIL Development
 ```uil
-! MyApp.uil - User Interface Language file
-module MyApp
-    version = 'v1.0'
+module hello
     names = case_sensitive
 
-object root_window : XmMainWindow {
-    controls {
-        XmMenuBar menu_bar;
-        XmForm work_area;
-    };
-};
-
-object menu_bar : XmMenuBar {
-    controls {
-        XmCascadeButton file_menu;
-    };
-};
-
-object work_area : XmForm {
-    controls {
-        XmPushButton hello_button;
-    };
-};
-
-object hello_button : XmPushButton {
+object hello : XmPushButton {
     arguments {
-        XmNlabelString = "Hello, Motif World!";
+        XmNlabelString = "Hello, World!";
     };
 };
 
 end module;
 ```
 
-Compile UIL:
-```bash
-uil -o MyApp.uid MyApp.uil
-```
+The manual pages (`man XmPushButton`, `man uil`, `man mwm`, ...) are
+installed with `WITH_DOCS`; `doc/guide` describes the architecture of
+the toolkit.  The example programs in `src/examples` are built with
+`WITH_DEMOS` and installed to `<datadir>/Xm`.
 
-### Demo Programs
-
-The distribution includes comprehensive demonstration programs:
-
-```bash
-# After building with --enable-examples
-cd examples/programs
-
-# Classic examples
-./hellomotif/hellomotif          # Basic Motif application
-./draw/draw                      # Drawing application
-./animate/animate                # Animation demo
-./filemanager/filemanager        # File manager
-./periodic/periodic              # Periodic table
-
-# Advanced widget examples  
-./Notebook/notebook              # Notebook widget
-./Container/container            # Container widget
-./Tree/tree                      # Tree widget
-./ComboBox/combo                 # Combo box widget
-```
-
-## Applications and Legacy
-
-### Historic Applications
-Motif powered numerous industry-defining applications:
-
-- **CAD/Engineering**: AutoCAD, Pro/ENGINEER, CATIA, I-DEAS
-- **Scientific Computing**: MATLAB, Mathematica, LabVIEW, AVS
-- **Databases**: Oracle Forms, Informix, Sybase
-- **Development Tools**: Sun Workshop, SGI Workshop, DEC FUSE
-- **System Administration**: HP OpenView, IBM Tivoli, Sun AdminSuite
-
-### Modern Usage
-Today, Motif continues to serve:
-
-- **Legacy Application Maintenance**: Keeping critical systems operational
-- **Industrial Control Systems**: Manufacturing and process control
-- **Scientific Instruments**: Laboratory and research equipment
-- **Embedded Systems**: Specialized Unix-based devices
-- **Educational Projects**: Learning classic Unix GUI development
-
-## Documentation
-
-### Official Resources
-- **Motif Programmer's Guide**: Complete development documentation
-- **Motif Reference Manual**: Widget and function reference
-- **Style Guide**: User interface design principles
-- **Man Pages**: Comprehensive API documentation
-
-### Online Documentation
-- [OpenGroup Motif Documentation](http://www.opengroup.org/openmotif/docs/)
-- [Motif Programming Manual](http://www.motifzone.net/docs/)
-- [Widget Gallery](http://www.motifzone.net/gallery/)
-
-### Quick References
-```bash
-# View widget man pages
-man XmPushButton
-man XmText
-man XmMainWindow
-
-# UIL documentation
-man uil
-man Mrm
-
-# Window manager
-man mwm
-```
-
-## Project Structure
+## Source layout
 
 ```
-motif/
-├── lib/Xm/          # Core Motif widget library
-├── lib/Mrm/         # Motif Resource Manager
-├── clients/         # Motif applications
-│   ├── mwm/         # Motif Window Manager
-│   ├── uil/         # UIL compiler
-│   └── xmbind/      # Key binding utility
-├── include/         # Header files
-├── examples/         # Example programs
-├── doc/             # Documentation and man pages
-├── data/            # Resource files and bitmaps
-└── tools/           # Development utilities
+src/lib/Xm       libXm, the widget library
+src/lib/Mrm      libMrm, the Motif Resource Manager (reads UID files)
+src/lib/Uil      libUil, the callable UIL compiler
+src/bin/uil      the uil program
+src/bin/mwm      the Motif Window Manager
+src/bin/xmbind   xmbind, which installs virtual key bindings
+src/bin/wml      the WML tools that generate the UIL compiler tables
+src/bin/utils    build-time tools (makestrs, mkcatdefs, mkmsgcat)
+src/examples     example programs
+src/tests        the libcheck test suite
+include          config.h.in and stub CDE headers for the build
+data             key bindings, bitmaps and the pkg-config templates
+localized        translated message catalogs
+doc              manual pages and documentation
+tools            CMake helpers and presets, CI and development scripts
 ```
 
 ## Contributing
 
-We welcome contributions to keep this historic toolkit alive and relevant:
-
-### Areas of Interest
-- **Bug Fixes**: Addressing compatibility issues
-- **Modern Platform Support**: New OS and compiler support  
-- **Performance Improvements**: Optimizations and memory management
-- **Documentation**: Examples and tutorials
-- **Testing**: Automated test coverage
-
-### Development Setup
-```bash
-git clone https://github.com/dimmus/motif.git
-cd motif
-
-# Development build with all features
-make developer debug full ninja ccache
-
-# Or configure manually for development
-cmake -H. -Bbuild \
-    -DCMAKE_BUILD_TYPE=Debug \
-    -DWITH_DEMOS=ON \
-    -DWITH_TESTS=ON \
-    -DWITH_UTF8=ON \
-    -DWITH_XFT=ON
-
-# Build
-make build
-
-# Run tests
-make test
-
-# Generate code coverage reports
-make gcov
-```
-
-### Code Coverage
-
-When tests are enabled (`-DWITH_TESTS=ON`), you can generate code coverage reports:
-
-```bash
-# Generate coverage reports
-make gcov
-
-# Clean up coverage files
-make clean-gcov
-
-# View available targets
-make help
-```
-
-The coverage system automatically detects your compiler:
-- **GCC**: Uses `gcov` for coverage analysis
-- **Clang**: Uses `llvm-cov gcov` for coverage analysis
-
-Coverage reports are generated as `.gcov` files in the source directories.
-
-### Additional Build Commands
-
-```bash
-# View all available targets
-make help
-
-# Clean build directory
-make clean
-
-# Clean everything including build directory
-make clean_all
-
-# Package the build
-make package_archive
-
-# Format source code
-make format PATHS="lib/Xm clients"
-
-# Run static analysis
-make check_cppcheck
-make check_clang_array
-make check_struct_comments
-```
+See [CONTRIBUTING.md](CONTRIBUTING.md).  Report bugs in the
+[issue tracker](https://github.com/dimmus/motif/issues), and security
+problems privately as described in [SECURITY.md](SECURITY.md).
 
 ## License
 
-This implementation of Motif is released under the **LGPL 2.1** license, ensuring it remains free and open source while allowing commercial usage.
-
-## Support and Community
-
-- **Issue Tracker**: [GitHub Issues](https://github.com/dimmus/motif/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/dimmus/motif/discussions)
-<!-- - **Mailing List**: [motif-developer@lists.openmotif.org](mailto:motif-developer@lists.openmotif.org) -->
+Motif is free software under the GNU Lesser General Public License,
+version 2.1 or (at your option) any later version; see
+[LICENSE](LICENSE).  Some files carry additional permissive notices
+(for example the XPM code in `src/lib/Xm/Xpm*`).
 
 ## Acknowledgments
 
-This project builds upon decades of development by:
-- **Open Software Foundation (OSF)**: Original Motif creators
-- **The Open Group**: Motif stewardship and standards
-- **ICS/Integrated Computer Solutions**: Commercial Motif development
-- **OpenMotif Community**: Open source maintenance and evolution
-
-Special thanks to:
-- [Tim Hentenaar](https://github.com/thentenaar)
-- [Olivier Fourdan](https://github.com/ofourdan)
-- [Alexander Pampuchin](https://github.com/alx210)
----
-
-*"Motif: Where industrial-strength meets elegant design. Powering mission-critical applications since 1988."*
+Motif is the work of the Open Software Foundation, The Open Group,
+Integrated Computer Solutions (who maintained Motif 2.3) and many
+contributors; see [AUTHORS](AUTHORS).  Thanks also to
+[Tim Hentenaar](https://github.com/thentenaar),
+[Olivier Fourdan](https://github.com/ofourdan) and
+[Alexander Pampuchin](https://github.com/alx210), whose work on Motif
+this tree draws on.

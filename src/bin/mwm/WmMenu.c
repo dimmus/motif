@@ -336,7 +336,7 @@ MenuSpec *MakeMenu (WmScreenData *pSD,
 
 
 /*************************************<->***********************************/
-void CheckTerminalSeparator(MenuSpec *menuSpec, Widget buttonWidget, Boolean manage)
+static void CheckTerminalSeparator(MenuSpec *menuSpec, Widget buttonWidget, Boolean manage)
 {
     CompositeWidget cw;
     WidgetList      children;
@@ -2540,7 +2540,7 @@ static Boolean ModifyClientCommandForMenuSpec (MenuSpec *menuSpec,
 
     /* Search through all the menu buttons of the menuspec for buttons
        which match the command ID to be removed. */
-    for (i = 0; i < menuSpec->menuButtonCount; ++i)
+    for (i = 0; (unsigned int)i < menuSpec->menuButtonCount; ++i)
     {
 	curMenuItem = menuSpec->menuButtons[i].menuItem;
 
@@ -3240,11 +3240,7 @@ AdjustTearOffControl (Widget cascade,
 
 	/* Add a callback that will clear menuActive when this cascade
 	   is unmapped. */
-#if 0
-	XtAddCallback (submenu, XmNunmapCallback,
-#else
 	XtAddCallback (XtParent(submenu), XmNpopdownCallback,
-#endif
 		       UnmapPulldownCallback,
 		       (XtPointer) NULL);
     }

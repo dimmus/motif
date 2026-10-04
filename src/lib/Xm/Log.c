@@ -217,8 +217,14 @@ void XmLogDomainUnregister(int domain)
     return;
 
   LOG_LOCK();
-  if ((unsigned int)domain < _log_domains_count)
+  if ((unsigned int)domain < _log_domains_count && !_log_domains[domain].deleted) {
+    /* XmLogShutdown skips deleted domains and registering a new one
+     * reuses the slot, so free the strings now. */
+    XmLogDomainFree(&_log_domains[domain]);
+    _log_domains[domain].domain_str = NULL;
+    _log_domains[domain].name = NULL;
     _log_domains[domain].deleted = XM_TRUE;
+  }
   LOG_UNLOCK();
 }
 

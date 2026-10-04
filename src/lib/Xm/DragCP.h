@@ -22,6 +22,7 @@
  */
 #ifndef _XmDragCP_h
 #define _XmDragCP_h
+#include <X11/IntrinsicP.h> /* before ShellP.h */
 #include <X11/Shell.h>
 #include <X11/ShellP.h>
 #include <Xm/DragC.h>

@@ -19,9 +19,10 @@ tools/dev/env/
 ├── README.md                # This documentation
 ├── test-motif.sh            # Main test runner script
 ├── add-os.sh                # Script to add new OS environments
+├── ci/                      # Scripts run by the CI workflows
 ├── containers/              # Container definitions
 │   ├── Dockerfile.archlinux # Arch Linux container
-│   └── Dockerfile.freebsd   # FreeBSD container
+│   └── Dockerfile.debian    # Debian container
 ├── scripts/                 # Build scripts
 │   └── build-motif.sh       # Container build script
 ├── templates/               # Template system
@@ -48,8 +49,8 @@ cd tools/dev/env
 # Test on Arch Linux (first run builds image, subsequent runs use cache)
 ./test-motif.sh archlinux
 
-# Test on FreeBSD
-./test-motif.sh freebsd
+# Test on Debian
+./test-motif.sh debian
 
 # Test on all available OS (uses cached images for speed)
 ./test-motif.sh --all
@@ -119,7 +120,7 @@ The system includes pre-configured templates for:
 
 - **archlinux**: Arch Linux (rolling release)
 - **ubuntu**: Ubuntu 22.04 LTS
-- **freebsd**: FreeBSD-like environment (Debian-based)
+- **debian**: Debian 12 (bookworm)
 - **centos**: CentOS Stream 9
 - **fedora**: Fedora 39
 
@@ -212,7 +213,7 @@ Logs are organized by session timestamp:
 logs/
 └── 20240101_120000/          # Session timestamp
     ├── test_archlinux.log    # Arch Linux test log
-    ├── test_freebsd.log      # FreeBSD test log
+    ├── test_debian.log       # Debian test log
     └── ...
 ```
 
@@ -343,7 +344,27 @@ podman system prune                 # Clean unused images
 
 ### Continuous Integration
 
-The environment can be integrated into CI/CD pipelines:
+The CI workflows (`.github/workflows/build.yml`, `codeql.yml` and the
+GitVerse mirror `.gitverse/workflows/build.yaml`) keep their logic in
+`tools/dev/env/ci/`, so every job can be repeated locally from the top of
+the source tree:
+
+| Script | What it does |
+|---|---|
+| `deps.sh [pkg...]` | Install the build and test dependencies (apt, dnf, apk, pacman, pkg) |
+| `build.sh` | Configure, build and run `ctest --no-tests=error`; `MOTIF_CI_PROFILE` is `debug`, `debug-asan`, `release` or `release-lto`, `CC` picks the compiler |
+| `package-smoke.sh` | Build with the Debian/Fedora packaging flags and libdir, then run `install-check.sh` |
+| `install-check.sh BUILD STAGE` | Check a staged install (symlinks, RPATH, `ldd`), install it for real and build and run `consumer/hello.c` through `pkg-config motif` and `find_package(Motif)` |
+| `static-analysis.sh TOOL BUILD OUT` | Run `scan-build`, `clang-tidy` (with the top-level `.clang-tidy`) or `cppcheck` and ratchet the findings against `ci/baselines/TOOL.txt` |
+| `abi-check.sh REF...` | Compare the libXm/libMrm ABI with older revisions using libabigail |
+| `repro-check.sh WORK` | Build twice with `SOURCE_DATE_EPOCH` and compare the installs with diffoscope |
+
+For example, `CC=clang MOTIF_CI_PROFILE=debug-asan tools/dev/env/ci/build.sh`
+is the "Ubuntu clang debug-asan" job.  The static-analysis ratchet fails
+on any new finding; after fixing findings, regenerate the baseline with
+`UPDATE_BASELINE=1 tools/dev/env/ci/static-analysis.sh TOOL BUILD OUT`.
+
+The container environment below can also be used from a CI pipeline:
 
 ```bash
 # Test all supported platforms

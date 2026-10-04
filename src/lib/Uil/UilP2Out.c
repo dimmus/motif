@@ -149,7 +149,7 @@ static UidCompressionTable      *extern_class_compr;
 **--
 **/
 
-void	sem_output_uid_file()
+void	sem_output_uid_file(void)
 
 {
     sym_external_def_entry_type	*ext_entry;
@@ -161,7 +161,7 @@ void	sem_output_uid_file()
     int				topmost_index;
     struct
     {   MrmOsOpenParam	os_param;
-	char		result_file[256];
+	char		*result_file;
     } uid_fcb;
 
 
@@ -200,6 +200,10 @@ void	sem_output_uid_file()
     /* clobber flag lets a.uid replace an existing a.uid */
     uid_fcb.os_param.nam_flg.clobber_flg = TRUE;
 
+    /* UrmIdbOpenFileWrite copies the file name into result_file */
+    uid_fcb.result_file =
+	XtMalloc (strlen (Uil_cmd_z_command.ac_resource_file) + 1);
+
     module_version = "";
     module_name = sym_az_module_entry->obj_header.az_name->c_text;
 
@@ -224,6 +228,7 @@ void	sem_output_uid_file()
 	    diag_k_no_column,
 	    uid_fcb.result_file );
 
+	XtFree (uid_fcb.result_file);
 	return;
     }
 
@@ -233,7 +238,7 @@ void	sem_output_uid_file()
     **	the Status callback routine to report our progress.
     */
     Uil_current_file =  uid_fcb.result_file;
-    if (Uil_cmd_z_command.status_cb != (Uil_continue_type(*)())NULL)
+    if (Uil_cmd_z_command.status_cb != NULL)
 	diag_report_status();
 
 
@@ -315,7 +320,7 @@ void	sem_output_uid_file()
       Uil_percent_complete=CEIL(
 	    80+	(.20 *((float)topmost_index/(float)(topmost_widget_count+.5)))*100, 80);
 
-	if (Uil_cmd_z_command.status_cb != (Uil_continue_type(*)())NULL)
+	if (Uil_cmd_z_command.status_cb != NULL)
 	    diag_report_status();
 
 	symbol_entry = ext_entry->az_name->az_object;
@@ -401,7 +406,7 @@ void	sem_output_uid_file()
 	/*
 	**  Call the Status callback routine to report our progress.
 	*/
-	if (Uil_cmd_z_command.status_cb != (Uil_continue_type(*)())NULL)
+	if (Uil_cmd_z_command.status_cb != NULL)
 	    diag_report_status();
 
 	switch (symbol_entry->header.b_tag)
@@ -454,6 +459,9 @@ void	sem_output_uid_file()
     if( urm_status != MrmSUCCESS)
 	issue_urm_error( "freeing context" );
 
+    Uil_current_file = "";
+    XtFree (uid_fcb.result_file);
+
 }
 
 /*
@@ -498,7 +506,7 @@ void	push(sym_entry_type *sym_entry)
     **	We reuse source buffers for the output queues.
     */
 
-    if (out_l_next_offset > out_k_last_offset)
+    if (out_l_next_offset > (int)out_k_last_offset)
     {
 	if (src_az_avail_source_buffer == NULL)
 	{
@@ -655,7 +663,7 @@ if (widget_variety == UilMrmAutoChildVariety)
   widget_name = "";
 else if (widget_entry->obj_header.az_name == NULL)
   {
-    sprintf(buffer, "widget-%d-%d-%d",
+    snprintf(buffer, sizeof(buffer), "widget-%d-%d-%d",
 	    widget_entry->header.az_src_rec->b_file_number,
 	    widget_entry->header.az_src_rec->w_line_number,
 	    widget_entry->header.b_src_pos);
@@ -1669,11 +1677,12 @@ void	out_emit_value(sym_value_entry_type *value_entry)
 
 	    fontitem->type = Urm_code_from_uil_type(value_entry->b_type);
 	    fontitem->cset.cs_offs = textoffs;
-	    strcpy (textptr, charset_name);
+	    memcpy (textptr, charset_name, text_len);
 	    textoffs += text_len;
 	    textptr += text_len;
 	    fontitem->font.font_offs = textoffs;
-	    strcpy (textptr, value_entry->value.c_value);
+	    memcpy (textptr, value_entry->value.c_value,
+		    strlen(value_entry->value.c_value) + 1);
 
 	    break;
 	    }
@@ -1889,13 +1898,13 @@ void	out_emit_value(sym_value_entry_type *value_entry)
 
 		fontitem->type = Urm_code_from_uil_type(font_value->b_type);
 		fontitem->cset.cs_offs = textoffs;
-		strcpy (textptr, charset_name);
 		text_len = strlen(charset_name) + 1;
+		memcpy (textptr, charset_name, text_len);
 		textoffs += text_len;
 		textptr += text_len;
 		fontitem->font.font_offs = textoffs;
-		strcpy (textptr, font_value->value.c_value);
 		text_len = strlen(font_value->value.c_value) + 1;
+		memcpy (textptr, font_value->value.c_value, text_len);
 		textoffs += text_len;
 		textptr += text_len;
 		}
@@ -2891,7 +2900,7 @@ void	issue_urm_error(char *problem)
 {
     char    buffer[132];
 
-    sprintf(buffer, "while %s encountered %s",
+    snprintf(buffer, sizeof(buffer), "while %s encountered %s",
 	    problem,
 	    Urm__UT_LatestErrorMessage());
 
@@ -3680,7 +3689,7 @@ int	compression_code = 2;
 **--
 **/
 
-void create_ext_compression_codes ()
+void create_ext_compression_codes (void)
 {
 
 /*

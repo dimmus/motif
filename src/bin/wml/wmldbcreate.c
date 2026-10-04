@@ -85,7 +85,7 @@ static char rcsid[] = "$TOG: wmldbcreate.c /main/8 1997/04/14 12:55:30 dbl $"
 #include "UilSymChCl.h" /* from WML */
 #include "UilSymChTa.h" /* from WML */
 
-void emit_globals();
+void emit_globals(void);
 void emit_header(_db_header_ptr header);
 void emit_chars(int	    table_id);
 void emit_ints_and_string( int	    table_id);
@@ -207,7 +207,7 @@ int main(int argc, char **argv)
 }
 
 
-void emit_globals()
+void emit_globals(void)
 {
     _db_globals globals;
 
@@ -368,7 +368,7 @@ void emit_char_table(int table_id)
     _db_header header;
     unsigned char *entry_vec;
     int i, j;
-    int num_bits = (uil_max_object + 7) / 8;
+    int num_bits = _DB_BIT_VECTOR_SIZE (uil_max_object);
 
     switch (table_id)
 	{

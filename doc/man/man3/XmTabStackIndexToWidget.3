@@ -1,0 +1,30 @@
+.TH "XmTabStackIndexToWidget" "library call"
+.SH "NAME"
+\fBXmTabStackIndexToWidget\fP \(em A TabStack function that returns the child of a tab
+.iX "XmTabStackIndexToWidget"
+.iX "TabStack functions" "XmTabStackIndexToWidget"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/TabStack\&.h>
+\fBWidget \fBXmTabStackIndexToWidget\fP\fR(
+\fBWidget \fBwidget\fR\fR,
+\fBint \fBindex\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fBXmTabStackIndexToWidget\fP returns the child of the TabStack whose
+tab is at position \fIindex\fP\&. Tabs are numbered from 0 in the
+order of the managed children of the TabStack\&.
+.IP "\fIwidget\fP" 10
+Specifies the TabStack widget ID\&.
+.IP "\fIindex\fP" 10
+Specifies the position of the tab\&.
+.SH "RETURN"
+.PP
+Returns the child widget, or NULL if \fIwidget\fP is not a TabStack
+or there is no managed child at \fIindex\fP\&.
+.SH "RELATED"
+.PP
+\fBXmTabStack\fP(3), \fBXmTabStackGetSelectedTab\fP(3) and
+\fBXmTabStackXYToWidget\fP(3)\&.

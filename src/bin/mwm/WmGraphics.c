@@ -112,7 +112,7 @@ static char rcsid[] = "$XConsortium: WmGraphics.c /main/4 1995/11/01 11:38:53 rs
 void BevelRectangle (RList *prTop, RList *prBot, int x, int y, unsigned int width, unsigned int height, unsigned int top_wid, unsigned int right_wid, unsigned int bot_wid, unsigned int left_wid)
 {
     XRectangle *prect;		/* pointer to "current" rectangle */
-    register int count;		/* counter used for beveling operation */
+    int count;		/* counter used for beveling operation */
     int join1, join2;		/* used to compute "good" bevel joints */
     int x1, y1, len;		/* used to compute bevel parameters */
     int *piTop, *piBot;
@@ -122,7 +122,7 @@ void BevelRectangle (RList *prTop, RList *prBot, int x, int y, unsigned int widt
 
     /* top side */
 
-    if (((prTop->used + (top_wid + left_wid)) > prTop->allocated) &&
+    if (((prTop->used + (int)(top_wid + left_wid)) > prTop->allocated) &&
 	(!ExtendRList (prTop, MAX (top_wid+left_wid, RLIST_EXTENSION_SIZE))))
     {
 	return;		/* not enough memory */
@@ -168,7 +168,7 @@ void BevelRectangle (RList *prTop, RList *prBot, int x, int y, unsigned int widt
 
     /* bottom side */
 
-    if (((prBot->used + (bot_wid + right_wid)) > prBot->allocated) &&
+    if (((prBot->used + (int)(bot_wid + right_wid)) > prBot->allocated) &&
 	(!ExtendRList(prBot, MAX (bot_wid+right_wid, RLIST_EXTENSION_SIZE))))
     {
 	return;
@@ -266,7 +266,7 @@ void BevelRectangle (RList *prTop, RList *prBot, int x, int y, unsigned int widt
 void BevelDepressedRectangle (RList *prTop, RList *prBot, int x, int y, unsigned int width, unsigned int height, unsigned int top_wid, unsigned int right_wid, unsigned int bot_wid, unsigned int left_wid, unsigned int in_wid)
 {
     XRectangle *prect;		/* pointer to "current" rectangle */
-    register int count;		/* counter used for beveling operation */
+    int count;		/* counter used for beveling operation */
     int join1, join2;		/* used to compute "good" bevel joints */
     int x1, y1, len;		/* used to compute bevel parameters */
     int *piTop, *piBot;
@@ -278,13 +278,13 @@ void BevelDepressedRectangle (RList *prTop, RList *prBot, int x, int y, unsigned
      */
 
 
-    if (((prTop->used + (top_wid + left_wid)) > prTop->allocated) &&
+    if (((prTop->used + (int)(top_wid + left_wid)) > prTop->allocated) &&
 	(!ExtendRList (prTop, MAX (top_wid+left_wid, RLIST_EXTENSION_SIZE))))
     {
 	return;		/* not enough memory */
     }
 
-    if (((prBot->used + (bot_wid + right_wid)) > prBot->allocated) &&
+    if (((prBot->used + (int)(bot_wid + right_wid)) > prBot->allocated) &&
 	(!ExtendRList(prBot, MAX (bot_wid+right_wid, RLIST_EXTENSION_SIZE))))
     {
 	return;		/* not enought memory */
@@ -1116,21 +1116,43 @@ void WmDrawString (Display *dpy, Drawable d, GC gc, int x, int y, char *string, 
 void WmDrawXmString (Display *dpy, Window w, XmFontList xmfontlist,
 		     XmString xmstring, GC gc, Position x, Position y,
 		     Dimension width,  XRectangle *pbox, Boolean bCenter)
+{
+    WmDrawXmStringWidth (dpy, w, xmfontlist, xmstring,
+			 XmStringWidth (xmfontlist, xmstring), gc, x, y,
+			 width, pbox, bCenter);
+}
 #else /* WSM */
 void WmDrawXmString (Display *dpy, Window w, XmFontList xmfontlist,
 		     XmString xmstring, GC gc, Position x, Position y,
 		     Dimension width,  XRectangle *pbox)
+{
+    WmDrawXmStringWidth (dpy, w, xmfontlist, xmstring,
+			 XmStringWidth (xmfontlist, xmstring), gc, x, y,
+			 width, pbox);
+}
+#endif /* WSM */
+
+/*
+ *  WmDrawXmStringWidth: same as WmDrawXmString, for callers that already
+ *  know textWidth, the XmStringWidth of xmstring in xmfontlist.
+ */
+#ifdef WSM
+void WmDrawXmStringWidth (Display *dpy, Window w, XmFontList xmfontlist,
+			  XmString xmstring, Dimension textWidth, GC gc,
+			  Position x, Position y, Dimension width,
+			  XRectangle *pbox, Boolean bCenter)
+#else /* WSM */
+void WmDrawXmStringWidth (Display *dpy, Window w, XmFontList xmfontlist,
+			  XmString xmstring, Dimension textWidth, GC gc,
+			  Position x, Position y, Dimension width,
+			  XRectangle *pbox)
 #endif /* WSM */
 {
-    Dimension textWidth;
 #ifdef WSM
     int alignment;
 #else /* WSM */
     int alignment = XmALIGNMENT_BEGINNING;
 #endif /* WSM */
-
-
-    textWidth = XmStringWidth(xmfontlist, xmstring);
 
 #ifdef WSM
     alignment = bCenter ? XmALIGNMENT_CENTER : XmALIGNMENT_BEGINNING;
@@ -1160,7 +1182,7 @@ void WmDrawXmString (Display *dpy, Window w, XmFontList xmfontlist,
 	XmStringDraw (dpy, w, xmfontlist, xmstring, gc, x, y, width,
 		      alignment, XmSTRING_DIRECTION_L_TO_R, pbox);
     }
-} /* END OF FUNCTION WmDrawXmString */
+} /* END OF FUNCTION WmDrawXmStringWidth */
 
 #ifdef WSM
 

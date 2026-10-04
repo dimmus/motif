@@ -60,6 +60,62 @@ static char rcsid[] = "$TOG: Form.c /main/19 1998/03/25 12:24:56 csn $"
 #define BOTTOM _XmFORM_BOTTOM
 #define FIRST_ATTACHMENT LEFT
 #define LAST_ATTACHMENT BOTTOM
+/* Largest edge value for which ComputeAttachment's "grow the form up to
+ * this edge" cannot wrap the Dimension it updates. */
+#define MAX_EDGE_VALUE 65535
+/* Values of the sorted constraint field once the child is in the sorted
+ * list: whether it was managed then.  False means "sort again". */
+#define SORTED_UNMANAGED 1
+#define SORTED_MANAGED 2
+/* Per child flags of a FormLayout */
+#define FL_DIRTY (1 << 0)   /* must be recomputed */
+#define FL_READS_W (1 << 1) /* an edge depends on the form width */
+#define FL_READS_H (1 << 2) /* an edge depends on the form height */
+#define FL_UNSAFE (1 << 3)  /* an edge exceeded MAX_EDGE_VALUE */
+#define FL_DEFERRED (1 << 4) /* in LayoutSync's deferred list */
+#define FL_READS(axis) ((axis) ? FL_READS_H : FL_READS_W)
+/* Check*Base memo slots, two per function (opposite False/True) */
+#define BASE_BOTTOM 0
+#define BASE_RIGHT 2
+#define BASE_LEFT 4
+#define NUM_BASE_SLOTS 6
+/* Widget -> index hash used by SortChildren and the layout code */
+typedef struct {
+  Widget *keys;
+  int *vals;
+  unsigned long mask;
+} FormIndexMap;
+/*
+ * Scratch state for one form size computation.  See RelaxChildren.
+ */
+typedef struct {
+  Widget *kids;        /* RectObj children in the order of the sorted list */
+  int num_kids;        /* length of kids */
+  int num_managed;     /* the leading managed children of kids */
+  FormIndexMap map;    /* kids[i] -> i */
+  int *dep_start;      /* deps[dep_start[i]..dep_start[i + 1]) are the */
+  int *deps;           /* managed children attached to kids[i] */
+  unsigned char *flags; /* FL_* for each managed child */
+  /* Children that read the form width (axis 0) or height (axis 1),
+   * ascending.  Such a child is also dirty when the size along that
+   * axis changed after it was last computed, that is when its seen
+   * value is not the current epoch. */
+  int *readers[2];
+  int num_readers[2];
+  unsigned int epoch[2];
+  unsigned int *seen[2];
+  int cursor[2];       /* LayoutSync: next reader to look at */
+  int *deferred;       /* scratch for LayoutSync */
+  int *heap;           /* min-heap of the flagged dirty children; may
+                        * also hold children that are clean again */
+  int heap_len, heap_size;
+  int scope;           /* last child of the prefix being settled */
+  int pos;             /* child being computed */
+  Boolean all_dirty;   /* children 0..scope are all dirty */
+  float *base_val;     /* Check*Base memo, NUM_BASE_SLOTS per kid */
+  unsigned char *base_state; /* 0 unknown, 1 being computed, 2 known */
+} FormLayout;
+typedef float (*BaseProc)(Widget sibling, Boolean opposite, FormLayout *layout);
     /********    Static Function Declarations    ********/
     static void
     FromTopOffset(Widget w, int offset, XtArgVal *value);
@@ -69,12 +125,11 @@ static void FromRightOffset(Widget w, int offset, XtArgVal *value);
 static void MarginWidthOut(Widget wid, int offset, XtArgVal *value);
 static void MarginHeightOut(Widget wid, int offset, XtArgVal *value);
 static void ClassPartInitialize(WidgetClass wc);
-static Boolean SyncEdges(XmFormWidget fw,
-                         Widget last_child,
-                         Dimension *form_width,
-                         Dimension *form_height,
-                         Widget instigator,
-                         XtWidgetGeometry *geometry);
+static Boolean RelaxChildren(XmFormWidget fw,
+                             Dimension *form_width,
+                             Dimension *form_height,
+                             Widget instigator,
+                             XtWidgetGeometry *geometry);
 static Boolean CalcFormSizeWithChange(
     XmFormWidget fw, Dimension *w, Dimension *h, Widget c, XtWidgetGeometry *g);
 static void CalcFormSize(XmFormWidget fw, Dimension *w, Dimension *h);
@@ -93,30 +148,34 @@ static void PlaceChild(XmFormWidget fw,
                        Widget instigator,
                        XtWidgetGeometry *inst_geometry);
 static void PlaceChildren(XmFormWidget fw, Widget instigator, XtWidgetGeometry *inst_geometry);
+static void DetachFrom(XmFormWidget fw, Widget child);
 static void ChangeManaged(Widget wid);
 static void GetSize(XmFormWidget fw, XtWidgetGeometry *g, Widget w, XtWidgetGeometry *desired);
 static void ChangeIfNeeded(XmFormWidget fw, Widget w, XtWidgetGeometry *desired);
 static void DeleteChild(Widget child);
 static Boolean SetValues(Widget cw, Widget rw, Widget nw, ArgList args, Cardinal *num_args);
 static void SetValuesAlmost(Widget cw, Widget nw, XtWidgetGeometry *req, XtWidgetGeometry *rep);
-static Boolean ConstraintSetValues(register Widget old,
-                                   register Widget ref,
-                                   register Widget new_w,
+static Boolean ConstraintSetValues(Widget old,
+                                   Widget ref,
+                                   Widget new_w,
                                    ArgList args,
                                    Cardinal *num_args);
 static void Initialize(Widget rw, Widget nw, ArgList args, Cardinal *num_args);
 static void ConstraintInitialize(Widget req, Widget new_w, ArgList args, Cardinal *num_args);
 static void CheckConstraints(Widget w);
-static void SortChildren(register XmFormWidget fw);
+static void SortChildren(XmFormWidget fw);
 static void CalcEdgeValues(Widget w,
                            Boolean really,
                            Widget instigator,
                            XtWidgetGeometry *inst_geometry,
                            Dimension *form_width,
-                           Dimension *form_height);
-static float CheckBottomBase(Widget sibling, Boolean opposite);
-static float CheckRightBase(Widget sibling, Boolean opposite);
-static float CheckLeftBase(Widget sibling, Boolean opposite);
+                           Dimension *form_height,
+                           FormLayout *layout);
+static float CheckBase(
+    FormLayout *layout, int kind, BaseProc proc, Widget sibling, Boolean opposite);
+static float CheckBottomBase(Widget sibling, Boolean opposite, FormLayout *layout);
+static float CheckRightBase(Widget sibling, Boolean opposite, FormLayout *layout);
+static float CheckLeftBase(Widget sibling, Boolean opposite, FormLayout *layout);
 static void CalcEdgeValue(XmFormWidget fw,
                           Widget w,
                           Dimension size,
@@ -124,7 +183,8 @@ static void CalcEdgeValue(XmFormWidget fw,
                           int which,
                           Boolean really,
                           Dimension *fwidth,
-                          Dimension *fheight);
+                          Dimension *fheight,
+                          FormLayout *layout);
 static void ComputeAttachment(XmFormWidget fw,
                               Widget w,
                               Dimension size,
@@ -490,78 +550,504 @@ static void ClassPartInitialize(WidgetClass wc)
 
 /************************************************************************
  *
+ *  Index map
+ *	A small open addressing hash from child widget to index.
+ *
+ ************************************************************************/
+static void MapInit(FormIndexMap *map, int count)
+{
+  unsigned long size = 16;
+  while (size < 2 * (unsigned long)count)
+    size <<= 1;
+  map->keys = (Widget *)XtCalloc((Cardinal)size, sizeof(Widget));
+  map->vals = (int *)_XmMallocArray(size, sizeof(int));
+  map->mask = size - 1;
+}
+
+static unsigned long MapSlot(FormIndexMap *map, Widget w)
+{
+  unsigned long h = (unsigned long)w;
+  h ^= h >> 17;
+  h *= 0x9E3779B1UL;
+  h ^= h >> 15;
+  return h & map->mask;
+}
+
+static void MapAdd(FormIndexMap *map, Widget w, int val)
+{
+  unsigned long i = MapSlot(map, w);
+  while (map->keys[i] != NULL && map->keys[i] != w)
+    i = (i + 1) & map->mask;
+  map->keys[i] = w;
+  map->vals[i] = val;
+}
+
+static int MapFind(FormIndexMap *map, Widget w)
+{
+  unsigned long i;
+  if (w == NULL)
+    return -1;
+  for (i = MapSlot(map, w); map->keys[i] != NULL; i = (i + 1) & map->mask)
+    if (map->keys[i] == w)
+      return map->vals[i];
+  return -1;
+}
+
+static void MapFree(FormIndexMap *map)
+{
+  XtFree((char *)map->keys);
+  XtFree((char *)map->vals);
+}
+
+/************************************************************************
+ *
+ *  HeapPush, HeapPop
+ *	A binary min-heap of child indices.  HeapPush grows the array
+ *	when it is full.
+ *
+ ************************************************************************/
+static void HeapPush(int **heap, int *len, int *size, int val)
+{
+  int i, parent;
+  int *h;
+  if (*len == *size) {
+    *size = (*size > 0) ? 2 * *size : 16;
+    *heap = (int *)_XmReallocArray((char *)*heap, *size, sizeof(int));
+  }
+  h = *heap;
+  for (i = (*len)++; i > 0 && h[parent = (i - 1) / 2] > val; i = parent)
+    h[i] = h[parent];
+  h[i] = val;
+}
+
+static int HeapPop(int *h, int *len)
+{
+  int top = h[0], last = h[--(*len)];
+  int i = 0, child;
+  while ((child = 2 * i + 1) < *len) {
+    if (child + 1 < *len && h[child + 1] < h[child])
+      child++;
+    if (h[child] >= last)
+      break;
+    h[i] = h[child];
+    i = child;
+  }
+  h[i] = last;
+  return top;
+}
+
+/************************************************************************
+ *
+ *  EdgeReadsFormSize
+ *	Whether CalcEdgeValue uses the current form width (height) to
+ *	compute the given edge.  Edges computed by ComputeAttachment only
+ *	ever grow the form up to a value of their own, which a larger form
+ *	already satisfies, so they do not count.
+ *
+ ************************************************************************/
+static Boolean EdgeReadsFormSize(XmFormWidget fw, Widget w, int which)
+{
+  XmFormAttachment a = &GetFormConstraint(w)->att[which];
+  int near_edge;
+  if ((which == LEFT) || (which == RIGHT))
+    near_edge = LayoutIsRtoLM(fw) ? RIGHT : LEFT;
+  else
+    near_edge = TOP;
+  switch (a->type) {
+    case XmATTACH_WIDGET:
+      /* not a sibling: computed as XmATTACH_FORM */
+      return (!SIBLINGS(a->w, w) && (which != near_edge));
+    case XmATTACH_OPPOSITE_WIDGET:
+      /* not a sibling: computed as XmATTACH_OPPOSITE_FORM */
+      return (!SIBLINGS(a->w, w) && (which == near_edge));
+    case XmATTACH_FORM:
+      return (which != near_edge);
+    case XmATTACH_OPPOSITE_FORM:
+      return (which == near_edge);
+    case XmATTACH_POSITION:
+      return True;
+    default:
+      return False;
+  }
+}
+
+/************************************************************************
+ *
+ *  LayoutInit, LayoutFree
+ *	Set up the scratch state of RelaxChildren from the sorted list.
+ *
+ ************************************************************************/
+static void LayoutInit(XmFormWidget fw, FormLayout *l)
+{
+  Cardinal num = fw->composite.num_children;
+  Widget child;
+  XmFormConstraint c;
+  int *fill;
+  int i, j, k, m, n = 0;
+  l->kids = (Widget *)_XmMallocArray(num ? num : 1, sizeof(Widget));
+  l->num_managed = -1;
+  for (child = fw->form.first_child; child != NULL && n < (int)num;
+       child = GetFormConstraint(child)->next_sibling)
+  {
+    if ((l->num_managed < 0) && !XtIsManaged(child))
+      l->num_managed = n;
+    l->kids[n++] = child;
+  }
+  if (l->num_managed < 0)
+    l->num_managed = n;
+  l->num_kids = n;
+  m = l->num_managed;
+  MapInit(&l->map, n);
+  for (i = 0; i < n; i++)
+    MapAdd(&l->map, l->kids[i], i);
+  /* Every child starts dirty; note which ones read the form size. */
+  l->flags = (unsigned char *)XtMalloc((Cardinal)(m + 1));
+  l->readers[0] = (int *)_XmMallocArray(m + 1, sizeof(int));
+  l->readers[1] = (int *)_XmMallocArray(m + 1, sizeof(int));
+  l->num_readers[0] = l->num_readers[1] = 0;
+  l->seen[0] = (unsigned int *)XtCalloc((Cardinal)(m + 1), sizeof(unsigned int));
+  l->seen[1] = (unsigned int *)XtCalloc((Cardinal)(m + 1), sizeof(unsigned int));
+  l->epoch[0] = l->epoch[1] = 0;
+  l->cursor[0] = l->cursor[1] = 0;
+  for (i = 0; i < m; i++) {
+    l->flags[i] = FL_DIRTY;
+    for (j = FIRST_ATTACHMENT; j < (LAST_ATTACHMENT + 1); j++) {
+      if (EdgeReadsFormSize(fw, l->kids[i], j))
+        l->flags[i] |= ((j == LEFT) || (j == RIGHT)) ? FL_READS_W : FL_READS_H;
+    }
+    if (l->flags[i] & FL_READS_W)
+      l->readers[0][l->num_readers[0]++] = i;
+    if (l->flags[i] & FL_READS_H)
+      l->readers[1][l->num_readers[1]++] = i;
+  }
+  /* For each managed child, the managed children attached to it. */
+  l->dep_start = (int *)XtCalloc((Cardinal)(m + 1), sizeof(int));
+  for (i = 0; i < m; i++) {
+    c = GetFormConstraint(l->kids[i]);
+    for (j = FIRST_ATTACHMENT; j < (LAST_ATTACHMENT + 1); j++) {
+      if (((c->att[j].type == XmATTACH_WIDGET) || (c->att[j].type == XmATTACH_OPPOSITE_WIDGET)) &&
+          SIBLINGS(c->att[j].w, l->kids[i]) && ((k = MapFind(&l->map, c->att[j].w)) >= 0) &&
+          (k < m))
+        l->dep_start[k + 1]++;
+    }
+  }
+  for (i = 0; i < m; i++)
+    l->dep_start[i + 1] += l->dep_start[i];
+  l->deps = (int *)_XmMallocArray(l->dep_start[m] + 1, sizeof(int));
+  fill = (int *)_XmMallocArray(m + 1, sizeof(int));
+  for (i = 0; i < m; i++)
+    fill[i] = l->dep_start[i];
+  for (i = 0; i < m; i++) {
+    c = GetFormConstraint(l->kids[i]);
+    for (j = FIRST_ATTACHMENT; j < (LAST_ATTACHMENT + 1); j++) {
+      if (((c->att[j].type == XmATTACH_WIDGET) || (c->att[j].type == XmATTACH_OPPOSITE_WIDGET)) &&
+          SIBLINGS(c->att[j].w, l->kids[i]) && ((k = MapFind(&l->map, c->att[j].w)) >= 0) &&
+          (k < m))
+        l->deps[fill[k]++] = i;
+    }
+  }
+  XtFree((char *)fill);
+  l->deferred = (int *)_XmMallocArray(m + 1, sizeof(int));
+  l->heap = NULL;
+  l->heap_len = l->heap_size = 0;
+  l->scope = -1;
+  l->pos = -1;
+  l->all_dirty = False;
+  l->base_val = NULL;
+  l->base_state = NULL;
+}
+
+static void LayoutFree(FormLayout *l)
+{
+  MapFree(&l->map);
+  XtFree((char *)l->kids);
+  XtFree((char *)l->flags);
+  XtFree((char *)l->readers[0]);
+  XtFree((char *)l->readers[1]);
+  XtFree((char *)l->seen[0]);
+  XtFree((char *)l->seen[1]);
+  XtFree((char *)l->dep_start);
+  XtFree((char *)l->deps);
+  XtFree((char *)l->deferred);
+  XtFree((char *)l->heap);
+  XtFree((char *)l->base_val);
+  XtFree((char *)l->base_state);
+}
+
+/************************************************************************
+ *
+ *  LayoutMark
+ *	Child i must be recomputed.  The children past the prefix being
+ *	settled have never been computed, so they are dirty already.
+ *
+ ************************************************************************/
+static void LayoutMark(FormLayout *l, int i)
+{
+  if (!l->all_dirty && !(l->flags[i] & FL_DIRTY)) {
+    l->flags[i] |= FL_DIRTY;
+    HeapPush(&l->heap, &l->heap_len, &l->heap_size, i);
+  }
+}
+
+/* The first of the n ascending values in a that is >= val */
+static int LowerBound(int *a, int n, int val)
+{
+  int lo = 0, hi = n, mid;
+  while (lo < hi) {
+    mid = lo + (hi - lo) / 2;
+    if (a[mid] < val)
+      lo = mid + 1;
+    else
+      hi = mid;
+  }
+  return lo;
+}
+
+/* The form width (axis 0) or height (axis 1) changed. */
+static void LayoutSizeChanged(FormLayout *l, int axis, Boolean shrunk)
+{
+  if (shrunk) {
+    /* The Dimension wrapped: the edges that only grow the form up to
+     * themselves may find it too small again. */
+    l->all_dirty = True;
+    return;
+  }
+  /* All its readers are dirty now; those after the current child
+   * are recomputed in this pass.  Should the epoch wrap around, a
+   * reader last computed long ago would look clean: recompute all. */
+  if (++l->epoch[axis] == 0)
+    l->all_dirty = True;
+  l->cursor[axis] = LowerBound(l->readers[axis], l->num_readers[axis], l->pos + 1);
+}
+
+/* Child i has an edge too large for the reasoning in EdgeReadsFormSize:
+ * from now on, it reads both form dimensions. */
+static void LayoutUnsafe(FormLayout *l, int i)
+{
+  int axis, k;
+  l->flags[i] |= FL_UNSAFE;
+  for (axis = 0; axis < 2; axis++) {
+    if (l->flags[i] & FL_READS(axis))
+      continue;
+    l->flags[i] |= FL_READS(axis);
+    k = LowerBound(l->readers[axis], l->num_readers[axis], i);
+    memmove(&l->readers[axis][k + 1], &l->readers[axis][k],
+            (l->num_readers[axis] - k) * sizeof(int));
+    l->readers[axis][k] = i;
+    l->num_readers[axis]++;
+    l->cursor[axis] = LowerBound(l->readers[axis], l->num_readers[axis], l->pos + 1);
+  }
+}
+
+/* The next reader of the given axis after l->pos that is dirty, or -1 */
+static int NextDirtyReader(FormLayout *l, int axis)
+{
+  int i;
+  while (l->cursor[axis] < l->num_readers[axis]) {
+    i = l->readers[axis][l->cursor[axis]];
+    if (i > l->scope)
+      break;
+    if ((i > l->pos) && (l->seen[axis][i] != l->epoch[axis]))
+      return i;
+    l->cursor[axis]++;
+  }
+  return -1;
+}
+
+/************************************************************************
+ *
+ *  LayoutCall
+ *	CalcEdgeValues on child i, then mark what it affected.
+ *
+ ************************************************************************/
+static void LayoutCall(XmFormWidget fw,
+                       FormLayout *l,
+                       int i,
+                       Widget instigator,
+                       XtWidgetGeometry *geometry,
+                       Dimension *form_width,
+                       Dimension *form_height)
+{
+  XmFormConstraint c = GetFormConstraint(l->kids[i]);
+  Dimension old_w = *form_width, old_h = *form_height;
+  int old[LAST_ATTACHMENT + 1];
+  Boolean changed = False;
+  int j;
+  for (j = FIRST_ATTACHMENT; j < (LAST_ATTACHMENT + 1); j++)
+    old[j] = c->att[j].tempValue;
+  l->pos = i;
+  l->flags[i] &= ~FL_DIRTY;
+  l->seen[0][i] = l->epoch[0];
+  l->seen[1][i] = l->epoch[1];
+  CalcEdgeValues(l->kids[i], False, instigator, geometry, form_width, form_height, l);
+  for (j = FIRST_ATTACHMENT; j < (LAST_ATTACHMENT + 1); j++) {
+    if (c->att[j].tempValue != old[j])
+      changed = True;
+    if ((c->att[j].tempValue > MAX_EDGE_VALUE) && !(l->flags[i] & FL_UNSAFE))
+      LayoutUnsafe(l, i);
+  }
+  if (changed) {
+    /* Our edges feed our own next computation and those of the
+     * children attached to us. */
+    LayoutMark(l, i);
+    for (j = l->dep_start[i]; j < l->dep_start[i + 1]; j++)
+      LayoutMark(l, l->deps[j]);
+  }
+  if (*form_width != old_w) {
+    LayoutMark(l, i);
+    LayoutSizeChanged(l, 0, *form_width < old_w);
+  }
+  if (*form_height != old_h) {
+    LayoutMark(l, i);
+    LayoutSizeChanged(l, 1, *form_height < old_h);
+  }
+}
+
+/************************************************************************
+ *
+ *  LayoutSync
+ *	Recompute children 0..l->scope, in list order, until a pass
+ *	leaves the form size unchanged.  Only the dirty children are
+ *	recomputed: CalcEdgeValues on a clean child changes nothing.
+ *
+ ************************************************************************/
+static Boolean LayoutSync(XmFormWidget fw,
+                          FormLayout *l,
+                          Dimension *form_width,
+                          Dimension *form_height,
+                          Widget instigator,
+                          XtWidgetGeometry *geometry)
+{
+  Dimension sav_w = *form_width, sav_h = *form_height;
+  long int loop_count = 0;
+  Boolean settled = FALSE;
+  int i, next, reader, axis, linear_from, num_deferred;
+  while (!settled) {
+    /*
+     * Contradictory constraints can cause the constraint processing
+     * to go into endless oscillation.  Give up after an arbitrarily
+     * large number of passes rather than loop forever.
+     */
+    if (loop_count++ > MAX_LOOP)
+      break;
+    num_deferred = 0;
+    if (l->all_dirty) {
+      /* everybody: a plain pass */
+      l->all_dirty = False;
+      l->heap_len = 0;
+      for (i = 0; i <= l->scope; i++)
+        l->flags[i] |= FL_DIRTY;
+      linear_from = 0;
+    }
+    else {
+      /* the dirty children, in order */
+      linear_from = -1;
+      l->pos = -1;
+      l->cursor[0] = l->cursor[1] = 0;
+      for (;;) {
+        next = -1;
+        while (l->heap_len > 0) {
+          i = l->heap[0];
+          if (!(l->flags[i] & FL_DIRTY)) {
+            /* done already */
+            (void)HeapPop(l->heap, &l->heap_len);
+            continue;
+          }
+          if (i <= l->pos) {
+            /* dirtied after this pass went by it: next pass */
+            (void)HeapPop(l->heap, &l->heap_len);
+            if (!(l->flags[i] & FL_DEFERRED)) {
+              l->flags[i] |= FL_DEFERRED;
+              l->deferred[num_deferred++] = i;
+            }
+            continue;
+          }
+          next = i;
+          break;
+        }
+        for (axis = 0; axis < 2; axis++) {
+          reader = NextDirtyReader(l, axis);
+          if ((reader >= 0) && ((next < 0) || (reader < next)))
+            next = reader;
+        }
+        if (next < 0)
+          break;
+        LayoutCall(fw, l, next, instigator, geometry, form_width, form_height);
+        if (l->all_dirty) {
+          /* the rest of this pass has to do everybody */
+          linear_from = next + 1;
+          break;
+        }
+      }
+    }
+    if (linear_from >= 0) {
+      for (i = linear_from; i <= l->scope; i++) {
+        if (l->all_dirty || (l->flags[i] & FL_DIRTY))
+          LayoutCall(fw, l, i, instigator, geometry, form_width, form_height);
+      }
+    }
+    for (i = 0; i < num_deferred; i++) {
+      l->flags[l->deferred[i]] &= ~FL_DEFERRED;
+      HeapPush(&l->heap, &l->heap_len, &l->heap_size, l->deferred[i]);
+    }
+    if ((sav_w == *form_width) && (sav_h == *form_height))
+      settled = TRUE;
+    else {
+      sav_w = *form_width;
+      sav_h = *form_height;
+    }
+  }
+  if (loop_count > MAX_LOOP) {
+    XmeWarning((Widget)fw, MESSAGE7);
+    return (False);
+  }
+  return (True);
+}
+
+/************************************************************************
+ *
+ *  RelaxChildren
+ *	Compute the temporary edge values of the managed children and
+ *	grow *form_width and *form_height to hold them.  Returns False
+ *	if the constraints do not settle.
+ *
+ *	The children are taken one at a time, in sorted order, and after
+ *	each one all the children taken so far are recomputed until the
+ *	form size settles.  Only the children whose inputs changed are
+ *	actually recomputed (see LayoutSync); this gives the same result
+ *	as recomputing them all, without the quadratic cost.
+ *
+ ************************************************************************/
+static Boolean RelaxChildren(XmFormWidget fw,
+                             Dimension *form_width,
+                             Dimension *form_height,
+                             Widget instigator,
+                             XtWidgetGeometry *geometry)
+{
+  FormLayout layout;
+  Boolean finished = True;
+  int i;
+  LayoutInit(fw, &layout);
+  for (i = 0; i < layout.num_managed; i++) {
+    layout.scope = i;
+    /* child i is new to the prefix, so it is dirty */
+    LayoutCall(fw, &layout, i, instigator, geometry, form_width, form_height);
+    if (!LayoutSync(fw, &layout, form_width, form_height, instigator, geometry)) {
+      finished = False;
+      break;
+    }
+  }
+  LayoutFree(&layout);
+  return (finished);
+}
+
+/************************************************************************
+ *
  *  CalcFormSizeWithChange
  *	Find size of a bounding box which will include all of the
  *	children, including the child which may change
  *
  ************************************************************************/
-static Boolean SyncEdges(XmFormWidget fw,
-                         Widget last_child,
-                         Dimension *form_width,
-                         Dimension *form_height,
-                         Widget instigator,
-                         XtWidgetGeometry *geometry)
-{
-  register Widget child;
-  register XmFormConstraint c;
-  long int loop_count;
-  Dimension tmp_w = *form_width, tmp_h = *form_height;
-  Dimension sav_w, sav_h;
-  Boolean settled = FALSE;
-  Boolean finished = TRUE;
-  sav_w = tmp_w;
-  sav_h = tmp_h;
-  loop_count = 0;
-  while (!settled) {
-    /*
-     * Contradictory constraints can cause the constraint
-     * processing to go into endless oscillation.  This means that
-     * proper exit condition for this loop is never satisfied.
-     * But, infinite loops are a bad thing, even if is the result
-     * of a careless user.  We therefore have added a loop counter
-     * to ensure that this loop will terminate.
-     *
-     * There are problems with this however.  In the worst case
-     * this procedure could need to loop fw->composite.num_children!
-     * times.  Unfortunately, numbers like 100! don't fit integer
-     * space well; neither will current architectures complete that
-     * many loops before the sun burns out.
-     *
-     * Soooo, we will wait for an arbitrarily large number of
-     * iterations to go by before we give up.  This allows us to
-     * claim that the procedure will always complete, and the number
-     * is large enough to accomodate all but the very large and
-     * very pathological Form widget configurations.
-     *
-     * This is gross, but it's either do this or risk truly
-     * infinite loops.
-     */
-    if (loop_count++ > MAX_LOOP)
-      break;
-    for (child = fw->form.first_child; child != NULL; child = c->next_sibling) {
-      if (!XtIsManaged(child))
-        break;
-      c = GetFormConstraint(child);
-      CalcEdgeValues(child, FALSE, instigator, geometry, &tmp_w, &tmp_h);
-      if (child == last_child)
-        break;
-    }
-    if ((sav_w == tmp_w) && (sav_h == tmp_h))
-      settled = TRUE;
-    else {
-      sav_w = tmp_w;
-      sav_h = tmp_h;
-    }
-  }
-  if (loop_count > MAX_LOOP) {
-    XmeWarning((Widget)fw, MESSAGE7);
-    finished = FALSE;
-  }
-  *form_width = sav_w;
-  *form_height = sav_h;
-  return (finished);
-}
-
 static Boolean CalcFormSizeWithChange(
     XmFormWidget fw, Dimension *w, Dimension *h, Widget c, XtWidgetGeometry *g)
 {
@@ -575,14 +1061,8 @@ static Boolean CalcFormSizeWithChange(
   if (w == NULL)
     w = &junkw;
   /* Place children, but don't do it for real--just get new size */
-  for (child = fw->form.first_child; child != NULL; child = fc->next_sibling) {
-    if (!XtIsManaged(child))
-      break;
-    fc = GetFormConstraint(child);
-    CalcEdgeValues(child, False, c, g, w, h);
-    if (!SyncEdges(fw, child, w, h, c, g))
-      return (False);
-  }
+  if (!RelaxChildren(fw, w, h, c, g))
+    return (False);
   for (child = fw->form.first_child; child != NULL; child = fc->next_sibling) {
     if (!XtIsManaged(child))
       break;
@@ -625,14 +1105,7 @@ static void CalcFormSize(XmFormWidget fw, Dimension *w, Dimension *h)
     h = &junkh;
   if (w == NULL)
     w = &junkw;
-  for (child = fw->form.first_child; child != NULL; child = fc->next_sibling) {
-    if (!XtIsManaged(child))
-      break;
-    fc = GetFormConstraint(child);
-    CalcEdgeValues(child, False, NULL, NULL, w, h);
-    if (!SyncEdges(fw, child, w, h, NULL, NULL))
-      break;
-  }
+  (void)RelaxChildren(fw, w, h, NULL, NULL);
   for (child = fw->form.first_child; child != NULL; child = fc->next_sibling) {
     if (!XtIsManaged(child))
       break;
@@ -883,7 +1356,7 @@ static XtGeometryResult QueryGeometry(Widget widget,
       int i;
       Widget child;
       XmFormConstraint c;
-      for (i = 0; i < fw->composite.num_children; i++) {
+      for (i = 0; (Cardinal)i < fw->composite.num_children; i++) {
         child = fw->composite.children[i];
         c = GetFormConstraint(child);
         c->preferred_width = XtWidth(child);
@@ -995,7 +1468,7 @@ static void UpdateAttachments(XmFormWidget fw,
                               Widget instigator,
                               XtWidgetGeometry *inst_geometry)
 {
-  register XmFormConstraint c;
+  XmFormConstraint c;
   c = GetFormConstraint(wid);
   if (IS_ATTACHED_WIDGET(c, LEFT))
     PlaceChild(fw, ATTACHED_WIDGET(c, LEFT), instigator, inst_geometry);
@@ -1012,14 +1485,14 @@ static void PlaceChild(XmFormWidget fw,
                        Widget instigator,
                        XtWidgetGeometry *inst_geometry)
 {
-  register XmFormConstraint c;
+  XmFormConstraint c;
   int height, width;
   Dimension border_width;
   int near_edge;
   if (!XtIsManaged(child))
     return;
   c = GetFormConstraint(child);
-  CalcEdgeValues(child, TRUE, instigator, inst_geometry, NULL, NULL);
+  CalcEdgeValues(child, TRUE, instigator, inst_geometry, NULL, NULL, NULL);
   if ((child == instigator) && (inst_geometry->request_mode & CWBorderWidth))
     border_width = inst_geometry->border_width;
   else
@@ -1065,6 +1538,46 @@ static void PlaceChild(XmFormWidget fw,
 
 /************************************************************************
  *
+ *  DetachFrom
+ *	The child is going away: if anyone depends on it, make that a
+ *	dependency on the form.
+ *
+ ************************************************************************/
+static void DetachFrom(XmFormWidget fw, Widget child)
+{
+  XmFormConstraint c;
+  Widget w;
+  Cardinal i;
+  int j;
+  for (i = 0; i < fw->composite.num_children; i++) {
+    w = fw->composite.children[i];
+    c = GetFormConstraint(w);
+    for (j = FIRST_ATTACHMENT; j < (LAST_ATTACHMENT + 1); j++) {
+      if (((c->att[j].type == XmATTACH_WIDGET) && (c->att[j].w == child)) ||
+          ((c->att[j].type == XmATTACH_OPPOSITE_WIDGET) && (c->att[j].w == child)))
+      {
+        switch (j) {
+          case LEFT:
+            c->att[j].type = XmATTACH_FORM;
+            c->att[j].offset = w->core.x;
+            break;
+          case TOP:
+            c->att[j].type = XmATTACH_FORM;
+            c->att[j].offset = w->core.y;
+            break;
+          default:
+            c->att[j].type = XmATTACH_NONE;
+            break;
+        }
+        c->att[j].w = NULL;
+        c->sorted = False;
+      }
+    }
+  }
+}
+
+/************************************************************************
+ *
  *  ChangeManaged
  *	Something changed in the set of managed children, so place
  *	the children and change the form widget size to reflect new size,
@@ -1076,44 +1589,18 @@ static void ChangeManaged(Widget wid)
   XmFormWidget fw = (XmFormWidget)wid;
   XtWidgetGeometry g;
   int i, j, k;
-  register XmFormConstraint c;
-  register Widget w, child;
+  XmFormConstraint c;
+  Widget w, child;
   /*
    * The following code works around a bug in the intrinsics
    * destroy processing.  The child is unmanaged before anything
    * else (destroy callbacks) so we have to handle the destroy
    * inside of changemanaged instead of in a destroy callback
    */
-  for (k = 0; k < fw->composite.num_children; k++) {
+  for (k = 0; (Cardinal)k < fw->composite.num_children; k++) {
     child = fw->composite.children[k];
-    if (child->core.being_destroyed) {
-      /*  If anyone depends on this child,
-                make into a dependency on form  */
-      for (i = 0; i < fw->composite.num_children; i++) {
-        w = fw->composite.children[i];
-        c = GetFormConstraint(w);
-        for (j = FIRST_ATTACHMENT; j < (LAST_ATTACHMENT + 1); j++) {
-          if (((c->att[j].type == XmATTACH_WIDGET) && (c->att[j].w == child)) ||
-              ((c->att[j].type == XmATTACH_OPPOSITE_WIDGET) && (c->att[j].w == child)))
-          {
-            switch (j) {
-              case LEFT:
-                c->att[j].type = XmATTACH_FORM;
-                c->att[j].offset = w->core.x;
-                break;
-              case TOP:
-                c->att[j].type = XmATTACH_FORM;
-                c->att[j].offset = w->core.y;
-                break;
-              default:
-                c->att[j].type = XmATTACH_NONE;
-                break;
-            }
-            c->att[j].w = NULL;
-          }
-        }
-      }
-    }
+    if (child->core.being_destroyed)
+      DetachFrom(fw, child);
   }
   SortChildren(fw);
   /* Don't use XtRealizedWidget(form) as a test to initialize the
@@ -1121,7 +1608,7 @@ static void ChangeManaged(Widget wid)
        kid, everything goes to the ground.
        Here we initialize a field if it hasn't been done already,
        the XmINVALID_DIMENSION has been set in ConstraintInitialize */
-  for (i = 0; i < fw->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < fw->composite.num_children; i++) {
     child = fw->composite.children[i];
     c = GetFormConstraint(child);
     if (c->preferred_width == XmINVALID_DIMENSION)
@@ -1230,6 +1717,7 @@ static void ChangeIfNeeded(XmFormWidget fw, Widget w, XtWidgetGeometry *desired)
 static void DeleteChild(Widget child)
 {
   XtWidgetProc delete_child;
+  XmFormWidget fw;
   if (!XtIsRectObj(child))
     return;
   _XmProcessLock();
@@ -1237,7 +1725,16 @@ static void DeleteChild(Widget child)
       ((CompositeWidgetClass)xmFormClassRec.core_class.superclass)->composite_class.delete_child;
   _XmProcessUnlock();
   (*delete_child)(child);
-  SortChildren((XmFormWidget)XtParent(child));
+  fw = (XmFormWidget)XtParent(child);
+  /* The list may hold the deleted child: drop it.  Do not sort again
+   * when the whole form is going away. */
+  fw->form.first_child = NULL;
+  if (!fw->core.being_destroyed) {
+    /* ChangeManaged has done this if the child was managed; do not
+     * leave the others pointing at a destroyed widget either. */
+    DetachFrom(fw, child);
+    SortChildren(fw);
+  }
 }
 
 /************************************************************************
@@ -1310,15 +1807,15 @@ static void SetValuesAlmost(Widget cw, /* unused */
  *	If any values change, what we do is place everything again.
  *
  ************************************************************************/
-static Boolean ConstraintSetValues(register Widget old,
-                                   register Widget ref, /* unused */
-                                   register Widget new_w,
+static Boolean ConstraintSetValues(Widget old,
+                                   Widget ref, /* unused */
+                                   Widget new_w,
                                    ArgList args,       /* unused */
                                    Cardinal *num_args) /* unused */
 {
   XmFormWidget fw = (XmFormWidget)XtParent(new_w);
-  register XmFormConstraint oldc, newc;
-  register int i;
+  XmFormConstraint oldc, newc;
+  int i;
   if (!XtIsRectObj(new_w))
     return (FALSE);
   oldc = GetFormConstraint(old), newc = GetFormConstraint(new_w);
@@ -1342,6 +1839,9 @@ static Boolean ConstraintSetValues(register Widget old,
       }
     }
   }
+  /* The order of the children may change */
+  if (ANY(type) || ANY(w))
+    newc->sorted = False;
   /* Re do the layout only if we have to */
   if ((XtIsRealized((Widget)fw)) && (XtIsManaged(new_w)) &&
       (ANY(type) || ANY(w) || ANY(percent) || ANY(offset)))
@@ -1412,7 +1912,7 @@ static void ConstraintInitialize(Widget req, /* unused */
                                  Cardinal *num_args) /* unused */
 {
   XmFormConstraint nc;
-  register int i;
+  int i;
   if (!XtIsRectObj(new_w))
     return;
   nc = GetFormConstraint(new_w);
@@ -1436,6 +1936,9 @@ static void ConstraintInitialize(Widget req, /* unused */
        always used after the changemanaged is called */
   nc->preferred_width = XmINVALID_DIMENSION;
   nc->preferred_height = XmINVALID_DIMENSION;
+  /* not in the sorted list yet */
+  nc->sorted = False;
+  nc->next_sibling = NULL;
 }
 
 /************************************************************************
@@ -1525,98 +2028,175 @@ static void CheckConstraints(Widget w)
 
 /************************************************************************
  *
- *  SortChildren
+ *  SortedListValid
+ *	Whether the sorted list still holds the num_rect RectObj children
+ *	with the managed ones first and the unmanaged ones last, newest
+ *	first, as SortChildren left it.
  *
  ************************************************************************/
-static void SortChildren(register XmFormWidget fw)
+static Boolean SortedListValid(XmFormWidget fw, Cardinal num_rect)
 {
-  int i, j;
-  Widget child = NULL;
-  register XmFormConstraint c = NULL, c1 = NULL;
-  int sortedCount = 0;
-  Widget last_child, att_widget;
-  Boolean sortable;
-  fw->form.first_child = NULL;
-  for (i = 0; i < fw->composite.num_children; i++) {
-    child = fw->composite.children[i];
+  Widget child = fw->form.first_child;
+  Cardinal count = 0;
+  int i;
+  while ((child != NULL) && XtIsManaged(child)) {
+    if (++count > num_rect)
+      return False;
+    child = GetFormConstraint(child)->next_sibling;
+  }
+  for (i = (int)fw->composite.num_children - 1; i >= 0; i--) {
+    Widget w = fw->composite.children[i];
+    if (!XtIsRectObj(w) || XtIsManaged(w))
+      continue;
+    if (child != w)
+      return False;
+    count++;
+    child = GetFormConstraint(child)->next_sibling;
+  }
+  return ((child == NULL) && (count == num_rect));
+}
+
+/************************************************************************
+ *
+ *  SortChildren
+ *	Link the RectObj children into the list that the layout walks:
+ *	the managed children in an order where each one comes after the
+ *	siblings it is attached to, then the managed children caught in
+ *	an attachment cycle, then the unmanaged children.  Among the
+ *	children that are ready, the one that comes first in the
+ *	children array is taken first.
+ *
+ *	A child's sorted field is cleared when it is created and when its
+ *	attachments change, and records whether it was managed when it
+ *	was sorted.  The list is rebuilt only when one of them is out of
+ *	date or the list does not match the children any more.
+ *
+ ************************************************************************/
+static void SortChildren(XmFormWidget fw)
+{
+  Cardinal num = fw->composite.num_children;
+  WidgetList children = fw->composite.children;
+  Cardinal num_rect = 0;
+  Boolean dirty = False;
+  FormIndexMap map;
+  XmFormConstraint c;
+  Widget child, last_child;
+  int *indeg, *edge_start, *edges, *heap, *order;
+  int heap_len = 0, heap_size, num_order = 0;
+  int i, j, k;
+  for (i = 0; i < (int)num; i++) {
+    child = children[i];
     if (!XtIsRectObj(child))
       continue;
-    c = GetFormConstraint(child);
-    if (XtIsManaged(child)) {
-      c->sorted = False;
-      c->next_sibling = NULL;
-    }
-    else {
-      c->next_sibling = fw->form.first_child;
-      fw->form.first_child = child;
-      c->sorted = True;
-      sortedCount++;
-    }
+    num_rect++;
+    if (GetFormConstraint(child)->sorted !=
+        (XtIsManaged(child) ? SORTED_MANAGED : SORTED_UNMANAGED))
+      dirty = True;
     CheckConstraints(child);
   }
+  if (!dirty && SortedListValid(fw, num_rect))
+    return;
   /* THIS IS PROBABLY WRONG AND SHOULD BE FIXED SOMEDAY             */
   /* WHY SHOULD UNMANAGED CHILDREN BE ALLOWED AS ATTACHMENT POINTS  */
   /* FOR MANAGED CHILDREN???                                        */
-  /* While there are unsorted children, find one with only sorted  */
-  /* predecessors and put it in the list.  This algorithm works    */
-  /* particularly well if the order is already correct             */
-  last_child = NULL;
-  for (; sortedCount != fw->composite.num_children; sortedCount++) {
-    sortable = False;
-    for (i = 0; !sortable && i < fw->composite.num_children; i++) {
-      child = fw->composite.children[i];
-      if (!XtIsRectObj(child))
-        continue;
-      c = GetFormConstraint(child);
-      if (c->sorted)
-        continue;
-      sortable = True;
-      for (j = FIRST_ATTACHMENT; j < (LAST_ATTACHMENT + 1); j++) {
-        if ((c->att[j].type == XmATTACH_WIDGET) || (c->att[j].type == XmATTACH_OPPOSITE_WIDGET)) {
-          att_widget = c->att[j].w;
-          if ((SIBLINGS(att_widget, child)) && (XtIsRectObj(att_widget))) {
-            c1 = GetFormConstraint(att_widget);
-            if (!c1->sorted)
-              sortable = False;
-          }
-        }
-      }
-    }
-    if (sortable) {
-      /*  We have found a sortable child...add to sorted list.  */
-      if (last_child == NULL) {
-        c->next_sibling = fw->form.first_child;
-        fw->form.first_child = child;
-      }
-      else {
-        c1 = GetFormConstraint(last_child);
-        c->next_sibling = c1->next_sibling;
-        c1->next_sibling = child;
-      }
-      last_child = child;
-      c->sorted = True;
-    }
-  }
-  /*Add other children that haven't been sorted*/
-  for (i = 0; i < fw->composite.num_children; i++) {
-    child = fw->composite.children[i];
-    c = GetFormConstraint(child);
-    if (!XtIsRectObj(child) || c->sorted)
+  /* Unmanaged children count as sorted from the start. */
+  MapInit(&map, (int)num);
+  for (i = 0; i < (int)num; i++) {
+    child = children[i];
+    if (!XtIsRectObj(child))
       continue;
-    if (!c->sorted) {
-      if (last_child == NULL) {
-        c->next_sibling = fw->form.first_child;
-        fw->form.first_child = child;
+    MapAdd(&map, child, i);
+    GetFormConstraint(child)->sorted = !XtIsManaged(child);
+  }
+  /* indeg[i]: attachments of managed child i to unsorted siblings,
+   * edges[edge_start[k]..edge_start[k + 1]): the children attached
+   * to child k. */
+  indeg = (int *)XtCalloc((Cardinal)(3 * num + 2), sizeof(int));
+  edge_start = indeg + num;
+  order = edge_start + num + 1;
+  for (i = 0; i < (int)num; i++) {
+    child = children[i];
+    if (!XtIsRectObj(child) || !XtIsManaged(child))
+      continue;
+    c = GetFormConstraint(child);
+    for (j = FIRST_ATTACHMENT; j < (LAST_ATTACHMENT + 1); j++) {
+      if (((c->att[j].type == XmATTACH_WIDGET) || (c->att[j].type == XmATTACH_OPPOSITE_WIDGET)) &&
+          SIBLINGS(c->att[j].w, child) && XtIsRectObj(c->att[j].w) &&
+          ((k = MapFind(&map, c->att[j].w)) >= 0) && !GetFormConstraint(children[k])->sorted)
+      {
+        indeg[i]++;
+        edge_start[k + 1]++;
       }
-      else {
-        c1 = GetFormConstraint(last_child);
-        c->next_sibling = c1->next_sibling;
-        c1->next_sibling = child;
-      }
-      last_child = child;
-      c->sorted = True;
     }
   }
+  for (i = 0; i < (int)num; i++)
+    edge_start[i + 1] += edge_start[i];
+  edges = (int *)_XmMallocArray(edge_start[num] + 1, sizeof(int));
+  for (i = 0; i < (int)num; i++)
+    order[i] = edge_start[i]; /* fill pointers, for now */
+  for (i = 0; i < (int)num; i++) {
+    child = children[i];
+    if (!XtIsRectObj(child) || !XtIsManaged(child))
+      continue;
+    c = GetFormConstraint(child);
+    for (j = FIRST_ATTACHMENT; j < (LAST_ATTACHMENT + 1); j++) {
+      if (((c->att[j].type == XmATTACH_WIDGET) || (c->att[j].type == XmATTACH_OPPOSITE_WIDGET)) &&
+          SIBLINGS(c->att[j].w, child) && XtIsRectObj(c->att[j].w) &&
+          ((k = MapFind(&map, c->att[j].w)) >= 0) && !GetFormConstraint(children[k])->sorted)
+        edges[order[k]++] = i;
+    }
+  }
+  MapFree(&map);
+  /* Take the ready children lowest index first. */
+  heap_size = (int)num;
+  heap = (int *)_XmMallocArray(num + 1, sizeof(int));
+  for (i = 0; i < (int)num; i++) {
+    child = children[i];
+    if (XtIsRectObj(child) && XtIsManaged(child) && (indeg[i] == 0))
+      HeapPush(&heap, &heap_len, &heap_size, i);
+  }
+  while (heap_len > 0) {
+    i = HeapPop(heap, &heap_len);
+    order[num_order++] = i;
+    GetFormConstraint(children[i])->sorted = True;
+    for (j = edge_start[i]; j < edge_start[i + 1]; j++) {
+      if (--indeg[edges[j]] == 0)
+        HeapPush(&heap, &heap_len, &heap_size, edges[j]);
+    }
+  }
+  XtFree((char *)heap);
+  XtFree((char *)edges);
+  /* Add other children that haven't been sorted */
+  for (i = 0; i < (int)num; i++) {
+    child = children[i];
+    if (XtIsRectObj(child) && !GetFormConstraint(child)->sorted) {
+      order[num_order++] = i;
+      GetFormConstraint(child)->sorted = True;
+    }
+  }
+  /* Then the unmanaged ones, last first. */
+  for (i = (int)num - 1; i >= 0; i--) {
+    child = children[i];
+    if (XtIsRectObj(child) && !XtIsManaged(child))
+      order[num_order++] = i;
+  }
+  for (i = 0; i < num_order; i++) {
+    child = children[order[i]];
+    GetFormConstraint(child)->sorted = XtIsManaged(child) ? SORTED_MANAGED : SORTED_UNMANAGED;
+  }
+  fw->form.first_child = NULL;
+  last_child = NULL;
+  for (i = 0; i < num_order; i++) {
+    child = children[order[i]];
+    if (last_child == NULL)
+      fw->form.first_child = child;
+    else
+      GetFormConstraint(last_child)->next_sibling = child;
+    last_child = child;
+  }
+  if (last_child != NULL)
+    GetFormConstraint(last_child)->next_sibling = NULL;
+  XtFree((char *)indeg);
 }
 
 /************************************************************************
@@ -1629,7 +2209,8 @@ static void CalcEdgeValues(Widget w,
                            Widget instigator,
                            XtWidgetGeometry *inst_geometry,
                            Dimension *form_width,
-                           Dimension *form_height)
+                           Dimension *form_height,
+                           FormLayout *layout)
 {
   XmFormConstraint c = GetFormConstraint(w);
   XmFormWidget fw = (XmFormWidget)XtParent(w);
@@ -1675,33 +2256,33 @@ static void CalcEdgeValues(Widget w,
     height = 1;
   if (left->type != XmATTACH_NONE) {
     if (right->type != XmATTACH_NONE) /* LEFT and right are attached */ {
-      CalcEdgeValue(fw, w, width, border_width, LEFT, really, form_width, form_height);
-      CalcEdgeValue(fw, w, width, border_width, RIGHT, really, form_width, form_height);
+      CalcEdgeValue(fw, w, width, border_width, LEFT, really, form_width, form_height, layout);
+      CalcEdgeValue(fw, w, width, border_width, RIGHT, really, form_width, form_height, layout);
     }
     else /*  LEFT attached, compute right  */ {
-      CalcEdgeValue(fw, w, width, border_width, LEFT, really, form_width, form_height);
+      CalcEdgeValue(fw, w, width, border_width, LEFT, really, form_width, form_height, layout);
       ComputeAttachment(fw, w, width, border_width, RIGHT, really, form_width, form_height);
     }
   }
   else {
     if (right->type != XmATTACH_NONE) /* RIGHT attached, compute left */ {
-      CalcEdgeValue(fw, w, width, border_width, RIGHT, really, form_width, form_height);
+      CalcEdgeValue(fw, w, width, border_width, RIGHT, really, form_width, form_height, layout);
       ComputeAttachment(fw, w, width, border_width, LEFT, really, form_width, form_height);
     }
   }
   if (top->type != XmATTACH_NONE) {
     if (bottom->type != XmATTACH_NONE) /* TOP and bottom are attached */ {
-      CalcEdgeValue(fw, w, height, border_width, TOP, really, form_width, form_height);
-      CalcEdgeValue(fw, w, height, border_width, BOTTOM, really, form_width, form_height);
+      CalcEdgeValue(fw, w, height, border_width, TOP, really, form_width, form_height, layout);
+      CalcEdgeValue(fw, w, height, border_width, BOTTOM, really, form_width, form_height, layout);
     }
     else /* TOP attached, compute bottom */ {
-      CalcEdgeValue(fw, w, height, border_width, TOP, really, form_width, form_height);
+      CalcEdgeValue(fw, w, height, border_width, TOP, really, form_width, form_height, layout);
       ComputeAttachment(fw, w, height, border_width, BOTTOM, really, form_width, form_height);
     }
   }
   else {
     if (bottom->type != XmATTACH_NONE) /* BOTTOM attached, compute top */ {
-      CalcEdgeValue(fw, w, height, border_width, BOTTOM, really, form_width, form_height);
+      CalcEdgeValue(fw, w, height, border_width, BOTTOM, really, form_width, form_height, layout);
       ComputeAttachment(fw, w, height, border_width, TOP, really, form_width, form_height);
     }
   }
@@ -1709,10 +2290,43 @@ static void CalcEdgeValues(Widget w,
 
 /*********************************************************************
  *
+ * CheckBase
+ *	Memoised call of one of the Check*Base functions below.  Their
+ *	result only depends on the attachments, which do not change
+ *	while the form size is being computed.  An attachment cycle,
+ *	which used to recurse until the stack overflowed, counts as 0.
+ *
+ *********************************************************************/
+static float CheckBase(
+    FormLayout *layout, int kind, BaseProc proc, Widget sibling, Boolean opposite)
+{
+  int i, slot, size;
+  float val;
+  if ((layout == NULL) || ((i = MapFind(&layout->map, sibling)) < 0))
+    return (*proc)(sibling, opposite, layout);
+  if (layout->base_state == NULL) {
+    size = layout->num_kids * NUM_BASE_SLOTS;
+    layout->base_val = (float *)_XmMallocArray(size, sizeof(float));
+    layout->base_state = (unsigned char *)XtCalloc((Cardinal)size, 1);
+  }
+  slot = i * NUM_BASE_SLOTS + kind + (opposite ? 1 : 0);
+  if (layout->base_state[slot] == 2)
+    return layout->base_val[slot];
+  if (layout->base_state[slot] == 1)
+    return 0.0;
+  layout->base_state[slot] = 1;
+  val = (*proc)(sibling, opposite, layout);
+  layout->base_val[slot] = val;
+  layout->base_state[slot] = 2;
+  return val;
+}
+
+/*********************************************************************
+ *
  * CheckBottomBase
  *
  *********************************************************************/
-static float CheckBottomBase(Widget sibling, Boolean opposite)
+static float CheckBottomBase(Widget sibling, Boolean opposite, FormLayout *layout)
 {
   XmFormWidget fw = (XmFormWidget)sibling->core.parent;
   XmFormConstraint c = GetFormConstraint(sibling);
@@ -1733,9 +2347,10 @@ static float CheckBottomBase(Widget sibling, Boolean opposite)
             break;
           case XmATTACH_OPPOSITE_WIDGET:
             flag = TRUE;
+            XM_FALLTHROUGH;
           case XmATTACH_WIDGET:
             if (SIBLINGS(c->att[BOTTOM].w, sibling))
-              return_val = CheckBottomBase(c->att[BOTTOM].w, flag);
+              return_val = CheckBase(layout, BASE_BOTTOM, CheckBottomBase, c->att[BOTTOM].w, flag);
             else {
               if (flag)
                 return_val = 0.0;
@@ -1769,9 +2384,10 @@ static float CheckBottomBase(Widget sibling, Boolean opposite)
         break;
       case XmATTACH_OPPOSITE_WIDGET:
         flag = TRUE;
+        XM_FALLTHROUGH;
       case XmATTACH_WIDGET:
         if (SIBLINGS(c->att[BOTTOM].w, sibling))
-          return_val = CheckBottomBase(c->att[BOTTOM].w, flag);
+          return_val = CheckBase(layout, BASE_BOTTOM, CheckBottomBase, c->att[BOTTOM].w, flag);
         else {
           if (flag)
             return_val = 0.0;
@@ -1795,7 +2411,7 @@ static float CheckBottomBase(Widget sibling, Boolean opposite)
  * CheckRightBase
  *
  *********************************************************************/
-static float CheckRightBase(Widget sibling, Boolean opposite)
+static float CheckRightBase(Widget sibling, Boolean opposite, FormLayout *layout)
 {
   XmFormWidget fw = (XmFormWidget)sibling->core.parent;
   XmFormConstraint c = GetFormConstraint(sibling);
@@ -1816,9 +2432,10 @@ static float CheckRightBase(Widget sibling, Boolean opposite)
             break;
           case XmATTACH_OPPOSITE_WIDGET:
             flag = TRUE;
+            XM_FALLTHROUGH;
           case XmATTACH_WIDGET:
             if (SIBLINGS(c->att[RIGHT].w, sibling))
-              return_val = CheckRightBase(c->att[RIGHT].w, flag);
+              return_val = CheckBase(layout, BASE_RIGHT, CheckRightBase, c->att[RIGHT].w, flag);
             else {
               if (flag)
                 return_val = 0.0;
@@ -1852,9 +2469,10 @@ static float CheckRightBase(Widget sibling, Boolean opposite)
         break;
       case XmATTACH_OPPOSITE_WIDGET:
         flag = TRUE;
+        XM_FALLTHROUGH;
       case XmATTACH_WIDGET:
         if (SIBLINGS(c->att[RIGHT].w, sibling))
-          return_val = CheckRightBase(c->att[RIGHT].w, flag);
+          return_val = CheckBase(layout, BASE_RIGHT, CheckRightBase, c->att[RIGHT].w, flag);
         else {
           if (flag)
             return_val = 0.0;
@@ -1878,7 +2496,7 @@ static float CheckRightBase(Widget sibling, Boolean opposite)
  * CheckLeftBase
  *
  *********************************************************************/
-static float CheckLeftBase(Widget sibling, Boolean opposite)
+static float CheckLeftBase(Widget sibling, Boolean opposite, FormLayout *layout)
 {
   XmFormWidget fw = (XmFormWidget)sibling->core.parent;
   XmFormConstraint c = GetFormConstraint(sibling);
@@ -1899,9 +2517,10 @@ static float CheckLeftBase(Widget sibling, Boolean opposite)
             break;
           case XmATTACH_OPPOSITE_WIDGET:
             flag = TRUE;
+            XM_FALLTHROUGH;
           case XmATTACH_WIDGET:
             if (SIBLINGS(c->att[LEFT].w, sibling))
-              return_val = CheckLeftBase(c->att[LEFT].w, flag);
+              return_val = CheckBase(layout, BASE_LEFT, CheckLeftBase, c->att[LEFT].w, flag);
             else {
               if (flag)
                 return_val = 0.0;
@@ -1935,9 +2554,10 @@ static float CheckLeftBase(Widget sibling, Boolean opposite)
         break;
       case XmATTACH_OPPOSITE_WIDGET:
         flag = TRUE;
+        XM_FALLTHROUGH;
       case XmATTACH_WIDGET:
         if (SIBLINGS(c->att[LEFT].w, sibling))
-          return_val = CheckLeftBase(c->att[LEFT].w, flag);
+          return_val = CheckBase(layout, BASE_LEFT, CheckLeftBase, c->att[LEFT].w, flag);
         else {
           if (flag)
             return_val = 0.0;
@@ -1971,7 +2591,8 @@ static void CalcEdgeValue(XmFormWidget fw,
                           int which,
                           Boolean really,
                           Dimension *fwidth,
-                          Dimension *fheight)
+                          Dimension *fheight,
+                          FormLayout *layout)
 {
   float scale;
   XmFormAttachment att = GetFormConstraint(w)->att;
@@ -2160,7 +2781,7 @@ static void CalcEdgeValue(XmFormWidget fw,
               temp2 = temp1 - Value(&(att[RIGHT]));
               temp3 = temp2 - size;
               if ((fwidth) && (temp3 < 0)) {
-                factor = CheckLeftBase(a->w, FALSE);
+                factor = CheckBase(layout, BASE_LEFT, CheckLeftBase, a->w, FALSE);
                 *fwidth += (Dimension)((factor * abs(temp3)) + 0.5);
                 temp1 = Value(&(att[RIGHT])) + size;
               }
@@ -2178,7 +2799,7 @@ static void CalcEdgeValue(XmFormWidget fw,
               temp2 = temp1 - Value((&att[TOP]));
               temp3 = temp2 - size;
               if ((fheight) && (temp3 < 0)) {
-                factor = CheckBottomBase(a->w, FALSE);
+                factor = CheckBase(layout, BASE_BOTTOM, CheckBottomBase, a->w, FALSE);
                 *fheight += (Dimension)((factor * abs(temp3)) + 0.5);
                 temp1 = Value((&att[TOP])) + size;
               }
@@ -2386,7 +3007,7 @@ static void CalcEdgeValue(XmFormWidget fw,
               temp2 = temp1 - Value(&(att[LEFT]));
               temp3 = temp2 - size;
               if ((fwidth) && (temp3 < 0)) {
-                factor = CheckRightBase(a->w, FALSE);
+                factor = CheckBase(layout, BASE_RIGHT, CheckRightBase, a->w, FALSE);
                 *fwidth += (Dimension)((factor * abs(temp3)) + 0.5);
                 temp1 = Value(&(att[LEFT])) + size;
               }
@@ -2404,7 +3025,7 @@ static void CalcEdgeValue(XmFormWidget fw,
               temp2 = temp1 - Value((&att[TOP]));
               temp3 = temp2 - size;
               if ((fheight) && (temp3 < 0)) {
-                factor = CheckBottomBase(a->w, FALSE);
+                factor = CheckBase(layout, BASE_BOTTOM, CheckBottomBase, a->w, FALSE);
                 *fheight += (Dimension)((factor * abs(temp3)) + 0.5);
                 temp1 = Value((&att[TOP])) + size;
               }
@@ -2587,7 +3208,7 @@ Widget XmCreateForm(Widget parent, char *name, ArgList arglist, Cardinal argcoun
 
 Widget XmVaCreateForm(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

@@ -106,6 +106,53 @@ static SubstitutionRec	uidSubs[1];
 
 
 /*
+ * Check a compression table read from a UID file into a resource context,
+ * before Urm__FixupCompressionTable turns its offsets into pointers: the
+ * entry vector and every string it locates must lie within the resource.
+ * The table is still in the byte order of the file.
+ */
+static Boolean
+Urm__ValidCompressionTable (URMResourceContextPtr	ctx,
+			    Boolean			byte_swapped)
+{
+  UidCompressionTablePtr	ctable ;	/* the table */
+  size_t			size ;		/* bytes in the resource */
+  unsigned			validation ;	/* validation code */
+  MrmCount			num_entries ;	/* number of entries */
+  MrmOffset			stoffset ;	/* string offset */
+  int				ndx ;		/* loop index */
+
+  ctable = (UidCompressionTablePtr) UrmRCBuffer (ctx) ;
+  size = UrmRCSize (ctx) ;
+  if ( ctable == NULL || size < XtOffsetOf (UidCompressionTable, entry) )
+    return FALSE ;
+
+  validation = ctable->validation ;
+  num_entries = ctable->num_entries ;
+  if ( byte_swapped )
+    {
+      swapbytes (validation) ;
+      swapbytes (num_entries) ;
+    }
+  if ( validation != UidCompressionTableValid || num_entries < 0 ||
+       ! _UrmInBuffer (XtOffsetOf (UidCompressionTable, entry),
+		       (size_t) num_entries * sizeof (UidCTableEntry), size) )
+    return FALSE ;
+
+  for ( ndx=UilMrmMinValidCode ; ndx<num_entries ; ndx++ )
+    {
+      stoffset = ctable->entry[ndx].stoffset ;
+      if ( byte_swapped ) swapbytes (stoffset) ;
+      if ( ! _UrmStringInBuffer (ctable, stoffset, size) )
+	return FALSE ;
+    }
+
+  return TRUE ;
+}
+
+
+
+/*
  *++
  *
  *  PROCEDURE DESCRIPTION:
@@ -123,6 +170,11 @@ static SubstitutionRec	uidSubs[1];
  *				structures corresponding to the files.
  *				This parameter may be NULL.
  *	hierarchy_id_return	To return the hierarchy id
+ *	in_memory		TRUE to open the single memory buffer
+ *				uid_buffer instead of the named files
+ *	uid_buffer		The memory buffer
+ *	uid_buffer_size		The size of the memory buffer in bytes,
+ *				or 0 if it is not known
  *
  *  IMPLICIT INPUTS:
  *
@@ -140,13 +192,14 @@ static SubstitutionRec	uidSubs[1];
  *--
  */
 
-Cardinal
-Urm__OpenHierarchy (MrmCount			num_files,
-		    String			*name_list,
-		    MrmOsOpenParamPtr		*os_ext_list,
-		    MrmHierarchy		*hierarchy_id_return,
-		    MrmFlag			in_memory,
-		    unsigned char		*uid_buffer)
+static Cardinal
+Urm__OpenHierarchyInternal (MrmCount			num_files,
+			    String			*name_list,
+			    MrmOsOpenParamPtr		*os_ext_list,
+			    MrmHierarchy		*hierarchy_id_return,
+			    MrmFlag			in_memory,
+			    unsigned char		*uid_buffer,
+			    size_t			uid_buffer_size)
 {
 
   /*
@@ -253,16 +306,17 @@ Urm__OpenHierarchy (MrmCount			num_files,
     {
       if ( in_memory == TRUE )
 	{
-	  result = UrmIdbOpenBuffer(uid_buffer, &cur_file) ;
+	  result = UrmIdbOpenBufferWithSize(uid_buffer, uid_buffer_size,
+					    &cur_file) ;
 	  switch ( result )
 	    {
 	    case MrmSUCCESS:
 	      break;
 	    case MrmNOT_VALID:
-	      sprintf (err_stg, "%s", _MrmMMsg_0113);
+	      snprintf (err_stg, sizeof(err_stg), "%s", _MrmMMsg_0113);
 	      break;
 	    default:
-	      sprintf (err_stg, "%s", _MrmMMsg_0114);
+	      snprintf (err_stg, sizeof(err_stg), "%s", _MrmMMsg_0114);
 	      break;
 	    }
 	}
@@ -301,12 +355,35 @@ Urm__OpenHierarchy (MrmCount			num_files,
       result = UrmGetResourceContext ((char *(*)(size_t))NULL, (void(*)(void *))NULL,
 				      0, &resource_ctx);
       if ( result != MrmSUCCESS ) return result;
-      result = UrmGetIndexedLiteral (cur_file, UilMrmClassTableIndex,
-				     class_ctx);
-      if ( result != MrmSUCCESS ) continue;
-      result = UrmGetIndexedLiteral (cur_file, UilMrmResourceTableIndex,
-				     resource_ctx);
-      if ( result != MrmSUCCESS ) continue;
+      result = UrmIdbGetIndexedResource (cur_file, UilMrmClassTableIndex,
+					 URMgLiteral, URMtNul, class_ctx);
+      if ( result == MrmSUCCESS )
+	result = UrmIdbGetIndexedResource (cur_file,
+					   UilMrmResourceTableIndex,
+					   URMgLiteral, URMtNul, resource_ctx);
+      if ( result != MrmSUCCESS )
+	{
+	  UrmFreeResourceContext (class_ctx);
+	  UrmFreeResourceContext (resource_ctx);
+	  continue;
+	}
+
+      /*
+       * The tables are used unchecked from now on, so reject the file if
+       * they are not valid.
+       */
+      if ( ! Urm__ValidCompressionTable (class_ctx, cur_file->byte_swapped) ||
+	   ! Urm__ValidCompressionTable (resource_ctx,
+					 cur_file->byte_swapped) )
+	{
+	  UrmFreeResourceContext (class_ctx);
+	  UrmFreeResourceContext (resource_ctx);
+	  XtFree (uidPath);
+	  uidPath = 0;
+	  Urm__CloseHierarchy (hiptr) ;
+	  return Urm__UT_Error ("Urm__OpenHierarchy", _MrmMMsg_0028,
+				NULL, NULL, MrmNOT_VALID);
+	}
 
       /*
        * Retain the buffers from the contexts, but free the contexts
@@ -333,6 +410,40 @@ Urm__OpenHierarchy (MrmCount			num_files,
   uidPath = 0;
   *hierarchy_id_return = hiptr ;
   return MrmSUCCESS ;
+
+}
+
+
+
+Cardinal
+Urm__OpenHierarchy (MrmCount			num_files,
+		    String			*name_list,
+		    MrmOsOpenParamPtr		*os_ext_list,
+		    MrmHierarchy		*hierarchy_id_return,
+		    MrmFlag			in_memory,
+		    unsigned char		*uid_buffer)
+{
+
+  return Urm__OpenHierarchyInternal (num_files, name_list, os_ext_list,
+				     hierarchy_id_return, in_memory,
+				     uid_buffer, 0) ;
+
+}
+
+
+/*
+ * Open a hierarchy on a memory buffer of uid_buffer_size bytes (0 if the
+ * size is not known) holding the image of a UID file.
+ */
+Cardinal
+Urm__OpenHierarchyFromBuffer (unsigned char		*uid_buffer,
+			      size_t			uid_buffer_size,
+			      MrmHierarchy		*hierarchy_id_return)
+{
+
+  return Urm__OpenHierarchyInternal ((MrmCount) 1, NULL, NULL,
+				     hierarchy_id_return, TRUE,
+				     uid_buffer, uid_buffer_size) ;
 
 }
 
@@ -386,8 +497,7 @@ Urm__CloseHierarchy (MrmHierarchy	hierarchy_id)
 			  NULL, NULL, MrmBAD_HIERARCHY) ;
 
   for ( ndx=0 ; ndx<hierarchy_id->num_file ; ndx++ )
-    if (hierarchy_id->file_list[ndx]->in_memory == FALSE )
-      UrmIdbCloseFile (hierarchy_id->file_list[ndx], FALSE) ;
+    UrmIdbCloseFile (hierarchy_id->file_list[ndx], FALSE) ;
 
   /* Begin fixing DTS 7303 */
   if(hierarchy_id->name_registry){
@@ -704,6 +814,7 @@ I18NOpenFile (Display			*display,
    */
   char			*resolvedname; /* current resolved name */
   Boolean		user_path ;
+  size_t		len ;		/* length of name */
 
   uidSubs[0].substitution = name;
 
@@ -721,7 +832,8 @@ I18NOpenFile (Display			*display,
    * resolve the pathname with .uid suffix first. If that fails or the suffix is
    * already on the file then just try to resolve the pathname.
    */
-  if ( strcmp (&name[strlen(name)-4],".uid") != 0 )
+  len = strlen (name);
+  if ( len < 4 || strcmp (&name[len-4], ".uid") != 0 )
     resolvedname = XtResolvePathname (display,
 				      "uid",
 				      NULL,
@@ -746,7 +858,7 @@ I18NOpenFile (Display			*display,
 
   if (resolvedname == 0)
     {
-      sprintf (err_stg, _MrmMMsg_0031, name) ;
+      snprintf (err_stg, sizeof(err_stg), _MrmMMsg_0031, name) ;
       return Urm__UT_Error ("I18NOpenFile", err_stg, NULL, NULL, MrmNOT_FOUND);
     }
 
@@ -756,11 +868,11 @@ I18NOpenFile (Display			*display,
     case MrmSUCCESS:
       break;
     case MrmNOT_VALID:
-      sprintf (err_stg, _MrmMMsg_0032, resolvedname) ;
+      snprintf (err_stg, sizeof(err_stg), _MrmMMsg_0032, resolvedname) ;
       break;
     case MrmNOT_FOUND:
     default:
-      sprintf (err_stg, _MrmMMsg_0031, resolvedname) ;
+      snprintf (err_stg, sizeof(err_stg), _MrmMMsg_0031, resolvedname) ;
       break;
     }
 

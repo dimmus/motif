@@ -501,9 +501,9 @@ static int ScanOtherColors(Display *display,
         /* at last store the rgb value */
         char buf[BUFSIZ];
 #ifndef FOR_MSW
-        sprintf(buf, "#%04X%04X%04X", xcolor->red, xcolor->green, xcolor->blue);
+        snprintf(buf, sizeof(buf), "#%04X%04X%04X", xcolor->red, xcolor->green, xcolor->blue);
 #else
-        sprintf(buf, "#%02x%02x%02x", xcolor->red, xcolor->green, xcolor->blue);
+        snprintf(buf, sizeof(buf), "#%02x%02x%02x", xcolor->red, xcolor->green, xcolor->blue);
 #endif
         color->c_color = (char *)xpmstrdup(buf);
       }

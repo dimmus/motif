@@ -300,6 +300,55 @@ typedef struct _XmAssocDataRec {
   struct _XmAssocDataRec *next;
 } XmAssocDataRec, *XmAssocData;
 
+/*
+ * Gadgets push and pop extension data around every Get/SetValues call,
+ * so keep a few free stack records instead of a malloc/free pair each.
+ */
+#define MAX_FREE_ASSOC 32
+static XmAssocData freeAssocData = NULL;
+static Cardinal numFreeAssocData = 0;
+
+static XmAssocData NewAssocData(void)
+{
+  XmAssocData rec;
+  _XmProcessLock();
+  if ((rec = freeAssocData) != NULL) {
+    freeAssocData = rec->next;
+    numFreeAssocData--;
+  }
+  _XmProcessUnlock();
+  if (rec == NULL)
+    rec = (XmAssocData)XtMalloc(sizeof(XmAssocDataRec));
+  rec->data = NULL;
+  rec->next = NULL;
+  return rec;
+}
+
+static void FreeAssocData(XmAssocData rec)
+{
+  _XmProcessLock();
+  if (numFreeAssocData < MAX_FREE_ASSOC) {
+    rec->next = freeAssocData;
+    freeAssocData = rec;
+    numFreeAssocData++;
+    rec = NULL;
+  }
+  _XmProcessUnlock();
+  XtFree((char *)rec);
+}
+
+/*
+ * XContext hashes an id as ((id << 1) + context) & mask, so widget
+ * addresses, which share their alignment, would all fall in a few of its
+ * buckets.  Rotate the alignment bits out of the low end; this is a
+ * bijection, so every widget still has its own id.
+ */
+static XID ExtDataId(Widget widget)
+{
+  unsigned long id = (unsigned long)widget;
+  return (XID)((id >> 4) | (id << (sizeof(id) * CHAR_BIT - 4)));
+}
+
 void _XmPushWidgetExtData(Widget widget, XmWidgetExtData data, unsigned char extType)
 {
   XmAssocData newData;
@@ -307,15 +356,16 @@ void _XmPushWidgetExtData(Widget widget, XmWidgetExtData data, unsigned char ext
   XmAssocData *assocDataPtr;
   Boolean empty;
   XContext widgetExtContext = ExtTypeToContext(extType);
-  newData = (XmAssocData)XtCalloc(1, sizeof(XmAssocDataRec));
+  XID id = ExtDataId(widget);
+  newData = NewAssocData();
   newData->data = (XtPointer)data;
-  empty = XFindContext(XtDisplay(widget), (Window)widget, widgetExtContext, (char **)&assocData);
+  empty = XFindContext(XtDisplay(widget), id, widgetExtContext, (char **)&assocData);
   assocDataPtr = &assocData;
   while (*assocDataPtr)
     assocDataPtr = &((*assocDataPtr)->next);
   *assocDataPtr = newData;
   if (empty)
-    XSaveContext(XtDisplay(widget), (Window)widget, widgetExtContext, (XPointer)assocData);
+    XSaveContext(XtDisplay(widget), id, widgetExtContext, (XPointer)assocData);
 }
 
 void _XmPopWidgetExtData(Widget widget, XmWidgetExtData *dataRtn, unsigned char extType)
@@ -323,9 +373,10 @@ void _XmPopWidgetExtData(Widget widget, XmWidgetExtData *dataRtn, unsigned char 
   XmAssocData assocData = NULL;
   XmAssocData *assocDataPtr;
   XContext widgetExtContext = ExtTypeToContext(extType);
+  XID id = ExtDataId(widget);
   /* Initialize the return parameter. */
   *dataRtn = NULL;
-  if (XFindContext(XtDisplay(widget), (Window)widget, widgetExtContext, (char **)&assocData)) {
+  if (XFindContext(XtDisplay(widget), id, widgetExtContext, (char **)&assocData)) {
 #ifdef DEBUG
     XmeWarning(NULL, MSG2);
 #endif
@@ -335,10 +386,10 @@ void _XmPopWidgetExtData(Widget widget, XmWidgetExtData *dataRtn, unsigned char 
   while ((*assocDataPtr) && (*assocDataPtr)->next)
     assocDataPtr = &((*assocDataPtr)->next);
   if (*assocDataPtr == assocData)
-    XDeleteContext(XtDisplay(widget), (Window)widget, widgetExtContext);
+    XDeleteContext(XtDisplay(widget), id, widgetExtContext);
   if (*assocDataPtr) {
     *dataRtn = (XmWidgetExtData)(*assocDataPtr)->data;
-    XtFree((char *)*assocDataPtr);
+    FreeAssocData(*assocDataPtr);
     *assocDataPtr = NULL;
   }
 }
@@ -348,7 +399,7 @@ XmWidgetExtData _XmGetWidgetExtData(Widget widget, unsigned char extType)
   XmAssocData assocData = NULL;
   XmAssocData *assocDataPtr;
   XContext widgetExtContext = ExtTypeToContext(extType);
-  if ((XFindContext(XtDisplay(widget), (Window)widget, widgetExtContext, (char **)&assocData))) {
+  if ((XFindContext(XtDisplay(widget), ExtDataId(widget), widgetExtContext, (char **)&assocData))) {
 #ifdef DEBUG
     XmeWarning(NULL, "no extension data on stack");
 #endif /* DEBUG */
@@ -484,20 +535,6 @@ static void RealizeWrapper(Widget w, Mask *vmask, XSetWindowAttributes *attr, Ca
     _XmProcessUnlock();
     if (realize)
       (*realize)(w, vmask, attr);
-#if 0
-      /* DRK 6/20/94 -- This change breaks our test environment; when
-       *	present the normal shell isn't added to the grab list
-       *	because VendorExtRealize is never called.  It used to
-       *	be called for the ApplicationShell class.
-       */
-      /*
-       * CR 9266: Only call the RealizeCallback if we're doing the
-       * VendorShell class level. Do not call multiple times for
-       * VendorShell subclasses.
-       */
-      if ((extData = _XmGetWidgetExtData(w, XmSHELL_EXTENSION)) &&
-	  (extData->widget) && wc == vendorShellWidgetClass)
-#else
     /*
      * CR 3353 - Avoid calling the RealizeCallback twice for DialogShells
      *	by checking the WidgetClass name.  If it is XmDialogShell,
@@ -506,7 +543,6 @@ static void RealizeWrapper(Widget w, Mask *vmask, XSetWindowAttributes *attr, Ca
      */
     if ((extData = _XmGetWidgetExtData(w, XmSHELL_EXTENSION)) && (extData->widget) &&
         strcmp(wc->core_class.class_name, "XmDialogShell"))
-#endif
     {
       _XmCallCallbackList(extData->widget,
                           ((XmVendorShellExtObject)(extData->widget))->vendor.realize_callback,
@@ -1116,10 +1152,10 @@ Cardinal _XmSecondaryResourceData(XmBaseClassExt bcePtr,
  */
 static XtResourceList *CreateIndirectionTable(XtResourceList resources, Cardinal num_resources)
 {
-  register int i;
+  int i;
   XtResourceList *table;
-  table = (XtResourceList *)XtMalloc(num_resources * sizeof(XtResourceList));
-  for (i = 0; i < num_resources; i++)
+  table = (XtResourceList *)_XmMallocArray(num_resources, sizeof(XtResourceList));
+  for (i = 0; (Cardinal)i < num_resources; i++)
     table[i] = (XtResourceList)(&(resources[i]));
   return table;
 }
@@ -1191,7 +1227,7 @@ void _XmTransformSubResources(XtResourceList comp_resources,
        /* extension            */ NULL}};
   if (((int)comp_resources[0].resource_offset) >= 0) {
     XtResourceList tmp_resources;
-    tmp_resources = (XtResourceList)XtMalloc(sizeof(XtResource) * num_comp_resources);
+    tmp_resources = (XtResourceList)_XmMallocArray(num_comp_resources, sizeof(XtResource));
     memcpy(tmp_resources, comp_resources, sizeof(XtResource) * num_comp_resources);
     *resources = tmp_resources;
     *num_resources = num_comp_resources;
@@ -1834,10 +1870,8 @@ static int GetDepth(WidgetClass wc)
 }
 
 /*
- * These symbols must always be present so applications compiling with
- * -DXTHREADS can still link against libraries built without it.  How
- * those applications recognize non MT-safe libraries is a different
- * issue.
+ * These are exported: the XmIs* macros in the installed headers expand
+ * to calls to them.
  */
 inline void _XmFastSubclassInit(WidgetClass wc, unsigned int bit)
 {

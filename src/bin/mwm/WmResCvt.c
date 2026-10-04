@@ -43,9 +43,7 @@ static char rcsid[] = "$XConsortium: WmResCvt.c /main/4 1995/11/01 11:49:54 rswi
 #include <stdio.h>
 #include <stdlib.h>
 
-#ifndef MOTIF_ONE_DOT_ONE
 #include <Xm/XmosP.h>
-#endif
 
 /*
  * include extern functions
@@ -1498,8 +1496,8 @@ unsigned char *NextToken (unsigned char *pchIn, int *pLen,
 	unsigned char **ppchNext)
 {
     unsigned char *pchR = pchIn;
-    register int   i;
-    register int   chlen;
+    int   i;
+    int   chlen;
 
     for (i = 0;
 	 ((chlen = mblen((char *)pchIn, MB_CUR_MAX)) > 0) && (pchIn[0] != '\0');

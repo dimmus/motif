@@ -22,6 +22,7 @@
  */
 #ifndef _XmDialogShellP_h
 #  define _XmDialogShellP_h
+#  include <X11/IntrinsicP.h> /* before ShellP.h */
 #  include <X11/ShellP.h>
 #  include <Xm/DialogS.h>
 #  include <Xm/XmP.h>

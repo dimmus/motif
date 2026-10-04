@@ -718,7 +718,7 @@ static void ChangeManaged(Widget w)
    * not be used to confirm the child to be text or text_field as this trait
    * is held by other widgets such as label as well.
    */
-  for (i = 0; i < SB_ChildCount(spinW); i++) {
+  for (i = 0; (Cardinal)i < SB_ChildCount(spinW); i++) {
     if (XtIsManaged(spinW->composite.children[i])) {
       if (XmIsTextField(spinW->composite.children[i]) || XmIsText(spinW->composite.children[i])) {
         spinW->spinBox.textw = spinW->composite.children[i];
@@ -779,20 +779,11 @@ static void ConstraintInitialize(Widget req,
   else {
     if (reqC->values != NULL) {
       /* buffer the values XmStringTable */
-      newC->values = (XmString *)XtMalloc(reqC->num_values * sizeof(XmString));
+      newC->values = (XmString *)_XmMallocArray(reqC->num_values, sizeof(XmString));
       if (newC->values != NULL)
         for (valLoop = 0; valLoop < reqC->num_values; valLoop++)
           newC->values[valLoop] = XmStringCopy(reqC->values[valLoop]);
     }
-#if 0
-    /*
-     * This is ifdef'ed out to be BC with DtSpinBox warning messages.
-     */
-    if (newC->values == NULL || newC->num_values == 0)
-      if (ChildIsTraversable(new_w))
-	if (XmeTraitGet((XtPointer)XtClass(new_w), XmQTaccessTextual) != NULL)
-          XmeWarning(new_w, BAD_SPIN_VALUES);
-#endif
   }
   if (newC->position_type != XmPOSITION_VALUE && newC->position_type != XmPOSITION_INDEX) {
     newC->position_type = XmPOSITION_VALUE;
@@ -884,7 +875,7 @@ static Boolean ConstraintSetValues(Widget old,
     if (reqC->values == NULL)
       reqC->values = oldC->values;
     else if (reqC->values != oldC->values) {
-      newC->values = (XmString *)XtMalloc(reqC->num_values * sizeof(XmString));
+      newC->values = (XmString *)_XmMallocArray(reqC->num_values, sizeof(XmString));
       if (newC->values != NULL)
         for (valLoop = 0; valLoop < reqC->num_values; valLoop++)
           newC->values[valLoop] = XmStringCopy(reqC->values[valLoop]);
@@ -892,11 +883,6 @@ static Boolean ConstraintSetValues(Widget old,
     error = ValidatePositionValue(newC, &newC->position);
     if (error)
       XmeWarning(new_w, error);
-#if 0
-      if (newC->values == NULL || newC->num_values == 0)
-	if (XmeTraitGet((XtPointer)XtClass(new_w), XmQTaccessTextual) != NULL)
-	  XmeWarning(new_w, BAD_SPIN_VALUES);
-#endif
     if ((newC->position != oldC->position) || (newC->values != oldC->values) ||
         (newC->num_values < oldC->num_values && newC->position > newC->num_values))
       redisplayText = True;
@@ -1238,7 +1224,7 @@ static int NumericChildCount(XmSpinBoxWidget spinW)
   int childCount;
   childCount = 0;
   if (SB_WithChild(spinW))
-    for (i = 0; i < SB_ChildCount(spinW); i++) {
+    for (i = 0; (Cardinal)i < SB_ChildCount(spinW); i++) {
       spinC = SB_GetConstraintRec(spinW->composite.children[i]);
       if (SB_ChildIsNumeric(spinC))
         childCount++;
@@ -1256,7 +1242,7 @@ static Boolean WidgetIsChild(XmSpinBoxWidget spinW, Widget child)
   int i;
   childFlag = False;
   if (SB_WithChild(spinW))
-    for (i = 0; i < SB_ChildCount(spinW); i++)
+    for (i = 0; (Cardinal)i < SB_ChildCount(spinW); i++)
       if (spinW->composite.children[i] == child) {
         childFlag = True;
         break;
@@ -1425,7 +1411,7 @@ static void LayoutSpinBox(Widget w, XtWidgetGeometry *spinG, Widget child) /* un
   /*
    * Now position the managed children of the SpinBox.
    */
-  for (i = 0; i < SB_ChildCount(spinW); i++) {
+  for (i = 0; (Cardinal)i < SB_ChildCount(spinW); i++) {
     Widget childW = spinW->composite.children[i];
     if (w != childW && XtIsManaged(childW)) {
       posY = (spinG->height - XtHeight(childW)) / 2;
@@ -1506,8 +1492,9 @@ static void LayoutSpinBox(Widget w, XtWidgetGeometry *spinG, Widget child) /* un
 static void NumToString(char **buffer, int min, int max, int decimal, int value)
 {
   float result;
-  int digits;
+  int digits, len;
   int test;
+  unsigned int magnitude;
   digits = 0;
   if (decimal < 1)
     decimal = 0;
@@ -1526,9 +1513,10 @@ static void NumToString(char **buffer, int min, int max, int decimal, int value)
       digits += decimal + 1;
   }
   else {
-    test = abs(value);
-    while (test > 0) {
-      test = test / 10;
+    /* not abs(), which overflows for INT_MIN */
+    magnitude = value < 0 ? 0U - (unsigned int)value : (unsigned int)value;
+    while (magnitude > 0) {
+      magnitude = magnitude / 10;
       digits++;
     }
     if (decimal > 0)
@@ -1542,15 +1530,16 @@ static void NumToString(char **buffer, int min, int max, int decimal, int value)
     test--;
     result /= 10.0;
   }
-  *buffer = (char *)XtMalloc((digits + 1) * sizeof(char));
-  if (*buffer) {
-#ifdef __osf__
-    if (decimal == 0)
-      sprintf(*buffer, "%*.0f", digits, result);
-    else
-#endif
-      sprintf(*buffer, "%*.*f", digits, decimal, result);
+  /* digits is only the minimum width: the float can round up to one
+     more digit, so size the buffer from what is actually printed */
+  len = snprintf(NULL, 0, "%*.*f", digits, decimal, result);
+  if (len < 0) {
+    *buffer = XtNewString("");
+    return;
   }
+  *buffer = (char *)_XmMallocArray(len + 1, sizeof(char));
+  if (*buffer)
+    snprintf(*buffer, len + 1, "%*.*f", digits, decimal, result);
 }
 
 /******************************************************************************
@@ -1777,7 +1766,7 @@ static void FireCallbacks(XmSpinBoxCallbackStruct *spinBoxCallData,
     spinBoxCallData->doit = True;
     position = spinC->position;
     GetPositionValue(
-        (Widget)spinW->spinBox.textw, XtOffset(XmSpinBoxConstraint, position), &position);
+        (Widget)spinW->spinBox.textw, XtOffsetOf(XmSpinBoxConstraintPart, position), &position);
     spinBoxCallData->position = position;
     if (spinC->sb_child_type == XmSTRING) {
       if ((spinC->num_values > 0) && (spinC->position < spinC->num_values))
@@ -1844,7 +1833,7 @@ static Boolean ArrowVerify(Widget arrowWidget, XEvent *arrowEvent, int arrowReas
     int int_pos;
     XmSpinBoxConstraint spinC = SB_GetConstraintRec(spinW->spinBox.textw);
     (void)SetPositionValue(
-        (Widget)spinW->spinBox.textw, XtOffset(XmSpinBoxConstraint, position), &position);
+        (Widget)spinW->spinBox.textw, XtOffsetOf(XmSpinBoxConstraintPart, position), &position);
     int_pos = position;
     error = ValidatePositionValue(spinC, &int_pos);
     if (error)
@@ -1964,7 +1953,7 @@ static void GetSpinSize(Widget w, Dimension *wide, Dimension *high)
     *wide += 2 * spinW->spinBox.margin_width;
     *wide += 2 * SB_ShadowPixels(spinW);
     if (SB_WithChild(spinW))
-      for (i = 0; i < SB_ChildCount(spinW); i++) {
+      for (i = 0; (Cardinal)i < SB_ChildCount(spinW); i++) {
         childW = spinW->composite.children[i];
         if (XtIsManaged(childW))
           *wide += XtWidth(childW) + spinW->spinBox.spacing;
@@ -1977,7 +1966,7 @@ static void GetSpinSize(Widget w, Dimension *wide, Dimension *high)
     *high += (arrowsHigh - 1) * spacing;
     *high += 2 * spinW->spinBox.margin_height;
     if (SB_WithChild(spinW))
-      for (i = 0; i < SB_ChildCount(spinW); i++) {
+      for (i = 0; (Cardinal)i < SB_ChildCount(spinW); i++) {
         childW = spinW->composite.children[i];
         if (XtIsManaged(childW)) {
           childHeight = XtHeight(childW);
@@ -2037,7 +2026,7 @@ static void SpinNSetValue(Widget nav, XmNavigatorData nav_data, Boolean notify)
      If there is only one dimension set, the following loop is only
      rnu once since the mask is update at the end of it */
   mask = spinW->spinBox.dim_mask;
-  for (numericCount = 0, i = 0; i < SB_ChildCount(spinW) && numericCount < 2 && mask; i++) {
+  for (numericCount = 0, i = 0; (Cardinal)i < SB_ChildCount(spinW) && numericCount < 2 && mask; i++) {
     spinC = SB_GetConstraintRec(spinW->composite.children[i]);
     if (SB_ChildIsNumeric(spinC)) {
       argCount = 0;
@@ -2065,7 +2054,7 @@ static void SpinNSetValue(Widget nav, XmNavigatorData nav_data, Boolean notify)
       {
         XtArgVal position = ACCESS_DIM(mask, nav_data->value);
         GetPositionValue((Widget)spinW->composite.children[i],
-                         XtOffset(XmSpinBoxConstraint, position),
+                         XtOffsetOf(XmSpinBoxConstraintPart, position),
                          &position);
         XtSetArg(arglist[argCount], XmNposition, ((int)position));
         argCount++;
@@ -2108,7 +2097,7 @@ static void SpinNGetValue(Widget nav, XmNavigatorData nav_data)
   mask = nav_data->dimMask = spinW->spinBox.dim_mask;
   if (nav_data->valueMask & (NavValue | NavMinimum | NavMaximum | NavIncrement)) {
     /* get the value out of the numeric children, in order  */
-    for (numericCount = 0, i = 0; i < SB_ChildCount(spinW) && numericCount < 2 && mask; i++) {
+    for (numericCount = 0, i = 0; (Cardinal)i < SB_ChildCount(spinW) && numericCount < 2 && mask; i++) {
       spinC = SB_GetConstraintRec(spinW->composite.children[i]);
       if (SB_ChildIsNumeric(spinC)) {
         numericCount++;
@@ -2214,7 +2203,7 @@ static Boolean CvtStringToPositionValue(Display *display,
                                         XtPointer *converter_data) /* unused */
 {
   XtArgVal value;
-  int offset = XtOffset(XmSpinBoxConstraint, position);
+  int offset = XtOffsetOf(XmSpinBoxConstraintPart, position);
   Widget w = *((Widget *)args[0].addr);
   if (sscanf(from->addr, "%ld", (long *)&value) == 0) {
     XtDisplayStringConversionWarning(display, (char *)from->addr, XmRPositionValue);
@@ -2242,7 +2231,7 @@ Widget XmCreateSpinBox(Widget parent, String name, ArgList arglist, Cardinal arg
 
 Widget XmVaCreateSpinBox(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);
@@ -2277,7 +2266,7 @@ int XmSpinBoxValidatePosition(Widget text_field, int *position)
   int i;
   float fPosition;
   int iPosition;
-  int positionOffset = XtOffset(XmSpinBoxConstraint, position);
+  int positionOffset = XtOffsetOf(XmSpinBoxConstraintPart, position);
   int iOffset;
   String string;
   XmAccessTextualTrait textT;

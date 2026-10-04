@@ -33,21 +33,19 @@ if(MAN5_PAGES)
     )
 endif()
 
-# Install other documentation files
-file(GLOB DOC_FILES 
-    "${CMAKE_SOURCE_DIR}/doc/*.md"
-    "${CMAKE_SOURCE_DIR}/doc/*.txt"
+# Install the other documentation, and the project files that users and
+# packagers look for next to it (the README is installed by the top-level
+# CMakeLists.txt).
+file(GLOB DOC_FILES "${CMAKE_SOURCE_DIR}/doc/*.md")
+install(FILES
+    ${DOC_FILES}
+    ${CMAKE_SOURCE_DIR}/AUTHORS
+    ${CMAKE_SOURCE_DIR}/CHANGELOG.md
+    ${CMAKE_SOURCE_DIR}/SECURITY.md
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/doc/motif
 )
-if(DOC_FILES)
-    install(FILES ${DOC_FILES}
-        DESTINATION ${CMAKE_INSTALL_DATADIR}/doc/motif
-    )
-endif()
 
-# Install guide directory if it exists
-if(EXISTS "${CMAKE_SOURCE_DIR}/doc/guide")
-    install(DIRECTORY "${CMAKE_SOURCE_DIR}/doc/guide"
-        DESTINATION ${CMAKE_INSTALL_DATADIR}/doc/motif
-        FILES_MATCHING PATTERN "*.html" PATTERN "*.txt" PATTERN "*.pdf"
-    )
-endif()
+install(DIRECTORY "${CMAKE_SOURCE_DIR}/doc/guide"
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/doc/motif
+    FILES_MATCHING PATTERN "*.md"
+)

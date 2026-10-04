@@ -173,7 +173,7 @@ void	sar_binary_op(yystype *operator_frame, yystype *op1_frame, yystype *op2_fra
 	break;
 
     case XOR:
-	operator = sym_k_or_op;
+	operator = sym_k_xor_op;
 	break;
 
     default:

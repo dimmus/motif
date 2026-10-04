@@ -56,7 +56,7 @@ static Boolean SetValues(Widget, Widget, Widget, ArgList, Cardinal *);
 static XtGeometryResult GeometryManager(Widget, XtWidgetGeometry *, XtWidgetGeometry *);
 static XtGeometryResult QueryGeometry(Widget, XtWidgetGeometry *, XtWidgetGeometry *);
 static void ClassPartInitialize(WidgetClass);
-static void ClassInitialize();
+static void ClassInitialize(void);
 static void ExposeMethod(Widget, XEvent *, Region);
 static Boolean ComboBoxParentProcess(Widget wid, XmParentProcessData event);
 /************************
@@ -337,7 +337,7 @@ WidgetClass xmDropDownWidgetClass = (WidgetClass)&xmDropDownClassRec;
  *	Arguments:     none
  *	Returns:       nothing
  */
-static void ClassInitialize()
+static void ClassInitialize(void)
 {
   /* do nothing */
 }
@@ -1944,7 +1944,7 @@ static Boolean SetListFromText(Widget w, Boolean no_action)
     if (table != NULL) {
       for (tptr = table, count = 0; *tptr != NULL; tptr++)
         count++;
-      sel_table = (XmStringTable)XtMalloc(sizeof(XmString) * count);
+      sel_table = (XmStringTable)_XmMallocArray(count, sizeof(XmString));
       for (tptr = table, count = 0; *tptr != NULL; tptr++) {
         if (XmListItemExists(XmDropDown_list(cbw), *tptr))
           sel_table[count++] = *tptr;
@@ -2021,7 +2021,7 @@ static Boolean SetTextFromList(Widget w)
   XmStringTable items;
   int count;
   unsigned char policy;
-  register int i, text_loc;
+  int i, text_loc;
   XmDropDownClassPartExtension *addition;
   addition = CheckExtensions((XmDropDownWidgetClass)XtClass(cbw));
   if (addition && addition->setTextFromList) {
@@ -2041,11 +2041,11 @@ static Boolean SetTextFromList(Widget w)
   text_loc = 0;
   i = 0;
   while (i < count) {
-    register int len;
+    int len;
     String ptr;
     wchar_t temp[BUFSIZ];
     ptr = XmStringUnparse(items[i], NULL, XmCHARSET_TEXT, XmMULTIBYTE_TEXT, NULL, 0, XmOUTPUT_ALL);
-    if (mbstowcs(NULL, ptr, 0) == (ssize_t)(-1)) {
+    if (mbstowcs(NULL, ptr, 0) == (size_t)-1) {
       XmeWarning((Widget)cbw, XmNstringGetFailedMsg);
       i++;
       continue;
@@ -2101,7 +2101,7 @@ Widget XmCreateDropDown(Widget parent, String name, ArgList args, Cardinal num_a
 
 Widget XmVaCreateDropDown(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

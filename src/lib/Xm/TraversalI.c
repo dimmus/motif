@@ -234,9 +234,9 @@ Boolean _XmGetEffectiveView(Widget wid, XRectangle *visRect)
   return TRUE;
 }
 
-Boolean _XmIntersectionOf(register XRectangle *srcRectA,
-                          register XRectangle *srcRectB,
-                          register XRectangle *destRect)
+Boolean _XmIntersectionOf(XRectangle *srcRectA,
+                          XRectangle *srcRectB,
+                          XRectangle *destRect)
 {
   /* Returns TRUE if there is a non-zero area at the intersection of the
    *   two source rectangles, FALSE otherwise.  The destRect receives
@@ -370,7 +370,7 @@ static XmTraversalNode TraverseControl(XmTraversalNode cur_node, XmTraversalDire
 
 static XmTraversalNode NextControl(XmTraversalNode ctl_node)
 {
-  register XmTraversalNode ptr = ctl_node;
+  XmTraversalNode ptr = ctl_node;
   XmTraversalNode next = NULL;
   XmTraversalNode min = ctl_node;
   do {
@@ -387,7 +387,7 @@ static XmTraversalNode NextControl(XmTraversalNode ctl_node)
 
 static XmTraversalNode PrevControl(XmTraversalNode ctl_node)
 {
-  register XmTraversalNode ptr = ctl_node;
+  XmTraversalNode ptr = ctl_node;
   XmTraversalNode prev = NULL;
   XmTraversalNode max = ctl_node;
   do {
@@ -841,8 +841,9 @@ Boolean _XmNewTravGraph(XmTravGraph trav_list, Widget top_wid, Widget init_curre
      * routinely attempt to prune excessive memory allocation.
      */
     trav_list->num_alloc -= XmTRAV_LIST_ALLOC_INCREMENT;
-    trav_list->head = (XmTraversalNode)XtRealloc(
-        (char *)trav_list->head, trav_list->num_alloc * sizeof(XmTraversalNodeRec));
+    trav_list->head = (XmTraversalNode)_XmReallocArray((char *)trav_list->head,
+                                                       trav_list->num_alloc,
+                                                       sizeof(XmTraversalNodeRec));
   }
   LinkNodeList(trav_list);
   SortNodeList(trav_list);
@@ -866,13 +867,14 @@ static XmTraversalNode AllocListEntry(XmTravGraph list)
       list->num_alloc = list->next_alloc;
     else
       list->num_alloc = XmTRAV_LIST_ALLOC_INCREMENT;
-    list->head = (XmTraversalNode)XtMalloc(list->num_alloc * sizeof(XmTraversalNodeRec));
+    list->head = (XmTraversalNode)_XmMallocArray(list->num_alloc, sizeof(XmTraversalNodeRec));
   }
   else {
     if (list->num_entries == list->num_alloc) {
       list->num_alloc += XmTRAV_LIST_ALLOC_INCREMENT;
-      list->head = (XmTraversalNode)XtRealloc((char *)list->head,
-                                              list->num_alloc * sizeof(XmTraversalNodeRec));
+      list->head = (XmTraversalNode)_XmReallocArray((char *)list->head,
+                                                    list->num_alloc,
+                                                    sizeof(XmTraversalNodeRec));
     }
   }
   return &(list->head[list->num_entries++]);
@@ -973,7 +975,7 @@ static void GetNodeList(
       trav_children = ((CompositeWidget)wid)->composite.children;
       num_trav_children = ((CompositeWidget)wid)->composite.num_children;
     }
-    for (i = 0; i < num_trav_children; i++)
+    for (i = 0; (Cardinal)i < num_trav_children; i++)
       GetNodeList(
           trav_children[i], list_entry_rect, trav_list, list_entry_offset, controls_graph_offset);
     if (free_child_list)
@@ -1130,8 +1132,9 @@ static void AppendToRow(XmTraversalNode item,
   assert(row->num_items <= row->max_items);
   if (row->num_items == row->max_items) {
     row->max_items += 10;
-    row->items = (XmTraversalNode *)XtRealloc((char *)row->items,
-                                              row->max_items * sizeof(XmTraversalNode));
+    row->items = (XmTraversalNode *)_XmReallocArray((char *)row->items,
+                                                    row->max_items,
+                                                    sizeof(XmTraversalNode));
   }
   /* Append this item.*/
   row->items[row->num_items++] = item;
@@ -1259,7 +1262,7 @@ static void Sort(XmTraversalNode *list, size_t n_mem, Boolean horizontal, XmDire
         new_data.max_hint = node->any.rect.x + node->any.rect.width;
       }
       num_rows++;
-      rows = (XmTraversalRow *)XtRealloc((char *)rows, num_rows * sizeof(XmTraversalRow));
+      rows = (XmTraversalRow *)_XmReallocArray((char *)rows, num_rows, sizeof(XmTraversalRow));
       /* Keep rows sorted by initial element. */
       for (row = new_index; row > 0; row--) {
         if (NodeDominates(node, rows[row - 1].lead_item, horizontal, layout)) {
@@ -1334,8 +1337,8 @@ static Comparator HorizNodeComparator(XmDirection layout)
 /* Compare nodes horizontally in a Left-to-Right, Top-to-Bottom layout. */
 static int CompareNodesHorizLT(XmConst void *A, XmConst void *B)
 {
-  register XmConst XmTraversalNode nodeA = *((XmTraversalNode *)A);
-  register XmConst XmTraversalNode nodeB = *((XmTraversalNode *)B);
+  XmConst XmTraversalNode nodeA = *((XmTraversalNode *)A);
+  XmConst XmTraversalNode nodeB = *((XmTraversalNode *)B);
   if (nodeA->any.rect.x != nodeB->any.rect.x)
     return (nodeA->any.rect.x < nodeB->any.rect.x) ? -1 : 1;
   if (nodeA->any.rect.y != nodeB->any.rect.y)
@@ -1350,8 +1353,8 @@ static int CompareNodesHorizLT(XmConst void *A, XmConst void *B)
 /* Compare nodes horizontally in a Right-to-Left, Top-to-Bottom layout. */
 static int CompareNodesHorizRT(XmConst void *A, XmConst void *B)
 {
-  register XmConst XmTraversalNode nodeA = *((XmTraversalNode *)A);
-  register XmConst XmTraversalNode nodeB = *((XmTraversalNode *)B);
+  XmConst XmTraversalNode nodeA = *((XmTraversalNode *)A);
+  XmConst XmTraversalNode nodeB = *((XmTraversalNode *)B);
   if ((nodeA->any.rect.x + nodeA->any.rect.width) != (nodeB->any.rect.x + nodeB->any.rect.width))
     return ((nodeA->any.rect.x + nodeA->any.rect.width) >
             (nodeB->any.rect.x + nodeB->any.rect.width)) ?
@@ -1369,8 +1372,8 @@ static int CompareNodesHorizRT(XmConst void *A, XmConst void *B)
 /* Compare nodes horizontally in a Left-to-Right, Bottom-to-Top layout. */
 static int CompareNodesHorizLB(XmConst void *A, XmConst void *B)
 {
-  register XmConst XmTraversalNode nodeA = *((XmTraversalNode *)A);
-  register XmConst XmTraversalNode nodeB = *((XmTraversalNode *)B);
+  XmConst XmTraversalNode nodeA = *((XmTraversalNode *)A);
+  XmConst XmTraversalNode nodeB = *((XmTraversalNode *)B);
   if (nodeA->any.rect.x != nodeB->any.rect.x)
     return (nodeA->any.rect.x < nodeB->any.rect.x) ? -1 : 1;
   if ((nodeA->any.rect.y + nodeA->any.rect.height) != (nodeB->any.rect.y + nodeB->any.rect.height))
@@ -1388,8 +1391,8 @@ static int CompareNodesHorizLB(XmConst void *A, XmConst void *B)
 /* Compare nodes horizontally in a Right-to-Left, Bottom-to-Top layout. */
 static int CompareNodesHorizRB(XmConst void *A, XmConst void *B)
 {
-  register XmConst XmTraversalNode nodeA = *((XmTraversalNode *)A);
-  register XmConst XmTraversalNode nodeB = *((XmTraversalNode *)B);
+  XmConst XmTraversalNode nodeA = *((XmTraversalNode *)A);
+  XmConst XmTraversalNode nodeB = *((XmTraversalNode *)B);
   if ((nodeA->any.rect.x + nodeA->any.rect.width) != (nodeB->any.rect.x + nodeB->any.rect.width))
     return ((nodeA->any.rect.x + nodeA->any.rect.width) >
             (nodeB->any.rect.x + nodeB->any.rect.width)) ?
@@ -1427,8 +1430,8 @@ static Comparator VertNodeComparator(XmDirection layout)
 /* Compare nodes vertically in a Left-to-Right, Top-to-Bottom layout. */
 static int CompareNodesVertLT(XmConst void *A, XmConst void *B)
 {
-  register XmConst XmTraversalNode nodeA = *((XmTraversalNode *)A);
-  register XmConst XmTraversalNode nodeB = *((XmTraversalNode *)B);
+  XmConst XmTraversalNode nodeA = *((XmTraversalNode *)A);
+  XmConst XmTraversalNode nodeB = *((XmTraversalNode *)B);
   if (nodeA->any.rect.y != nodeB->any.rect.y)
     return (nodeA->any.rect.y < nodeB->any.rect.y) ? -1 : 1;
   if (nodeA->any.rect.x != nodeB->any.rect.x)
@@ -1443,8 +1446,8 @@ static int CompareNodesVertLT(XmConst void *A, XmConst void *B)
 /* Compare nodes vertically in a Right-to-Left, Top-to-Bottom layout. */
 static int CompareNodesVertRT(XmConst void *A, XmConst void *B)
 {
-  register XmConst XmTraversalNode nodeA = *((XmTraversalNode *)A);
-  register XmConst XmTraversalNode nodeB = *((XmTraversalNode *)B);
+  XmConst XmTraversalNode nodeA = *((XmTraversalNode *)A);
+  XmConst XmTraversalNode nodeB = *((XmTraversalNode *)B);
   if (nodeA->any.rect.y != nodeB->any.rect.y)
     return (nodeA->any.rect.y < nodeB->any.rect.y) ? -1 : 1;
   if ((nodeA->any.rect.x + nodeA->any.rect.width) != (nodeB->any.rect.x + nodeB->any.rect.width))
@@ -1462,8 +1465,8 @@ static int CompareNodesVertRT(XmConst void *A, XmConst void *B)
 /* Compare nodes vertically in a Left-to-Right, Bottom-to-Top layout. */
 static int CompareNodesVertLB(XmConst void *A, XmConst void *B)
 {
-  register XmConst XmTraversalNode nodeA = *((XmTraversalNode *)A);
-  register XmConst XmTraversalNode nodeB = *((XmTraversalNode *)B);
+  XmConst XmTraversalNode nodeA = *((XmTraversalNode *)A);
+  XmConst XmTraversalNode nodeB = *((XmTraversalNode *)B);
   if ((nodeA->any.rect.y + nodeA->any.rect.height) != (nodeB->any.rect.y + nodeB->any.rect.height))
     return ((nodeA->any.rect.y + nodeA->any.rect.height) >
             (nodeB->any.rect.y + nodeB->any.rect.height)) ?
@@ -1481,8 +1484,8 @@ static int CompareNodesVertLB(XmConst void *A, XmConst void *B)
 /* Compare nodes vertically in a Right-to-Left, Bottom-to-Top layout. */
 static int CompareNodesVertRB(XmConst void *A, XmConst void *B)
 {
-  register XmConst XmTraversalNode nodeA = *((XmTraversalNode *)A);
-  register XmConst XmTraversalNode nodeB = *((XmTraversalNode *)B);
+  XmConst XmTraversalNode nodeA = *((XmTraversalNode *)A);
+  XmConst XmTraversalNode nodeB = *((XmTraversalNode *)B);
   if ((nodeA->any.rect.y + nodeA->any.rect.height) != (nodeB->any.rect.y + nodeB->any.rect.height))
     return ((nodeA->any.rect.y + nodeA->any.rect.height) >
             (nodeB->any.rect.y + nodeB->any.rect.height)) ?
@@ -1756,13 +1759,14 @@ void _XmTabListAdd(XmTravGraph graph, Widget wid)
     if (!(graph->tab_list_alloc)) {
       Widget shell = _XmFindTopMostShell(wid);
       graph->tab_list_alloc = XmTAB_LIST_ALLOC_INCREMENT;
-      graph->excl_tab_list = (Widget *)XtMalloc(graph->tab_list_alloc * sizeof(Widget));
+      graph->excl_tab_list = (Widget *)_XmMallocArray(graph->tab_list_alloc, sizeof(Widget));
       graph->excl_tab_list[graph->num_tab_list++] = shell;
     }
     if (graph->num_tab_list >= graph->tab_list_alloc) {
       graph->tab_list_alloc += XmTAB_LIST_ALLOC_INCREMENT;
-      graph->excl_tab_list = (Widget *)XtRealloc((char *)graph->excl_tab_list,
-                                                 graph->tab_list_alloc * sizeof(Widget));
+      graph->excl_tab_list = (Widget *)_XmReallocArray((char *)graph->excl_tab_list,
+                                                       graph->tab_list_alloc,
+                                                       sizeof(Widget));
     }
     graph->excl_tab_list[graph->num_tab_list++] = wid;
   }
@@ -1773,8 +1777,9 @@ void _XmTabListDelete(XmTravGraph graph, Widget wid)
   DeleteFromTabList(graph, SearchTabList(graph, wid));
   if ((graph->num_tab_list + XmTAB_LIST_ALLOC_INCREMENT) < graph->tab_list_alloc) {
     graph->tab_list_alloc -= XmTAB_LIST_ALLOC_INCREMENT;
-    graph->excl_tab_list = (Widget *)XtRealloc((char *)graph->excl_tab_list,
-                                               graph->tab_list_alloc * sizeof(Widget));
+    graph->excl_tab_list = (Widget *)_XmReallocArray((char *)graph->excl_tab_list,
+                                                     graph->tab_list_alloc,
+                                                     sizeof(Widget));
   }
 }
 

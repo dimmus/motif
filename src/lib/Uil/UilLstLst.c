@@ -55,6 +55,7 @@ static char rcsid[] = "$TOG: UilLstLst.c /main/20 1999/07/21 09:03:16 vipin $"
 #include <Xm/Xm.h>
 
 #include <stdarg.h>
+#include <string.h>
 
 #include "UilDefI.h"
 
@@ -117,10 +118,10 @@ static	     boolean		lst_v_listing_open = FALSE;
 **--
 **/
 
-void	lst_open_listing()
+void	lst_open_listing(void)
 {
     status  open_status;
-    _Xctimeparams	ctime_buf;
+    char	ctime_buf[26];
 
 
     /* allocate fcb */
@@ -146,10 +147,10 @@ void	lst_open_listing()
     lst_l_page_no = 0;
     lst_v_listing_open = TRUE;
 
-    sprintf(lst_c_title1,
+    snprintf(lst_c_title1, sizeof(lst_c_title1),
 	    "%s %s \t%s\t\t Page ",
 	    _host_compiler, _compiler_version,
-	    current_time(&ctime_buf));
+	    current_time(ctime_buf));
 
     /*
     **	Haven't parsed the module yet.
@@ -191,7 +192,7 @@ void	lst_open_listing()
 **--
 **/
 
-void	Uil_lst_cleanup_listing()
+void	Uil_lst_cleanup_listing(void)
 {
     /*
     **	Check that there is a listing file requested and that
@@ -315,7 +316,7 @@ void	lst_output_line(char *ac_line, boolean v_new_page)
     **	our progress.
     */
     Uil_current_file = lst_az_fcb->expanded_name;
-    if (Uil_cmd_z_command.status_cb != (Uil_continue_type(*)())NULL)
+    if (Uil_cmd_z_command.status_cb != NULL)
 	diag_report_status();
 
 
@@ -374,18 +375,19 @@ void	lst_output_line(char *ac_line, boolean v_new_page)
 **--
 **/
 
-char	*current_time(_Xctimeparams *ctime_buf)
+char	*current_time(char *ctime_buf)
 {
     time_t	time_location;
-    char	*ascii_time;
+    char	*nl;
 
     time_location = time( 0 );
 
-    ascii_time = ctime( &time_location );
+    if (ctime_r( &time_location, ctime_buf ) == NULL)
+	ctime_buf[0] = 0;
+    else if ((nl = strchr( ctime_buf, '\n' )) != NULL)
+	*nl = 0;
 
-    ascii_time[24] = 0;
-
-    return ascii_time;
+    return ctime_buf;
 }
 
 
@@ -410,11 +412,12 @@ char	*current_time(_Xctimeparams *ctime_buf)
 **--
 **/
 
-void	lst_output_listing()
+void	lst_output_listing(void)
 
 {
     src_source_record_type  *az_src_rec;
-    char		    src_buffer[ src_k_max_source_line_length+12 ];
+    /* "65535 (255)\t", a line and the NUL */
+    char		    src_buffer[ src_k_max_source_line_length+13 ];
     char		    *src_ptr;
     int			    i;
 
@@ -441,7 +444,7 @@ void	lst_output_listing()
 	**  place the line and file number in the output buffer
 	*/
 
-	sprintf(src_buffer, "%5d (%d)\t",
+	snprintf(src_buffer, sizeof(src_buffer), "%5d (%d)\t",
 		az_src_rec->w_line_number,
 		az_src_rec->b_file_number);
 
@@ -507,7 +510,7 @@ void	lst_output_listing()
 	char		buffer [132 + sizeof(az_fcb->expanded_name)];
 
 	az_fcb = src_az_source_file_table [i];
-	sprintf (buffer,
+	snprintf (buffer, sizeof (buffer),
 		 "     File (%d)   %s",
 		 i, az_fcb->expanded_name );
 	lst_output_line( buffer, FALSE );
@@ -550,7 +553,7 @@ void	lst_output_messages(src_message_item_type *az_message_item)
 
 {
     src_message_item_type	*az_msg;
-    char			buffer[132];
+    char			buffer[132 + 32];   /* message plus prefix */
     int				msg_no;
     int				last_pos;
     int				current_pos;
@@ -574,7 +577,7 @@ void	lst_output_messages(src_message_item_type *az_message_item)
 	}
 
 
-	sprintf(buffer, "%s (%d) %s",
+	snprintf(buffer, sizeof(buffer), "%s (%d) %s",
 		diag_get_message_abbrev( az_msg->l_message_number ),
 		msg_no,
 		az_msg->c_text);
@@ -699,7 +702,7 @@ void	lst_output_machine_code(src_source_record_type *az_src_rec)
 	memset (buffer, ' ', sizeof buffer - 1);
 
 
-	sprintf ((char *)hex_longword, "%04X", code_offset);
+	snprintf ((char *)hex_longword, sizeof (hex_longword), "%04X", code_offset);
 	memmove  (& buffer [OFFSET_COL - 1], hex_longword, HEX_PER_WORD);
 
 	/* Safely copy text within buffer bounds */
@@ -731,10 +734,10 @@ void	lst_output_machine_code(src_source_record_type *az_src_rec)
 
 	      if (BIT_64_LONG){
 
-		sprintf ((char *)hex_longword, "%lX", (* code_ptr));
+		snprintf ((char *)hex_longword, sizeof (hex_longword), "%lX", (* code_ptr));
 	      }
 	      else{
-                sprintf ((char *)hex_longword, "%08lX", (* code_ptr));
+                snprintf ((char *)hex_longword, sizeof (hex_longword), "%08lX", (* code_ptr));
 	      }
 
 		memmove (& buffer [start_hex_long [j]],
@@ -747,7 +750,7 @@ void	lst_output_machine_code(src_source_record_type *az_src_rec)
 	    line_written = TRUE;
 
 	    code_offset += LONG_PER_LINE * sizeof (long);
-	    sprintf ((char *)hex_longword, "%04X", code_offset);
+	    snprintf ((char *)hex_longword, sizeof (hex_longword), "%04X", code_offset);
 	    memmove  (& buffer [OFFSET_COL - 1], hex_longword, HEX_PER_WORD);
 
 	    if (i == 0 && text_len > 0) {
@@ -782,10 +785,10 @@ void	lst_output_machine_code(src_source_record_type *az_src_rec)
 		for (i = 0; i < extra_long_cnt; i++, code_ptr++) {
 		    if (BIT_64_LONG){
 /*		      memmove( (char*) &temp_long, (char*) code_ptr, sizeof(temp_long));*/
-		      sprintf ((char *)hex_longword, "%lX", (* code_ptr));
+		      snprintf ((char *)hex_longword, sizeof (hex_longword), "%lX", (* code_ptr));
 		    }
 		    else{
-		      sprintf ((char *)hex_longword, "%08lX", (*code_ptr));
+		      snprintf ((char *)hex_longword, sizeof (hex_longword), "%08lX", (*code_ptr));
 		    }
 
 		    memmove (& buffer [start_hex_long [i]],
@@ -803,13 +806,13 @@ void	lst_output_machine_code(src_source_record_type *az_src_rec)
 		memset (hex_longword, ' ', HEX_PER_LONG);
 		for (l = extra_byte_cnt - 1; l >= 0; l--) {
 		if (BIT_64_LONG)
-		    sprintf ((char *)
+		    snprintf ((char *)
 			     & hex_longword [HEX_PER_LONG - (2 * (l + 1))],
-			     "%02X", extra_bytes [l]);
+			      2 * (l + 1) + 1, "%02X", extra_bytes [l]);
 		else
-		    sprintf ((char *)
+		    snprintf ((char *)
 			     & hex_longword [HEX_PER_LONG - (2 * (l + 1))],
-			     "%02X", extra_bytes [extra_byte_cnt-l-1]);
+			      2 * (l + 1) + 1, "%02X", extra_bytes [extra_byte_cnt-l-1]);
 
 		}
 		memmove (& buffer [start_hex_long [extra_long_cnt]],
@@ -991,13 +994,13 @@ void	lst_debug_output
 	int	count;
 	char	*ptr;
 
-	vsprintf( &(buffer[cur_pos]), format, ap );
+	vsnprintf( &(buffer[cur_pos]), sizeof(buffer) - cur_pos, format, ap );
 
 	for ( ptr=buffer; ptr[0] != '\0'; ptr += (count+1) )
 	{
 	    _assert( ptr <= &(buffer[132]), "Overflowed debug listing buffer" );
 	    count = strcspn( ptr, "\n" );
-	    if (count == strlen( ptr ))
+	    if ((size_t)count == strlen( ptr ))
 	    {
 		cur_pos = ptr - buffer + count;
 		return;

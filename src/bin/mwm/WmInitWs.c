@@ -79,14 +79,6 @@ typedef struct
 #include <Dt/WsmM.h>
 #endif /* WSM */
 
-/* Busy is also defined in the BMS  -> bms.h. This conflicts with
- * /usr/include/X11/Xasync.h on ibm.
- */
-#ifdef _AIX
-#ifdef Busy
-#undef Busy
-#endif
-#endif
 #include <X11/Xlibint.h>
 
 /*
@@ -330,7 +322,7 @@ SetupLockingModifierMask(void)
 
     int kcq, kc;
 
-    for (i=0; i<NUM_LOCKING_MODS; i++)
+    for (i=0; (long unsigned int)i<NUM_LOCKING_MODS; i++)
     {
 	pkcLockingMods[i] = XKeysymToKeycode(dpy, pksLockingMods[i]);
     }
@@ -351,7 +343,7 @@ SetupLockingModifierMask(void)
         kc = modifier_map->modifiermap[i];
         if (kc)
 	{
-	    for (j=0; j<NUM_LOCKING_MODS; j++)
+	    for (j=0; j<(int)NUM_LOCKING_MODS; j++)
 	    {
 		if (pkcLockingMods[j] == kc)
 		{
@@ -395,7 +387,7 @@ MappingEventHandler(
 
 /******************************<->*************************************
  *
- *  InitWmGlobal (argc, argv, environ)
+ *  InitWmGlobal (argc, argv, envp)
  *
  *
  *  Description:
@@ -409,7 +401,7 @@ MappingEventHandler(
  *
  *  argv = window manager command line arguments
  *
- *  environ = window manager environment
+ *  envp = window manager environment
  *
  *
  *  Outputs:
@@ -418,7 +410,7 @@ MappingEventHandler(
  *
  *************************************<->***********************************/
 
-void InitWmGlobal (int argc, char *argv [], char *environ [])
+void InitWmGlobal (int argc, char *argv [], char *envp [])
 {
     XSetWindowAttributes sAttributes;
     int scr;
@@ -442,9 +434,6 @@ void InitWmGlobal (int argc, char *argv [], char *environ [])
 #endif /*PANELIST  */
 #endif  /* WSM */
 
-    SetupWmSignalHandlers (0); /* dummy paramater */
-
-
     /*
      * Do (pre-toolkit) initialization:
      */
@@ -462,7 +451,7 @@ void InitWmGlobal (int argc, char *argv [], char *environ [])
     savedArgc = argc;
     CopyArgv (argc, argv);
 
-    wmGD.environ = environ;
+    wmGD.environ = envp;
 
 #ifdef WSM
     wmGD.pWmPB = _DtWmParseNewBuf();
@@ -504,6 +493,7 @@ void InitWmGlobal (int argc, char *argv [], char *environ [])
     XtToolkitInitialize();
 
     wmGD.mwmAppContext = XtCreateApplicationContext();
+    SetupWmSignalHandlers (0); /* dummy paramater */
     AddWmResourceConverters ();
     wmGD.display = XtOpenDisplay (wmGD.mwmAppContext,
 				  NULL,
@@ -621,11 +611,6 @@ void InitWmGlobal (int argc, char *argv [], char *environ [])
 			      DISPLAY,
 			      args,
 			      argnum);
-
-#ifdef __osf__
-    _XmColorObjCreate ( wmGD.topLevelW, NULL, NULL);
-    _XmColorObjCreate ( wmGD.topLevelW, NULL, NULL);
-#endif
 
     XtAddEventHandler(wmGD.topLevelW, NoEventMask, True,
 			MappingEventHandler, NULL);
@@ -1050,26 +1035,6 @@ void InitWmGlobal (int argc, char *argv [], char *environ [])
 
 	    MakeWmFunctionResources (pSD);
 	}
-
-#ifdef WSM
-        /*
-	 *
-	 *  Set root cursor to be a pointer for dtwm
-	 *
-	 */
-
-# ifdef __osf__
-	/* Fixes problem on multiscreen where cursor is only
-         * set on primary screen.
-	 */
-	if (DtwmBehavior)
-	{
-	    XDefineCursor (DISPLAY,
-		RootWindow (DISPLAY, scr),
-		wmGD.workspaceCursor);
-	}
-# endif
-#endif /* WSM */
 
     }
 #ifdef PANELIST
@@ -2483,12 +2448,12 @@ GetReplacementList(
   kc_count *= ks_per_kc ;
 
   i = 0 ;
-  while(    i < count    )
+  while(    (int)i < count    )
     {
       KeySym ks = XStringToKeysym( std_xref[i].default_name) ;
       unsigned j = 0 ;
 
-      while(    j < kc_count    )
+      while(    (int)j < kc_count    )
         {
           if(    key_map[j] == ks    )
             {
@@ -2499,7 +2464,7 @@ GetReplacementList(
             }
           ++j ;
         }
-      if(    j == kc_count    )
+      if(    (int)j == kc_count    )
         {
           /* Didn't find keysym of virtkey table, so add record to
            *   returned list which will later cause replacement in

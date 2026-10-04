@@ -73,7 +73,7 @@ static char rcsid[] = "$TOG: MenuShell.c /main/24 1999/07/08 16:49:59 vipin $"
 #define default_translations _XmMenuShell_translations
     /********    Static Function Declarations    ********/
     static void
-    _XmFastExpose(register XmManagerWidget rowcol);
+    _XmFastExpose(XmManagerWidget rowcol);
 static void _XmFastPopdown(XmMenuShellWidget shell);
 static void PostMenuShell(XmMenuShellWidget menuShell,
                           XtGrabKind grab_kind,
@@ -89,9 +89,9 @@ static Boolean SetValues(Widget cw, Widget rw, Widget nw, ArgList args, Cardinal
 static void Resize(Widget wid);
 static void DeleteChild(Widget widget);
 static void InsertChild(Widget widget);
-static void ForceMenuPaneOnScreen(register XmRowColumnWidget rowcol,
-                                  register Position *x,
-                                  register Position *y);
+static void ForceMenuPaneOnScreen(XmRowColumnWidget rowcol,
+                                  Position *x,
+                                  Position *y);
 static void PopupSharedMenuShell(Widget cbwid, Widget smwid, XEvent *event);
 static XtGeometryResult GeometryManager(Widget wid,
                                         XtWidgetGeometry *request,
@@ -281,15 +281,15 @@ static int check_set_offset2 = 0;
  * redraw all of the items now, and ignore the exposure events we receive
  * later.
  */
-static void _XmFastExpose(register XmManagerWidget rowcol)
+static void _XmFastExpose(XmManagerWidget rowcol)
 {
-  register int i;
-  register Widget child;
+  int i;
+  Widget child;
   /* Process the menupane */
   RC_SetExpose(rowcol, True);
   (*(XtClass(rowcol)->core_class.expose))((Widget)rowcol, NULL, NULL);
   /* Process each windowed child */
-  for (i = 0; i < rowcol->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < rowcol->composite.num_children; i++) {
     child = rowcol->composite.children[i];
     if (XtIsWidget(child) && XtIsManaged(child)) {
       (*(XtClass(child)->core_class.expose))(child, NULL, NULL);
@@ -326,7 +326,7 @@ static void slideFinish(Widget slide, Widget w)
 
 static void _XmPopupI(Widget widget, XtGrabKind grab_kind, Boolean spring_loaded)
 {
-  register ShellWidget shell_widget = (ShellWidget)widget;
+  ShellWidget shell_widget = (ShellWidget)widget;
   if (!XtIsShell(widget)) {
     XtAppErrorMsg(XtWidgetToApplicationContext(widget),
                   "invalidClass",
@@ -401,7 +401,7 @@ void _XmPopupSpringLoaded(Widget shell)
   _XmPopupI(shell, XtGrabExclusive, True);
 }
 
-void _XmPopup(Widget shell, XtGrabKind grab_kind)
+static void _XmPopup(Widget shell, XtGrabKind grab_kind)
 {
   _XmPopupI(shell, grab_kind, FALSE);
 }
@@ -642,7 +642,7 @@ static void InsertChild(Widget widget)
      * and added.  Before this fix the new menu was never mapped
      * because the menu being destroyed was still counted as a child.
      */
-    for (i = 0, num_real_children = 0; i < parent->composite.num_children; i++)
+    for (i = 0, num_real_children = 0; (Cardinal)i < parent->composite.num_children; i++)
       if (!parent->composite.children[i]->core.being_destroyed)
         num_real_children++;
     /*
@@ -677,9 +677,9 @@ static void InsertChild(Widget widget)
     XmeWarning(widget, ChildMsg);
 }
 
-static void ForceMenuPaneOnScreen(register XmRowColumnWidget rowcol,
-                                  register Position *x,
-                                  register Position *y)
+static void ForceMenuPaneOnScreen(XmRowColumnWidget rowcol,
+                                  Position *x,
+                                  Position *y)
 {
   Position rightEdgeOfMenu, bottomEdgeOfMenu;
   Dimension dispWidth, dispHeight;
@@ -769,12 +769,12 @@ static void PopupSharedMenuShell(Widget cbwid, Widget smwid, XEvent *event)
 {
   XmCascadeButtonWidget cascadebtn = (XmCascadeButtonWidget)cbwid;
   XmRowColumnWidget submenu = (XmRowColumnWidget)smwid;
-  register XmMenuShellWidget popup = (XmMenuShellWidget)XtParent(submenu);
+  XmMenuShellWidget popup = (XmMenuShellWidget)XtParent(submenu);
   XmRowColumnWidget parent_menu;
   Position x, y;
   Dimension height, width;
   int _index = 0;
-  register int i;
+  int i;
   Boolean popped_up = popup->shell.popped_up;
   XmRowColumnWidget old_rowcol = NULL;
   XmCascadeButtonWidget old_cascadebtn = NULL;
@@ -783,7 +783,7 @@ static void PopupSharedMenuShell(Widget cbwid, Widget smwid, XEvent *event)
   XmMenuSystemTrait menuSTrait;
   menuSTrait = (XmMenuSystemTrait)XmeTraitGet((XtPointer)XtClass((Widget)submenu), XmQTmenuSystem);
   /* Find out which child is trying to get posted */
-  for (i = 0; i < popup->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < popup->composite.num_children; i++) {
     if (popup->composite.children[i] == (Widget)submenu) {
       _index = i;
       break;
@@ -870,7 +870,7 @@ static void PopupSharedMenuShell(Widget cbwid, Widget smwid, XEvent *event)
    * traversal code set it to the toc.
    */
   if (RC_TearOffControl(submenu) && XtIsManaged(RC_TearOffControl(submenu))) {
-    for (i = 0; i < submenu->composite.num_children; i++) {
+    for (i = 0; (Cardinal)i < submenu->composite.num_children; i++) {
       if (XmIsTraversable(submenu->composite.children[i])) {
         _XmSetInitialOfTabGroup((Widget)submenu, submenu->composite.children[i]);
         break;
@@ -1028,13 +1028,13 @@ static XtGeometryResult GeometryManager(Widget wid,
  */
 static void ChangeManaged(Widget w)
 {
-  register XmMenuShellWidget popup = (XmMenuShellWidget)w;
+  XmMenuShellWidget popup = (XmMenuShellWidget)w;
   XmRowColumnWidget parent_menu;
   Position x, y;
   Dimension height, width;
   XmCascadeButtonWidget cascadebtn;
-  register Widget child;
-  register XmRowColumnWidget rowcol = (XmRowColumnWidget)popup->composite.children[0];
+  Widget child;
+  XmRowColumnWidget rowcol = (XmRowColumnWidget)popup->composite.children[0];
   int i;
   XmMenuState mst = _XmGetMenuState((Widget)w);
   XmMenuSystemTrait menuSTrait;
@@ -1105,7 +1105,7 @@ static void ChangeManaged(Widget w)
      * traversal code set it to the toc.
      */
     if (RC_TearOffControl(rowcol) && XtIsManaged(RC_TearOffControl(rowcol))) {
-      for (i = 0; i < rowcol->composite.num_children; i++) {
+      for (i = 0; (Cardinal)i < rowcol->composite.num_children; i++) {
         if (XmIsTraversable(rowcol->composite.children[i])) {
           _XmSetInitialOfTabGroup((Widget)rowcol, rowcol->composite.children[i]);
           break;
@@ -1226,7 +1226,7 @@ static void ChangeManaged(Widget w)
 
 void _XmPopdown(Widget widget)
 {
-  register ShellWidget shell_widget = (ShellWidget)widget;
+  ShellWidget shell_widget = (ShellWidget)widget;
   if (!XtIsShell(widget)) {
     XtAppErrorMsg(XtWidgetToApplicationContext(widget),
                   "invalidClass",
@@ -1513,7 +1513,7 @@ static void PopdownDone(Widget widget, XEvent *event, String *params, Cardinal *
   if (RC_popupMenuClick(rowcol) && event &&
       ((event->type == ButtonPress) || (event->type == ButtonRelease)) &&
       ((event->xbutton.time - mst->MS_LastManagedMenuTime) <
-       XtGetMultiClickTime(XtDisplay(ms)))) /* or 150 ms? */
+       (Time)XtGetMultiClickTime(XtDisplay(ms)))) /* or 150 ms? */
   {
     if (RC_Type(rowcol) == XmMENU_OPTION) {
       if (!XmProcessTraversal(RC_MemWidget(rowcol), XmTRAVERSE_CURRENT))
@@ -1707,9 +1707,9 @@ static void Destroy(Widget wid)
 
 static Widget _XmFindPopup(Widget widget, String name)
 {
-  register Cardinal i;
-  register XrmQuark q;
-  register Widget w;
+  Cardinal i;
+  XrmQuark q;
+  Widget w;
   q = XrmStringToQuark(name);
   for (w = widget; w != NULL; w = w->core.parent)
     for (i = 0; i < w->core.num_popups; i++)
@@ -1721,7 +1721,7 @@ static Widget _XmFindPopup(Widget widget, String name)
 static void _XmMenuPopupAction(Widget widget, XEvent *event, String *params, Cardinal *num_params)
 {
   Boolean spring_loaded;
-  register Widget popup_shell;
+  Widget popup_shell;
   if (*num_params != 1) {
     XtAppWarningMsg(XtWidgetToApplicationContext(widget),
                     "invalidParameters",

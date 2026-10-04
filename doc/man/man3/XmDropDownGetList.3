@@ -1,0 +1,29 @@
+.TH "XmDropDownGetList" "library call"
+.SH "NAME"
+\fBXmDropDownGetList\fP \(em A DropDown function that returns its list child
+.iX "XmDropDownGetList"
+.iX "DropDown functions" "XmDropDownGetList"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/DropDown\&.h>
+\fBWidget \fBXmDropDownGetList\fP\fR(
+\fBWidget \fBwidget\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fBXmDropDownGetList\fP returns the list child of a DropDown\&. It is
+equivalent to \fBXmDropDownGetChild\fP(\fIwidget\fP,
+\fBXmDROPDOWN_LIST\fP)\&.
+The list is created inside the popup shell of the DropDown and is
+found by name, as \fBXtNameToWidget\fP(\fIwidget\fP, "*list")\&.
+.IP "\fIwidget\fP" 10
+Specifies the DropDown widget ID\&.
+.SH "RETURN"
+.PP
+Returns the widget ID of the list, or NULL if \fIwidget\fP is not a
+DropDown\&. An application should not assume that the returned
+widget is of any particular class\&.
+.SH "RELATED"
+.PP
+\fBXmDropDown\fP(3) and \fBXmDropDownGetChild\fP(3)\&.

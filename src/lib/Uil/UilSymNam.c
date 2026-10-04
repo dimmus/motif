@@ -416,7 +416,7 @@ int	hash_function(int l_length, char *c_value)
 **--
 **/
 
-void	sym_dump_hash_table()
+void	sym_dump_hash_table(void)
 {
     int		i;
     int		total_count;

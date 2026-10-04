@@ -20,6 +20,7 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
  */
+#include "XmI.h"
 #include <Xm/PictureP.h>
 static XmPictureNode *_XiGetNewNode(XmPictureRec *);
 static void _XmPictureParseNode(
@@ -384,6 +385,7 @@ static void _XmPictureParseNode(XmPictureRec *picture,
         /*
          * It's not a special character, so it must be a literal
          */
+        XM_FALLTHROUGH;
       default:
         newnode = _XiGetNewNode(picture);
         newtrans = _XiGetNewTransition(LiteralCharacter, current_node, newnode);
@@ -427,8 +429,8 @@ static XmPictureNode *_XiGetNewNode(XmPictureRec *picture)
    */
   if (picture->num_nodes > picture->nodes_alloced) {
     int newsize = picture->nodes_alloced * 2;
-    picture->nodes = (XmPictureNode **)XtRealloc((char *)picture->nodes,
-                                                 newsize * sizeof(XmPictureNode *));
+    picture->nodes =
+        (XmPictureNode **)_XmReallocArray((char *)picture->nodes, newsize, sizeof(XmPictureNode *));
     picture->nodes_alloced = newsize;
   }
   picture->nodes[new_node->index] = new_node;
@@ -581,7 +583,7 @@ static XmPictureNode *_XmPictureCopySubGraph(XmPictureRec *picture,
    * the XmPictureNode for the newest copy.
    */
   tablesize = picture->num_nodes;
-  table = (XmPictureNode **)XtMalloc(tablesize * sizeof(XmPictureNode *));
+  table = (XmPictureNode **)_XmMallocArray(tablesize, sizeof(XmPictureNode *));
   for (i = 0; i < picture->num_nodes; i++)
     table[i] = NULL;
   /*

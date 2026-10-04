@@ -1076,6 +1076,34 @@ void AdoptClient (ClientData *pcd)
 
 /*************************************<->*************************************
  *
+ *  GetClientTitleWidth (pcd, fontList)
+ *
+ *
+ *  Description:
+ *  -----------
+ *  Returns the width of the client's title in fontList.  The value is
+ *  cached in the client data since the title is redrawn far more often
+ *  (focus changes, exposures, resizes) than it changes.  Code that sets
+ *  pcd->clientTitle must reset pcd->clientTitleWidthFont to NULL.
+ *
+ *************************************<->***********************************/
+
+Dimension GetClientTitleWidth (ClientData *pcd, XmFontList fontList)
+{
+    if ((fontList == NULL) || (pcd->clientTitleWidthFont != fontList))
+    {
+	pcd->clientTitleWidth = XmStringWidth (fontList, pcd->clientTitle);
+	pcd->clientTitleWidthFont = fontList;
+    }
+
+    return (pcd->clientTitleWidth);
+
+} /* END OF FUNCTION GetClientTitleWidth */
+
+
+
+/*************************************<->*************************************
+ *
  *  GetTextBox (pcd, pBox)
  *
  *
@@ -1142,7 +1170,7 @@ void GetTextBox (ClientData *pcd, XRectangle *pBox)
 	    fontList = CLIENT_TITLE_APPEARANCE(pcd).fontList;
 	else
 	    fontList = CLIENT_APPEARANCE(pcd).fontList;
-	textWidth = XmStringWidth(fontList, pcd->clientTitle);
+	textWidth = GetClientTitleWidth(pcd, fontList);
 
 	offset = TitleBarHeight(pcd)/2;
 
@@ -1259,16 +1287,19 @@ void DrawWindowTitle (ClientData *pcd, Boolean eraseFirst)
     }
 
 #ifdef  DT_LEFT_JUSTIFIED_TITLE
-    WmDrawXmString(DISPLAY, win, fontList, pcd->clientTitle, clientGC,
+    WmDrawXmStringWidth(DISPLAY, win, fontList, pcd->clientTitle,
+		   GetClientTitleWidth(pcd, fontList), clientGC,
 		   textBox.x, textBox.y, textBox.width, &textBox,
 		   ((wmGD.frameStyle == WmSLAB) ? False : True));
 #else /* DT_LEFT_JUSTIFIED_TITLE */
 #ifdef WSM
-    WmDrawXmString(DISPLAY, win, fontList, pcd->clientTitle, clientGC,
+    WmDrawXmStringWidth(DISPLAY, win, fontList, pcd->clientTitle,
+		   GetClientTitleWidth(pcd, fontList), clientGC,
 		   textBox.x, textBox.y, textBox.width, &textBox,
 		   True);
 #else
-    WmDrawXmString(DISPLAY, win, fontList, pcd->clientTitle, clientGC,
+    WmDrawXmStringWidth(DISPLAY, win, fontList, pcd->clientTitle,
+		   GetClientTitleWidth(pcd, fontList), clientGC,
 		   textBox.x, textBox.y, textBox.width, &textBox);
 #endif
 #endif /* DT_LEFT_JUSTIFIED_TITLE */
@@ -1956,7 +1987,7 @@ void GetSystemMenuPosition (ClientData *pcd, int *px, int *py,
             if (*py < 0)
             {
                 *py += height + ICON_HEIGHT(pcd);
-                if (*py + height >= DisplayHeight (DISPLAY,
+                if (*py + (int)height >= DisplayHeight (DISPLAY,
 						   SCREEN_FOR_CLIENT(pcd)))
                 {
                     wmGD.checkHotspot = FALSE;
@@ -1971,7 +2002,7 @@ void GetSystemMenuPosition (ClientData *pcd, int *px, int *py,
 	    if (*py < 0)
 	    {
 		*py = ICON_Y(pcd) + ICON_HEIGHT(pcd);
-		if (*py + height >= DisplayHeight (DISPLAY,
+		if (*py + (int)height >= DisplayHeight (DISPLAY,
 						   SCREEN_FOR_CLIENT(pcd)))
 		{
 		    wmGD.checkHotspot = FALSE;
@@ -2010,7 +2041,7 @@ void GetSystemMenuPosition (ClientData *pcd, int *px, int *py,
 	    *py = pcd->frameInfo.y + pcd->frameInfo.upperBorderWidth +
 		  pcd->frameInfo.titleBarHeight;
 	}
-	if (*py + height >= DisplayHeight (DISPLAY,
+	if (*py + (int)height >= DisplayHeight (DISPLAY,
 		  SCREEN_FOR_CLIENT(pcd)))
 	{
 	    if ((pcd->decor & MWM_DECOR_TITLE) &&

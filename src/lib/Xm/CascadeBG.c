@@ -80,7 +80,7 @@ static int _XmCascadeBCacheCompare(XtPointer A, XtPointer B);
 static void BorderHighlight(Widget wid);
 static void BorderUnhighlight(Widget wid);
 static void DrawShadow(XmCascadeButtonGadget cb);
-static void DrawCascade(register XmCascadeButtonGadget cb);
+static void DrawCascade(XmCascadeButtonGadget cb);
 static void position_cascade(XmCascadeButtonGadget cascadebtn);
 static void Redisplay(Widget wid, XEvent *event, Region region);
 static void InputDispatch(Widget wid, XEvent *event, Mask event_mask);
@@ -366,14 +366,14 @@ static void ClassInitialize(void)
 ****************************************************************************/
   wc_num_res = xmCascadeButtonGCacheObjClassRec.object_class.num_resources;
   sc_num_res = xmLabelGCacheObjClassRec.object_class.num_resources;
-  merged_list = (XtResource *)XtMalloc((sizeof(XtResource) * (wc_num_res + sc_num_res)));
+  merged_list = (XtResource *)_XmMallocArray(wc_num_res + sc_num_res, sizeof(XtResource));
   _XmTransformSubResources(
       xmLabelGCacheObjClassRec.object_class.resources, sc_num_res, &uncompiled, &num);
-  for (i = 0; i < num; i++) {
+  for (i = 0; (Cardinal)i < num; i++) {
     merged_list[i] = uncompiled[i];
   }
   XtFree((char *)uncompiled);
-  for (i = 0, j = num; i < wc_num_res; i++, j++) {
+  for (i = 0, j = num; (Cardinal)i < wc_num_res; i++, j++) {
     merged_list[j] = xmCascadeButtonGCacheObjClassRec.object_class.resources[i];
   }
   _XmProcessLock();
@@ -604,7 +604,7 @@ static void DrawShadow(XmCascadeButtonGadget cb)
   }
 }
 
-static void DrawCascade(register XmCascadeButtonGadget cb)
+static void DrawCascade(XmCascadeButtonGadget cb)
 {
   if ((CBG_HasCascade(cb)) && (CBG_Cascade_width(cb) != 0)) {
     /* draw the casacade */
@@ -685,7 +685,7 @@ static void DrawCascade(register XmCascadeButtonGadget cb)
                    CBG_ArmedPixmap(cb) :
                    CBG_CascadePixmap(cb);
       XmeGetPixmapData(XtScreen(cb), pixmap, NULL, &depth, NULL, NULL, NULL, NULL, NULL, NULL);
-      if (depth == XtParent(cb)->core.depth)
+      if (depth == (int)XtParent(cb)->core.depth)
         XCopyArea(XtDisplay(cb),
                   pixmap,
                   XtWindow(XtParent(cb)),
@@ -1378,7 +1378,7 @@ static void MenuBarSelect(Widget wid, XEvent *event)
  */
 static void MenuBarEnter(Widget wid, XEvent *event)
 {
-  register XmCascadeButtonWidget cb = (XmCascadeButtonWidget)wid;
+  XmCascadeButtonWidget cb = (XmCascadeButtonWidget)wid;
   XmRowColumnWidget rc = (XmRowColumnWidget)XtParent(cb);
   if ((RC_IsArmed(rc)) && (!CBG_IsArmed(cb)) && _XmGetInDragMode((Widget)cb)) {
     if (!CBG_Submenu(cb)) {
@@ -1394,7 +1394,7 @@ static void MenuBarEnter(Widget wid, XEvent *event)
  */
 static void MenuBarLeave(Widget wid)
 {
-  register XmCascadeButtonWidget cb = (XmCascadeButtonWidget)wid;
+  XmCascadeButtonWidget cb = (XmCascadeButtonWidget)wid;
   XmMenuShellWidget submenuShell;
   if (RC_IsArmed(XtParent(cb))) {
     /* Reset this bit so that we don't unpost if the user
@@ -2149,7 +2149,7 @@ Widget XmCreateCascadeButtonGadget(Widget parent, char *name, ArgList al, Cardin
 
 Widget XmVaCreateCascadeButtonGadget(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

@@ -711,8 +711,10 @@ static void Destroy(Widget w)
   if (nb->notebook.spiral_pixmap != XmUNSPECIFIED_PIXMAP && nb->notebook.spiral_pixmap != XmNONE)
     XFreePixmap(XtDisplay(w), nb->notebook.spiral_pixmap);
   /* release scroll frame data */
-  if (nb->notebook.scroll_frame_data != NULL)
+  if (nb->notebook.scroll_frame_data != NULL) {
+    XtFree((char *)nb->notebook.scroll_frame_data->nav_list);
     XtFree((char *)nb->notebook.scroll_frame_data);
+  }
 }
 
 /*- Resize -----------------------------------------------------------------
@@ -741,7 +743,7 @@ static void Redisplay(Widget w, XEvent *e, Region region)
   int total_major_tabs, total_minor_tabs;
   XmNotebookConstraint nc;
   total_major_tabs = 0;
-  for (i = 0; i < nb->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < nb->composite.num_children; i++) {
     child = nb->composite.children[i];
     nc = NotebookConstraint(child);
     if (NB_IS_CHILD_MAJOR(nc->child_type))
@@ -756,7 +758,7 @@ static void Redisplay(Widget w, XEvent *e, Region region)
     XtUnmanageChild(nb->notebook.next_major);
   }
   total_minor_tabs = 0;
-  for (i = 0; i < nb->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < nb->composite.num_children; i++) {
     child = nb->composite.children[i];
     nc = NotebookConstraint(child);
     if (NB_IS_CHILD_MAJOR(nc->child_type))
@@ -778,7 +780,7 @@ static void Redisplay(Widget w, XEvent *e, Region region)
   XmeRedisplayGadgets(w, e, region);
   /* Work-around due to PushBG not updating border highlight
        -- to be removed when PushBG is fixed, see CR9805 */
-  for (i = 0; i < nb->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < nb->composite.num_children; i++) {
     child = nb->composite.children[i];
     if ((NB_IS_CHILD_TAB(NotebookConstraint(child)->child_type)) &&
         (NotebookConstraint(child)->active) && (XmIsPushButtonGadget((child))))
@@ -1644,7 +1646,7 @@ static void UpdateJoinSideChildren(XmNotebookWidget nb, Dimension shadow_thickne
   Widget cw;        /* child widget */
   unsigned char ct; /* child constraint type */
   int i;
-  for (i = 0; i < nb->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < nb->composite.num_children; i++) {
     cw = nb->composite.children[i];
     ct = NotebookConstraint(cw)->child_type;
     if (NB_IS_CHILD_TAB(ct))
@@ -1757,7 +1759,7 @@ static void LayoutPages(XmNotebookWidget nb, Widget instigator)
     x2 = x;
   }
   /* resize pages & status */
-  for (i = 0; i < nb->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < nb->composite.num_children; i++) {
     child = nb->composite.children[i];
     nc = NotebookConstraint(child);
     if (NB_IS_CHILD_PAGE(nc->child_type) || NB_IS_CHILD_STATUS(nc->child_type)) {
@@ -2073,7 +2075,7 @@ static void LayoutMajorTabs(XmNotebookWidget nb, Widget instigator)
    * FIX for CDExc23791
    */
   total_major_tabs = 0;
-  for (i = 0; i < nb->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < nb->composite.num_children; i++) {
     child = nb->composite.children[i];
     nc = NotebookConstraint(child);
     if (NB_IS_CHILD_MAJOR(nc->child_type))
@@ -2085,7 +2087,7 @@ static void LayoutMajorTabs(XmNotebookWidget nb, Widget instigator)
    * Layout major tabs
    */
   tab_count = 0;
-  for (i = 0; i < nb->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < nb->composite.num_children; i++) {
     child = nb->composite.children[i];
     nc = NotebookConstraint(child);
     if (NB_IS_CHILD_MAJOR(nc->child_type)) {
@@ -2531,7 +2533,7 @@ static void LayoutMinorTabs(XmNotebookWidget nb, Widget instigator)
    */
   status = TAB_DRAW;
   tab_count = 0;
-  for (i = 0; i < nb->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < nb->composite.num_children; i++) {
     child = nb->composite.children[i];
     nc = NotebookConstraint(child);
     if (first_minor < nb->notebook.first_page_number ||
@@ -2719,7 +2721,7 @@ static void ResetTopPointers(XmNotebookWidget nb, unsigned char reason, int scro
   top_major_idx = -1;
   start_major = top_major = next_major = prev_major = NULL;
   num_major = num_rest_major = num_next_major = num_prev_major = 0;
-  for (i = 0; i < nb->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < nb->composite.num_children; i++) {
     child = nb->composite.children[i];
     nc = NotebookConstraint(child);
     if (nc->active && NB_IS_CHILD_MAJOR(nc->child_type)) {
@@ -2761,7 +2763,7 @@ static void ResetTopPointers(XmNotebookWidget nb, unsigned char reason, int scro
   start_minor_idx = end_minor_idx = -1;
   start_minor = top_minor = next_minor = prev_minor = NULL;
   num_minor = num_rest_minor = num_next_minor = num_prev_minor = 0;
-  for (i = 0; i < nb->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < nb->composite.num_children; i++) {
     child = nb->composite.children[i];
     nc = NotebookConstraint(child);
     if (nc->active) {
@@ -3899,7 +3901,7 @@ static void CalcGeoInfo(XmNotebookWidget nb,
   Dimension frame_width, frame_height;
   Dimension real_binding_width, real_back_page_number;
   /* get width and height of children */
-  for (i = 0; i < nb->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < nb->composite.num_children; i++) {
     /* ask preferred size */
     child = nb->composite.children[i];
     if (child == instigator) {
@@ -4223,7 +4225,7 @@ static Boolean AssignDefaultPageNumber(XmNotebookWidget nb)
   /* initialize */
   last_page_number = nb->notebook.first_page_number;
   /* for all children */
-  for (i = 0; i < nb->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < nb->composite.num_children; i++) {
     child = nb->composite.children[i];
     nc = NotebookConstraint(child);
     /* for all managed children */
@@ -4281,7 +4283,7 @@ static void SetActiveChildren(XmNotebookWidget nb)
   unsigned char type = XmNONE;         /* initial previous type */
   int num = XmUNSPECIFIED_PAGE_NUMBER; /* initial previous page */
   int i;
-  for (i = 0; i < nb->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < nb->composite.num_children; i++) {
     child = nb->composite.children[i];
     nc = NotebookConstraint(child);
     if (XtIsManaged(child) && nc->page_number >= nb->notebook.first_page_number &&
@@ -4349,7 +4351,7 @@ static void RepositionChild(XmNotebookWidget nb, Widget child)
   /* nothing to do, if there is only one child in array */
   if (nb->composite.num_children == 1)
     return;
-  for (i = 0; i < nb->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < nb->composite.num_children; i++) {
     w = nb->composite.children[i];
     nc = NotebookConstraint(w);
     if (rnc == nc)
@@ -4369,7 +4371,7 @@ static void RepositionChild(XmNotebookWidget nb, Widget child)
     return;
   /* found no one less than, move others down, and insert at last position */
   if (ins_pos < 0) {
-    for (i = cur_pos; i < nb->composite.num_children - 1; i++)
+    for (i = cur_pos; (Cardinal)i < nb->composite.num_children - 1; i++)
       nb->composite.children[i] = nb->composite.children[i + 1];
     nb->composite.children[nb->composite.num_children - 1] = child;
   }
@@ -4416,7 +4418,7 @@ static Widget GetChildWidget(XmNotebookWidget nb, int page_number, unsigned char
   Widget child, this_w;
   int i;
   this_w = NULL;
-  for (i = 0; i < nb->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < nb->composite.num_children; i++) {
     child = nb->composite.children[i];
     nc = NotebookConstraint(child);
     if (nc->page_number == page_number && nc->child_type == child_type) {
@@ -4923,7 +4925,7 @@ static Widget GetNextTab(XmNotebookWidget nb,
   target = NULL;
   target_found = False;
   if (NB_IS_CHILD_MAJOR(target_child_type)) {
-    while ((!target_found) && (i < nb->composite.num_children)) {
+    while ((!target_found) && ((Cardinal)i < nb->composite.num_children)) {
       child = nb->composite.children[i];
       nc = NotebookConstraint(child);
       if ((nc->active) && (NB_IS_CHILD_MAJOR(nc->child_type)))
@@ -4965,7 +4967,7 @@ static Widget GetNextTab(XmNotebookWidget nb,
     top_major_page = nb->notebook.top_major ?
                          NotebookConstraint(nb->notebook.top_major)->page_number :
                          nb->notebook.first_page_number - 1;
-    while ((!target_found) && (i < nb->composite.num_children)) {
+    while ((!target_found) && ((Cardinal)i < nb->composite.num_children)) {
       child = nb->composite.children[i];
       nc = NotebookConstraint(child);
       if (NB_IS_CHILD_MAJOR(nc->child_type) && (nc->page_number > top_major_page))
@@ -5219,7 +5221,7 @@ XmNotebookPageStatus XmNotebookGetPageInfo(Widget notebook,
   page = status = major_tab = minor_tab = NULL;
   result = XmPAGE_EMPTY;
   /* searching for the page */
-  for (i = 0; i < nb->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < nb->composite.num_children; i++) {
     child = nb->composite.children[i];
     nc = NotebookConstraint(child);
     if (nc->page_number > page_number)
@@ -5273,7 +5275,7 @@ Widget XmCreateNotebook(Widget parent, String name, ArgList arglist, Cardinal ar
 
 Widget XmVaCreateNotebook(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

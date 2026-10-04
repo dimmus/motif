@@ -47,11 +47,11 @@ static char rcsid[] = "$XConsortium: GMUtils.c /main/11 1995/09/19 23:03:32 cde-
                   Dimension *replyWidth,
                   Dimension *replyHeight)
 {
-  register int i;
-  register Widget child;
+  int i;
+  Widget child;
   int right, bottom;
   *replyWidth = *replyHeight = 0;
-  for (i = 0; i < manager->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < manager->composite.num_children; i++) {
     child = manager->composite.children[i];
     if (XtIsManaged(child)) {
       right = XtX(child) + 2 * XtBorderWidth(child) + XtWidth(child);
@@ -166,10 +166,10 @@ void _XmGMEnforceMargin(XmManagerWidget manager,
                         Boolean setvalue)
 {
   int i;
-  register Widget child;
-  register Boolean do_move;
+  Widget child;
+  Boolean do_move;
   Position newx, newy;
-  for (i = 0; i < manager->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < manager->composite.num_children; i++) {
     do_move = False;
     child = (Widget)manager->composite.children[i];
     if (XtIsManaged(child)) {
@@ -289,13 +289,13 @@ XtGeometryResult XmeReplyToQueryGeometry(Widget widget,
  ****************/
 Boolean _XmGMOverlap(XmManagerWidget manager, Widget w)
 {
-  register int i;
+  int i;
   Position left1 = XtX(w);
   Position top1 = XtY(w);
   Dimension right1 = XtX(w) + 2 * XtBorderWidth(w) + XtWidth(w);
   Dimension bottom1 = XtY(w) + 2 * XtBorderWidth(w) + XtHeight(w);
   /****************/
-  for (i = 0; i < manager->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < manager->composite.num_children; i++) {
     Widget kid = manager->composite.children[i];
     Position left2 = XtX(kid);
     Position top2 = XtY(kid);

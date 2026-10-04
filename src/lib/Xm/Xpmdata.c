@@ -51,8 +51,8 @@ static char *RCS_Id = "Id: xpm.shar,v 3.71 1998/03/19 19:47:14 lehors Exp $";
 static int ParseComment(xpmData *data)
 {
   if (data->type == XPMBUFFER) {
-    register char c;
-    register unsigned int n = 0;
+    char c;
+    unsigned int n = 0;
     unsigned int notend;
     char *s;
     const char *s2;
@@ -88,6 +88,11 @@ static int ParseComment(xpmData *data)
         n++;
       }
       data->CommentLength = n;
+      if (!c) {
+        /* hit end of buffer before the end of the comment */
+        data->cptr--;
+        return XpmFileInvalid;
+      }
       do {
         c = *data->cptr++;
         if (n == XPMMAXCMTLEN - 1) { /* forget it */
@@ -103,13 +108,18 @@ static int ParseComment(xpmData *data)
         notend = 0;
         data->cptr--;
       }
+      else if (!c) {
+        /* hit end of buffer before the end of the comment */
+        data->cptr--;
+        return XpmFileInvalid;
+      }
     }
     return 0;
   }
   else {
     FILE *file = data->stream.file;
-    register int c;
-    register unsigned int n = 0, a;
+    int c;
+    unsigned int n = 0, a;
     unsigned int notend;
     char *s;
     const char *s2;
@@ -147,6 +157,10 @@ static int ParseComment(xpmData *data)
         n++;
       }
       data->CommentLength = n;
+      if (c == EOF) {
+        /* hit end of file before the end of the comment */
+        return XpmFileInvalid;
+      }
       do {
         c = Getc(data, file);
         if (n == XPMMAXCMTLEN - 1) { /* forget it */
@@ -162,6 +176,10 @@ static int ParseComment(xpmData *data)
         notend = 0;
         Ungetc(data, *s, file);
       }
+      else if (c == EOF) {
+        /* hit end of file before the end of the comment */
+        return XpmFileInvalid;
+      }
     }
     return 0;
   }
@@ -172,48 +190,69 @@ static int ParseComment(xpmData *data)
  */
 int xpmNextString(xpmData *data)
 {
+  int status;
   if (!data->type)
     data->cptr = (data->stream.data)[++data->line];
   else if (data->type == XPMBUFFER) {
-    register char c;
+    char c;
+    /*
+     * Never move past the terminating NUL of the buffer: leave cptr
+     * pointing at it and report the premature end instead.
+     */
     /* get to the end of the current string */
-    if (data->Eos)
+    if (data->Eos) {
       while ((c = *data->cptr++) && c != data->Eos)
         ;
+      if (!c) {
+        data->cptr--;
+        return XpmFileInvalid;
+      }
+    }
     /*
      * then get to the beginning of the next string looking for possible
      * comment
      */
     if (data->Bos) {
       while ((c = *data->cptr++) && c != data->Bos)
-        if (data->Bcmt && c == data->Bcmt[0])
-          ParseComment(data);
+        if (data->Bcmt && c == data->Bcmt[0] && (status = ParseComment(data)) != 0)
+          return status;
+      if (!c) {
+        data->cptr--;
+        return XpmFileInvalid;
+      }
     }
     else if (data->Bcmt) { /* XPM2 natural */
       while ((c = *data->cptr++) == data->Bcmt[0])
-        ParseComment(data);
+        if ((status = ParseComment(data)) != 0)
+          return status;
       data->cptr--;
     }
   }
   else {
-    register int c;
+    int c;
     FILE *file = data->stream.file;
     /* get to the end of the current string */
-    if (data->Eos)
+    if (data->Eos) {
       while ((c = Getc(data, file)) != data->Eos && c != EOF)
         ;
+      if (c == EOF)
+        return XpmFileInvalid;
+    }
     /*
      * then get to the beginning of the next string looking for possible
      * comment
      */
     if (data->Bos) {
       while ((c = Getc(data, file)) != data->Bos && c != EOF)
-        if (data->Bcmt && c == data->Bcmt[0])
-          ParseComment(data);
+        if (data->Bcmt && c == data->Bcmt[0] && (status = ParseComment(data)) != 0)
+          return status;
+      if (c == EOF)
+        return XpmFileInvalid;
     }
     else if (data->Bcmt) { /* XPM2 natural */
       while ((c = Getc(data, file)) == data->Bcmt[0])
-        ParseComment(data);
+        if ((status = ParseComment(data)) != 0)
+          return status;
       Ungetc(data, c, file);
     }
   }
@@ -225,16 +264,17 @@ int xpmNextString(xpmData *data)
  */
 unsigned int xpmNextWord(xpmData *data, char *buf, unsigned int buflen)
 {
-  register unsigned int n = 0;
+  unsigned int n = 0;
   int c;
   if (!data->type || data->type == XPMBUFFER) {
     while (isspace(c = *data->cptr) && c != data->Eos)
       data->cptr++;
+    /* stop at the terminating NUL: cptr is left pointing at it */
     do {
       c = *data->cptr++;
       *buf++ = c;
       n++;
-    } while (!isspace(c) && c != data->Eos && n < buflen);
+    } while (c && !isspace(c) && c != data->Eos && n < buflen);
     n--;
     data->cptr--;
   }
@@ -350,7 +390,7 @@ int xpmGetCmt(xpmData *data, char **cmt)
 {
   if (!data->type)
     *cmt = NULL;
-  else if (data->CommentLength != 0 && data->CommentLength < UINT_MAX - 1) {
+  else if (data->CommentLength != 0 && (unsigned int)data->CommentLength < UINT_MAX - 1) {
     if ((*cmt = (char *)XpmMalloc(data->CommentLength + 1)) == NULL)
       return XpmNoMemory;
     strncpy(*cmt, data->Comment, data->CommentLength);

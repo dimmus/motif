@@ -125,6 +125,7 @@ void	sar_include_file(yystype *file_frame, yystype *include_frame, yystype *semi
     char			* buffer;
     unsigned char		  tmp1;
     int				  i,j;
+    size_t			  name_len;
 
     value_entry =
 	(sym_value_entry_type *) file_frame -> value . az_symbol_entry;
@@ -141,6 +142,14 @@ void	sar_include_file(yystype *file_frame, yystype *include_frame, yystype *semi
 /*
  * End Fix for CR 5465
  */
+
+    /*
+    ** The name must fit in the include entry's file_name.
+    */
+    if (value_entry->w_length >= sizeof (include_entry->file_name))
+      diag_issue_diagnostic (
+             d_include_file,
+             _sar_source_pos2(value_entry));
 /*
  * If the direction is RtoL then reverse the include file.
  */
@@ -179,7 +188,8 @@ void	sar_include_file(yystype *file_frame, yystype *include_frame, yystype *semi
 		   value_entry -> w_length);
     buffer [value_entry -> w_length] = 0 ;
 
-    src_open_file (buffer, include_entry->full_file_name);
+    src_open_file (buffer, include_entry->full_file_name,
+		   sizeof (include_entry->full_file_name));
 
     /*
     **  Allocate a section entry for this include "section".
@@ -211,8 +221,14 @@ void	sar_include_file(yystype *file_frame, yystype *include_frame, yystype *semi
     **  Save the file name
     */
 
-    memmove (include_entry->file_name, buffer, value_entry->w_length);
-    include_entry->file_name [value_entry->w_length] =  0;
+    /* (A longer name has been diagnosed as severe above, which ends
+    **  the compilation; the bound only makes that visible here.)
+    */
+    name_len = value_entry->w_length;
+    if (name_len >= sizeof (include_entry->file_name))
+	name_len = sizeof (include_entry->file_name) - 1;
+    memmove (include_entry->file_name, buffer, name_len);
+    include_entry->file_name [name_len] =  0;
 
     /*
     ** Since this is an INCLUDE we want included sections to hang off

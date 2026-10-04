@@ -62,15 +62,8 @@ static char rcsid[] = "$XConsortium: WmResParse.c /main/9 1996/11/01 10:17:34 dr
 #include <X11/Xatom.h>
 #include <X11/Xlocale.h>
 
-#ifdef MOTIF_ONE_DOT_ONE
-#include <stdio.h>
-#include <pwd.h>
-#else
 #include <Xm/XmP.h>             /* for XmeGetHomeDirName */
-#endif
-#ifdef WSM
-#include <signal.h>
-#endif /* WSM */
+#include <unistd.h>
 
 /* maximum string lengths */
 
@@ -107,9 +100,6 @@ static char rcsid[] = "$XConsortium: WmResParse.c /main/9 1996/11/01 10:17:34 dr
 #include "WmImage.h"
 #include "WmXSMP.h"
 
-#ifdef MOTIF_ONE_DOT_ONE
-extern char   *getenv ();
-#endif
 #ifdef PANELIST
 # include <errno.h>
 # define HOME_DT_WMRC    "/.dt/dtwmrc"
@@ -139,6 +129,9 @@ static unsigned char  line[MAXLINE+1]; /* line buffer */
 static int   linec = 0;       /* line counter for parser */
 static unsigned char *parseP = NULL;   /* pointer to parse string */
 #endif /* WSM */
+
+/* True while parsing a menu supplied by a client (_MOTIF_WM_MENU). */
+static Boolean parseClientMenu = False;
 
 
 typedef struct {
@@ -203,9 +196,6 @@ typedef struct _CCIFuncArg {
 } CCIFuncArg;
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
 
-#ifdef MOTIF_ONE_DOT_ONE
-void GetHomeDirName(String  fileName);
-#endif
 #ifdef WSM
 static String GetNetworkFileName (char *pchFile);
 #endif /* WSM */
@@ -224,6 +214,8 @@ FILE *FopenConfigFile (void);
 void SaveMenuAccelerators (WmScreenData *pSD, MenuSpec *newMenuSpec);
 static void ParseMenuSet (WmScreenData *pSD, unsigned char *lineP);
 MenuItem *ParseMwmMenuStr (WmScreenData *pSD, unsigned char *menuStr);
+MenuItem *ParseClientMwmMenuStr (WmScreenData *pSD, unsigned char *menuStr);
+static Boolean IsClientMenuFunction (WmFunction wmFunction);
 static MenuItem *ParseMenuItems (WmScreenData *pSD
 #if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
 				 , MenuSpec *menuSpec
@@ -297,7 +289,6 @@ static FILE *ConfigStackPush (unsigned char *pchFileName);
 static void ConfigStackPop (void);
 Boolean ParseWmFuncActionArg (unsigned char **linePP,
 				  WmFunction wmFunction, String *pArgs);
-static void PreprocessConfigFile (void);
 #endif /* PANELIST */
 
 static EventTableEntry buttonEvents[] = {
@@ -336,7 +327,6 @@ static EventTableEntry keyEvents[] = {
 typedef struct _ConfigFileStackEntry {
     char		*fileName;
     char 		*tempName;
-    char 		*cppName;
     char		*wmgdConfigFile;
     long		offset;
     DtWmpParseBuf	*pWmPB;
@@ -1690,58 +1680,6 @@ unsigned int PeekAhead(unsigned char *currentChar,
 
 
 
-#ifdef MOTIF_ONE_DOT_ONE
-/*************************************<->*************************************
- *
- *  GetHomeDirName (fileName)
- *
- *  Description:
- *  -----------
- *  This function finds the "HOME" directory
- *
- *
- *  Inputs:
- *  ------
- *  fileName
- *
- *  Outputs:
- *  -------
- *  fileName
- *
- *  Comments:
- *  --------
- *
- *************************************<->***********************************/
-void GetHomeDirName(String  fileName)
-{
-        int uid;
-        struct passwd *pw;
-        char *ptr = NULL;
-
-        if((ptr = getenv("HOME")) == NULL)
-        {
-            if((ptr = getenv("USER")) != NULL)
-	    {
-		pw = getpwnam(ptr);
-	    }
-            else
-            {
-                uid = getuid();
-                pw = getpwuid(uid);
-            }
-
-            if (pw)
-	    {
-                ptr = pw->pw_dir;
-	    }
-            else
-	    {
-                ptr = "";
-	    }
-        }
-        strcpy(fileName, ptr);
-}
-#endif
 
 
 /*************************************<->*************************************
@@ -2040,9 +1978,7 @@ FILE *FopenConfigFile (void)
     char    *LANG, *LANGp;
     FILE    *fileP;
 
-#ifndef MOTIF_ONE_DOT_ONE
     char *homeDir = XmeGetHomeDirName();
-#endif
 #ifdef PANELIST
     Boolean stackPushed;
 #endif /* PANELIST */
@@ -2097,11 +2033,7 @@ FILE *FopenConfigFile (void)
         if ((wmGD.configFile[0] == '~') && (wmGD.configFile[1] == '/'))
 	/* handle "~/..." */
 	{
-#ifdef MOTIF_ONE_DOT_ONE
-	    GetHomeDirName(cfileName);
-#else
 	    strcpy (cfileName, homeDir);
-#endif
 	    if (LANG != NULL)
 	    {
 		strncat(cfileName, "/", MAXWMPATH-strlen(cfileName));
@@ -2123,11 +2055,7 @@ FILE *FopenConfigFile (void)
 		/*
 		 * Just try $HOME/.mwmrc
 		 */
-#ifdef MOTIF_ONE_DOT_ONE
-		GetHomeDirName(cfileName);
-#else
 		strcpy (cfileName, homeDir);
-#endif
 		strncat(cfileName, &(wmGD.configFile[1]),
 			MAXWMPATH-strlen(cfileName));
 		if ((fileP = fopen (cfileName, "r")) != NULL)
@@ -2191,11 +2119,7 @@ FILE *FopenConfigFile (void)
 #define HOME_MWMRC "/.mwmrc"
 #define SLASH_MWMRC "/system.mwmrc"
 
-#ifdef MOTIF_ONE_DOT_ONE
-    GetHomeDirName(cfileName);
-#else
     strcpy (cfileName, homeDir);
-#endif
 
 #ifdef WSM
     if (MwmBehavior)
@@ -2256,11 +2180,7 @@ FILE *FopenConfigFile (void)
 	/*
 	 * Just try $HOME/.mwmrc
 	 */
-#ifdef MOTIF_ONE_DOT_ONE
-	GetHomeDirName(cfileName);
-#else
     strcpy (cfileName, homeDir);
-#endif
 #ifdef WSM
 	if (MwmBehavior)
 	{
@@ -2443,19 +2363,6 @@ FILE *FopenConfigFile (void)
     if (!pConfigStack)
     {
 	ConfigStackInit (cfileName);
-    }
-
-    if (wmGD.cppCommand && *wmGD.cppCommand)
-    {
-	/*
-	 *  Run the file through the C-preprocessor
-	 */
-	PreprocessConfigFile ();
-	if (pConfigStackTop->cppName)
-	{
-	    /* open the result */
-	    fileP = fopen (pConfigStackTop->cppName, "r");
-	}
     }
 
     if (LANG != NULL)
@@ -2711,6 +2618,69 @@ MenuItem *ParseMwmMenuStr (WmScreenData *pSD, unsigned char *menuStr)
 
 /*************************************<->*************************************
  *
+ *  MenuItem *
+ *  ParseClientMwmMenuStr (pSD, menuStr)
+ *
+ *
+ *  Description:
+ *  -----------
+ *  Like ParseMwmMenuStr, but for a menu string supplied by a client in
+ *  its _MOTIF_WM_MENU property.  Clients are not trusted by the window
+ *  manager (they may even run on another host), so only items that send
+ *  a message back to the client (f.send_msg), titles, separators and
+ *  inert entries (f.nop) are accepted.  Any other item, including client
+ *  command entries, is dropped with a warning.
+ *
+ *
+ *  Inputs:
+ *  ------
+ *  pSD = pointer to screen data
+ *  menuStr = menu string from the client
+ *
+ *
+ *  Outputs:
+ *  -------
+ *  Return = list of MenuItem structures or NULL
+ *
+ *************************************<->***********************************/
+
+MenuItem *ParseClientMwmMenuStr (WmScreenData *pSD, unsigned char *menuStr)
+{
+    MenuItem *menuItems;
+
+    parseClientMenu = True;
+    menuItems = ParseMwmMenuStr (pSD, menuStr);
+    parseClientMenu = False;
+
+    return (menuItems);
+
+} /* END OF FUNCTION ParseClientMwmMenuStr */
+
+
+/*************************************<->*************************************
+ *
+ *  IsClientMenuFunction (wmFunction)
+ *
+ *
+ *  Description:
+ *  -----------
+ *  Returns True if wmFunction may be used in a menu item that comes from
+ *  a client's _MOTIF_WM_MENU property.
+ *
+ *************************************<->***********************************/
+
+static Boolean IsClientMenuFunction (WmFunction wmFunction)
+{
+    return ((wmFunction == F_Send_Msg) ||
+	    (wmFunction == F_Separator) ||
+	    (wmFunction == F_Title) ||
+	    (wmFunction == F_Nop));
+
+} /* END OF FUNCTION IsClientMenuFunction */
+
+
+/*************************************<->*************************************
+ *
  *  static MenuItem *
  *  ParseMenuItems (pSD, menuSpec)
  *
@@ -2762,7 +2732,7 @@ static MenuItem *ParseMenuItems (WmScreenData *pSD
     MenuItem      *firstMenuItem;
     MenuItem      *lastMenuItem;
     MenuItem      *menuItem;
-    register int   ix = 0;
+    int   ix = 0;
 #if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
     Boolean        use_separators = False;
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
@@ -2812,6 +2782,13 @@ static MenuItem *ParseMenuItems (WmScreenData *pSD
 
 	if (IsClientCommand((String) string))
 	{
+	    if (parseClientMenu)
+	    {
+		/* not allowed in a client-supplied menu */
+		PWarning (((char *)GETMESSAGE(60, 43, "Menu item function not allowed in a client menu")));
+		XtFree ((char *)menuItem);
+		continue;
+	    }
 	    if (!ParseClientCommand(&lineP, menuSpec, menuItem, string,
 				    &use_separators))
 	    {
@@ -2819,7 +2796,7 @@ static MenuItem *ParseMenuItems (WmScreenData *pSD
 		continue;
 	    }
 
-	    for (ix = 0; ix < WMFUNCTIONTABLESIZE - 1; ++ix)
+	    for (ix = 0; ix < (int)WMFUNCTIONTABLESIZE - 1; ++ix)
 	      if (functionTable[ix].wmFunction == F_InvokeCommand)
 		break;
 
@@ -2871,6 +2848,13 @@ static MenuItem *ParseMenuItems (WmScreenData *pSD
 	else
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
 	  ix = ParseWmFunction (&lineP, CRS_MENU, &menuItem->wmFunction);
+
+	if (parseClientMenu && !IsClientMenuFunction (menuItem->wmFunction))
+	{
+	    PWarning (((char *)GETMESSAGE(60, 43, "Menu item function not allowed in a client menu")));
+	    FreeMenuItem (menuItem);
+	    continue;
+	}
 
 	/*
 	 * Determine context sensitivity and applicability mask.
@@ -3159,9 +3143,9 @@ static Boolean ParseClientCommand (unsigned char **linePP, MenuSpec *menuSpec,
 				  command was parsed to be an exclusion
 				  command. */
 
-    /* Construct one input stream out of the string and the linePP that
-       we were given. */
-    linelen = strlen((char *)string) + strlen((char *)*linePP) + 1;
+    /* Construct one input stream out of the string, a space and the
+       linePP that we were given. */
+    linelen = strlen((char *)string) + 1 + strlen((char *)*linePP) + 1;
     if ((unchanged_stream = stream = (String)
 	 XtMalloc((unsigned int)(sizeof(unsigned char) * linelen))) == NULL)
     {
@@ -3436,7 +3420,12 @@ static Boolean ParseWmLabel (WmScreenData *pSD, MenuItem *menuItem,
     strcpy (menuItem->label, (char *)string);
     menuItem->labelType = XmSTRING;
 
-    if (*string == '@')
+    /*
+     * A client menu must not make the window manager open files on its
+     * host (the name could be any file, or a FIFO that blocks forever),
+     * so "@<bitmap file>" is only honoured in the configuration file.
+     */
+    if ((*string == '@') && !parseClientMenu)
     /*
      * Here:  string  = "@<bitmap file>"
      * Try to find the label bitmap in the bitmap cache or read the label
@@ -3754,7 +3743,7 @@ int ParseWmFunction (unsigned char **linePP, unsigned int res_spec,
 {
     unsigned char *lineP = *linePP;
     unsigned char *string;
-    register int  low, mid, high, cmp;
+    int  low, mid, high, cmp;
 
     /*
      * Skip leading white space.
@@ -3883,14 +3872,6 @@ Boolean ParseWmFuncMaybeStrArg (unsigned char **linePP,
     }
 */
 #ifdef PANELIST
-#if 0
-    else if (*lineP == '"' && *(lineP+1) == '-')
-    {
-	/* kill off '-' */
-	strcpy ((char *) (lineP+1), (char *) (lineP+2));
-	return (ParseWmFuncStrArg (linePP, wmFunction, pArgs));
-    }
-#endif
 #endif /* PANELIST */
     if ((len = strlen ((char *)string)) != 0)
     {
@@ -5116,15 +5097,15 @@ static void ParseKeySet (WmScreenData *pSD, unsigned char *lineP)
  *  Comments:
  *  --------
  *  If there are more than MAXLINE characters on a line in the file cfileP the
- *  excess are truncated.
- *  Assumes the line buffer is long enough for any parse string line.
+ *  excess are truncated.  Parse string lines longer than MAXLINE are
+ *  truncated as well.
  *
  *************************************<->***********************************/
 
 unsigned char *
 GetNextLine (void)
 {
-    register unsigned char	*string;
+    unsigned char	*string;
     int				len;
     int   chlen;
     wchar_t last;
@@ -5177,11 +5158,25 @@ GetNextLine (void)
 	chlen = mblen((char *)parseP, MB_CUR_MAX);
 	if(chlen==-1) string = NULL;
 
-	while ((*parseP != '\0') &&
+	while ((string != NULL) && (*parseP != '\0') &&
                ((chlen = mblen ((char *)parseP, MB_CUR_MAX)) > 0) &&
 	       (*parseP != '\n'))
 	/* copy all but NULL and newlines to line buffer */
 	{
+	    if (chlen > MAXLINE - (string - line))
+	    {
+		/*
+		 * The parse string may come from a client property
+		 * (_MOTIF_WM_MENU), so its lines can be arbitrarily
+		 * long.  Truncate like fgets does for files and skip
+		 * the rest of the line.
+		 */
+		while ((*parseP != '\0') && (*parseP != '\n'))
+		{
+		    parseP++;
+		}
+		break;
+	    }
 	    while (chlen--)
 	    {
 	        *(string++) = *(parseP++);
@@ -5843,7 +5838,7 @@ static Boolean ParseModifiers(unsigned char **linePP, unsigned int *state)
 
 static Boolean LookupModifier (unsigned char *name, unsigned int *valueP)
 {
-    register int i;
+    int i;
 
     if (name != NULL)
     {
@@ -6046,7 +6041,7 @@ static Boolean ParseEventType (unsigned char **linePP, EventTableEntry *table,
     unsigned char *lineP = *linePP;
     unsigned char *startP = *linePP;
     unsigned char eventTypeStr[MAX_EVENTTYPE_STRLEN+1];
-    register int  len;
+    int  len;
 
     /* Parse out the event string */
     ScanAlphanumeric (&lineP);
@@ -6176,7 +6171,7 @@ static Boolean ParseKeySym (unsigned char **linePP, unsigned int closure,
 	 (mblen (keySymName, MB_CUR_MAX) == 1))
     {
         if (!isdigit (keySymName[0]) ||
-            ((*detail = StrToNum ((unsigned char *)&keySymName[0])) == -1))
+            ((*detail = StrToNum ((unsigned char *)&keySymName[0])) == (unsigned int)-1))
         {
             *detail = NoSymbol;
             return (FALSE);
@@ -6988,62 +6983,16 @@ void ProcessMotifBindings (void)
 {
     char           fileName[MAXWMPATH+1];
     char	  *bindings = NULL;
-#ifndef MOTIF_ONE_DOT_ONE
     char	  *homeDir = XmeGetHomeDirName();
-#else
-    FILE          *fileP;
-#endif
 
     /*
      *  Look in the user's home directory for .motifbind
      */
 
-#ifdef MOTIF_ONE_DOT_ONE
-    GetHomeDirName(fileName);
-#else
     strcpy (fileName, homeDir);
-#endif
     strncat(fileName, "/", MAXWMPATH-strlen(fileName));
     strncat(fileName, MOTIF_BINDINGS_FILE, MAXWMPATH-strlen(fileName));
 
-#ifdef MOTIF_ONE_DOT_ONE
-    if ((fileP = fopen (fileName, "r")) != NULL)
-    {
-        unsigned char   buffer[MBBSIZ];
-        int             count;
-        Boolean         first = True;
-        int             mode = PropModeReplace;
-        Window          propWindow;
-
-        /*
-         * Get the atom for the property.
-         */
-        wmGD.xa_MOTIF_BINDINGS =
-                XInternAtom (DISPLAY, _XA_MOTIF_BINDINGS, False);
-
-        /*
-         * The property goes on the root window of screen zero
-         */
-        propWindow = RootWindow(DISPLAY, 0);
-
-        /*
-         * Copy file contents to property on root window of screen 0.
-         */
-        while ( (count=fread((char *) &buffer[0], 1, MBBSIZ, fileP)) > 0)
-        {
-            XChangeProperty (DISPLAY, propWindow, wmGD.xa_MOTIF_BINDINGS,
-                                XA_STRING, 8, mode,
-                                &buffer[0], count);
-
-            if (first)
-            {
-                first = False;
-                mode = PropModeAppend;
-            }
-        }
-    }
-
-#else
     XDeleteProperty (DISPLAY, RootWindow (DISPLAY, 0),
 		XInternAtom (DISPLAY, "_MOTIF_BINDINGS", False));
     XDeleteProperty (DISPLAY, RootWindow (DISPLAY, 0),
@@ -7059,7 +7008,6 @@ void ProcessMotifBindings (void)
 	_XmVirtKeysLoadFallbackBindings (DISPLAY, &bindings);
     }
     XtFree (bindings);
-#endif
 } /* END OF FUNCTION ProcessMotifBindings */
 
 #ifdef PANELIST
@@ -7204,51 +7152,6 @@ ParseWmFunctionArg (
 
 /*************************************<->*************************************
  *
- *  SystemCmd (pchCmd)
- *
- *
- *  Description:
- *  -----------
- *  This function fiddles with our signal handling and calls the
- *  system() function to invoke a unix command.
- *
- *
- *  Inputs:
- *  ------
- *  pchCmd = string with the command we want to exec.
- *
- *  Outputs:
- *  -------
- *
- *
- *  Comments:
- *  --------
- *  The system() command is touchy about the SIGCLD behavior. Restore
- *  the default SIGCLD handler during the time we run system().
- *
- *************************************<->***********************************/
-
-void
-SystemCmd (char *pchCmd)
-{
-    struct sigaction sa;
-    struct sigaction osa;
-
-    (void) sigemptyset(&sa.sa_mask);
-    sa.sa_flags = 0;
-    sa.sa_handler = SIG_DFL;
-
-    (void) sigaction (SIGCLD, &sa, &osa);
-
-    system (pchCmd);
-
-    (void) sigaction (SIGCLD, &osa, (struct sigaction *) 0);
-}
-
-
-
-/*************************************<->*************************************
- *
  *  DeleteTempConfigFileIfAny ()
  *
  *
@@ -7274,23 +7177,11 @@ SystemCmd (char *pchCmd)
 void
 DeleteTempConfigFileIfAny (void)
 {
-    char pchCmd[MAXWMPATH+1];
-
     if (pConfigStackTop->tempName)
     {
-	strcpy (pchCmd, "/bin/rm ");
-	strcat (pchCmd, pConfigStackTop->tempName);
-	SystemCmd (pchCmd);
+	(void) unlink (pConfigStackTop->tempName);
 	XtFree ((char *) pConfigStackTop->tempName);
 	pConfigStackTop->tempName = NULL;
-    }
-    if (pConfigStackTop->cppName)
-    {
-	strcpy (pchCmd, "/bin/rm ");
-	strcat (pchCmd, pConfigStackTop->cppName);
-	SystemCmd (pchCmd);
-	XtFree ((char *) pConfigStackTop->cppName);
-	pConfigStackTop->cppName = NULL;
     }
 }
 
@@ -7417,7 +7308,6 @@ static void ConfigStackInit (char *pchFileName)
 	pConfigStackTop = pConfigStack;
 	pConfigStackTop->fileName = XtNewString (pchFileName);
 	pConfigStackTop->tempName = NULL;
-	pConfigStackTop->cppName = NULL;
 	pConfigStackTop->offset = 0;
 	pConfigStackTop->pWmPB = wmGD.pWmPB;
 	pConfigStackTop->wmgdConfigFile = wmGD.configFile;
@@ -7476,7 +7366,6 @@ ConfigStackPush (unsigned char *pchFileName)
 	/* set up state of new config file */
 	pEntry->fileName = XtNewString ((char *)pchFileName);
 	pEntry->tempName = NULL;
-	pEntry->cppName = NULL;
 	pEntry->wmgdConfigFile = (String) pEntry->fileName;
 
 	/* set globals for new config file */
@@ -7538,7 +7427,6 @@ static void ConfigStackPop (void)
 {
     Boolean error = False;
     ConfigFileStackEntry *pPrev;
-    char pchCmd[MAXWMPATH+1];
 
     if (pConfigStackTop != pConfigStack)
     {
@@ -7548,14 +7436,6 @@ static void ConfigStackPop (void)
 	if (pConfigStackTop->tempName)
 	{
 	    XtFree (pConfigStackTop->tempName);
-	}
-	if (pConfigStackTop->cppName)
-	{
-	    strcpy (pchCmd, "/bin/rm ");
-	    strcat (pchCmd, pConfigStackTop->cppName);
-	    SystemCmd (pchCmd);
-	    XtFree ((char *) pConfigStackTop->cppName);
-	    pConfigStackTop->cppName = NULL;
 	}
 	if (pConfigStackTop->fileName)
 	{
@@ -7567,10 +7447,6 @@ static void ConfigStackPop (void)
 	if (pPrev->tempName)
 	{
 	    cfileP = fopen (pPrev->tempName, "r");
-	}
-	else if (pPrev->cppName)
-	{
-	    cfileP = fopen (pPrev->cppName, "r");
 	}
 	else
 	{
@@ -7721,65 +7597,6 @@ Boolean ParseWmFuncActionArg (unsigned char **linePP,
 
 #endif /* PANELIST */
 #ifdef WSM
-
-/*************************************<->*************************************
- *
- *  PreprocessConfigFile (pSD)
- *
- *
- *  Description:
- *  -----------
- *  This function runs the configuration file through the C
- *  preprocessor
- *
- *
- *  Inputs:
- *  ------
- *  pSD = ptr to screen data
- *
- *  Outputs:
- *  -------
- *
- *
- *  Comments:
- *  --------
- *
- *************************************<->***********************************/
-
-static void
-PreprocessConfigFile (void)
-{
-#define CPP_NAME_SIZE	((L_tmpnam)+1)
-    char pchCmd[MAXWMPATH+1];
-
-    if (wmGD.cppCommand && *wmGD.cppCommand)
-    {
-	/*
-	 * Generate a temp file name.
-	 */
-	pConfigStackTop->cppName = XtMalloc (CPP_NAME_SIZE * sizeof(char));
-	if (pConfigStackTop->cppName)
-	{
-	    (void) tmpnam (pConfigStackTop->cppName);
-
-	    /*
-	     * Build up the command line.
-	     */
-	    strcpy (pchCmd, wmGD.cppCommand);
-	    strcat (pchCmd, " ");
-	    strcat (pchCmd, pConfigStackTop->fileName);
-	    strcat (pchCmd, " ");
-	    strcat (pchCmd, pConfigStackTop->cppName);
-
-	    /*
-	     * Run the config file through the converter program
-	     * and send the output to a temp file.
-	     */
-	    SystemCmd (pchCmd);
-	}
-    }
-}
-
 
 /*************************************<->*************************************
  *
@@ -7995,7 +7812,7 @@ Boolean SetGreyedContextAndMgtMask (MenuItem *menuItem,
 {
     int ix;
 
-    for (ix = 0; ix < WMFUNCTIONTABLESIZE - 1; ++ix)
+    for (ix = 0; (long unsigned int)ix < WMFUNCTIONTABLESIZE - 1; ++ix)
     {
 	if (functionTable[ix].wmFunction == wmFunction)
 	{

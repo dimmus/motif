@@ -247,7 +247,7 @@ static Boolean DoPlacement(Widget wid, XEvent *event)
   GC tearoffGC;
   /* Determine which keycodes are bound to osfXK_Cancel. */
   num_keys = XmeVirtualToActualKeysyms(XtDisplay(rc), keysym, &keys);
-  KCancel = (KeyCode *)XtMalloc(num_keys * sizeof(KeyCode));
+  KCancel = (KeyCode *)_XmMallocArray(num_keys, sizeof(KeyCode));
   for (index = 0; index < num_keys; index++)
     KCancel[index] = XKeysymToKeycode(XtDisplay(rc), keys[index].keysym);
   XtFree((char *)keys);
@@ -398,7 +398,7 @@ void _XmAddTearOffEventHandlers(Widget wid)
   int i;
   Cursor cursor = _XmGetMenuCursorByScreen(XtScreen(wid));
   XmMenuSavvyTrait mtrait;
-  for (i = 0; i < rc->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < rc->composite.num_children; i++) {
     child = rc->composite.children[i];
     mtrait = (XmMenuSavvyTrait)XmeTraitGet(XtClass(child), XmQTmenuSavvy);
     /*
@@ -438,7 +438,7 @@ static void RemoveTearOffEventHandlers(Widget wid)
   XmRowColumnWidget rc = (XmRowColumnWidget)wid;
   Widget child;
   int i;
-  for (i = 0; i < rc->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < rc->composite.num_children; i++) {
     child = rc->composite.children[i];
     /*
      * Remove the event handlers on the label and separator widgets.
@@ -575,9 +575,7 @@ void _XmTearOffInitiate(Widget wid, XEvent *event)
   PropMwmHints *rprop = NULL; /* receive pointer */
   PropMwmHints sprop;         /* send structure */
   Atom atoms[XtNumber(atom_names)];
-  Atom actual_type;
-  int actual_format;
-  unsigned long num_items, bytes_after;
+  unsigned long num_items;
   XEvent newEvent;
   XmMenuState mst = _XmGetMenuState((Widget)wid);
   XtWidgetProc proc;
@@ -774,31 +772,24 @@ void _XmTearOffInitiate(Widget wid, XEvent *event)
   XtRealizeWidget((Widget)to_shell);
   /* Wait until after to_shell realize to set the focus */
   XmProcessTraversal((Widget)submenu, XmTRAVERSE_CURRENT);
-  XGetWindowProperty(XtDisplay(to_shell),
-                     XtWindow(to_shell),
-                     atoms[XmA_MOTIF_WM_HINTS],
-                     0,
-                     PROP_MWM_HINTS_ELEMENTS,
-                     False,
-                     atoms[XmA_MOTIF_WM_HINTS],
-                     &actual_type,
-                     &actual_format,
-                     &num_items,
-                     &bytes_after,
-                     (unsigned char **)&rprop);
-  if ((actual_type != atoms[XmA_MOTIF_WM_HINTS]) || (actual_format != 32) ||
-      (num_items < PROP_MOTIF_WM_INFO_ELEMENTS))
+  if (_XmGetWindowPropertyChecked(XtDisplay(to_shell),
+                                  XtWindow(to_shell),
+                                  atoms[XmA_MOTIF_WM_HINTS],
+                                  PROP_MWM_HINTS_ELEMENTS,
+                                  atoms[XmA_MOTIF_WM_HINTS],
+                                  32,
+                                  PROP_MWM_HINTS_ELEMENTS,
+                                  NULL,
+                                  NULL,
+                                  &num_items,
+                                  NULL,
+                                  (unsigned char **)&rprop))
   {
-    if (rprop != NULL)
-      XFree((char *)rprop);
-  }
-  else {
     bzero((void *)&sprop, sizeof(sprop));
     /* Fix for 9346,  use sizeof(long) to calculate total
          size of block from get property */
     memcpy(&sprop, rprop, (size_t)sizeof(long) * num_items);
-    if (rprop != NULL)
-      XFree((char *)rprop);
+    XFree((char *)rprop);
     sprop.flags |= MWM_HINTS_STATUS;
     sprop.status |= MWM_TEAROFF_WINDOW;
     XChangeProperty(XtDisplay(to_shell),
@@ -990,7 +981,7 @@ void _XmRestoreTearOffToMenuShell(Widget wid, XEvent *event)
       if (expose)
         (*expose)((Widget)submenu, NULL, NULL);
       /* Redraw the submenu's widgets */
-      for (i = 0; i < submenu->composite.num_children; i++) {
+      for (i = 0; (Cardinal)i < submenu->composite.num_children; i++) {
         child = submenu->composite.children[i];
         if (XtIsWidget(child)) {
           _XmProcessLock();

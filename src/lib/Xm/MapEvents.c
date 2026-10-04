@@ -52,17 +52,17 @@ static int StrToOct(String str);
 static int StrToNum(String str);
 static void FillInQuarks(EventKey *table);
 static Boolean LookupModifier(String name, Modifiers *valueP);
-static String ScanAlphanumeric(register String str);
-static String ScanWhitespace(register String str);
+static String ScanAlphanumeric(String str);
+static String ScanWhitespace(String str);
 static String ParseImmed(String str, unsigned int closure, unsigned long *detail, Boolean *status);
 static String ParseKeySym(String str,
                           unsigned int closure,
                           unsigned long *detail,
                           Boolean *status);
-static String ParseModifiers(register String str, Modifiers *modifiers, Boolean *status);
+static String ParseModifiers(String str, Modifiers *modifiers, Boolean *status);
 static String ParseEventType(
-    register String str, EventKey *table, int *eventType, Cardinal *_index, Boolean *status);
-static String _MapEvent(register String str,
+    String str, EventKey *table, int *eventType, Cardinal *_index, Boolean *status);
+static String _MapEvent(String str,
                         EventKey *table,
                         int *eventType,
                         unsigned long *detail,
@@ -143,8 +143,8 @@ static Boolean initialized = FALSE;
  *************************************<->***********************************/
 static int StrToHex(String str)
 {
-  register char c;
-  register int val = 0;
+  char c;
+  int val = 0;
   while ((c = *str) != '\0') {
     if ('0' <= c && c <= '9')
       val = val * 16 + c - '0';
@@ -161,8 +161,8 @@ static int StrToHex(String str)
 
 static int StrToOct(String str)
 {
-  register char c;
-  register int val = 0;
+  char c;
+  int val = 0;
   while ((c = *str) != '\0') {
     if ('0' <= c && c <= '7')
       val = val * 8 + c - '0';
@@ -175,8 +175,8 @@ static int StrToOct(String str)
 
 static int StrToNum(String str)
 {
-  register char c;
-  register int val = 0;
+  char c;
+  int val = 0;
   if (*str == '0') {
     str++;
     if (*str == 'x' || *str == 'X')
@@ -219,7 +219,7 @@ static int StrToNum(String str)
  *************************************<->***********************************/
 static void FillInQuarks(EventKey *table)
 {
-  register int i;
+  int i;
   for (i = 0; table[i].event; i++)
     table[i].signature = XrmPermStringToQuark(table[i].event);
 }
@@ -250,8 +250,8 @@ static void FillInQuarks(EventKey *table)
  *************************************<->***********************************/
 static Boolean LookupModifier(String name, Modifiers *valueP)
 {
-  register int i;
-  register XrmQuark signature = XrmStringToQuark(name);
+  int i;
+  XrmQuark signature = XrmStringToQuark(name);
   for (i = 0; modifierStrings[i].event != NULL; i++)
     if (modifierStrings[i].signature == signature) {
       *valueP = modifierStrings[i].closure;
@@ -281,7 +281,23 @@ static Boolean LookupModifier(String name, Modifiers *valueP)
  *   -----------------
  *
  *************************************<->***********************************/
-static String ScanAlphanumeric(register String str)
+/*
+ * Copy the n characters at start to buf, of size bytes, as a string.
+ * Returns False if they do not fit, and no name that long is a valid
+ * keysym, modifier or event type.  The text comes from .motifbind files
+ * and from the _MOTIF_BINDINGS root window property, which any client
+ * can set.
+ */
+static Boolean CopyName(char *buf, size_t size, const char *start, size_t n)
+{
+  if (n >= size)
+    return False;
+  memcpy(buf, start, n);
+  buf[n] = '\0';
+  return True;
+}
+
+static String ScanAlphanumeric(String str)
 {
   while (('A' <= *str && *str <= 'Z') || ('a' <= *str && *str <= 'z') ||
          ('0' <= *str && *str <= '9'))
@@ -311,7 +327,7 @@ static String ScanAlphanumeric(register String str)
  *   -----------------
  *
  *************************************<->***********************************/
-static String ScanWhitespace(register String str)
+static String ScanWhitespace(String str)
 {
   while (*str == ' ' || *str == '\t')
     str++;
@@ -380,8 +396,10 @@ static String ParseKeySym(String str, unsigned int closure, unsigned long *detai
   if (*str == '\\') {
     /* "\x"; interpret "x" as a Keysym. */
     str++;
-    keySymName[0] = *str++;
+    keySymName[0] = *str;
     keySymName[1] = '\0';
+    if (*str != '\0') /* not past the end of a trailing backslash */
+      str++;
     *detail = XStringToKeysym(keySymName);
   }
   else if (*str == ',' || *str == ':') {
@@ -392,8 +410,8 @@ static String ParseKeySym(String str, unsigned int closure, unsigned long *detai
     while (*str != ',' && *str != ':' && *str != ' ' && *str != '\t' && *str != '\n' &&
            *str != '\0')
       str++;
-    (void)strncpy(keySymName, start, str - start);
-    keySymName[str - start] = '\0';
+    if (!CopyName(keySymName, sizeof(keySymName), start, str - start))
+      return str;
     *detail = XStringToKeysym(keySymName);
   }
   if (*detail == NoSymbol) {
@@ -438,9 +456,9 @@ static String ParseKeySym(String str, unsigned int closure, unsigned long *detai
  *   -----------------
  *
  *************************************<->***********************************/
-static String ParseModifiers(register String str, Modifiers *modifiers, Boolean *status)
+static String ParseModifiers(String str, Modifiers *modifiers, Boolean *status)
 {
-  register String start;
+  String start;
   char modStr[100];
   Boolean notFlag;
   Modifiers maskBit;
@@ -452,8 +470,10 @@ static String ParseModifiers(register String str, Modifiers *modifiers, Boolean 
   start = str;
   str = ScanAlphanumeric(str);
   if (start != str) {
-    (void)strncpy(modStr, start, str - start);
-    modStr[str - start] = '\0';
+    if (!CopyName(modStr, sizeof(modStr), start, str - start)) {
+      *status = FALSE;
+      return str;
+    }
     if (LookupModifier(modStr, &maskBit)) {
       if (maskBit == None) {
         *modifiers = 0;
@@ -478,9 +498,8 @@ static String ParseModifiers(register String str, Modifiers *modifiers, Boolean 
       *status = FALSE;
       return str;
     }
-    (void)strncpy(modStr, start, str - start);
-    modStr[str - start] = '\0';
-    if (!LookupModifier(modStr, &maskBit)) {
+    if (!CopyName(modStr, sizeof(modStr), start, str - start) ||
+        !LookupModifier(modStr, &maskBit)) {
       /* Unknown modifier name */
       *status = FALSE;
       return str;
@@ -516,16 +535,18 @@ static String ParseModifiers(register String str, Modifiers *modifiers, Boolean 
  *
  *************************************<->***********************************/
 static String ParseEventType(
-    register String str, EventKey *table, int *eventType, Cardinal *_index, Boolean *status)
+    String str, EventKey *table, int *eventType, Cardinal *_index, Boolean *status)
 {
   String start = str;
   char eventTypeStr[100];
-  register Cardinal i;
-  register XrmQuark signature;
+  Cardinal i;
+  XrmQuark signature;
   /* Parse out the event string */
   str = ScanAlphanumeric(str);
-  (void)strncpy(eventTypeStr, start, str - start);
-  eventTypeStr[str - start] = '\0';
+  if (!CopyName(eventTypeStr, sizeof(eventTypeStr), start, str - start)) {
+    *status = FALSE;
+    return str;
+  }
   /* Attempt to match the parsed event against our supported event set */
   signature = XrmStringToQuark(eventTypeStr);
   for (i = 0; table[i].signature != NULLQUARK; i++)
@@ -561,7 +582,7 @@ static String ParseEventType(
  *   -----------------
  *
  *************************************<->***********************************/
-static String _MapEvent(register String str,
+static String _MapEvent(String str,
                         EventKey *table,
                         int *eventType,
                         unsigned long *detail,
@@ -617,7 +638,7 @@ static String _MapEvent(register String str,
  *   -----------------
  *
  *************************************<->***********************************/
-Boolean _XmMapBtnEvent(register String str,
+Boolean _XmMapBtnEvent(String str,
                        int *eventType,
                        unsigned int *button,
                        Modifiers *modifiers)
@@ -677,11 +698,11 @@ int _XmMapKeyEvents(String str, int **eventTypes, KeySym **keysyms, Modifiers **
     if (!status)
       break;
     /* Save this event. */
-    *eventTypes = (int *)XtRealloc((char *)*eventTypes, (count + 1) * sizeof(int));
+    *eventTypes = (int *)_XmReallocArray((char *)*eventTypes, count + 1, sizeof(int));
     (*eventTypes)[count] = tmp_type;
-    *keysyms = (KeySym *)XtRealloc((char *)*keysyms, (count + 1) * sizeof(KeySym));
+    *keysyms = (KeySym *)_XmReallocArray((char *)*keysyms, count + 1, sizeof(KeySym));
     (*keysyms)[count] = (KeySym)tmp_sym;
-    *modifiers = (Modifiers *)XtRealloc((char *)*modifiers, (count + 1) * sizeof(Modifiers));
+    *modifiers = (Modifiers *)_XmReallocArray((char *)*modifiers, count + 1, sizeof(Modifiers));
     (*modifiers)[count] = tmp_mods;
     count++;
     /* Skip the separator. */
@@ -730,7 +751,7 @@ int _XmMapKeyEvents(String str, int **eventTypes, KeySym **keysyms, Modifiers **
  *************************************<->***********************************/
 Boolean _XmMatchBtnEvent(XEvent *event, int eventType, unsigned int button, Modifiers modifiers)
 {
-  register Modifiers state = event->xbutton.state &
+  Modifiers state = event->xbutton.state &
                              (ShiftMask | LockMask | ControlMask | Mod1Mask | Mod2Mask | Mod3Mask |
                               Mod4Mask | Mod5Mask);
   if (((eventType == XmIGNORE_EVENTTYPE) || (event->type == eventType)) &&
@@ -764,7 +785,7 @@ Boolean _XmMatchBtnEvent(XEvent *event, int eventType, unsigned int button, Modi
  *************************************<->***********************************/
 Boolean _XmMatchKeyEvent(XEvent *event, int eventType, unsigned int key, Modifiers modifiers)
 {
-  register Modifiers state, mods;
+  Modifiers state, mods;
   _XmCheckInitModifiers();
   state = event->xkey.state & ~(LockMask | ScrollLockMask | NumLockMask);
   mods = modifiers & ~(LockMask | ScrollLockMask | NumLockMask);

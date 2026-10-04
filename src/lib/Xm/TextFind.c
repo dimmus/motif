@@ -37,7 +37,7 @@ Boolean _XmTextFindStringBackwards(Widget w,
                                    char *search_string,
                                    XmTextPosition *position)
 {
-  register int i;
+  int i;
   XmTextWidget tw = (XmTextWidget)w;
   XmSourceData data = ((XmTextWidget)w)->text.source->data;
   Boolean return_val = False, match = False;
@@ -175,8 +175,7 @@ Boolean _XmTextFindStringBackwards(Widget w,
       bits16_ptr = bits16_search_string = NULL;
       bits16_gap_start = bits16_gap_end = NULL;
       /* search_length is number of characters (!bytes) in search_string */
-      bits16_search_string = (BITS16 *)XtMalloc((unsigned)(search_length + 1) *
-                                                (int)tw->text.char_size);
+      bits16_search_string = (BITS16 *)_XmMallocArray(search_length + 1, tw->text.char_size);
       (void)_XmTextBytesToCharacters((char *)bits16_search_string,
                                      search_string,
                                      search_length,
@@ -307,7 +306,7 @@ Boolean _XmTextFindStringBackwards(Widget w,
       wchar_t *wchar_t_end_of_data;
       wchar_t_ptr = wchar_t_search_string = NULL;
       wchar_t_gap_start = wchar_t_gap_end = NULL;
-      wchar_t_search_string = (wchar_t *)XtMalloc((unsigned)(search_length + 1) * sizeof(wchar_t));
+      wchar_t_search_string = (wchar_t *)_XmMallocArray(search_length + 1, sizeof(wchar_t));
       (void)_XmTextBytesToCharacters((char *)wchar_t_search_string,
                                      search_string,
                                      search_length,
@@ -441,7 +440,7 @@ Boolean _XmTextFindStringForwards(Widget w,
                                   char *search_string,
                                   XmTextPosition *position)
 {
-  register int i;
+  int i;
   XmTextWidget tw = (XmTextWidget)w;
   XmSourceData data = tw->text.source->data;
   Boolean return_val = False, match = False;
@@ -570,8 +569,7 @@ Boolean _XmTextFindStringForwards(Widget w,
       bits16_ptr = bits16_search_string = NULL;
       bits16_gap_start = bits16_gap_end = NULL;
       /* search_length is number of characters (!bytes) in search_string */
-      bits16_search_string = (BITS16 *)XtMalloc((unsigned)(search_length + 1) *
-                                                (int)tw->text.char_size);
+      bits16_search_string = (BITS16 *)_XmMallocArray(search_length + 1, tw->text.char_size);
       (void)_XmTextBytesToCharacters((char *)bits16_search_string,
                                      search_string,
                                      search_length,
@@ -692,7 +690,7 @@ Boolean _XmTextFindStringForwards(Widget w,
       wchar_t *wchar_t_end_of_data;
       wchar_t_ptr = wchar_t_search_string = NULL;
       wchar_t_gap_start = wchar_t_gap_end = NULL;
-      wchar_t_search_string = (wchar_t *)XtMalloc((unsigned)(search_length + 1) * sizeof(wchar_t));
+      wchar_t_search_string = (wchar_t *)_XmMallocArray(search_length + 1, sizeof(wchar_t));
       (void)_XmTextBytesToCharacters((char *)wchar_t_search_string,
                                      search_string,
                                      search_length,
@@ -856,7 +854,7 @@ Boolean XmTextFindStringWcs(Widget w,
   if (!XmIsTextField(w)) {
     for (num_chars = 0, tmp_wc = wc_string; *tmp_wc != (wchar_t)0L; num_chars++)
       tmp_wc++;
-    string = XtMalloc((unsigned)(num_chars + 1) * (int)tw->text.char_size);
+    string = _XmMallocArray(num_chars + 1, tw->text.char_size);
     wcs_ret_val = wcstombs(string, wc_string, (num_chars + 1) * (int)tw->text.char_size);
     if (wcs_ret_val >= 0)
       return_val = XmTextFindString(w, start, string, direction, position);

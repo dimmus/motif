@@ -83,6 +83,56 @@ START_TEST(rasterize_image)
 }
 END_TEST
 
+START_TEST(load_huge_size)
+{
+	FILE *fp;
+	XImage *img = NULL;
+	int ret;
+
+	/* A width that doesn't fit in an int must be rejected */
+	ck_assert_msg(fp = fopen("svg/huge.svg", "rb"), "Failed to open svg/huge.svg");
+	ret = _XmSvgGetImage(fp, &img);
+	fclose(fp);
+
+	ck_assert_msg(ret == 1 && !img, "Expected huge SVG to be rejected");
+}
+END_TEST
+
+START_TEST(load_negative_size)
+{
+	FILE *fp;
+	XImage *img = NULL;
+	int ret;
+
+	ck_assert_msg(fp = fopen("svg/negative_size.svg", "rb"), "Failed to open svg/negative_size.svg");
+	ret = _XmSvgGetImage(fp, &img);
+	fclose(fp);
+
+	ck_assert_msg(ret == 1 && !img, "Expected negative size SVG to be rejected");
+}
+END_TEST
+
+START_TEST(rasterize_bad_size)
+{
+	FILE *fp;
+	XImage *img = NULL;
+	int ret;
+
+	ck_assert_msg(fp = fopen("svg/test.svg", "rb"), "Failed to open svg/test.svg");
+	ret = _XmSvgGetImage(fp, &img);
+	fclose(fp);
+
+	ck_assert_msg(!ret && img, "Failed to load RGB test image");
+	ck_assert_msg(!img->f.sub_image(img, 0, 0, 0, 1), "Expected zero width to fail");
+	ck_assert_msg(!img->f.sub_image(img, 0, 0, 1, 0), "Expected zero height to fail");
+	ck_assert_msg(!img->f.sub_image(img, 0, 0, (unsigned int)-1, 1), "Expected huge width to fail");
+	ck_assert_msg(!img->f.sub_image(img, 0, 0, 1, 65536), "Expected huge height to fail");
+	/* Each dimension is in range, but w * h * 4 overflows the rasterizer's int */
+	ck_assert_msg(!img->f.sub_image(img, 0, 0, 65535, 8193), "Expected huge area to fail");
+	XDestroyImage(img);
+}
+END_TEST
+
 void svg_suite(SRunner *runner)
 {
 	TCase *t;
@@ -92,6 +142,9 @@ void svg_suite(SRunner *runner)
 	tcase_add_test(t, load_invalid_file);
 	tcase_add_test(t, load_test_image);
 	tcase_add_test(t, rasterize_image);
+	tcase_add_test(t, load_huge_size);
+	tcase_add_test(t, load_negative_size);
+	tcase_add_test(t, rasterize_bad_size);
 	tcase_set_timeout(t, 1);
 	suite_add_tcase(s, t);
 	srunner_add_suite(runner, s);

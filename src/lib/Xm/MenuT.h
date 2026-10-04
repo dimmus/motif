@@ -61,7 +61,7 @@ typedef Widget (*XmMenuSystemPopupPostedProc)(Widget);
 typedef void (*XmMenuSavvyDisableProc)(Widget, XmActivateState);
 typedef char *(*XmMenuSavvyGetAcceleratorProc)(Widget);
 typedef KeySym (*XmMenuSavvyGetMnemonicProc)(Widget);
-typedef char *(*XmMenuSavvyGetActivateCBNameProc)();
+typedef char *(*XmMenuSavvyGetActivateCBNameProc)(void);
 #define XmMenuSystemTypeProc XmMenuSystemWidgetProc
 #define XmMenuSystemStatusProc XmMenuSystemWidgetProc
 #define XmMenuSystemGetPostedFromWidgetProc XmMenuSystemDisarmProc

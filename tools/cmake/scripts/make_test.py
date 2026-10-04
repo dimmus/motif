@@ -28,8 +28,9 @@ def main():
     # Change to build directory
     os.chdir(args.build_dir)
 
-    # Build ctest command
-    ctest_cmd = ['ctest']
+    # Build ctest command.  Running zero tests is an error, not a pass:
+    # it means the build directory was configured without WITH_TESTS.
+    ctest_cmd = ['ctest', '--no-tests=error', '--output-on-failure']
     
     if args.verbose:
         ctest_cmd.append('--verbose')
@@ -46,7 +47,7 @@ def main():
             pass
 
     print(f"Running tests in {args.build_dir}")
-    print(f"Command: {' '.join(ctest_cmd)}")
+    print(f"Command: {' '.join(ctest_cmd)}", flush=True)
     
     # Run ctest
     try:
@@ -55,6 +56,9 @@ def main():
         return 0
     except subprocess.CalledProcessError as e:
         print(f"Tests failed with exit code {e.returncode}")
+        if not os.path.exists(os.path.join('src', 'tests', 'CTestTestfile.cmake')):
+            print("No tests are configured in this build directory; "
+                  "reconfigure it with -DWITH_TESTS=ON (e.g. 'make developer').")
         return e.returncode
     except FileNotFoundError:
         print("Error: ctest not found. Make sure CMake is installed and tests are configured.")

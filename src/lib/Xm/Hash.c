@@ -81,7 +81,7 @@ XmHashTable _XmAllocHashTable(Cardinal size_hint, XmHashCompareProc cproc, XmHas
     table->compare = Compare;
   i = 0;
   /* Search size_table for size which is bigger than size_hint */
-  while (size_table[i] != 0 && size_table[i] < size_hint)
+  while (size_table[i] != 0 && (Cardinal)size_table[i] < size_hint)
     i++;
   if (size_table[i] == 0)
     i--;
@@ -96,7 +96,7 @@ void _XmFreeHashTable(XmHashTable table)
 {
   int i;
   XmHashBucket bucket, next;
-  for (i = 0; i < table->size; i++) {
+  for (i = 0; (Cardinal)i < table->size; i++) {
     bucket = table->buckets[i];
     while (bucket) {
       next = bucket->next;
@@ -115,24 +115,24 @@ void _XmResizeHashTable(XmHashTable table, Cardinal new_size)
   XmHashBucket current, last, next, new_h;
   i = 0;
   /* Search size_table for size which is bigger than size_hint */
-  while (size_table[i] != 0 && size_table[i] < new_size)
+  while (size_table[i] != 0 && (Cardinal)size_table[i] < new_size)
     i++;
   if (size_table[i] == 0)
     i--;
   /* New size should be larger,  otherwise return */
-  if (size_table[i] <= table->size)
+  if ((Cardinal)size_table[i] <= table->size)
     return;
   /* Realloc table */
   oldsize = table->size;
   table->size = size_table[i];
-  table->buckets = (XmHashBucket *)XtRealloc((char *)table->buckets,
-                                             table->size * sizeof(XmHashBucket));
+  table->buckets =
+      (XmHashBucket *)_XmReallocArray((char *)table->buckets, table->size, sizeof(XmHashBucket));
   /* NULL new array entries */
-  for (i = oldsize; i < table->size; i++)
+  for (i = oldsize; (Cardinal)i < table->size; i++)
     table->buckets[i] = NULL;
   /* Rearrange buckets,  this is a slow method,  but always
      correct.  We will end up rescanning any moved buckets */
-  for (i = 0; i < table->size; i++) {
+  for (i = 0; (Cardinal)i < table->size; i++) {
     last = NULL;
     current = table->buckets[i];
     while (current) {
@@ -280,7 +280,7 @@ void _XmMapHashTable(XmHashTable table, XmHashMapProc proc, XtPointer client_dat
 {
   int i;
   XmHashBucket entry, next;
-  for (i = 0; i < table->size; i++) {
+  for (i = 0; (Cardinal)i < table->size; i++) {
     entry = table->buckets[i];
     while (entry) {
       /* Can free key and value in this proc */

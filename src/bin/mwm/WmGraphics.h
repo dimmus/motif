@@ -51,10 +51,20 @@ extern void WmDrawXmString (Display *dpy, Window w, XmFontList xmfontlist,
 			    XmString xmstring, GC gc, Position x, Position y,
 			    Dimension width, XRectangle *pbox,
 			    Boolean bCenter);
+extern void WmDrawXmStringWidth (Display *dpy, Window w,
+				 XmFontList xmfontlist, XmString xmstring,
+				 Dimension textWidth, GC gc,
+				 Position x, Position y, Dimension width,
+				 XRectangle *pbox, Boolean bCenter);
 #else /* WSM */
 extern void WmDrawXmString (Display *dpy, Window w, XmFontList xmfontlist,
 			    XmString xmstring, GC gc, Position x, Position y,
 			    Dimension width, XRectangle *pbox);
+extern void WmDrawXmStringWidth (Display *dpy, Window w,
+				 XmFontList xmfontlist, XmString xmstring,
+				 Dimension textWidth, GC gc,
+				 Position x, Position y, Dimension width,
+				 XRectangle *pbox);
 #endif /* WSM */
 
 extern GC WmGetGC (WmScreenData *pSD, unsigned long gc_mask, XGCValues *pGcv);

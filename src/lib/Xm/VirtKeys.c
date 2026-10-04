@@ -294,9 +294,10 @@ static void FillBindingsFromDB(Display *dpy,
       /* Append the new bindings to the end of the table. */
       if (new_num > 0) {
         int tmp;
-        *keys = (XmVKeyBinding)XtRealloc((char *)*keys,
-                                         (*num_keys + new_num) * sizeof(XmVKeyBindingRec));
-        for (tmp = 0; tmp < new_num; tmp++) {
+        *keys = (XmVKeyBinding)_XmReallocArray((char *)*keys,
+                                               *num_keys + new_num,
+                                               sizeof(XmVKeyBindingRec));
+        for (tmp = 0; (Cardinal)tmp < new_num; tmp++) {
           (*keys)[*num_keys + tmp].keysym = new_keys[tmp].keysym;
           (*keys)[*num_keys + tmp].modifiers = new_keys[tmp].modifiers;
           (*keys)[*num_keys + tmp].virtkey = virtualKeysyms[vk_num].keysym;
@@ -312,33 +313,24 @@ static void FillBindingsFromDB(Display *dpy,
 static Boolean GetBindingsProperty(Display *display, String property, String *binding)
 {
   char *prop = NULL;
-  Atom actual_type;
-  int actual_format;
   unsigned long num_items;
-  unsigned long bytes_after;
   if (binding == NULL)
     return False;
-  XGetWindowProperty(display,
-                     RootWindow(display, 0),
-                     XInternAtom(display, property, FALSE),
-                     0,
-                     (long)1000000,
-                     FALSE,
-                     XA_STRING,
-                     &actual_type,
-                     &actual_format,
-                     &num_items,
-                     &bytes_after,
-                     (unsigned char **)&prop);
-  if ((actual_type != XA_STRING) || (actual_format != 8) || (num_items == 0)) {
-    if (prop != NULL)
-      XFree(prop);
+  if (!_XmGetWindowPropertyChecked(display,
+                                   RootWindow(display, 0),
+                                   XInternAtom(display, property, FALSE),
+                                   (long)1000000,
+                                   XA_STRING,
+                                   8,
+                                   1,
+                                   NULL,
+                                   NULL,
+                                   &num_items,
+                                   NULL,
+                                   (unsigned char **)&prop))
     return False;
-  }
-  else {
-    *binding = prop;
-    return True;
-  }
+  *binding = prop;
+  return True;
 }
 
 /*
@@ -548,6 +540,7 @@ static Modifiers EffectiveStdModMask(Display *dpy, KeySym *kc_map, int ks_per_kc
          */
         break;
       }
+      XM_FALLTHROUGH;
     case 3:
       if (kc_map[2] == NoSymbol) {
         /* Both Group 2 keysyms are NoSymbol, so the group
@@ -568,6 +561,7 @@ static Modifiers EffectiveStdModMask(Display *dpy, KeySym *kc_map, int ks_per_kc
       /* At this fall-through, the group modifier bits have been
        * decided, while the case is still out on Shift/Lock.
        */
+      XM_FALLTHROUGH;
     case 2:
       if (kc_map[1] != NoSymbol) {
         /* Shift/Lock modifier selects keysym from Group 1,
@@ -576,6 +570,7 @@ static Modifiers EffectiveStdModMask(Display *dpy, KeySym *kc_map, int ks_per_kc
          */
         break;
       }
+      XM_FALLTHROUGH;
     case 1:
       if (kc_map[0] != NoSymbol) {
         XtConvertCase(dpy, kc_map[0], &lc, &uc);
@@ -590,6 +585,7 @@ static Modifiers EffectiveStdModMask(Display *dpy, KeySym *kc_map, int ks_per_kc
        * the Shift modifier is not effective; mask it out.
        */
       esm_mask &= ~ShiftMask;
+      break;
     case 0:
       break;
   }
@@ -626,7 +622,7 @@ int XmeVirtualToActualKeysyms(Display *dpy, KeySym virtKeysym, XmKeyBinding *act
       matches++;
   /* Allocate the return array. */
   if (matches > 0) {
-    *actualKeyData = (XmKeyBinding)XtMalloc(matches * sizeof(XmKeyBindingRec));
+    *actualKeyData = (XmKeyBinding)_XmMallocArray(matches, sizeof(XmKeyBindingRec));
     matches = 0;
     for (index = 0; index < xmDisplay->display.num_bindings; index++)
       if (keyBindings[index].virtkey == virtKeysym) {
@@ -642,50 +638,47 @@ int XmeVirtualToActualKeysyms(Display *dpy, KeySym virtKeysym, XmKeyBinding *act
 Boolean _XmVirtKeysLoadFileBindings(char *fileName, String *binding)
 {
   FILE *fileP;
-  int buffersize;
-  int count;
-  int firsttime;
+  size_t buffersize;
+  size_t count;
+  size_t len;
   char line[256];
   Boolean skip;
-  if ((fileP = fopen(fileName, "r")) != NULL) {
-    skip = False;
-    count = 0;
-    buffersize = 1;
-    firsttime = 1;
-    while (fgets(line, sizeof(line), fileP) != NULL) {
-      /* handle '!' comments; they can extend across mutliple reads */
-      if (skip) {
-        if (line[strlen(line) - 1] == '\n')
-          skip = False;
-        continue;
-      }
-      if (line[0] == '!') {
-        if (line[strlen(line) - 1] == '\n')
-          continue;
-        else {
-          skip = True;
-          continue;
-        }
-      }
-      /* must be >=, because buffersize is always 1 bigger for '\0' */
-      if (count + strlen(line) >= buffersize) {
-        buffersize += BUFFERSIZE;
-        *binding = XtRealloc(*binding, buffersize);
-        /* always make sure that the end of *binding is null terminated */
-        if (firsttime) {
-          *binding[0] = '\0';
-          firsttime = 0;
-        }
-      }
-      count += strlen(line);
-      strcat(*binding, line);
+  if ((fileP = fopen(fileName, "r")) == NULL)
+    return False;
+  skip = False;
+  count = 0;
+  /* Always start from a NUL-terminated buffer, so that an empty file
+   * (or one holding only comments) yields "" rather than garbage. */
+  buffersize = BUFFERSIZE;
+  *binding = XtRealloc(*binding, buffersize);
+  (*binding)[0] = '\0';
+  while (fgets(line, sizeof(line), fileP) != NULL) {
+    /* A line starting with a NUL byte has length 0. */
+    if ((len = strlen(line)) == 0)
+      continue;
+    /* handle '!' comments; they can extend across mutliple reads */
+    if (skip) {
+      if (line[len - 1] == '\n')
+        skip = False;
+      continue;
     }
-    /* trim unused buffer space */
-    *binding = XtRealloc(*binding, count + 1);
-    fclose(fileP);
-    return True;
+    if (line[0] == '!') {
+      if (line[len - 1] != '\n')
+        skip = True;
+      continue;
+    }
+    /* must be >=, because buffersize is always 1 bigger for '\0' */
+    if (count + len >= buffersize) {
+      buffersize += BUFFERSIZE;
+      *binding = XtRealloc(*binding, buffersize);
+    }
+    memcpy(*binding + count, line, len + 1);
+    count += len;
   }
-  return False;
+  /* trim unused buffer space */
+  *binding = XtRealloc(*binding, count + 1);
+  fclose(fileP);
+  return True;
 }
 
 static void LoadVendorBindings(Display *display, char *path, FILE *fp, String *binding)
@@ -694,11 +687,13 @@ static void LoadVendorBindings(Display *display, char *path, FILE *fp, String *b
   char *bindFile;
   char *vendor;
   char *vendorV;
+  size_t size;
   char *ptr;
   char *start;
   vendor = ServerVendor(display);
-  vendorV = XtMalloc(strlen(vendor) + 20); /* assume rel.# is < 19 digits */
-  sprintf(vendorV, "%s %d", vendor, VendorRelease(display));
+  size = strlen(vendor) + 20; /* assume rel.# is < 19 digits */
+  vendorV = XtMalloc(size);
+  snprintf(vendorV, size, "%s %d", vendor, VendorRelease(display));
   while (fgets(buffer, MAXLINE, fp) != NULL) {
     ptr = buffer;
     while (*ptr != '"' && *ptr != '!' && *ptr != '\0')
@@ -787,20 +782,18 @@ int _XmVirtKeysLoadFallbackBindings(Display *display, String *binding)
   }
   /* Check hardcoded fallbacks (for 1.1 bc) */
   if (*binding == NULL) {
-    for (i = 0, currDefault = fallbackBindingStrings; i < XtNumber(fallbackBindingStrings);
+    for (i = 0, currDefault = fallbackBindingStrings; (unsigned int)i < XtNumber(fallbackBindingStrings);
          i++, currDefault++)
     {
       if (strcmp(currDefault->vendorName, ServerVendor(display)) == 0) {
-        *binding = XtMalloc(strlen(currDefault->defaults) + 1);
-        strcpy(*binding, currDefault->defaults);
+        *binding = XtNewString(currDefault->defaults);
         break;
       }
     }
   }
   /* Use generic fallback bindings */
   if (*binding == NULL) {
-    *binding = XtMalloc(strlen(defaultFallbackBindings) + 1);
-    strcpy(*binding, defaultFallbackBindings);
+    *binding = XtNewString(defaultFallbackBindings);
   }
   /* Set the fallback property for future Xm applications */
   XChangeProperty(display,

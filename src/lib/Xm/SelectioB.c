@@ -660,7 +660,7 @@ void _XmSelectionBoxCreateSelectionLabel(XmSelectionBoxWidget sel)
 void _XmSelectionBoxCreateList(XmSelectionBoxWidget sel)
 {
   Arg al[20];
-  register int ac = 0;
+  int ac = 0;
   int *position;
   int pos_count;
   XtCallbackProc callbackProc;
@@ -713,7 +713,7 @@ void _XmSelectionBoxCreateList(XmSelectionBoxWidget sel)
 void _XmSelectionBoxCreateText(XmSelectionBoxWidget sel)
 {
   Arg al[10];
-  register int ac = 0;
+  int ac = 0;
   String text_value;
   XtAccelerators temp_accelerators;
   /****************/
@@ -749,7 +749,7 @@ void _XmSelectionBoxCreateText(XmSelectionBoxWidget sel)
 void _XmSelectionBoxCreateSeparator(XmSelectionBoxWidget sel)
 {
   Arg al[10];
-  register int ac = 0;
+  int ac = 0;
   /****************/
   XtSetArg(al[ac], XmNhighlightThickness, 0);
   ac++;
@@ -828,8 +828,8 @@ XmGeoMatrix _XmSelectionBoxGeoMatrixCreate(Widget wid,
 {
   XmSelectionBoxWidget sb = (XmSelectionBoxWidget)wid;
   XmGeoMatrix geoSpec;
-  register XmGeoRowLayout layoutPtr;
-  register XmKidGeometry boxPtr;
+  XmGeoRowLayout layoutPtr;
+  XmKidGeometry boxPtr;
   XmKidGeometry firstButtonBox;
   XmListWidget list;
   Boolean listLabelBox;
@@ -853,7 +853,7 @@ XmGeoMatrix _XmSelectionBoxGeoMatrixCreate(Widget wid,
   layoutPtr = &(geoSpec->layouts->row);
   boxPtr = geoSpec->boxes;
   /* menu bar */
-  for (i = 0; i < sb->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < sb->composite.num_children; i++) {
     Widget w = sb->composite.children[i];
     if (XmIsRowColumn(w) && ((XmRowColumnWidget)w)->row_column.type == XmMENU_BAR &&
         w != SB_WorkArea(sb) && _XmGeoSetupKid(boxPtr, w))
@@ -934,7 +934,7 @@ XmGeoMatrix _XmSelectionBoxGeoMatrixCreate(Widget wid,
     if (_XmGeoSetupKid(boxPtr, SB_ApplyButton(sb))) {
       ++boxPtr;
     }
-    for (i = 0; i < sb->composite.num_children; i++) {
+    for (i = 0; (Cardinal)i < sb->composite.num_children; i++) {
       Widget w = sb->composite.children[sb->composite.num_children - i - 1];
       if (IsButton(w) && !IsAutoButton(sb, w) && w != SB_WorkArea(sb)) {
         if (_XmGeoSetupKid(boxPtr, w)) {
@@ -950,7 +950,7 @@ XmGeoMatrix _XmSelectionBoxGeoMatrixCreate(Widget wid,
     if (_XmGeoSetupKid(boxPtr, SB_OkButton(sb))) {
       ++boxPtr;
     }
-    for (i = 0; i < sb->composite.num_children; i++) {
+    for (i = 0; (Cardinal)i < sb->composite.num_children; i++) {
       Widget w = sb->composite.children[i];
       if (IsButton(w) && !IsAutoButton(sb, w) && w != SB_WorkArea(sb)) {
         if (_XmGeoSetupKid(boxPtr, w)) {
@@ -1096,15 +1096,18 @@ static void ListCallback(Widget w, XtPointer client_data, XtPointer call_data)
   }
   if (success) {
     if (type == atoms[XmA_MOTIF_COMPOUND_STRING]) {
-      XmString temp;
-      temp = XmCvtByteStreamToXmString((unsigned char *)value);
+      XmString temp = NULL;
+      /* The byte stream is not NUL terminated: bound it by size. */
+      if ((format == 8) && (_XmStringByteStreamValidLength((unsigned char *)value, size) != 0))
+        temp = XmCvtByteStreamToXmString((unsigned char *)value);
+      /* A NULL (empty) string clears the text, as it always has. */
       textTrait->setValue(SB_Text(sel), temp, XmFORMAT_XmSTRING);
       XmStringFree(temp);
     }
     else if (type == atoms[XmACOMPOUND_TEXT]) {
       XmString temp;
       temp = XmCvtCTToXmString((char *)value);
-      textTrait->setValue(SB_Text(sel), value, XmFORMAT_XmSTRING);
+      textTrait->setValue(SB_Text(sel), temp, XmFORMAT_XmSTRING);
       XmStringFree(temp);
     }
     else if (type == XA_STRING) {
@@ -1140,7 +1143,7 @@ static void ListCallback(Widget w, XtPointer client_data, XtPointer call_data)
 static void UpdateString(Widget w, XmString string, XmStringDirection direction)
 {
   Arg al[3];
-  register int ac = 0;
+  int ac = 0;
   /****************/
   if (w) {
     XtSetArg(al[ac], XmNstringDirection, direction);
@@ -1165,7 +1168,7 @@ static Boolean SetValues(Widget cw,
   XmSelectionBoxWidget request = (XmSelectionBoxWidget)rw;
   XmSelectionBoxWidget new_w = (XmSelectionBoxWidget)nw;
   Arg al[10];
-  register int ac;
+  int ac;
   String text_value;
   /****************/
   BB_InSetValues(new_w) = True;
@@ -1689,7 +1692,7 @@ Widget XmCreateSelectionBox(Widget p, String name, ArgList args, Cardinal n)
 
 Widget XmVaCreateSelectionBox(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);
@@ -1725,8 +1728,9 @@ Widget XmCreateSelectionDialog(Widget ds_p, String name, ArgList sb_args, Cardin
   Widget w;
   /*  allocate arglist, copy args, add dialog type arg
    */
-  _sb_args = (ArgList)XtMalloc(sizeof(Arg) * (sb_n + 1));
-  memcpy(_sb_args, sb_args, sizeof(Arg) * sb_n);
+  _sb_args = (ArgList)_XmMallocArray(sb_n + 1, sizeof(Arg));
+  if (sb_n > 0)
+    memcpy(_sb_args, sb_args, sizeof(Arg) * sb_n);
   XtSetArg(_sb_args[sb_n], XmNdialogType, XmDIALOG_SELECTION);
   sb_n++;
   /*  create SelectionBoxDialog, free args, return */
@@ -1745,8 +1749,9 @@ Widget XmCreatePromptDialog(Widget ds_p, String name, ArgList sb_args, Cardinal 
   Widget w;
   /*  allocate arglist, copy args, add dialog type arg
    */
-  _sb_args = (ArgList)XtMalloc(sizeof(Arg) * (sb_n + 1));
-  memcpy(_sb_args, sb_args, sizeof(Arg) * sb_n);
+  _sb_args = (ArgList)_XmMallocArray(sb_n + 1, sizeof(Arg));
+  if (sb_n > 0)
+    memcpy(_sb_args, sb_args, sizeof(Arg) * sb_n);
   XtSetArg(_sb_args[sb_n], XmNdialogType, XmDIALOG_PROMPT);
   sb_n++;
   /*  create SelectionBoxDialog, free args, return */

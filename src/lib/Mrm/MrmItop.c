@@ -56,6 +56,7 @@ static char rcsid[] = "$XConsortium: MrmItop.c /main/15 1996/11/13 13:58:55 drk 
 #include <Mrm/MrmAppl.h>
 #include <Mrm/Mrm.h>
 #include <Mrm/IDB.h>
+#include "MrmMsgI.h"
 
 
 /*
@@ -162,6 +163,7 @@ UrmIdbOpenFileRead (String			name,
   filedesc->byte_swapped = FALSE ;
   filedesc->in_memory = FALSE ;
   filedesc->uid_buffer = NULL ;
+  filedesc->uid_buffer_size = 0 ;
   for ( ndx=IDBrtMin ; ndx<=IDBrtMax ; ndx++ )
     filedesc->rt_counts[ndx] = 0 ;
 
@@ -219,6 +221,51 @@ UrmIdbOpenBuffer (unsigned char 		*uid_buffer,
 		  IDBFile			*file_id_return)
 {
 
+  return UrmIdbOpenBufferWithSize (uid_buffer, 0, file_id_return) ;
+
+}
+
+
+
+/*
+ *++
+ *
+ *  PROCEDURE DESCRIPTION:
+ *
+ *     	UrmIdbOpenBufferWithSize is UrmIdbOpenBuffer for a buffer of known
+ *	size. No record is read from outside the buffer. A size of 0 means
+ *	the size is unknown, and the record count in the file header is
+ *	trusted instead.
+ *
+ *  FORMAL PARAMETERS:
+ *
+ *	uid_buffer	the buffer containing the uid file
+ *	uid_buffer_size	the number of bytes in the buffer, or 0
+ *	file_id_return	returns the IDB file id used in all other IDB routines
+ *
+ *  IMPLICIT INPUTS:
+ *
+ *  IMPLICIT OUTPUTS:
+ *
+ *  FUNCTION VALUE:
+ *
+ *	MrmSUCCESS	operation succeeded
+ *	MrmNOT_VALID	the buffer does not hold a valid UID file header
+ *	MrmFAILURE	operation failed, no further reason
+ *
+ *  SIDE EFFECTS:
+ *
+ *      1. Acquires memory for the file descriptor.
+ *
+ *--
+ */
+
+Cardinal
+UrmIdbOpenBufferWithSize (unsigned char 	*uid_buffer,
+			  size_t		uid_buffer_size,
+			  IDBFile		*file_id_return)
+{
+
   /*
    *  Local variables
    */
@@ -226,6 +273,12 @@ UrmIdbOpenBuffer (unsigned char 		*uid_buffer,
   IDBFile		filedesc ;	/* new file descriptor */
   int			ndx ;		/* loop index */
 
+
+  if ( uid_buffer == NULL )
+    return MrmFAILURE ;
+  if ( uid_buffer_size != 0 && uid_buffer_size < IDBRecordSize )
+    return Urm__UT_Error ("UrmIdbOpenBufferWithSize", _MrmMMsg_0019,
+			  NULL, NULL, MrmNOT_VALID) ;
 
   filedesc = (IDBFile) XtMalloc (sizeof(IDBOpenFile)) ;
   if ( filedesc == NULL ) return MrmFAILURE ;
@@ -242,6 +295,7 @@ UrmIdbOpenBuffer (unsigned char 		*uid_buffer,
   filedesc->byte_swapped = FALSE ;
   filedesc->in_memory = TRUE ;
   filedesc->uid_buffer = uid_buffer ;
+  filedesc->uid_buffer_size = uid_buffer_size ;
   for ( ndx=IDBrtMin ; ndx<=IDBrtMax ; ndx++ )
     filedesc->rt_counts[ndx] = 0 ;
 
@@ -249,7 +303,11 @@ UrmIdbOpenBuffer (unsigned char 		*uid_buffer,
    * Read the file header record info into the file descriptor
    */
   result = Idb__HDR_GetHeader (filedesc) ;
-  if ( result != MrmSUCCESS ) return result ;
+  if ( result != MrmSUCCESS )
+    {
+      UrmIdbCloseFile (filedesc, FALSE) ;
+      return result ;
+    }
 
   /*
    * Buffer ready
@@ -312,7 +370,8 @@ UrmIdbCloseFile (IDBFile		file_id,
    */
 #define	_error_close()					\
   {							\
-    Idb__FU_CloseFile(file_id->lowlevel_id,TRUE) ;	\
+    if ( file_id->lowlevel_id != NULL )			\
+      Idb__FU_CloseFile(file_id->lowlevel_id,TRUE) ;	\
     file_id->validation = 0 ;				\
     XtFree((char*)file_id) ;				\
     return MrmFAILURE ;					\
@@ -346,9 +405,11 @@ UrmIdbCloseFile (IDBFile		file_id,
   if ( result != MrmSUCCESS ) _error_close () ;
 
   /*
-   * Close the file and deallocate the file descriptor
+   * Close the file (there is none for a memory buffer) and deallocate the
+   * file descriptor
    */
-  result = Idb__FU_CloseFile (file_id->lowlevel_id, FALSE) ;
+  if ( file_id->lowlevel_id != NULL )
+    result = Idb__FU_CloseFile (file_id->lowlevel_id, FALSE) ;
   file_id->validation = 0 ;
   XtFree ((char*)file_id) ;
 

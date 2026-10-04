@@ -115,11 +115,12 @@ Idb__DB_GetDataEntry (IDBFile			file_id,
   IDBDataEntryHdrPtr	datahdr ;	/* Header part of entry */
   IDBSimpleDataPtr	sim_data ;	/* Simple data entry */
   IDBOverflowDataPtr	ofl_data ;	/* Overflow data entry */
-  IDBDataRecordPtr	data_rec;	/* pointer data record */
   IDBRecordBufferPtr	curbuf ;	/* temp buffer for record */
-  Cardinal		num_recs;	/* # records to save overflow */
-  Cardinal		cur_rec;	/* the current record */
+  int			num_recs;	/* # records to save overflow */
+  int			cur_rec;	/* the current record */
   char			*buff_ptr;	/* ptr into context buffer */
+  size_t		data_offs;	/* entry offset in record */
+  MrmSize		data_rem;	/* # bytes of entry left to read */
 
   /*
    * Check and see if the context is valid
@@ -137,27 +138,21 @@ Idb__DB_GetDataEntry (IDBFile			file_id,
     return Idb__HDR_GetDataEntry (file_id, data_entry, context_id);
 
   /*
-   * Get the record that contains this data, get to the correct offset in
-   * that record.
+   * Get the record that contains this data, and locate and check the
+   * entry header at the correct offset in that record.
    */
   status = Idb__BM_GetRecord (file_id, record_number, &curbuf) ;
   if ( status != MrmSUCCESS ) return status ;
-
-  /*
-   * Point to the header in the data entry, set the context data. The context
-   * is resized if necessary. Note that all context info except the
-   * actual data can be set now regardless of the entry type.
-   */
-  data_rec = (IDBDataRecord *) curbuf->IDB_record;
-  datahdr = (IDBDataEntryHdrPtr)
-    &data_rec->data[data_entry.item_offs] ;
-
-  if ((datahdr->validation != IDBDataEntryValid) && ( file_id->byte_swapped ))
-    SwapIDBDataEntryHdr(datahdr) ;
-  if (datahdr->validation != IDBDataEntryValid)
+  datahdr = Idb__DB_EntryHeader (file_id, curbuf, data_entry.item_offs) ;
+  if ( datahdr == NULL )
     return Urm__UT_Error ("Idb__DB_GetDataEntry", _MrmMMsg_0007,
 			  NULL, context_id, MrmNOT_VALID) ;
 
+  /*
+   * Set the context data. The context is resized if necessary. Note that
+   * all context info except the actual data can be set now regardless of
+   * the entry type.
+   */
   if ( datahdr->entry_size > UrmRCSize(context_id) )
     {
       status = UrmResizeResourceContext (context_id, datahdr->entry_size) ;
@@ -173,23 +168,42 @@ Idb__DB_GetDataEntry (IDBFile			file_id,
 
   /*
    * Read the data into the context. Technique depends on entry type.
+   * Idb__DB_EntryHeader has checked that the fixed part of the entry
+   * lies within the record; the data must fit in the rest of it, and
+   * the overflow segments must add up to exactly the entry size.
    */
   buff_ptr = (char *) UrmRCBuffer(context_id) ;
+  data_offs = (char *) datahdr - (char *) curbuf->IDB_record ;
   switch ( datahdr->entry_type )
     {
     case IDBdrSimple:
       sim_data = (IDBSimpleDataPtr) datahdr ;
-      UrmBCopy (sim_data->data, buff_ptr, datahdr->entry_size) ;
+      if ( ! _IdbInRecord (data_offs + XtOffsetOf (IDBSimpleData, data),
+			   datahdr->entry_size) )
+	return Urm__UT_Error ("Idb__DB_GetDataEntry", _MrmMMsg_0007,
+			      NULL, context_id, MrmNOT_VALID) ;
+      if ( datahdr->entry_size > 0 )
+	UrmBCopy (sim_data->data, buff_ptr, datahdr->entry_size) ;
       return MrmSUCCESS ;
 
     case IDBdrOverflow:
       ofl_data = (IDBOverflowDataPtr) datahdr ;
-      if ( file_id->byte_swapped ) SwapIDBOverflowData(ofl_data);
+      data_rem = datahdr->entry_size ;
       num_recs = ofl_data->segment_count ;
+      if ( num_recs < 1 )
+	return Urm__UT_Error ("Idb__DB_GetDataEntry", _MrmMMsg_0008,
+			      NULL, context_id, MrmNOT_VALID) ;
       for ( cur_rec=1 ; cur_rec<=num_recs ; cur_rec++ )
 	{
+	  if ( ofl_data->segment_size == 0 ||
+	       ofl_data->segment_size > data_rem ||
+	       ! _IdbInRecord (data_offs + XtOffsetOf (IDBOverflowData, data),
+			       ofl_data->segment_size) )
+	    return Urm__UT_Error ("Idb__DB_GetDataEntry", _MrmMMsg_0008,
+				  NULL, context_id, MrmNOT_VALID) ;
 	  UrmBCopy (ofl_data->data, buff_ptr, ofl_data->segment_size) ;
 	  buff_ptr += ofl_data->segment_size ;
+	  data_rem -= ofl_data->segment_size ;
 
 	  /*
 	   * Read the next record in the chain if this is not the last
@@ -201,23 +215,124 @@ Idb__DB_GetDataEntry (IDBFile			file_id,
 		Idb__BM_GetRecord (file_id, record_number, &curbuf) ;
 	      if ( status != MrmSUCCESS ) return status ;
 
-	      data_rec = (IDBDataRecord *) curbuf->IDB_record;
-	      datahdr = (IDBDataEntryHdrPtr)
-		&data_rec->data[data_entry.item_offs] ;
-	      if ( file_id->byte_swapped ) SwapIDBDataEntryHdr(datahdr) ;
-	      if (datahdr->validation != IDBDataEntryValid)
+	      datahdr = Idb__DB_EntryHeader (file_id, curbuf,
+					     data_entry.item_offs) ;
+	      if ( datahdr == NULL || datahdr->entry_type != IDBdrOverflow )
 		return Urm__UT_Error ("Idb__DB_GetDataEntry", _MrmMMsg_0008,
 				      NULL, context_id, MrmNOT_VALID) ;
 	      ofl_data = (IDBOverflowDataPtr) datahdr ;
-	      if ( file_id->byte_swapped ) SwapIDBOverflowData(ofl_data);
+	      data_offs = (char *) datahdr - (char *) curbuf->IDB_record ;
 	    }
 	}
+      if ( data_rem != 0 )
+	return Urm__UT_Error ("Idb__DB_GetDataEntry", _MrmMMsg_0008,
+			      NULL, context_id, MrmNOT_VALID) ;
       return MrmSUCCESS ;
 
     default:
       return Urm__UT_Error ("Idb__DB_GetDataEntry", _MrmMMsg_0009,
 			    NULL, context_id, MrmFAILURE) ;
     }
+
+}
+
+
+
+/*
+ *++
+ *
+ *  PROCEDURE DESCRIPTION:
+ *
+ *	Idb__DB_EntryHeader locates the header of a data entry in a header
+ *	or data record that has been read into a buffer. It checks that the
+ *	fixed part of the entry (including the segment information of an
+ *	overflow entry) lies within the record and that the entry is valid,
+ *	and swaps it to native byte order the first time it is accessed in
+ *	a byte swapped file. The variable-length data is not checked here.
+ *
+ *  FORMAL PARAMETERS:
+ *
+ *	file_id		Open IDB file
+ *	buffer		Buffer containing the header or data record
+ *	item_offs	Offset of the entry in the data part of the record
+ *
+ *  IMPLICIT INPUTS:
+ *
+ *  IMPLICIT OUTPUTS:
+ *
+ *  FUNCTION VALUE:
+ *
+ *	The entry header, or NULL if it is not valid.
+ *
+ *  SIDE EFFECTS:
+ *
+ *--
+ */
+
+IDBDataEntryHdrPtr
+Idb__DB_EntryHeader (IDBFile			file_id,
+		     IDBRecordBufferPtr		buffer,
+		     MrmOffset			item_offs)
+{
+
+  /*
+   *  Local variables
+   */
+  size_t		offs ;		/* entry offset in record */
+  IDBDataEntryHdrPtr	datahdr ;	/* header of the entry */
+
+  switch ( _IdbBufferRecordType (buffer) )
+    {
+    case IDBrtHeader:
+      offs = XtOffsetOf (IDBHeaderRecord, data) ;
+      break ;
+    case IDBrtData:
+      offs = XtOffsetOf (IDBDataRecord, data) ;
+      break ;
+    default:
+      return NULL ;
+    }
+  offs += item_offs ;
+
+  if ( ! _IdbInRecord (offs, sizeof(IDBDataEntryHdr)) )
+    return NULL ;
+  datahdr = (IDBDataEntryHdrPtr) ((char *) buffer->IDB_record + offs) ;
+
+  /*
+   * In a byte swapped file, swap the header, and the segment information
+   * of an overflow entry, the first time the entry is seen. The swapped
+   * validation code tells whether this record buffer has been swapped.
+   */
+  if ( (datahdr->validation != IDBDataEntryValid) &&
+       file_id->byte_swapped &&
+       (Urm__SwapValidation (datahdr->validation) == IDBDataEntryValid) )
+    {
+      SwapIDBDataEntryHdr (datahdr) ;
+      if ( datahdr->entry_type == IDBdrOverflow &&
+	   _IdbInRecord (offs, XtOffsetOf (IDBOverflowData, data)) )
+	{
+	  IDBOverflowDataPtr ofl_data = (IDBOverflowDataPtr) datahdr ;
+	  SwapIDBOverflowData (ofl_data) ;
+	}
+    }
+  if ( datahdr->validation != IDBDataEntryValid )
+    return NULL ;
+
+  switch ( datahdr->entry_type )
+    {
+    case IDBdrSimple:
+      if ( ! _IdbInRecord (offs, XtOffsetOf (IDBSimpleData, data)) )
+	return NULL ;
+      break ;
+    case IDBdrOverflow:
+      if ( ! _IdbInRecord (offs, XtOffsetOf (IDBOverflowData, data)) )
+	return NULL ;
+      break ;
+    default:
+      break ;
+    }
+
+  return datahdr ;
 
 }
 
@@ -268,13 +383,13 @@ Idb__DB_PutDataEntry (IDBFile			file_id,
   IDBRecordBufferPtr	curbuf;		/* current record buffer pointer */
   IDBRecordBufferPtr	nxtbuf;		/* next record buffer pointer */
   IDBDataHdrPtr		dataheader;	/* data record header */
-  MrmCount		entsiz ;	/* Number of bytes for new entry */
+  int			entsiz ;	/* Number of bytes for new entry */
   MrmOffset		entoffs ;	/* Entry offset in buffer */
   Cardinal		num_recs;	/* # records to save overflow */
   Cardinal		cur_rec;	/* the current record */
   char			*dataptr ;	/* pointer to data in context */
-  MrmCount		datarem ;	/* # bytes left to copy in data */
-  MrmCount		cursiz ;	/* # bytse of data in cur. segment */
+  int			datarem ;	/* # bytes left to copy in data */
+  int			cursiz ;	/* # bytse of data in cur. segment */
 
   /*
    * Consistency check
@@ -313,7 +428,7 @@ Idb__DB_PutDataEntry (IDBFile			file_id,
    */
   entsiz = IDBSimpleDataHdrSize + UrmRCSize(context_id) ;
   entsiz = _FULLWORD (entsiz) ;
-  if ( entsiz <= IDBDataFreeMax )
+  if ( entsiz <= (int)IDBDataFreeMax )
     ent_typ = IDBdrSimple ;
   else ent_typ = IDBdrOverflow ;
 
@@ -412,7 +527,7 @@ Idb__DB_PutDataEntry (IDBFile			file_id,
 	   * Set up the header of this segment, and copy in the appropriate part
 	   * of the data buffer in the context
 	   */
-	  cursiz = MIN(datarem, IDBDataOverflowMax) ;
+	  cursiz = MIN(datarem, (int)IDBDataOverflowMax) ;
 	  entsiz = cursiz + IDBOverflowDataHdrSize ;
 	  entsiz = _FULLWORD (entsiz) ;
 	  overflowdata->header.validation	= IDBDataEntryValid;
@@ -521,7 +636,6 @@ Idb__DB_MatchFilter (IDBFile 		file_id,
   Cardinal		result ;	/* return status */
   IDBRecordNumber	record_number ;	/* Record to be read in */
   IDBRecordBufferPtr	bufptr ;	/* buffer for data record */
-  IDBDataRecordPtr	data_rec;	/* pointer data record */
   IDBDataEntryHdrPtr	datahdr ;	/* Header part of entry */
 
   /*
@@ -541,9 +655,8 @@ Idb__DB_MatchFilter (IDBFile 		file_id,
   /*
    * Point to the header in the entry, and check the filters.
    */
-  data_rec = (IDBDataRecord *) bufptr->IDB_record;
-  datahdr = (IDBDataEntryHdrPtr) &data_rec->data[data_entry.item_offs] ;
-  if (datahdr->validation != IDBDataEntryValid)
+  datahdr = Idb__DB_EntryHeader (file_id, bufptr, data_entry.item_offs) ;
+  if ( datahdr == NULL )
     {
       Urm__UT_Error ("Idb__DB_GetDataEntry", _MrmMMsg_0007,
 		     NULL, NULL, MrmNOT_VALID) ;

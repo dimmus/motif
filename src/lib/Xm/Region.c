@@ -64,45 +64,45 @@ typedef void (*XmNonOverlapProc)(XmRegion, XmRegionBox *, XmRegionBox *, short, 
 /********    Static Function Declarations    ********/
 static void miSetExtents(XmRegion pReg);
 static void Compress(XmRegion r, XmRegion s, XmRegion t, unsigned dx, int xdir, int grow);
-static void miIntersectO(register XmRegion pReg,
-                         register XmRegionBox *r1,
+static void miIntersectO(XmRegion pReg,
+                         XmRegionBox *r1,
                          XmRegionBox *r1End,
-                         register XmRegionBox *r2,
+                         XmRegionBox *r2,
                          XmRegionBox *r2End,
                          short y1,
                          short y2);
-static void miRegionCopy(register XmRegion dstrgn, register XmRegion rgn);
-static long miCoalesce(register XmRegion pReg, long prevStart, long curStart);
-static void miRegionOp(register XmRegion newReg,
+static void miRegionCopy(XmRegion dstrgn, XmRegion rgn);
+static long miCoalesce(XmRegion pReg, long prevStart, long curStart);
+static void miRegionOp(XmRegion newReg,
                        XmRegion reg1,
                        XmRegion reg2,
                        XmOverlapProc overlapFunc,
                        XmNonOverlapProc nonOverlap1Func,
                        XmNonOverlapProc nonOverlap2Func);
-static void miUnionNonO(register XmRegion pReg,
-                        register XmRegionBox *r,
+static void miUnionNonO(XmRegion pReg,
+                        XmRegionBox *r,
                         XmRegionBox *rEnd,
-                        register short y1,
-                        register short y2);
-static void miUnionO(register XmRegion pReg,
-                     register XmRegionBox *r1,
+                        short y1,
+                        short y2);
+static void miUnionO(XmRegion pReg,
+                     XmRegionBox *r1,
                      XmRegionBox *r1End,
-                     register XmRegionBox *r2,
+                     XmRegionBox *r2,
                      XmRegionBox *r2End,
-                     register short y1,
-                     register short y2);
-static void miSubtractNonO1(register XmRegion pReg,
-                            register XmRegionBox *r,
+                     short y1,
+                     short y2);
+static void miSubtractNonO1(XmRegion pReg,
+                            XmRegionBox *r,
                             XmRegionBox *rEnd,
-                            register short y1,
-                            register short y2);
-static void miSubtractO(register XmRegion pReg,
-                        register XmRegionBox *r1,
+                            short y1,
+                            short y2);
+static void miSubtractO(XmRegion pReg,
+                        XmRegionBox *r1,
                         XmRegionBox *r1End,
-                        register XmRegionBox *r2,
+                        XmRegionBox *r2,
                         XmRegionBox *r2End,
-                        register short y1,
-                        register short y2);
+                        short y1,
+                        short y2);
 static void CreateLeftShadow(
     XmRegionBox *here, unsigned long mask, XSegment **segml, int *segmc, int *segmi);
 static void CreateRightShadow(
@@ -133,9 +133,19 @@ static void ShrinkRegion(XmRegion r, XmRegion s, XmRegion t, int dx, int dy);
 XmRegion _XmRegionCreateSize(long size)
 {
   XmRegion temp;
+  /*
+   * size may come from another client (drop site regions), so compute
+   * the allocation in size_t and refuse anything XtMalloc() cannot
+   * represent.  Keep at least one box: MEMCHECK cannot grow a region
+   * of size 0.
+   */
+  if (size < 1)
+    size = 1;
+  if ((unsigned long)size > (Cardinal)~0 / sizeof(XmRegionBox))
+    return (XmRegion)NULL;
   if (!(temp = (XmRegion)XtMalloc(sizeof(XmRegionRec))))
     return (XmRegion)NULL;
-  if (!(temp->rects = (XmRegionBox *)XtMalloc((Cardinal)(sizeof(XmRegionBox) * size)))) {
+  if (!(temp->rects = (XmRegionBox *)_XmMallocArray(size, sizeof(XmRegionBox)))) {
     XtFree((char *)temp);
     return (XmRegion)NULL;
   }
@@ -203,9 +213,9 @@ Boolean _XmRegionIsEmpty(XmRegion r)
  *
  *  Check to see if two XmRegions are equal.
  ***********************************************************************/
-Boolean _XmRegionEqual(register XmRegion r1, register XmRegion r2)
+Boolean _XmRegionEqual(XmRegion r1, XmRegion r2)
 {
-  register int i;
+  int i;
   if (r1->numRects != r2->numRects) {
     return (False);
   }
@@ -244,7 +254,7 @@ Boolean _XmRegionEqual(register XmRegion r1, register XmRegion r2)
  ***********************************************************************/
 Boolean _XmRegionPointInRegion(XmRegion r, int x, int y)
 {
-  register int i;
+  int i;
   if (ISEMPTY(r)) {
     return (False);
   }
@@ -266,8 +276,8 @@ Boolean _XmRegionPointInRegion(XmRegion r, int x, int y)
  ***********************************************************************/
 void _XmRegionOffset(XmRegion r, int x, int y)
 {
-  register long nbox;
-  register XmRegionBox *pbox;
+  long nbox;
+  XmRegionBox *pbox;
   pbox = r->rects;
   nbox = r->numRects;
   while (nbox--) {
@@ -318,14 +328,14 @@ long _XmRegionGetNumRectangles(XmRegion r)
  ***********************************************************************/
 void _XmRegionGetRectangles(XmRegion r, XRectangle **rects, long *nrects)
 {
-  register XmRegionBox *pBox = r->rects;
-  register XRectangle *pRect;
-  register long count = r->numRects;
+  XmRegionBox *pBox = r->rects;
+  XRectangle *pRect;
+  long count = r->numRects;
   if (!(*nrects = count)) {
     *rects = NULL;
     return;
   }
-  pRect = *rects = (XRectangle *)XtMalloc((Cardinal)(sizeof(XRectangle) * count));
+  pRect = *rects = (XRectangle *)_XmMallocArray(count, sizeof(XRectangle));
   if (pRect) {
     for (; count; pBox++, pRect++, count--) {
       pRect->x = pBox->x1;
@@ -371,9 +381,9 @@ void _XmRegionSetGCRegion(Display *dpy, GC gc, int x_origin, int y_origin, XmReg
  ***********************************************************************/
 static void miSetExtents(XmRegion pReg)
 {
-  register XmRegionBox *pBox;
-  register XmRegionBox *pBoxEnd;
-  register XmRegionBox *pExtents;
+  XmRegionBox *pBox;
+  XmRegionBox *pBoxEnd;
+  XmRegionBox *pExtents;
   if (ISEMPTY(pReg)) {
     pReg->extents.x1 = 0;
     pReg->extents.y1 = 0;
@@ -424,13 +434,13 @@ void _XmRegionComputeExtents(XmRegion r)
  *  miRegionCopy()
  *
  ***********************************************************************/
-static void miRegionCopy(register XmRegion dstrgn, register XmRegion rgn)
+static void miRegionCopy(XmRegion dstrgn, XmRegion rgn)
 {
   if (dstrgn != rgn) /*  don't want to copy to itself */ {
     if (dstrgn->size < rgn->numRects) {
       if (dstrgn->rects) {
-        if (!(dstrgn->rects = (XmRegionBox *)XtRealloc(
-                  (char *)dstrgn->rects, (Cardinal)rgn->numRects * (sizeof(XmRegionBox)))))
+        if (!(dstrgn->rects = (XmRegionBox *)
+                  _XmReallocArray((char *)dstrgn->rects, rgn->numRects, sizeof(XmRegionBox))))
           return;
       }
       dstrgn->size = rgn->numRects;
@@ -466,10 +476,10 @@ static void miRegionCopy(register XmRegion dstrgn, register XmRegion rgn)
  */
 static long miCoalesce(XmRegion pReg, long prevStart, long curStart)
 {
-  register XmRegionBox *pPrevBox; /* Current box in previous band */
-  register XmRegionBox *pCurBox;  /* Current box in current band */
-  register XmRegionBox *pRegEnd;  /* End of region */
-  register long curNumRects;      /* Number of rectangles in
+  XmRegionBox *pPrevBox; /* Current box in previous band */
+  XmRegionBox *pCurBox;  /* Current box in current band */
+  XmRegionBox *pRegEnd;  /* End of region */
+  long curNumRects;      /* Number of rectangles in
                                         current band */
   long prevNumRects;              /* Number of rectangles in
                                          previous band */
@@ -588,26 +598,26 @@ static long miCoalesce(XmRegion pReg, long prevStart, long curStart)
  *
  *-----------------------------------------------------------------------
  */
-static void miRegionOp(register XmRegion newReg,
+static void miRegionOp(XmRegion newReg,
                        XmRegion reg1,
                        XmRegion reg2,
                        XmOverlapProc overlapFunc,
                        XmNonOverlapProc nonOverlap1Func,
                        XmNonOverlapProc nonOverlap2Func)
 {
-  register XmRegionBox *r1;        /* Pointer into first region */
-  register XmRegionBox *r2;        /* Pointer into 2d region */
+  XmRegionBox *r1;        /* Pointer into first region */
+  XmRegionBox *r2;        /* Pointer into 2d region */
   XmRegionBox *r1End;              /* End of 1st region */
   XmRegionBox *r2End;              /* End of 2d region */
-  register short ybot;             /* Bottom of intersection */
-  register short ytop;             /* Top of intersection */
+  short ybot;             /* Bottom of intersection */
+  short ytop;             /* Top of intersection */
   XmRegionBox *oldRects;           /* Old rects for newReg */
   long prevBand;                   /* Index of start of
                                     * previous band in newReg */
   long curBand;                    /* Index of start of current
                                     * band in newReg */
-  register XmRegionBox *r1BandEnd; /* End of current band in r1 */
-  register XmRegionBox *r2BandEnd; /* End of current band in r2 */
+  XmRegionBox *r1BandEnd; /* End of current band in r1 */
+  XmRegionBox *r2BandEnd; /* End of current band in r2 */
   short top;                       /* Top of non-overlapping
                                     * band */
   short bot;                       /* Bottom of non-overlapping
@@ -633,7 +643,7 @@ static void miRegionOp(register XmRegion newReg,
    */
   newReg->numRects = 0;
   newReg->size = MAX(reg1->numRects, reg2->numRects) * 2;
-  if (!(newReg->rects = (XmRegionBox *)XtMalloc((Cardinal)(sizeof(XmRegionBox) * newReg->size)))) {
+  if (!(newReg->rects = (XmRegionBox *)_XmMallocArray(newReg->size, sizeof(XmRegionBox)))) {
     newReg->size = 0;
     return;
   }
@@ -781,8 +791,8 @@ static void miRegionOp(register XmRegion newReg,
     if (newReg->numRects) {
       XmRegionBox *prev_rects = newReg->rects;
       newReg->size = newReg->numRects;
-      newReg->rects = (XmRegionBox *)XtRealloc((char *)newReg->rects,
-                                               (Cardinal)(sizeof(XmRegionBox) * newReg->size));
+      newReg->rects =
+          (XmRegionBox *)_XmReallocArray((char *)newReg->rects, newReg->size, sizeof(XmRegionBox));
       if (!newReg->rects)
         newReg->rects = prev_rects;
     }
@@ -816,16 +826,16 @@ static void miRegionOp(register XmRegion newReg,
  *-----------------------------------------------------------------------
  */
 static void miIntersectO(XmRegion pReg,
-                         register XmRegionBox *r1,
+                         XmRegionBox *r1,
                          XmRegionBox *r1End,
-                         register XmRegionBox *r2,
+                         XmRegionBox *r2,
                          XmRegionBox *r2End,
                          short y1,
                          short y2)
 {
-  register short x1;
-  register short x2;
-  register XmRegionBox *pNextRect;
+  short x1;
+  short x2;
+  XmRegionBox *pNextRect;
   pNextRect = &pReg->rects[pReg->numRects];
   while ((r1 != r1End) && (r2 != r2End)) {
     x1 = MAX(r1->x1, r2->x1);
@@ -932,12 +942,12 @@ void _XmRegionIntersectRectWithRegion(XRectangle *rect, XmRegion source, XmRegio
  *-----------------------------------------------------------------------
  */
 static void miUnionNonO(XmRegion pReg,
-                        register XmRegionBox *r,
+                        XmRegionBox *r,
                         XmRegionBox *rEnd,
-                        register short y1,
-                        register short y2)
+                        short y1,
+                        short y2)
 {
-  register XmRegionBox *pNextRect;
+  XmRegionBox *pNextRect;
   pNextRect = &pReg->rects[pReg->numRects];
   assert(y1 <= y2);
   while (r != rEnd) {
@@ -970,14 +980,14 @@ static void miUnionNonO(XmRegion pReg,
  *-----------------------------------------------------------------------
  */
 static void miUnionO(XmRegion pReg,
-                     register XmRegionBox *r1,
+                     XmRegionBox *r1,
                      XmRegionBox *r1End,
-                     register XmRegionBox *r2,
+                     XmRegionBox *r2,
                      XmRegionBox *r2End,
-                     register short y1,
-                     register short y2)
+                     short y1,
+                     short y2)
 {
-  register XmRegionBox *pNextRect;
+  XmRegionBox *pNextRect;
   pNextRect = &pReg->rects[pReg->numRects];
 #define MERGERECT(r) \
   if ((pReg->numRects != 0) && (pNextRect[-1].y1 == y1) && (pNextRect[-1].y2 == y2) && \
@@ -1112,12 +1122,12 @@ void _XmRegionUnionRectWithRegion(XRectangle *rect, XmRegion source, XmRegion de
  *-----------------------------------------------------------------------
  */
 static void miSubtractNonO1(XmRegion pReg,
-                            register XmRegionBox *r,
+                            XmRegionBox *r,
                             XmRegionBox *rEnd,
-                            register short y1,
-                            register short y2)
+                            short y1,
+                            short y2)
 {
-  register XmRegionBox *pNextRect;
+  XmRegionBox *pNextRect;
   pNextRect = &pReg->rects[pReg->numRects];
   assert(y1 < y2);
   while (r != rEnd) {
@@ -1149,15 +1159,15 @@ static void miSubtractNonO1(XmRegion pReg,
  *-----------------------------------------------------------------------
  */
 static void miSubtractO(XmRegion pReg,
-                        register XmRegionBox *r1,
+                        XmRegionBox *r1,
                         XmRegionBox *r1End,
-                        register XmRegionBox *r2,
+                        XmRegionBox *r2,
                         XmRegionBox *r2End,
-                        register short y1,
-                        register short y2)
+                        short y1,
+                        short y2)
 {
-  register XmRegionBox *pNextRect;
-  register int x1;
+  XmRegionBox *pNextRect;
+  int x1;
   x1 = r1->x1;
   assert(y1 < y2);
   pNextRect = &pReg->rects[pReg->numRects];
@@ -1306,7 +1316,7 @@ void _XmRegionSubtract(XmRegion regM, XmRegion regS, XmRegion regD)
  ***********************************************************************/
 static void Compress(XmRegion r, XmRegion s, XmRegion t, unsigned dx, int xdir, int grow)
 {
-  register unsigned shift = 1;
+  unsigned shift = 1;
   miRegionCopy(s, r);
   while (dx) {
     if (dx & shift) {
@@ -1406,8 +1416,7 @@ static void CreateLeftShadow(
   Position start_y = here->y1 + 1;
   Position end_y = here->y2;
   if (*segmi >= *segmc) {
-    *segml = (XSegment *)XtRealloc((char *)(*segml),
-                                   (Cardinal)((sizeof(XSegment) << 1) * (*segmc)));
+    *segml = (XSegment *)_XmReallocArray((char *)(*segml), *segmc, sizeof(XSegment) << 1);
     if (*segml == NULL) {
       XmeWarning(NULL, MESSAGE1);
       *segmi = *segmc = 0;
@@ -1439,8 +1448,7 @@ static void CreateRightShadow(
   Position start_y = here->y1;
   Position end_y = here->y2;
   if (*segmi >= *segmc) {
-    *segml = (XSegment *)XtRealloc((char *)(*segml),
-                                   (Cardinal)((sizeof(XSegment) << 1) * (*segmc)));
+    *segml = (XSegment *)_XmReallocArray((char *)(*segml), *segmc, sizeof(XSegment) << 1);
     if (*segml == NULL) {
       XmeWarning(NULL, MESSAGE1);
       *segmi = *segmc = 0;
@@ -1477,8 +1485,7 @@ static void CreateTopShadow(Position start_x,
                             int *segmi)
 {
   if (*segmi >= *segmc) {
-    *segml = (XSegment *)XtRealloc((char *)(*segml),
-                                   (Cardinal)((sizeof(XSegment) << 1) * (*segmc)));
+    *segml = (XSegment *)_XmReallocArray((char *)(*segml), *segmc, sizeof(XSegment) << 1);
     if (*segml == NULL) {
       XmeWarning(NULL, MESSAGE1);
       *segmi = *segmc = 0;
@@ -1512,8 +1519,7 @@ static void CreateBottomShadow(Position start_x,
                                int *segmi)
 {
   if (*segmi >= *segmc) {
-    *segml = (XSegment *)XtRealloc((char *)(*segml),
-                                   (Cardinal)((sizeof(XSegment) << 1) * (*segmc)));
+    *segml = (XSegment *)_XmReallocArray((char *)(*segml), *segmc, sizeof(XSegment) << 1);
     if (*segml == NULL) {
       XmeWarning(NULL, MESSAGE1);
       *segmi = *segmc = 0;
@@ -1584,8 +1590,8 @@ void _XmRegionDrawShadow(Display *display,
   XSegment *botSegms;
   int botSegmCount;
   int curBotSeg;
-  register XmRegionBox *above, *here, *below;
-  register XmRegionBox *end_above, *end_here, *end_below;
+  XmRegionBox *above, *here, *below;
+  XmRegionBox *end_above, *end_here, *end_below;
   XmRegionBox *end_all;
   unsigned long mask;
   Position x1, x2, y;
@@ -1641,14 +1647,14 @@ void _XmRegionDrawShadow(Display *display,
     }
   }
   topSegmCount = botSegmCount = (int)(nrects * shadow_thick << 1);
-  if (!(topSegms = (XSegment *)XtMalloc(sizeof(XSegment) * topSegmCount))) {
+  if (!(topSegms = (XSegment *)_XmMallocArray(topSegmCount, sizeof(XSegment)))) {
     XmeWarning(NULL, MESSAGE1);
     _XmRegionDestroy(workReg);
     _XmRegionDestroy(scReg2);
     _XmRegionDestroy(scReg1);
     return;
   }
-  if (!(botSegms = (XSegment *)XtMalloc(sizeof(XSegment) * botSegmCount))) {
+  if (!(botSegms = (XSegment *)_XmMallocArray(botSegmCount, sizeof(XSegment)))) {
     XmeWarning(NULL, MESSAGE1);
     XtFree((char *)topSegms);
     _XmRegionDestroy(workReg);
@@ -1853,10 +1859,10 @@ void _XmRegionDrawShadow(Display *display,
  */
 XmRegion _XmRegionFromImage(XImage *image)
 {
-  register XmRegion pReg;
-  register int width, x1, x2, y1, crects;
+  XmRegion pReg;
+  int width, x1, x2, y1, crects;
   int irectPrevStart, irectLineStart;
-  register XmRegionBox *prectO, *prectN;
+  XmRegionBox *prectO, *prectN;
   XmRegionBox *FirstRect, *rects, *prectLineStart;
   Bool fInBox, fSame;
   pReg = (XmRegion)XCreateRegion();

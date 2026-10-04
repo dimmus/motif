@@ -37,10 +37,8 @@ static char rcsid[] = "$XConsortium: wmlutils.c /main/8 1995/08/29 11:11:24 drk 
 
 #include "wml.h"
 
-#if defined(__STDC__)
 #include <stdlib.h>
 #include <string.h>
-#endif
 #include <stdio.h>
 
 
@@ -79,7 +77,7 @@ int		ndx;		/* loop index */
 
 
 if ( stg == NULL ) return;
-for ( ndx=0 ; ndx<strlen(stg) ; ndx++ )
+for ( ndx=0 ; (size_t)ndx<strlen(stg) ; ndx++ )
     stg[ndx] = _upper (stg[ndx]);
 
 }

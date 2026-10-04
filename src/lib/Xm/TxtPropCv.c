@@ -58,6 +58,19 @@ static Atom GetLocaleEncodingAtom(Display *dpy)
   return (encoding);
 }
 
+/*
+ * Returns a NUL terminated copy of the nitems bytes of a text property
+ * value, which need not be NUL terminated itself.
+ */
+static char *CopyTextPropertyValue(XTextProperty *text_prop)
+{
+  char *value = XtMalloc(text_prop->nitems + 1);
+  if (text_prop->nitems > 0)
+    memcpy(value, text_prop->value, text_prop->nitems);
+  value[text_prop->nitems] = '\0';
+  return (value);
+}
+
 /************************************************************************
  *
  *  TextPropertyToSingleTextItem
@@ -81,17 +94,7 @@ static int TextPropertyToSingleTextItem(Display *display,
   else if (count > 1) {
     /* If we got back more than one string, then
            let's concatenate them all together. */
-    int i, length = 0;
-    char *newstring;
-    /* First figure out how big the final string will be */
-    for (i = 0; i < count; ++i)
-      length += strlen(textlist[i]);
-    /* Allocate a buffer and jam all the strings into it */
-    newstring = (char *)XtMalloc(sizeof(char) * (length + 1));
-    newstring[0] = '\0';
-    for (i = 0; i < count; ++i)
-      strcat(newstring, textlist[i]);
-    *text_item = newstring;
+    *text_item = _XmConcatStrings(textlist, count);
     XFreeStringList(textlist);
   }
   return (Success);
@@ -197,8 +200,11 @@ static unsigned char GetTextSegment(Display *display, /* unused */
             bzero(tmp + char_count, sizeof(wchar_t));
             *buffer = tmp;
           }
-          else
+          else {
+            XtFree(encoding);
             return (_INVALID_SEGMENT);
+          }
+          XtFree(encoding); /* XmMapSegmentEncoding returns a copy */
         }
         else
           return (_INVALID_SEGMENT); /* the encoding was unregistered */
@@ -212,11 +218,10 @@ static unsigned char GetTextSegment(Display *display, /* unused */
       int newlength;
       char *newstring;
       newlength = strlen(*buffer) + (separator ? 1 : 0) + tabs;
-      newstring = (char *)XtMalloc(sizeof(char) * (newlength + 1));
+      newstring = (char *)_XmMallocArray(newlength + 1, sizeof(char));
       for (i = 0; i < tabs; i++)
         newstring[i] = '\t';
-      strcpy(&newstring[i], *buffer);
-      strcat(newstring, "\n");
+      snprintf(&newstring[i], newlength + 1 - i, "%s%s", *buffer, separator ? "\n" : "");
       XtFree(*buffer);
       *buffer = newstring;
     }
@@ -257,7 +262,8 @@ static int GetUseableText(
   XTextProperty text_prop_return;
   char *text = NULL, *final_string = NULL, *text_item = NULL, *compound_text;
   unsigned char return_status;
-  int result, size_so_far = 1; /* initialized for the ending NULL */
+  int result;
+  size_t size_so_far = 1; /* initialized for the ending NULL */
   /* Initialize the buffer in case we have to abort and return
        failure. */
   *buffer = NULL;
@@ -277,10 +283,10 @@ static int GetUseableText(
   while ((return_status = GetTextSegment(display, &stack_context, xmstring, &text, texttype)) ==
          _VALID_SEGMENT)
   {
-    size_so_far += strlen(text);
-    final_string = (char *)XtRealloc(final_string, size_so_far);
-    final_string[0] = '\0';
-    strcat(final_string, text);
+    size_t len = strlen(text);
+    final_string = _XmReallocArray(final_string, size_so_far + len, 1);
+    memcpy(final_string + size_so_far - 1, text, len + 1);
+    size_so_far += len;
     XtFree(text);
     text = NULL;
   }
@@ -309,8 +315,8 @@ static int GetUseableText(
     }
     /* then to a text property in TextStyle encoding ... */
     txt_len = strlen(compound_text) + 1;
-    txt_value = XtMalloc((txt_len + 1) * sizeof(char));
-    strcpy(txt_value, compound_text);
+    txt_value = _XmMallocArray(txt_len + 1, sizeof(char));
+    memcpy(txt_value, compound_text, txt_len);
     text_prop_return.value = (unsigned char *)txt_value;
     text_prop_return.value[txt_len] = '\0';
     text_prop_return.nitems = txt_len;
@@ -353,7 +359,7 @@ int XmCvtXmStringTableToTextProperty(Display *display,
   _XmAppLock(app);
   switch (style) {
     case XmSTYLE_COMPOUND_TEXT:
-      compound_text = (char **)XtMalloc(sizeof(char *) * count);
+      compound_text = (char **)_XmMallocArray(count, sizeof(char *));
       /* Convert each XmString to Compound Text */
       for (i = 0, total_size = 0; i < count; ++i) {
         compound_text[i] = XmCvtXmStringToCT(string_table[i]);
@@ -363,10 +369,10 @@ int XmCvtXmStringTableToTextProperty(Display *display,
      null-separated compound text elements. A final terminating
      null is stored at the end of the value field of text_prop_return
      but is not included in the nitems member. */
-      ptr = xm_compound_text = (char *)XtMalloc(sizeof(char) * (total_size + 1));
+      ptr = xm_compound_text = (char *)_XmMallocArray(total_size + 1, sizeof(char));
       for (i = 0; i < count; i++) {
         if (compound_text[i]) {
-          strcpy(ptr, compound_text[i]);
+          memcpy(ptr, compound_text[i], strlen(compound_text[i]) + 1);
           XtFree(compound_text[i]);
         }
         else {
@@ -385,20 +391,30 @@ int XmCvtXmStringTableToTextProperty(Display *display,
     case XmSTYLE_COMPOUND_STRING:
       /* First calculate how much space the compound strings will occupy
      when they are all converted to ASN1 strings. */
-      for (i = 0, total_size = 0; i < count; ++i)
-        total_size += XmCvtXmStringToByteStream(string_table[i], NULL);
+      for (i = 0, total_size = 0; i < count; ++i) {
+        unsigned int size = XmCvtXmStringToByteStream(string_table[i], NULL);
+        /* Fail on a string too long for the byte stream format */
+        /* rather than silently drop it from the table. */
+        if (((size == 0) && (string_table[i] != NULL)) ||
+            (size >= (unsigned int)(INT_MAX - total_size))) {
+          _XmAppUnlock(app);
+          return (XConverterNotFound);
+        }
+        total_size += size;
+      }
       /* Allocate that amount of space and convert the compound strings
      to ASN1 strings, putting them directly into the buffer. */
-      text_prop_return->value = ubufptr = (unsigned char *)XtMalloc(sizeof(unsigned char) *
-                                                                    total_size);
+      text_prop_return->value = ubufptr =
+          (unsigned char *)_XmMallocArray(total_size + 1, sizeof(unsigned char));
       for (i = 0; i < count; ++i) {
         int size;
         size = XmCvtXmStringToByteStream(string_table[i], &bufptr);
-        memcpy(ubufptr, bufptr, size);
+        if (size > 0)
+          memcpy(ubufptr, bufptr, size);
         XtFree((char *)bufptr);
         ubufptr += size;
       }
-      *(++ubufptr) = '\0';
+      *ubufptr = '\0';
       text_prop_return->nitems = total_size;
       text_prop_return->format = 8;
       text_prop_return->encoding = XInternAtom(display, XmS_MOTIF_COMPOUND_STRING, False);
@@ -437,7 +453,7 @@ int XmCvtXmStringTableToTextProperty(Display *display,
           break;
       }
       /* Get useable text for each compound string */
-      useable_text = (char **)XtMalloc(sizeof(char *) * count);
+      useable_text = (char **)_XmMallocArray(count, sizeof(char *));
       for (i = 0; i < count; ++i) {
         result = GetUseableText(display, string_table[i], &useable_text[i], strict, texttype);
         if (result != Success) {
@@ -474,12 +490,13 @@ int XmCvtXmStringTableToTextProperty(Display *display,
      long string with null separated elements. */
       for (i = 0, total_size = 0; i < count; ++i)
         total_size += strlen(useable_text[i]) + 1;
-      final_string = (unsigned char *)XtMalloc(sizeof(char) * (total_size + 1));
+      final_string = (unsigned char *)_XmMallocArray(total_size + 1, sizeof(char));
       final_string[0] = '\0';
       bufptr = final_string;
       for (i = 0; i < count; ++i) {
-        strcpy((char *)bufptr, useable_text[i]);
-        bufptr += strlen(useable_text[i]) + 1;
+        size_t len = strlen(useable_text[i]) + 1;
+        memcpy(bufptr, useable_text[i], len);
+        bufptr += len;
       }
       *bufptr = '\0';
       /* Fill in the text property with the data */
@@ -524,6 +541,7 @@ int XmCvtTextPropertyToXmStringTable(Display *display,
 #endif
   };
   int i, elements = 0;
+  char *value;
   XmStringTable string_table;
   XmStringTag tag;
   XmTextType type;
@@ -535,38 +553,52 @@ int XmCvtTextPropertyToXmStringTable(Display *display,
   _XmAppLock(app);
   if (text_prop->encoding == atoms[XmACOMPOUND_TEXT]) {
     char *ptr;
+    /* The value need not be NUL terminated: work on a copy that is. */
+    value = CopyTextPropertyValue(text_prop);
     /* First found how many XmString we need to allocate. */
-    for (*count_return = 1, i = 0; i < text_prop->nitems; i++) {
-      if (text_prop->value[i] == '\0')
+    for (*count_return = 1, i = 0; (unsigned long)i < text_prop->nitems; i++) {
+      if (value[i] == '\0')
         (*count_return)++;
     }
-    string_table = (XmStringTable)XtMalloc(sizeof(XmString) * (*count_return));
+    string_table = (XmStringTable)_XmMallocArray(*count_return, sizeof(XmString));
     /* Now convert each compound text to an XmString. */
-    for (i = 0, ptr = (char *)text_prop->value; i < *count_return; i++, ptr += strlen(ptr) + 1) {
+    for (i = 0, ptr = value; i < *count_return; i++, ptr += strlen(ptr) + 1) {
       XmString tempstr;
       tempstr = XmCvtCTToXmString(ptr);
       string_table[i] = tempstr;
     }
+    XtFree(value);
     *string_table_return = string_table;
     _XmAppUnlock(app);
     return (Success);
   }
   else if (text_prop->encoding == atoms[XmA_MOTIF_COMPOUND_STRING]) {
     unsigned char *asn1_head;
-    /* First calculate how many elements there are */
+    unsigned long left;
+    unsigned int asn1_len;
+    /* First calculate how many elements there are, checking that */
+    /* each one is well formed and lies within the property. */
     asn1_head = text_prop->value;
-    for (elements = 0; *asn1_head != '\0'; ++elements)
-      asn1_head += XmStringByteStreamLength(asn1_head);
+    left = (asn1_head != NULL) ? text_prop->nitems : 0;
+    for (elements = 0; (left > 0) && (*asn1_head != '\0'); ++elements) {
+      asn1_len = _XmStringByteStreamValidLength(asn1_head, left);
+      if (asn1_len == 0) {
+        _XmAppUnlock(app);
+        return (XConverterNotFound);
+      }
+      asn1_head += asn1_len;
+      left -= asn1_len;
+    }
     /* Now allocate a string table to put them in */
-    string_table = (XmStringTable)XtMalloc(sizeof(XmString) * elements);
+    string_table = (XmStringTable)_XmMallocArray(elements, sizeof(XmString));
     /* Run through again, converting the strings. */
     asn1_head = text_prop->value;
-    for (elements = 0; *asn1_head != '\0'; ++elements) {
-      string_table[elements] = XmCvtByteStreamToXmString(asn1_head);
+    for (i = 0; i < elements; ++i) {
+      string_table[i] = XmCvtByteStreamToXmString(asn1_head);
       /* If the string is NULL, then we don't know what to do */
-      if (string_table[elements] == (XmString)NULL) {
-        while (elements > 0)
-          XtFree((char *)string_table[--elements]);
+      if (string_table[i] == (XmString)NULL) {
+        while (i > 0)
+          XmStringFree(string_table[--i]);
         XtFree((char *)string_table);
         _XmAppUnlock(app);
         return (XConverterNotFound);
@@ -598,26 +630,28 @@ int XmCvtTextPropertyToXmStringTable(Display *display,
     return (XLocaleNotSupported);
   }
   /* We fell through the else-if's so pull apart the data in the text
-       property and set up a return string table. */
+       property and set up a return string table.  The value need not
+       be NUL terminated: work on a copy that is. */
+  value = CopyTextPropertyValue(text_prop);
   /* First count up how many string elements there are in the value. */
-  for (i = 0, elements = 1; i < text_prop->nitems - 1; ++i) {
+  for (i = 0, elements = 1; (unsigned long)i + 1 < text_prop->nitems; ++i) {
     /* The text prop value will have two NULL's at the end,
            one for the end of the last string and one to terminate
            the entire value. The terminating NULL will be excluded
            by looping until i == nitems since the terminating NULL
            is not included in the nitems calculation. */
-    if (text_prop->value[i] == '\0')
+    if (value[i] == '\0')
       ++elements;
   }
   /* Create an appropriately sized array of xmstrings */
-  string_table = (XmStringTable)XtMalloc(sizeof(XmString) * (elements));
+  string_table = (XmStringTable)_XmMallocArray(elements, sizeof(XmString));
   /* Create XmStrings from each string in the value field */
-  string_table[0] = XmStringGenerate((XtPointer)text_prop->value, tag, type, NULL);
-  for (i = 0, elements = 1; i < text_prop->nitems - 1; ++i) {
-    if (text_prop->value[i] == '\0')
-      string_table[elements++] = XmStringGenerate(
-          (XtPointer) & (text_prop->value[i + 1]), tag, type, NULL);
+  string_table[0] = XmStringGenerate((XtPointer)value, tag, type, NULL);
+  for (i = 0, elements = 1; (unsigned long)i + 1 < text_prop->nitems; ++i) {
+    if (value[i] == '\0')
+      string_table[elements++] = XmStringGenerate((XtPointer) & (value[i + 1]), tag, type, NULL);
   }
+  XtFree(value);
   *string_table_return = string_table;
   *count_return = elements;
   _XmAppUnlock(app);

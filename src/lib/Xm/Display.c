@@ -72,7 +72,7 @@ static void DisplayInsertChild(Widget w);
 static void DisplayDeleteChild(Widget w);
 static void DisplayDestroy(Widget w);
 static XmDragContext FindDC(XmDisplay xmDisplay, Time time, Boolean sourceIsExternal);
-static int isMine(Display *dpy, register XEvent *event, char *arg);
+static int isMine(Display *dpy, XEvent *event, char *arg);
 static void ReceiverShellExternalSourceHandler(Widget w,
                                                XtPointer client_data,
                                                XEvent *event,
@@ -711,7 +711,7 @@ static XmDragContext FindDC(XmDisplay xmDisplay, Time time, Boolean sourceIsExte
   return (NULL);
 }
 
-static int isMine(Display *dpy, register XEvent *event, char *arg)
+static int isMine(Display *dpy, XEvent *event, char *arg)
 {
   XmDisplayEventQueryStruct *q = (XmDisplayEventQueryStruct *)arg;
   XmICCCallbackStruct callback, *cb = &callback;

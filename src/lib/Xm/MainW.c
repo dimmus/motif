@@ -819,7 +819,7 @@ static void ChangeManaged(Widget wid)
   XtWidgetGeometry desired;
   CompositeWidget cw = (CompositeWidget)mw->swindow.ClipWindow;
   Widget w;
-  register int i;
+  int i;
   XtWidgetProc resize;
   if (mw->mwindow.ManagingSep || mw->swindow.FromResize)
     return;
@@ -834,7 +834,7 @@ static void ChangeManaged(Widget wid)
       (mw->swindow.WorkWindow != NULL))
   {
     /* loop over the clip window child list and treat the bogus */
-    for (i = 0; i < cw->composite.num_children; i++) {
+    for (i = 0; (Cardinal)i < cw->composite.num_children; i++) {
       XmScrolledWindowConstraint swc;
       int j;
       w = cw->composite.children[i];
@@ -848,16 +848,16 @@ static void ChangeManaged(Widget wid)
                    me keep this hacky code around... */
         if (mw->composite.num_children == mw->composite.num_slots) {
           mw->composite.num_slots += (mw->composite.num_slots / 2) + 2;
-          mw->composite.children = (WidgetList)XtRealloc((char *)mw->composite.children,
-                                                         (unsigned)(mw->composite.num_slots) *
-                                                             sizeof(Widget));
+          mw->composite.children = (WidgetList)_XmReallocArray((char *)mw->composite.children,
+                                                               mw->composite.num_slots,
+                                                               sizeof(Widget));
         }
         mw->composite.children[mw->composite.num_children++] = w;
         w->core.parent = (Widget)mw;
         /* remove it from the clipwindow child list by
                    moving all the siblings that comes after it
                    one slot down */
-        for (j = i + 1; j < cw->composite.num_children; j++) {
+        for (j = i + 1; (Cardinal)j < cw->composite.num_children; j++) {
           cw->composite.children[i - 1] = cw->composite.children[i];
         }
         cw->composite.num_children--;
@@ -987,7 +987,7 @@ static void GetVertRects(Widget sw, XRectangle **vrect, Cardinal *num_vrect)
   Widget w;
   XmMainWindowWidget mw = (XmMainWindowWidget)sw;
   *num_vrect = 2;
-  *vrect = (XRectangle *)XtMalloc(sizeof(XRectangle) * (*num_vrect));
+  *vrect = (XRectangle *)_XmMallocArray(*num_vrect, sizeof(XRectangle));
   /* The vertical rectangles are the ones that vertically auto scroll,
        they are defined by areas on the top and bottom of the
        workarea, e.g. the margins, the spacing, the scrollbars
@@ -1141,7 +1141,7 @@ Widget XmCreateMainWindow(Widget parent, char *name, ArgList args, Cardinal argC
 
 Widget XmVaCreateMainWindow(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

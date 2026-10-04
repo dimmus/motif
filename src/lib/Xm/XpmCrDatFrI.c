@@ -130,9 +130,15 @@ int XpmCreateDataFromXpmImage(char ***data_return, XpmImage *image, XpmInfo *inf
     return (XpmNoMemory);
   /* print the hints line */
   s = buf;
-  s += sprintf(s, "%u %u %u %u", image->width, image->height, image->ncolors, image->cpp);
+  s += snprintf(s,
+                sizeof(buf),
+                "%u %u %u %u",
+                image->width,
+                image->height,
+                image->ncolors,
+                image->cpp);
   if (info && (info->valuemask & XpmHotspot)) {
-    s += sprintf(s, " %u %u", info->x_hotspot, info->y_hotspot);
+    s += snprintf(s, sizeof(buf) - (s - buf), " %u %u", info->x_hotspot, info->y_hotspot);
   }
   if (extensions) {
     strncpy(s, " XPMEXT", 8);
@@ -172,7 +178,7 @@ int XpmCreateDataFromXpmImage(char ***data_return, XpmImage *image, XpmInfo *inf
   /* can header have less elements then n suggests? */
   n = image->ncolors;
   for (l = 0, sptr = data, sptr2 = header; l <= n && sptr && sptr2; l++, sptr++, sptr2++) {
-    strcpy(*sptr, *sptr2);
+    memcpy(*sptr, *sptr2, strlen(*sptr2) + 1);
     *(sptr + 1) = *sptr + strlen(*sptr2) + 1;
   }
   /* print pixels */
@@ -222,13 +228,13 @@ static int CreateColors(char **dataptr,
       return (XpmNoMemory);
     strncpy(buf, *defaults++, cpp);
     s = buf + cpp;
-    if (sizeof(buf) <= (s - buf))
+    if (sizeof(buf) <= (size_t)(s - buf))
       return XpmNoMemory;
     for (key = 1; key <= NKEYS; key++, defaults++) {
       if ((s2 = *defaults)) {
         s += snprintf(s, sizeof(buf) - (s - buf), "\t%s %s", xpmColorKeys[key - 1], s2);
         /* does s point out-of-bounds? */
-        if (sizeof(buf) < (s - buf))
+        if (sizeof(buf) < (size_t)(s - buf))
           return XpmNoMemory;
       }
     }
@@ -344,7 +350,7 @@ static void CreateExtensions(char **dataptr,
     dataptr++;
     b = ext->nlines; /* can we trust these values? */
     for (y = 0, line = ext->lines; y < b; y++, line++) {
-      strcpy(*dataptr, *line);
+      memcpy(*dataptr, *line, strlen(*line) + 1);
       a++;
       if (a < ext_nlines)
         *(dataptr + 1) = *dataptr + strlen(*line) + 1;

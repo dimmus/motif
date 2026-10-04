@@ -60,6 +60,47 @@ static char rcsid[] = "$XConsortium: Mrmwread.c /main/11 1996/11/13 14:07:06 drk
 
 
 /*
+ * Check the widget record just read into context_id from file_id,
+ * swapping it to native byte order if the file is byte swapped.
+ */
+static Cardinal
+Urm__GetValidWidgetRecord (IDBFile			file_id,
+			   URMResourceContextPtr	context_id)
+{
+  RGMWidgetRecordPtr	widgetrec ;	/* widget record in context */
+  MrmSize		size ;		/* record size */
+
+  widgetrec = (RGMWidgetRecordPtr) UrmRCBuffer (context_id) ;
+  if ( UrmRCSize (context_id) < sizeof (RGMWidgetRecord) )
+    return Urm__UT_Error ("Urm__GetValidWidgetRecord", _MrmMMsg_0026,
+			  NULL, context_id, MrmBAD_WIDGET_REC) ;
+
+  if ( ! UrmWRValid(widgetrec) && file_id->byte_swapped )
+    {
+      swapbytes(widgetrec->validation);
+      if ( ! UrmWRValid(widgetrec) )
+	return Urm__UT_Error ("Urm__GetValidWidgetRecord", _MrmMMsg_0026,
+			      NULL, context_id, MrmBAD_WIDGET_REC) ;
+
+      /*
+       * Urm__SwapRGMWidgetRecord keeps within the size in the record.
+       */
+      size = widgetrec->size ;
+      swapbytes(size);
+      if ( size > UrmRCSize (context_id) ||
+	   Urm__SwapRGMWidgetRecord(widgetrec) != MrmSUCCESS )
+	return Urm__UT_Error ("Urm__GetValidWidgetRecord", _MrmMMsg_0026,
+			      NULL, context_id, MrmBAD_WIDGET_REC) ;
+    }
+  if ( ! UrmWRValid(widgetrec) )
+    return Urm__UT_Error ("Urm__GetValidWidgetRecord", _MrmMMsg_0026,
+			  NULL, context_id, MrmBAD_WIDGET_REC) ;
+
+  return Urm__ValidWidgetRecord (file_id, context_id) ;
+}
+
+
+/*
  *
  *  TABLE OF CONTENTS
  *
@@ -115,7 +156,6 @@ UrmHGetWidget (MrmHierarchy		hierarchy_id,
    *  Local variables
    */
   Cardinal		result ;	/* function results */
-  RGMWidgetRecordPtr	widgetrec ;	/* widget record in context */
 
 
   /*
@@ -128,21 +168,8 @@ UrmHGetWidget (MrmHierarchy		hierarchy_id,
   /*
    * Validate the widget record in the context
    */
-  widgetrec = (RGMWidgetRecordPtr) UrmRCBuffer (context_id) ;
-  if ( UrmWRValid(widgetrec) )
-    return MrmSUCCESS ;
-  else
-    {
-      if ( (*file_id_return)->byte_swapped ) swapbytes(widgetrec->validation);
-      if ( UrmWRValid(widgetrec) )
-	{
-	  Urm__SwapRGMWidgetRecord(widgetrec);
-	  return MrmSUCCESS ;
-	}
-    }
+  return Urm__GetValidWidgetRecord (*file_id_return, context_id) ;
 
-  return Urm__UT_Error("UrmHGetIndexedWidget", _MrmMMsg_0026,
-		       NULL, context_id, MrmBAD_WIDGET_REC) ;
 }
 
 /*
@@ -184,7 +211,6 @@ UrmGetIndexedWidget (IDBFile			file_id,
    *  Local variables
    */
   Cardinal		result ;	/* function results */
-  RGMWidgetRecordPtr	widgetrec ;	/* widget record in context */
 
 
   /*
@@ -201,21 +227,8 @@ UrmGetIndexedWidget (IDBFile			file_id,
   /*
    * Validate the widget record in the context
    */
-  widgetrec = (RGMWidgetRecordPtr) UrmRCBuffer (context_id) ;
-  if ( UrmWRValid(widgetrec) )
-    return MrmSUCCESS ;
-  else
-    {
-      if ( file_id->byte_swapped ) swapbytes(widgetrec->validation);
-      if ( UrmWRValid(widgetrec) )
-	{
-	  Urm__SwapRGMWidgetRecord(widgetrec);
-	  return MrmSUCCESS ;
-	}
-    }
+  return Urm__GetValidWidgetRecord (file_id, context_id) ;
 
-  return Urm__UT_Error("UrmGetIndexedWidget", _MrmMMsg_0026,
-		       NULL, context_id, MrmBAD_WIDGET_REC) ;
 }
 
 
@@ -257,7 +270,6 @@ UrmGetRIDWidget (IDBFile		file_id,
    *  Local variables
    */
   Cardinal		result ;	/* function results */
-  RGMWidgetRecordPtr	widgetrec ;	/* widget record in context */
 
 
   /*
@@ -274,19 +286,6 @@ UrmGetRIDWidget (IDBFile		file_id,
   /*
    * Validate the widget record in the context
    */
-  widgetrec = (RGMWidgetRecordPtr) UrmRCBuffer (context_id) ;
-  if ( UrmWRValid(widgetrec) )
-    return MrmSUCCESS ;
-  else
-    {
-      if ( file_id->byte_swapped ) swapbytes(widgetrec->validation);
-      if ( UrmWRValid(widgetrec) )
-	{
-	  Urm__SwapRGMWidgetRecord(widgetrec);
-	  return MrmSUCCESS ;
-	}
-    }
-  return Urm__UT_Error("UrmGetRIDWidget", _MrmMMsg_0026,
-		       NULL, context_id, MrmBAD_WIDGET_REC) ;
+  return Urm__GetValidWidgetRecord (file_id, context_id) ;
 
 }

@@ -105,7 +105,7 @@ static void GetLastSelectToplevel(XmRowColumnWidget submenu);
 static Boolean ShouldDispatchFocusOut(Widget widget);
 static int MenuStatus(Widget wid);
 static int MenuType(Widget);
-static void PositionMenu(register XmRowColumnWidget m, XButtonPressedEvent *event);
+static void PositionMenu(XmRowColumnWidget m, XButtonPressedEvent *event);
 static void ButtonMenuPopDown(Widget w, XEvent *event, Boolean *popped_up);
 static void MenuArm(Widget w);
 static void MenuDisarm(Widget w);
@@ -146,7 +146,7 @@ static void RadioBehaviorAndMenuHistory(XmRowColumnWidget m, Widget w);
 static void ChildsActivateCallback(XmRowColumnWidget rowcol, Widget child, XtPointer call_value);
 static void EntryFired(Widget w, XtPointer client_data, XmAnyCallbackStruct *callback);
 static int NoTogglesOn(XmRowColumnWidget m);
-static int IsInWidgetList(register XmRowColumnWidget m, RectObj w);
+static int IsInWidgetList(XmRowColumnWidget m, RectObj w);
 static void AllOffExcept(XmRowColumnWidget m, Widget w);
 static void MenuShellPopdown(Widget w, XEvent *e);
 static Boolean MenuSystemPopdown(Widget w, XEvent *e);
@@ -659,14 +659,28 @@ static int SIF_ErrorHandler(Display *display, /* unused */
   return 0;
 }
 
-static void SetInputFocus(Display *display, Window focus, int revert_to, Time time)
+/*
+ * Set the input focus, ignoring the BadMatch error that a window which is
+ * no longer viewable gets.  The handler has to stay in place until the
+ * server has answered, so this makes a round trip: when focus_return is
+ * not NULL that round trip is an XGetInputFocus, whose result is returned.
+ */
+static void SetInputFocus(Display *display,
+                          Window focus,
+                          int revert_to,
+                          Time time,
+                          Window *focus_return,
+                          int *revert_return)
 {
   XErrorHandler old_Handler;
   /* Setup error proc and reset error flag */
   old_Handler = XSetErrorHandler((XErrorHandler)SIF_ErrorHandler);
   /* Set the input focus */
   XSetInputFocus(display, focus, revert_to, time);
-  XSync(display, False);
+  if (focus_return)
+    XGetInputFocus(display, focus_return, revert_return);
+  else
+    XSync(display, False);
   XSetErrorHandler(old_Handler);
 }
 
@@ -690,28 +704,19 @@ void _XmMenuFocus(Widget w, int operation, Time _time)
                            XtNdestroyCallback,
                            (XtCallbackProc)InvalidateOldFocus,
                            (XtPointer)&mst->RC_menuFocus.oldFocus);
-          /* oldWidget is not destroyed so the window is valid. */
+          /*
+           * oldWidget is not destroyed so the window is valid.  The
+           * focus can only go back to it if it is still viewable; rather
+           * than asking the server first (two more round trips on every
+           * unpost), let SetInputFocus ignore the BadMatch it gets if not.
+           */
           if (XtIsRealized(mst->RC_menuFocus.oldWidget)) {
-            XWindowAttributes xwa;
-            /* 99.9% of the time, oldWidget is a shell.  So we'll
-             * funnel everything through XGetWindowAttributes.  For
-             * non-shells we could just call _XmIsViewable().
-             */
-            XGetWindowAttributes(
-                XtDisplay(mst->RC_menuFocus.oldWidget), mst->RC_menuFocus.oldFocus, &xwa);
-            if (xwa.map_state == IsViewable)
-            /** old code with fix for 5715
-               if (!XtIsShell(mst->RC_menuFocus.oldWidget) ||
-                   XtIsApplicationShell(mst->RC_menuFocus.oldWidget) ||
-                   (((ShellWidget)mst->RC_menuFocus.oldWidget)->
-                      shell.popped_up))
-**/
-            {
-              SetInputFocus(XtDisplay(w),
-                            mst->RC_menuFocus.oldFocus,
-                            mst->RC_menuFocus.oldRevert,
-                            mst->RC_menuFocus.oldTime);
-            }
+            SetInputFocus(XtDisplay(w),
+                          mst->RC_menuFocus.oldFocus,
+                          mst->RC_menuFocus.oldRevert,
+                          mst->RC_menuFocus.oldTime,
+                          NULL,
+                          NULL);
           }
         }
         /*
@@ -723,7 +728,9 @@ void _XmMenuFocus(Widget w, int operation, Time _time)
           SetInputFocus(XtDisplay(w),
                         mst->RC_menuFocus.oldFocus,
                         mst->RC_menuFocus.oldRevert,
-                        mst->RC_menuFocus.oldTime);
+                        mst->RC_menuFocus.oldTime,
+                        NULL,
+                        NULL);
         }
         mst->RC_menuFocus.oldFocus = 0;
         mst->RC_menuFocus.oldRevert = 0;
@@ -735,8 +742,6 @@ void _XmMenuFocus(Widget w, int operation, Time _time)
       XGetInputFocus(XtDisplay(w), &mst->RC_menuFocus.oldFocus, &mst->RC_menuFocus.oldRevert);
       mst->RC_menuFocus.oldWidget = XtWindowToWidget(XtDisplay(w), mst->RC_menuFocus.oldFocus);
       mst->RC_menuFocus.oldTime = _time - 1;
-      SetInputFocus(
-          XtDisplay(w), XtWindow(w), mst->RC_menuFocus.oldRevert, mst->RC_menuFocus.oldTime);
       /*
        * If unable to set focus, it means that some other application
        * (hopefully the WM) has set the focus more recently; try to
@@ -744,9 +749,14 @@ void _XmMenuFocus(Widget w, int operation, Time _time)
        * it's possible some other application (hopefully the WM)
        * will set the focus soon - see XmMENU_MIDDLE comments.
        */
-      XGetInputFocus(XtDisplay(w), &tmpWindow, &tmpRevert);
+      SetInputFocus(XtDisplay(w),
+                    XtWindow(w),
+                    mst->RC_menuFocus.oldRevert,
+                    mst->RC_menuFocus.oldTime,
+                    &tmpWindow,
+                    &tmpRevert);
       if (tmpWindow != XtWindow(w)) {
-        SetInputFocus(XtDisplay(w), XtWindow(w), tmpRevert, _time);
+        SetInputFocus(XtDisplay(w), XtWindow(w), tmpRevert, _time, NULL, NULL);
         mst->RC_menuFocus.oldRevert = tmpRevert;
         mst->RC_menuFocus.oldTime = _time;
         if (tmpWindow != mst->RC_menuFocus.oldFocus) {
@@ -762,17 +772,20 @@ void _XmMenuFocus(Widget w, int operation, Time _time)
       XFlush(XtDisplay(w));
       break;
     case XmMENU_MIDDLE:
-      SetInputFocus(
-          XtDisplay(w), XtWindow(w), mst->RC_menuFocus.oldRevert, mst->RC_menuFocus.oldTime);
       /*
        * If unable to set focus, some other application has set
        * focus more recently than time saved by our last success.
        * Try _time (if later than oldTime), and update menuFocus
        * structure appropriately.
        */
-      XGetInputFocus(XtDisplay(w), &tmpWindow, &tmpRevert);
+      SetInputFocus(XtDisplay(w),
+                    XtWindow(w),
+                    mst->RC_menuFocus.oldRevert,
+                    mst->RC_menuFocus.oldTime,
+                    &tmpWindow,
+                    &tmpRevert);
       if ((tmpWindow != XtWindow(w)) && (_time > mst->RC_menuFocus.oldTime)) {
-        SetInputFocus(XtDisplay(w), XtWindow(w), tmpRevert, _time);
+        SetInputFocus(XtDisplay(w), XtWindow(w), tmpRevert, _time, NULL, NULL);
         mst->RC_menuFocus.oldRevert = tmpRevert;
         mst->RC_menuFocus.oldTime = _time;
         if (tmpWindow != mst->RC_menuFocus.oldFocus) {
@@ -860,13 +873,13 @@ void _XmRCArmAndActivate(Widget w, XEvent *event, String *parms, Cardinal *num_p
       m->manager.traversal_on = True;
       /* First look for a non-Help menu child.  If this fails
             we'll use the help menu */
-      for (i = 0; i < m->composite.num_children; i++) {
+      for (i = 0; (Cardinal)i < m->composite.num_children; i++) {
         child = (XmCascadeButtonWidget)m->composite.children[i];
         if (!IsHelp(m, (Widget)child) && XmIsTraversable((Widget)child))
           break;
       }
       /* See if we found one */
-      if (i >= m->composite.num_children) {
+      if ((Cardinal)i >= m->composite.num_children) {
         /* If we haven't,  and there's no help menu,  then fail */
         if (!(RC_HelpPb(m) && XmIsTraversable((Widget)RC_HelpPb(m)))) {
           m->manager.traversal_on = False;
@@ -1064,7 +1077,7 @@ static void ProcessMenuTree(XmRowColumnWidget w, int mode)
   Widget child;
   if (w == NULL)
     return;
-  for (i = 0; i < w->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < w->composite.num_children; i++) {
     if (XtIsManaged((child = w->composite.children[i]))) {
       _XmRC_ProcessSingleWidget(child, mode);
       if (XmIsCascadeButtonGadget(child)) {
@@ -1286,8 +1299,9 @@ static void AddKeycodeToKeyboardList(Widget w,
   if (MGR_NumKeyboardEntries(rowcol) >= MGR_SizeKeyboardList(rowcol)) {
     /* Grow list */
     MGR_SizeKeyboardList(rowcol) += 10;
-    MGR_KeyboardList(rowcol) = (XmKeyboardData *)XtRealloc(
-        (char *)MGR_KeyboardList(rowcol), (MGR_SizeKeyboardList(rowcol) * sizeof(XmKeyboardData)));
+    MGR_KeyboardList(rowcol) = (XmKeyboardData *)_XmReallocArray((char *)MGR_KeyboardList(rowcol),
+                                                                 MGR_SizeKeyboardList(rowcol),
+                                                                 sizeof(XmKeyboardData));
   }
   list = MGR_KeyboardList(rowcol);
   i = MGR_NumKeyboardEntries(rowcol);
@@ -1529,8 +1543,9 @@ void _XmRC_AddToPostFromList(XmRowColumnWidget m, Widget widget)
   if (m->row_column.postFromListSize == m->row_column.postFromCount) {
     /* increase the size to fit the new one and one more */
     m->row_column.postFromListSize += 2;
-    m->row_column.postFromList = (Widget *)XtRealloc(
-        (char *)m->row_column.postFromList, m->row_column.postFromListSize * sizeof(Widget));
+    m->row_column.postFromList = (Widget *)_XmReallocArray((char *)m->row_column.postFromList,
+                                                           m->row_column.postFromListSize,
+                                                           sizeof(Widget));
   }
   m->row_column.postFromList[m->row_column.postFromCount++] = widget;
   /* If the popup's attach widget mysteriously is destroyed, remove the
@@ -1598,7 +1613,7 @@ static void DismissTearOffSubMenu(XmRowColumnWidget menu)
   int i;
   if ((menu == NULL) || !XmIsRowColumn(menu) || !IsPulldown(menu) || (menu->core.being_destroyed))
     return;
-  for (i = 0; i < menu->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < menu->composite.num_children; i++) {
     Widget child = menu->composite.children[i];
     if (XmIsCascadeButtonGadget(child)) {
       if (CBG_Submenu(child))
@@ -2151,7 +2166,7 @@ static int MenuType(Widget wid)
  * position the row column widget where it wants to be; normally, this
  * is used only for popup or pulldown menupanes.
  */
-static void PositionMenu(register XmRowColumnWidget m, XButtonPressedEvent *event)
+static void PositionMenu(XmRowColumnWidget m, XButtonPressedEvent *event)
 {
   XmRowColumnWidget root;
   XmCascadeButtonWidget p;
@@ -2216,8 +2231,8 @@ static void ButtonMenuPopDown(Widget w, XEvent *event, Boolean *popped_up)
   {
     if ((depth + 1) > excPP->pane_list_size) {
       excPP->pane_list_size += 4;
-      excPP->pane = (Widget *)XtRealloc((char *)excPP->pane,
-                                        sizeof(Widget) * excPP->pane_list_size);
+      excPP->pane =
+          (Widget *)_XmReallocArray((char *)excPP->pane, excPP->pane_list_size, sizeof(Widget));
     }
     (excPP->pane)[depth] = (Widget)pane;
     /* Someone (mwm?) has posted a popup in an unorthodox manner.  Either
@@ -2268,10 +2283,10 @@ static Boolean SearchMenu(XmRowColumnWidget search_m,
                           Widget *w,
                           Boolean setHistory)
 {
-  register Widget *q;
-  register int i;
+  Widget *q;
+  int i;
   if (!InMenu(search_m, parent_m, child, w)) {
-    for (i = 0, q = search_m->composite.children; i < search_m->composite.num_children; i++, q++) {
+    for (i = 0, q = search_m->composite.children; (Cardinal)i < search_m->composite.num_children; i++, q++) {
       if (XtIsManaged(*q)) {
         if (XmIsCascadeButtonGadget(*q)) {
           XmCascadeButtonGadget p = (XmCascadeButtonGadget)*q;
@@ -2317,8 +2332,8 @@ static void LotaMagic(XmRowColumnWidget m, RectObj child, XmRowColumnWidget *par
 
 static int NoTogglesOn(XmRowColumnWidget m)
 {
-  register Widget *q;
-  register int i;
+  Widget *q;
+  int i;
   ForManagedChildren(m, i, q)
   {
     if (XmIsToggleButtonGadget(*q)) {
@@ -2333,13 +2348,13 @@ static int NoTogglesOn(XmRowColumnWidget m)
   return (TRUE);
 }
 
-static int IsInWidgetList(register XmRowColumnWidget m, RectObj w)
+static int IsInWidgetList(XmRowColumnWidget m, RectObj w)
 {
-  register Widget *q;
-  register int i;
+  Widget *q;
+  int i;
   if ((m == NULL) || (w == NULL))
     return (FALSE);
-  for (i = 0, q = m->composite.children; i < m->composite.num_children; i++, q++)
+  for (i = 0, q = m->composite.children; (Cardinal)i < m->composite.num_children; i++, q++)
     if ((*q == (Widget)w) && IsManaged(*q))
       return (TRUE);
   return (FALSE);
@@ -2347,8 +2362,8 @@ static int IsInWidgetList(register XmRowColumnWidget m, RectObj w)
 
 static void AllOffExcept(XmRowColumnWidget m, Widget w)
 {
-  register Widget *q;
-  register int i;
+  Widget *q;
+  int i;
   if (w) /* then all widgets except this one go off */ {
     ForManagedChildren(m, i, q)
     {
@@ -2555,7 +2570,7 @@ static void ChildsActivateCallback(XmRowColumnWidget rowcol, Widget child, XtPoi
       count = 0;
       while (callbacks[count].callback != NULL)
         count++;
-      callbackClosure = (XtPointer *)XtMalloc(sizeof(XtPointer) * count);
+      callbackClosure = (XtPointer *)_XmMallocArray(count, sizeof(XtPointer));
       for (i = 0; i < count; i++)
         callbackClosure[i] = callbacks[i].closure;
       for (i = 0; i < count; i++)

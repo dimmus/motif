@@ -26,6 +26,8 @@
 static char rcsid[] = "$RCSfile: DataFSel.c,v $ $Revision: 1.6 $ $Date: 2003/10/06 10:10:23 $"
 #  endif
 #endif
+#include "DataFI.h"
+#include "XmI.h"
 #include <X11/Xatom.h>
 #include <Xm/AtomMgr.h>
 #include <Xm/DataFP.h>
@@ -58,12 +60,37 @@ static void HandleInsertTargets(Widget w,
                                 unsigned long *length,
                                 int *format);
 /********    End Static Function Declarations    ********/
-extern void _XmDataFieldDeselectSelection(Widget, Boolean, Time);
-extern void _XmDataFieldStartSelection(XmDataFieldWidget, XmTextPosition, XmTextPosition, Time);
-extern int _XmDataFieldCountBytes(XmDataFieldWidget, wchar_t *, int);
-extern Boolean _XmDataFielddf_SetDestination(Widget, XmTextPosition, Time);
-extern void _XmDataFielddf_SetCursorPosition(
-    XmDataFieldWidget, XEvent *, XmTextPosition, Boolean, Boolean);
+
+/* State of one INSERT_SELECTION conversion.  It lives on the heap because
+   ConvertInsertSelection() may stop waiting while a request is still
+   pending; the callback of that request then frees it. */
+typedef struct {
+  _XmInsertSelect select;        /* first: the callbacks get its address */
+  XSelectionRequestEvent event;  /* Xt frees the request after conversion */
+  Boolean abandoned;             /* the convert proc gave up waiting */
+} DataFInsertSelectRec;
+
+/* Bound on the nested event loop of ConvertInsertSelection(), in units of
+   the selection timeout.  Xt times out each request it makes on its own;
+   this only guards against a peer that keeps a transfer going forever. */
+#define INSERT_SELECTION_WAIT_FACTOR 4
+
+/* Returns True (after freeing value and the record) if the convert proc
+   that issued this request has already given up on it. */
+static Boolean InsertSelectAbandoned(XtPointer closure, XtPointer value)
+{
+  DataFInsertSelectRec *rec = (DataFInsertSelectRec *)closure;
+  if (!rec->abandoned)
+    return False;
+  XtFree((char *)value);
+  XtFree((char *)rec);
+  return True;
+}
+
+static void InsertSelectTimeout(XtPointer closure, XtIntervalId *id)
+{
+  *(Boolean *)closure = True;
+}
 
 static void InsertSelection(Widget w,
                             XtPointer closure,
@@ -90,12 +117,14 @@ static void InsertSelection(Widget w,
   int malloc_size = 0;
   int i, status = 0;
   XmAnyCallbackStruct cb;
+  if (InsertSelectAbandoned(closure, value))
+    return;
   if (!value) {
     insert_select->done_status = True;
     return;
   }
   /* Don't do replace if there is not text to add */
-  if (*(char *)value == (char)'\0' || *length == 0) {
+  if (*length == 0 || *(char *)value == (char)'\0') {
     XtFree((char *)value);
     insert_select->done_status = True;
     return;
@@ -131,23 +160,26 @@ static void InsertSelection(Widget w,
     /* if no conversion, num_vals won't change */
     /* status >0 if some characters can't be converted; continue anyway */
     if (num_vals && (status == Success || status > 0)) {
-      for (i = 0; i < num_vals; i++)
-        malloc_size += strlen(tmp_value[i]);
-      total_tmp_value = XtMalloc((unsigned)malloc_size + 1);
-      total_tmp_value[0] = '\0';
-      for (i = 0; i < num_vals; i++)
-        strcat(total_tmp_value, tmp_value[i]);
+      total_tmp_value = _XmConcatStrings(tmp_value, num_vals);
+      malloc_size = strlen(total_tmp_value);
       XFreeStringList(tmp_value);
     }
-    if (XmTextF_max_char_size(tf) == 1) {
+    if (total_tmp_value == NULL) {
+      /* nothing could be converted */
+      replace_res = False;
+    }
+    else if (XmTextF_max_char_size(tf) == 1) {
       replace_res = _XmDataFieldReplaceText(
           tf, (XEvent *)insert_select->event, left, right, total_tmp_value, malloc_size, True);
     }
     else { /* must convert to wchar_t before passing to Replace */
-      wc_value = (wchar_t *)XtMalloc((unsigned)(1 + malloc_size) * sizeof(wchar_t));
+      wc_value = (wchar_t *)_XmMallocArray(1 + malloc_size, sizeof(wchar_t));
       num_chars = mbstowcs(wc_value, total_tmp_value, 1 + malloc_size);
-      replace_res = _XmDataFieldReplaceText(
-          tf, (XEvent *)insert_select->event, left, right, (char *)wc_value, num_chars, True);
+      if (num_chars < 0)
+        num_chars = 0;
+      else
+        replace_res = _XmDataFieldReplaceText(
+            tf, (XEvent *)insert_select->event, left, right, (char *)wc_value, num_chars, True);
       XtFree((char *)wc_value);
     }
     XtFree(total_tmp_value);
@@ -159,15 +191,19 @@ static void InsertSelection(Widget w,
           tf, (XEvent *)insert_select->event, left, right, (char *)value, (unsigned)*length, True);
     }
     else {
-      temp = XtMalloc((unsigned)*length + 1);
+      temp = _XmMallocArray(*length + 1, sizeof(char));
       /* NOTE: casting *length could result in a truncated long. */
       (void)memcpy((void *)temp, (void *)value, (unsigned)*length);
       temp[*length] = '\0';
-      wc_value = (wchar_t *)XtMalloc((unsigned)(*length + 1) * sizeof(wchar_t));
+      wc_value = (wchar_t *)_XmMallocArray(*length + 1, sizeof(wchar_t));
       /* NOTE: casting *length could result in a truncated long. */
       num_chars = mbstowcs(wc_value, temp, (unsigned)*length + 1);
-      replace_res = _XmDataFieldReplaceText(
-          tf, (XEvent *)insert_select->event, left, right, (char *)wc_value, num_chars, True);
+      /* the data comes from another client and need not be valid */
+      if (num_chars < 0)
+        num_chars = 0;
+      else
+        replace_res = _XmDataFieldReplaceText(
+            tf, (XEvent *)insert_select->event, left, right, (char *)wc_value, num_chars, True);
       XtFree(temp);
       XtFree((char *)wc_value);
     }
@@ -225,14 +261,18 @@ static void HandleInsertTargets(Widget w,
   Atom COMPOUND_TEXT = XmInternAtom(XtDisplay(w), "COMPOUND_TEXT", False);
   Atom target = TEXT;
   Atom *atom_ptr;
-  int i;
+  unsigned long i, num_atoms;
+  if (InsertSelectAbandoned(closure, value))
+    return;
   if (!length) {
     XtFree((char *)value);
     insert_select->done_status = True;
     return; /* Supports no targets, so don't bother sending anything */
   }
   atom_ptr = (Atom *)value;
-  for (i = 0; i < *length; i++, atom_ptr++) {
+  /* the reply comes from another client: only an atom list is usable */
+  num_atoms = (*type == XA_ATOM && *format == 32) ? *length : 0;
+  for (i = 0; i < num_atoms; i++, atom_ptr++) {
     if (*atom_ptr == COMPOUND_TEXT) {
       target = *atom_ptr;
       break;
@@ -240,6 +280,7 @@ static void HandleInsertTargets(Widget w,
     else if (*atom_ptr == XA_STRING)
       target = *atom_ptr;
   }
+  XtFree((char *)value);
   XtGetSelectionValue(
       w, *seltype, target, InsertSelection, (XtPointer)insert_select, insert_select->event->time);
 }
@@ -261,52 +302,67 @@ static Boolean ConvertInsertSelection(Widget w,
   static unsigned long old_serial = 0;
   Atom TARGETS = XmInternAtom(XtDisplay(w), "TARGETS", False);
   Atom MOTIF_DESTINATION = XmInternAtom(XtDisplay(w), "MOTIF_DESTINATION", False);
-  Atom actual_type;
-  int actual_format;
   unsigned long nitems;
-  unsigned long bytes;
   unsigned char *prop = NULL;
-  _XmInsertSelect insert_select;
-  _XmTextInsertPair *pair;
-  insert_select.done_status = False;
-  insert_select.success_status = False;
+  DataFInsertSelectRec *insert_select;
+  _XmTextInsertPair pair;
+  XmSelectType select_type;
+  XtIntervalId timer;
+  Boolean timed_out = False;
+  Boolean success;
   if (*selection == MOTIF_DESTINATION) {
-    insert_select.select_type = XmDEST_SELECT;
+    select_type = XmDEST_SELECT;
   }
   else if (*selection == XA_PRIMARY) {
-    insert_select.select_type = XmPRIM_SELECT;
+    select_type = XmPRIM_SELECT;
   }
-  req_event = XtGetSelectionRequest(w, *selection, NULL);
-  insert_select.event = req_event;
-  /* Work around for intrinsics selection bug */
-  if (old_serial != req_event->serial)
-    old_serial = req_event->serial;
   else
     return False;
-  if (XGetWindowProperty(req_event->display,
-                         req_event->requestor,
-                         req_event->property,
-                         0L,
-                         10000000,
-                         False,
-                         AnyPropertyType,
-                         &actual_type,
-                         &actual_format,
-                         &nitems,
-                         &bytes,
-                         &prop) != Success)
-    return FALSE;
-  pair = (_XmTextInsertPair *)prop;
-  if (pair->target != locale_atom) {
+  req_event = XtGetSelectionRequest(w, *selection, NULL);
+  if (req_event == NULL)
+    return False;
+  /* Work around for intrinsics selection bug */
+  _XmProcessLock();
+  if (old_serial != req_event->serial)
+    old_serial = req_event->serial;
+  else {
+    _XmProcessUnlock();
+    return False;
+  }
+  _XmProcessUnlock();
+  /* The parameter is the ATOM_PAIR the requestor stored on its window. */
+  if (!_XmGetWindowPropertyChecked(req_event->display,
+                                   req_event->requestor,
+                                   req_event->property,
+                                   2L,
+                                   AnyPropertyType,
+                                   32,
+                                   2,
+                                   NULL,
+                                   NULL,
+                                   &nitems,
+                                   NULL,
+                                   &prop))
+    return False;
+  pair = *(_XmTextInsertPair *)prop;
+  XFree((void *)prop);
+  insert_select = (DataFInsertSelectRec *)XtMalloc(sizeof(DataFInsertSelectRec));
+  insert_select->select.done_status = False;
+  insert_select->select.success_status = False;
+  insert_select->select.select_type = select_type;
+  insert_select->event = *req_event;
+  insert_select->select.event = &insert_select->event;
+  insert_select->abandoned = False;
+  if (pair.target != locale_atom) {
     /*
      * Make selection request to find out which targets
      * the selection can provide.
      */
     XtGetSelectionValue(w,
-                        pair->selection,
+                        pair.selection,
                         TARGETS,
                         HandleInsertTargets,
-                        (XtPointer)&insert_select,
+                        (XtPointer)insert_select,
                         req_event->time);
   }
   else {
@@ -315,31 +371,37 @@ static Boolean ConvertInsertSelection(Widget w,
      * with the insert selection.
      */
     XtGetSelectionValue(w,
-                        pair->selection,
-                        pair->target,
+                        pair.selection,
+                        pair.target,
                         InsertSelection,
-                        (XtPointer)&insert_select,
+                        (XtPointer)insert_select,
                         req_event->time);
   }
   /*
    * Make sure the above selection request is completed
-   * before returning from the convert proc.
+   * before returning from the convert proc, but do not wait forever:
+   * XtAppProcessEvent() also returns for the timer.
    */
-  for (;;) {
-    XEvent event;
-    if (insert_select.done_status)
-      break;
-    XtAppNextEvent(app, &event);
-    XtDispatchEvent(&event);
-  }
+  timer = XtAppAddTimeOut(app,
+                          XtAppGetSelectionTimeout(app) * INSERT_SELECTION_WAIT_FACTOR,
+                          InsertSelectTimeout,
+                          (XtPointer)&timed_out);
+  while (!insert_select->select.done_status && !timed_out)
+    XtAppProcessEvent(app, XtIMAll);
+  if (!timed_out)
+    XtRemoveTimeOut(timer);
   *type = XmInternAtom(XtDisplay(w), "NULL", False);
   *format = 8;
   *value = NULL;
   *length = 0;
-  if (prop != NULL) {
-    XFree((void *)prop);
+  if (!insert_select->select.done_status) {
+    /* the pending request frees the record when it completes */
+    insert_select->abandoned = True;
+    return False;
   }
-  return (insert_select.success_status);
+  success = insert_select->select.success_status;
+  XtFree((char *)insert_select);
+  return success;
 }
 
 Boolean _XmDataFieldConvert(Widget w,
@@ -489,7 +551,7 @@ Boolean _XmDataFieldConvert(Widget w,
       int stat;
       /* NOTE: casting (right - left) could result in a truncated long. */
       *length = _XmDataFieldCountBytes(tf, TextF_WcValue(tf) + left, (int)(right - left));
-      tmp_value = XtMalloc((unsigned)*length + 1);
+      tmp_value = _XmMallocArray(*length + 1, sizeof(char));
       stat = wcstombs(tmp_value, TextF_WcValue(tf) + left, (unsigned)*length); /* NOTE: casting
                                         *length could result in a truncated long. */
       if (stat < 0) /* wcstombs will return neg value on conv failure */
@@ -499,7 +561,7 @@ Boolean _XmDataFieldConvert(Widget w,
     }
     else {
       *length = right - left;
-      tmp_value = XtMalloc((unsigned)*length + 1);
+      tmp_value = _XmMallocArray(*length + 1, sizeof(char));
       /* get the selection value */
       (void)memcpy((void *)tmp_value, (void *)(TextF_Value(tf) + left), (unsigned)*length); /* NOTE:
                                              casting *length could result in a truncated long. */
@@ -528,7 +590,7 @@ Boolean _XmDataFieldConvert(Widget w,
       int stat;
       /* NOTE: casting (right - left) could result in a truncated long. */
       *length = _XmDataFieldCountBytes(tf, TextF_WcValue(tf) + left, (int)(right - left));
-      *value = XtMalloc((unsigned)*length + 1);
+      *value = _XmMallocArray(*length + 1, sizeof(char));
       stat = wcstombs((char *)*value, TextF_WcValue(tf) + left, (unsigned)*length); /* NOTE:
                                            casting *length could result in a truncated long */
       if (stat < 0) /* wcstombs return neg value on conv failure */
@@ -538,7 +600,7 @@ Boolean _XmDataFieldConvert(Widget w,
     }
     else {
       *length = right - left;
-      *value = XtMalloc((unsigned)*length + 1);
+      *value = _XmMallocArray(*length + 1, sizeof(char));
       /* get the selection value */
       (void)memcpy((void *)*value, (void *)(TextF_Value(tf) + left), (unsigned)*length); /* NOTE:
                                              casting *length could result in a truncated long. */
@@ -556,7 +618,7 @@ Boolean _XmDataFieldConvert(Widget w,
        * (right - left) could result in a truncated long.
        */
       *length = _XmDataFieldCountBytes(tf, TextF_WcValue(tf) + left, (int)(right - left));
-      tmp_value = XtMalloc((unsigned)*length + 1);
+      tmp_value = _XmMallocArray(*length + 1, sizeof(char));
       stat = wcstombs(tmp_value, TextF_WcValue(tf) + left, (unsigned)*length); /* NOTE: casting
                                         *length could result in a truncated long. */
       if (stat < 0) /* wcstombs will return neg value on conv failure */
@@ -566,7 +628,7 @@ Boolean _XmDataFieldConvert(Widget w,
     }
     else { /* malloc the space and copy the data to be converted */
       *length = right - left;
-      tmp_value = XtMalloc((unsigned)*length + 1);
+      tmp_value = _XmMallocArray(*length + 1, sizeof(char));
       /* get the selection value */
       (void)memcpy((void *)tmp_value, (void *)(TextF_Value(tf) + left), (unsigned)*length); /* NOTE:
                                              casting *length could result in a truncated long. */

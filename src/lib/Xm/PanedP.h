@@ -230,7 +230,7 @@ XmImportOperator _XmToPanedPixels(Widget, int, XtArgVal *);
          ((childP) < ((XmPaned_managed_children((pw))) + (XmPaned_num_panes((pw))))); \
          (childP)++)
 #  define NthPane(pw, paneIndex) (XmPaned_managed_children((pw)) + (paneIndex))
-#  ifdef _cplusplus
+#  ifdef __cplusplus
 } /* Closes scope of 'extern "C"' declaration */
 #  endif
 #endif /* _XmPanedP_h */

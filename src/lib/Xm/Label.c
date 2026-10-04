@@ -511,12 +511,12 @@ void _XmLabelCloneMenuSavvy(WidgetClass wc, XmMenuSavvyTrait mst)
   XmeTraitSet((XtPointer)wc, XmQTmenuSavvy, (XtPointer)mst);
 }
 
-char *_XmCBNameActivate()
+char *_XmCBNameActivate(void)
 {
   return XmNactivateCallback;
 }
 
-char *_XmCBNameValueChanged()
+char *_XmCBNameValueChanged(void)
 {
   return XmNvalueChangedCallback;
 }
@@ -544,7 +544,7 @@ static void InitializePosthook(Widget req, /* unused */
  ************************************************************************/
 static void ClassPartInitialize(WidgetClass c)
 {
-  register XmLabelWidgetClass wc = (XmLabelWidgetClass)c;
+  XmLabelWidgetClass wc = (XmLabelWidgetClass)c;
   XmLabelWidgetClass super = (XmLabelWidgetClass)wc->core_class.superclass;
   if (wc->label_class.setOverrideCallback == XmInheritSetOverrideCallback)
     wc->label_class.setOverrideCallback = super->label_class.setOverrideCallback;
@@ -1185,7 +1185,7 @@ static void Redisplay(Widget wid, XEvent *event, Region region)
       if (Pix(lw) != XmUNSPECIFIED_PIXMAP) {
         gc = lp->normal_GC;
         XmeGetPixmapData(XtScreen(lw), Pix(lw), NULL, &depth, NULL, NULL, NULL, NULL, NULL, NULL);
-        if (depth == lw->core.depth)
+        if (depth == (int)lw->core.depth)
           XCopyArea(XtDisplay(lw),
                     Pix(lw),
                     XtWindow(lw),
@@ -1217,7 +1217,7 @@ static void Redisplay(Widget wid, XEvent *event, Region region)
       if (pix_use != XmUNSPECIFIED_PIXMAP) {
         gc = lp->insensitive_GC;
         XmeGetPixmapData(XtScreen(lw), pix_use, NULL, &depth, NULL, NULL, NULL, NULL, NULL, NULL);
-        if (depth == lw->core.depth)
+        if (depth == (int)lw->core.depth)
           XCopyArea(XtDisplay(lw),
                     pix_use,
                     XtWindow(lw),
@@ -1847,7 +1847,7 @@ Widget XmCreateLabel(Widget parent, char *name, Arg *arglist, Cardinal argCount)
 
 Widget XmVaCreateLabel(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);
@@ -1958,8 +1958,8 @@ static Boolean XmLabelGetBaselines(Widget wid, Dimension **baselines, int *line_
     _XmStringGetBaselines(lw->label.font, lw->label._label, &(lw->label.baselines), &count);
     assert(lw->label.baselines != NULL);
     /* Store the current offset in an extra location. */
-    lw->label.baselines = (Dimension *)XtRealloc((char *)lw->label.baselines,
-                                                 (count + 1) * sizeof(Dimension));
+    lw->label.baselines =
+        (Dimension *)_XmReallocArray((char *)lw->label.baselines, count + 1, sizeof(Dimension));
     lw->label.baselines[count] = 0;
   }
   else {
@@ -1969,12 +1969,12 @@ static Boolean XmLabelGetBaselines(Widget wid, Dimension **baselines, int *line_
   delta = Lab_TextRect_y(lw) - lw->label.baselines[count];
   if (delta) {
     int tmp;
-    for (tmp = 0; tmp <= count; tmp++)
+    for (tmp = 0; (Cardinal)tmp <= count; tmp++)
       lw->label.baselines[tmp] += delta;
   }
   /* Copy the cached data. */
   *line_count = count;
-  *baselines = (Dimension *)XtMalloc(*line_count * sizeof(Dimension));
+  *baselines = (Dimension *)_XmMallocArray(*line_count, sizeof(Dimension));
   memcpy((char *)*baselines, (char *)lw->label.baselines, *line_count * sizeof(Dimension));
   return True;
 }
@@ -2470,12 +2470,18 @@ static void LabelSetValue(Widget w, XtPointer value, int type)
       length = 0;
       while (str2[length] != 0)
         length++;
-      str = (char *)XtMalloc(MB_CUR_MAX * length);
-      wcstombs(str, str2, length * MB_CUR_MAX);
+      /* Room for the terminating NUL too, which wcstombs only writes
+         when it fits: without it an empty or full conversion is left
+         unterminated. */
+      str = _XmMallocArray(length + 1, MB_CUR_MAX);
+      if (wcstombs(str, str2, (length + 1) * MB_CUR_MAX) == (size_t)-1)
+        str[0] = '\0';
       XtFree((char *)value);
-      value = str;
+      temp = XmStringCreateLocalized(str);
+      XtFree(str);
     }
-    temp = XmStringCreateLocalized((char *)value);
+    else
+      temp = XmStringCreateLocalized((char *)value);
   }
   nargs = 0;
   XtSetArg(args[nargs], XmNlabelString, temp), nargs++;

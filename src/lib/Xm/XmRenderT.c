@@ -32,18 +32,12 @@ static char rcsid[] = "$TOG: XmRenderT.c /main/14 1998/10/26 20:14:42 samborn $"
 #  endif
 #endif
 #include <ctype.h>
+#include <limits.h>
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
-#ifdef __cplusplus
-    extern "C"
-{
-  /* some 'locale.h' do not have prototypes (sun) */
-#endif
 #include <X11/Xlocale.h>
-#ifdef __cplusplus
-} /* Close scope of 'extern "C"' declaration */
-#endif /* __cplusplus */
+#include "HashI.h"
 #include "MessagesI.h"
 #include "XmI.h"
 #include "XmRenderTI.h"
@@ -51,10 +45,10 @@ static char rcsid[] = "$TOG: XmRenderT.c /main/14 1998/10/26 20:14:42 samborn $"
 #include "XmTabListI.h"
 #include <X11/IntrinsicP.h>
 #include <X11/ShellP.h>
+#include <X11/Xlibint.h> /* for XESetCloseDisplay */
 #include <X11/Xresource.h>
 #include <Xm/Display.h>  /* For XmGetXmDisplay */
 #include <Xm/DisplayP.h> /* For direct access to callback fields */
-#include <Xm/XmosP.h>    /* For ALLOCATE/DEALLOCATE_LOCAL */
 #if USE_XFT
 #  include <X11/Xft/Xft.h>
 #endif
@@ -144,6 +138,8 @@ static Boolean GetResources(XmRendition rend,
 static void SetDefault(XmRendition rend);
 #if USE_XFT
 static XftColor GetCachedXftColor(Display *display, Pixel color);
+static Boolean LookupXftFont(Display *display, XmRendition rend, XftFont **font);
+static void CacheXftFont(Display *display, XmRendition rend);
 #endif
 /********    End Static Function Declarations    ********/
 /* Resource List. */
@@ -350,7 +346,7 @@ static XrmResourceList CompileResourceTable(XtResourceList resources, Cardinal n
   Cardinal count;
   XrmResourceList table, tPtr;
   XtResourceList rPtr;
-  tPtr = table = (XrmResourceList)XtMalloc(num_resources * sizeof(XrmResource));
+  tPtr = table = (XrmResourceList)_XmMallocArray(num_resources, sizeof(XrmResource));
   rPtr = resources;
   for (count = 0; count < num_resources; count++, tPtr++, rPtr++) {
     tPtr->xrm_name = XrmPermStringToQuark(rPtr->resource_name);
@@ -397,7 +393,6 @@ static Boolean GetResources(XmRendition rend,
   XrmQuark rawType;
   XrmValue convValue;
   Boolean have_value, copied;
-#ifdef XTHREADS
   XtAppContext app = NULL;
   if (wid)
     app = XtWidgetToApplicationContext(wid);
@@ -407,15 +402,14 @@ static Boolean GetResources(XmRendition rend,
     _XmAppLock(app);
   }
   _XmProcessLock();
-#endif
   /* Initialize quark cache */
   if (quarks == NULL) {
-    quarks = (XrmQuark *)XtMalloc(_XmNumRenditionResources * sizeof(XrmQuark));
+    quarks = (XrmQuark *)_XmMallocArray(_XmNumRenditionResources, sizeof(XrmQuark));
     num_quarks = _XmNumRenditionResources;
   }
   /* Initialize found */
   if (found == NULL)
-    found = (Boolean *)XtMalloc(_XmNumRenditionResources * sizeof(Boolean));
+    found = (Boolean *)_XmMallocArray(_XmNumRenditionResources, sizeof(Boolean));
   bzero(found, _XmNumRenditionResources * sizeof(Boolean));
   /* Compile names and classes. */
   if (wid != NULL)
@@ -432,10 +426,10 @@ static Boolean GetResources(XmRendition rend,
   classes[length] = NULLQUARK;
   /* Cache arglist */
   if (num_quarks < argcount) {
-    quarks = (XrmQuark *)XtRealloc((char *)quarks, argcount * sizeof(XrmQuark));
+    quarks = (XrmQuark *)_XmReallocArray((char *)quarks, argcount, sizeof(XrmQuark));
     num_quarks = argcount;
   }
-  for (i = 0; i < argcount; i++)
+  for (i = 0; (Cardinal)i < argcount; i++)
     quarks[i] = XrmStringToQuark(arglist[i].name);
   /* Compile resource description into XrmResourceList if not already done. */
   if (table == NULL) {
@@ -444,9 +438,9 @@ static Boolean GetResources(XmRendition rend,
     Qfont = XrmPermStringToQuark(XmNfont);
   }
   /* Set resources from arglist. */
-  for (arg = arglist, i = 0; i < argcount; arg++, i++) {
+  for (arg = arglist, i = 0; (Cardinal)i < argcount; arg++, i++) {
     argName = quarks[i];
-    for (j = 0, res = table; j < _XmNumRenditionResources; j++, res++) {
+    for (j = 0, res = table; (Cardinal)j < _XmNumRenditionResources; j++, res++) {
       if (res->xrm_name == argName) {
         CopyFromArg((arg->value), ((char *)GetPtr(rend) + res->xrm_offset), res->xrm_size);
         found[j] = TRUE;
@@ -465,12 +459,13 @@ static Boolean GetResources(XmRendition rend,
     while (!XrmQGetSearchList(db, names, classes, searchList, searchListSize)) {
       if (searchList == stackSearchList)
         searchList = NULL;
-      searchList = (XrmHashTable *)XtRealloc((char *)searchList,
-                                             sizeof(XrmHashTable) * (searchListSize *= 2));
+      searchList = (XrmHashTable *)_XmReallocArray((char *)searchList,
+                                                   searchListSize *= 2,
+                                                   sizeof(XrmHashTable));
     }
   }
   /* Loop over table */
-  for (j = 0, res = table; j < _XmNumRenditionResources; j++, res++) {
+  for (j = 0, res = table; (Cardinal)j < _XmNumRenditionResources; j++, res++) {
     if (!found[j]) {
       copied = False;
       have_value = False;
@@ -532,12 +527,10 @@ static Boolean GetResources(XmRendition rend,
   }
   if (searchList != stackSearchList)
     XtFree((char *)searchList);
-#ifdef XTHREADS
   _XmProcessUnlock();
   if (app) {
     _XmAppUnlock(app);
   }
-#endif
   return (got_one);
 }
 
@@ -574,8 +567,9 @@ static void SetDefault(XmRendition rend)
   _XmRendBGState(rend) = DEFAULT_backgroundState;
   _XmRendFGState(rend) = DEFAULT_foregroundState;
 #if USE_XFT
-  _XmRendXftFG(rend).color.alpha = 0xFFFF; /*TODO: it is really needed? (yura)*/
-  _XmRendXftBG(rend).color.alpha = 0xFFFF; /*TODO: it is really needed? (yura)*/
+  /* Opaque: Xft draws with the alpha, and text drawn with 0 is invisible. */
+  _XmRendXftFG(rend).color.alpha = 0xFFFF;
+  _XmRendXftBG(rend).color.alpha = 0xFFFF;
   _XmRendXftFont(rend) = DEFAULT_xftFont;
   _XmRendPattern(rend) = NULL;
   _XmRendFontStyle(rend) = DEFAULT_fontStyle;
@@ -1059,8 +1053,8 @@ XmRendition _XmRenditionCopy(XmRendition rend, Boolean shared)
     _XmRendGC(toRend) = _XmRendGC(rend);
     _XmRendTagCount(toRend) = _XmRendTagCount(rend);
     _XmRendHadEnds(toRend) = _XmRendHadEnds(rend);
-    _XmRendTags(toRend) = (XmStringTag *)XtMalloc(sizeof(XmStringTag) * _XmRendTagCount(rend));
-    for (i = 0; i < _XmRendTagCount(rend); i++)
+    _XmRendTags(toRend) = (XmStringTag *)_XmMallocArray(_XmRendTagCount(rend), sizeof(XmStringTag));
+    for (i = 0; (unsigned int)i < _XmRendTagCount(rend); i++)
       _XmRendTags(toRend)[i] = _XmRendTags(rend)[i];
   }
   return (toRend);
@@ -1083,7 +1077,6 @@ XmRenderTable XmRenderTableAddRenditions(XmRenderTable oldtable,
   XtAppContext app = NULL;
   if ((renditions == NULL) || (rendition_count == 0))
     return (oldtable);
-#ifdef XTHREADS
   if (_XmRendDisplay(renditions[0]))
     app = XtDisplayToApplicationContext(_XmRendDisplay(renditions[0]));
   if (app) {
@@ -1092,7 +1085,6 @@ XmRenderTable XmRenderTableAddRenditions(XmRenderTable oldtable,
   else {
     _XmProcessLock();
   }
-#endif
   if (oldtable == NULL) {
     /* Malloc new table */
     table = (_XmRenderTable)XtMalloc(
@@ -1104,14 +1096,14 @@ XmRenderTable XmRenderTableAddRenditions(XmRenderTable oldtable,
     _XmRTDisplay(oldtable) = NULL;
     _XmRTRefcount(oldtable) = 1;
     /* Copy renditions */
-    for (i = 0; i < rendition_count; i++) {
+    for (i = 0; (Cardinal)i < rendition_count; i++) {
       _XmRTRenditions(oldtable)[i] = CopyRendition(renditions[i]);
       if (_XmRTDisplay(oldtable) == NULL)
         _XmRTDisplay(oldtable) = _XmRendDisplay(renditions[i]);
     }
   }
   else {
-    matches = (Boolean *)ALLOCATE_LOCAL(rendition_count * sizeof(Boolean));
+    matches = (Boolean *)_XmMallocArray(rendition_count, sizeof(Boolean));
     bzero(matches, rendition_count * sizeof(Boolean));
     /* May have to copy table if shared. */
     if (_XmRTRefcount(oldtable) > 1) {
@@ -1133,7 +1125,7 @@ XmRenderTable XmRenderTableAddRenditions(XmRenderTable oldtable,
       oldtable = newtable;
     }
     /* Merge matching renditions */
-    for (i = 0; i < rendition_count; i++) {
+    for (i = 0; (Cardinal)i < rendition_count; i++) {
       rend = renditions[i];
       match = _XmRenderTableFindRendition(oldtable, _XmRendTag(rend), TRUE, FALSE, FALSE, &idx);
       if ((match != NULL) && (merge_mode != XmDUPLICATE)) {
@@ -1181,7 +1173,7 @@ XmRenderTable XmRenderTableAddRenditions(XmRenderTable oldtable,
         _XmRTRenditions(newtable)[i] = _XmRTRenditions(oldtable)[i];
       /* Copy new renditions. */
       next = _XmRTCount(oldtable);
-      for (i = 0; i < rendition_count; i++) {
+      for (i = 0; (Cardinal)i < rendition_count; i++) {
         if (!matches[i]) {
           _XmRTRenditions(newtable)[next] = CopyRendition(renditions[i]);
           if (_XmRTDisplay(newtable) == NULL)
@@ -1201,19 +1193,17 @@ XmRenderTable XmRenderTableAddRenditions(XmRenderTable oldtable,
       SetPtr(newtable, table);
       FreeHandle(oldtable);
     }
-    DEALLOCATE_LOCAL((char *)matches);
+    XtFree((char *)matches);
     oldtable = newtable;
   }
   if (tmptable != NULL)
     FreeHandle(tmptable);
-#ifdef XTHREADS
   if (app) {
     _XmAppUnlock(app);
   }
   else {
     _XmProcessUnlock();
   }
-#endif
   return (oldtable);
 }
 
@@ -1224,7 +1214,6 @@ XmRenderTable XmRenderTableRemoveRenditions(XmRenderTable oldtable,
                                             int tag_count)
 {
   XmRenderTable ret_val;
-#ifdef XTHREADS
   XtAppContext app = NULL;
   if (_XmRTDisplay(oldtable))
     app = XtDisplayToApplicationContext(_XmRTDisplay(oldtable));
@@ -1234,16 +1223,13 @@ XmRenderTable XmRenderTableRemoveRenditions(XmRenderTable oldtable,
   else {
     _XmProcessLock();
   }
-#endif
   ret_val = _XmRenderTableRemoveRenditions(oldtable, tags, tag_count, FALSE, XmFONT_IS_FONT, NULL);
-#ifdef XTHREADS
   if (app) {
     _XmAppUnlock(app);
   }
   else {
     _XmProcessUnlock();
   }
-#endif
   return ret_val;
 }
 
@@ -1414,7 +1400,6 @@ XmRenderTable XmRenderTableCopy(XmRenderTable table, XmStringTag *tags, int tag_
   XtAppContext app = NULL;
   if (table == NULL)
     return ((XmRenderTable)NULL);
-#ifdef XTHREADS
   if (_XmRTDisplay(table))
     app = XtDisplayToApplicationContext(_XmRTDisplay(table));
   if (app) {
@@ -1423,12 +1408,11 @@ XmRenderTable XmRenderTableCopy(XmRenderTable table, XmStringTag *tags, int tag_
   else {
     _XmProcessLock();
   }
-#endif
   count = 0;
   if ((_XmRTRefcountInc(table) == 0) || (tags != NULL)) {
     /* Malloc new table */
     _XmRTRefcountDec(table);
-    if (tag_count > 0)
+    if ((tags != NULL) && (tag_count > 0))
       size = (sizeof(_XmRendition) * (tag_count - RENDITIONS_IN_STRUCT));
     else
       size = (sizeof(_XmRendition) * (_XmRTCount(table) - RENDITIONS_IN_STRUCT));
@@ -1446,22 +1430,28 @@ XmRenderTable XmRenderTableCopy(XmRenderTable table, XmStringTag *tags, int tag_
       if (rend != _XmRTRenditions(table)[i])
         break;
     }
-    if (i < _XmRTCount(table)) /* Overflow! */ {
-      /* Malloc new table. */
-      t = (_XmRenderTable)XtMalloc(
-          sizeof(_XmRenderTableRec) +
-          (sizeof(_XmRendition) * (_XmRTCount(table) - RENDITIONS_IN_STRUCT)));
-      rt = GetHandle(_XmRenderTable);
-      SetPtr(rt, t);
-      _XmRTRefcount(rt) = 1;
+    if ((i < _XmRTCount(table)) || (rt != NULL)) /* Overflow! */ {
+      /* Either a rendition or the table refcount overflowed. */
+      if (rt == NULL) {
+        /* Malloc new table, giving back the reference taken above. */
+        _XmRTRefcountDec(table);
+        t = (_XmRenderTable)XtMalloc(
+            sizeof(_XmRenderTableRec) +
+            (sizeof(_XmRendition) * (_XmRTCount(table) - RENDITIONS_IN_STRUCT)));
+        rt = GetHandle(_XmRenderTable);
+        SetPtr(rt, t);
+        _XmRTRefcount(rt) = 1;
+      }
       _XmRTCount(rt) = _XmRTCount(table);
       /* Move renditions done already. */
       for (j = 0; j < i; j++)
         _XmRTRenditions(rt)[j] = _XmRTRenditions(table)[j];
-      _XmRTRenditions(rt)[i] = rend;
-      /* Copy rest */
-      for (j = i + 1; j < _XmRTCount(rt); j++)
-        _XmRTRenditions(rt)[j] = DuplicateRendition(_XmRTRenditions(table)[j]);
+      if (i < _XmRTCount(rt)) {
+        _XmRTRenditions(rt)[i] = rend;
+        /* Copy rest */
+        for (j = i + 1; j < _XmRTCount(rt); j++)
+          _XmRTRenditions(rt)[j] = DuplicateRendition(_XmRTRenditions(table)[j]);
+      }
     }
     else {
       rt = GetHandle(_XmRenderTable);
@@ -1473,27 +1463,24 @@ XmRenderTable XmRenderTableCopy(XmRenderTable table, XmStringTag *tags, int tag_
     for (i = 0; i < tag_count; i++) {
       XmRendition match;
       match = XmRenderTableGetRendition(table, tags[i]);
-      if (match != NULL) {
-        _XmRTRenditions(rt)[i] = match;
-        ++count;
-      }
+      if (match != NULL)
+        _XmRTRenditions(rt)[count++] = match;
     }
     /* Realloc table */
     t = (_XmRenderTable)XtRealloc((char *)t,
                                   sizeof(_XmRenderTableRec) +
-                                      (sizeof(XmRendition) * (count - RENDITIONS_IN_STRUCT)));
+                                      (sizeof(XmRendition) *
+                                       (MAX(count, RENDITIONS_IN_STRUCT) - RENDITIONS_IN_STRUCT)));
     SetPtr(rt, t);
     _XmRTCount(rt) = count;
   }
   _XmRTDisplay(rt) = _XmRTDisplay(table);
-#ifdef XTHREADS
   if (app) {
     _XmAppUnlock(app);
   }
   else {
     _XmProcessUnlock();
   }
-#endif
   return (rt);
 }
 
@@ -1524,7 +1511,7 @@ int XmRenderTableGetTags(XmRenderTable table, XmStringTag **tag_list)
   app = XtDisplayToApplicationContext(_XmRTDisplay(table));
   (void)app; /* unused but required for _XmAppLock */
   _XmAppLock(app);
-  *tag_list = (XmStringTag *)XtMalloc(sizeof(XmStringTag) * _XmRTCount(table));
+  *tag_list = (XmStringTag *)_XmMallocArray(_XmRTCount(table), sizeof(XmStringTag));
   for (i = 0; i < _XmRTCount(table); i++)
     (*tag_list)[i] = XtNewString(_XmRendTag(_XmRTRenditions(table)[i]));
   ret_val = _XmRTCount(table);
@@ -1551,28 +1538,24 @@ XmRendition *XmRenderTableGetRenditions(XmRenderTable table, char **tags, Cardin
   XtAppContext app = NULL;
   if ((table == NULL) || (tags == NULL) || (tag_count == 0))
     return (NULL);
-#ifdef XTHREADS
   if (_XmRTDisplay(table)) {
     app = XtDisplayToApplicationContext(_XmRTDisplay(table));
     _XmAppLock(app);
   }
-#endif
-  rends = (XmRendition *)XtMalloc(tag_count * sizeof(XmRendition));
+  rends = (XmRendition *)_XmMallocArray(tag_count, sizeof(XmRendition));
   count = 0;
-  for (i = 0; i < tag_count; i++) {
+  for (i = 0; (Cardinal)i < tag_count; i++) {
     rend = _XmRenderTableFindRendition(table, tags[i], FALSE, FALSE, FALSE, NULL);
     if (rend != NULL) {
       rends[count] = CopyRendition(rend);
       count++;
     }
   }
-  if (count < tag_count)
-    rends = (XmRendition *)XtRealloc((char *)rends, count * sizeof(XmRendition));
-#ifdef XTHREADS
+  if ((Cardinal)count < tag_count)
+    rends = (XmRendition *)_XmReallocArray((char *)rends, count, sizeof(XmRendition));
   if (app) {
     _XmAppUnlock(app);
   }
-#endif
   return (rends);
 }
 
@@ -1626,36 +1609,6 @@ static void ValidateTag(XmRendition rend, XmStringTag dflt)
     _XmRendTag(rend) = _XmStringCacheTag(dflt, XmSTRING_TAG_STRLEN);
   }
 }
-#if USE_XFT
-static int GetSameRenditions(XmRendition *rend_cache, XmRendition rend, int count_rend)
-{
-  int i;
-  for (i = 0; i < count_rend; i++) {
-    if (rend_cache && (rend_cache[i]) &&
-        ((((_XmRendFontName(rend) && _XmRendFontName(rend_cache[i])) &&
-           !strcmp(_XmRendFontName(rend_cache[i]), _XmRendFontName(rend))) ||
-          (!_XmRendFontName(rend) && !_XmRendFontName(rend_cache[i]))) &&
-         (((_XmRendFontFoundry(rend) && _XmRendFontFoundry(rend_cache[i])) &&
-           !strcmp(_XmRendFontFoundry(rend_cache[i]), _XmRendFontFoundry(rend))) ||
-          (!_XmRendFontFoundry(rend) && !_XmRendFontFoundry(rend_cache[i]))) &&
-         (((_XmRendFontEncoding(rend) && _XmRendFontEncoding(rend_cache[i])) &&
-           !strcmp(_XmRendFontEncoding(rend_cache[i]), _XmRendFontEncoding(rend))) ||
-          (!_XmRendFontEncoding(rend) && !_XmRendFontEncoding(rend_cache[i]))) &&
-         (((_XmRendFontStyle(rend) && _XmRendFontStyle(rend_cache[i])) &&
-           !strcmp(_XmRendFontStyle(rend_cache[i]), _XmRendFontStyle(rend))) ||
-          (!_XmRendFontStyle(rend) && !_XmRendFontStyle(rend_cache[i]))) &&
-         _XmRendFontSize(rend) == _XmRendFontSize(rend_cache[i]) &&
-         _XmRendPixelSize(rend) == _XmRendPixelSize(rend_cache[i]) &&
-         _XmRendFontSlant(rend) == _XmRendFontSlant(rend_cache[i]) &&
-         _XmRendFontWeight(rend) == _XmRendFontWeight(rend_cache[i]) &&
-         _XmRendFontSpacing(rend) == _XmRendFontSpacing(rend_cache[i])))
-    {
-      return i;
-    }
-  }
-  return -1;
-}
-#endif
 /* Make sure all the font related resources make sense together and */
 /* then load the font specified by fontName if necessary. */
 static void ValidateAndLoadFont(XmRendition rend, Display *display)
@@ -1695,6 +1648,10 @@ static void ValidateAndLoadFont(XmRendition rend, Display *display)
                 display, XtCvtStringToFontStruct, args, num_args, &fromVal, &toVal, NULL);
             break;
           case XmFONT_IS_FONTSET:
+            /* libX11's XCreateFontSet() frees an empty base font name */
+            /* list that it does not own; never hand it one. */
+            if (*_XmRendFontName(rend) == '\0')
+              break;
             locale = XrmQuarkToString(XrmStringToQuark(setlocale(LC_ALL, NULL)));
             args[1].addr = (XPointer)&locale;
             args[1].size = sizeof(XrmString);
@@ -1706,11 +1663,10 @@ static void ValidateAndLoadFont(XmRendition rend, Display *display)
           case XmFONT_IS_XFT: {
             FcResult res;
             FcPattern *p;
-            static XmRendition *rend_cache;
-            static int count_rend = 0, num_rend;
-            num_rend = GetSameRenditions(rend_cache, rend, count_rend);
-            if (num_rend >= 0 && (display == _XmRendDisplay(rend_cache[num_rend]))) {
-              _XmRendXftFont(rend) = _XmRendXftFont(rend_cache[num_rend]);
+            XftFont *cached;
+            if (LookupXftFont(display, rend, &cached)) {
+              /* FreeRendition closes the font, so take a reference. */
+              _XmRendXftFont(rend) = cached ? XftFontCopy(display, cached) : NULL;
             }
             else {
               _XmRendPattern(rend) = FcPatternCreate();
@@ -1737,11 +1693,11 @@ static void ValidateAndLoadFont(XmRendition rend, Display *display)
               if (_XmRendFontSpacing(rend))
                 FcPatternAddInteger(_XmRendPattern(rend), FC_SPACING, _XmRendFontSpacing(rend));
               p = XftFontMatch(display, 0, _XmRendPattern(rend), &res);
-              _XmRendXftFont(rend) = XftFontOpenPattern(display, p);
-              rend_cache = (XmRendition *)XtRealloc(
-                  (char *)rend_cache, (Cardinal)(sizeof(XmRendition) * (count_rend + 1)));
-              rend_cache[count_rend] = _XmRenditionCopy(rend, TRUE);
-              count_rend++;
+              _XmRendXftFont(rend) = p ? XftFontOpenPattern(display, p) : NULL;
+              /* The font owns the pattern only once it is open. */
+              if (p != NULL && _XmRendXftFont(rend) == NULL)
+                FcPatternDestroy(p);
+              CacheXftFont(display, rend);
             }
           }
             result = _XmRendXftFont(rend) != NULL;
@@ -1963,9 +1919,9 @@ void XmRenditionRetrieve(XmRendition rendition, ArgList arglist, Cardinal argcou
     return;
   _XmProcessLock();
   /* Get resources */
-  for (i = 0; i < argcount; i++) {
+  for (i = 0; (Cardinal)i < argcount; i++) {
     arg = &(arglist[i]);
-    for (j = 0; j < _XmNumRenditionResources; j++) {
+    for (j = 0; (Cardinal)j < _XmNumRenditionResources; j++) {
       res = &(_XmRenditionResources[j]);
       if (strcmp(res->resource_name, arg->name) == 0) {
         /* CR 7890: Font hook - if there's a fontName but the
@@ -2028,14 +1984,12 @@ void XmRenditionUpdate(XmRendition rendition, ArgList arglist, Cardinal argcount
   XtAppContext app = NULL;
   if (rendition == NULL)
     return;
-#ifdef XTHREADS
   if (_XmRendDisplay(rendition)) {
     app = XtDisplayToApplicationContext(_XmRendDisplay(rendition));
     _XmAppLock(app);
   }
   if (_XmRendDisplay(rendition) && (_XmRendDisplay(rendition) != display))
     display = _XmRendDisplay(rendition);
-#endif
   /* Save old values to check for dependencies and free memory. */
   oldtag = _XmRendTag(rendition);
   oldname = _XmRendFontName(rendition);
@@ -2048,9 +2002,9 @@ void XmRenditionUpdate(XmRendition rendition, ArgList arglist, Cardinal argcount
     RenewRendition(rendition);
     can_free = FALSE;
   }
-  for (i = 0; i < argcount; i++) {
+  for (i = 0; (Cardinal)i < argcount; i++) {
     arg = &(arglist[i]);
-    for (j = 0; j < _XmNumRenditionResources; j++) {
+    for (j = 0; (Cardinal)j < _XmNumRenditionResources; j++) {
       res = &(_XmRenditionResources[j]);
       if (strcmp(res->resource_name, arg->name) == 0) {
         CopyFromArg(
@@ -2084,11 +2038,9 @@ void XmRenditionUpdate(XmRendition rendition, ArgList arglist, Cardinal argcount
     XmTabListFree(oldtabs);
   ValidateTag(rendition, oldtag);
   ValidateAndLoadFont(rendition, display);
-#ifdef XTHREADS
   if (app) {
     _XmAppUnlock(app);
   }
-#endif
 }
 
 /*****************************************************************************/
@@ -2132,15 +2084,18 @@ static XmConst char *CVTproperties[] = {
 static char CVTtransfervector[256];
 static int CVTtvinited = 0;
 /* Use this macro to encapsulate the code that extends the output
-   buffer as needed */
+   buffer as needed.  srcsize is strlen(src); the buffer always has
+   room for it and the terminating NUL. */
 #define CVTaddString(dest, src, srcsize) \
   { \
-    if ((chars_used + srcsize) > allocated_size) { \
-      allocated_size *= 2; \
-      buffer = XtRealloc(buffer, allocated_size); \
+    if ((size_t)(chars_used + (srcsize)) >= (size_t)allocated_size) { \
+      while ((size_t)(chars_used + (srcsize)) >= (size_t)allocated_size) \
+        allocated_size *= 2; \
+      dest = XtRealloc(dest, allocated_size); \
     } \
-    strcat(buffer, src); \
-    chars_used += srcsize; \
+    memcpy((dest) + chars_used, src, srcsize); \
+    chars_used += (srcsize); \
+    (dest)[chars_used] = '\0'; \
   }
 
 unsigned int XmRenderTableCvtToProp(Widget widget, /* unused */
@@ -2152,8 +2107,7 @@ unsigned int XmRenderTableCvtToProp(Widget widget, /* unused */
   int chars_used = 0, size;
   char *buffer;
   char *str;
-  char temp[2048];
-  char temp2[1024];
+  char temp[256];
   XmRendition rendition;
   _XmWidgetToAppContext(widget);
   _XmAppLock(app);
@@ -2161,13 +2115,15 @@ unsigned int XmRenderTableCvtToProp(Widget widget, /* unused */
   _XmProcessLock();
   if (CVTtvinited == 0) {
     CVTtvinited = 1;
-    strncpy(CVTtransfervector, "", 255);
+    size_t len = 0;
     CVTtransfervector[0] = '\0';
-    for (i = 0; CVTproperties[i] != NULL; i++) {
-      strcat(CVTtransfervector, CVTproperties[i]);
-      strcat(CVTtransfervector, ",");
-    }
-    strcat(CVTtransfervector, "\n");
+    for (i = 0; CVTproperties[i] != NULL && len < sizeof(CVTtransfervector); i++)
+      len += snprintf(CVTtransfervector + len,
+                      sizeof(CVTtransfervector) - len,
+                      "%s,",
+                      CVTproperties[i]);
+    if (len < sizeof(CVTtransfervector))
+      snprintf(CVTtransfervector + len, sizeof(CVTtransfervector) - len, "\n");
   }
   /* Copy the transfer vector into the output buffer. */
   strncpy(buffer, CVTtransfervector, allocated_size - 1);
@@ -2177,65 +2133,59 @@ unsigned int XmRenderTableCvtToProp(Widget widget, /* unused */
   /* Now iterate over the list of renditions */
   for (i = 0; i < _XmRTCount(table); i++) {
     rendition = _XmRTRenditions(table)[i];
-    snprintf(temp, sizeof temp, "\"%s\", ", _XmRendTag(rendition));
-    size = strlen(temp);
-    CVTaddString(buffer, temp, size);
-    if (_XmRendFontType(rendition) == XmAS_IS)
-      str = "-1, ";
-    else {
-      snprintf(temp,
-               sizeof temp,
-               "%u \"%s\" %u,",
-               _XmRendFontType(rendition),
-               _XmRendFontName(rendition),
-               _XmRendLoadModel(rendition));
-      str = temp;
+    /* Names and tab lists can be of any length: add them piecewise */
+    /* rather than through a fixed size buffer that truncates them. */
+    CVTaddString(buffer, "\"", 1);
+    CVTaddString(buffer, _XmRendTag(rendition), strlen(_XmRendTag(rendition)));
+    CVTaddString(buffer, "\", ", 3);
+    if ((_XmRendFontType(rendition) == XmAS_IS) || (_XmRendFontName(rendition) == NULL)) {
+      CVTaddString(buffer, "-1, ", 4);
     }
-    size = strlen(str);
-    CVTaddString(buffer, str, size);
+    else {
+      snprintf(temp, sizeof(temp), "%u \"", _XmRendFontType(rendition));
+      CVTaddString(buffer, temp, strlen(temp));
+      CVTaddString(buffer, _XmRendFontName(rendition), strlen(_XmRendFontName(rendition)));
+      snprintf(temp, sizeof(temp), "\" %u,", _XmRendLoadModel(rendition));
+      CVTaddString(buffer, temp, strlen(temp));
+    }
     if ((unsigned int)(unsigned long)_XmRendTabs(rendition) == XmAS_IS ||
-        _XmRendTabs(rendition) == NULL)
-      str = "-1, ";
+        _XmRendTabs(rendition) == NULL) {
+      CVTaddString(buffer, "-1, ", 4);
+    }
     else {
       _XmTab tab;
       _XmTabList tlist;
       int number;
-      strncpy(temp, "[ ", 2);
-      temp[2] = '\0';
+      CVTaddString(buffer, "[ ", 2);
       tlist = (_XmTabList)_XmRendTabs(rendition);
       number = tlist->count;
       tab = (_XmTab)tlist->start;
       while (number > 0) {
-        strncpy(temp2, temp, 1023);
-        temp2[1023] = '\0';
         snprintf(temp,
-                 sizeof(temp) - 5,
-                 "%s %f %u %u %u, ",
-                 temp2,
+                 sizeof temp,
+                 " %f %u %u %u, ",
                  tab->value,
                  tab->units,
                  tab->alignment,
                  tab->offsetModel);
+        CVTaddString(buffer, temp, strlen(temp));
         tab = (_XmTab)tab->next;
         number--;
       }
-      strcat(temp, " ], ");
+      CVTaddString(buffer, " ], ", 4);
+    }
+    if (_XmRendBG(rendition) == XmUNSPECIFIED_PIXEL)
+      str = "-1, ";
+    else {
+      snprintf(temp, sizeof(temp), "%lu, ", _XmRendBG(rendition));
       str = temp;
     }
     size = strlen(str);
     CVTaddString(buffer, str, size);
-    if (_XmRendBG(rendition) == XmAS_IS)
+    if (_XmRendFG(rendition) == XmUNSPECIFIED_PIXEL)
       str = "-1, ";
     else {
-      sprintf(temp, "%lu, ", _XmRendBG(rendition));
-      str = temp;
-    }
-    size = strlen(str);
-    CVTaddString(buffer, str, size);
-    if (_XmRendFG(rendition) == XmAS_IS)
-      str = "-1, ";
-    else {
-      sprintf(temp, "%lu, ", _XmRendFG(rendition));
+      snprintf(temp, sizeof(temp), "%lu, ", _XmRendFG(rendition));
       str = temp;
     }
     size = strlen(str);
@@ -2243,7 +2193,7 @@ unsigned int XmRenderTableCvtToProp(Widget widget, /* unused */
     if (_XmRendUnderlineType(rendition) == XmAS_IS)
       str = "-1, ";
     else {
-      sprintf(temp, "%d, ", _XmRendUnderlineType(rendition));
+      snprintf(temp, sizeof(temp), "%d, ", _XmRendUnderlineType(rendition));
       str = temp;
     }
     size = strlen(str);
@@ -2251,12 +2201,12 @@ unsigned int XmRenderTableCvtToProp(Widget widget, /* unused */
     if (_XmRendStrikethruType(rendition) == XmAS_IS)
       str = "-1, ";
     else {
-      sprintf(temp, "%d, ", _XmRendStrikethruType(rendition));
+      snprintf(temp, sizeof(temp), "%d, ", _XmRendStrikethruType(rendition));
       str = temp;
     }
     size = strlen(str);
     CVTaddString(buffer, str, size);
-    CVTaddString(buffer, "\n", size);
+    CVTaddString(buffer, "\n", 1);
   }
   /* Return the converted rendertable string */
   *prop_return = buffer;
@@ -2265,7 +2215,7 @@ unsigned int XmRenderTableCvtToProp(Widget widget, /* unused */
   return (chars_used + 1);
 }
 
-typedef enum { T_NL, T_INT, T_FLOAT, T_SEP, T_OPEN, T_CLOSE, T_STR, T_EOF } TokenType;
+typedef enum { T_NL, T_INT, T_FLOAT, T_SEP, T_OPEN, T_CLOSE, T_STR, T_EOF, T_ERROR } TokenType;
 
 typedef struct _TokenRec {
   TokenType type;
@@ -2274,13 +2224,19 @@ typedef struct _TokenRec {
   char *string;
 } TokenRec, *Token;
 
+/* Every token but T_EOF consumes at least one character.  A T_STR */
+/* string is owned by the token: callers that keep it must set */
+/* token->string to NULL, otherwise it is freed by the next call. */
 static Token ReadToken(char *string, int *position, Token reusetoken)
 {
   Token new_token = reusetoken;
   int pos = *position;
   int count;
+  if (new_token->type == T_STR)
+    XtFree(new_token->string);
+  new_token->string = NULL;
   /* Skip whitespace but not newlines */
-  while (isspace(string[pos]) && !(string[pos] == '\n'))
+  while (isspace((unsigned char)string[pos]) && !(string[pos] == '\n'))
     pos++;
   /* Select token type */
   switch (string[pos]) {
@@ -2304,23 +2260,21 @@ static Token ReadToken(char *string, int *position, Token reusetoken)
       pos++;
       break;
     case '"': /* String result */
-      count = 1;
-      while (string[pos + count] != '"' && string[pos + count] != '\0')
+      count = 0;
+      while (string[pos + 1 + count] != '"' && string[pos + 1 + count] != '\0')
         count++; /* Scan for end of string */
       new_token->type = T_STR;
-      new_token->string = NULL;
-      count -= 1;
-      if (count > 0) {
-        new_token->string = (char *)XtMalloc(count + 1);
-        strncpy(new_token->string, &string[pos + 1], count);
-        pos += count + 2;             /* Move past end quote */
-        new_token->string[count] = 0; /* Null terminate */
-      }
+      new_token->string = (char *)XtMalloc(count + 1);
+      memcpy(new_token->string, &string[pos + 1], count);
+      new_token->string[count] = 0; /* Null terminate */
+      pos += count + 1;             /* Move past opening quote and text */
+      if (string[pos] == '"')       /* and past the end quote, if any */
+        pos++;
       break;
     default:
-      if (isalpha(string[pos])) /* String result */ {
+      if (isalpha((unsigned char)string[pos])) /* String result */ {
         char temp[80];
-        for (count = 0; isalpha(string[pos + count]) && count < 79; count++)
+        for (count = 0; isalpha((unsigned char)string[pos + count]) && count < 79; count++)
           temp[count] = string[pos + count];
         temp[count] = 0;
         pos += count;
@@ -2331,18 +2285,24 @@ static Token ReadToken(char *string, int *position, Token reusetoken)
         /* start converting a float number.  If it is exactly integer
        then we return an int,  otherwise return a float */
         double result;
-        int intresult;
         char *newpos;
         result = strtod(&(string[pos]), &newpos);
-        intresult = (int)result;
-        pos = newpos - string;
-        if (((double)intresult) == result) /* Integer result */ {
-          new_token->type = T_INT;
-          new_token->integer = intresult;
+        if (newpos == &(string[pos])) {
+          /* Not a number either: consume the offending character. */
+          new_token->type = T_ERROR;
+          pos++;
         }
         else {
-          new_token->type = T_FLOAT;
-          new_token->real = (float)result;
+          pos = newpos - string;
+          if (result >= INT_MIN && result <= INT_MAX && ((double)(int)result) == result) {
+            /* Integer result */
+            new_token->type = T_INT;
+            new_token->integer = (int)result;
+          }
+          else {
+            new_token->type = T_FLOAT;
+            new_token->real = (float)result;
+          }
         }
       }
   }
@@ -2350,13 +2310,339 @@ static Token ReadToken(char *string, int *position, Token reusetoken)
   return (new_token);
 }
 #if USE_XFT
-static struct _XmXftDrawCacheStruct {
-  Display *display;
-  Window window;
-  XftDraw *draw;
-} *_XmXftDrawCache = NULL;
+/*
+ * Per-display Xft state: the XftDraw of each window that has been drawn
+ * into, the XftColor of each (colormap, pixel) pair, and the font opened
+ * for each font description, all in hash tables so that every Xft draw
+ * does not scan a list or ask the server for the colour of a pixel.  A
+ * record lives until its display is closed.
+ *
+ * The colour of a pixel is remembered only where it cannot change: in the
+ * default colormap of a screen whose default visual has a static class.
+ * In any other colormap a cell may be stored into, or freed and allocated
+ * again, so the colour of the pixel of a GC is asked for at every draw.
+ * The colours of renditions are remembered in the default colormap, as
+ * they always have been.
+ */
+typedef struct _XmXftColorRec {
+  Colormap colormap;
+  XftColor color; /* color.pixel is the rest of the key */
+} XmXftColorRec;
 
-static int _XmXftDrawCacheSize = 0;
+typedef struct _XmXftDisplayRec {
+  struct _XmXftDisplayRec *next;
+  Display *display;
+  int extension;
+  XmHashTable draws;  /* Window -> XftDraw * */
+  XmHashTable colors; /* XmXftColorRec * -> XmXftColorRec * */
+  XmHashTable fonts;  /* XmXftFontRec * -> XmXftFontRec * */
+} XmXftDisplayRec;
+
+static XmXftDisplayRec *_XmXftDisplays = NULL;
+
+static Boolean CompareXftColor(XmHashKey k1, XmHashKey k2)
+{
+  XmXftColorRec *c1 = (XmXftColorRec *)k1, *c2 = (XmXftColorRec *)k2;
+  return (c1->color.pixel == c2->color.pixel && c1->colormap == c2->colormap);
+}
+
+static XmHashValue HashXftColor(XmHashKey k)
+{
+  XmXftColorRec *c = (XmXftColorRec *)k;
+  return (XmHashValue)(c->color.pixel ^ (c->colormap << 7));
+}
+
+static Boolean FreeXftColor(XmHashKey k, XtPointer value, XtPointer data)
+{
+  XtFree((char *)value);
+  return False;
+}
+
+/*
+ * A font opened by ValidateAndLoadFont, and the rendition resources that
+ * describe it.  The record holds its own reference to the font, and its
+ * own copy of the strings, so that it does not depend on what happens to
+ * the renditions that use the font.
+ */
+typedef struct _XmXftFontRec {
+  char *name, *foundry, *encoding, *style;
+  int size, pixel_size, slant, weight, spacing;
+  XftFont *font; /* NULL if it failed to open */
+} XmXftFontRec;
+
+static void XftFontDesc(XmRendition rend, XmXftFontRec *desc)
+{
+  desc->name = NameIsString(_XmRendFontName(rend)) ? _XmRendFontName(rend) : NULL;
+  desc->foundry = _XmRendFontFoundry(rend);
+  desc->encoding = _XmRendFontEncoding(rend);
+  desc->style = _XmRendFontStyle(rend);
+  desc->size = _XmRendFontSize(rend);
+  desc->pixel_size = _XmRendPixelSize(rend);
+  desc->slant = _XmRendFontSlant(rend);
+  desc->weight = _XmRendFontWeight(rend);
+  desc->spacing = _XmRendFontSpacing(rend);
+  desc->font = NULL;
+}
+
+static Boolean SameString(char *s1, char *s2)
+{
+  return ((s1 == NULL && s2 == NULL) || (s1 != NULL && s2 != NULL && strcmp(s1, s2) == 0));
+}
+
+static Boolean CompareXftFont(XmHashKey k1, XmHashKey k2)
+{
+  XmXftFontRec *f1 = (XmXftFontRec *)k1, *f2 = (XmXftFontRec *)k2;
+  return (f1->size == f2->size && f1->pixel_size == f2->pixel_size && f1->slant == f2->slant &&
+          f1->weight == f2->weight && f1->spacing == f2->spacing &&
+          SameString(f1->name, f2->name) && SameString(f1->foundry, f2->foundry) &&
+          SameString(f1->encoding, f2->encoding) && SameString(f1->style, f2->style));
+}
+
+static unsigned int HashString(unsigned int h, char *s)
+{
+  if (s != NULL)
+    while (*s)
+      h = h * 31 + (unsigned char)*s++;
+  return h * 31;
+}
+
+static XmHashValue HashXftFont(XmHashKey k)
+{
+  XmXftFontRec *f = (XmXftFontRec *)k;
+  unsigned int h = 0;
+  h = HashString(h, f->name);
+  h = HashString(h, f->foundry);
+  h = HashString(h, f->encoding);
+  h = HashString(h, f->style);
+  h = h * 31 + (unsigned int)f->size;
+  h = h * 31 + (unsigned int)f->pixel_size;
+  h = h * 31 + (unsigned int)f->slant;
+  h = h * 31 + (unsigned int)f->weight;
+  h = h * 31 + (unsigned int)f->spacing;
+  return (XmHashValue)(h & 0x7FFFFFFF);
+}
+
+/* Close a font of a display that is being closed; the connection is
+ * still open, and Xft releases the font's server resources. */
+static Boolean FreeXftFont(XmHashKey k, XtPointer value, XtPointer data)
+{
+  XmXftFontRec *f = (XmXftFontRec *)value;
+  if (f->font != NULL)
+    XftFontClose((Display *)data, f->font);
+  XtFree(f->name);
+  XtFree(f->foundry);
+  XtFree(f->encoding);
+  XtFree(f->style);
+  XtFree((char *)f);
+  return False;
+}
+
+static int XftDisplayClose(Display *display, XExtCodes *codes)
+{
+  XmXftDisplayRec **prev, *rec;
+  _XmProcessLock();
+  for (prev = &_XmXftDisplays; (rec = *prev) != NULL; prev = &rec->next)
+    if (rec->display == display && rec->extension == codes->extension) {
+      *prev = rec->next;
+      /* The XftDraws are not destroyed: the server has already freed the
+       * Pictures of the windows that went away, and Xft is closing too. */
+      _XmFreeHashTable(rec->draws);
+      _XmMapHashTable(rec->colors, FreeXftColor, NULL);
+      _XmFreeHashTable(rec->colors);
+      _XmMapHashTable(rec->fonts, FreeXftFont, (XtPointer)display);
+      _XmFreeHashTable(rec->fonts);
+      XtFree((char *)rec);
+      break;
+    }
+  _XmProcessUnlock();
+  return 0;
+}
+
+/* Call with the process lock held. */
+static XmXftDisplayRec *FindXftDisplay(Display *display, Boolean create)
+{
+  XmXftDisplayRec **prev, *rec;
+  XExtCodes *codes;
+  for (prev = &_XmXftDisplays; (rec = *prev) != NULL; prev = &rec->next)
+    if (rec->display == display) {
+      if (prev != &_XmXftDisplays) { /* Keep the last display used first. */
+        *prev = rec->next;
+        rec->next = _XmXftDisplays;
+        _XmXftDisplays = rec;
+      }
+      return rec;
+    }
+  if (!create || (codes = XAddExtension(display)) == NULL)
+    return NULL;
+  XESetCloseDisplay(display, codes->extension, XftDisplayClose);
+  rec = XtNew(XmXftDisplayRec);
+  rec->display = display;
+  rec->extension = codes->extension;
+  rec->draws = _XmAllocHashTable(64, NULL, NULL);
+  rec->colors = _XmAllocHashTable(64, CompareXftColor, HashXftColor);
+  rec->fonts = _XmAllocHashTable(16, CompareXftFont, HashXftFont);
+  rec->next = _XmXftDisplays;
+  _XmXftDisplays = rec;
+  return rec;
+}
+
+/*
+ * Destroy callback of a widget whose window has an XftDraw: destroy the
+ * XftDraw while the window still exists, so that the table does not keep
+ * every window ever drawn into, nor hand a stale XftDraw to a new window
+ * that gets the same XID.
+ */
+static void XftDrawWidgetDestroyed(Widget w, XtPointer client_data, XtPointer call_data)
+{
+  Window window = (Window)client_data;
+  XmXftDisplayRec *rec;
+  XftDraw *draw = NULL;
+  _XmProcessLock();
+  if ((rec = FindXftDisplay(XtDisplay(w), False)) != NULL &&
+      (draw = (XftDraw *)_XmGetHashEntry(rec->draws, (XmHashKey)window)) != NULL)
+    (void)_XmRemoveHashEntry(rec->draws, (XmHashKey)window);
+  _XmProcessUnlock();
+  /* If the widget was unrealized meanwhile, the server has already freed
+   * the window and its Picture: only forget the XftDraw then. */
+  if (draw != NULL && XtWindow(w) == window)
+    XftDrawDestroy(draw);
+}
+
+/* Grow a table once it holds more entries than buckets. */
+static void AddHashEntry(XmHashTable table, XmHashKey key, XtPointer value)
+{
+  _XmAddHashEntry(table, key, value);
+  if (_XmHashTableCount(table) > _XmHashTableSize(table))
+    _XmResizeHashTable(table, 2 * _XmHashTableSize(table));
+}
+
+/*
+ * The font opened earlier on display for the font resources of rend,
+ * which may be NULL if it failed to open; False if there is none.  This
+ * saves building and matching a pattern for every rendition.
+ */
+static Boolean LookupXftFont(Display *display, XmRendition rend, XftFont **font)
+{
+  XmXftDisplayRec *rec;
+  XmXftFontRec key, *found = NULL;
+  XftFontDesc(rend, &key);
+  _XmProcessLock();
+  if ((rec = FindXftDisplay(display, False)) != NULL)
+    found = (XmXftFontRec *)_XmGetHashEntry(rec->fonts, (XmHashKey)&key);
+  if (found != NULL)
+    *font = found->font;
+  _XmProcessUnlock();
+  return (found != NULL);
+}
+
+/* Remember the font just opened for rend, until display is closed. */
+static void CacheXftFont(Display *display, XmRendition rend)
+{
+  XmXftDisplayRec *rec;
+  XmXftFontRec key, *entry;
+  XftFontDesc(rend, &key);
+  _XmProcessLock();
+  if ((rec = FindXftDisplay(display, True)) != NULL &&
+      _XmGetHashEntry(rec->fonts, (XmHashKey)&key) == NULL) {
+    entry = XtNew(XmXftFontRec);
+    *entry = key;
+    entry->name = XtNewString(key.name);
+    entry->foundry = XtNewString(key.foundry);
+    entry->encoding = XtNewString(key.encoding);
+    entry->style = XtNewString(key.style);
+    if (_XmRendXftFont(rend) != NULL)
+      entry->font = XftFontCopy(display, _XmRendXftFont(rend));
+    AddHashEntry(rec->fonts, (XmHashKey)entry, (XtPointer)entry);
+  }
+  _XmProcessUnlock();
+}
+
+/* The colormap of the widget that owns window, else the default one. */
+static Colormap WindowColormap(Display *display, Window window)
+{
+  Widget w = XtWindowToWidget(display, window);
+  if (w != NULL && w->core.colormap != None)
+    return w->core.colormap;
+  return DefaultColormap(display, DefaultScreen(display));
+}
+
+/*
+ * Whether the colours of colormap cannot change: it is the default
+ * colormap of a screen whose default visual is StaticGray, StaticColor
+ * or TrueColor.  The visual of another colormap is not known here.
+ */
+static Boolean ColormapIsStatic(Display *display, Colormap colormap)
+{
+  int i, c;
+  for (i = 0; i < ScreenCount(display); i++)
+    if (colormap == DefaultColormap(display, i)) {
+      c = DefaultVisual(display, i)->class;
+      return (c == StaticGray || c == StaticColor || c == TrueColor);
+    }
+  return False;
+}
+
+/* The XftColor for pixel in colormap, asking the server once if cache. */
+static XftColor GetXftColor(Display *display, Colormap colormap, Pixel pixel, Boolean cache)
+{
+  XmXftDisplayRec *rec;
+  XmXftColorRec key, *entry;
+  XColor xcol;
+  key.colormap = colormap;
+  key.color.pixel = pixel;
+  key.color.color.red = key.color.color.green = key.color.color.blue = 0;
+  key.color.color.alpha = 0xFFFF;
+  if (display == NULL)
+    return key.color;
+  if (!cache) {
+    memset(&xcol, 0, sizeof(xcol));
+    xcol.pixel = pixel;
+    XQueryColor(display, colormap, &xcol);
+    key.color.color.red = xcol.red;
+    key.color.color.green = xcol.green;
+    key.color.color.blue = xcol.blue;
+    return key.color;
+  }
+  _XmProcessLock();
+  rec = FindXftDisplay(display, True);
+  entry = rec ? (XmXftColorRec *)_XmGetHashEntry(rec->colors, (XmHashKey)&key) : NULL;
+  if (entry != NULL) {
+    key.color = entry->color;
+    _XmProcessUnlock();
+    return key.color;
+  }
+  _XmProcessUnlock();
+  memset(&xcol, 0, sizeof(xcol));
+  xcol.pixel = pixel;
+  XQueryColor(display, colormap, &xcol);
+  key.color.color.red = xcol.red;
+  key.color.color.green = xcol.green;
+  key.color.color.blue = xcol.blue;
+  _XmProcessLock();
+  if ((rec = FindXftDisplay(display, True)) != NULL &&
+      _XmGetHashEntry(rec->colors, (XmHashKey)&key) == NULL) {
+    entry = XtNew(XmXftColorRec);
+    *entry = key;
+    AddHashEntry(rec->colors, (XmHashKey)entry, (XtPointer)entry);
+  }
+  _XmProcessUnlock();
+  return key.color;
+}
+
+static XftColor GetCachedXftColor(Display *display, Pixel color)
+{
+  if (display == NULL)
+    return GetXftColor(NULL, None, color, True);
+  return GetXftColor(display, DefaultColormap(display, DefaultScreen(display)), color, True);
+}
+
+/* The XftColor to draw pixel with into window. */
+static XftColor GetDrawXftColor(Display *display, Window window, Pixel pixel)
+{
+  Colormap colormap = WindowColormap(display, window);
+  return GetXftColor(display, colormap, pixel, ColormapIsStatic(display, colormap));
+}
+
 static XErrorHandler oldErrorHandler __attribute__((unused));
 static int xft_error __attribute__((unused));
 /* Suppress unused variable warning */
@@ -2376,48 +2662,44 @@ static int __attribute__((unused)) _XmXftErrorHandler(Display *display, XErrorEv
 
 XftDraw *_XmXftDrawCreate(Display *display, Window window)
 {
-  XftDraw *draw;
-  int i;
-  for (i = 0; i < _XmXftDrawCacheSize; i++) {
-    if (_XmXftDrawCache[i].display == display && _XmXftDrawCache[i].window == window) {
-      return _XmXftDrawCache[i].draw;
-    }
-  }
+  XmXftDisplayRec *rec;
+  XftDraw *draw = NULL;
+  Widget widget;
+  _XmProcessLock();
+  if ((rec = FindXftDisplay(display, True)) != NULL)
+    draw = (XftDraw *)_XmGetHashEntry(rec->draws, (XmHashKey)window);
+  _XmProcessUnlock();
+  if (draw != NULL)
+    return draw;
   if (!(draw = XftDrawCreate(display,
                              window,
                              DefaultVisual(display, DefaultScreen(display)),
                              DefaultColormap(display, DefaultScreen(display)))))
     draw = XftDrawCreateBitmap(display, window);
-  /* Store it in the cache. Look for an empty slot first */
-  for (i = 0; i < _XmXftDrawCacheSize; i++)
-    if (_XmXftDrawCache[i].display == NULL) {
-      _XmXftDrawCache[i].display = display;
-      _XmXftDrawCache[i].draw = draw;
-      _XmXftDrawCache[i].window = window;
-      return draw;
-    }
-  i = _XmXftDrawCacheSize; /* Next free index */
-  _XmXftDrawCacheSize = _XmXftDrawCacheSize * 2 + 8;
-  _XmXftDrawCache = (struct _XmXftDrawCacheStruct *)XtRealloc(
-      (char *)_XmXftDrawCache, sizeof(struct _XmXftDrawCacheStruct) * _XmXftDrawCacheSize);
-  memset(_XmXftDrawCache + i, 0, (_XmXftDrawCacheSize - i) * sizeof(*_XmXftDrawCache));
-  _XmXftDrawCache[i].display = display;
-  _XmXftDrawCache[i].draw = draw;
-  _XmXftDrawCache[i].window = window;
+  if (draw == NULL)
+    return NULL;
+  _XmProcessLock();
+  if ((rec = FindXftDisplay(display, True)) != NULL)
+    AddHashEntry(rec->draws, (XmHashKey)window, (XtPointer)draw);
+  _XmProcessUnlock();
+  if (rec != NULL && (widget = XtWindowToWidget(display, window)) != NULL)
+    XtAddCallback(widget, XtNdestroyCallback, XftDrawWidgetDestroyed, (XtPointer)window);
   return draw;
 }
 
 void _XmXftDrawDestroy(Display *display, Window window, XftDraw *draw)
 {
-  int i;
-  for (i = 0; i < _XmXftDrawCacheSize; i++)
-    if (_XmXftDrawCache[i].display == display && _XmXftDrawCache[i].window == window) {
-      _XmXftDrawCache[i].display = NULL;
-      _XmXftDrawCache[i].draw = NULL;
-      _XmXftDrawCache[i].window = None;
-      XftDrawDestroy(draw);
-      return;
-    }
+  XmXftDisplayRec *rec;
+  XtPointer found = NULL;
+  _XmProcessLock();
+  if ((rec = FindXftDisplay(display, True)) != NULL &&
+      (found = _XmGetHashEntry(rec->draws, (XmHashKey)window)) != NULL)
+    (void)_XmRemoveHashEntry(rec->draws, (XmHashKey)window);
+  _XmProcessUnlock();
+  if (found != NULL) {
+    XftDrawDestroy(draw);
+    return;
+  }
   XmeWarning(NULL, "_XmXftDrawDestroy() this should not happen\n");
 }
 
@@ -2433,15 +2715,10 @@ void _XmXftDrawString2(Display *display,
 {
   XftDraw *draw = _XmXftDrawCreate(display, window);
   XGCValues gc_val;
-  XColor xcol;
   XftColor xftcol;
+  /* XGetGCValues reads Xlib's copy of the GC; it is not a round trip. */
   XGetGCValues(display, gc, GCForeground, &gc_val);
-  xcol.pixel = gc_val.foreground;
-  XQueryColor(display, DefaultColormap(display, DefaultScreen(display)), &xcol);
-  xftcol.color.red = xcol.red;
-  xftcol.color.blue = xcol.blue;
-  xftcol.color.green = xcol.green;
-  xftcol.color.alpha = 0xFFFF;
+  xftcol = GetDrawXftColor(display, window, gc_val.foreground);
   switch (bpc) {
     case 1:
       XftDrawStringUtf8(draw, &xftcol, font, x, y, (XftChar8 *)s, len);
@@ -2486,15 +2763,8 @@ void _XmXftDrawString(Display *display,
     }
     if (_XmRendBG(rend) == XmUNSPECIFIED_PIXEL) {
       XGCValues gc_val;
-      XColor xcol;
       XGetGCValues(display, _XmRendGC(rend), GCBackground, &gc_val);
-      xcol.pixel = gc_val.background;
-      XQueryColor(display, DefaultColormapOfScreen(DefaultScreenOfDisplay(display)), &xcol);
-      bg_color.pixel = xcol.pixel;
-      bg_color.color.red = xcol.red;
-      bg_color.color.green = xcol.green;
-      bg_color.color.blue = xcol.blue;
-      bg_color.color.alpha = 0xFFFF;
+      bg_color = GetDrawXftColor(display, window, gc_val.background);
     }
     XftDrawRect(draw,
                 &bg_color,
@@ -2505,15 +2775,8 @@ void _XmXftDrawString(Display *display,
   }
   if (_XmRendFG(rend) == XmUNSPECIFIED_PIXEL) {
     XGCValues gc_val;
-    XColor xcol;
     XGetGCValues(display, _XmRendGC(rend), GCForeground, &gc_val);
-    xcol.pixel = gc_val.foreground;
-    XQueryColor(display, DefaultColormapOfScreen(DefaultScreenOfDisplay(display)), &xcol);
-    fg_color.pixel = xcol.pixel;
-    fg_color.color.red = xcol.red;
-    fg_color.color.green = xcol.green;
-    fg_color.color.blue = xcol.blue;
-    fg_color.color.alpha = 0xFFFF;
+    fg_color = GetDrawXftColor(display, window, gc_val.foreground);
   }
   switch (bpc) {
     case 1:
@@ -2535,39 +2798,6 @@ void _XmXftSetClipRectangles(
 {
   XftDraw *d = _XmXftDrawCreate(display, window);
   XftDrawSetClipRectangles(d, x, y, rects, n);
-}
-
-static XftColor GetCachedXftColor(Display *display, Pixel color)
-{
-  static XftColor *color_cache = NULL;
-  static int colors_count = 0;
-  XftColor xftcol = {0, {0, 0, 0, 0xFFFF}};
-  XColor xcol;
-  Boolean color_exist = FALSE;
-  int i;
-  if (color_cache != NULL) {
-    for (i = 0; i < colors_count; ++i) {
-      if (color_cache[i].pixel == color) {
-        xftcol = color_cache[i];
-        color_exist = TRUE;
-        break;
-      }
-    }
-  }
-  if (!color_exist) {
-    xcol.pixel = color;
-    XQueryColor(display, DefaultColormap(display, DefaultScreen(display)), &xcol);
-    xftcol.pixel = color;
-    xftcol.color.red = xcol.red;
-    xftcol.color.blue = xcol.blue;
-    xftcol.color.green = xcol.green;
-    xftcol.color.alpha = 0xFFFF;
-    color_cache = (XftColor *)XtRealloc((char *)color_cache,
-                                        (Cardinal)(sizeof(XftColor) * (colors_count + 1)));
-    if (color_cache != NULL)
-      color_cache[colors_count++] = xftcol;
-  }
-  return xftcol;
 }
 
 XftColor _XmXftGetXftColor(Display *display, Pixel color)
@@ -2593,13 +2823,15 @@ XmRenderTable XmRenderTableCvtFromProp(Widget w, char *prop, unsigned int len) /
   XmRendition rendition;
   XmRendition *rarray;
   int rarray_count, rarray_max;
-  /* These must both be big enough for the number of passed parameters */
+  /* Header items; columns beyond these are ignored. */
   char *items[20];
+  int nitems;
   char *name;
+  /* Each item adds at most 3 args and 1 string; extra columns that */
+  /* do not fit are rejected. */
   Arg args[20];
-  /* This must be big enough to hold all the strings returned by
-     readtoken */
   char *freelater[5];
+  XmTabList tablist;
   int scanpointer, j, count, freecount, i;
   Token token;
   _XmWidgetToAppContext(w);
@@ -2608,23 +2840,28 @@ XmRenderTable XmRenderTableCvtFromProp(Widget w, char *prop, unsigned int len) /
   scanpointer = 0;
   rarray_max = 10;
   rarray_count = 0;
-  rarray = (XmRendition *)XtMalloc(sizeof(XmRendition) * rarray_max);
+  rarray = (XmRendition *)_XmMallocArray(rarray_max, sizeof(XmRendition));
   name = "";
-  for (j = 0; j < 20; j++)
-    items[j] = NULL;
-  /* Read the list of items */
-  for (j = 0; j < 20;) {
-    token = ReadToken(prop, &scanpointer, &reusetoken);
-    if (token->type == T_NL)
-      break;
-    if (token->type == T_STR) {
-      items[j] = token->string;
-      j++;
-    }
-  }
-  j = -1;
+  tablist = NULL;
   count = 0;
   freecount = 0;
+  reusetoken.type = T_EOF;
+  reusetoken.string = NULL;
+  token = &reusetoken;
+  /* Read the list of items */
+  for (nitems = 0; nitems < (int)XtNumber(items);) {
+    token = ReadToken(prop, &scanpointer, &reusetoken);
+    if (token->type == T_NL || token->type == T_EOF)
+      break;
+    if (token->type == T_STR) {
+      items[nitems++] = token->string;
+      token->string = NULL;
+    }
+  }
+  /* Skip any further items */
+  while (token->type != T_NL && token->type != T_EOF)
+    token = ReadToken(prop, &scanpointer, &reusetoken);
+  j = -1;
   while (True) {
     token = ReadToken(prop, &scanpointer, &reusetoken);
     /* We skip the separators */
@@ -2633,7 +2870,7 @@ XmRenderTable XmRenderTableCvtFromProp(Widget w, char *prop, unsigned int len) /
     if (token->type == T_EOF)
       goto finish;
     j++; /* Go to next item in items array */
-    if (items[j] == NULL) {
+    if (j >= nitems) {
       /* End of line processing.  Scan for NewLine */
       while (token->type != T_NL && token->type != T_EOF)
         token = ReadToken(prop, &scanpointer, &reusetoken);
@@ -2647,16 +2884,25 @@ XmRenderTable XmRenderTableCvtFromProp(Widget w, char *prop, unsigned int len) /
       for (i = 0; i < freecount; i++)
         XtFree(freelater[i]);
       freecount = 0;
+      /* The rendition has its own copy of the tab list */
+      if (tablist != NULL) {
+        XmTabListFree(tablist);
+        tablist = NULL;
+      }
       /* Record rendition in array */
       if (rarray_count >= rarray_max) {
         /* Extend array if necessary */
         rarray_max += 10;
-        rarray = (XmRendition *)XtRealloc((char *)rarray, sizeof(XmRendition) * rarray_max);
+        rarray = (XmRendition *)_XmReallocArray((char *)rarray, rarray_max, sizeof(XmRendition));
       }
-      if (token->type == T_EOF)
-        goto finish;
       rarray[rarray_count] = rendition;
       rarray_count++;
+      if (token->type == T_EOF)
+        goto finish;
+    }
+    else if ((count + 3 > (int)XtNumber(args)) || (freecount >= (int)XtNumber(freelater))) {
+      /* Too many columns for one rendition */
+      goto finish;
     }
     else if (strcmp(items[j], XmNtag) == 0) {
       /* Next item should be a string with the name of the new
@@ -2665,29 +2911,31 @@ XmRenderTable XmRenderTableCvtFromProp(Widget w, char *prop, unsigned int len) /
         name = token->string;
         freelater[freecount] = token->string;
         freecount++;
+        token->string = NULL;
       }
       else {
-        goto error;
+        goto finish;
       }
     }
     else if (strcmp(items[j], XmNfont) == 0) {
       /* If the next item is a number then we have a font
          id,  otherwise we are reading in a fontset */
       if (token->type != T_INT)
-        goto error;
+        goto finish;
       if (token->integer != -1) { /* AS IS */
         XtSetArg(args[count], XmNfontType, token->integer);
         count++;
         token = ReadToken(prop, &scanpointer, &reusetoken);
         if (token->type != T_STR)
-          goto error;
+          goto finish;
         XtSetArg(args[count], XmNfontName, token->string);
         count++;
         freelater[freecount] = token->string;
         freecount++;
+        token->string = NULL;
         token = ReadToken(prop, &scanpointer, &reusetoken);
         if (token->type != T_INT)
-          goto error;
+          goto finish;
         XtSetArg(args[count], XmNloadModel, token->integer);
         count++;
       }
@@ -2697,95 +2945,99 @@ XmRenderTable XmRenderTableCvtFromProp(Widget w, char *prop, unsigned int len) /
          FLOAT INT INT INT then CLOSE and SEP */
       if (token->type == T_INT) { /* Should be AS IS */
         if (token->integer != -1)
-          goto error;
+          goto finish;
       }
-      else if (token->type == T_OPEN) {
+      else if (token->type == T_OPEN && tablist == NULL) {
         float value;
         int units, align;
         XmOffsetModel model;
-        XmTabList tablist;
         XmTab tabs[1];
-        tablist = NULL;
         token = ReadToken(prop, &scanpointer, &reusetoken);
         while (token->type != T_CLOSE) {
           if (token->type != T_FLOAT && token->type != T_INT)
-            goto error;
+            goto finish;
           if (token->type == T_FLOAT)
             value = token->real;
           else
             value = (float)token->integer;
           token = ReadToken(prop, &scanpointer, &reusetoken);
           if (token->type != T_INT)
-            goto error;
+            goto finish;
           units = token->integer;
           token = ReadToken(prop, &scanpointer, &reusetoken);
           if (token->type != T_INT)
-            goto error;
+            goto finish;
           align = token->integer;
           token = ReadToken(prop, &scanpointer, &reusetoken);
           if (token->type != T_INT)
-            goto error;
+            goto finish;
           model = (XmOffsetModel)token->integer;
           tabs[0] = XmTabCreate(value, units, model, align, NULL);
           tablist = XmTabListInsertTabs(tablist, tabs, 1, 1000);
           XtFree((char *)tabs[0]);
           /* Go to next separator to skip unknown future values */
-          while (token->type != T_SEP)
+          while (token->type != T_SEP) {
+            if (token->type == T_NL || token->type == T_EOF)
+              goto finish;
             token = ReadToken(prop, &scanpointer, &reusetoken);
-          if (token->type == T_SEP)
-            token = ReadToken(prop, &scanpointer, &reusetoken);
+          }
+          token = ReadToken(prop, &scanpointer, &reusetoken);
         }
         XtSetArg(args[count], XmNtabList, tablist);
         count++;
       }
       else
-        goto error;
+        goto finish;
     }
     else if (strcmp(items[j], XmNbackground) == 0) {
       if (token->type != T_INT)
-        goto error;
-      if (token->type != -1) {
+        goto finish;
+      if (token->integer != -1) {
         XtSetArg(args[count], XmNrenditionBackground, token->integer);
         count++;
       }
     }
     else if (strcmp(items[j], XmNforeground) == 0) {
       if (token->type != T_INT)
-        goto error;
-      if (token->type != -1) {
+        goto finish;
+      if (token->integer != -1) {
         XtSetArg(args[count], XmNrenditionForeground, token->integer);
         count++;
       }
     }
     else if (strcmp(items[j], XmNunderlineType) == 0) {
       if (token->type != T_INT)
-        goto error;
-      if (token->type != -1) {
+        goto finish;
+      if (token->integer != -1) {
         XtSetArg(args[count], XmNunderlineType, token->integer);
         count++;
       }
     }
     else if (strcmp(items[j], XmNstrikethruType) == 0) {
       if (token->type != T_INT)
-        goto error;
-      if (token->type != -1) {
+        goto finish;
+      if (token->integer != -1) {
         XtSetArg(args[count], XmNstrikethruType, token->integer);
         count++;
       }
     }
   }
 finish:
+  /* Free what a malformed or truncated last line left behind */
+  for (i = 0; i < freecount; i++)
+    XtFree(freelater[i]);
+  if (tablist != NULL)
+    XmTabListFree(tablist);
+  if (reusetoken.type == T_STR)
+    XtFree(reusetoken.string);
+  for (i = 0; i < nitems; i++)
+    XtFree(items[i]);
   new_rt = XmRenderTableAddRenditions(new_rt, rarray, rarray_count, XmMERGE_REPLACE);
   for (i = 0; i < rarray_count; i++)
     XmRenditionFree(rarray[i]);
+  XtFree((char *)rarray);
   _XmAppUnlock(app);
   return (new_rt);
-error:
-  /* Free temp strings returned by ReadToken */
-  for (i = 0; i < freecount; i++)
-    XtFree((char *)freelater[i]);
-  freecount = 0;
-  goto finish;
 }
 
 void XmRenderTableGetDefaultFontExtents(XmRenderTable rendertable,
@@ -2798,7 +3050,6 @@ void XmRenderTableGetDefaultFontExtents(XmRenderTable rendertable,
   Boolean success;
   short indx;
   int h, a, d;
-#ifdef XTHREADS
   XtAppContext app = NULL;
   if (_XmRTDisplay(rendertable))
     app = XtDisplayToApplicationContext(_XmRTDisplay(rendertable));
@@ -2806,7 +3057,6 @@ void XmRenderTableGetDefaultFontExtents(XmRenderTable rendertable,
     _XmAppLock(app);
   else
     _XmProcessLock();
-#endif
   a = d = h = 0;
   /* Get default rendition */
   success = _XmRenderTableFindFallback(rendertable, tag, FALSE, &indx, &rend);
@@ -2846,12 +3096,10 @@ void XmRenderTableGetDefaultFontExtents(XmRenderTable rendertable,
 #endif
     }
   }
-#ifdef XTHREADS
   if (app)
     _XmAppUnlock(app);
   else
     _XmProcessUnlock();
-#endif
   if (ascent)
     *ascent = a;
   if (descent)

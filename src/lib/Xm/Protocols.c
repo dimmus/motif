@@ -354,6 +354,7 @@ static void RealizeHandler(Widget w, XtPointer closure, XEvent *event, Boolean *
   switch (event->type) {
     case MapNotify:
       InstallProtocols(w, ap_mgr);
+      break;
     default:
       break;
   }
@@ -435,9 +436,9 @@ static XmProtocolMgr AddProtocolMgr(XmAllProtocolsMgr ap_mgr, Atom property)
   }
   if (ap_mgr->num_protocol_mgrs + 2 >= ap_mgr->max_protocol_mgrs) {
     ap_mgr->max_protocol_mgrs += 2;
-    ap_mgr->protocol_mgrs = (XmProtocolMgrList)XtRealloc(
-        (char *)ap_mgr->protocol_mgrs,
-        ((unsigned)(ap_mgr->max_protocol_mgrs) * sizeof(XmProtocolMgr)));
+    ap_mgr->protocol_mgrs = (XmProtocolMgrList)_XmReallocArray((char *)ap_mgr->protocol_mgrs,
+                                                               ap_mgr->max_protocol_mgrs,
+                                                               sizeof(XmProtocolMgr));
   }
   ap_mgr->protocol_mgrs[ap_mgr->num_protocol_mgrs++] = p_mgr = XtNew(XmProtocolMgrRec);
   p_mgr->property = property;
@@ -518,8 +519,9 @@ static void AddProtocols(Widget shell,
     else
       add_size = PROTOCOL_BLOCK_SIZE;
     p_mgr->max_protocols += add_size;
-    p_mgr->protocols = (XmProtocolList)XtRealloc(
-        (char *)p_mgr->protocols, (unsigned)(p_mgr->max_protocols) * sizeof(XmProtocol));
+    p_mgr->protocols = (XmProtocolList)_XmReallocArray((char *)p_mgr->protocols,
+                                                       p_mgr->max_protocols,
+                                                       sizeof(XmProtocol));
   }
   for (i = p_mgr->num_protocols, j = 0; i < new_num_protocols; i++, j++) {
     newSec = XtMalloc(size);

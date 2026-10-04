@@ -748,7 +748,7 @@ void _XmLabelGCloneMenuSavvy(WidgetClass wc, XmMenuSavvyTrait mst)
  ************************************************************************/
 static void ClassPartInitialize(WidgetClass cl)
 {
-  register XmLabelGadgetClass wc = (XmLabelGadgetClass)cl;
+  XmLabelGadgetClass wc = (XmLabelGadgetClass)cl;
   XmLabelGadgetClass super = (XmLabelGadgetClass)wc->rect_class.superclass;
   XmGadgetClassExt *wcePtr, *scePtr;
   if (wc->label_class.setOverrideCallback == XmInheritSetOverrideCallback)
@@ -849,6 +849,35 @@ static void InitializePosthook(Widget req, Widget new_w, ArgList args, Cardinal 
   XtFree((char *)ext);
 }
 
+/*
+ * Every Get/SetValues on a gadget pushes extension data for the length
+ * of the call.  Keep a few of those records rather than a calloc/free
+ * pair each time.  The records come from XtCalloc and a cached one is
+ * cleared on reuse, so it does not matter which code frees one.  Call
+ * these with the process lock held.
+ */
+#define MAX_FREE_EXT_DATA 4
+static XmWidgetExtData freeExtData[MAX_FREE_EXT_DATA];
+static Cardinal numFreeExtData = 0;
+
+static XmWidgetExtData NewExtData(void)
+{
+  XmWidgetExtData extData;
+  if (numFreeExtData == 0)
+    return (XmWidgetExtData)XtCalloc(1, sizeof(XmWidgetExtDataRec));
+  extData = freeExtData[--numFreeExtData];
+  bzero((char *)extData, sizeof(XmWidgetExtDataRec));
+  return extData;
+}
+
+static void FreeExtData(XmWidgetExtData extData)
+{
+  if (numFreeExtData < MAX_FREE_EXT_DATA)
+    freeExtData[numFreeExtData++] = extData;
+  else
+    XtFree((char *)extData);
+}
+
 /************************************************************************
  *
  *  SetValuesPrehook
@@ -868,6 +897,7 @@ static Boolean SetValuesPrehook(
   size = ec->core_class.widget_size;
   newSec = (XmLabelGCacheObject)_XmExtObjAlloc(size);
   reqSec = (XmLabelGCacheObject)_XmExtObjAlloc(size);
+  extData = NewExtData();
   _XmProcessUnlock();
   newSec->object.self = (Widget)newSec;
   newSec->object.widget_class = ec;
@@ -879,7 +909,6 @@ static Boolean SetValuesPrehook(
   newSec->ext.logicalParent = newParent;
   newSec->ext.extensionType = XmCACHE_EXTENSION;
   memcpy(&(newSec->label_cache), LabG_Cache(newParent), sizeof(XmLabelGCacheObjPart));
-  extData = (XmWidgetExtData)XtCalloc(1, sizeof(XmWidgetExtDataRec));
   extData->widget = (Widget)newSec;
   extData->reqWidget = (Widget)reqSec;
   _XmPushWidgetExtData(newParent, extData, XmCACHE_EXTENSION);
@@ -909,6 +938,7 @@ static void GetValuesPrehook(Widget newParent, ArgList args, Cardinal *num_args)
   ec = (*cePtr)->secondaryObjectClass;
   size = ec->core_class.widget_size;
   newSec = (XmLabelGCacheObject)_XmExtObjAlloc(size);
+  extData = NewExtData();
   _XmProcessUnlock();
   newSec->object.self = (Widget)newSec;
   newSec->object.widget_class = ec;
@@ -920,7 +950,6 @@ static void GetValuesPrehook(Widget newParent, ArgList args, Cardinal *num_args)
   newSec->ext.logicalParent = newParent;
   newSec->ext.extensionType = XmCACHE_EXTENSION;
   memcpy(&(newSec->label_cache), LabG_Cache(newParent), sizeof(XmLabelGCacheObjPart));
-  extData = (XmWidgetExtData)XtCalloc(1, sizeof(XmWidgetExtDataRec));
   extData->widget = (Widget)newSec;
   _XmPushWidgetExtData(newParent, extData, XmCACHE_EXTENSION);
   XtGetSubvalues(
@@ -939,8 +968,8 @@ static void GetValuesPosthook(Widget new_w, ArgList args, Cardinal *num_args)
   _XmPopWidgetExtData(new_w, &ext, XmCACHE_EXTENSION);
   _XmProcessLock();
   _XmExtObjFree((XtPointer)ext->widget);
+  FreeExtData(ext);
   _XmProcessUnlock();
-  XtFree((char *)ext);
 }
 
 /************************************************************************
@@ -970,7 +999,7 @@ static Boolean SetValuesPosthook(
   _XmPopWidgetExtData(new_w, &ext, XmCACHE_EXTENSION);
   _XmExtObjFree((XtPointer)ext->widget);
   _XmExtObjFree((XtPointer)ext->reqWidget);
-  XtFree((char *)ext);
+  FreeExtData(ext);
   _XmProcessUnlock();
   return FALSE;
 }
@@ -1819,7 +1848,7 @@ void _XmRedisplayLabG(Widget wid, XEvent *event, Region region, LRectangle *back
       if (Pix(lw) != XmUNSPECIFIED_PIXMAP) {
         gc = LabG_NormalGC(lw);
         XmeGetPixmapData(XtScreen(lw), Pix(lw), NULL, &depth, NULL, NULL, NULL, NULL, NULL, NULL);
-        if (depth == XtParent(lw)->core.depth)
+        if (depth == (int)XtParent(lw)->core.depth)
           XCopyArea(XtDisplay(lw),
                     Pix(lw),
                     XtWindow(lw),
@@ -1851,7 +1880,7 @@ void _XmRedisplayLabG(Widget wid, XEvent *event, Region region, LRectangle *back
       if (pix_use != XmUNSPECIFIED_PIXMAP) {
         gc = LabG_InsensitiveGC(lw);
         XmeGetPixmapData(XtScreen(lw), pix_use, NULL, &depth, NULL, NULL, NULL, NULL, NULL, NULL);
-        if (depth == XtParent(lw)->core.depth)
+        if (depth == (int)XtParent(lw)->core.depth)
           XCopyArea(XtDisplay(lw),
                     pix_use,
                     XtWindow(lw),
@@ -2723,7 +2752,7 @@ Widget XmCreateLabelGadget(Widget parent, char *name, Arg *arglist, Cardinal arg
 
 Widget XmVaCreateLabelGadget(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);
@@ -2843,8 +2872,8 @@ static Boolean XmLabelGadgetGetBaselines(Widget wid, Dimension **baselines, int 
     _XmStringGetBaselines(LabG_Font(lw), LabG__label(lw), &(lw->label.baselines), &count);
     assert(lw->label.baselines != NULL);
     /* Store the current offset in an extra location. */
-    lw->label.baselines = (Dimension *)XtRealloc((char *)lw->label.baselines,
-                                                 (count + 1) * sizeof(Dimension));
+    lw->label.baselines =
+        (Dimension *)_XmReallocArray((char *)lw->label.baselines, count + 1, sizeof(Dimension));
     lw->label.baselines[count] = 0;
   }
   else {
@@ -2854,12 +2883,12 @@ static Boolean XmLabelGadgetGetBaselines(Widget wid, Dimension **baselines, int 
   delta = LabG_TextRect_y(lw) - lw->label.baselines[count];
   if (delta) {
     int tmp;
-    for (tmp = 0; tmp <= count; tmp++)
+    for (tmp = 0; (Cardinal)tmp <= count; tmp++)
       lw->label.baselines[tmp] += delta;
   }
   /* Copy the cached data. */
   *line_count = count;
-  *baselines = (Dimension *)XtMalloc(*line_count * sizeof(Dimension));
+  *baselines = (Dimension *)_XmMallocArray(*line_count, sizeof(Dimension));
   memcpy((char *)*baselines, (char *)lw->label.baselines, *line_count * sizeof(Dimension));
   return True;
 }

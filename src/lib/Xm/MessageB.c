@@ -764,8 +764,8 @@ XmGeoMatrix _XmMessageBoxGeoMatrixCreate(Widget wid, Widget instigator, XtWidget
 {
   XmMessageBoxWidget mb = (XmMessageBoxWidget)wid;
   XmGeoMatrix geoSpec;
-  register XmGeoRowLayout layoutPtr;
-  register XmKidGeometry boxPtr;
+  XmGeoRowLayout layoutPtr;
+  XmKidGeometry boxPtr;
   XmKidGeometry firstBoxInRow;
   Widget menubar = NULL;
   Widget workarea = NULL;
@@ -783,7 +783,7 @@ XmGeoMatrix _XmMessageBoxGeoMatrixCreate(Widget wid, Widget instigator, XtWidget
    */
   /* identify menu bar and work area children. */
   for (i = 0; i < nchildren; i++) {
-    register Widget w = mb->composite.children[i];
+    Widget w = mb->composite.children[i];
     if (menubar == NULL && XmIsRowColumn(w) &&
         ((XmRowColumnWidget)w)->row_column.type == XmMENU_BAR)
     {
@@ -902,7 +902,7 @@ XmGeoMatrix _XmMessageBoxGeoMatrixCreate(Widget wid, Widget instigator, XtWidget
       ++boxPtr;
     }
     for (i = 0; i < nchildren; i++) {
-      register Widget w = mb->composite.children[nchildren - i - 1];
+      Widget w = mb->composite.children[nchildren - i - 1];
       if (!IsAutoChild(mb, w) && IsButton(w) && _XmGeoSetupKid(boxPtr, w)) {
         ++boxPtr;
       }
@@ -916,7 +916,7 @@ XmGeoMatrix _XmMessageBoxGeoMatrixCreate(Widget wid, Widget instigator, XtWidget
       ++boxPtr;
     }
     for (i = 0; i < nchildren; i++) {
-      register Widget w = mb->composite.children[i];
+      Widget w = mb->composite.children[i];
       if (!IsAutoChild(mb, w) && IsButton(w) && _XmGeoSetupKid(boxPtr, w)) {
         ++boxPtr;
       }
@@ -1031,8 +1031,9 @@ static Widget CreateDialog(Widget parent,
   /****************/
   /* add dialogType to arglist and force to type passed in... */
   /*  allocate arglist, copy args, add dialog type arg */
-  argsNew = (ArgList)XtMalloc(sizeof(Arg) * (ac + 1));
-  memcpy(argsNew, al, sizeof(Arg) * ac);
+  argsNew = (ArgList)_XmMallocArray(ac + 1, sizeof(Arg));
+  if (ac > 0)
+    memcpy(argsNew, al, sizeof(Arg) * ac);
   XtSetArg(argsNew[ac], XmNdialogType, type);
   ac++;
   /*  create MessageBoxDialog free argsNew, return */
@@ -1049,7 +1050,7 @@ Widget XmCreateMessageBox(Widget parent, char *name, ArgList al, Cardinal ac)
 
 Widget XmVaCreateMessageBox(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

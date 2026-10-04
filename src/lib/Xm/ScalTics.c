@@ -32,7 +32,6 @@
 #include <Xm/Scale.h>
 #include <Xm/SeparatoG.h>
 #include <Xm/Xm.h>
-#include <Xm/XmosP.h> /* for allocate local */
 
 /************************************************************************
  *
@@ -85,7 +84,7 @@ void XmScaleSetTicks(Widget scale,
   real_num_med = (real_num_big - 1) * num_med;
   real_num_small = (real_num_big + real_num_med - 1) * num_small;
   sep_num = real_num_big + real_num_med + real_num_small;
-  sep = (Widget *)ALLOCATE_LOCAL(sep_num * sizeof(Widget));
+  sep = (Widget *)_XmMallocArray(sep_num, sizeof(Widget));
   if (orient == XmHORIZONTAL) {
     dim_res = XmNheight;
     orient = XmVERTICAL;
@@ -97,13 +96,13 @@ void XmScaleSetTicks(Widget scale,
   XtSetArg(args[0], XmNmargin, 0);
   XtSetArg(args[1], XmNorientation, orient);
   sep_num = 0;
-  for (i = 0; i < real_num_big; i++) {
+  for (i = 0; (int)i < real_num_big; i++) {
     n = 2;
     XtSetArg(args[n], dim_res, size_big);
     n++;
     sep[sep_num] = XmCreateSeparatorGadget(scale, "BigTic", args, n);
     sep_num++;
-    if (i == real_num_big - 1)
+    if ((int)i == real_num_big - 1)
       break;
     for (k = 0; k < num_small; k++) {
       n = 2;
@@ -132,6 +131,6 @@ void XmScaleSetTicks(Widget scale,
     }
   }
   XtManageChildren(sep, sep_num);
-  DEALLOCATE_LOCAL((char *)sep);
+  XtFree((char *)sep);
   _XmAppUnlock(app);
 }

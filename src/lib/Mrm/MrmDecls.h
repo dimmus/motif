@@ -23,6 +23,14 @@
 #ifndef MrmDecls_H
 #define MrmDecls_H
 
+/* The types used below.  MrmPublic.h includes this file at its end, after
+ * defining them, so the circular include is harmless either way. */
+#include <Mrm/MrmPublic.h>
+
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
 /*----------------------------------*/
 /* Error messages                   */
 /*----------------------------------*/
@@ -169,10 +177,6 @@ externalref _MrmConst char *_MrmMsg_0119;
 #define _ARGUMENTS(arglist) arglist
 #endif
 
-#if defined(__cplusplus) || defined(c_plusplus)
-extern "C" {
-#endif
-
 /* mrminit.c */
 extern void MrmInitialize  _ARGUMENTS(( void ));
 
@@ -191,12 +195,12 @@ extern Cardinal MrmOpenHierarchyPerDisplay  _ARGUMENTS(( Display *display , int 
 extern Cardinal MrmRegisterNames  _ARGUMENTS(( MrmRegisterArglist reglist ,int num_reg ));
 extern Cardinal MrmRegisterNamesInHierarchy  _ARGUMENTS(( MrmHierarchy hierarchy_id , MrmRegisterArglist reglist , int num_reg ));
 
-#if defined(__cplusplus) || defined(c_plusplus)
+#if defined(__cplusplus)
 extern Cardinal MrmRegisterClass  _ARGUMENTS(( int class_code , String class_name , String create_name , Widget (*creator )(...), WidgetClass class_record ));
 extern Cardinal MrmRegisterClassWithCleanup  _ARGUMENTS(( int class_code , String class_name , String create_name , Widget (*creator )(), WidgetClass class_record, void (*cleanup)(...) ));
 #else
-extern Cardinal MrmRegisterClass  _ARGUMENTS(( int class_code , String class_name , String create_name , Widget (*creator )(), WidgetClass class_record ));
-extern Cardinal MrmRegisterClassWithCleanup  _ARGUMENTS(( int class_code , String class_name , String create_name , Widget (*creator )(), WidgetClass class_record, void (*cleanup)() ));
+extern Cardinal MrmRegisterClass  _ARGUMENTS(( int class_code , String class_name , String create_name , Widget (*creator )(Widget, String, ArgList, Cardinal), WidgetClass class_record ));
+extern Cardinal MrmRegisterClassWithCleanup  _ARGUMENTS(( int class_code , String class_name , String create_name , Widget (*creator )(Widget, String, ArgList, Cardinal), WidgetClass class_record, void (*cleanup)(Widget) ));
 #endif
 
 #else
@@ -205,11 +209,18 @@ extern Cardinal MrmOpenHierarchy  _ARGUMENTS(( MrmCount num_files , String *name
 extern Cardinal MrmOpenHierarchyPerDisplay  _ARGUMENTS(( Display *display , MrmCount num_files , String *name_list , MrmOsOpenParamPtr *os_ext_list , MrmHierarchy *hierarchy_id_return ));
 extern Cardinal MrmRegisterNames  _ARGUMENTS(( MrmRegisterArglist reglist ,MrmCount num_reg ));
 extern Cardinal MrmRegisterNamesInHierarchy  _ARGUMENTS(( MrmHierarchy hierarchy_id , MrmRegisterArglist reglist , MrmCount num_reg ));
+#if defined(__cplusplus)
 extern Cardinal MrmRegisterClass  _ARGUMENTS(( MrmType class_code , String class_name , String create_name , Widget (*creator )(), WidgetClass class_record ));
 extern Cardinal MrmRegisterClassWithCleanup  _ARGUMENTS(( MrmType class_code , String class_name , String create_name , Widget (*creator )(), WidgetClass class_record, void (*cleanup)() ));
+#else
+extern Cardinal MrmRegisterClass  _ARGUMENTS(( MrmType class_code , String class_name , String create_name , Widget (*creator )(Widget, String, ArgList, Cardinal), WidgetClass class_record ));
+extern Cardinal MrmRegisterClassWithCleanup  _ARGUMENTS(( MrmType class_code , String class_name , String create_name , Widget (*creator )(Widget, String, ArgList, Cardinal), WidgetClass class_record, void (*cleanup)(Widget) ));
+#endif
 
 #endif
 
+extern Cardinal MrmOpenHierarchyFromBuffer  _ARGUMENTS(( unsigned char *uid_buffer , MrmHierarchy *hierarchy_id_return ));
+extern Cardinal MrmOpenHierarchyFromBufferWithSize  _ARGUMENTS(( unsigned char *uid_buffer , size_t uid_buffer_size , MrmHierarchy *hierarchy_id_return ));
 extern Cardinal MrmCloseHierarchy  _ARGUMENTS(( MrmHierarchy hierarchy_id ));
 extern Cardinal MrmFetchInterfaceModule  _ARGUMENTS(( MrmHierarchy hierarchy_id , char *module_name , Widget parent , Widget *w_return ));
 extern Cardinal MrmFetchWidget  _ARGUMENTS(( MrmHierarchy hierarchy_id , String index , Widget parent , Widget *w_return , MrmType *class_return ));
@@ -220,7 +231,7 @@ extern Cardinal MrmFetchSetValues  _ARGUMENTS(( MrmHierarchy hierarchy_id , Widg
 
 /* extern Cardinal XmRegisterMrmCallbacks () ; */
 
-#if defined(__cplusplus) || defined(c_plusplus)
+#if defined(__cplusplus)
 }
 #endif
 

@@ -43,18 +43,12 @@ static char rcsid[] = "$XConsortium: WmImage.c /main/7 1996/11/14 13:50:30 rswis
 #define MWM_NEED_IIMAGE
 #include "WmIBitmap.h"
 
-#ifdef MOTIF_ONE_DOT_ONE
-#include <stdio.h>
-#include <pwd.h>
-#define MATCH_CHAR 'P'		/* Default match character - defined in Xmos.p */
-#else
 #include <Xm/XmosP.h>
 /* Copied from XmosI.h */
 extern String _XmOSInitPath(
                         String file_name,
                         String env_pathname,
                         Boolean *user_path) ;
-#endif
 #ifdef WSM
 #include <Xm/IconFile.h>
 #include <Dt/GetDispRes.h>
@@ -74,9 +68,6 @@ extern String _XmOSInitPath(
 #include "WmMenu.h"
 #include "WmError.h"
 
-#ifdef MOTIF_ONE_DOT_ONE
-extern char    *getenv ();
-#endif
 
 
 /******************************<->*************************************
@@ -167,7 +158,7 @@ Pixmap MakeClientIconPixmap (
  *
  *************************************<->***********************************/
 
-Pixmap GetNamedPixmap (Screen *scr, String iconName,
+static Pixmap GetNamedPixmap (Screen *scr, String iconName,
 		       Pixel fg, Pixel bg, int depth)
 {
   Pixmap       pixmap = XmUNSPECIFIED_PIXMAP;
@@ -362,8 +353,8 @@ Pixmap MakeIconPixmap (ClientData *pCD, Pixmap bitmap, Pixmap mask, unsigned int
 
     /* don't make icon pixmap if bitmap is too small */
 
-    if ((width < pSD->iconImageMinimum.width) ||
-	(height < pSD->iconImageMinimum.height))
+    if (((int)width < pSD->iconImageMinimum.width) ||
+	((int)height < pSD->iconImageMinimum.height))
     {
 	/* bitmap is too small */
 	return ((Pixmap)NULL);
@@ -371,7 +362,7 @@ Pixmap MakeIconPixmap (ClientData *pCD, Pixmap bitmap, Pixmap mask, unsigned int
 #ifndef NO_CLIP_CENTER
 
     /* copy the center of the icon if too big */
-    if (width > pSD->iconImageMaximum.width)
+    if ((int)width > pSD->iconImageMaximum.width)
     {
 	src_x = (width - pSD->iconImageMaximum.width)/2;
     }
@@ -379,7 +370,7 @@ Pixmap MakeIconPixmap (ClientData *pCD, Pixmap bitmap, Pixmap mask, unsigned int
     {
 	src_x = 0;
     }
-    if (height > pSD->iconImageMaximum.height)
+    if ((int)height > pSD->iconImageMaximum.height)
     {
 	src_y = (height - pSD->iconImageMaximum.height)/2;
     }
@@ -469,11 +460,11 @@ Pixmap MakeIconPixmap (ClientData *pCD, Pixmap bitmap, Pixmap mask, unsigned int
 
     /* center the image */
 
-    if (width > pSD->iconImageMaximum.width)
+    if ((int)width > pSD->iconImageMaximum.width)
     {
 	width = pSD->iconImageMaximum.width;
     }
-    if (height > pSD->iconImageMaximum.height)
+    if ((int)height > pSD->iconImageMaximum.height)
     {
 	height = pSD->iconImageMaximum.height;
     }
@@ -521,7 +512,7 @@ Pixmap MakeIconPixmap (ClientData *pCD, Pixmap bitmap, Pixmap mask, unsigned int
     /* copy the bitmap to the pixmap */
 #ifndef DISALLOW_DEEP_ICONS
     if ((depth > 1) &&
-        (depth == DefaultDepth(DISPLAY, pSD->screen)))
+        ((int)depth == DefaultDepth(DISPLAY, pSD->screen)))
     {
 #ifndef NO_CLIP_CENTER
         XCopyArea (DISPLAY, bitmap, iconPixmap, imageGC, src_x, src_y,
@@ -919,9 +910,7 @@ char *BitmapPathName(char *string)
     static char  fileName[MAXWMPATH+1];
     char *retname;
     SubstitutionRec subs[1];
-#ifndef MOTIF_ONE_DOT_ONE
     char *homeDir = XmeGetHomeDirName();
-#endif
 
     if (!string || !*string)
     {
@@ -941,11 +930,7 @@ char *BitmapPathName(char *string)
      * Handle "~/.."
      */
     {
-#ifdef MOTIF_ONE_DOT_ONE
-	GetHomeDirName(fileName);
-#else
 	strcpy (fileName, homeDir);
-#endif
         strncat (fileName, &(string[1]), MAXWMPATH - strlen (fileName));
 	return (fileName);
     }
@@ -963,11 +948,7 @@ char *BitmapPathName(char *string)
 	if ((wmGD.bitmapDirectory[0] == '~') &&
 	    (wmGD.bitmapDirectory[1] == '/'))
 	{
-#ifdef MOTIF_ONE_DOT_ONE
-	    GetHomeDirName(fileName);
-#else
 	    strcpy (fileName, homeDir);
-#endif
             strncat (fileName, &wmGD.bitmapDirectory[1],
 		     MAXWMPATH - strlen (fileName));
 	} else {
@@ -988,9 +969,6 @@ char *BitmapPathName(char *string)
 
     /* Fall back on a path search */
 
-#ifdef MOTIF_ONE_DOT_ONE
-    return (NULL);
-#else
     {
 	char *search_path;
 	Boolean user_path;
@@ -1010,7 +988,6 @@ char *BitmapPathName(char *string)
 	XtFree(retname);
 	return (fileName);
     }
-#endif
 
 } /* END OF FUNCTION BitmapPathName */
 

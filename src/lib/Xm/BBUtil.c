@@ -93,7 +93,7 @@ static char *GetLabelString(XmLabelStringLoc l_loc)
 Widget _XmBB_CreateButtonG(Widget bb, XmString l_string, char *name, XmLabelStringLoc l_loc)
 {
   Arg al[10];
-  register Cardinal ac = 0;
+  Cardinal ac = 0;
   Widget button;
   XmTakesDefaultTrait trait_default;
   XmString default_label_string_loc = NULL;
@@ -122,7 +122,7 @@ Widget _XmBB_CreateButtonG(Widget bb, XmString l_string, char *name, XmLabelStri
 Widget _XmBB_CreateLabelG(Widget bb, XmString l_string, char *name, XmLabelStringLoc l_loc)
 {
   Arg al[10];
-  register int ac = 0;
+  int ac = 0;
   Widget label;
   XmString default_label_string_loc = NULL;
   /****************/

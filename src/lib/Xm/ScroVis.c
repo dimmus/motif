@@ -51,9 +51,9 @@ void XmScrollVisible(Widget scrw, Widget wid, Dimension hor_margin, Dimension ve
  **********************/
 {
   XmScrolledWindowWidget sw = (XmScrolledWindowWidget)scrw;
-  register Position newx, newy,   /* new workwindow position */
+  Position newx, newy,   /* new workwindow position */
       wx, wy;                     /* current workwindow position */
-  register unsigned short tw, th, /* widget sizes */
+  unsigned short tw, th, /* widget sizes */
       cw, ch;                     /* clipwindow sizes */
   Position dx, dy;                /* position inside the workwindow */
   Position src_x, src_y, dst_x, dst_y;

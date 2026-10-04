@@ -48,9 +48,7 @@ static char rcsid[] = "$TOG: WmResource.c /main/14 1997/04/15 10:30:02 dbl $"
 
 #include <Xm/XmP.h>
 #include <Xm/RowColumn.h>
-#ifndef MOTIF_ONE_DOT_ONE
 #include <Xm/ScreenP.h>		/* for XmGetXmScreen and screen.moveOpaque */
-#endif
 
 /*
  * include extern functions
@@ -201,11 +199,7 @@ void InitBuiltinSystemMenu(void)
     gotItAll = True;
     if(gotItAll)
     {
-#if 1
         tmpString = ((char *)GETMESSAGE(62, 60, "Restore _R  Alt<Key>F5 f.restore"));
-#else
-        tmpString = ((char *)GETMESSAGE(62, 49, "Restore _R  f.restore"));
-#endif
         if ((ResString =
              (char *)XtMalloc ((unsigned int) (strlen(tmpString) + 1))) == NULL)
         {
@@ -219,11 +213,7 @@ void InitBuiltinSystemMenu(void)
     }
     if(gotItAll)
     {
-#if 1
         tmpString = ((char *)GETMESSAGE(62, 61, "Move _M  Alt<Key>F7 f.move"));
-#else
-        tmpString = ((char *)GETMESSAGE(62, 50, "Move _M  f.move"));
-#endif
         if ((MovString =
              (char *)XtMalloc ((unsigned int) (strlen(tmpString) + 1))) == NULL)
         {
@@ -237,11 +227,7 @@ void InitBuiltinSystemMenu(void)
     }
     if(gotItAll)
     {
-#if 1
         tmpString = ((char *)GETMESSAGE(62, 62, "Size _S  Alt<Key>F8 f.resize"));
-#else
-        tmpString = ((char *)GETMESSAGE(62, 51, "Size _S  f.resize"));
-#endif
         if ((SizString =
              (char *)XtMalloc ((unsigned int) (strlen(tmpString) + 1))) == NULL)
         {
@@ -255,11 +241,7 @@ void InitBuiltinSystemMenu(void)
     }
     if(gotItAll)
     {
-#if 1
         tmpString = ((char *)GETMESSAGE(62, 63, "Minimize _n  Alt<Key>F9 f.minimize"));
-#else
-        tmpString = ((char *)GETMESSAGE(62, 52, "Minimize _n  f.minimize"));
-#endif
         if ((MinString =
              (char *)XtMalloc ((unsigned int) (strlen(tmpString) + 1))) == NULL)
         {
@@ -273,11 +255,7 @@ void InitBuiltinSystemMenu(void)
     }
     if(gotItAll)
     {
-#if 1
 	tmpString = ((char *)GETMESSAGE(62, 64, "Maximize _x  Alt<Key>F10 f.maximize"));
-#else
-	tmpString = ((char *)GETMESSAGE(62, 53, "Maximize _x  f.maximize"));
-#endif
 	if ((MaxString =
              (char *)XtMalloc ((unsigned int) (strlen(tmpString) + 1))) == NULL)
         {
@@ -291,11 +269,7 @@ void InitBuiltinSystemMenu(void)
     }
     if(gotItAll)
     {
-#if 1
         tmpString = ((char *)GETMESSAGE(62, 65, "Lower _L  Alt<Key>F3 f.lower"));
-#else
-        tmpString = ((char *)GETMESSAGE(62, 54, "Lower _L  f.lower"));
-#endif
         if ((LowString =
              (char *)XtMalloc ((unsigned int) (strlen(tmpString) + 1))) == NULL)
         {
@@ -4774,10 +4748,8 @@ ProcessScreenResources (WmScreenData *pSD, unsigned char *screenName)
 	    wmScreenResources,
 	    XtNumber (wmScreenResources), NULL, 0);
 
-#ifndef MOTIF_ONE_DOT_ONE
 	pSD->moveOpaque = (((XmScreen) XmGetXmScreen(XtScreen(pSD->screenTopLevelW)))
 			   -> screen.moveOpaque);
-#endif
     }
 
 #else /* WSM */
@@ -4803,10 +4775,8 @@ ProcessScreenResources (WmScreenData *pSD, unsigned char *screenName)
 	    (String)screenName, (String)screenName, wmScreenResources,
 	    XtNumber (wmScreenResources), NULL, 0);
 
-#ifndef MOTIF_ONE_DOT_ONE
 	pSD->moveOpaque =(((XmScreen) XmGetXmScreen(XtScreen(pSD->screenTopLevelW)))
 			  -> screen.moveOpaque);
-#endif
     }
 #endif /* WSM */
 
@@ -6028,10 +5998,10 @@ XmColorData * _WmGetDefaultColors (Screen *screen, Colormap colormap, String def
     static int defaultCount[2] = {0, 0};
     static int defaultSize[2] = {0, 0};
     int setId;
-    register XmColorData *set;
-    register int count;
-    register int size;
-    register int i;
+    XmColorData *set;
+    int count;
+    int size;
+    int i;
     Display *display = DisplayOfScreen (screen);
     XColor colorDef;
 

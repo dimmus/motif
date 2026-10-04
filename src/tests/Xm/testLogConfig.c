@@ -4,7 +4,9 @@
 #include <unistd.h>
 #include <check.h>
 
+#ifdef HAVE_CONFIG_H
 #include "config.h"
+#endif
 #include "suites.h"
 
 #include "Log.h"

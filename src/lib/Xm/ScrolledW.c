@@ -1380,12 +1380,12 @@ static void ConstantLayout(XmScrolledWindowWidget sw)
   VSBExists = ExistManaged((Widget)sw->swindow.vScrollBar);
   /* If there's no kid to clip, keep the scrollbars invisible
        by moving them out of the frame */
-  for (i = 0; i < clip->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < clip->composite.num_children; i++) {
     if (XtIsManaged(clip->composite.children[i]))
       break;
   }
   /* ran thru the entire list: no managed child in the clipwindow */
-  if (i == clip->composite.num_children) {
+  if ((Cardinal)i == clip->composite.num_children) {
     if (VSBExists) {
       XmeConfigureObject((Widget)sw->swindow.vScrollBar,
                          sw->core.width,
@@ -1423,7 +1423,7 @@ static void ConstantLayout(XmScrolledWindowWidget sw)
   newy = MAXPOS;
   sw->swindow.hmax = 0;
   sw->swindow.vmax = 0;
-  for (i = 0; i < clip->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < clip->composite.num_children; i++) {
     child = clip->composite.children[i];
     if (ExistManaged(child)) {
       swc = GetSWConstraint(child);
@@ -1815,7 +1815,7 @@ static void GetHorRects(Widget sw, XRectangle **hrect, Cardinal *num_hrect)
   Widget w;
   XmScrolledWindowWidget scw = (XmScrolledWindowWidget)sw;
   *num_hrect = 2;
-  *hrect = (XRectangle *)XtMalloc(sizeof(XRectangle) * (*num_hrect));
+  *hrect = (XRectangle *)_XmMallocArray(*num_hrect, sizeof(XRectangle));
   /* The hor rectangles are the ones that horizontally auto scroll,
        they are defined by areas on the left and right of the
        workarea, e.g. the margins, the spacing, the scrollbars
@@ -1854,7 +1854,7 @@ static void GetVertRects(Widget sw, XRectangle **vrect, Cardinal *num_vrect)
   Widget w;
   XmScrolledWindowWidget scw = (XmScrolledWindowWidget)sw;
   *num_vrect = 2;
-  *vrect = (XRectangle *)XtMalloc(sizeof(XRectangle) * (*num_vrect));
+  *vrect = (XRectangle *)_XmMallocArray(*num_vrect, sizeof(XRectangle));
   /* The vertical rectangles are the ones that vertically auto scroll,
        they are defined by areas on the top and bottom of the
        workarea, e.g. the margins, the spacing, the scrollbars
@@ -2862,7 +2862,7 @@ Widget XmCreateScrolledWindow(Widget parent, char *name, ArgList args, Cardinal 
 
 Widget XmVaCreateScrolledWindow(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

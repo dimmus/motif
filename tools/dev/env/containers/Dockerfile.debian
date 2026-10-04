@@ -1,0 +1,47 @@
+# Dockerfile for testing Motif build on Debian
+#
+# This file used to be called Dockerfile.freebsd, but it never was FreeBSD:
+# it is Debian with a few FreeBSD-looking environment variables, which no
+# part of the build reads.  FreeBSD cannot run in a Linux container; CI
+# builds and tests Motif in a real FreeBSD VM instead (the "freebsd" job
+# in .github/workflows/build.yml).
+FROM docker.io/debian:bookworm-slim
+
+LABEL maintainer="XDE Motif Development Team"
+LABEL description="Debian environment for testing Motif builds"
+LABEL version="1.0"
+
+# Set environment variables
+ENV DEBIAN_FRONTEND=noninteractive
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+
+# Install dependencies using the updated dependency checker
+COPY tools/dev/scripts/deps_check.sh /tmp/deps_check.sh
+RUN chmod +x /tmp/deps_check.sh && /tmp/deps_check.sh
+
+# Create working directory
+WORKDIR /build
+
+# Copy build script
+COPY tools/dev/env/scripts/build-motif.sh /usr/local/bin/build-motif.sh
+RUN chmod +x /usr/local/bin/build-motif.sh
+
+# Set up build environment
+ENV CC=clang
+ENV CXX=clang++
+ENV CFLAGS="-O2 -pipe -fstack-protector-strong -fno-strict-aliasing"
+ENV CXXFLAGS="-O2 -pipe -fstack-protector-strong -fno-strict-aliasing"
+ENV LDFLAGS="-Wl,--as-needed"
+ENV MAKEFLAGS="-j$(nproc)"
+
+# Create non-root user for building
+RUN useradd -m -s /bin/bash builder && \
+    echo 'builder ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+
+# Switch to builder user
+USER builder
+WORKDIR /home/builder
+
+# Default command
+CMD ["/usr/local/bin/build-motif.sh"]

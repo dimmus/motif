@@ -61,9 +61,6 @@ typedef union {
 /*
  * A data pointer as a passed-by-value reference
  */
-#if 0
-typedef unsigned		IDBDataHandle ;
-#endif
 
 typedef struct {
   IDBRecordNumber	rec_no ;		  /* record number */
@@ -184,6 +181,12 @@ typedef struct {
  * Number of bytes in a low-level file block = # bytes in an IDB file record
  */
 #define	IDBRecordSize	4096
+
+/*
+ * True if the len bytes at byte offset offs from the start of a record
+ * lie entirely within the record (see _UrmInBuffer).
+ */
+#define	_IdbInRecord(offs,len)	_UrmInBuffer(offs,len,IDBRecordSize)
 
 /*
  * IDB record header
@@ -372,6 +375,11 @@ typedef struct {
  */
 #define	IDBIndexLeafFreeMax	(IDBRecordSize - sizeof(IDBIndexLeafHdr))
 
+/*
+ * Max number of entries in a leaf index record
+ */
+#define	IDBIndexLeafMaxCount	(IDBIndexLeafFreeMax / IDBIndexLeafEntrySize)
+
 
 
 /*
@@ -432,6 +440,11 @@ typedef struct {
  * Max number of free bytes in node index record (0 entries)
  */
 #define	IDBIndexNodeFreeMax	(IDBRecordSize - sizeof(IDBIndexNodeHdr))
+
+/*
+ * Max number of entries in a node index record
+ */
+#define	IDBIndexNodeMaxCount	(IDBIndexNodeFreeMax / IDBIndexNodeEntrySize)
 
 /*
  * Max number of bytes consumed by a new entry

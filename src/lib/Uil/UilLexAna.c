@@ -55,7 +55,7 @@ static char rcsid[] = "$TOG: UilLexAna.c /main/14 1997/03/12 15:10:52 dbl $"
 #include <Xm/Xm.h>
 /* I think this one should be public too, it's not the case right now,
    and I don't want to include XmP.h here - dd */
-extern char *_XmStringGetCurrentCharset ();
+extern char *_XmStringGetCurrentCharset (void);
 #include <Xm/XmosP.h>	/* Need this for MB_CUR_MAX */
 
 #include <Mrm/MrmosI.h> /* Need this for _MrmOSSetLocale. */
@@ -83,6 +83,8 @@ typedef struct	_lex_buffer_type
 
 
 static lex_buffer_type *get_lex_buffer  _ARGUMENTS(( lex_buffer_type *az_current_lex_buffer ));
+static lex_buffer_type *get_prior_lex_buffer  _ARGUMENTS(( lex_buffer_type *az_current_lex_buffer ));
+static unsigned char *get_token_text  _ARGUMENTS(( lex_buffer_type *az_current_lex_buffer , int l_lex_pos ));
 #if debug_version
 static void dump_token  _ARGUMENTS(( lex_buffer_type *az_current_lex_buffer , int l_lex_pos ));
 #endif
@@ -997,7 +999,7 @@ static int	punc2_token[2] =
 **
 **--
 **/
-int	yylex()
+int	yylex(void)
 {
     unsigned char c_char;	    /* current character */
     int		l_class;	    /* current character's class */
@@ -1025,10 +1027,11 @@ int	yylex()
     /*
     **  Call the Status callback routine to report our progress.
     */
-    /* %COMPLETE  (between 0-50) */
-    Uil_percent_complete =
-      CEIL((int)( .5 * ((float)Uil_characters_read/(float)Uil_file_size))*100, 50);
-    if (Uil_cmd_z_command.status_cb != (Uil_continue_type(*)())NULL)
+    /* %COMPLETE  (between 0-50); an empty file would divide by zero */
+    if (Uil_file_size > 0)
+      Uil_percent_complete =
+	CEIL((int)( .5 * ((float)Uil_characters_read/(float)Uil_file_size))*100, 50);
+    if (Uil_cmd_z_command.status_cb != NULL)
 	diag_report_status();
 
 
@@ -1358,6 +1361,14 @@ found_localized_string:
 			 [src_az_current_source_buffer->w_current_position],
 			 MB_CUR_MAX);
 
+	  /*
+	  **  Treat the null at the end of the line (0) and an invalid
+	  **  multibyte sequence (-1) as single bytes, so that the end of
+	  **  the line is seen and the scan always advances.
+	  */
+	  if (mb_len < 1)
+	    mb_len = 1;
+
 	  mb_byte = src_az_current_source_buffer->c_text
 	    [src_az_current_source_buffer->w_current_position];
 
@@ -1416,6 +1427,14 @@ found_token:
     src_az_current_source_buffer->w_current_position -= z_cell.backup;
     l_lex_pos -= z_cell.backup;
 
+    /* the backup may reach back into the previous (full) lex buffer */
+
+    while (l_lex_pos < 0)
+    {
+	az_current_lex_buffer = get_prior_lex_buffer( az_current_lex_buffer );
+	l_lex_pos += l_max_lex_buffer_pos + 1;
+    }
+
     /* put a null at the end of the current lex buffer */
 
     az_current_lex_buffer->c_text[ l_lex_pos ] = 0;
@@ -1428,6 +1447,18 @@ found_token:
     {
 
 	key_keytable_entry_type	*az_keyword;
+
+	/*
+	**  A name that does not fit in the first lex buffer is too long
+	**  and is truncated below; only its start is needed.
+	*/
+
+	if (az_current_lex_buffer != az_first_lex_buffer)
+	{
+	    az_current_lex_buffer = az_first_lex_buffer;
+	    l_lex_pos = l_max_lex_buffer_pos + 1;
+	    az_current_lex_buffer->c_text[ l_lex_pos ] = 0;
+	}
 
 	/* check the case sensitivity flag and change case if necessary */
 
@@ -1448,7 +1479,7 @@ found_token:
 	    {
 	      /* check that the length of the name is in range */
 
-	      if (l_lex_pos > key_k_keyword_max_length)
+	      if ((unsigned long)l_lex_pos > key_k_keyword_max_length)
 		{
 		  l_lex_pos = key_k_keyword_max_length;
 		  az_current_lex_buffer->c_text[ l_lex_pos ] = 0;
@@ -1530,6 +1561,7 @@ found_token:
     case token_integer:
     {
 	long			l_integer;
+	unsigned char		*c_token;
 
 	yylval.b_type = UNS_INT_LITERAL;
 
@@ -1539,7 +1571,10 @@ found_token:
 	 */
 
         errno = 0;
-	l_integer = cvt_ascii_to_long(az_current_lex_buffer->c_text);
+	c_token = get_token_text( az_current_lex_buffer, l_lex_pos );
+	l_integer = cvt_ascii_to_long(c_token);
+	if (c_token != az_current_lex_buffer->c_text)
+	    XtFree( (char *)c_token );
 
 	if (errno != 0)
 	    diag_issue_diagnostic
@@ -1567,20 +1602,26 @@ found_token:
 
   case token_comment:       /* RAP preserve comments */
     {
-      int size;
+      size_t size, len;
+      unsigned char *c_token;
 
       if (last_token_seen != token_comment)
 	comment_text[0]=0;
 
-      size = (int)strlen((char *)az_current_lex_buffer->c_text)+1;
-      if ((size  + (int)strlen (comment_text)) >= comment_size)
+      c_token = get_token_text( az_current_lex_buffer, l_lex_pos );
+
+      /* the comment, a newline and a null */
+      size = strlen((char *)c_token) + strlen (comment_text) + 2;
+      if (size > (size_t)comment_size)
 	{
-	  comment_text = XtRealloc(comment_text, INCR_COMMENT_SIZE + strlen(comment_text));
-	  comment_size = INCR_COMMENT_SIZE + strlen (comment_text);
+	  comment_size = size + INCR_COMMENT_SIZE;
+	  comment_text = XtRealloc(comment_text, comment_size);
 	}
 
-      strcat (comment_text, (char *)az_current_lex_buffer->c_text);
-      strcat (comment_text, "\n");
+      len = strlen (comment_text);
+      snprintf (comment_text + len, comment_size - len, "%s\n", (char *)c_token);
+      if (c_token != az_current_lex_buffer->c_text)
+	XtFree( (char *)c_token );
       last_token_seen = token_comment;
 	    goto initialize_token_builder;
     }
@@ -1623,12 +1664,16 @@ found_primitive_string:
 
     case token_real:
     {
-	double	d_real;
+	double		d_real;
+	unsigned char	*c_token;
 
 	yylval.b_type = UNS_FLOAT_LITERAL;
 
         errno = 0;
-	d_real = atof((char *)az_current_lex_buffer->c_text);
+	c_token = get_token_text( az_current_lex_buffer, l_lex_pos );
+	d_real = atof((char *)c_token);
+	if (c_token != az_current_lex_buffer->c_text)
+	    XtFree( (char *)c_token );
 
 	if (errno != 0)
 	    diag_issue_diagnostic
@@ -1661,6 +1706,7 @@ found_primitive_string:
 		  src_az_current_source_buffer->w_current_position - 1,
 		  "character string",
 		  "before end of line" );
+	XM_FALLTHROUGH;
 
     case token_gstr:
 
@@ -1892,6 +1938,14 @@ found_error:
     src_az_current_source_buffer->w_current_position -= z_cell.backup;
     l_lex_pos -= z_cell.backup;
 
+    /* the backup may reach back into the previous (full) lex buffer */
+
+    while (l_lex_pos < 0)
+    {
+	az_current_lex_buffer = get_prior_lex_buffer( az_current_lex_buffer );
+	l_lex_pos += l_max_lex_buffer_pos + 1;
+    }
+
     /* put a null at the end of the current lex buffer */
 
     az_current_lex_buffer->c_text[ l_lex_pos ] = 0;
@@ -1953,7 +2007,7 @@ found_error:
 
 #define UNSCHAR_MINUS_ONE (unsigned char) 255;
 
-void  lex_initialize_analyzer( )
+void  lex_initialize_analyzer(void)
 
 {
 String language;
@@ -2047,7 +2101,7 @@ prev_yylval.az_source_record = src_az_current_source_record;
 **--
 **/
 
-void  Uil_lex_cleanup_analyzer( )
+void  Uil_lex_cleanup_analyzer(void)
 
 {
     /*	pointer to next buffer to free	*/
@@ -2247,6 +2301,69 @@ static lex_buffer_type *get_lex_buffer(lex_buffer_type *az_current_lex_buffer)
 
 }
 
+/*
+**  Return the lex buffer that precedes az_current_lex_buffer.
+*/
+
+static lex_buffer_type *get_prior_lex_buffer
+	(lex_buffer_type *az_current_lex_buffer)
+
+{
+    lex_buffer_type *az_lex_buffer;
+
+    _assert( az_current_lex_buffer != az_first_lex_buffer,
+	     "no lex buffer before the first one" );
+
+    for (az_lex_buffer = az_first_lex_buffer;
+	 az_lex_buffer->az_next_buffer != az_current_lex_buffer;
+	 az_lex_buffer = az_lex_buffer->az_next_buffer)
+	;
+
+    return az_lex_buffer;
+
+}
+
+/*
+**  Return the null terminated text of the current token.  A token that
+**  fits in the first lex buffer is returned in place; a longer one is
+**  copied to memory that the caller must free with XtFree.
+*/
+
+static unsigned char *get_token_text
+	(lex_buffer_type *az_current_lex_buffer, int l_lex_pos)
+
+{
+    lex_buffer_type	*az_lex_buffer;
+    unsigned char	*c_text;
+    unsigned char	*pc_char;
+    int			l_length;
+
+    if (az_current_lex_buffer == az_first_lex_buffer)
+	return az_current_lex_buffer->c_text;
+
+    l_length = l_lex_pos;
+    for (az_lex_buffer = az_first_lex_buffer;
+	 az_lex_buffer != az_current_lex_buffer;
+	 az_lex_buffer = az_lex_buffer->az_next_buffer)
+	l_length += l_max_lex_buffer_pos + 1;
+
+    c_text = (unsigned char *) XtMalloc( l_length + 1 );
+
+    pc_char = c_text;
+    for (az_lex_buffer = az_first_lex_buffer;
+	 az_lex_buffer != az_current_lex_buffer;
+	 az_lex_buffer = az_lex_buffer->az_next_buffer)
+    {
+	memmove( pc_char, az_lex_buffer->c_text, l_max_lex_buffer_pos + 1 );
+	pc_char += l_max_lex_buffer_pos + 1;
+    }
+    memmove( pc_char, az_current_lex_buffer->c_text, l_lex_pos );
+    pc_char[ l_lex_pos ] = 0;
+
+    return c_text;
+
+}
+
 
 /*
 **++
@@ -2425,7 +2542,7 @@ potential_overflow:
 
     l_value = (l_value * 10) + c_text[ pos ] - '0';
 
-    if (l_value > k_max_int)
+    if (l_value > k_max_int || c_text[ pos + 1 ] != 0)
     {
 	errno = ERANGE;
 	return k_max_int;

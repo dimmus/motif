@@ -107,13 +107,8 @@ static int		off_info_cnt = 0;
 #define _Offset(type,base,field)    \
         ((unsigned int)(base + XtOffsetOf(type, field)))
 
-#if defined(__STDC__)
 #define _OffsetArray(type,base,field)    \
         ((unsigned int)(base + XtOffsetOf(type, field)))
-#else
-#define _OffsetArray(type,base,field)    \
-        ((unsigned int)(base + XtOffsetOf(type, field[0])))
-#endif
 #define	_Pointer(base,offset) ((char *)(base)+(offset))
 
 #define ASNHEADERLEN 3
@@ -193,14 +188,14 @@ void		save_widget_machine_code(sym_widget_entry_type *widget_entry, URMResourceC
     az_src_rec = widget_entry->header.az_src_rec;
 
     if (widget_entry->resource_id != 0 ) {
-	sprintf (buffer, "Resource ID: %08lX", (unsigned long)widget_entry->resource_id);
+	snprintf (buffer, sizeof (buffer), "Resource ID: %08lX", (unsigned long)widget_entry->resource_id);
 	src_append_machine_code (
 		az_src_rec,
 		0,
 		0, 0,
 		buffer );
     } else if (widget_entry->obj_header.az_name != NULL) {
-	sprintf (buffer, "Resource index: %s",
+	snprintf (buffer, sizeof (buffer), "Resource index: %s",
 		 widget_entry->obj_header.az_name->c_text);
 	src_append_machine_code (
 		az_src_rec,
@@ -217,7 +212,7 @@ void		save_widget_machine_code(sym_widget_entry_type *widget_entry, URMResourceC
 		sizeof (w_rec->validation), (char*)& w_rec->validation,
 		"widget record" );
 
-    sprintf (buffer, "size: %d", w_rec->size);
+    snprintf (buffer, sizeof (buffer), "size: %d", w_rec->size);
 
     src_append_machine_code (
 		az_src_rec,
@@ -227,7 +222,7 @@ void		save_widget_machine_code(sym_widget_entry_type *widget_entry, URMResourceC
 
     w_rec_size = w_rec->size;
 
-    sprintf (buffer, "access: %s",
+    snprintf (buffer, sizeof (buffer), "access: %s",
 			access_from_code (w_rec->access) );
 
     src_append_machine_code (
@@ -236,12 +231,12 @@ void		save_widget_machine_code(sym_widget_entry_type *widget_entry, URMResourceC
 		sizeof (w_rec->access), (char*)& w_rec->access,
 		buffer );
 
-    sprintf (buffer, "locked: ");
+    snprintf (buffer, sizeof (buffer), "locked: ");
 
     if (w_rec->lock) {
-	strcat (buffer, "true");
+	strncat (buffer, "true", sizeof (buffer) - strlen (buffer) - 1);
     } else {
-	strcat (buffer, "false");
+	strncat (buffer, "false", sizeof (buffer) - strlen (buffer) - 1);
     }
 
     src_append_machine_code (
@@ -259,9 +254,9 @@ void		save_widget_machine_code(sym_widget_entry_type *widget_entry, URMResourceC
 		buffer );
 
     if (w_rec->name_offs == (MrmOffset) 0) {
-	sprintf (buffer, "no name specified");
+	snprintf (buffer, sizeof (buffer), "no name specified");
     } else {
-	sprintf (buffer, "name: offset %X (hex)",
+	snprintf (buffer, sizeof (buffer), "name: offset %X (hex)",
 		 w_rec->name_offs);
 	off_put (k_name_off, w_rec->name_offs);
     }
@@ -274,9 +269,9 @@ void		save_widget_machine_code(sym_widget_entry_type *widget_entry, URMResourceC
 		buffer );
 
     if (w_rec->class_offs == (MrmOffset) 0) {
-	sprintf (buffer, "class: builtin");
+	snprintf (buffer, sizeof (buffer), "class: builtin");
     } else {
-	sprintf (buffer, "class: offset %X (hex)",
+	snprintf (buffer, sizeof (buffer), "class: offset %X (hex)",
 		 w_rec->class_offs);
 	off_put (k_class_off, w_rec->class_offs);
     }
@@ -289,9 +284,9 @@ void		save_widget_machine_code(sym_widget_entry_type *widget_entry, URMResourceC
 		buffer );
 
     if (w_rec->arglist_offs == (MrmOffset) 0) {
-	sprintf (buffer, "no argument list");
+	snprintf (buffer, sizeof (buffer), "no argument list");
     } else {
-	sprintf (buffer, "argument list offset: %X (hex)", w_rec->arglist_offs);
+	snprintf (buffer, sizeof (buffer), "argument list offset: %X (hex)", w_rec->arglist_offs);
 	off_put (k_arglist_off, w_rec->arglist_offs);
     }
 
@@ -303,9 +298,9 @@ void		save_widget_machine_code(sym_widget_entry_type *widget_entry, URMResourceC
 		buffer );
 
     if (w_rec->children_offs == (MrmOffset) 0) {
-	sprintf (buffer, "no children");
+	snprintf (buffer, sizeof (buffer), "no children");
     } else {
-	sprintf (buffer, "children list offset: %X (hex)",
+	snprintf (buffer, sizeof (buffer), "children list offset: %X (hex)",
 		 w_rec->children_offs);
 	off_put (k_children_off, w_rec->children_offs);
     }
@@ -318,9 +313,9 @@ void		save_widget_machine_code(sym_widget_entry_type *widget_entry, URMResourceC
 		buffer );
 
     if (w_rec->comment_offs == (MrmOffset) 0) {
-	sprintf (buffer, "no comment specified");
+	snprintf (buffer, sizeof (buffer), "no comment specified");
     } else {
-	sprintf (buffer, "comment: offset %X (hex)",
+	snprintf (buffer, sizeof (buffer), "comment: offset %X (hex)",
 		 w_rec->comment_offs);
 	off_put (k_comment_off, w_rec->comment_offs);
     }
@@ -333,9 +328,9 @@ void		save_widget_machine_code(sym_widget_entry_type *widget_entry, URMResourceC
 		buffer );
 
     if (w_rec->creation_offs == (MrmOffset) 0) {
-	sprintf (buffer, "no creation callback");
+	snprintf (buffer, sizeof (buffer), "no creation callback");
     } else {
-	sprintf (buffer, "creation callback offset: %X (hex)",
+	snprintf (buffer, sizeof (buffer), "creation callback offset: %X (hex)",
 		 w_rec->creation_offs);
 	off_put (k_creation_off, w_rec->creation_offs);
     }
@@ -434,7 +429,7 @@ void	unload_stack(char *rec, int rec_size, src_source_record_type *az_src_rec)
 
 		argdesc = (RGMArgListDescPtr) _Pointer(rec, off_offset);
 
-		sprintf (buffer, "argument count: %d", argdesc->count);
+		snprintf (buffer, sizeof (buffer), "argument count: %d", argdesc->count);
 
 		src_append_machine_code (
 			az_src_rec,
@@ -443,7 +438,7 @@ void	unload_stack(char *rec, int rec_size, src_source_record_type *az_src_rec)
 			(char*)& argdesc->count,
 			buffer );
 
-		sprintf (buffer, "related argument count: %d", argdesc->extra);
+		snprintf (buffer, sizeof (buffer), "related argument count: %d", argdesc->extra);
 
 		src_append_machine_code (
 			az_src_rec,
@@ -460,7 +455,7 @@ void	unload_stack(char *rec, int rec_size, src_source_record_type *az_src_rec)
 
 		    if (arg_ptr->tag_code != UilMrmUnknownCode )
 			{
-			sprintf (buffer,
+			snprintf (buffer, sizeof (buffer),
 				 "(%d) arg type: %s",
 				 j,
 				 resource_name_from_code(arg_ptr->tag_code));
@@ -469,7 +464,7 @@ void	unload_stack(char *rec, int rec_size, src_source_record_type *az_src_rec)
 			{
 			ptr = (char *)
 			    _Pointer(rec,arg_ptr->stg_or_relcode.tag_offs);
-			sprintf (buffer,
+			snprintf (buffer, sizeof (buffer),
 				 "(%d) arg type: %s (user defined)",
 				 j,
 				 ptr);
@@ -483,9 +478,9 @@ void	unload_stack(char *rec, int rec_size, src_source_record_type *az_src_rec)
 			buffer );
 
 		    if (arg_ptr->stg_or_relcode.tag_offs == (MrmOffset) 0) {
-			sprintf (buffer, "(%d) no tag offset", j);
+			snprintf (buffer, sizeof (buffer), "(%d) no tag offset", j);
 		    } else {
-			sprintf (buffer, "(%d) tag offset: %X (hex)",
+			snprintf (buffer, sizeof (buffer), "(%d) tag offset: %X (hex)",
 					j, arg_ptr->stg_or_relcode.tag_offs);
 			off_put (k_name_off, arg_ptr->stg_or_relcode.tag_offs);
 		    }
@@ -497,7 +492,7 @@ void	unload_stack(char *rec, int rec_size, src_source_record_type *az_src_rec)
 			(char*)& arg_ptr->stg_or_relcode.tag_offs,
 			buffer );
 
-		    sprintf (buffer, "(%d) type: %s",
+		    snprintf (buffer, sizeof (buffer), "(%d) type: %s",
 			j, type_from_code (arg_ptr->arg_val.rep_type) );
 
 		    src_append_machine_code (
@@ -508,10 +503,11 @@ void	unload_stack(char *rec, int rec_size, src_source_record_type *az_src_rec)
 			(char*)& arg_ptr->arg_val.rep_type,
 			buffer );
 
-		    sprintf (buffer, "(%d) ", j);
+		    snprintf (buffer, sizeof (buffer), "(%d) ", j);
 
 		    format_arg_value (& arg_ptr->arg_val,
-				& buffer [strlen (buffer)]);
+				& buffer [strlen (buffer)],
+				sizeof (buffer) - strlen (buffer));
 
 		    src_append_machine_code (
 			az_src_rec,
@@ -531,7 +527,7 @@ void	unload_stack(char *rec, int rec_size, src_source_record_type *az_src_rec)
 		double	* dptr;
 
 		dptr = (double *) _Pointer (rec, off_offset);
-		sprintf (buffer, "floating point value: %g", (* dptr));
+		snprintf (buffer, sizeof (buffer), "floating point value: %g", (* dptr));
 		src_append_machine_code (
 			az_src_rec,
 			off_offset,
@@ -545,7 +541,7 @@ void	unload_stack(char *rec, int rec_size, src_source_record_type *az_src_rec)
 		float *fptr;
 
 		fptr = (float *) _Pointer(rec, off_offset);
-		sprintf(buffer, "Single float value: %g", (* fptr));
+		snprintf(buffer, sizeof (buffer), "Single float value: %g", (* fptr));
 		src_append_machine_code (
 					 az_src_rec,
 					 off_offset,
@@ -571,7 +567,7 @@ void	unload_stack(char *rec, int rec_size, src_source_record_type *az_src_rec)
 			(char*)& cb_desc_ptr->validation,
 			"callback descriptor" );
 
-		sprintf (buffer, "callback count: %d", cb_desc_ptr->count);
+		snprintf (buffer, sizeof (buffer), "callback count: %d", cb_desc_ptr->count);
 
 		src_append_machine_code (
 			az_src_rec,
@@ -588,7 +584,7 @@ void	unload_stack(char *rec, int rec_size, src_source_record_type *az_src_rec)
 		     j++, cb_item_ptr++,
 				off_offset += sizeof (RGMCallbackItem)) {
 
-		    sprintf (buffer,
+		    snprintf (buffer, sizeof (buffer),
 				"(%d) routine name offset: %X (hex)",
 				j, cb_item_ptr->cb_item.routine);
 
@@ -607,7 +603,7 @@ void	unload_stack(char *rec, int rec_size, src_source_record_type *az_src_rec)
 
 		    off_put (k_name_off, cb_item_ptr->cb_item.routine);
 
-		    sprintf (buffer, "(%d) routine tag type: %s",
+		    snprintf (buffer, sizeof (buffer), "(%d) routine tag type: %s",
 			j, type_from_code (
 				cb_item_ptr->cb_item.rep_type) );
 
@@ -624,7 +620,7 @@ void	unload_stack(char *rec, int rec_size, src_source_record_type *az_src_rec)
 #endif /* WORD64 */
 			 buffer );
 
-		    sprintf (buffer, "(%d) value: ", j);
+		    snprintf (buffer, sizeof (buffer), "(%d) value: ", j);
 		    src_append_machine_code
 			(az_src_rec,
 			 _Offset (RGMCallbackItem, off_offset,
@@ -645,7 +641,7 @@ void	unload_stack(char *rec, int rec_size, src_source_record_type *az_src_rec)
 		r_desc_ptr =
 			(RGMResourceDescPtr) _Pointer (rec, off_offset);
 
-		sprintf (buffer, "resource descriptor, size: %d",
+		snprintf (buffer, sizeof (buffer), "resource descriptor, size: %d",
 			 r_desc_ptr->size);
 
 		src_append_machine_code (
@@ -655,7 +651,7 @@ void	unload_stack(char *rec, int rec_size, src_source_record_type *az_src_rec)
 			(char*)& r_desc_ptr->size,
 			buffer );
 
-		sprintf (buffer, "access: %s",
+		snprintf (buffer, sizeof (buffer), "access: %s",
 				access_from_code (r_desc_ptr->access) );
 
 		src_append_machine_code (
@@ -667,7 +663,7 @@ void	unload_stack(char *rec, int rec_size, src_source_record_type *az_src_rec)
 
 		switch (r_desc_ptr->type) {
 		    case URMrIndex:
-			sprintf (buffer, "index, offset: %X (hex)",
+			snprintf (buffer, sizeof (buffer), "index, offset: %X (hex)",
 				_Offset (RGMResourceDesc, off_offset, key) );
 
 			off_put (k_name_off,
@@ -676,7 +672,7 @@ void	unload_stack(char *rec, int rec_size, src_source_record_type *az_src_rec)
 
 		    case URMrRID:
 
-			sprintf (buffer, "resource ID, offset: %X (hex)",
+			snprintf (buffer, sizeof (buffer), "resource ID, offset: %X (hex)",
 				_Offset (RGMResourceDesc, off_offset, key) );
 
 			off_put (k_resource_id_off,
@@ -684,7 +680,7 @@ void	unload_stack(char *rec, int rec_size, src_source_record_type *az_src_rec)
 			break;
 
 		    default:
-			sprintf (buffer, "unknown resource type");
+			snprintf (buffer, sizeof (buffer), "unknown resource type");
 			break;
 		}
 
@@ -695,7 +691,7 @@ void	unload_stack(char *rec, int rec_size, src_source_record_type *az_src_rec)
 			(char*)& r_desc_ptr->type,
 			buffer );
 
-		sprintf (buffer, "resource group: %s",
+		snprintf (buffer, sizeof (buffer), "resource group: %s",
 			 group_from_code (r_desc_ptr->res_group) );
 
 		src_append_machine_code (
@@ -705,7 +701,7 @@ void	unload_stack(char *rec, int rec_size, src_source_record_type *az_src_rec)
 			(char*)& r_desc_ptr->res_group,
 			buffer );
 
-		sprintf (buffer, "resource type: %s",
+		snprintf (buffer, sizeof (buffer), "resource type: %s",
 			(r_desc_ptr->res_group == URMgLiteral) ?
 				type_from_code (r_desc_ptr->cvt_type) :
 				class_name_from_code (r_desc_ptr->cvt_type) );
@@ -722,7 +718,7 @@ void	unload_stack(char *rec, int rec_size, src_source_record_type *az_src_rec)
 
 	    case k_resource_id_off : {
 
-		sprintf (buffer, "resource id");
+		snprintf (buffer, sizeof (buffer), "resource id");
 
 		src_append_machine_code (
 			az_src_rec,
@@ -741,7 +737,7 @@ void	unload_stack(char *rec, int rec_size, src_source_record_type *az_src_rec)
 
 		c_desc_ptr = (RGMChildrenDescPtr) _Pointer(rec, off_offset);
 
-		sprintf (buffer, "Children count: %d",
+		snprintf (buffer, sizeof (buffer), "Children count: %d",
 			 c_desc_ptr->count);
 
 		src_append_machine_code (
@@ -777,9 +773,9 @@ void	unload_stack(char *rec, int rec_size, src_source_record_type *az_src_rec)
 		child_index++;
 
 		if (c_ptr->manage) {
-		    sprintf (buffer, "(%d) managed", j);
+		    snprintf (buffer, sizeof (buffer), "(%d) managed", j);
 		} else {
-		    sprintf (buffer, "(%d) unmanaged", j);
+		    snprintf (buffer, sizeof (buffer), "(%d) unmanaged", j);
 		}
 
 		src_append_machine_code (
@@ -789,7 +785,7 @@ void	unload_stack(char *rec, int rec_size, src_source_record_type *az_src_rec)
 			(char*)& c_ptr->manage,
 			buffer );
 
-		sprintf (buffer, "(%d) access: %s", j,
+		snprintf (buffer, sizeof (buffer), "(%d) access: %s", j,
 				access_from_code (c_ptr->access) );
 
 		src_append_machine_code (
@@ -801,7 +797,7 @@ void	unload_stack(char *rec, int rec_size, src_source_record_type *az_src_rec)
 
 		switch (c_ptr->type) {
 		    case URMrIndex:
-			sprintf (buffer, "(%d) index, offset: %X (hex)",
+			snprintf (buffer, sizeof (buffer), "(%d) index, offset: %X (hex)",
 				j, (unsigned int)c_ptr->key.index_offs);
 
 			src_append_machine_code (
@@ -816,7 +812,7 @@ void	unload_stack(char *rec, int rec_size, src_source_record_type *az_src_rec)
 			break;
 
 		    case URMrRID:
-			sprintf (buffer,
+			snprintf (buffer, sizeof (buffer),
 				"(%d) resource ID, offset: %X (hex)",
 				j, _Offset (RGMChildDesc, off_offset, key) );
 
@@ -833,7 +829,7 @@ void	unload_stack(char *rec, int rec_size, src_source_record_type *az_src_rec)
 
 		    default:
 
-			sprintf (buffer, "(%d) unknown class", j);
+			snprintf (buffer, sizeof (buffer), "(%d) unknown class", j);
 
 			src_append_machine_code (
 				az_src_rec,
@@ -900,14 +896,14 @@ void		save_value_machine_code(sym_value_entry_type *value_entry, URMResourceCont
     az_src_rec = value_entry->header.az_src_rec;
 
     if (value_entry->resource_id != 0) {
-	sprintf (buffer, "Resource ID: %08lX", (unsigned long)value_entry->resource_id);
+	snprintf (buffer, sizeof (buffer), "Resource ID: %08lX", (unsigned long)value_entry->resource_id);
 	src_append_machine_code (
 		az_src_rec,
 		0,
 		0, 0,
 		buffer );
     } else if (value_entry->obj_header.az_name != NULL) {
-	sprintf (buffer, "Resource index: %s",
+	snprintf (buffer, sizeof (buffer), "Resource index: %s",
 		 value_entry->obj_header.az_name->c_text);
 	src_append_machine_code
 	    (az_src_rec,
@@ -916,19 +912,19 @@ void		save_value_machine_code(sym_value_entry_type *value_entry, URMResourceCont
 	     buffer);
     }
 
-    sprintf (buffer, "size: %d, group: %s",
+    snprintf (buffer, sizeof (buffer), "size: %d, group: %s",
 	     UrmRCSize (az_context),
 	     group_from_code (UrmRCGroup (az_context)) );
     src_append_machine_code ( az_src_rec, 0, 0, 0, buffer );
 
-    sprintf (buffer, "type: %s, access: %s, locked: ",
+    snprintf (buffer, sizeof (buffer), "type: %s, access: %s, locked: ",
 	     type_from_code (UrmRCType (az_context)),
 	     access_from_code (UrmRCAccess (az_context)) );
 
     if (UrmRCLock (az_context)) {
-	strcat (buffer, "true");
+	strncat (buffer, "true", sizeof (buffer) - strlen (buffer) - 1);
     } else {
-	strcat (buffer, "false");
+	strncat (buffer, "false", sizeof (buffer) - strlen (buffer) - 1);
     }
 
     src_append_machine_code ( az_src_rec, 0, 0, 0, buffer );
@@ -945,9 +941,9 @@ void		save_value_machine_code(sym_value_entry_type *value_entry, URMResourceCont
 	case sym_k_bool_value:
 
 	    if ( * (unsigned long *) rc_buffer )
-		sprintf (buffer, "value: true");
+		snprintf (buffer, sizeof (buffer), "value: true");
 	    else
-		sprintf (buffer, "value: false");
+		snprintf (buffer, sizeof (buffer), "value: false");
 	    src_append_machine_code (
 		az_src_rec, 0, rc_size, rc_buffer, buffer );
 	    break;
@@ -956,7 +952,7 @@ void		save_value_machine_code(sym_value_entry_type *value_entry, URMResourceCont
 	case sym_k_horizontal_integer_value:
 	case sym_k_vertical_integer_value:
 
-	    sprintf (buffer, "value: %lu",
+	    snprintf (buffer, sizeof (buffer), "value: %lu",
 		     (* (unsigned long *) rc_buffer) );
 	    src_append_machine_code (
 		az_src_rec, 0, rc_size, rc_buffer, buffer );
@@ -970,7 +966,7 @@ void		save_value_machine_code(sym_value_entry_type *value_entry, URMResourceCont
 
 	    for (offset = 0; offset < (int)rc_size; offset += sizeof(int), index++)
 		{
-		sprintf (buffer, "value[%d]: %lu",
+		snprintf (buffer, sizeof (buffer), "value[%d]: %lu",
 			 index, ((unsigned long *) rc_buffer)[index] );
 
 		src_append_machine_code
@@ -983,14 +979,14 @@ void		save_value_machine_code(sym_value_entry_type *value_entry, URMResourceCont
 	case sym_k_float_value:
 	case sym_k_horizontal_float_value:
 	case sym_k_vertical_float_value:
-	    sprintf (buffer, "value: %g",
+	    snprintf (buffer, sizeof (buffer), "value: %g",
 		     (* (double *) rc_buffer) );
 	    src_append_machine_code (
 		az_src_rec, 0, rc_size, rc_buffer, buffer );
 	    break;
 
 	case sym_k_single_float_value:
-	    sprintf (buffer, "value: %g",
+	    snprintf (buffer, sizeof (buffer), "value: %g",
 		     (* (float *) rc_buffer));
 	    src_append_machine_code
 		(az_src_rec, 0, rc_size, rc_buffer, buffer );
@@ -1030,7 +1026,7 @@ void		save_value_machine_code(sym_value_entry_type *value_entry, URMResourceCont
 			(char*)& tv_ptr->validation,
 			"text vector" );
 
-	    sprintf (buffer, "count: %d", tv_ptr->count);
+	    snprintf (buffer, sizeof (buffer), "count: %d", tv_ptr->count);
 	    src_append_machine_code (
 			az_src_rec,
 			_Offset (RGMTextVector, off_offset, count),
@@ -1076,7 +1072,7 @@ void		save_value_machine_code(sym_value_entry_type *value_entry, URMResourceCont
 			te_ptr = (RGMTextEntryPtr)
 					_Pointer (rc_buffer, off_offset);
 
-			sprintf (buffer, "(%d) type: %s, offset: %X (hex)",
+			snprintf (buffer, sizeof (buffer), "(%d) type: %s, offset: %X (hex)",
 			    off_cnt,
 			    type_from_code (te_ptr->text_item.rep_type),
 			    te_ptr->text_item.offset );
@@ -1097,7 +1093,7 @@ void		save_value_machine_code(sym_value_entry_type *value_entry, URMResourceCont
 
 		    default:
 
-			sprintf (buffer, "(%d) unknown text entry", i);
+			snprintf (buffer, sizeof (buffer), "(%d) unknown text entry", i);
 
 			src_append_machine_code (
 				az_src_rec,
@@ -1120,7 +1116,7 @@ void		save_value_machine_code(sym_value_entry_type *value_entry, URMResourceCont
 
 	default: {
 
-	    sprintf (buffer, "unknown value");
+	    snprintf (buffer, sizeof (buffer), "unknown value");
 
 	    src_append_machine_code (
 		az_src_rec,
@@ -1185,7 +1181,7 @@ void		save_module_machine_code(src_source_record_type *az_src_rec, URMResourceCo
 		sizeof (m_rec->validation), (char*)& m_rec->validation,
 		"module record" );
 
-    sprintf (buffer, "topmost count: %d", m_rec->count);
+    snprintf (buffer, sizeof (buffer), "topmost count: %d", m_rec->count);
 
     src_append_machine_code (
 		az_src_rec,
@@ -1199,7 +1195,7 @@ void		save_module_machine_code(src_source_record_type *az_src_rec, URMResourceCo
 	 i < m_rec->count;
 	 i++, t_rec++, off_offset += sizeof (RGMTopmostDesc)) {
 
-	sprintf (buffer, "(%d) %s", i, t_rec->index);
+	snprintf (buffer, sizeof (buffer), "(%d) %s", i, t_rec->index);
 
 	src_append_machine_code (
 		az_src_rec,
@@ -1527,7 +1523,7 @@ char * group_from_code
 }
 
 
-void format_arg_value(RGMArgValuePtr argval_ptr, char *buffer)
+void format_arg_value(RGMArgValuePtr argval_ptr, char *buffer, size_t size)
 
 /*
  *++
@@ -1564,14 +1560,14 @@ void format_arg_value(RGMArgValuePtr argval_ptr, char *buffer)
 	case MrmRtypeInteger:
         case MrmRtypeHorizontalInteger:
         case MrmRtypeVerticalInteger:
-	    sprintf (buffer, "value: %d", argval_ptr->datum.ival);
+	    snprintf (buffer, size, "value: %d", argval_ptr->datum.ival);
 	    break;
 
 	case MrmRtypeBoolean:
 	    if (argval_ptr->datum.ival) {
-		sprintf (buffer, "value: true");
+		snprintf (buffer, size, "value: true");
 	    } else {
-		sprintf (buffer, "value: false");
+		snprintf (buffer, size, "value: false");
 	    }
 	    break;
 
@@ -1582,34 +1578,34 @@ void format_arg_value(RGMArgValuePtr argval_ptr, char *buffer)
 	case MrmRtypeCString:
 	case MrmRtypeAddrName:
         case MrmRtypeKeysym:
-	    sprintf (buffer, "offset: %X (hex)", argval_ptr->datum.offset);
+	    snprintf (buffer, size, "offset: %X (hex)", argval_ptr->datum.offset);
 	    off_put (k_unknown_off, argval_ptr->datum.offset);
 	    break;
 
 	case MrmRtypeFloat:
         case MrmRtypeHorizontalFloat:
         case MrmRtypeVerticalFloat:
-	    sprintf (buffer, "offset: %X (hex)", argval_ptr->datum.offset);
+	    snprintf (buffer, size, "offset: %X (hex)", argval_ptr->datum.offset);
 	    off_put (k_float_off, argval_ptr->datum.offset);
 	    break;
 
 	  case MrmRtypeSingleFloat: /* single float data type RAP */
-	    sprintf (buffer, "offset: %X (hex)", argval_ptr->datum.offset);
+	    snprintf (buffer, size, "offset: %X (hex)", argval_ptr->datum.offset);
             off_put (k_single_float_off, argval_ptr->datum.offset);
             break;
 
 	case MrmRtypeCallback:
-	    sprintf (buffer, "offset: %X (hex)", argval_ptr->datum.offset);
+	    snprintf (buffer, size, "offset: %X (hex)", argval_ptr->datum.offset);
 	    off_put (k_callback_off, argval_ptr->datum.offset);
 	    break;
 
 	case MrmRtypeResource:
-	    sprintf (buffer, "offset: %X (hex)", argval_ptr->datum.offset);
+	    snprintf (buffer, size, "offset: %X (hex)", argval_ptr->datum.offset);
 	    off_put (k_resource_off, argval_ptr->datum.offset);
 	    break;
 
 	default:
-	    sprintf (buffer, "value unknown");
+	    snprintf (buffer, size, "value unknown");
 	    break;
     }
 

@@ -279,7 +279,7 @@ static sym_callback_entry_type		**reason_seen;
 **--
 **/
 
-void	sem_validation ()
+void	sem_validation (void)
 {
 
 /*
@@ -357,7 +357,7 @@ sym_control_entry_type		*control_entry;
  */
 /* %COMPLETE */
 Uil_percent_complete = 80;
-if ( Uil_cmd_z_command.status_cb != (Uil_continue_type(*)())NULL )
+if ( Uil_cmd_z_command.status_cb != NULL )
     diag_report_status ();
 
 /*
@@ -2683,6 +2683,7 @@ if ((val_entry->b_aux_flags & sym_m_exp_eval) == 0)
 			}
 
 		}
+	      break;
 	    case sym_k_error_value:
 		break;
 	    default:
@@ -2858,6 +2859,26 @@ return (csval_entry);
 /* END OSF Fix CR 4859 */
 
 /*
+ * An expression operand must be a value.  A name declared as a widget is
+ * accepted where a value is referenced (sar_value_ref allows widgets as
+ * argument values), and a forward reference is resolved to whatever the
+ * name turns out to be, so check before an operand is evaluated, which
+ * reads it as a value entry.
+ */
+static int operand_is_value(sym_value_entry_type *expr_entry,
+			    sym_value_entry_type *op_entry)
+{
+    if (op_entry->header.b_tag == sym_k_value_entry)
+	return TRUE;
+    diag_issue_diagnostic
+	( d_ctx_req,
+	  _sar_source_pos2( expr_entry ),
+	  diag_tag_text( sym_k_value_entry ),
+	  diag_tag_text( op_entry->header.b_tag ) );
+    return FALSE;
+}
+
+/*
 **++
 **  FUNCTIONAL DESCRIPTION:
 **
@@ -2951,16 +2972,39 @@ sym_value_entry_type *sem_evaluate_value_expr(sym_value_entry_type *value_entry)
     /*
      ** Validate the first argument for the expression. If it is NULL,
      ** then return with no further processing, since this is usually
-     ** due to previous compilation errors.
+     ** due to previous compilation errors.  The next expression starts
+     ** a new circular reference check.
      */
     if ( value_entry->az_exp_op1 == NULL )
-      return NULL;
+    {
+	in_expr = FALSE;
+	return NULL;
+    }
+    if ( !operand_is_value (value_entry, value_entry->az_exp_op1) )
+      goto operand_error;
     sem_evaluate_value_expr(value_entry->az_exp_op1);
     in_expr = TRUE;
     op1_type = validate_arg (value_entry->az_exp_op1,
 			     value_entry->b_expr_opr);
     op1_entry = value_entry->az_exp_op1;
     res_type = op1_type;
+    /*
+     ** A binary operator whose second operand is missing (for example
+     ** an undeclared name) has already been diagnosed; like a missing
+     ** first operand, it is not evaluated any further.  The operations
+     ** below would dereference it.
+     */
+    if (value_entry->az_exp_op2 == NULL &&
+	value_entry->b_expr_opr > sym_k_last_unary_op &&
+	value_entry->b_expr_opr <= sym_k_last_binary_op)
+    {
+	in_expr = FALSE;
+	return NULL;
+    }
+    if (value_entry->az_exp_op2 != NULL &&
+	!operand_is_value (value_entry, value_entry->az_exp_op2))
+      goto operand_error;
+
     /*
      ** If it's a binary expression, evaluate the second argument and
      ** perform any necessary conversions
@@ -3332,6 +3376,7 @@ sym_value_entry_type *sem_evaluate_value_expr(sym_value_entry_type *value_entry)
 		   diag_value_text( value_entry->b_type ) );
 		res_type = error_arg_type;
 	    }
+	    break;
 
 	  case sym_k_color_value:
 	  case sym_k_xbitmapfile_value:
@@ -4028,6 +4073,18 @@ sym_value_entry_type *sem_evaluate_value_expr(sym_value_entry_type *value_entry)
     return value_entry;
 
     /*
+     ** An operand is not a value (already reported): the expression is
+     ** an error, and is not evaluated, or reported, again.
+     */
+
+  operand_error:
+
+    value_entry->b_type = sym_k_error_value;
+    value_entry->b_aux_flags |= sym_m_exp_eval;
+    in_expr = FALSE;
+    return value_entry;
+
+    /*
      **	Point where errors are transferred
      */
 
@@ -4057,7 +4114,13 @@ int validate_arg(sym_value_entry_type *operand_entry, int operator)
     if (operand_type == sym_k_error_value )
         return error_arg_type;
 
-    if ((( 1 << operand_type ) & legal_operand_type[ operator ]) == 0)
+    /*
+    ** The masks have a bit for each type below 32.  The other types are
+    ** legal only for the operators that take any type.
+    */
+    if (operand_type >= 32
+	? legal_operand_type[ operator ] != 0xFFFFFFFF
+	: (( 1u << operand_type ) & legal_operand_type[ operator ]) == 0)
     {
 	diag_issue_diagnostic
 	    ( d_operand_type,
@@ -4650,6 +4713,7 @@ void	sar_cat_value_entry(sym_value_entry_type **target_entry, sym_value_entry_ty
 	  (value1_entry, FALSE,
 	   value2_entry, FALSE);
 	target_type  = sym_k_localized_string_value;
+	break;
 
     default:   /* some form of error */
 	target_type = sym_k_error_value;

@@ -1,0 +1,32 @@
+.TH "XmTabBoxXYToIndex" "library call"
+.SH "NAME"
+\fBXmTabBoxXYToIndex\fP \(em A TabBox function that returns the tab at a point
+.iX "XmTabBoxXYToIndex"
+.iX "TabBox functions" "XmTabBoxXYToIndex"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/TabBox\&.h>
+\fBint \fBXmTabBoxXYToIndex\fP\fR(
+\fBWidget \fBwidget\fR\fR,
+\fBint \fBx\fR\fR,
+\fBint \fBy\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fBXmTabBoxXYToIndex\fP returns the position of the tab of the TabBox that
+contains the point (\fIx\fP, \fIy\fP), given in the coordinate
+system of the TabBox\&.
+.IP "\fIwidget\fP" 10
+Specifies the TabBox widget ID\&.
+.IP "\fIx\fP" 10
+Specifies the x coordinate\&.
+.IP "\fIy\fP" 10
+Specifies the y coordinate\&.
+.SH "RETURN"
+.PP
+Returns the position of the tab, or \-1 if there is no tab at that
+point or \fIwidget\fP is not a TabBox\&.
+.SH "RELATED"
+.PP
+\fBXmTabBoxGetIndex\fP(3), \fBXmTabStackXYToWidget\fP(3), \fBXmTabStack\fP(3) and \fBXmTabbedStackList\fP(3)\&.

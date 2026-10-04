@@ -99,7 +99,7 @@ void _XmTextReplace(
     else {
       for (tmp_wc = (wchar_t *)value, num_chars = 0; *tmp_wc != (wchar_t)0L; num_chars++)
         tmp_wc++;
-      tmp_block = XtMalloc((unsigned)(num_chars + 1) * (int)tw->text.char_size);
+      tmp_block = _XmMallocArray(num_chars + 1, tw->text.char_size);
       block.ptr = tmp_block;
       need_free = True;
       tmp_wc = (wchar_t *)value;
@@ -667,12 +667,12 @@ static int _XmTextGetSubstring(Widget widget,
       return XmCOPY_TRUNCATED;
     }
     if (!want_wchar) {
-      if (((destpos + block.length) * sizeof(char)) >= buf_size)
+      if (destpos + block.length >= buf_size)
         return XmCOPY_FAILED;
     }
     else { /* Need number of characters for buffer comparison */
       num_chars = _XmTextCountCharacters(block.ptr, block.length);
-      if (((destpos + num_chars) * sizeof(char)) >= buf_size)
+      if (destpos + num_chars >= buf_size)
         return XmCOPY_FAILED;
     }
     if (!want_wchar) {

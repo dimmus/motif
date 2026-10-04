@@ -226,12 +226,12 @@ void _XmFilterArgs(ArgList args,
                    ArgList *filtered_args,
                    Cardinal *num_filtered_args)
 {
-  ArgList fargs = (ArgList)XtMalloc(sizeof(Arg) * num_args);
-  register int i;
+  ArgList fargs = (ArgList)_XmMallocArray(num_args, sizeof(Arg));
+  int i;
   String *ptr;
   *filtered_args = fargs;
   *num_filtered_args = 0;
-  for (i = 0; i < num_args; i++) {
+  for (i = 0; (Cardinal)i < num_args; i++) {
     Boolean match = False;
     for (ptr = filter; *ptr != NULL; ptr++) {
       if (streq(*ptr, args[i].name)) {
@@ -296,8 +296,9 @@ String _XmGetMBStringFromXmString(XmString xmstr)
 {
   String text;
   XmStringContext context;    /* context for conversion	*/
-  char *newText;              /* new text string        	*/
+  XtPointer newText;          /* new text string        	*/
   int length;                 /* length of string		*/
+  int used, n;                /* filled in so far, piece	*/
   unsigned int u_length;      /* length from XmStringGetNextTriple		*/
   XmStringComponentType type; /* type			*/
   Boolean done;               /* done with it	*/
@@ -316,11 +317,11 @@ String _XmGetMBStringFromXmString(XmString xmstr)
   }
   done = False;
   while (!done) {
-    type = XmStringGetNextTriple(context, &u_length, (XtPointer *)&newText);
+    type = XmStringGetNextTriple(context, &u_length, &newText);
     switch (type) {
       case XmSTRING_COMPONENT_TEXT:
       case XmSTRING_COMPONENT_LOCALE_TEXT:
-        length += strlen(newText);
+        length += strlen((char *)newText);
         break;
       case XmSTRING_COMPONENT_SEPARATOR:
         length += 1;
@@ -334,17 +335,17 @@ String _XmGetMBStringFromXmString(XmString xmstr)
       default:
         done = True;
     }
-    XtFree((XtPointer)newText);
+    XtFree((char *)newText);
   }
-  if (!length && (type = XmStringGetNextTriple(context, &u_length, (XtPointer *)&newText))) {
+  if (!length && (type = XmStringGetNextTriple(context, &u_length, &newText))) {
     text = XtMalloc(u_length + 2);
     text[0] = '\0';
-    strncat(text, newText, u_length);
+    strncat(text, (char *)newText, u_length);
     if (type == XmSTRING_COMPONENT_SEPARATOR) {
       text[u_length] = '\n';
       text[u_length + 1] = '\0';
     }
-    XtFree(newText);
+    XtFree((char *)newText);
     XmStringFreeContext(context);
     return text;
   }
@@ -355,21 +356,26 @@ String _XmGetMBStringFromXmString(XmString xmstr)
     return (NULL);
   XmStringFreeContext(context);
   text = XtMalloc(length + 1);
-  text[0] = '\0';
+  used = 0;
   /*
    * Fill in the string.
    */
   XmStringInitContext(&context, xmstr);
   done = False;
   while (!done) {
-    type = XmStringGetNextTriple(context, &u_length, (XtPointer *)&newText);
+    type = XmStringGetNextTriple(context, &u_length, &newText);
     switch (type) {
       case XmSTRING_COMPONENT_TEXT:
       case XmSTRING_COMPONENT_LOCALE_TEXT:
-        strcat(text, newText);
+        n = strlen((char *)newText);
+        if (n > length - used) /* the first pass counted less */
+          n = length - used;
+        memcpy(text + used, newText, n);
+        used += n;
         break;
       case XmSTRING_COMPONENT_SEPARATOR:
-        strcat(text, "\n");
+        if (used < length)
+          text[used++] = '\n';
         break;
       case XmSTRING_COMPONENT_USER_BEGIN:
       case XmSTRING_COMPONENT_USER_END:
@@ -380,8 +386,9 @@ String _XmGetMBStringFromXmString(XmString xmstr)
       default:
         done = True;
     }
-    XtFree((XtPointer)newText);
+    XtFree((char *)newText);
   }
+  text[used] = '\0';
   XmStringFreeContext(context);
   return (text);
 }
@@ -463,9 +470,9 @@ void _XmConfigureWidget(
  */
 int XmCompareISOLatin1(char *first, char *second)
 {
-  register unsigned char *ap, *bp;
+  unsigned char *ap, *bp;
   for (ap = (unsigned char *)first, bp = (unsigned char *)second; *ap && *bp; ap++, bp++) {
-    register unsigned char a, b;
+    unsigned char a, b;
     if ((a = *ap) != (b = *bp)) {
       /* try lowercasing and try again */
       if ((a >= XK_A) && (a <= XK_Z))
@@ -489,7 +496,7 @@ int XmCompareISOLatin1(char *first, char *second)
 
 void XmCopyISOLatin1Lowered(char *dst, char *src)
 {
-  register unsigned char *dest, *source;
+  unsigned char *dest, *source;
   for (dest = (unsigned char *)dst, source = (unsigned char *)src; *source; source++, dest++) {
     if ((*source >= XK_A) && (*source <= XK_Z))
       *dest = *source + (XK_a - XK_A);
@@ -510,9 +517,9 @@ void XmCopyISOLatin1Lowered(char *dst, char *src)
 #define pixmap_width 2
 #define pixmap_height 2
 
-Pixmap XiCreateStippledPixmap(Screen *screen, Pixel fore, Pixel back, unsigned int depth)
+static Pixmap XiCreateStippledPixmap(Screen *screen, Pixel fore, Pixel back, unsigned int depth)
 {
-  register Display *display = DisplayOfScreen(screen);
+  Display *display = DisplayOfScreen(screen);
   CacheEntry *cachePtr;
   Pixmap stippled_pixmap;
   static unsigned char pixmap_bits[] = {
@@ -548,9 +555,9 @@ Pixmap XiCreateStippledPixmap(Screen *screen, Pixel fore, Pixel back, unsigned i
   return (stippled_pixmap);
 }
 
-void XiReleaseStippledPixmap(Screen *screen, Pixmap pixmap)
+static void XiReleaseStippledPixmap(Screen *screen, Pixmap pixmap)
 {
-  register Display *display = DisplayOfScreen(screen);
+  Display *display = DisplayOfScreen(screen);
   CacheEntry *cachePtr, **prevP;
   _XmProcessLock();
   for (prevP = &pixmapCache, cachePtr = pixmapCache; cachePtr;) {
@@ -672,10 +679,10 @@ static Boolean IsSubclassOf(WidgetClass wc, WidgetClass sc)
 /*
  *  end FIX for 5178.
  */
-void _XiResolveAllPartOffsets(WidgetClass w_class,
-                              XmOffsetPtr *offset,
-                              XmOffsetPtr *constraint_offset,
-                              Boolean align64)
+static void _XiResolveAllPartOffsets(WidgetClass w_class,
+                                     XmOffsetPtr *offset,
+                                     XmOffsetPtr *constraint_offset,
+                                     Boolean align64)
 {
   WidgetClass c, super = w_class->core_class.superclass;
   ConstraintWidgetClass cc = NULL, scc = NULL;
@@ -732,9 +739,9 @@ void _XiResolveAllPartOffsets(WidgetClass w_class,
    */
   for (c = w_class; c != NULL; c = c->core_class.superclass)
     classcount++;
-  *offset = (XmOffsetPtr)XtMalloc(classcount * sizeof(XmOffset));
+  *offset = (XmOffsetPtr)_XmMallocArray(classcount, sizeof(XmOffset));
   if (cc)
-    *constraint_offset = (XmOffsetPtr)XtMalloc(classcount * sizeof(XmOffset));
+    *constraint_offset = (XmOffsetPtr)_XmMallocArray(classcount, sizeof(XmOffset));
   else if (constraint_offset != NULL)
     *constraint_offset = NULL;
   /*
@@ -770,13 +777,13 @@ void _XiResolveAllPartOffsets(WidgetClass w_class,
   /*
    *  Update the resource list(s) offsets in place
    */
-  for (i = 0; i < w_class->core_class.num_resources; i++) {
+  for (i = 0; (Cardinal)i < w_class->core_class.num_resources; i++) {
     pr = (XmPartResource *)&w_class->core_class.resources[i];
     /* The next line updates this in place--be careful */
     w_class->core_class.resources[i].resource_offset = XmGetPartOffset(pr, offset);
   }
   if (cc)
-    for (i = 0; i < cc->constraint_class.num_resources; i++) {
+    for (i = 0; (Cardinal)i < cc->constraint_class.num_resources; i++) {
       pr = (XmPartResource *)&cc->constraint_class.resources[i];
       /* The next line updates this in place--be careful */
       cc->constraint_class.resources[i].resource_offset = XmGetPartOffset(pr, constraint_offset);
@@ -784,9 +791,9 @@ void _XiResolveAllPartOffsets(WidgetClass w_class,
   _XmProcessUnlock();
 }
 
-void XiResolveAllPartOffsets(WidgetClass w_class,
-                             XmOffsetPtr *offset,
-                             XmOffsetPtr *constraint_offset)
+static void XiResolveAllPartOffsets(WidgetClass w_class,
+                                    XmOffsetPtr *offset,
+                                    XmOffsetPtr *constraint_offset)
 {
   _XiResolveAllPartOffsets(w_class, offset, constraint_offset, False);
 }

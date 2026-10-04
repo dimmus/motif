@@ -41,10 +41,7 @@ set(MWM_SRCS
 add_executable(mwm ${MWM_SRCS})
 
 target_include_directories(mwm PRIVATE
-    ${CMAKE_BINARY_DIR}/src/lib
-    ${CMAKE_SOURCE_DIR}/src/lib
     ${CMAKE_SOURCE_DIR}/src/lib/Wsm
-    ${X_INCLUDE_DIRS}
 )
 
 target_compile_definitions(mwm PRIVATE
@@ -53,21 +50,34 @@ target_compile_definitions(mwm PRIVATE
     UNMAP_ON_RESTART
     CDE_INSTALLATION_TOP="${CMAKE_INSTALL_PREFIX}/dt"
     CDE_CONFIGURATION_TOP="${CMAKE_INSTALL_PREFIX}/etc/dt"
-    BITMAPDIR="${CMAKE_INSTALL_INCLUDEDIR}/bitmaps"
-    MWMRCDIR="${CMAKE_INSTALL_SYSCONFDIR}/X11"
+    # Where data/bitmaps installs the bitmaps; the trailing slash is
+    # expected by WmResource.c, as in its built-in default.
+    BITMAPDIR="${CMAKE_INSTALL_FULL_INCLUDEDIR}/X11/bitmaps/"
+    # Where system.mwmrc is installed, below
+    MWMRCDIR="${CMAKE_INSTALL_FULL_SYSCONFDIR}/X11"
 )
 
 target_link_libraries(mwm
     Wsm
     Xm
-    ${X_LIBRARIES}
+    PkgConfig::MOTIF_XEXT
 )
 
 install(TARGETS mwm
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
-# Install system.mwmrc
+# Install system.mwmrc where mwm looks for it (MWMRCDIR above).
+# GNUInstallDirs maps the sysconfdir of the /usr prefix to /etc, not
+# /usr/etc, so the full path is used when the sysconfdir is outside the
+# prefix.  Otherwise the destination stays relative, so that
+# "cmake --install --prefix <dir>" can still stage it below <dir>.
+if(CMAKE_INSTALL_FULL_SYSCONFDIR STREQUAL
+   "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_SYSCONFDIR}")
+    set(MWM_RC_INSTALL_DIR ${CMAKE_INSTALL_SYSCONFDIR}/X11)
+else()
+    set(MWM_RC_INSTALL_DIR ${CMAKE_INSTALL_FULL_SYSCONFDIR}/X11)
+endif()
 install(FILES system.mwmrc
-    DESTINATION ${CMAKE_INSTALL_SYSCONFDIR}/X11
+    DESTINATION ${MWM_RC_INSTALL_DIR}
 )

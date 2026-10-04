@@ -28,13 +28,6 @@ static char rcsid[] = "$TOG: ResConvert.c /main/29 1999/05/18 19:19:39 mgreess $
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
 #endif
-#define X_INCLUDE_STRING_H
-/* XOS_USE_XT_LOCKING is now configured by build system */
-#if HAVE_X11_XOS_R_H
-#  include <X11/Xos_r.h>
-#else
-#  include <Xm/Xmos_r.h>
-#endif
 #include "MessagesI.h"
 #include "RepTypeI.h"
 #include "ResConverI.h"
@@ -47,6 +40,7 @@ static char rcsid[] = "$TOG: ResConvert.c /main/29 1999/05/18 19:19:39 mgreess $
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #define MSG2 _XmMMsgResConvert_0001
 #define MSG3 _XmMMsgResConvert_0002
 #define MSG4 _XmMMsgResConvert_0003
@@ -251,7 +245,7 @@ static Boolean CvtStringToSelectColor(Display *disp,
                                       XtPointer *converter_data);
 static void CvtStringToXmTabListDestroy(
     XtAppContext app, XrmValue *to, XtPointer converter_data, XrmValue *args, Cardinal *num_args);
-static Boolean GetNextTab(char **s, float *value, char *unitType, XmOffsetModel *offsetModel);
+static int GetNextTab(char **s, float *value, char *unitType, XmOffsetModel *offsetModel);
 static Boolean CvtStringToXmTabList(Display *dpy,
                                     XrmValue *args,
                                     Cardinal *num_args,
@@ -541,9 +535,9 @@ void _XmRegisterConverters(void)
  *	responsibility to ensure that test_str is already lower cased.
  *
  ************************************************************************/
-Boolean XmeNamesAreEqual(register char *in_str, register char *test_str)
+Boolean XmeNamesAreEqual(char *in_str, char *test_str)
 {
-  register char i;
+  char i;
   if (((in_str[0] == 'X') || (in_str[0] == 'x')) && ((in_str[1] == 'M') || (in_str[1] == 'm'))) {
     in_str += 2;
   }
@@ -1095,18 +1089,18 @@ static Boolean CvtStringToXmStringTable(Display *dpy,
     return FALSE;
   s = (char *)from_val->addr;
   table_size = 100;
-  table = (XmString *)XtMalloc(sizeof(XmString) * table_size);
+  table = (XmString *)_XmMallocArray(table_size, sizeof(XmString));
   for (str_no = 0; GetNextXmString(&s, &cs); str_no++) {
     if (str_no >= table_size) {
       table_size *= 2;
-      table = (XmString *)XtRealloc((char *)table, sizeof(XmString) * table_size);
+      table = (XmString *)_XmReallocArray((char *)table, table_size, sizeof(XmString));
     }
     table[str_no] = XmStringGenerate(cs, XmFONTLIST_DEFAULT_TAG, XmCHARSET_TEXT, NULL);
     XtFree(cs);
   }
   /* NULL terminate the array... */
   table_size = str_no + 1;
-  table = (XmString *)XtRealloc((char *)table, sizeof(XmString) * table_size);
+  table = (XmString *)_XmReallocArray((char *)table, table_size, sizeof(XmString));
   table[str_no] = (XmString)NULL;
   if (to_val->addr != NULL) {
     if (to_val->size < sizeof(XtPointer)) {
@@ -1148,7 +1142,7 @@ static Boolean CvtStringToStringTable(Display *dpy,       /* unused */
                                       XrmValue *to_val,
                                       XtPointer *data) /* unused */
 {
-  register char *p;
+  char *p;
   char *top;
   String *table;
   static String *tblptr;
@@ -1158,7 +1152,7 @@ static Boolean CvtStringToStringTable(Display *dpy,       /* unused */
   if ((p = from_val->addr) == NULL) {
     return (False);
   }
-  table = (String *)XtMalloc(sizeof(String) * size);
+  table = (String *)_XmMallocArray(size, sizeof(String));
   for (i = 0; *p; i++) {
     while (isspace((unsigned char)*p) && *p != '\0') {
       p++;
@@ -1166,7 +1160,7 @@ static Boolean CvtStringToStringTable(Display *dpy,       /* unused */
     if (*p == '\0') {
       if (i == size) {
         size++;
-        table = (String *)XtRealloc((char *)table, sizeof(String) * size);
+        table = (String *)_XmReallocArray((char *)table, size, sizeof(String));
       }
       table[i] = XtMalloc(sizeof(char));
       *(table[i]) = '\0';
@@ -1181,7 +1175,7 @@ static Boolean CvtStringToStringTable(Display *dpy,       /* unused */
     }
     if (i == size) {
       size *= 2;
-      table = (String *)XtRealloc((char *)table, sizeof(String) * size);
+      table = (String *)_XmReallocArray((char *)table, size, sizeof(String));
     }
     len = p - top;
     table[i] = XtMalloc(len + 1);
@@ -1190,7 +1184,7 @@ static Boolean CvtStringToStringTable(Display *dpy,       /* unused */
     if (*p != '\0')
       p++;
   }
-  table = (String *)XtRealloc((char *)table, sizeof(String) * (i + 1));
+  table = (String *)_XmReallocArray((char *)table, i + 1, sizeof(String));
   table[i] = NULL;
   if (to_val->addr != NULL) {
     if (to_val->size < sizeof(XPointer)) {
@@ -1229,7 +1223,7 @@ static Boolean CvtStringToCardinalList(Display *dpy,       /* unused */
                                        XrmValue *to_val,
                                        XtPointer *data) /* unused */
 {
-  register char *p;
+  char *p;
   Cardinal *crd_array;
   int crd_array_size = 50;
   int crd_array_count = 0;
@@ -1248,7 +1242,8 @@ static Boolean CvtStringToCardinalList(Display *dpy,       /* unused */
         p++;
       if (crd_array_size == crd_array_count) {
         crd_array_size *= 2; /* Double array size */
-        crd_array = (Cardinal *)XtRealloc((char *)crd_array, sizeof(Cardinal) * crd_array_size);
+        crd_array =
+            (Cardinal *)_XmReallocArray((char *)crd_array, crd_array_size, sizeof(Cardinal));
       }
       crd_array[crd_array_count] = new_element;
       crd_array_count++;
@@ -1435,12 +1430,6 @@ XmFontList XmeGetDefaultRenderTable(Widget w, unsigned char fontListType)
   if (fontlist) {
     return (fontlist);
   }
-#if 0
-    else if (sFontList) {
-	printf("Reusing sFontList\n");
-	return(sFontList);
-    }
-#endif
   _XmProcessLock();
   fontlist = DefaultSystemFontList(XtDisplay(origw), (XmFontList)NULL);
   if (!fontlist) {
@@ -1495,7 +1484,7 @@ static Boolean ConvertStringToButtonType(Display *display,
   XmButtonTypeTable buttonTable;
   int i, comma_count;
   String work_str, btype_str;
-  _Xstrtokparams strtok_buf;
+  char *strtok_buf;
   comma_count = 0;
   while (in_str[in_str_size]) {
     if (in_str[in_str_size++] == ',') {
@@ -1503,13 +1492,13 @@ static Boolean ConvertStringToButtonType(Display *display,
     }
   }
   ++in_str_size;
-  buttonTable = (XmButtonTypeTable)XtMalloc(sizeof(XmButtonType) * (comma_count + 2));
+  buttonTable = (XmButtonTypeTable)_XmMallocArray(comma_count + 2, sizeof(XmButtonType));
   buttonTable[comma_count + 1] = (XmButtonType)0;
   work_str = (String)XtMalloc(in_str_size);
   strncpy(work_str, in_str, in_str_size - 1);
   work_str[in_str_size - 1] = '\0';
-  for (i = 0, btype_str = _XStrtok(work_str, ",", strtok_buf); btype_str;
-       btype_str = _XStrtok(NULL, ",", strtok_buf), ++i)
+  for (i = 0, btype_str = strtok_r(work_str, ",", &strtok_buf); btype_str;
+       btype_str = strtok_r(NULL, ",", &strtok_buf), ++i)
   {
     while (*btype_str && isspace((unsigned char)*btype_str))
       btype_str++;
@@ -1561,18 +1550,18 @@ static Boolean CvtStringToKeySymTable(Display *display,
   int i, comma_count;
   String work_str, ks_str;
   KeySym ks;
-  _Xstrtokparams strtok_buf;
+  char *strtok_buf;
   comma_count = 0;
   while (in_str[in_str_size]) {
     if (in_str[in_str_size++] == ',')
       ++comma_count;
   }
   ++in_str_size;
-  keySymTable = (XmKeySymTable)XtMalloc(sizeof(KeySym) * (comma_count + 2));
+  keySymTable = (XmKeySymTable)_XmMallocArray(comma_count + 2, sizeof(KeySym));
   keySymTable[comma_count + 1] = (KeySym)NULL;
   work_str = XtNewString(in_str);
-  for (ks_str = _XStrtok(work_str, ",", strtok_buf), i = 0; ks_str;
-       ks_str = _XStrtok(NULL, ",", strtok_buf), i++)
+  for (ks_str = strtok_r(work_str, ",", &strtok_buf), i = 0; ks_str;
+       ks_str = strtok_r(NULL, ",", &strtok_buf), i++)
   {
     if (!*ks_str)
       keySymTable[i] = NoSymbol;
@@ -1614,10 +1603,10 @@ static Boolean CvtStringToCharSetTable(Display *display,   /* unused */
   char *dataPtr;
   int i;
   String work_str, cs_str;
-  _Xstrtokparams strtok_buf;
+  char *strtok_buf;
   work_str = XtNewString(in_str);
-  for (cs_str = _XStrtok(work_str, ",", strtok_buf); cs_str;
-       cs_str = _XStrtok(NULL, ",", strtok_buf))
+  for (cs_str = strtok_r(work_str, ",", &strtok_buf); cs_str;
+       cs_str = strtok_r(NULL, ",", &strtok_buf))
   {
     if (*cs_str)
       strDataSize += strlen(cs_str) + 1;
@@ -1627,14 +1616,15 @@ static Boolean CvtStringToCharSetTable(Display *display,   /* unused */
                                                 sizeof(XmStringCharSet) * (numCharsets + 1));
   charsetTable[numCharsets] = (XmStringCharSet)NULL;
   dataPtr = (char *)&charsetTable[numCharsets + 1];
-  strcpy(work_str, in_str);
-  for (i = 0, cs_str = _XStrtok(work_str, ",", strtok_buf); cs_str;
-       cs_str = _XStrtok(NULL, ",", strtok_buf), ++i)
+  memcpy(work_str, in_str, strlen(in_str) + 1);
+  for (i = 0, cs_str = strtok_r(work_str, ",", &strtok_buf); cs_str;
+       cs_str = strtok_r(NULL, ",", &strtok_buf), ++i)
   {
     if (*cs_str) {
+      size_t len = strlen(cs_str) + 1;
       charsetTable[i] = dataPtr;
-      strcpy(dataPtr, cs_str);
-      dataPtr += strlen(cs_str) + 1;
+      memcpy(dataPtr, cs_str, len);
+      dataPtr += len;
     }
     else {
       charsetTable[i] = NULL;
@@ -1720,20 +1710,24 @@ static Boolean CvtStringToAtomList(Display *dpy,
   for (atom_name = GetNextToken((char *)from->addr, ",", &context_string); atom_name != NULL;
        atom_name = GetNextToken(NULL, ",", &context_string))
   {
+    if (*atom_name == '\0') {
+      XtFree(atom_name);
+      continue;
+    }
     if (atom_count == max_atoms) {
       max_atoms *= 2;
       if (name_list == stack_names) {
-        char **new_names = (char **)XtMalloc(sizeof(char *) * max_atoms);
+        char **new_names = (char **)_XmMallocArray(max_atoms, sizeof(char *));
         memcpy((char *)new_names, (char *)name_list, (sizeof(char *) * atom_count));
         name_list = new_names;
       }
       else {
-        name_list = (char **)XtRealloc((char *)name_list, sizeof(char *) * max_atoms);
+        name_list = (char **)_XmReallocArray((char *)name_list, max_atoms, sizeof(char *));
       }
     }
     name_list[atom_count++] = atom_name;
   }
-  atom_list = (Atom *)XtMalloc(sizeof(Atom) * atom_count);
+  atom_list = (Atom *)_XmMallocArray(atom_count, sizeof(Atom));
   XInternAtoms(dpy, name_list, atom_count, False, atom_list);
   while (--atom_count >= 0)
     XtFree(name_list[atom_count]);
@@ -1812,35 +1806,31 @@ static char *GetNextToken(char *src, char *delim, char **context)
 {
   Boolean terminated = False;
   char *s, *e, *p;
-  char *next_context;
-  char *buf = NULL;
-  int len;
+  char *buf;
   if (src != NULL)
     *context = src;
   if (*context == NULL)
     return (NULL);
-  s = *context;
-  /* find the end of the token */
-  for (e = s; (!terminated) && (*s != '\0'); e = s++) {
-    if ((*s == '\\') && (*(s + 1) != '\0'))
-      s++;
-    else if (OneOf(*s, delim))
+  /* Find the end of the token: e stops on the terminating delimiter or
+   * on the final NUL. A backslash quotes the next character. */
+  for (e = *context; *e != '\0'; e++) {
+    if ((*e == '\\') && (*(e + 1) != '\0'))
+      e++;
+    else if (OneOf(*e, delim)) {
       terminated = True;
+      break;
+    }
   }
-  /* assert (OneOf(*e,delim) || (*e == '\0')) */
-  if (terminated) {
-    next_context = (e + 1);
-    e--;
-  }
-  else
-    next_context = NULL;
-  /* Strip out non-backslashed leading and trailing whitespace */
+  /* The token is [s, e). Always advance the context, even past an
+   * empty token, so that callers looping until NULL terminate. */
   s = *context;
-  while ((s != e) && isspace((unsigned char)*s))
+  *context = terminated ? (e + 1) : NULL;
+  /* Strip out non-backslashed leading and trailing whitespace */
+  while ((s < e) && isspace((unsigned char)*s))
     s++;
-  while ((e != s) && isspace((unsigned char)*e) && ((*e - 1) != '\\'))
+  while ((e - s > 1) && isspace((unsigned char)*(e - 1)) && (*(e - 2) != '\\'))
     e--;
-  if (e == s) {
+  if (s == e) {
     /*
      * Only white-space between the delimiters,
      * if we're at the end of the string anyway, indicate
@@ -1859,16 +1849,14 @@ static char *GetNextToken(char *src, char *delim, char **context)
    * delimiter characters or spaces.  It would be great if we had
    * time to implement full C style backslash processing...
    */
-  len = (e - s) + 1;
-  p = buf = XtMalloc(len + 1);
-  while (s != e) {
-    if ((*s == '\\') && (OneOf(*(s + 1), delim) || isspace((unsigned char)*(s + 1))))
+  p = buf = XtMalloc((e - s) + 1);
+  while (s < e) {
+    if ((*s == '\\') && (s + 1 < e) &&
+        (OneOf(*(s + 1), delim) || isspace((unsigned char)*(s + 1))))
       s++;
     *(p++) = *(s++);
   }
-  *(p++) = *(s++);
   *p = '\0';
-  *context = next_context;
   return (buf);
 }
 
@@ -2073,22 +2061,39 @@ static Boolean CvtStringToSelectColor(Display *disp,
  *  GetNextTab
  *
  ************************************************************************/
-static Boolean GetNextTab(char **s, float *value, char *unitType, XmOffsetModel *offsetModel)
+/*
+ * Returns 1 and the tab in *value, unitType and *offsetModel, 0 at the
+ * end of the list, or -1 on a malformed tab. unitType must hold
+ * UNIT_TYPE_LEN + 1 characters.
+ */
+#define UNIT_TYPE_LEN 31
+#define UNIT_TYPE_LEN_STR "31"
+static int GetNextTab(char **s, float *value, char *unitType, XmOffsetModel *offsetModel)
 {
-  int ret_val;
+  int ret_val, need;
   char sign[3];
   char *tmp;
   bzero(sign, sizeof(sign));
   unitType[0] = '\0';
-  if (sscanf(*s, " %2[+]", sign) == 1)
-    ret_val = sscanf(*s, " %2[+] %f %12[^ \t\r\n\v\f,] ", sign, value, unitType);
-  else
-    ret_val = sscanf(*s, " %f %12[^ \t\r\n\v\f,] ", value, unitType);
+  /* The unit width is larger than any valid unit name, so a truncated
+   * unit never parses as a valid one. */
+  if (sscanf(*s, " %2[+]", sign) == 1) {
+    need = 2;
+    ret_val = sscanf(
+        *s, " %2[+] %f %" UNIT_TYPE_LEN_STR "[^ \t\r\n\v\f,] ", sign, value, unitType);
+  }
+  else {
+    need = 1;
+    ret_val = sscanf(*s, " %f %" UNIT_TYPE_LEN_STR "[^ \t\r\n\v\f,] ", value, unitType);
+  }
   if (ret_val == EOF)
-    return (FALSE);
+    return (0);
+  /* No number: *value was not set. */
+  if (ret_val < need)
+    return (-1);
   if (sign[1] != '\0') {
     /* Error message */
-    return (FALSE);
+    return (-1);
   }
   switch (sign[0]) {
     case '\0':
@@ -2103,7 +2108,7 @@ static Boolean GetNextTab(char **s, float *value, char *unitType, XmOffsetModel 
     *s += strlen(*s);
   else
     *s = (tmp + 1);
-  return (TRUE);
+  return (1);
 }
 
 static void CvtStringToXmTabListDestroy(XtAppContext app, /* unused */
@@ -2140,16 +2145,16 @@ static Boolean CvtStringToXmTabList(Display *dpy,
   Boolean got_one = FALSE;
   char *s;
   float value;
-  char unitType[12]; /* longest unit name is "millimeters"  */
+  char unitType[UNIT_TYPE_LEN + 1];
   XmOffsetModel offsetModel = XmABSOLUTE;
-  int units;
+  int units, ret;
   XmParseResult result;
   XmTab tab;
   XmTabList tl = NULL;
   if (from->addr) {
     s = (char *)from->addr;
     /* Parse the tabs */
-    while (GetNextTab(&s, &value, unitType, &offsetModel)) {
+    while ((ret = GetNextTab(&s, &value, unitType, &offsetModel)) > 0) {
       got_one = TRUE;
       result = XmeParseUnits(unitType, &units);
       if (result == XmPARSE_ERROR) {
@@ -2163,9 +2168,14 @@ static Boolean CvtStringToXmTabList(Display *dpy,
       tl = XmTabListInsertTabs(tl, &tab, 1, -1);
       XmTabFree(tab);
     }
+    if (ret < 0)
+      got_one = FALSE;
   }
   if (got_one)
     _XM_CONVERTER_DONE(to, XmTabList, tl, XmTabListFree(tl);)
+  /* The tabs parsed before a malformed one are not returned. */
+  if (tl != NULL)
+    XmTabListFree(tl);
   XtDisplayStringConversionWarning(dpy, (char *)from->addr, XmRTabList);
   return (FALSE);
 }
@@ -2178,7 +2188,7 @@ static Boolean cvtStringToXmRenderTable(
   XmRenderTable rt;
   char *tag;
   Boolean has_default = FALSE, in_db = FALSE;
-  _Xstrtokparams strtok_buf;
+  char *strtok_buf;
   if (from->addr) {
     s = XtNewString((char *)from->addr);
     rt = NULL;
@@ -2190,7 +2200,7 @@ static Boolean cvtStringToXmRenderTable(
       has_default = TRUE;
     }
     /* Try to get first tag. */
-    if ((tag = _XStrtok(s, " \t\r\n\v\f,", strtok_buf)) != NULL) {
+    if ((tag = strtok_r(s, " \t\r\n\v\f,", &strtok_buf)) != NULL) {
       XmRenditionFree(rend[0]);
       rend[0] = _XmRenditionCreate(NULL, widget, resname, resclass, tag, NULL, 0, &in_db);
       if (!has_default && !in_db) {
@@ -2212,7 +2222,7 @@ static Boolean cvtStringToXmRenderTable(
       XmRenditionFree(rend[0]);
       _XM_CONVERTER_DONE(to, XmRenderTable, rt, XmRenderTableFree(rt);)
     }
-    while ((tag = _XStrtok(NULL, " \t\r\n\v\f,", strtok_buf)) != NULL) {
+    while ((tag = strtok_r(NULL, " \t\r\n\v\f,", &strtok_buf)) != NULL) {
       XmRenditionFree(rend[0]);
       rend[0] = _XmRenditionCreate(NULL, widget, resname, resclass, tag, NULL, 0, NULL);
       rt = XmRenderTableAddRenditions(rt, rend, 1, XmMERGE_REPLACE);

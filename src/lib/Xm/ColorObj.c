@@ -32,7 +32,10 @@
 #include "XmI.h"
 #include <X11/Xlibint.h>
 #include <Xm/VendorSEP.h>
-#if defined(__cplusplus) || defined(c_plusplus)
+#include <ctype.h>
+#include <stdlib.h>
+#include <string.h>
+#if defined(__cplusplus)
 #  define OBJ_CLASS(w) (((ApplicationShellWidget)(w))->application.c_class)
 #else
 #  define OBJ_CLASS(w) (((ApplicationShellWidget)(w))->application.class)
@@ -57,7 +60,7 @@ static void GetSelection(Widget w,
                          int *format);
 static void UpdatePixelSet(XmPixelSet *toSet, XmPixelSet *fromSet);
 static void UpdateXrm(Colors colors, int screen, XmColorObj tmpColorObj);
-static void FetchPixelData(Widget w, char *value, int screen);
+static Boolean FetchPixelData(Widget w, char *value, unsigned long length, int screen);
 static Boolean ColorCachePropertyExists(Display *dpy, Window SelOwner, Widget w, int screen);
 /********    End Static Function Declarations    ********/
 #define UNSPECIFIED_USE_MULTI_COLOR_ICONS 2
@@ -423,7 +426,7 @@ static void Initialize(Widget rq, /* unused */
       for (i = 0; i < nscreens; i++) {
         names[i] = ((nscreens <= MAX_SCREENS) ? &buf[i * MAX_ATOM_LENGTH] :
                                                 XtMalloc(MAX_ATOM_LENGTH));
-        sprintf(names[i], "%s%d", XmSCUSTOMIZE_DATA, i);
+        snprintf(names[i], MAX_ATOM_LENGTH, "%s%d", XmSCUSTOMIZE_DATA, i);
       }
       XInternAtoms(new_obj->color_obj.display, names, nscreens, FALSE, new_obj->color_obj.atoms);
       if (nscreens > MAX_SCREENS)
@@ -483,7 +486,7 @@ static void Initialize(Widget rq, /* unused */
         }
       }
     }
-    if (savetimeout != -1) /* Restore the timeout if we had changed it */
+    if (savetimeout != (unsigned long)-1) /* Restore the timeout if we had changed it */
       XtAppSetSelectionTimeout(XtWidgetToApplicationContext(nw), savetimeout);
   }
   if (new_obj->color_obj.useMultiColorIcons == UNSPECIFIED_USE_MULTI_COLOR_ICONS) {
@@ -501,76 +504,89 @@ static void Initialize(Widget rq, /* unused */
   }
 }
 
-static void FetchPixelData(Widget w, char *value, int screen)
+/* Read one "<hex>_" field of a pixel set string and advance *cursor past
+   it.  The last field may also end the string. */
+static Boolean ParsePixelField(char **cursor, unsigned long *out)
 {
-  int i, count, colorUse;
-  char tmp[256];
+  char *end;
+  if (!isxdigit((unsigned char)**cursor))
+    return False;
+  *out = strtoul(*cursor, &end, 16);
+  if (*end == '_')
+    end++;
+  else if (*end != '\0')
+    return False;
+  *cursor = end;
+  return True;
+}
+
+/* The pixel set ("<use>_" followed by XmCO_NUM_COLORS times
+   "<bg>_<fg>_<ts>_<bs>_<sc>_", all hexadecimal) is written by another
+   client, so parse it strictly and change nothing unless all of it is
+   valid. */
+static Boolean FetchPixelData(Widget w, char *value, unsigned long length, int screen)
+{
+  int i;
+  unsigned long colorUse;
+  char *copy, *cursor;
+  Boolean ok;
   XmColorObj tmpColorObj = (XmColorObj)w;
   Colors colors;
+  /* a valid pixel set is well under 1 KB */
+  if (value == NULL || length == 0 || length > 4096)
+    return False;
+  /* the data need not be NUL terminated */
+  copy = _XmMallocArray(length + 1, 1);
+  memcpy(copy, value, (size_t)length);
+  copy[length] = '\0';
+  cursor = copy;
   /* read color use */
-  count = 0;
-  sscanf(&(value[count]), "%x_", (unsigned int*)&colorUse);
-  sprintf(tmp, "%x_", (unsigned int)colorUse);
-  count += strlen(tmp);
-  tmpColorObj->color_obj.colorUse[screen] = colorUse;
-  for (i = 0; i < XmCO_NUM_COLORS; i++) {
+  ok = ParsePixelField(&cursor, &colorUse);
+  for (i = 0; ok && i < XmCO_NUM_COLORS; i++) {
     /* read data into PixelSet */
-    sscanf(&(value[count]),
-           "%lx_%lx_%lx_%lx_%lx_",
-           &(colors[i].bg),
-           &(colors[i].fg),
-           &(colors[i].ts),
-           &(colors[i].bs),
-           &(colors[i].sc));
-    sprintf(tmp,
-            "%lx_%lx_%lx_%lx_%lx_",
-            colors[i].bg,
-            colors[i].fg,
-            colors[i].ts,
-            colors[i].bs,
-            colors[i].sc);
-    count += strlen(tmp);
+    ok = (ParsePixelField(&cursor, &colors[i].bg) && ParsePixelField(&cursor, &colors[i].fg) &&
+          ParsePixelField(&cursor, &colors[i].ts) && ParsePixelField(&cursor, &colors[i].bs) &&
+          ParsePixelField(&cursor, &colors[i].sc));
   }
+  XtFree(copy);
+  if (!ok)
+    return False;
+  tmpColorObj->color_obj.colorUse[screen] = (int)colorUse;
   UpdateXrm(colors, screen, tmpColorObj);
   tmpColorObj->color_obj.colorIsRunning = True;
-  XFree(value);
+  return True;
 }
 
 static Boolean ColorCachePropertyExists(Display *dpy, Window SelOwner, Widget w, int screen)
 {
   Atom pixel_set_atom;
-  unsigned long bytesafter, length;
+  unsigned long length;
   char *value = NULL;
-  int format = 0;
-  Atom target;
-  int result = False;
+  Boolean result;
   if (!SelOwner)
     return False;
   /* try to get the property if it exist only */
   if ((pixel_set_atom = XInternAtom(dpy, XmSPIXEL_SET_PROP, TRUE)) == None)
     return False;
   /* get the content of the property */
-  result = XGetWindowProperty(dpy,
-                              SelOwner,
-                              pixel_set_atom,
-                              0L,
-                              1000000,
-                              False,
-                              (Atom)AnyPropertyType,
-                              &target,
-                              &format,
-                              &length,
-                              &bytesafter,
-                              (unsigned char **)&value);
-  if ((result != Success) || (format == 0) || (target == None))
+  if (!_XmGetWindowPropertyChecked(dpy,
+                                   SelOwner,
+                                   pixel_set_atom,
+                                   1000000,
+                                   (Atom)AnyPropertyType,
+                                   8,
+                                   2,
+                                   NULL,
+                                   NULL,
+                                   &length,
+                                   NULL,
+                                   (unsigned char **)&value))
     return False;
-  if (value != NULL) {
-    if (value[length - 1] != XmPIXEL_SET_PROP_VERSION)
-      return False;
-    value[length - 1] = 0; /* extract version info */
-    FetchPixelData(w, value, screen);
-  }
-  return True;
+  /* the last byte of the string is the version */
+  result = value[length - 1] == XmPIXEL_SET_PROP_VERSION &&
+           FetchPixelData(w, value, length - 1, screen);
+  XFree(value);
+  return result;
 }
 
 /**********************************************************************/
@@ -585,8 +601,8 @@ static void GetSelection(Widget w,
                          Atom *selection,
                          Atom *type, /* unused */
                          XtPointer val,
-                         unsigned long *length, /* unused */
-                         int *format)           /* unused */
+                         unsigned long *length,
+                         int *format)
 {
   XmColorObj tmpColorObj = (XmColorObj)w;
   char *value = (char *)val;
@@ -602,11 +618,13 @@ static void GetSelection(Widget w,
   }
   if (screen == -1) {
     XmeWarning(w, WARNING2); /* bad screen number */
+    XtFree(value);
     return;
   }
-  if (value != NULL) {
-    FetchPixelData(w, value, screen);
+  if (value != NULL && *format == 8) {
+    FetchPixelData(w, value, *length, screen);
   }
+  XtFree(value);
 }
 
 /**********************************************************************/
@@ -974,13 +992,14 @@ Boolean XmeGetColorObjData(Screen *screen,
   }
   screen_num = XScreenNumberOfScreen(screen);
   /* return False if screen invalid */
-  if (screen_num >= tmpColorObj->color_obj.numScreens) {
+  if (screen_num < 0 || screen_num >= tmpColorObj->color_obj.numScreens) {
     _XmProcessUnlock();
     return False;
   }
   if (colorUse)
     *colorUse = tmpColorObj->color_obj.colorUse[screen_num];
-  for (k = 0; k < num_pixelSet; k++) {
+  /* there are only XmCO_NUM_COLORS sets per screen */
+  for (k = 0; k < num_pixelSet && k < XmCO_NUM_COLORS; k++) {
     pixelSet[k].fg = tmpColorObj->color_obj.colors[screen_num][k].fg;
     pixelSet[k].bg = tmpColorObj->color_obj.colors[screen_num][k].bg;
     pixelSet[k].ts = tmpColorObj->color_obj.colors[screen_num][k].ts;
@@ -1016,8 +1035,10 @@ Boolean XmeGetPixelData(
   _XmProcessLock();
   if (_XmDefaultColorObj)
     display = XtDisplay(_XmDefaultColorObj);
-  else
+  else {
+    _XmProcessUnlock();
     return False;
+  }
   _XmProcessUnlock();
   return XmeGetColorObjData(XScreenOfDisplay(display, screen_number),
                             colorUse,

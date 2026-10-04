@@ -533,10 +533,8 @@ void MakeScrolledWindow (WmWorkspaceData *pWS, IconBoxData *pIBD)
 					pIBD->frameWidget,
 					(ArgList)setArgs, i);
 
-#ifndef MOTIF_ONE_DOT_ONE
     XtAddCallback(pIBD->scrolledWidget, XmNtraverseObscuredCallback,
 		  (XtCallbackProc) IconScrollVisibleCallback, (XtPointer)NULL);
-#endif
 
     XtAddEventHandler(pIBD->scrolledWidget,
 			StructureNotifyMask,
@@ -1066,6 +1064,7 @@ void InitializeClientData (ClientData *pCD, IconBoxData *pIBD)
     }
 
     pCD->clientTitle = pCD->pSD->iconBoxTitle;
+    pCD->clientTitleWidthFont = NULL;
     pCD->iconTitle   = pCD->pSD->iconBoxTitle;
 
 } /* END OF FUNCTION InitializeClientData */
@@ -1292,7 +1291,7 @@ void SetGeometry (WmWorkspaceData *pWS, ClientData *pCD, IconBoxData *pIBD)
      *     & an integral number of widthInc from baseWidth.
      */
 
-    if (pCD->minWidth < tmpMin)
+    if (pCD->minWidth < (int)tmpMin)
     {
         if ((diff = ((tmpMin - pCD->baseWidth)%pCD->widthInc)) != 0)
         {
@@ -3248,7 +3247,7 @@ void SetNewBounds (IconBoxData *pIBD)
     cw = (CompositeWidget) pIBD->bBoardWidget;
     children = cw->composite.children;
 
-    for (i = 0; i < cw->composite.num_children; i++)
+    for (i = 0; (Cardinal)i < cw->composite.num_children; i++)
     {
         if (children[i]->core.x > X)
         {
@@ -3319,7 +3318,6 @@ void ShowClientIconState (ClientData *pCD, int newState)
 
 
 
-#ifndef MOTIF_ONE_DOT_ONE
 /*************************************<->*************************************
  *
  *  IconScrollVisibleCallback
@@ -3345,7 +3343,6 @@ void IconScrollVisibleCallback (Widget w, XtPointer client_data, XmAnyCallbackSt
 */
 } /* END OF FUNCTION IconScrollVisibleCallback */
 
-#endif
 
 
 /*************************************<->*************************************

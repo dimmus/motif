@@ -38,34 +38,20 @@ extern "C" {
 #define MINSHORT -MAXSHORT
 /*
  *  Swap the byte order of 4- and 2- byte quantities.
- *  These macros work for bitfields.
+ *  These macros work for bitfields.  They use arithmetic rather than
+ *  copying the value through the bytes of a bitfield struct, whose
+ *  padding bits static analysers report as read uninitialised.
  */
 #define swap4bytes(l) \
   { \
-    struct { \
-      unsigned t : 32; \
-    } bit32; \
-    char n, *tp = (char *)&bit32; \
-    bit32.t = l; \
-    n = tp[0]; \
-    tp[0] = tp[3]; \
-    tp[3] = n; \
-    n = tp[1]; \
-    tp[1] = tp[2]; \
-    tp[2] = n; \
-    l = bit32.t; \
+    CARD32 _swap_t = (CARD32)(l); \
+    (l) = ((_swap_t & 0xff) << 24) | ((_swap_t & 0xff00) << 8) | \
+          ((_swap_t >> 8) & 0xff00) | (_swap_t >> 24); \
   }
 #define swap2bytes(s) \
   { \
-    struct { \
-      unsigned t : 16; \
-    } bit16; \
-    char n, *tp = (char *)&bit16; \
-    bit16.t = s; \
-    n = tp[0]; \
-    tp[0] = tp[1]; \
-    tp[1] = n; \
-    s = bit16.t; \
+    unsigned int _swap_t = (unsigned int)(s) & 0xffff; \
+    (s) = ((_swap_t & 0xff) << 8) | (_swap_t >> 8); \
   }
 
 typedef struct {

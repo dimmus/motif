@@ -159,20 +159,20 @@ static void ClassInitialize(void)
   wc_unique_res = wc_num_res - 1; /* XmNdeleteResponse has been defined */
                                   /* in VendorSE  */
   sc_num_res = xmVendorShellExtClassRec.object_class.num_resources;
-  merged_list = (XtResource *)XtMalloc((sizeof(XtResource) * (wc_unique_res + sc_num_res)));
+  merged_list = (XtResource *)_XmMallocArray(wc_unique_res + sc_num_res, sizeof(XtResource));
   _XmTransformSubResources(
       xmVendorShellExtClassRec.object_class.resources, sc_num_res, &uncompiled, &num);
-  for (i = 0; i < num; i++) {
+  for (i = 0; (Cardinal)i < num; i++) {
     merged_list[i] = uncompiled[i];
   }
   XtFree((char *)uncompiled);
   res_list = xmDialogShellExtClassRec.object_class.resources;
-  for (i = 0, j = num; i < wc_num_res; i++) {
+  for (i = 0, j = num; (Cardinal)i < wc_num_res; i++) {
     k = 0;
-    while ((k < sc_num_res) &&
+    while (((Cardinal)k < sc_num_res) &&
            (strcmp(merged_list[k].resource_name, res_list[i].resource_name) != 0))
       k++;
-    if ((k < sc_num_res) && (strcmp(merged_list[k].resource_name, res_list[i].resource_name) == 0))
+    if (((Cardinal)k < sc_num_res) && (strcmp(merged_list[k].resource_name, res_list[i].resource_name) == 0))
       merged_list[k] = res_list[i];
     else {
       merged_list[j] = xmDialogShellExtClassRec.object_class.resources[i];
@@ -522,10 +522,10 @@ static void ChangeManaged(Widget wid)
      * For nested Dialog Shells, it is necessary to unmanage
      * dialog shell popups of the child of this dialog shell.
      */
-    for (i = 0; i < child->core.num_popups; i++) {
+    for (i = 0; (Cardinal)i < child->core.num_popups; i++) {
       if (XmIsDialogShell(child->core.popup_list[i])) {
         XmDialogShellWidget next_shell = (XmDialogShellWidget)(child->core.popup_list[i]);
-        for (j = 0; j < next_shell->composite.num_children; j++) {
+        for (j = 0; (Cardinal)j < next_shell->composite.num_children; j++) {
           XtUnmanageChild(next_shell->composite.children[j]);
         }
       }
@@ -665,15 +665,17 @@ Widget XmeCreateClassDialog(
   Widget ds;       /*  DialogShell		*/
   ArgList ds_args; /*  arglist for shell	*/
   char *ds_name;
+  size_t size;
   if (!name)
     name = "";
   /*	Create DialogShell parent.
    */
-  ds_name = XtMalloc((strlen(name) + XmDIALOG_SUFFIX_SIZE + 1) * sizeof(char));
-  strcpy(ds_name, name);
-  strcat(ds_name, XmDIALOG_SUFFIX);
-  ds_args = (ArgList)XtMalloc(sizeof(Arg) * (bb_n + 1));
-  memcpy(ds_args, bb_args, (sizeof(Arg) * bb_n));
+  size = strlen(name) + XmDIALOG_SUFFIX_SIZE + 1;
+  ds_name = _XmMallocArray(size, sizeof(char));
+  snprintf(ds_name, size, "%s%s", name, XmDIALOG_SUFFIX);
+  ds_args = (ArgList)_XmMallocArray(bb_n + 1, sizeof(Arg));
+  if (bb_n > 0)
+    memcpy(ds_args, bb_args, (sizeof(Arg) * bb_n));
   XtSetArg(ds_args[bb_n], XmNallowShellResize, True);
   ds = XmCreateDialogShell(ds_p, ds_name, ds_args, bb_n + 1);
   XtFree((char *)ds_args);

@@ -289,7 +289,7 @@ static Widget FindBestMatchWidget(Widget wid, XEvent *event)
     if (XtIsComposite(target)) {
       ctarget = (CompositeRec *)target;
       found = 0;
-      for (i = 0; i < ctarget->composite.num_children; i++) {
+      for (i = 0; (Cardinal)i < ctarget->composite.num_children; i++) {
         possible = ctarget->composite.children[i];
         if (XtIsManaged(possible)) {
           delx = appx - XtX(possible);
@@ -330,7 +330,7 @@ static Widget FindPopupMenu(Widget toplevel, Widget target, XEvent *event, int l
   if (target == NULL)
     return (NULL);
   if (!XmIsGadget(target)) {
-    for (i = 0; i < thiswid->core.num_popups; i++) {
+    for (i = 0; (Cardinal)i < thiswid->core.num_popups; i++) {
       possible = thiswid->core.popup_list[i];
       if ((possible = MenuMatches(possible, level, event)) != NULL)
         break;
@@ -345,7 +345,7 @@ static Widget FindPopupMenu(Widget toplevel, Widget target, XEvent *event, int l
       }
       _XmProcessUnlock();
       if (list) {
-        for (i = 0; i < list->num_popups; i++) {
+        for (i = 0; (Cardinal)i < list->num_popups; i++) {
           possible = list->popups[i];
           if ((possible = MenuMatches(possible, level, event)) != NULL)
             break;
@@ -694,7 +694,7 @@ static Boolean ProcessKey(XmRowColumnWidget rowcol, XEvent *event)
   /* Try to use it on the current rowcol */
   if (!CheckKey(rowcol, event)) {
     /* not used, try moving down the cascade */
-    for (i = 0; (i < rowcol->composite.num_children) && (!found); i++) {
+    for (i = 0; ((Cardinal)i < rowcol->composite.num_children) && (!found); i++) {
       child = rowcol->composite.children[i];
       /* only check sensitive and managed cascade buttons */
       if (XtIsSensitive(child) && XtIsManaged(child)) {
@@ -961,8 +961,8 @@ void XmAddToPostFromList(Widget m, Widget widget)
     }
     _XmProcessUnlock();
     /* Add to list,  we add the menu's shell parent */
-    list->popups = (WidgetList)XtRealloc((char *)list->popups,
-                                         sizeof(Widget) * (list->num_popups + 1));
+    list->popups =
+        (WidgetList)_XmReallocArray((char *)list->popups, list->num_popups + 1, sizeof(Widget));
     list->popups[list->num_popups] = XtParent(m);
     list->num_popups++;
     if (IsPulldown(menu)) {
@@ -998,10 +998,10 @@ void XmRemoveFromPostFromList(Widget m, Widget widget)
            is beyond me.  But just in case,  avoid crashing */
       list = (PopupList)_XmGetHashEntry(popup_table, (XmHashKey)widget);
       /* Remove from associated list */
-      for (i = 0; i < list->num_popups;) {
+      for (i = 0; (Cardinal)i < list->num_popups;) {
         if (list->popups[i] == XtParent(m)) {
           /* First shift all the remaining elements */
-          for (j = i; j < list->num_popups - 1; j++) {
+          for (j = i; (Cardinal)j < list->num_popups - 1; j++) {
             list->popups[j] = list->popups[j + 1];
           }
           list->num_popups--;

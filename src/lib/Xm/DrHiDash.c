@@ -48,8 +48,8 @@ void _XmDrawHighlight(Display *display,
                       int line_style)
 {
   XSegment seg[4];
-  register Dimension half_hl = highlight_thickness / 2;
-  register Dimension cor = highlight_thickness % 2;
+  Dimension half_hl = highlight_thickness / 2;
+  Dimension cor = highlight_thickness % 2;
   XGCValues gcvalues;
   if (!d || !highlight_thickness || !width || !height)
     return;

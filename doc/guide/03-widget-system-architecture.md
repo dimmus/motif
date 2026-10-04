@@ -233,7 +233,7 @@ Motif provides extensive i18n support:
 
 Features include:
 - **Wide Character Support** - Multi-byte text handling
-- **Accessibility** - Screen reader and keyboard navigation
+- **Keyboard Navigation** - Traversal between and within widgets
 - **Cultural Adaptation** - Right-to-left languages, date formats
 
 ### 3. Rendering and Theming

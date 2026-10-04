@@ -86,7 +86,7 @@ void wmlIssueError (char *);
  * The control routine for semantic analysis. It calls the various phases.
  */
 
-void wmlResolveDescriptors ()
+void wmlResolveDescriptors (void)
 
 {
 
@@ -118,7 +118,7 @@ wmlResolvePrintReport ();
  * a dispatching routine.
  */
 
-void wmlResolveGenerateSymK ()
+void wmlResolveGenerateSymK (void)
 
 {
 

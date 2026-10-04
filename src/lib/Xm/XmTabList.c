@@ -56,11 +56,11 @@ static char rcsid[] = "$TOG: XmTabList.c /main/9 1999/04/27 17:49:59 samborn $"
 static XmTab GetNthTab(XmTabList tl, int pos, XmTab cur_tab, int cur_pos)
 {
   XmTab prev_tab;
-  unsigned int count;
+  int count;
   int i;
   if (pos == 0)
     return (_XmTabLStart(tl));
-  count = _XmTabLCount(tl);
+  count = (int)_XmTabLCount(tl);
   if (abs(pos) >= count) {
     if (pos > 0)
       return (_XmTabPrev(_XmTabLStart(tl)));
@@ -115,7 +115,7 @@ XmTabList XmTabListInsertTabs(XmTabList oldlist, XmTab *tabs, Cardinal tab_count
     _XmTabLCount(tl) = tab_count;
     prev_tab = _XmTabCopy(tabs[0]);
     _XmTabLStart(tl) = prev_tab;
-    for (i = 1; i < tab_count; i++) {
+    for (i = 1; (Cardinal)i < tab_count; i++) {
       tab = _XmTabCopy(tabs[i]);
       _XmTabPrev(tab) = prev_tab;
       _XmTabNext(prev_tab) = tab;
@@ -136,7 +136,7 @@ XmTabList XmTabListInsertTabs(XmTabList oldlist, XmTab *tabs, Cardinal tab_count
     _XmTabPrev(tab) = prev_tab;
     prev_tab = tab;
     /* Hook in rest of tabs. */
-    for (i = 1; i < tab_count; i++) {
+    for (i = 1; (Cardinal)i < tab_count; i++) {
       tab = _XmTabCopy(tabs[i]);
       _XmTabNext(prev_tab) = tab;
       _XmTabPrev(tab) = prev_tab;
@@ -222,7 +222,7 @@ void XmTabListFree(XmTabList tablist)
     return;
   }
   tab = _XmTabLStart(tablist);
-  for (i = 1; i < _XmTabLCount(tablist); i++) {
+  for (i = 1; (unsigned int)i < _XmTabLCount(tablist); i++) {
     next = _XmTabNext(tab);
     if (_XmTabMark(tab))
       _XmTabMark(tab) = FALSE;
@@ -334,7 +334,7 @@ XmTabList XmTabListRemoveTabs(XmTabList oldlist, Cardinal *position_list, Cardin
   cur_tab = _XmTabLStart(oldlist);
   cur_pos = 0;
   /* Get position, set mark */
-  for (i = 0; i < position_count; i++) {
+  for (i = 0; (Cardinal)i < position_count; i++) {
     cur_tab = GetNthTab(oldlist, position_list[i], cur_tab, cur_pos);
     cur_pos = position_list[i];
     _XmTabMark(cur_tab) = TRUE;
@@ -426,7 +426,7 @@ Widget _XmCreateTab(Widget parent,
     quarks[4] = XrmPermStringToQuark(XmNdecimal);
   }
   /* Get arguments from arglist */
-  for (i = 0; i < argcount; i++) {
+  for (i = 0; (Cardinal)i < argcount; i++) {
     qarg = XrmStringToQuark(arglist[i].name);
     if (qarg == quarks[0])
       value = (float)arglist[i].value;
@@ -556,7 +556,7 @@ static char *units_image(XtEnum units)
     case XmFONT_UNITS:
       return "fu";
     default:
-      sprintf(buf, "<Unknown units %d>", units);
+      snprintf(buf, sizeof(buf), "<Unknown units %d>", units);
       return buf;
   }
 }
@@ -570,7 +570,7 @@ static char *model_image(XmOffsetModel model)
     case XmRELATIVE:
       return "rel.";
     default:
-      sprintf(buf, "<Unknown model %d>", model);
+      snprintf(buf, sizeof(buf), "<Unknown model %d>", model);
       return buf;
   }
 }
@@ -586,7 +586,7 @@ static char *alignment_image(XtEnum alignment)
     case XmALIGNMENT_END:
       return "end";
     default:
-      sprintf(buf, "<Unknown alignment %d>", alignment);
+      snprintf(buf, sizeof(buf), "<Unknown alignment %d>", alignment);
       return buf;
   }
 }
