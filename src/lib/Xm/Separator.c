@@ -40,9 +40,8 @@ static char rcsid[] = "$XConsortium: Separator.c /main/14 1996/03/25 17:53:11 ba
 #include <Xm/VaSimpleP.h>
 #include <ctype.h>
 #include <stdio.h>
-    /********    Static Function Declarations    ********/
-    static void
-    ClassInitialize();
+/********    Static Function Declarations    ********/
+static void ClassInitialize(void);
 static void ClassPartInitialize(WidgetClass wc);
 static void Initialize(Widget rw, Widget nw, ArgList args, Cardinal *num_args);
 static void GetSeparatorGC(XmSeparatorWidget mw);

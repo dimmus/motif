@@ -165,7 +165,7 @@ UrmCreateWidgetInstanceCleanup (URMResourceContextPtr	context_id,
 				     &cldesc) ;
       if ( result != MrmSUCCESS ) return result ;
 
-      if (NULL != cldesc->cleanup) (*(void (*)(Widget))cldesc->cleanup) (child) ;
+      if (NULL != cldesc->cleanup) (*cldesc->cleanup) (child) ;
     }
   else if (widgetrec->variety != UilMrmAutoChildVariety)
     return Urm__UT_Error("UrmCreateWidgetInstanceCleanup", _MrmMMsg_0055,
@@ -786,7 +786,7 @@ UrmCreateWidgetInstance (URMResourceContextPtr	context_id,
    * Create the widget
    */
   *w_name = (ov_name != NULL) ? ov_name : (char*)widgetrec+widgetrec->name_offs;
-  *w_return = (*(Widget (*)(Widget, String, ArgList, Cardinal))cldesc->creator) (parent, *w_name, args, num_used) ;
+  *w_return = (*cldesc->creator) (parent, *w_name, args, num_used) ;
 
   Urm__CW_AddWRef (wref_id, *w_name, *w_return) ;
   if ( *svlist != NULL )
@@ -1503,7 +1503,7 @@ Urm__CW_CreateArglist (Widget			parent,
 		     (XtPointer)((char *)widgetrec+widgetrec->class_offs),
 		     &class_desc) ;
 		  if ((uncmp_res == MrmSUCCESS) &&
-		      (class_desc->creator == (Widget (*)())_XmCreateRendition))
+		      (class_desc->creator == _XmCreateRendition))
 		  {
 		    display = _XmRenderTableDisplay((XmRenderTable)parent);
 		    cmap = XDefaultColormap(display, XDefaultScreen(display));
@@ -1559,7 +1559,7 @@ Urm__CW_CreateArglist (Widget			parent,
 		     (XtPointer)((char *)widgetrec+widgetrec->class_offs),
 		     &class_desc) ;
 		  if ((uncmp_res == MrmSUCCESS) &&
-		      (class_desc->creator == (Widget (*)())_XmCreateRendition))
+		      (class_desc->creator == _XmCreateRendition))
 		    display = _XmRenderTableDisplay((XmRenderTable)parent);
 		  else
 		    display = XtDisplay(parent);
@@ -1655,10 +1655,10 @@ Urm__CW_CreateArglist (Widget			parent,
 	     (XtPointer)((char *)widgetrec+widgetrec->class_offs),
 	     &class_desc);
 	  if ((uncmp_res == MrmSUCCESS) &&
-	      (class_desc->creator == (Widget (*)())_XmCreateRendition))
+	      (class_desc->creator == _XmCreateRendition))
 	    display = _XmRenderTableDisplay((XmRenderTable)parent);
 	  else if ((uncmp_res == MrmSUCCESS) &&
-		   (class_desc->creator == (Widget (*)())_XmCreateTab))
+		   (class_desc->creator == _XmCreateTab))
 	    display = NULL;
 	  else display = XtDisplay(parent);
 	  result = Urm__CW_ConvertValue

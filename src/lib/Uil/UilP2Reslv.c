@@ -116,7 +116,7 @@ static char rcsid[] = "$XConsortium: UilP2Reslv.c /main/11 1995/07/14 09:36:35 d
 **--
 **/
 
-void	sem_resolve_forward_refs()
+void	sem_resolve_forward_refs(void)
 
 {
     sym_forward_ref_entry_type		* fwd_entry;
@@ -157,7 +157,7 @@ void	sem_resolve_forward_refs()
 	*/
 	/* %COMPLETE */
 	Uil_percent_complete = 60;
-	if (Uil_cmd_z_command.status_cb != (Uil_continue_type(*)())NULL)
+	if (Uil_cmd_z_command.status_cb != NULL)
 	    diag_report_status();
 
 
@@ -262,7 +262,7 @@ void	sem_resolve_forward_refs()
 	*/
 	/* %COMPLETE */
 	Uil_percent_complete = 60;
-	if (Uil_cmd_z_command.status_cb != (Uil_continue_type(*)())NULL)
+	if (Uil_cmd_z_command.status_cb != NULL)
 	    diag_report_status();
 
 	name_entry = fwd_val_entry->az_name;

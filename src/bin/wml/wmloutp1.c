@@ -40,12 +40,12 @@ static char rcsid[] = "$XConsortium: wmloutp1.c /main/7 1995/07/13 21:04:31 drk 
 #include "wml.h"
 
 /* External functions declaraion */
-extern  void wmlOutputKeyWordFiles ();
-extern  void wmlOutputMmFiles();
+extern  void wmlOutputKeyWordFiles (void);
+extern  void wmlOutputMmFiles(void);
 
 
 
-void wmlOutput ()
+void wmlOutput (void)
 
 {
 

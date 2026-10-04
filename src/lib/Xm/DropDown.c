@@ -56,7 +56,7 @@ static Boolean SetValues(Widget, Widget, Widget, ArgList, Cardinal *);
 static XtGeometryResult GeometryManager(Widget, XtWidgetGeometry *, XtWidgetGeometry *);
 static XtGeometryResult QueryGeometry(Widget, XtWidgetGeometry *, XtWidgetGeometry *);
 static void ClassPartInitialize(WidgetClass);
-static void ClassInitialize();
+static void ClassInitialize(void);
 static void ExposeMethod(Widget, XEvent *, Region);
 static Boolean ComboBoxParentProcess(Widget wid, XmParentProcessData event);
 /************************
@@ -337,7 +337,7 @@ WidgetClass xmDropDownWidgetClass = (WidgetClass)&xmDropDownClassRec;
  *	Arguments:     none
  *	Returns:       nothing
  */
-static void ClassInitialize()
+static void ClassInitialize(void)
 {
   /* do nothing */
 }

@@ -1005,7 +1005,7 @@ Boolean _XmMapKeyEvent(register String str,
   return (count > 0);
 }
 
-void XmRegisterConverters()
+void XmRegisterConverters(void)
 {
   _XmRegisterConverters();
 }

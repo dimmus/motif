@@ -161,7 +161,7 @@ static void GetValuesHook(Widget, ArgList, Cardinal *);
 static void Destroy(Widget);
 static void Initialize(Widget, Widget, ArgList, Cardinal *);
 static void ClassPartInitialize(WidgetClass w_class);
-static void ClassInitialize();
+static void ClassInitialize(void);
 /*  Resource definitions for Subclasses of Primitive */
 #define SAMPLE \
   ("abcdefghijklmonpqrstuvwxyz\n\
@@ -2998,7 +2998,7 @@ static void RemoveUserError(Widget w, XtPointer fsw_ptr, XtPointer data)
  *      Arguments:     none
  *      Returns:       nothing
  */
-static void ClassInitialize()
+static void ClassInitialize(void)
 {
   /* do nothing */
 }

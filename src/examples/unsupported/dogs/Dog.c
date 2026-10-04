@@ -215,7 +215,7 @@ Widget DogCreate(Widget parent, char *name, ArgList arglist, Cardinal nargs)
 
 int DogMrmInitialize()
 {
-    return(MrmRegisterClass (MrmwcUnknown, "Dog" , "DogCreate",	(Widget (*)(void))DogCreate,
+    return(MrmRegisterClass (MrmwcUnknown, "Dog" , "DogCreate",	DogCreate,
 				(WidgetClass)&dogClassRec));
 }
 #endif /* USING_UIL */

@@ -43,7 +43,7 @@
 /************************************************************
  *	STATIC FUNCTION DECLARATIONS
  *************************************************************/
-static void ClassInitialize();
+static void ClassInitialize(void);
 static void ClassPartInitialize(WidgetClass w_class);
 static void Realize(Widget, Mask *, XSetWindowAttributes *);
 static void Resize(Widget), ChangeManaged(Widget), InsertChild(Widget);
@@ -228,7 +228,7 @@ WidgetClass xmIconBoxWidgetClass = (WidgetClass)&xmIconBoxClassRec;
  *                                      the creation call.
  *	Returns:       none.
  */
-static void ClassInitialize()
+static void ClassInitialize(void)
 {
   /* do nothing */
 }

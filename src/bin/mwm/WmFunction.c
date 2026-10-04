@@ -100,7 +100,7 @@ static char rcsid[] = "$TOG: WmFunction.c /main/19 1998/04/20 13:00:48 mgreess $
 #include "WmCmd.h"
 
 #include <Xm/RowColumnP.h> /* for MS_LastManagedMenuTime */
-extern XmMenuState _XmGetMenuState();
+extern XmMenuState _XmGetMenuState(Widget);
 
 static unsigned int GetEventInverseMask(XEvent *event);
 

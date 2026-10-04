@@ -223,7 +223,7 @@ WidgetClass xmButtonBoxWidgetClass = (WidgetClass)&xmButtonBoxClassRec;
  *      Returns:       none.
  */
 /* ARGSUSED */
-static void ClassInitialize()
+static void ClassInitialize(void)
 {
   XtSetTypeConverter(XmRString,
                      XmRXmFillOption,

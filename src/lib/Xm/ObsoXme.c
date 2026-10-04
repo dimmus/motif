@@ -275,7 +275,7 @@ int _XmMicroSleep(long usecs)
 }
 
 /********************************************************************/
-String _XmOSGetHomeDirName()
+String _XmOSGetHomeDirName(void)
 {
   return XmeGetHomeDirName();
 }

@@ -223,7 +223,7 @@ db_table_required_entries (_db_globals *globals, int table_id)
 static FILE *dbfile;
 static int  num_bits;
 
-void db_incorporate()
+void db_incorporate(void)
 
 /*
  *++
@@ -992,7 +992,7 @@ void db_read_int_and_shorts(_db_header_ptr header)
 
 
 
-void db_open_file ()
+void db_open_file (void)
 
 /*
  *++
@@ -1112,7 +1112,7 @@ void db_open_file ()
 
 
 
-String get_root_dir_name()
+String get_root_dir_name(void)
 {
 	int uid;
 	struct passwd *pwd_value;

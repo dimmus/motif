@@ -118,7 +118,7 @@ static	     boolean		lst_v_listing_open = FALSE;
 **--
 **/
 
-void	lst_open_listing()
+void	lst_open_listing(void)
 {
     status  open_status;
     char	ctime_buf[26];
@@ -192,7 +192,7 @@ void	lst_open_listing()
 **--
 **/
 
-void	Uil_lst_cleanup_listing()
+void	Uil_lst_cleanup_listing(void)
 {
     /*
     **	Check that there is a listing file requested and that
@@ -316,7 +316,7 @@ void	lst_output_line(char *ac_line, boolean v_new_page)
     **	our progress.
     */
     Uil_current_file = lst_az_fcb->expanded_name;
-    if (Uil_cmd_z_command.status_cb != (Uil_continue_type(*)())NULL)
+    if (Uil_cmd_z_command.status_cb != NULL)
 	diag_report_status();
 
 
@@ -412,7 +412,7 @@ char	*current_time(char *ctime_buf)
 **--
 **/
 
-void	lst_output_listing()
+void	lst_output_listing(void)
 
 {
     src_source_record_type  *az_src_rec;

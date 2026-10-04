@@ -37,7 +37,7 @@ static Widget CreateFrame(Widget, ArgList, Cardinal);
 static void ActivateTextSearch(Widget, XtPointer, XtPointer);
 static void LayoutChildren(Widget), ChangeManaged(Widget);
 static void PositionFindAndFindText(Widget);
-static void ClassInitialize();
+static void ClassInitialize(void);
 static void Initialize(Widget, Widget, ArgList, Cardinal *);
 static void ClassPartInitialize(WidgetClass w_class);
 static void Resize(Widget), Destroy(Widget w);
@@ -268,7 +268,7 @@ WidgetClass xmMultiListWidgetClass = (WidgetClass)&xmMultiListClassRec;
  *      Arguments:     none
  *      Returns:       nothing
  */
-static void ClassInitialize()
+static void ClassInitialize(void)
 {
   /* do nothing */
 }

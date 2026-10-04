@@ -40,7 +40,7 @@
  *	Arguments: none
  *	Returns: the stack
  */
-XmStack _XmStackInit()
+XmStack _XmStackInit(void)
 {
   return ((XmStack)XtCalloc(sizeof(XmStackRec), (Cardinal)1));
 }
@@ -110,7 +110,7 @@ XtPointer _XmStackPop(XmStack stack)
  *	Arguments: none
  *	Returns: the queue
  */
-XmQueue _XmQueueInit()
+XmQueue _XmQueueInit(void)
 {
   return ((XmQueue)XtCalloc(sizeof(XmQueueRec), (Cardinal)1));
 }
@@ -325,7 +325,7 @@ _XmQElem *_Xm_GetNewElement(XmQueue queue)
  *	Arguments: none
  *	Returns: the queue
  */
-XmList _XmListInit()
+XmList _XmListInit(void)
 {
   return ((XmList)_XmQueueInit());
 }

@@ -94,7 +94,7 @@ TokenRec token[1000];
 TokenRec temp;
 
 void add_token (Token t);
-int yywrap ();
+int yywrap (void);
 
 int phase		= 0;
 int keyword_count;

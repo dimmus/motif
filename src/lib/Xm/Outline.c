@@ -49,7 +49,7 @@ typedef struct {
 /************************************************************
  *	STATIC FUNCTION DECLARATIONS
  *************************************************************/
-static void ClassInitialize();
+static void ClassInitialize(void);
 static void Resize(Widget), ClassPartInitialize(WidgetClass);
 static void Redisplay(Widget, XEvent *, Region);
 static void Initialize(Widget, Widget, ArgList, Cardinal *);
@@ -216,7 +216,7 @@ WidgetClass xmOutlineWidgetClass = (WidgetClass)&xmOutlineClassRec;
  *      Arguments:     none
  *      Returns:       nothing
  */
-static void ClassInitialize()
+static void ClassInitialize(void)
 {
   /* do nothing */
 }

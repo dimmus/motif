@@ -84,7 +84,7 @@ static Widget global_current_widget; /* static global to hold
 Boolean XmI18ListDoSearch(Widget w, String str, Boolean reset);
 XmMultiListRowInfo *XmI18ListFindRow(
     Widget w, String str, int *found_column, Boolean reset, Boolean do_visual);
-static void ClassInitialize();
+static void ClassInitialize(void);
 static void ClassPartInitialize(WidgetClass w_class);
 static void Initialize(Widget, Widget, ArgList, Cardinal *);
 static void Realize(Widget, Mask *, XSetWindowAttributes *);
@@ -433,7 +433,7 @@ static XmConst XmTransferTraitRec ListTransfer = {
  *      Arguments:     none
  *      Returns:       nothing
  */
-static void ClassInitialize()
+static void ClassInitialize(void)
 {
   /* do nothing */
 }

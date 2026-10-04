@@ -85,7 +85,7 @@ typedef enum { YES, NO, DONT_CARE } SuccessType;
 /************************************************************
  *	STATIC FUNCTION DECLARATIONS
  *************************************************************/
-static void ClassInit(), ClassPartInitialize(WidgetClass), InsertChild(Widget);
+static void ClassInit(void), ClassPartInitialize(WidgetClass), InsertChild(Widget);
 static void Destroy(Widget), ConstraintDestroy(Widget);
 static void Realize(Widget, Mask *, XSetWindowAttributes *);
 static void Initialize(Widget, Widget, ArgList, Cardinal *);
@@ -341,7 +341,7 @@ WidgetClass xmHierarchyWidgetClass = (WidgetClass)&xmHierarchyClassRec;
  *	Returns:       none.
  */
 /*ARGSUSED*/
-static void ClassInit()
+static void ClassInit(void)
 {
   XtSetTypeConverter(XmRString,
                      XmRXmHierarchyNodeState,

@@ -1555,13 +1555,13 @@ void _XmLowerCase(register char *source, register char *dest)
   *dest = 0;
 }
 
-void dump_external() {}
+void dump_external(void) {}
 
-void dump_fontlist_cache() {}
+void dump_fontlist_cache(void) {}
 
-void dump_fontlist() {}
+void dump_fontlist(void) {}
 
-void dump_internal() {}
+void dump_internal(void) {}
 
 void _XmButtonPopdownChildren(XmRowColumnWidget rowcol)
 {

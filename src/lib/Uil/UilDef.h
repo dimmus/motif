@@ -70,10 +70,18 @@ extern "C" {
 #endif
 
 /* uilmain.c */
+#if defined(__cplusplus)
 extern Uil_status_type Uil _ARGUMENTS((Uil_command_type
 *comand_desc,Uil_compile_desc_type *compile_desc,Uil_continue_type
 (*message_cb)(), char *message_data, Uil_continue_type (*status_cb)(),
 char *status_data));
+#else
+extern Uil_status_type Uil _ARGUMENTS((Uil_command_type
+*comand_desc,Uil_compile_desc_type *compile_desc,Uil_continue_type
+(*message_cb)(char *, int, int, char *, char *, char *, char *, int *),
+char *message_data, Uil_continue_type (*status_cb)(char *, int, int,
+char *, int *), char *status_data));
+#endif
 
 /* uilsymstor.c */
 extern void UilDumpSymbolTable  _ARGUMENTS(( sym_entry_type *node_entry ));

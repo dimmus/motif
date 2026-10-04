@@ -24,6 +24,7 @@
 /************************************************************
  *	INCLUDE FILES
  *************************************************************/
+#include "ColorI.h"
 #include "PrimitiveI.h"
 #include "RepTypeI.h"
 #include "Xm/XmStrDefsI.h"
@@ -67,7 +68,6 @@ typedef struct _PixCacheEntry {
 /************************************************************
  *	GLOBAL DECLARATIONS
  *************************************************************/
-extern void _XmSelectColorDefault();
 static XmList pix_cache_list = NULL;
 /************************************************************
  *	STATIC FUNCTION DECLARATIONS
@@ -398,7 +398,7 @@ static XmConst XmActivatableTraitRec iconButtonAT = {
  *	Returns:       none.
  */
 /*ARGSUSED*/
-static void ClassInit()
+static void ClassInit(void)
 {
   XtSetTypeConverter(XmRString,
                      XmRXmIconPlacement,

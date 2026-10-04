@@ -279,7 +279,7 @@ static sym_callback_entry_type		**reason_seen;
 **--
 **/
 
-void	sem_validation ()
+void	sem_validation (void)
 {
 
 /*
@@ -357,7 +357,7 @@ sym_control_entry_type		*control_entry;
  */
 /* %COMPLETE */
 Uil_percent_complete = 80;
-if ( Uil_cmd_z_command.status_cb != (Uil_continue_type(*)())NULL )
+if ( Uil_cmd_z_command.status_cb != NULL )
     diag_report_status ();
 
 /*

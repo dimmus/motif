@@ -1812,7 +1812,7 @@ Boolean _XmConvertActionParamToRepTypeId(
   return (False);
 }
 #ifdef DEBUG
-void _XmCheckStandardNumRecs()
+void _XmCheckStandardNumRecs(void)
 {
   Cardinal Index;
   XmRepTypeEntry Record, PrevRecord = NULL;

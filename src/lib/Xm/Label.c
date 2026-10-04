@@ -511,12 +511,12 @@ void _XmLabelCloneMenuSavvy(WidgetClass wc, XmMenuSavvyTrait mst)
   XmeTraitSet((XtPointer)wc, XmQTmenuSavvy, (XtPointer)mst);
 }
 
-char *_XmCBNameActivate()
+char *_XmCBNameActivate(void)
 {
   return XmNactivateCallback;
 }
 
-char *_XmCBNameValueChanged()
+char *_XmCBNameValueChanged(void)
 {
   return XmNvalueChangedCallback;
 }

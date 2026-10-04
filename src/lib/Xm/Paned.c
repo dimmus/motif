@@ -21,6 +21,7 @@
  * Floor, Boston, MA 02110-1301 USA
  *
  */
+#include "ColorI.h"
 #include "XmI.h"
 #include <Xm/ExtP.h>
 #include <Xm/PanedP.h>
@@ -74,11 +75,10 @@ static char defSashTranslations[] =
      <EnterWindow>: enter()\n\
      <LeaveWindow>: leave()";
 /* Internal (yet useful) Motif routine. */
-extern void _XmBackgroundColorDefault();
 /************************************************************
  *     Private functions.
  ************************************************************/
-static void ClassInitialize();
+static void ClassInitialize(void);
 static XmImportOperator ToPanedOppositePixels(Widget, int, XtArgVal *);
 static XmImportOperator ToPanedChildPixels(Widget, int, XtArgVal *);
 static Dimension PaneSize(Widget, Boolean);
@@ -421,7 +421,7 @@ WidgetClass xmPanedWidgetClass = (WidgetClass)&xmPanedClassRec;
  *     Arguments: none
  *     Returns: nothing
  */
-static void ClassInitialize()
+static void ClassInitialize(void)
 {
   /* do nothing */
 }

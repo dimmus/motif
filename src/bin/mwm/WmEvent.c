@@ -84,7 +84,7 @@ typedef struct {
    unsigned int   resource;
    long           mgtMask;
    WmFunction     wmFunction;
-   Boolean       (*parseProc)();
+   Boolean       (*parseProc)(unsigned char **linePP, WmFunction wmFunction, String *pArgs);
 } FunctionTableEntry;
 
 #endif /* WSM */
@@ -2617,7 +2617,7 @@ Time GetTimestamp (void)
  *
  *************************************<->***********************************/
 
-Time LastTime ()
+Time LastTime (void)
 {
   Time evTime;
 

@@ -668,10 +668,10 @@ extern void wmlAddCharsetAttribute (int, void *);
 extern void LexIssueError (int);
 
 /*      May be, declaration of functions must be next:
-extern void wmlAddClassChild ();
-extern void wmlCreateChild ();
-extern void wmlCreateOrAppendCtrlList ();
-extern void wmlAddCtrlListControl ();
+extern void wmlAddClassChild (char *name);
+extern void wmlCreateChild (char *name, char *class);
+extern void wmlCreateOrAppendCtrlList (char *name);
+extern void wmlAddCtrlListControl (char *name);
         But, we are using real function arguments type declaration:
 */
 extern void wmlAddClassChild (char *);
