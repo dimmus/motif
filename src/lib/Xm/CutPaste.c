@@ -465,6 +465,8 @@ static Boolean ClipboardGetByNameItem(Display *dpy,
       /* passed by name */
       dataok = ClipboardRequestDataAndWait(dpy, win, matchformat);
     }
+    /* ClipboardFindFormat() returns a copy of the record */
+    XtFree((char *)matchformat);
   }
   else {
     dataok = 0;

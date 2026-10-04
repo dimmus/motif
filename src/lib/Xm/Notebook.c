@@ -711,8 +711,10 @@ static void Destroy(Widget w)
   if (nb->notebook.spiral_pixmap != XmUNSPECIFIED_PIXMAP && nb->notebook.spiral_pixmap != XmNONE)
     XFreePixmap(XtDisplay(w), nb->notebook.spiral_pixmap);
   /* release scroll frame data */
-  if (nb->notebook.scroll_frame_data != NULL)
+  if (nb->notebook.scroll_frame_data != NULL) {
+    XtFree((char *)nb->notebook.scroll_frame_data->nav_list);
     XtFree((char *)nb->notebook.scroll_frame_data);
+  }
 }
 
 /*- Resize -----------------------------------------------------------------

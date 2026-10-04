@@ -5,13 +5,11 @@
 # The same as in ../lsan.supp.
 leak:XtOwnSelection
 leak:XtDisownSelection
-leak:_XmSFAddNavigator
 
 # Mrmappl.c, MrmFetchWidgetOverride: when UrmCreateWidgetTree() fails
 # (a corrupt .uid), the widget reference context made by
 # Urm__CW_InitWRef() and the SetValues list are not freed.
 leak:Urm__CW_InitWRef
-leak:ClipboardGetByNameItem
 
 # ResEncod.c, XmCvtCTToXmString: the separator it caches for newlines
 # leaks for some inputs with direction sequences between newlines, for

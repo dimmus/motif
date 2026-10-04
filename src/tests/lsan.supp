@@ -16,12 +16,3 @@
 # known to be Motif's fault.
 leak:XtOwnSelection
 leak:XtDisownSelection
-
-# Notebook.c, Destroy: frees the scroll frame data but not its navigator
-# list (ScrollFrameT.c, _XmSFAddNavigator).
-leak:_XmSFAddNavigator
-
-# CutPaste.c, ClipboardGetByNameItem: the format record it gets from
-# ClipboardFindFormat() is never freed; every conversion of the
-# CLIPBOARD selection by its Motif owner (a paste) leaks one.
-leak:ClipboardGetByNameItem
