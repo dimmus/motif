@@ -389,15 +389,20 @@ static void Destroy(Widget wid)
   }
 }
 
+/* extarray is shared by all threads: its slots are taken and given back
+   under the process lock */
 char *_XmExtObjAlloc(int size)
 {
   int i;
   if (size <= XmNUM_BYTES) {
+    _XmProcessLock();
     for (i = 0; i < XmNUM_ELEMENTS; i++)
       if (!extarray[i].cache.inuse) {
         extarray[i].cache.inuse = TRUE;
+        _XmProcessUnlock();
         return extarray[i].cache.data;
       }
+    _XmProcessUnlock();
   }
   return XtMalloc(size);
 }
@@ -405,11 +410,14 @@ char *_XmExtObjAlloc(int size)
 void _XmExtObjFree(XtPointer element)
 {
   int i;
+  _XmProcessLock();
   for (i = 0; i < XmNUM_ELEMENTS; i++)
     if (extarray[i].cache.data == (char *)element) {
       extarray[i].cache.inuse = FALSE;
+      _XmProcessUnlock();
       return;
     }
+  _XmProcessUnlock();
   XtFree((char *)element);
 }
 

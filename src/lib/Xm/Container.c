@@ -4519,8 +4519,9 @@ static XmTabList GetDumbTabList(int tab_size, Cardinal asked_num_tab)
   static int Num_tab = 0;
   static XmTab *Tab_pool = NULL;
   XmTabList Tab_list = NULL;
-  Cardinal i, prev_num_tab = Num_tab;
+  Cardinal i, prev_num_tab;
   _XmProcessLock();
+  prev_num_tab = Num_tab;
   if ((Cardinal)Num_tab < asked_num_tab) {
     Num_tab = MAX(asked_num_tab, 100); /* HACKKKK */
     Tab_pool = (XmTab *)_XmReallocArray((char *)Tab_pool, Num_tab, sizeof(XmTab));

@@ -475,7 +475,7 @@ static void ChangeManaged(Widget w)
     if ((info->cell_x != XmIconBoxAnyCell) && (info->cell_y != XmIconBoxAnyCell) &&
         !XmIconBoxIsCellEmpty((Widget)ibw, info->cell_x, info->cell_y, *childp))
     {
-      static String params[1];
+      String params[1];
       Cardinal num = 1;
       char buf[BUFSIZ];
       params[0] = buf;
@@ -559,7 +559,7 @@ static Boolean ConstraintSetValues(
       GetXYFromCell(XtParent(set), set_info, &(set->core.x), &(set->core.y));
     }
     else {
-      static String params[1];
+      String params[1];
       Cardinal num = 1;
       char buf[BUFSIZ];
       params[0] = buf;

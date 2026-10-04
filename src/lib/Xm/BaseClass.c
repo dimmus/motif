@@ -1106,10 +1106,12 @@ void _XmInitializeExtensions(void)
     objectClass->core_class.initialize = InitializeRootWrapper;
     objectClass->core_class.set_values = SetValuesRootWrapper;
     objectClass->core_class.get_values_hook = GetValuesRootWrapper;
+    /* Once: the wrappers of widgets of other classes, maybe in another
+       thread, may be using them by the time a class initializes. */
+    resizeRefWContext = XUniqueContext();
+    geoRefWContext = XUniqueContext();
     firstTime = False;
   }
-  resizeRefWContext = XUniqueContext();
-  geoRefWContext = XUniqueContext();
 }
 
 Cardinal _XmSecondaryResourceData(XmBaseClassExt bcePtr,

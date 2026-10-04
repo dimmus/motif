@@ -381,8 +381,21 @@ static Boolean CurrentCharsetIsUTF8(void);
 #define Ucs2Buffer(len, local)                                                                     \
   ((len) <= UCS2_LOCAL_LEN ? (local) : (XChar2b *)_XmMallocArray(len, sizeof(XChar2b)))
 static struct __Xmlocale locale;
-static char **_tag_cache;
+/*
+ * The tags of optimized segments, by index, guarded by the process lock.
+ * _XmEntryRendBegins and friends return pointers into the array, used
+ * without the lock, so it never moves: when it is full a larger copy
+ * replaces it and the old one is kept, still valid, on a list (entries
+ * never change once added).
+ */
+typedef struct _XmTagCacheRec {
+  struct _XmTagCacheRec *next;
+  char **tags;
+} XmTagCacheRec;
+static char **_Atomic _tag_cache;
 static int _cache_count = 0;
+static int _cache_size = 0;
+static XmTagCacheRec *_old_tag_caches = NULL;
 
 /*
  * Determines whether this string has a short or long length field
@@ -851,7 +864,8 @@ int _XmStringIndexCacheTag(XmStringTag tag, int length)
      locale.tag if necessary, to keep indices low. */
   _XmProcessLock();
   if (_cache_count == 0) {
-    _tag_cache = (char **)XtMalloc(sizeof(char **) * 3);
+    _cache_size = 16;
+    _tag_cache = (char **)_XmMallocArray(_cache_size, sizeof(char *));
     _tag_cache[_cache_count] = XmFONTLIST_DEFAULT_TAG;
     _cache_count++;
     _tag_cache[_cache_count] = _MOTIF_DEFAULT_LOCALE;
@@ -883,7 +897,16 @@ int _XmStringIndexCacheTag(XmStringTag tag, int length)
   /* Add this entry to the cache. */
   if (length == XmSTRING_TAG_STRLEN)
     length = strlen(tag);
-  _tag_cache = (char **)_XmReallocArray((char *)_tag_cache, _cache_count + 1, sizeof(char **));
+  if (_cache_count == _cache_size) {
+    XmTagCacheRec *old = (XmTagCacheRec *)XtMalloc(sizeof(XmTagCacheRec));
+    char **tags = (char **)_XmMallocArray(2 * _cache_size, sizeof(char *));
+    memcpy(tags, _tag_cache, _cache_count * sizeof(char *));
+    old->tags = _tag_cache;
+    old->next = _old_tag_caches;
+    _old_tag_caches = old;
+    _tag_cache = tags;
+    _cache_size *= 2;
+  }
   a = XtMalloc(length + 1);
   memcpy(a, tag, length);
   a[length] = '\0';

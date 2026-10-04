@@ -350,14 +350,9 @@ void _XmSetEtchedSlider(XmScrollBarWidget sbw)
  **********************************************************************/
 void _XmSortResourceList(XrmResource *list[], Cardinal len)
 {
-  static Boolean first_time = TRUE;
-  static XrmQuark unitQ;
+  XrmQuark unitQ = XrmPermStringToQuark(XmNunitType);
   int n, i;
   XrmResource *p = NULL;
-  if (first_time) {
-    unitQ = XrmPermStringToQuark(XmNunitType);
-    first_time = FALSE;
-  }
   for (n = 0; (Cardinal)n < len; n++)
     if (list[n]->xrm_name == unitQ) {
       p = list[n];
@@ -492,7 +487,6 @@ void _XmGetDefaultThresholdsForScreen(Screen *screen)
   int default_dark_threshold_spec;
   int default_foreground_threshold_spec;
   WidgetRec widget;
-  XmTHRESHOLDS_INITD = True;
   /*
    * We need a widget to pass into the XtConvertAndStore() function
    * to convert the string to an int.  Since a widget can't be
@@ -560,9 +554,13 @@ void _XmGetDefaultThresholdsForScreen(Screen *screen)
   }
   else
     default_foreground_threshold_spec = XmDEFAULT_FOREGROUND_THRESHOLD;
+  /* The thresholds are shared by all threads */
+  _XmProcessLock();
   XmCOLOR_LITE_THRESHOLD = default_light_threshold_spec * XmCOLOR_PERCENTILE;
   XmCOLOR_DARK_THRESHOLD = default_dark_threshold_spec * XmCOLOR_PERCENTILE;
   XmFOREGROUND_THRESHOLD = default_foreground_threshold_spec * XmCOLOR_PERCENTILE;
+  XmTHRESHOLDS_INITD = True;
+  _XmProcessUnlock();
 }
 
 /********--------------------------------------
@@ -844,7 +842,11 @@ XmColorData *_XmGetColors(Screen *screen, Colormap color_map, Pixel background)
      * already matched what is in the cache and the thresholds
      * haven't already been initialized.
      */
-    if (!XmTHRESHOLDS_INITD)
+    Boolean inited;
+    _XmProcessLock();
+    inited = XmTHRESHOLDS_INITD;
+    _XmProcessUnlock();
+    if (!inited)
       _XmGetDefaultThresholdsForScreen(screen);
     return (old_colors);
   }
@@ -882,31 +884,26 @@ XmColorData *_XmGetDefaultColors(Screen *screen, Colormap color_map)
   static int default_set_size = 0;
   int i;
   XColor color_def;
-  static Pixel background;
+  Pixel background;
   XrmValue fromVal;
   XrmValue toVal;
   XrmValue args[2];
   Cardinal num_args;
   String default_string = XtDefaultBackground;
+  XmColorData *result;
   /*  Look through  a set of screen / background pairs to see  */
-  /*  if the default is already in the table.                  */
+  /*  if the default is already in the table.  The table is shared  */
+  /*  by all threads; the conversions below are made without the    */
+  /*  lock, which Xt may need in another order.                     */
+  _XmProcessLock();
   for (i = 0; i < default_set_count; i++) {
-    if ((default_set[i]->screen == screen) && (default_set[i]->color_map == color_map))
-      return (default_set[i]);
+    if ((default_set[i]->screen == screen) && (default_set[i]->color_map == color_map)) {
+      result = default_set[i];
+      _XmProcessUnlock();
+      return (result);
+    }
   }
-  /*  See if more space is needed in the array  */
-  if (default_set == NULL) {
-    default_set_size = 10;
-    default_set = (XmColorData **)_XmReallocArray((char *)default_set,
-                                                  default_set_size,
-                                                  sizeof(XmColorData *));
-  }
-  else if (default_set_count == default_set_size) {
-    default_set_size += 10;
-    default_set = (XmColorData **)_XmReallocArray((char *)default_set,
-                                                  default_set_size,
-                                                  sizeof(XmColorData *));
-  }
+  _XmProcessUnlock();
   /* Find the background based on the depth of the screen */
   if (DefaultDepthOfScreen(screen) == 1) {
     /*
@@ -954,9 +951,17 @@ XmColorData *_XmGetDefaultColors(Screen *screen, Colormap color_map)
    * slot in the default set array.  default_set points to a subset
    * of the data pointed to by color_set (defined in _XmGetColors).
    */
-  default_set[default_set_count] = _XmGetColors(screen, color_map, background);
-  default_set_count++;
-  return (default_set[default_set_count - 1]);
+  result = _XmGetColors(screen, color_map, background);
+  _XmProcessLock();
+  /*  See if more space is needed in the array  */
+  if (default_set_count == default_set_size) {
+    default_set_size += 10;
+    default_set = (XmColorData **)_XmReallocArray(
+        (char *)default_set, default_set_size, sizeof(XmColorData *));
+  }
+  default_set[default_set_count++] = result;
+  _XmProcessUnlock();
+  return (result);
 }
 
 static int _XmBrightness(XColor *color)
@@ -988,6 +993,8 @@ static int _XmBrightness(XColor *color)
 Pixel _XmAccessColorData(XmColorData *cd, unsigned char which)
 {
   Pixel p;
+  /* The entry and the thresholds are shared by all threads */
+  _XmProcessLock();
   switch (which) {
     case XmBACKGROUND:
       if (!(cd->allocated & which) &&
@@ -1059,6 +1066,7 @@ Pixel _XmAccessColorData(XmColorData *cd, unsigned char which)
       p = _XmBlackPixel(cd->screen, cd->color_map, cd->background);
       break;
   }
+  _XmProcessUnlock();
   return (p);
 }
 
@@ -1311,8 +1319,10 @@ static void DisplayDestroyCallback(Widget w,
 WidgetClass _XmGetActualClass(Display *display, WidgetClass w_class)
 {
   WidgetClass actualClass;
+  _XmProcessLock();
   if (!actualClassContext)
     actualClassContext = XUniqueContext();
+  _XmProcessUnlock();
   /*
    * see if a non-default class has been specified for the
    * class
@@ -1335,8 +1345,10 @@ void _XmSetActualClass(Display *display, WidgetClass w_class, WidgetClass actual
   XmDisplay dd = (XmDisplay)XmGetXmDisplay(display);
   WidgetClass previous;
   WidgetClass oldActualClass;
+  _XmProcessLock();
   if (!actualClassContext)
     actualClassContext = XUniqueContext();
+  _XmProcessUnlock();
   /*
    * see if a non-default class has been specified for the
    * class
@@ -1374,8 +1386,10 @@ XmDesktopObject _XmGetWorldObject(Widget shell, ArgList args, Cardinal *num_args
    ** the display is closed, so that we don't get bad data if a second
    ** display with the same id is opened.
    */
+  _XmProcessLock();
   if (!worldObjectContext)
     worldObjectContext = XUniqueContext();
+  _XmProcessUnlock();
   display = XtDisplayOfObject(shell);
   if (XFindContext(display, (Window)NULL, worldObjectContext, (char **)&worldObject)) {
     WidgetClass worldClass;

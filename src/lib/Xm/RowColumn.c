@@ -2262,9 +2262,12 @@ static void Initialize(Widget rw, Widget nw, ArgList args, Cardinal *num_args)
   RC_popupMenuClick(m) = TRUE;
   if (m->manager.shadow_thickness == XmINVALID_DIMENSION) {
     XrmValue xrm_value;
-    /* Depend on the enableThinThickness Display resource. */
+    /* Depend on the enableThinThickness Display resource.  The value is
+       in a buffer that all threads share. */
+    _XmProcessLock();
     _XmSetThickness((Widget)m, (int)0, &xrm_value);
     m->manager.shadow_thickness = *((Dimension *)xrm_value.addr);
+    _XmProcessUnlock();
   }
   m->row_column.old_width = XtWidth(m);
   m->row_column.old_height = XtHeight(m);

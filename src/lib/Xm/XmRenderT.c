@@ -1082,9 +1082,9 @@ XmRenderTable XmRenderTableAddRenditions(XmRenderTable oldtable,
   if (app) {
     _XmAppLock(app);
   }
-  else {
-    _XmProcessLock();
-  }
+  /* and the process lock: the reference counts are shared with
+     XmRenderTableFree and XmRenditionFree, which hold only that */
+  _XmProcessLock();
   if (oldtable == NULL) {
     /* Malloc new table */
     table = (_XmRenderTable)XtMalloc(
@@ -1198,11 +1198,9 @@ XmRenderTable XmRenderTableAddRenditions(XmRenderTable oldtable,
   }
   if (tmptable != NULL)
     FreeHandle(tmptable);
+  _XmProcessUnlock();
   if (app) {
     _XmAppUnlock(app);
-  }
-  else {
-    _XmProcessUnlock();
   }
   return (oldtable);
 }
@@ -1220,15 +1218,13 @@ XmRenderTable XmRenderTableRemoveRenditions(XmRenderTable oldtable,
   if (app) {
     _XmAppLock(app);
   }
-  else {
-    _XmProcessLock();
-  }
+  /* and the process lock: the reference counts are shared with
+     XmRenderTableFree and XmRenditionFree, which hold only that */
+  _XmProcessLock();
   ret_val = _XmRenderTableRemoveRenditions(oldtable, tags, tag_count, FALSE, XmFONT_IS_FONT, NULL);
+  _XmProcessUnlock();
   if (app) {
     _XmAppUnlock(app);
-  }
-  else {
-    _XmProcessUnlock();
   }
   return ret_val;
 }
@@ -1405,9 +1401,9 @@ XmRenderTable XmRenderTableCopy(XmRenderTable table, XmStringTag *tags, int tag_
   if (app) {
     _XmAppLock(app);
   }
-  else {
-    _XmProcessLock();
-  }
+  /* and the process lock: the reference counts are shared with
+     XmRenderTableFree and XmRenditionFree, which hold only that */
+  _XmProcessLock();
   count = 0;
   if ((_XmRTRefcountInc(table) == 0) || (tags != NULL)) {
     /* Malloc new table */
@@ -1475,11 +1471,9 @@ XmRenderTable XmRenderTableCopy(XmRenderTable table, XmStringTag *tags, int tag_
     _XmRTCount(rt) = count;
   }
   _XmRTDisplay(rt) = _XmRTDisplay(table);
+  _XmProcessUnlock();
   if (app) {
     _XmAppUnlock(app);
-  }
-  else {
-    _XmProcessUnlock();
   }
   return (rt);
 }
@@ -1525,7 +1519,9 @@ XmRendition XmRenderTableGetRendition(XmRenderTable table, XmStringTag tag)
   XmRendition ret_val;
   _XmDisplayToAppContext(_XmRTDisplay(table));
   _XmAppLock(app);
+  _XmProcessLock(); /* for the reference count, see XmRenderTableCopy */
   ret_val = CopyRendition(_XmRenderTableFindRendition(table, tag, FALSE, FALSE, FALSE, NULL));
+  _XmProcessUnlock();
   _XmAppUnlock(app);
   return ret_val;
 }
@@ -1542,6 +1538,7 @@ XmRendition *XmRenderTableGetRenditions(XmRenderTable table, char **tags, Cardin
     app = XtDisplayToApplicationContext(_XmRTDisplay(table));
     _XmAppLock(app);
   }
+  _XmProcessLock(); /* for the reference counts, see XmRenderTableCopy */
   rends = (XmRendition *)_XmMallocArray(tag_count, sizeof(XmRendition));
   count = 0;
   for (i = 0; (Cardinal)i < tag_count; i++) {
@@ -1553,6 +1550,7 @@ XmRendition *XmRenderTableGetRenditions(XmRenderTable table, char **tags, Cardin
   }
   if ((Cardinal)count < tag_count)
     rends = (XmRendition *)_XmReallocArray((char *)rends, count, sizeof(XmRendition));
+  _XmProcessUnlock();
   if (app) {
     _XmAppUnlock(app);
   }
@@ -1763,15 +1761,13 @@ XmRendition XmRenditionCreate(Widget widget, XmStringTag tag, ArgList arglist, C
   if (app) {
     _XmAppLock(app);
   }
-  else {
-    _XmProcessLock();
-  }
+  /* and the process lock: the reference counts are shared with
+     XmRenderTableFree and XmRenditionFree, which hold only that */
+  _XmProcessLock();
   ret_val = _XmRenditionCreate(NULL, widget, XmS, XmCRenderTable, tag, arglist, argcount, NULL);
+  _XmProcessUnlock();
   if (app) {
     _XmAppUnlock(app);
-  }
-  else {
-    _XmProcessUnlock();
   }
   return ret_val;
 }
