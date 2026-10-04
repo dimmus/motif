@@ -834,7 +834,7 @@ void XmeGetDefaultPixel(Widget widget, int type, int offset, XrmValue *value)
 {
   Screen *screen;
   Colormap color_map;
-  static Pixel new_value;
+  static _Thread_local Pixel new_value;
   XmColorData *color_data;
   Pixel background = 0;
   Widget parent;

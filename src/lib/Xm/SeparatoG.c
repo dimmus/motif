@@ -315,7 +315,7 @@ static void SetTopShadowPixmapDefault(Widget widget,
 {
   XmSeparatorGadget sg = (XmSeparatorGadget)widget;
   XmManagerWidget mw = (XmManagerWidget)XtParent(sg);
-  static Pixmap pixmap;
+  static _Thread_local Pixmap pixmap;
   pixmap = XmUNSPECIFIED_PIXMAP;
   value->addr = (char *)&pixmap;
   value->size = sizeof(Pixmap);

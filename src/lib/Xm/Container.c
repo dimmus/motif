@@ -1816,7 +1816,7 @@ static void CheckSetRenderTable(Widget wid, int offset, XrmValue *value)
  */
 static void DefaultCollapsedPixmap(Widget wid, int offset, XrmValue *value)
 {
-  static Pixmap result;
+  static _Thread_local Pixmap result;
   XmContainerWidget cw = (XmContainerWidget)wid;
   result = XmGetPixmapByDepth(XtScreen(wid),
                               (LayoutIsRtoLM(cw) ? "collapsed_rtol" : "collapsed"),

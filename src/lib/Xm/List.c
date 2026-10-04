@@ -1710,7 +1710,7 @@ static void ScrollBarDisplayPolicyDefault(Widget widget,
                                           int offset, /* unused */
                                           XrmValue *value)
 {
-  static unsigned char sb_display_policy;
+  static _Thread_local unsigned char sb_display_policy;
   value->addr = (XPointer)&sb_display_policy;
   /* If this is a scrolledlist in a filesb */
   if (XmIsScrolledWindow(XtParent(widget)) && XmIsFileSelectionBox(XtParent(XtParent(widget)))) {

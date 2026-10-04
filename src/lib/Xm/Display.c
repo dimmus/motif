@@ -1036,7 +1036,7 @@ WidgetClass _XmSetXmDisplayClass(WidgetClass wc)
 void _XmSetThickness(Widget widget, int offset, XrmValue *value)
 {
   XmDisplay xmDisplay;
-  static Dimension thickness;
+  static _Thread_local Dimension thickness;
   xmDisplay = (XmDisplay)XmGetXmDisplay(XtDisplay(widget));
   if (xmDisplay->display.enable_thin_thickness) {
     thickness = 1;
@@ -1058,7 +1058,7 @@ void _XmSetThickness(Widget widget, int offset, XrmValue *value)
 void _XmSetThicknessDefault0(Widget widget, int offset, XrmValue *value)
 {
   XmDisplay xmDisplay;
-  static Dimension thickness;
+  static _Thread_local Dimension thickness;
   xmDisplay = (XmDisplay)XmGetXmDisplay(XtDisplay(widget));
   if (xmDisplay->display.enable_thin_thickness) {
     thickness = 1;

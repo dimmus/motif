@@ -597,7 +597,7 @@ void _XmUnitTypeDefault(Widget widget,
                         int offset, /* unused */
                         XrmValue *value)
 {
-  static unsigned char unit_type;
+  static _Thread_local unsigned char unit_type;
   value->size = sizeof(unit_type);
   value->addr = (XPointer)&unit_type;
   if (XmIsManager(widget->core.parent))

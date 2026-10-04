@@ -386,7 +386,7 @@ static void ScrollBarPlacementDefault(Widget widget,
                                       int offset, /* unused */
                                       XrmValue *value)
 {
-  static unsigned char placement;
+  static _Thread_local unsigned char placement;
   value->addr = (char *)&placement;
   if (LayoutIsRtoLM(((XmScrolledWindowWidget)widget)))
     placement = XmBOTTOM_LEFT;
@@ -408,7 +408,7 @@ static void VisualPolicyDefault(Widget widget,
                                 XrmValue *value)
 {
   XmScrolledWindowWidget sw = (XmScrolledWindowWidget)widget;
-  static unsigned char visual_policy;
+  static _Thread_local unsigned char visual_policy;
   value->addr = (XPointer)&visual_policy;
   if (sw->swindow.ScrollPolicy == XmAUTOMATIC)
     visual_policy = XmCONSTANT;

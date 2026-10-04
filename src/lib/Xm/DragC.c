@@ -576,7 +576,7 @@ externaldef(dragContextclass) WidgetClass xmDragContextClass = (WidgetClass)&xmD
 
 static void GetRefForeground(Widget widget, int offset, XrmValue *value)
 {
-  static Pixel pixel;
+  static _Thread_local Pixel pixel;
   XmDragContext dc = (XmDragContext)widget;
   Widget sw = dc->drag.sourceWidget;
   pixel = BlackPixelOfScreen(XtScreen(widget));
@@ -601,7 +601,7 @@ static void CopyRefForeground(Widget widget, int offset, XrmValue *value)
 
 static void GetRefBackground(Widget widget, int offset, XrmValue *value)
 {
-  static Pixel pixel;
+  static _Thread_local Pixel pixel;
   XmDragContext dc = (XmDragContext)widget;
   Widget sw = dc->drag.sourceWidget;
   pixel = WhitePixelOfScreen(XtScreen(dc));
