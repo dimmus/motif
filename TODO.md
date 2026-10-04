@@ -70,6 +70,18 @@ What remains, by priority:
   converter caching, lock-free traits, the remaining per-tick ScrollBar
   `XSync`, idle coalescing of IM spot updates; mwm benchmarks, a CI
   performance gate and profiling.
+- **Warnings at `-O3`:** the zero-warning result holds for GCC at
+  `-O2` (RelWithDebInfo). A CMake `Release` build (`-O3`) still reports
+  optimisation-dependent warnings in library code:
+  - `-Warray-bounds` in `TextStrSo.c` `ScanStart` (`XmSELECT_LINE`, about
+    line 1111/1116): a 2- or 4-byte character is read through `Look()`
+    from what GCC sees as a 1-byte buffer. The same code is on `master`.
+    Check whether `_XmStringSourceGetChar` can return a 1-byte buffer for
+    wide sources.
+  - `-Wmaybe-uninitialized` for `cursorPos`/`nextPos` in `DataF.c` (about
+    3392-3466).
+  - `-Wstringop-truncation` in `Mrmwci.c:886`.
+  Make the CI `-Werror` job build `Release` as well as `RelWithDebInfo`.
 
 ---
 
