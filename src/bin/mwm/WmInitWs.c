@@ -434,9 +434,6 @@ void InitWmGlobal (int argc, char *argv [], char *envp [])
 #endif /*PANELIST  */
 #endif  /* WSM */
 
-    SetupWmSignalHandlers (0); /* dummy paramater */
-
-
     /*
      * Do (pre-toolkit) initialization:
      */
@@ -496,6 +493,7 @@ void InitWmGlobal (int argc, char *argv [], char *envp [])
     XtToolkitInitialize();
 
     wmGD.mwmAppContext = XtCreateApplicationContext();
+    SetupWmSignalHandlers (0); /* dummy paramater */
     AddWmResourceConverters ();
     wmGD.display = XtOpenDisplay (wmGD.mwmAppContext,
 				  NULL,

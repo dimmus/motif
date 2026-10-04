@@ -837,7 +837,9 @@ lw(1.097588i) lw(4.402412i).
 NameDescription
 allShow all feedback (Default value)\&.
 behaviorConfirm behavior switch\&.
-killConfirm on receipt of KILL signal\&.
+killT{
+Confirm quitting on receipt of SIGTERM, SIGINT, SIGHUP or SIGQUIT\&.
+T}
 moveShow position during move\&.
 noneShow no feedback\&.
 placementT{
@@ -859,6 +861,12 @@ This resource specification provides feedback for initial client placement
 and resize, and enables the dialog boxes to confirm the restart and set behavior
 functions\&. It disables feedback for the move function\&. The default value for
 this resource is all\&.
+.PP
+Because the default includes kill, \fBmwm\fP does not exit when it
+receives SIGTERM, SIGINT, SIGHUP or SIGQUIT, but shows a dialog that
+asks for confirmation\&. Exclude kill (for example
+\fIMwm*showFeedback: \-kill\fP) to have \fBmwm\fP exit at once on
+these signals, as a session or service manager expects\&.
 .IP "\fIstartupKeyFocus\fP\ (class\  \fIStartupKeyFocus\fP)" 10
 This resource is available only when the keyboard input focus policy
 is explicit\&. When given the default value of True, a window gets the keyboard
