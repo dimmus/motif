@@ -975,6 +975,53 @@ START_TEST(list_items_without_count)
 }
 END_TEST
 
+static void button(Widget list, int type, const char *action, int pos)
+{
+	XButtonEvent ev;
+	Position x = 0, y = 0;
+	Dimension w = 0, h = 0;
+
+	ck_assert(XmListPosToBounds(list, pos, &x, &y, &w, &h));
+	memset(&ev, 0, sizeof(ev));
+	ev.type = type;
+	ev.display = XtDisplay(list);
+	ev.window = XtWindow(list);
+	ev.x = x + 2;
+	ev.y = y + h / 2;
+	ev.button = Button1;
+	ev.time = 1000 * pos; /* far apart: no double click */
+	XtCallActionProc(list, (String)action, (XEvent *)&ev, NULL, 0);
+}
+
+/*
+ * Selections through the API while the user is selecting with the
+ * mouse: the button press has changed the elements, so the API updates
+ * the selection lists from them.
+ */
+START_TEST(list_api_during_button_selection)
+{
+	Widget list = make_list(XmMULTIPLE_SELECT, 50, "item %d", 0);
+	int e1[] = { 3, 10 };
+	int e2[] = { 3, 8, 10 };
+
+	XtRealizeWidget(shell);
+	XmListSelectPos(list, 10, False);
+	button(list, ButtonPress, "ListBeginSelect", 3);
+	XmListSelectPos(list, 7, False);
+	XmListSelectPos(list, 7, False);
+	expect_selected(list, 2, e1);
+	button(list, ButtonRelease, "ListEndSelect", 3);
+	expect_selected(list, 2, e1);
+	button(list, ButtonPress, "ListBeginSelect", 8);
+	XmListDeletePos(list, 40);
+	button(list, ButtonRelease, "ListEndSelect", 8);
+	expect_selected(list, 3, e2);
+	XmListDeselectPos(list, 3);
+	XmListSelectPos(list, 3, False);
+	expect_selected(list, 3, e2);
+}
+END_TEST
+
 void list_suite(SRunner *runner)
 {
 	Suite *s = suite_create("List");
@@ -1006,6 +1053,7 @@ void list_suite(SRunner *runner)
 	tcase_add_test(t, list_selection_resources);
 	tcase_add_test(t, list_selected_positions_replace_selection);
 	tcase_add_test(t, list_replace_unselected_duplicates);
+	tcase_add_test(t, list_api_during_button_selection);
 	tcase_add_checked_fixture(t, _init_xt, uninit_xt);
 	tcase_set_timeout(t, 60);
 	suite_add_tcase(s, t);

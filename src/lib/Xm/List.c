@@ -67,6 +67,7 @@ static char rcsid[] = "$TOG: List.c /main/47 1999/10/12 16:58:17 mgreess $"
 #include <Xm/XmosP.h>
 #include <stdio.h>
 #include <stdint.h>
+#include <stdlib.h>
 #include <string.h>
 #define BUTTONDOWN 1
 #define SHIFTDOWN 2
@@ -113,7 +114,9 @@ static char rcsid[] = "$TOG: List.c /main/47 1999/10/12 16:58:17 mgreess $"
  * - histograms of the item widths and heights, so that MaxWidth and
  *   MaxItemHeight are found without a pass over the items;
  * - an index of the items by content (see FindItem) and a set of the
- *   selected items or positions (see OnSelectedList), built on demand.
+ *   selected items or positions (see OnSelectedList), built on demand;
+ * - whether the selection lists are in step with the elements (see
+ *   SyncedSelect), so that the API can update them in place.
  *
  * The record is shared with the copies of the widget that Xt passes to
  * SetValues, which may work on the old one; the arrays it describes are
@@ -154,6 +157,8 @@ typedef struct {
   int sel_count;
   Boolean sel_by_pos;
   Boolean sel_valid;
+  /* The selection lists match the elements exactly (see SyncedSelect). */
+  Boolean synced;
 } XmListPrivRec, *XmListPriv;
 _Static_assert(sizeof(Pixmap) >= sizeof(XmListPriv), "list.DashTile holds a pointer");
 #define ListPriv(lw) ((XmListPriv)(uintptr_t)(lw)->list.DashTile)
@@ -241,6 +246,12 @@ static Boolean StartFind(XmListWidget lw, XmString item, unsigned int *hash);
 static int FindItem(XmListWidget lw, XmString item, Boolean hashed, unsigned int hash, int after);
 static void SelectionListsChanged(XmListWidget lw);
 static Boolean InSelectionSet(XmListWidget lw, XmString item, int pos, Boolean by_pos);
+static int SelectedIndex(XmListWidget lw, int position);
+static void SyncedSelect(XmListWidget lw, int pos, Boolean select);
+static void SyncedMove(XmListWidget lw, int pos, int n);
+static void SyncedDeletePositions(XmListWidget lw, int *positions, int n);
+static void UpdateSelectionAfterDelete(XmListWidget lw, Boolean rebuild);
+static void SyncedAPISelect(XmListWidget lw, int pos);
 static void FixStartEnd(XmListWidget lw, int pos, int count, int *start, int *end);
 static int AddInternalElements(
     XmListWidget lw, XmString *items, int nitems, int position, Boolean selectable);
@@ -1261,6 +1272,15 @@ static Boolean SetValues(
   int i, j;
   XrmValue val;
   RowsChanged(newlw);
+  /* Below the lists may change, and the old widget, which shares them,
+   * be worked on: update them in full. */
+  if ((newlw->list.items != oldlw->list.items) ||
+      (newlw->list.itemCount != oldlw->list.itemCount) ||
+      (newlw->list.selectedItems != oldlw->list.selectedItems) ||
+      (newlw->list.selectedItemCount != oldlw->list.selectedItemCount) ||
+      (newlw->list.selectedPositions != oldlw->list.selectedPositions) ||
+      (newlw->list.selectedPositionCount != oldlw->list.selectedPositionCount))
+    SelectionListsChanged(newlw);
   if (!XmRepTypeValidValue(XmRID_SELECTION_POLICY, newlw->list.SelectionPolicy, (Widget)newlw))
     newlw->list.SelectionPolicy = oldlw->list.SelectionPolicy;
   if (!XmRepTypeValidValue(XmRID_SELECTION_MODE, newlw->list.SelectionMode, (Widget)newlw))
@@ -1613,6 +1633,7 @@ static void Destroy(Widget wid)
     XtReleaseGC((Widget)lw, lw->list.InsensitiveGC);
   if (lw->list.scratchRend != NULL)
     XmRenditionFree(lw->list.scratchRend);
+  SelectionListsChanged(lw);
   if (lw->list.itemCount) {
     j = lw->list.itemCount;
     lw->list.itemCount = 0;
@@ -3022,11 +3043,20 @@ static int FindItem(XmListWidget lw, XmString item, Boolean hashed, unsigned int
   return -1;
 }
 
-/* SelectionListsChanged - the selection set is stale. */
+/*
+ * SelectionListsChanged - selectedItems or selectedPositions changed
+ *	other than through SyncedSelect: they may no longer match the
+ *	elements, and the selection set is stale.
+ */
 static void SelectionListsChanged(XmListWidget lw)
 {
-  ListPriv(lw)->sel_valid = FALSE;
+  XmListPriv p = ListPriv(lw);
+  p->sel_valid = FALSE;
+  p->synced = FALSE;
 }
+
+/* SelectionFlagsChanged - the selected flags of elements changed. */
+#define SelectionFlagsChanged(lw) (ListPriv(lw)->synced = FALSE)
 
 /*
  * InSelectionSet - whether item (or position pos, by_pos) is in the
@@ -3071,6 +3101,158 @@ static Boolean InSelectionSet(XmListWidget lw, XmString item, int pos, Boolean b
       return TRUE;
   }
   return FALSE;
+}
+
+/*
+ * SelectedIndex - the index in selectedPositions of the first entry
+ *	not below position (1-based), which is sorted while synced.
+ */
+static int SelectedIndex(XmListWidget lw, int position)
+{
+  int lo = 0, hi = lw->list.selectedPositionCount, mid;
+  while (lo < hi) {
+    mid = lo + (hi - lo) / 2;
+    if (lw->list.selectedPositions[mid] < position)
+      lo = mid + 1;
+    else
+      hi = mid;
+  }
+  return lo;
+}
+
+/*
+ * SyncedSelect - select or deselect the element at pos, committed, and
+ *	update the selection lists in place.  Only while synced: the
+ *	lists then hold the selected elements, in order, selectedItems
+ *	copies of their items, and every element is committed
+ *	(last_selected equals selected), as UpdateSelection leaves them;
+ *	UpdateSelection would now only commit this element and add or
+ *	remove it.
+ */
+static void SyncedSelect(XmListWidget lw, int pos, Boolean select)
+{
+  int n = lw->list.selectedPositionCount;
+  int i = SelectedIndex(lw, pos + 1);
+  Boolean listed = ((i < n) && (lw->list.selectedPositions[i] == pos + 1));
+  assert(ListPriv(lw)->synced && (n == lw->list.selectedItemCount));
+  lw->list.InternalList[pos]->selected = select;
+  lw->list.InternalList[pos]->last_selected = select;
+  if (select == listed)
+    return;
+  ListPriv(lw)->sel_valid = FALSE;
+  if (select) {
+    lw->list.selectedPositions =
+        (int *)_XmReallocArray((char *)lw->list.selectedPositions, n + 1, sizeof(int));
+    lw->list.selectedItems =
+        (XmString *)_XmReallocArray((char *)lw->list.selectedItems, n + 1, sizeof(XmString));
+    memmove(lw->list.selectedPositions + i + 1, lw->list.selectedPositions + i,
+            (n - i) * sizeof(int));
+    memmove(lw->list.selectedItems + i + 1, lw->list.selectedItems + i,
+            (n - i) * sizeof(XmString));
+    lw->list.selectedPositions[i] = pos + 1;
+    lw->list.selectedItems[i] = XmStringCopy(lw->list.items[pos]);
+    n++;
+  }
+  else {
+    XmStringFree(lw->list.selectedItems[i]);
+    n--;
+    memmove(lw->list.selectedPositions + i, lw->list.selectedPositions + i + 1,
+            (n - i) * sizeof(int));
+    memmove(lw->list.selectedItems + i, lw->list.selectedItems + i + 1,
+            (n - i) * sizeof(XmString));
+    if (n == 0) {
+      XtFree((char *)lw->list.selectedPositions);
+      XtFree((char *)lw->list.selectedItems);
+      lw->list.selectedPositions = NULL;
+      lw->list.selectedItems = NULL;
+    }
+  }
+  lw->list.selectedPositionCount = lw->list.selectedItemCount = n;
+}
+
+/*
+ * SyncedMove - while synced, n elements were inserted (n > 0, none
+ *	selected) or deleted (n < 0) at pos: renumber the selected
+ *	positions after them and drop the deleted ones.
+ */
+static void SyncedMove(XmListWidget lw, int pos, int n)
+{
+  int count = lw->list.selectedPositionCount;
+  int i = SelectedIndex(lw, pos + 1), j = i, k;
+  if (n < 0) {
+    for (; (j < count) && (lw->list.selectedPositions[j] <= pos - n); j++)
+      XmStringFree(lw->list.selectedItems[j]);
+  }
+  for (k = j; k < count; k++, i++) {
+    lw->list.selectedPositions[i] = lw->list.selectedPositions[k] + n;
+    lw->list.selectedItems[i] = lw->list.selectedItems[k];
+  }
+  if (i != count) {
+    ListPriv(lw)->sel_valid = FALSE;
+    lw->list.selectedPositionCount = lw->list.selectedItemCount = i;
+    if (i == 0) {
+      XtFree((char *)lw->list.selectedPositions);
+      XtFree((char *)lw->list.selectedItems);
+      lw->list.selectedPositions = NULL;
+      lw->list.selectedItems = NULL;
+    }
+  }
+}
+
+/*
+ * SyncedDeletePositions - while synced, the elements at the sorted
+ *	positions (1-based, n of them, without repeats) were deleted.
+ */
+static void SyncedDeletePositions(XmListWidget lw, int *positions, int n)
+{
+  int count = lw->list.selectedPositionCount;
+  int i, j = 0, d = 0, position;
+  for (i = 0; i < count; i++) {
+    position = lw->list.selectedPositions[i];
+    while ((d < n) && (positions[d] < position))
+      d++;
+    if ((d < n) && (positions[d] == position)) {
+      XmStringFree(lw->list.selectedItems[i]);
+      continue;
+    }
+    lw->list.selectedPositions[j] = position - d;
+    lw->list.selectedItems[j] = lw->list.selectedItems[i];
+    j++;
+  }
+  if (j != count) {
+    ListPriv(lw)->sel_valid = FALSE;
+    lw->list.selectedPositionCount = lw->list.selectedItemCount = j;
+    if (j == 0) {
+      XtFree((char *)lw->list.selectedPositions);
+      XtFree((char *)lw->list.selectedItems);
+      lw->list.selectedPositions = NULL;
+      lw->list.selectedItems = NULL;
+    }
+  }
+}
+
+/*
+ * UpdateSelectionAfterDelete - bring the selection lists up to date
+ *	after a deletion, as UpdateSelection, when a selected item was
+ *	deleted (rebuild), or as UpdateSelectedPositions; while synced
+ *	the deletion did so already.
+ */
+static void UpdateSelectionAfterDelete(XmListWidget lw, Boolean rebuild)
+{
+  if (ListPriv(lw)->synced)
+    UpdateSelectedList(lw, FALSE);
+  else if (rebuild)
+    UpdateSelection(lw);
+  else {
+    UpdateSelectedList(lw, FALSE);
+    UpdateSelectedPositions(lw, lw->list.selectedItemCount);
+  }
+}
+
+static int CompareInts(const void *a, const void *b)
+{
+  int x = *(const int *)a, y = *(const int *)b;
+  return (x > y) - (x < y);
 }
 
 /************************************************************************
@@ -3171,6 +3353,10 @@ static int AddInternalElements(
     pos++;
   }
   lw->list.LastItem += nitems;
+  /* Selected new elements are not on selectedItems; the callers update
+   * the selected positions. */
+  if (nsel)
+    SelectionFlagsChanged(lw);
   return nsel;
 }
 
@@ -3215,6 +3401,8 @@ static int DeleteInternalElements(XmListWidget lw, XmString string, int position
             (char *)(lw->list.InternalList + curpos + count),
             (lw->list.itemCount - curpos) * sizeof(ElementPtr));
   lw->list.LastItem -= count;
+  if (ListPriv(lw)->synced)
+    SyncedMove(lw, curpos, -count);
   /* BEGIN OSF Fix CR 4656 */
   /* Fix selection delimiters. */
   FixStartEnd(lw, curpos, count, &lw->list.StartItem, &lw->list.EndItem);
@@ -3242,6 +3430,8 @@ static int DeleteInternalElementPositions(XmListWidget lw,
   Boolean reset_height = FALSE;
   int nsel = 0;
   int first = oldItemCount;
+  int *deleted = NULL;
+  int ndeleted = 0;
   RowsChanged(lw);
   /* See what caller can do to flag errors, if necessary,
    * when this information is not present. */
@@ -3258,6 +3448,8 @@ static int DeleteInternalElementPositions(XmListWidget lw,
    * will reset list.itemCount (just as DeleteItem does).   This is
    * why we must have oldItemCount passed to us.
    */
+  if (ListPriv(lw)->synced)
+    deleted = (int *)_XmMallocArray(position_count, sizeof(int));
   for (ix = 0; ix < position_count; ix++) {
     item_pos = position_list[ix] - 1;
     if (item_pos >= 0 && item_pos < oldItemCount) {
@@ -3268,6 +3460,8 @@ static int DeleteInternalElementPositions(XmListWidget lw,
           nsel--;
         FreeElement(lw, ptr);
         lw->list.InternalList[item_pos] = NULL;
+        if (deleted)
+          deleted[ndeleted++] = item_pos + 1;
         lw->list.LastItem--;
         ASSIGN_MIN(first, item_pos);
         /* BEGIN OSF Fix CR 4656 */
@@ -3304,6 +3498,11 @@ static int DeleteInternalElementPositions(XmListWidget lw,
     }
   }
   ResizeElements(lw, lw->list.itemCount);
+  if (deleted) {
+    qsort(deleted, ndeleted, sizeof(int), CompareInts);
+    SyncedDeletePositions(lw, deleted, ndeleted);
+    XtFree((char *)deleted);
+  }
   /* The actual maximum width and height may not have changed. */
   if (reset_width && lw->list.itemCount && (lw->list.InternalList[0]->width >= lw->list.MaxWidth))
     reset_width = FALSE;
@@ -3331,6 +3530,7 @@ static int ReplaceInternalElement(XmListWidget lw, int position, Boolean selecta
 {
   int curpos = position - 1;
   Element *item = lw->list.InternalList[curpos];
+  Boolean was_selected = item->selected;
   int dsel = (item->selected ? -1 : 0);
   XmString name = lw->list.items[curpos];
   RowsChanged(lw);
@@ -3338,7 +3538,11 @@ static int ReplaceInternalElement(XmListWidget lw, int position, Boolean selecta
   item->first_char = 0;
   item->length = UNKNOWN_LENGTH;
   SetElementExtent(lw, item, name, TRUE);
-  item->selected = (selectable && OnSelectedList(lw, name, curpos));
+  /* While synced, ReplaceItem has put a selected item on selectedItems. */
+  item->selected = (selectable && ((was_selected && ListPriv(lw)->synced) ||
+                                   OnSelectedList(lw, name, curpos)));
+  if (item->selected != was_selected)
+    SelectionFlagsChanged(lw);
   item->last_selected = item->selected;
   item->LastTimeDrawn = !item->selected;
   ASSIGN_MAX(lw->list.MaxWidth, item->width);
@@ -3482,6 +3686,16 @@ static void ReplaceItem(XmListWidget lw, XmString item, int pos)
   lw->list.items[pos] = XmStringCopy(item);
   IndexReplace(lw, pos);
   /*Selected items should be replaced also*/
+  if (ListPriv(lw)->synced) {
+    /* The positions are up to date and sorted. */
+    i = SelectedIndex(lw, pos + 1);
+    if ((i < lw->list.selectedPositionCount) && (lw->list.selectedPositions[i] == pos + 1)) {
+      XmStringFree(lw->list.selectedItems[i]);
+      lw->list.selectedItems[i] = XmStringCopy(item);
+      ListPriv(lw)->sel_valid = FALSE;
+    }
+    return;
+  }
   UpdateSelectedPositions(lw, lw->list.selectedItemCount);
   for (i = 0; (i < lw->list.selectedItemCount) && (i < lw->list.selectedPositionCount); i++) {
     if (lw->list.selectedPositions[i] == pos + 1) {
@@ -3874,7 +4088,9 @@ static void UpdateSelection(XmListWidget lw)
     lw->list.selectedPositions = NULL;
     XtFree((char *)positions);
   }
+  /* The lists now match the committed elements. */
   ListPriv(lw)->sel_valid = FALSE;
+  ListPriv(lw)->synced = TRUE;
 }
 
 /***************************************************************************
@@ -3972,6 +4188,7 @@ static int WhichItem(XmListWidget w, Position EventY)
 static void SelectRange(XmListWidget lw, int first, int last, Boolean select)
 {
   int start, end;
+  SelectionFlagsChanged(lw);
   if (first <= last) {
     start = first;
     end = last;
@@ -3998,6 +4215,7 @@ static void SelectRange(XmListWidget lw, int first, int last, Boolean select)
 static void RestoreRange(XmListWidget lw, int first, int last, Boolean dostart)
 {
   int tmp, start, end;
+  SelectionFlagsChanged(lw);
   start = first;
   end = last;
   if (start > end) {
@@ -4088,6 +4306,7 @@ static void ArrangeRange(XmListWidget lw, int item)
 static void HandleNewItem(XmListWidget lw, int item, int olditem)
 {
   int dir;
+  SelectionFlagsChanged(lw);
   if (lw->list.LastHLItem == item)
     return;
   if (item < 0 || item >= lw->list.itemCount)
@@ -4149,6 +4368,7 @@ static void HandleExtendedItem(XmListWidget lw, int item)
 {
   Boolean set;
   int i, start, end;
+  SelectionFlagsChanged(lw);
   if (lw->list.LastHLItem == item)
     return;
   if (item < 0 || item >= lw->list.itemCount)
@@ -4340,6 +4560,7 @@ static void SelectElement(Widget wid, XEvent *event, String *params, Cardinal *n
   int i, item;
   int start = 0, end = 1;
   Boolean sel;
+  SelectionFlagsChanged(lw);
   if (!lw->list.itemCount)
     return;
   interval = (Time)lw->list.ClickInterval;
@@ -4666,6 +4887,7 @@ static void CtrlSelect(Widget wid, XEvent *event, String *params, Cardinal *num_
 {
   XmListWidget lw = (XmListWidget)wid;
   int i, j;
+  SelectionFlagsChanged(lw);
   if (lw->list.SelectionPolicy != XmEXTENDED_SELECT)
     return;
   lw->list.AppendInProgress = TRUE;
@@ -4763,6 +4985,7 @@ static void KbdCtrlSelect(Widget wid, XEvent *event, String *params, Cardinal *n
 {
   XmListWidget lw = (XmListWidget)wid;
   int i, j;
+  SelectionFlagsChanged(lw);
   if (lw->list.SelectionPolicy != XmEXTENDED_SELECT)
     return;
   if (lw->list.SelectionMode == XmNORMAL_MODE) {
@@ -4824,6 +5047,7 @@ static void KbdActivate(Widget wid, XEvent *event, String *params, Cardinal *num
   XmListWidget lw = (XmListWidget)wid;
   XmParentInputActionRec p_event;
   int i;
+  SelectionFlagsChanged(lw);
   if (!lw->list.itemCount || !lw->list.items)
     return;
   lw->list.AppendInProgress = FALSE;
@@ -4935,6 +5159,7 @@ static void KbdSelectAll(Widget wid, XEvent *event, String *params, Cardinal *nu
   XmListWidget lw = (XmListWidget)wid;
   int i;
   Boolean selection_changed = FALSE;
+  SelectionFlagsChanged(lw);
   /* Do nothing on empty lists. */
   if (!lw->list.itemCount || !lw->list.items)
     return;
@@ -4995,6 +5220,7 @@ static void KbdDeSelectAll(Widget wid, XEvent *event, String *params, Cardinal *
   XmListWidget lw = (XmListWidget)wid;
   int i, j;
   Boolean selection_changed = FALSE;
+  SelectionFlagsChanged(lw);
   /* Do nothing on empty lists. */
   if (!lw->list.itemCount || !lw->list.items)
     return;
@@ -6680,6 +6906,7 @@ static void APIAddItems(XmListWidget lw, XmString *items, int item_count, int po
   if (select && !selectable) {
     /* Find the last matching item. */
     assert(lw->list.selectedPositionCount <= 1);
+    SelectionFlagsChanged(lw);
     i = item_count;
     while (i-- > 0) {
       if (OnSelectedList(lw, items[i], intern_pos + i)) {
@@ -6705,8 +6932,10 @@ static void APIAddItems(XmListWidget lw, XmString *items, int item_count, int po
     }
   }
   /* CR 9443: Inserting before selected items requires update too. */
-  if (select || (nsel != lw->list.selectedPositionCount) ||
-      (nsel && (intern_pos < lw->list.selectedPositions[nsel - 1])))
+  if (ListPriv(lw)->synced)
+    SyncedMove(lw, intern_pos, item_count);
+  else if (select || (nsel != lw->list.selectedPositionCount) ||
+           (nsel && (intern_pos < lw->list.selectedPositions[nsel - 1])))
     UpdateSelectedPositions(lw, nsel);
   if (intern_pos < (lw->list.top_position + lw->list.visibleItemCount))
     DrawList(lw, NULL, TRUE);
@@ -6845,6 +7074,10 @@ void XmListDeleteItems(Widget w, XmString *items, int item_count)
   for (i = 0; i < item_count; i++)
     copy[i] = XmStringCopy(items[i]);
   DrawHighlight(lw, lw->list.CurrentKbdItem, FALSE);
+  /* Rebuilding the selection lists once costs less than moving the
+   * selected positions after every deletion. */
+  if ((double)item_count * lw->list.selectedPositionCount > lw->list.itemCount)
+    SelectionFlagsChanged(lw);
   for (i = 0; i < item_count; i++) {
     item_pos = ItemNumber(lw, copy[i]);
     if (item_pos < 1 || item_pos > lw->list.itemCount)
@@ -6869,12 +7102,7 @@ void XmListDeleteItems(Widget w, XmString *items, int item_count)
       rebuild_selection |= DeleteInternalElements(lw, NULL, item_pos, 1);
     }
   }
-  if (rebuild_selection)
-    UpdateSelection(lw);
-  else {
-    UpdateSelectedList(lw, FALSE);
-    UpdateSelectedPositions(lw, lw->list.selectedItemCount);
-  }
+  UpdateSelectionAfterDelete(lw, rebuild_selection);
   if (lw->list.itemCount) {
     if ((lw->list.itemCount - lw->list.top_position) < lw->list.visibleItemCount) {
       lw->list.top_position = lw->list.itemCount - lw->list.visibleItemCount;
@@ -6944,12 +7172,7 @@ static void APIDeletePositions(XmListWidget lw, int *positions, int count, Boole
     if (UpdateLastHL)
       lw->list.LastHLItem = lw->list.CurrentKbdItem;
   }
-  if (rebuild_selection)
-    UpdateSelection(lw);
-  else {
-    UpdateSelectedList(lw, FALSE);
-    UpdateSelectedPositions(lw, lw->list.selectedItemCount);
-  }
+  UpdateSelectionAfterDelete(lw, rebuild_selection);
   if (lw->list.itemCount) {
     if ((lw->list.itemCount - lw->list.top_position) < lw->list.visibleItemCount) {
       lw->list.top_position = lw->list.itemCount - lw->list.visibleItemCount;
@@ -7070,12 +7293,7 @@ void XmListDeleteItemsPos(Widget w, int item_count, int pos)
       XmImVaSetValues((Widget)lw, XmNspotLocation, &xmim_point, NULL);
     }
   }
-  if (rebuild_selection)
-    UpdateSelection(lw);
-  else {
-    UpdateSelectedList(lw, FALSE);
-    UpdateSelectedPositions(lw, lw->list.selectedItemCount);
-  }
+  UpdateSelectionAfterDelete(lw, rebuild_selection);
   last = lw->list.top_position + lw->list.visibleItemCount;
   new_top = lw->list.top_position;
   if (lw->list.itemCount) {
@@ -7190,7 +7408,7 @@ static void APIReplaceItems(
     }
   }
   XtFree((char *)matches);
-  if (select || (nsel != lw->list.selectedPositionCount))
+  if (!ListPriv(lw)->synced && (select || (nsel != lw->list.selectedPositionCount)))
     UpdateSelectedPositions(lw, nsel);
   reset_width &= (old_max_width == lw->list.MaxWidth);
   if (reset_width && !replaced_first && (lw->list.InternalList[0]->width == lw->list.MaxWidth))
@@ -7265,7 +7483,7 @@ static void APIReplaceItemsPos(
     ReplaceItem(lw, new_items[i], position);
     nsel += ReplaceInternalElement(lw, position, select);
   }
-  if (select || (nsel != lw->list.selectedPositionCount))
+  if (!ListPriv(lw)->synced && (select || (nsel != lw->list.selectedPositionCount)))
     UpdateSelectedPositions(lw, nsel);
   reset_width &= (old_max_width == lw->list.MaxWidth);
   if (reset_width && (position > 1) && (lw->list.InternalList[0]->width == lw->list.MaxWidth))
@@ -7362,7 +7580,8 @@ void XmListReplacePositions(Widget w, int *position_list, XmString *item_list, i
       nsel += ReplaceInternalElement(lw, item_pos, TRUE);
     }
   }
-  UpdateSelectedPositions(lw, nsel);
+  if (!ListPriv(lw)->synced)
+    UpdateSelectedPositions(lw, nsel);
   reset_width &= (old_max_width == lw->list.MaxWidth);
   if (reset_width && !replaced_first && (lw->list.InternalList[0]->width == lw->list.MaxWidth))
     reset_width = FALSE;
@@ -7390,6 +7609,11 @@ void XmListReplacePositions(Widget w, int *position_list, XmString *item_list, i
 static void APISelect(XmListWidget lw, int item_pos, Boolean notify)
 {
   int i;
+  if (!notify && ListPriv(lw)->synced) {
+    SyncedAPISelect(lw, item_pos - 1);
+    return;
+  }
+  SelectionFlagsChanged(lw);
   /* Copy the current selection to the last selection.  Without notify,
    * UpdateSelection commits the new selection anyway. */
   if (notify) {
@@ -7434,6 +7658,38 @@ static void APISelect(XmListWidget lw, int item_pos, Boolean notify)
 }
 
 /************************************************************************
+ *									*
+ * SyncedAPISelect - APISelect(lw, pos + 1, FALSE) while synced, which	*
+ * updates the selection lists in place instead of with		*
+ * UpdateSelection.							*
+ *									*
+ ************************************************************************/
+static void SyncedAPISelect(XmListWidget lw, int pos)
+{
+  int i;
+  /* Unselect the previous selection if needed. */
+  if (((lw->list.SelectionPolicy == XmSINGLE_SELECT) ||
+       (lw->list.SelectionPolicy == XmBROWSE_SELECT) ||
+       (lw->list.SelectionPolicy == XmEXTENDED_SELECT)))
+  {
+    while ((i = lw->list.selectedPositionCount) > 0) {
+      int old = lw->list.selectedPositions[i - 1] - 1;
+      SyncedSelect(lw, old, FALSE);
+      DrawItem((Widget)lw, old);
+    }
+  }
+  if (lw->list.SelectionPolicy == XmEXTENDED_SELECT)
+    lw->list.SelectionType = XmINITIAL;
+  SyncedSelect(lw, pos,
+               ((lw->list.SelectionPolicy != XmMULTIPLE_SELECT) ||
+                (!lw->list.InternalList[pos]->selected)));
+  DrawItem((Widget)lw, pos);
+  lw->list.LastHLItem = pos;
+  /* primary ownership */
+  UpdateSelectedList(lw, FALSE);
+}
+
+/************************************************************************
  *                                                                      *
  * SetSelectionParams - update the selection parameters so that an API  *
  * selection looks the same as a user selection.                        *
@@ -7443,7 +7699,13 @@ static void SetSelectionParams(XmListWidget lw)
 {
   int start, end, i;
   if (lw->list.items && lw->list.itemCount) {
-    for (i = lw->list.itemCount - 1; i >= 0; i--)
+    /* While synced, the last selected element is known. */
+    i = lw->list.itemCount - 1;
+    if (ListPriv(lw)->synced)
+      i = (lw->list.selectedPositionCount ?
+               lw->list.selectedPositions[lw->list.selectedPositionCount - 1] - 1 :
+               -1);
+    for (; i >= 0; i--)
       if (lw->list.InternalList[i]->selected) {
         end = i;
         while (i && (lw->list.InternalList[i]->selected))
@@ -7543,11 +7805,21 @@ void XmListDeselectItem(Widget w, XmString item)
   }
   if ((i = ItemNumber(lw, item)) != 0) {
     i--;
-    lw->list.InternalList[i]->last_selected = FALSE;
-    if (lw->list.InternalList[i]->selected) {
-      lw->list.InternalList[i]->selected = FALSE;
-      UpdateSelection(lw);
-      DrawItem((Widget)lw, i);
+    if (ListPriv(lw)->synced) {
+      if (lw->list.InternalList[i]->selected) {
+        SyncedSelect(lw, i, FALSE);
+        UpdateSelectedList(lw, FALSE);
+        DrawItem((Widget)lw, i);
+      }
+    }
+    else {
+      SelectionFlagsChanged(lw);
+      lw->list.InternalList[i]->last_selected = FALSE;
+      if (lw->list.InternalList[i]->selected) {
+        lw->list.InternalList[i]->selected = FALSE;
+        UpdateSelection(lw);
+        DrawItem((Widget)lw, i);
+      }
     }
   }
   _XmAppUnlock(app);
@@ -7572,11 +7844,21 @@ void XmListDeselectPos(Widget w, int pos)
     pos--;
     if (pos < 0)
       pos = lw->list.itemCount - 1;
-    lw->list.InternalList[pos]->last_selected = FALSE;
-    if (lw->list.InternalList[pos]->selected) {
-      lw->list.InternalList[pos]->selected = FALSE;
-      UpdateSelection(lw);
-      DrawItem((Widget)lw, pos);
+    if (ListPriv(lw)->synced) {
+      if (lw->list.InternalList[pos]->selected) {
+        SyncedSelect(lw, pos, FALSE);
+        UpdateSelectedList(lw, FALSE);
+        DrawItem((Widget)lw, pos);
+      }
+    }
+    else {
+      SelectionFlagsChanged(lw);
+      lw->list.InternalList[pos]->last_selected = FALSE;
+      if (lw->list.InternalList[pos]->selected) {
+        lw->list.InternalList[pos]->selected = FALSE;
+        UpdateSelection(lw);
+        DrawItem((Widget)lw, pos);
+      }
     }
   }
   _XmAppUnlock(app);
@@ -7598,6 +7880,8 @@ void XmListDeselectAllItems(Widget w)
     return;
   }
   if (lw->list.selectedItemCount > 0) {
+    /* Synced lists hold all the selected elements: none are left. */
+    Boolean synced = ListPriv(lw)->synced;
     for (i = 0; i < lw->list.selectedPositionCount; i++) {
       int pos = lw->list.selectedPositions[i] - 1;
       lw->list.InternalList[pos]->selected = FALSE;
@@ -7606,6 +7890,7 @@ void XmListDeselectAllItems(Widget w)
     }
     ClearSelectedList(lw);
     ClearSelectedPositions(lw);
+    ListPriv(lw)->synced = synced;
   }
   _XmAppUnlock(app);
 }
@@ -7745,6 +8030,7 @@ void XmListSetAddMode(Widget w, Boolean add_mode)
   XmListWidget lw = (XmListWidget)w;
   _XmWidgetToAppContext(w);
   _XmAppLock(app);
+  SelectionFlagsChanged(lw);
   /*  Can't be false for single or multiple */
   if ((!add_mode) && ((lw->list.SelectionPolicy == XmSINGLE_SELECT) ||
                       (lw->list.SelectionPolicy == XmMULTIPLE_SELECT)))
