@@ -284,8 +284,13 @@ WSMProcessProtoTarget(Widget w, Atom target, XtPointer input,
      * Unpack up the request from the wire.
      */
 
-    _WSMUnpackRequest(dpy, scr_num, (MessageData) input, input_len,
-		      _WSMTargetToReqType(dpy, target), &request);
+    if (!_WSMUnpackRequest(dpy, scr_num, (MessageData) input, input_len,
+			   _WSMTargetToReqType(dpy, target), &request)) {
+	fprintf(stderr, "%s request is truncated or malformed\n",
+		_WSMReqTypeToName(request.any.type));
+	FreeRequest(&request);
+	return(False);
+    }
 
     /*
      * Call the app's callback function to process the request.

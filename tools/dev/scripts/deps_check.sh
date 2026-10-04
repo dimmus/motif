@@ -229,7 +229,17 @@ install_packages() {
     fi
 }
 
-# Function to get package names for current OS
+# Dependencies, by the base names get_package_names() maps per OS.
+# Required: needed to build Motif.
+REQUIRED_DEPS="cmake ninja pkg-config gcc make flex bison libX11 libXt libXmu libXext libXpm libXft libjpeg libpng check"
+# Optional: libXp for printing support; Xvfb and xvfb-run to run the X test
+# suites without a display; Xephyr (a nested X server) to watch or debug them
+# in a window; xdotool to drive widgets and mwm from tests; abidiff
+# (libabigail) for ABI compatibility checks.
+OPTIONAL_DEPS="libXp Xvfb xvfb-run Xephyr xdotool abidiff"
+
+# Function to get package names for current OS.
+# Prints nothing when the dependency is not packaged for this OS.
 get_package_names() {
     base_pkg="$1"
     
@@ -253,6 +263,11 @@ get_package_names() {
                 libpng) echo "libpng-dev" ;;
                 libXp) echo "libxp-dev" ;;
                 check) echo "check" ;;
+                Xvfb) echo "xvfb" ;;
+                xvfb-run) echo "xvfb" ;;
+                abidiff) echo "abigail-tools" ;;
+                Xephyr) echo "xserver-xephyr" ;;
+                xdotool) echo "xdotool" ;;
                 *) echo "$base_pkg" ;;
             esac
             ;;
@@ -275,6 +290,11 @@ get_package_names() {
                 libpng) echo "libpng" ;;
                 libXp) echo "libxp" ;;
                 check) echo "check" ;;
+                Xvfb) echo "xorg-server-xvfb" ;;
+                xvfb-run) echo "xorg-server-xvfb" ;;
+                abidiff) echo "libabigail" ;;
+                Xephyr) echo "xorg-server-xephyr" ;;
+                xdotool) echo "xdotool" ;;
                 *) echo "$base_pkg" ;;
             esac
             ;;
@@ -297,6 +317,11 @@ get_package_names() {
                 libpng) echo "libpng-devel" ;;
                 libXp) echo "libXp-devel" ;;
                 check) echo "check-devel" ;;
+                Xvfb) echo "xorg-x11-server-Xvfb" ;;
+                xvfb-run) echo "xorg-x11-server-Xvfb" ;;
+                abidiff) echo "libabigail" ;;
+                Xephyr) echo "xorg-x11-server-Xephyr" ;;
+                xdotool) echo "xdotool" ;;
                 *) echo "$base_pkg" ;;
             esac
             ;;
@@ -319,6 +344,11 @@ get_package_names() {
                 libpng) echo "image/library/libpng" ;;
                 libXp) echo "x11/header/xp" ;;
                 check) echo "developer/check" ;;
+                Xvfb) echo "x11/server/xvfb" ;;
+                xvfb-run) echo "" ;;
+                abidiff) echo "" ;;
+                Xephyr) echo "x11/server/xephyr" ;;
+                xdotool) echo "" ;;
                 *) echo "$base_pkg" ;;
             esac
             ;;
@@ -341,6 +371,11 @@ get_package_names() {
                 libpng) echo "libpng-dev" ;;
                 libXp) echo "libxp-dev" ;;
                 check) echo "check-dev" ;;
+                Xvfb) echo "xvfb" ;;
+                xvfb-run) echo "xvfb-run" ;;
+                abidiff) echo "libabigail-tools" ;;
+                Xephyr) echo "xorg-server-xephyr" ;;
+                xdotool) echo "xdotool" ;;
                 *) echo "$base_pkg" ;;
             esac
             ;;
@@ -363,6 +398,11 @@ get_package_names() {
                 libpng) echo "libpng-devel" ;;
                 libXp) echo "libXp-devel" ;;
                 check) echo "check-devel" ;;
+                Xvfb) echo "xorg-server-xvfb" ;;
+                xvfb-run) echo "" ;;
+                abidiff) echo "libabigail-tools" ;;
+                Xephyr) echo "xorg-server-xephyr" ;;
+                xdotool) echo "xdotool" ;;
                 *) echo "$base_pkg" ;;
             esac
             ;;
@@ -385,6 +425,11 @@ get_package_names() {
                 libpng) echo "libpng" ;;
                 libXp) echo "libXp" ;;
                 check) echo "check" ;;
+                Xvfb) echo "xorg-vfbserver" ;;
+                xvfb-run) echo "" ;;
+                abidiff) echo "libabigail" ;;
+                Xephyr) echo "xephyr" ;;
+                xdotool) echo "xdotool" ;;
                 *) echo "$base_pkg" ;;
             esac
             ;;
@@ -395,24 +440,15 @@ get_package_names() {
 check_dependencies() {
     log_info "Checking project dependencies..."
     
-    # Define required dependencies (essential for building)
-    required_deps="cmake ninja pkg-config gcc make flex bison libX11 libXt libXmu libXext libXpm libXft libjpeg libpng check"
-    
-    # Define optional dependencies (nice to have but not essential)
-    optional_deps="libXp"
-    
     missing_required=""
     missing_optional=""
+    seen_optional=""
     installed_count=0
-    total_required=0
-    
-    # Count total required dependencies
-    for dep in $required_deps; do
-        total_required=$((total_required + 1))
-    done
+    total_count=0
     
     # Check required dependencies
-    for dep in $required_deps; do
+    for dep in $REQUIRED_DEPS; do
+        total_count=$((total_count + 1))
         pkg_name=$(get_package_names "$dep")
         
         if check_package "$pkg_name" "$dep"; then
@@ -425,8 +461,19 @@ check_dependencies() {
     done
     
     # Check optional dependencies
-    for dep in $optional_deps; do
+    for dep in $OPTIONAL_DEPS; do
         pkg_name=$(get_package_names "$dep")
+        
+        if [ -z "$pkg_name" ]; then
+            log_info "- $dep - not packaged for $OS_NAME (optional, skipped)"
+            continue
+        fi
+        # Several dependencies can come from one package (Xvfb and xvfb-run)
+        case " $seen_optional " in
+            *" $pkg_name "*) continue ;;
+        esac
+        seen_optional="$seen_optional $pkg_name"
+        total_count=$((total_count + 1))
         
         if check_package "$pkg_name" "$dep"; then
             log_success "✓ $dep ($pkg_name) - installed (optional)"
@@ -439,7 +486,7 @@ check_dependencies() {
         fi
     done
     
-    log_info "Dependency check complete: $installed_count/$((total_required + 1)) packages installed"
+    log_info "Dependency check complete: $installed_count/$total_count packages installed"
     
     if [ -n "$missing_required" ]; then
         log_error "Missing required packages: $missing_required"
@@ -458,11 +505,9 @@ install_missing_dependencies() {
     # Get list of missing required packages
     missing_required=""
     missing_optional=""
-    required_deps="cmake ninja pkg-config gcc make flex bison libX11 libXt libXmu libXext libXpm libXft libjpeg libpng check"
-    optional_deps="libXp"
     
     # Check required dependencies
-    for dep in $required_deps; do
+    for dep in $REQUIRED_DEPS; do
         pkg_name=$(get_package_names "$dep")
         if ! check_package "$pkg_name" "$dep"; then
             if [ -z "$missing_required" ]; then
@@ -474,8 +519,14 @@ install_missing_dependencies() {
     done
     
     # Check optional dependencies
-    for dep in $optional_deps; do
+    for dep in $OPTIONAL_DEPS; do
         pkg_name=$(get_package_names "$dep")
+        if [ -z "$pkg_name" ]; then
+            continue
+        fi
+        case " $missing_optional " in
+            *" $pkg_name "*) continue ;;
+        esac
         if ! check_package "$pkg_name" "$dep" && check_package_available "$pkg_name"; then
             if [ -z "$missing_optional" ]; then
                 missing_optional="$pkg_name"
@@ -561,12 +612,13 @@ main() {
     echo
     log_info "Starting dependency check..."
     
-    # Check current dependencies
-    if check_dependencies; then
+    # Check current dependencies (sets missing_optional for available but
+    # uninstalled optional packages)
+    if check_dependencies && [ -z "$missing_optional" ]; then
         log_success "All dependencies are already installed!"
         exit 0
     fi
-    
+
     echo
     log_info "Some dependencies are missing. Installing them now..."
     

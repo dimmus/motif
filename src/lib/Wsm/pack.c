@@ -43,10 +43,11 @@
 #define PackWindow(d, num)	PackCARD32((d), (CARD32) (num))
 #define PackProperty(d, num)	PackCARD32((d), (CARD32) (num))
 
-#define UnpackBoolean(data)	((Boolean) UnpackCARD8(data))
 #define UnpackListNum(data)	((int) UnpackCARD16(data))
-#define UnpackWindow(data)	((Window) UnpackCARD32(data))
-#define UnpackProperty(data)	((WindowProperty) UnpackCARD32(data))
+
+#define StreamBoolean(s)	((Boolean) StreamCARD8(s))
+#define StreamWindow(s)		((Window) StreamCARD32(s))
+#define StreamProperty(s)	((WindowProperty) StreamCARD32(s))
 
 #define START_CHECK_MASK 0x80
 
@@ -87,11 +88,11 @@ static int WinDataSizePacked(Display *, int,
  * Routines for unpacking protocol data stream.
  */
 
-static void UnpackWinData(MessageData *, Display *,
+static void UnpackWinData(UnpackStream *, Display *,
 			  int, WSMConfigFormatType, WSMWinData **, int *);
-static void UnpackSingleWinDataRec(MessageData *, WSMAttribute *,WSMWinData *);
-static void UnpackWinInfo(MessageData *, Display *, int, WSMWinInfo *);
-static void UnpackWinEntry(MessageData *, Display *, int, WSMWinEntry *);
+static void UnpackSingleWinDataRec(UnpackStream *, WSMAttribute *,WSMWinData *);
+static void UnpackWinInfo(UnpackStream *, Display *, int, WSMWinInfo *);
+static void UnpackWinEntry(UnpackStream *, Display *, int, WSMWinEntry *);
 
 /* public */ String UnpackString(MessageData *);
 /* public */ CARD32 UnpackCARD32(MessageData *);
@@ -477,53 +478,57 @@ _WSMPackReply(Display *dpy, int screen_num,
  *	Arguments: dpy - The Display.
  *                 screen_num - The Screen number.
  *                 data - The bits from accross the wire.
- *                 len - The number of bits sent - Better error checking
- *                       makes this more necessary.
+ *                 len - The number of bytes sent; nothing past it is read.
  *                 type - The type of message received.
  * RETURNED        request - This request structure is filled in with the data
  *                         unpacked from the protocol.
- *	Returns: none.
+ *	Returns: False if the request is shorter than its contents claim.
+ *               The request is still filled in and must be freed.
  */
 
-/*ARGSUSED*/
-void
+Boolean
 _WSMUnpackRequest(Display *dpy, int screen_num, MessageData data,
 		  unsigned long len, WSMRequestType type, WSMRequest *request)
 {
     int i, j, num;
+    UnpackStream stream;
+
+    StreamInit(&stream, data, len);
+
     request->any.type = type;	/* Save the type. */
     request->any.allocated = False;
 
     switch (request->any.type) {
     case WSM_CONNECT:
-	request->connect.num_versions = UnpackListNum(&data);
+	request->connect.num_versions = StreamListNum(&stream, 1);
 	request->connect.known_versions =
 	    (short *) XtMalloc(sizeof(short) * request->connect.num_versions);
 	request->connect.allocated = True;
 	for (i = 0; i < request->connect.num_versions; i++)
-	    request->connect.known_versions[i] = (short) UnpackCARD8(&data);
+	    request->connect.known_versions[i] = (short) StreamCARD8(&stream);
 	break;
     case WSM_EXTENSIONS:
         {
 	    String *ptr;
 
-	    num = request->extensions.num_extensions = UnpackListNum(&data);
+	    num = request->extensions.num_extensions =
+		StreamListNum(&stream, COUNT_SIZE);
 	    ptr = (String *) XtMalloc(sizeof(String) * num);
 	    request->extensions.extension_suggestions = ptr;
 	    request->extensions.allocated = True;
 	    for (i = 0; i < num; i++, ptr++)
-		*ptr = UnpackString(&data);
+		*ptr = StreamString(&stream);
 	}
 	break;
     case WSM_CONFIG_FMT:
 	break;
     case WSM_GET_STATE:
-	request->get_state.window = UnpackWindow(&data);
-	request->get_state.diffs_allowed = UnpackBoolean(&data);
+	request->get_state.window = StreamWindow(&stream);
+	request->get_state.diffs_allowed = StreamBoolean(&stream);
 	break;
     case WSM_SET_STATE:
         {
-	    num = UnpackListNum(&data);
+	    num = StreamListNum(&stream, sizeof(CARD32));
 
 	    request->set_state.num_win_info_list = num;
 	    request->set_state.win_info_list =
@@ -531,53 +536,62 @@ _WSMUnpackRequest(Display *dpy, int screen_num, MessageData data,
 	    request->extensions.allocated = True;
 
 	    for (i = 0; i < num; i++) {
-		UnpackWinInfo(&data, dpy, screen_num,
+		UnpackWinInfo(&stream, dpy, screen_num,
 			      request->set_state.win_info_list + i);
 	    }
 	}
 	break;
     case WSM_REG_WINDOW:
-	request->register_window.window = UnpackWindow(&data);
+	request->register_window.window = StreamWindow(&stream);
 	break;
     case WSM_WM_GET_BACKGROUND_WINDOW:
-	request->get_background.screen = (int)UnpackCARD16(&data);
+	request->get_background.screen = (int)StreamCARD16(&stream);
 	break;
     case WSM_WM_SET_BACKGROUND_WINDOW:
-	request->set_background.window = UnpackWindow(&data);
+	request->set_background.window = StreamWindow(&stream);
 	break;
     case WSM_WM_WINDOWS:
 	{
-	  request->extensions.allocated = True;
-	  request->wm_windows.location_flag = UnpackCARD32(&data);
+	  AttributePair *pair;
 
-	  num = request->wm_windows.num_window_properties = UnpackListNum(&data);
+	  request->extensions.allocated = True;
+	  request->wm_windows.location_flag = StreamCARD32(&stream);
+
+	  num = request->wm_windows.num_window_properties =
+	    StreamListNum(&stream, sizeof(CARD32));
 	  request->wm_windows.window_properties =
 	    (WindowProperty *) XtMalloc(sizeof(WindowProperty) * num);
 	  for (i=0; i<num; i++)
-	    request->wm_windows.window_properties[i] = UnpackProperty(&data);
+	    request->wm_windows.window_properties[i] = StreamProperty(&stream);
 
 
-	  num = request->wm_windows.num_match_attributes = UnpackListNum(&data);
+	  num = request->wm_windows.num_match_attributes =
+	    StreamListNum(&stream, COUNT_SIZE);
 	  request->wm_windows.match_attributes =
 	    (AttributePair **) XtMalloc(sizeof(AttributePair*) * num);
 
 	  for (i=0; i<request->wm_windows.num_match_attributes; i++)
 	    {
-	      num = UnpackListNum(&data);
+	      num = StreamListNum(&stream, 2 * sizeof(CARD32));
 
-	      request->wm_windows.match_attributes[i] = (AttributePair *)
-		XtMalloc(sizeof(AttributePair) * num * 2 + sizeof(int));
+	      /*
+	       * One block holds the pair and both of its lists.
+	       */
+	      pair = (AttributePair *)
+		XtMalloc(sizeof(AttributePair) +
+			 sizeof(WindowProperty) * num * 2);
+	      pair->allowed_attributes = (WindowProperty *) (pair + 1);
+	      pair->prohibited_attributes = pair->allowed_attributes + num;
+	      pair->num_attributes = num;
+	      request->wm_windows.match_attributes[i] = pair;
 
-	      request->wm_windows.match_attributes[i]->num_attributes = num;
 	      for (j=0; j<num; j++)
 		{
-		  request->wm_windows.match_attributes[i]->allowed_attributes[j] =
-		    UnpackProperty(&data);
+		  pair->allowed_attributes[j] = StreamProperty(&stream);
 		}
 	      for (j=0; j<num; j++)
 		{
-		  request->wm_windows.match_attributes[i]->prohibited_attributes[j] =
-		    UnpackProperty(&data);
+		  pair->prohibited_attributes[j] = StreamProperty(&stream);
 		}
 	    }
 	}
@@ -589,6 +603,8 @@ _WSMUnpackRequest(Display *dpy, int screen_num, MessageData data,
     default:
 	break;
     }
+
+    return(!stream.overrun);
 } /* _WSMUnpackRequest */
 
 /*	Function Name: _WSMUnpackReply
@@ -597,41 +613,43 @@ _WSMUnpackRequest(Display *dpy, int screen_num, MessageData data,
  *	Arguments: dpy - The Display.
  *                 screen_num - The Screen number.
  *                 data - the bits from accross the wire.
- *                 len - The number of bits sent - Better error checking
- *                       makes this more necessary.
+ *                 len - The number of bytes sent; nothing past it is read.
  *                 type - The type of message received.
  * RETURNED        reply - This reply structure is filled in with the data
  *                         unpacked from the protocol.
- *	Returns: none.
+ *	Returns: False if the reply is shorter than its contents claim,
+ *               or describes an attribute this library cannot unpack.
+ *               The reply is still filled in and must be freed.
  */
 
-/*ARGSUSED*/
-void
+Boolean
 _WSMUnpackReply(Display *dpy, int screen_num, MessageData data,
 		unsigned long len, WSMRequestType type, WSMReply *reply)
 {
     int i;
+    UnpackStream stream;
+
+    StreamInit(&stream, data, len);
+
     reply->any.type = type;		/* Save the type. */
     reply->any.allocated = False;
 
     switch (reply->any.type) {
     case WSM_CONNECT:
-        if (data != NULL)
-	  reply->connect.version = (short) UnpackCARD8(&data);
-	else
-	  fprintf(stderr, "Error - Connection request reply data is empty!\n");
+	reply->connect.version = (short) StreamCARD8(&stream);
 	break;
     case WSM_EXTENSIONS:
         {
 	    int num;
 	    String *ptr;
 
-	    num = reply->extensions.num_extensions = UnpackListNum(&data);
+	    num = reply->extensions.num_extensions =
+		StreamListNum(&stream, COUNT_SIZE);
 	    ptr = (String *) XtMalloc(sizeof(String) * num);
 	    reply->extensions.allocated = True;
 	    reply->extensions.extensions = ptr;
 	    for (i = 0; i < num; i++, ptr++)
-		*ptr = UnpackString(&data);
+		*ptr = StreamString(&stream);
 	}
 	break;
     case WSM_CONFIG_FMT:
@@ -641,8 +659,9 @@ _WSMUnpackReply(Display *dpy, int screen_num, MessageData data,
 	    WSMConfigFormatReply * config_format = &(reply->config_format);
 	    WSMConfigFormatData *fmt;
 	    WSMScreenInfo *scr_info = _WSMGetScreenInfo(dpy, screen_num);
+	    Boolean bad_attr = False;
 
-	    config_format->accepts_diffs = UnpackBoolean(&data);
+	    config_format->accepts_diffs = StreamBoolean(&stream);
 
 	    for (types = 0; types < 3; types++) {
 		switch(types) {
@@ -657,17 +676,47 @@ _WSMUnpackReply(Display *dpy, int screen_num, MessageData data,
 		    break;
 		}
 
-		fmt->num_attrs = UnpackListNum(&data);
+		/* Each attribute is a name and two CARD8s. */
+		fmt->num_attrs = StreamListNum(&stream, COUNT_SIZE + 2);
 		fmt->attr_list = (WSMAttribute *)
 		    XtMalloc(sizeof(WSMAttribute) * fmt->num_attrs);
 
 		for (i = 0; i < fmt->num_attrs; i++) {
-		    String str = UnpackString(&data);
+		    String str = StreamString(&stream);
 		    fmt->attr_list[i].nameq = XrmStringToQuark(str);
 		    XtFree(str);
-		    fmt->attr_list[i].size = UnpackCARD8(&data);
-		    fmt->attr_list[i].is_list = UnpackCARD8(&data);
+		    fmt->attr_list[i].size = StreamCARD8(&stream);
+		    fmt->attr_list[i].is_list = StreamCARD8(&stream);
+
+		    switch (fmt->attr_list[i].size) {
+		    case 8:
+		    case 16:
+		    case 32:
+			break;
+		    default:
+			bad_attr = True;
+			break;
+		    }
 		}
+	    }
+
+	    /*
+	     * Do not keep a format that came from a bad reply; the
+	     * window data unpacked against it later would be garbage.
+	     */
+
+	    if (stream.overrun || bad_attr) {
+		WSMConfigFormatData *all[3];
+
+		all[0] = &(scr_info->global);
+		all[1] = &(scr_info->window);
+		all[2] = &(scr_info->icon);
+		for (types = 0; types < 3; types++) {
+		    XtFree((XtPointer) all[types]->attr_list);
+		    all[types]->attr_list = NULL;
+		    all[types]->num_attrs = 0;
+		}
+		stream.overrun = True;
 	    }
 
 	    /*
@@ -685,58 +734,58 @@ _WSMUnpackReply(Display *dpy, int screen_num, MessageData data,
 	break;
     case WSM_GET_STATE:
 	{
-	    int num =reply->get_state.num_win_info_list = UnpackListNum(&data);
+	    int num = reply->get_state.num_win_info_list =
+		StreamListNum(&stream, sizeof(CARD32));
 	    reply->get_state.win_info_list =
 		(WSMWinInfo *) XtMalloc(sizeof(WSMWinInfo) * num);
 	    reply->get_state.allocated = True;
 
 	    for (i = 0; i < num; i++)
-		UnpackWinInfo(&data, dpy, screen_num,
+		UnpackWinInfo(&stream, dpy, screen_num,
 			      reply->get_state.win_info_list + i);
 	}
 	break;
     case WSM_SET_STATE:
 	break;
     case WSM_REG_WINDOW:
-	if (data != NULL)
-	  {
-	    UnpackWinData(&data, dpy, screen_num, WSM_WINDOW_FMT,
-			  &(reply->register_window.window_data),
-			  &(reply->register_window.num_window_data));
-	    reply->register_window.allocated = True;
-	  }
-	else
-	  fprintf(stderr, "Error - Register Window reply data is empty!\n");
+	UnpackWinData(&stream, dpy, screen_num, WSM_WINDOW_FMT,
+		      &(reply->register_window.window_data),
+		      &(reply->register_window.num_window_data));
+	reply->register_window.allocated = True;
 	break;
     case WSM_WM_GET_BACKGROUND_WINDOW:
-	reply->get_background.window = UnpackWindow(&data);
+	reply->get_background.window = StreamWindow(&stream);
 	break;
     case WSM_WM_SET_BACKGROUND_WINDOW:
-	reply->set_background.window = UnpackWindow(&data);
+	reply->set_background.window = StreamWindow(&stream);
 	break;
     case WSM_WM_WINDOWS:
 	{
 	  int num;
 
-	  num = reply->wm_windows.num_win_entry_list = UnpackListNum(&data);
+	  /* Each entry is two list counts. */
+	  num = reply->wm_windows.num_win_entry_list =
+	    StreamListNum(&stream, 2 * COUNT_SIZE);
 	  reply->wm_windows.win_entry_list =
 	    (WSMWinEntry *) XtMalloc(sizeof(WSMWinEntry) * num);
 	  reply->wm_windows.allocated = True;
 
 	  for (i = 0; i < num; i++)
-	    UnpackWinEntry(&data, dpy, screen_num,
+	    UnpackWinEntry(&stream, dpy, screen_num,
 			   reply->wm_windows.win_entry_list + i);
 	}
 	break;
     case WSM_WM_FOCUS:
-	reply->wm_focus.window = UnpackWindow(&data);
+	reply->wm_focus.window = StreamWindow(&stream);
 	break;
     case WSM_WM_POINTER:
-	reply->wm_pointer.location_flag = UnpackCARD32(&data);
+	reply->wm_pointer.location_flag = StreamCARD32(&stream);
 	break;
     default:
 	break;
     }
+
+    return(!stream.overrun);
 } /* _WSMUnpackReply */
 
 /************************************************************
@@ -1106,7 +1155,7 @@ PackCARD8(MessageData data, CARD8 val)
 
 /*	Function Name: UnpackWinData
  *	Description: Unpacks the window data from the protocol stream.
- *	Arguments: data_ptr - A pointer to the message data stream.
+ *	Arguments: stream - The message data stream.
  *                 dpy, screen_num - The display and screen of the client
  *                                   that we are talking to.
  *                 fmt - The window format to use.
@@ -1116,7 +1165,7 @@ PackCARD8(MessageData data, CARD8 val)
  */
 
 static void
-UnpackWinData(MessageData *data_ptr, Display *dpy, int screen_num,
+UnpackWinData(UnpackStream *stream, Display *dpy, int screen_num,
 	      WSMConfigFormatType fmt,
 	      WSMWinData **win_data, int *num)
 {
@@ -1138,7 +1187,7 @@ UnpackWinData(MessageData *data_ptr, Display *dpy, int screen_num,
      * Unpack the bits from the wire.
      */
     for (i = 0; i < size; i++, current_mask++)
-	*current_mask = UnpackCARD8(data_ptr);
+	*current_mask = StreamCARD8(stream);
 
     current_mask = bit_mask;
     check_mask = START_CHECK_MASK;
@@ -1165,7 +1214,7 @@ UnpackWinData(MessageData *data_ptr, Display *dpy, int screen_num,
     attr = conf_fmt->attr_list;
     for (i = 0; i < conf_fmt->num_attrs; i++, attr++) {
 	if (*current_mask & check_mask)
-	    UnpackSingleWinDataRec(data_ptr, attr, ptr++);
+	    UnpackSingleWinDataRec(stream, attr, ptr++);
 
 	check_mask >>= 1;
 	if ((i % 8) == 7) {
@@ -1179,7 +1228,7 @@ UnpackWinData(MessageData *data_ptr, Display *dpy, int screen_num,
 
 /*	Function Name: UnpackSingleWinDataRec
  *	Description: Packs a single window data record.
- *	Arguments: data_ptr - The data pointer.
+ *	Arguments: stream - The message data stream.
  *                 attr - The attribute record that defines general information
  *                        on how to unpack this data.
  *                 win_data - the window data struct.
@@ -1187,23 +1236,23 @@ UnpackWinData(MessageData *data_ptr, Display *dpy, int screen_num,
  */
 
 static void
-UnpackSingleWinDataRec(MessageData *data_ptr,
+UnpackSingleWinDataRec(UnpackStream *stream,
 		     WSMAttribute *attr, WSMWinData *win_data)
 {
     int i;
 
     /*
-     * Set these no matter what the size.
+     * Set these no matter what the size, so that the record can be
+     * freed even if the size is not one we know how to unpack.
      */
 
     win_data->nameq = attr->nameq; /* Save the name. */
+    win_data->type = WSM_VALUE_DATA;
+    win_data->data_len = 0;	/* unused... */
+    win_data->data.value = 0;
 
     if (attr->is_list) {
-	win_data->data_len = UnpackListNum(data_ptr);
-    }
-    else {
-	win_data->type = WSM_VALUE_DATA;
-	win_data->data_len = 0;	/* unused... */
+	win_data->data_len = StreamListNum(stream, attr->size / 8);
     }
 
     /*
@@ -1220,10 +1269,10 @@ UnpackSingleWinDataRec(MessageData *data_ptr,
 	    local = win_data->data.char_ptr =
 		(char *) XtMalloc(sizeof(char) * win_data->data_len);
 	    for (i = 0; i < win_data->data_len; i++, local++)
-		*local = UnpackCARD8(data_ptr);
+		*local = StreamCARD8(stream);
 	}
 	else
-	    win_data->data.value = UnpackCARD8(data_ptr);
+	    win_data->data.value = StreamCARD8(stream);
 
 	break;
     case 16:
@@ -1234,10 +1283,10 @@ UnpackSingleWinDataRec(MessageData *data_ptr,
 	    local = win_data->data.short_ptr =
 		(short *) XtMalloc(sizeof(short) * win_data->data_len);
 	    for (i = 0; i < win_data->data_len; i++, local++)
-		*local = UnpackCARD16(data_ptr);
+		*local = StreamCARD16(stream);
 	}
 	else
-	    win_data->data.value = UnpackCARD16(data_ptr);
+	    win_data->data.value = StreamCARD16(stream);
 
 	break;
     case 32:
@@ -1248,18 +1297,23 @@ UnpackSingleWinDataRec(MessageData *data_ptr,
 	    local = win_data->data.long_ptr =
 		(long *) XtMalloc(sizeof(long) * win_data->data_len);
 	    for (i = 0; i < win_data->data_len; i++, local++)
-		*local = UnpackCARD32(data_ptr);
+		*local = StreamCARD32(stream);
 	}
 	else
-	    win_data->data.value = UnpackCARD32(data_ptr);
+	    win_data->data.value = StreamCARD32(stream);
 
+	break;
+    default:
+	/* Nothing tells us how long the value is; give up. */
+	win_data->data_len = 0;
+	stream->overrun = True;
 	break;
     }
 }
 
 /*	Function Name: UnpackWinInfo
  *	Description: Unpacks the window information from the protocol stream.
- *	Arguments: data_ptr - A pointer to the message data stream.
+ *	Arguments: stream - The message data stream.
  *                 dpy, screen_num - The display and screen of the client
  *                                   that we are talking to.
  *                 win_info - The window information.
@@ -1267,18 +1321,18 @@ UnpackSingleWinDataRec(MessageData *data_ptr,
  */
 
 static void
-UnpackWinInfo(MessageData *data, Display *dpy,
+UnpackWinInfo(UnpackStream *stream, Display *dpy,
 	      int screen_num, WSMWinInfo *win_info)
 {
-    win_info->window = UnpackWindow(data);
-    UnpackWinData(data, dpy, screen_num,
+    win_info->window = StreamWindow(stream);
+    UnpackWinData(stream, dpy, screen_num,
 		  _WSMGetConfigFormatType(win_info->window),
 		  &(win_info->data_list), &(win_info->num_data_list));
 }
 
 /*	Function Name: UnpackWinEntry
  *	Description: Unpacks the window entry information from the protocol stream.
- *	Arguments: data_ptr - A pointer to the message data stream.
+ *	Arguments: stream - The message data stream.
  *                 dpy, screen_num - The display and screen of the client
  *                                   that we are talking to.
  *                 win_entry - The window entry information.
@@ -1286,24 +1340,136 @@ UnpackWinInfo(MessageData *data, Display *dpy,
  */
 
 static void
-UnpackWinEntry(MessageData *data, Display *dpy,
+UnpackWinEntry(UnpackStream *stream, Display *dpy,
 	       int screen_num, WSMWinEntry *win_entry)
 {
     int i;
 
-    win_entry->num_windows = UnpackListNum(data);
+    win_entry->num_windows = StreamListNum(stream, sizeof(CARD32));
     win_entry->windows = (Window *) XtMalloc(sizeof(Window) * win_entry->num_windows);
 
     for (i=0; i<win_entry->num_windows; i++)
-      win_entry->windows[i] = UnpackWindow(data);
+      win_entry->windows[i] = StreamWindow(stream);
 
-    win_entry->num_match_properties = UnpackListNum(data);
+    win_entry->num_match_properties = StreamListNum(stream, sizeof(CARD32));
     win_entry->match_properties =
       (WindowProperty *) XtMalloc(sizeof(WindowProperty) *
 				  win_entry->num_match_properties);
 
     for (i=0; i<win_entry->num_match_properties; i++)
-      win_entry->match_properties[i] = UnpackProperty(data);
+      win_entry->match_properties[i] = StreamProperty(stream);
+}
+
+/*	Function Name: StreamInit
+ *	Description: Starts reading a message from the wire.
+ *	Arguments: stream - The stream to set up.
+ *                 data - The message.
+ *                 len - The length of the message in bytes.
+ *	Returns: none
+ */
+
+void
+StreamInit(UnpackStream *stream, MessageData data, unsigned long len)
+{
+    stream->data = data;
+    stream->left = len;
+    stream->overrun = False;
+}
+
+/*	Function Name: StreamListNum
+ *	Description: Unpacks a list count from the protocol data stream.
+ *	Arguments: stream - The message data stream.
+ *                 elem_size - The fewest bytes each list element takes.
+ *	Returns: the list count, or zero if fewer bytes are left than
+ *               that many elements need.
+ */
+
+int
+StreamListNum(UnpackStream *stream, unsigned long elem_size)
+{
+    int num = (int) StreamCARD16(stream);
+
+    if ((unsigned long) num * elem_size > stream->left) {
+	stream->overrun = True;
+	return(0);
+    }
+
+    return(num);
+}
+
+/*	Function Name: StreamString
+ *	Description: Unpacks a string from the protocol data stream.
+ *	Arguments: stream - The message data stream.
+ *	Returns: the string, empty if the stream is too short.
+ */
+
+String
+StreamString(UnpackStream *stream)
+{
+    int i;
+    int len = StreamListNum(stream, 1);
+    char *str, *top = XtMalloc((len + 1) * sizeof(char));
+
+    for (str = top, i = 0; i < len; i++, str++) {
+	*str = (char) StreamCARD8(stream);
+    }
+    *str = '\0';
+
+    return((String) top);
+}
+
+/*	Function Name: StreamCARD32
+ *	Description: Unpacks an 32 bit value from the protocol data stream.
+ *	Arguments: stream - The message data stream.
+ *	Returns: the CARD32, or zero if the stream is too short.
+ */
+
+CARD32
+StreamCARD32(UnpackStream *stream)
+{
+    if (stream->overrun || stream->left < sizeof(CARD32)) {
+	stream->overrun = True;
+	return(0);
+    }
+
+    stream->left -= sizeof(CARD32);
+    return(UnpackCARD32(&stream->data));
+}
+
+/*	Function Name: StreamCARD16
+ *	Description: Unpacks an 16 bit value from the protocol data stream.
+ *	Arguments: stream - The message data stream.
+ *	Returns: the CARD16, or zero if the stream is too short.
+ */
+
+CARD16
+StreamCARD16(UnpackStream *stream)
+{
+    if (stream->overrun || stream->left < sizeof(CARD16)) {
+	stream->overrun = True;
+	return(0);
+    }
+
+    stream->left -= sizeof(CARD16);
+    return(UnpackCARD16(&stream->data));
+}
+
+/*	Function Name: StreamCARD8
+ *	Description: Unpacks an 8 bit value from the protocol data stream.
+ *	Arguments: stream - The message data stream.
+ *	Returns: the CARD8, or zero if the stream is too short.
+ */
+
+CARD8
+StreamCARD8(UnpackStream *stream)
+{
+    if (stream->overrun || stream->left < sizeof(CARD8)) {
+	stream->overrun = True;
+	return(0);
+    }
+
+    stream->left -= sizeof(CARD8);
+    return(UnpackCARD8(&stream->data));
 }
 
 /*	Function Name: UnpackString
@@ -1312,6 +1478,8 @@ UnpackWinEntry(MessageData *data, Display *dpy,
  *	Returns: the string from the data stream.
  *
  * NOTE: Data is modified to point to the next empty location in the stream.
+ * NOTE: Nothing here knows where the data ends; the caller must check
+ *       that the string is all there.
  */
 
 String
@@ -1335,6 +1503,8 @@ UnpackString(MessageData *data_ptr)
  *	Returns: the CARD32 from the data stream.
  *
  * NOTE: data is modified to point to the next empty location in the stream.
+ * NOTE: Nothing here knows where the data ends; the caller must check
+ *       that there is room for the value.
  */
 
 CARD32
@@ -1351,6 +1521,8 @@ UnpackCARD32(MessageData *data_ptr)
  *	Returns: the CARD16 from the data stream.
  *
  * NOTE: data is modified to point to the next empty location in the stream.
+ * NOTE: Nothing here knows where the data ends; the caller must check
+ *       that there is room for the value.
  */
 
 CARD16
@@ -1367,6 +1539,8 @@ UnpackCARD16(MessageData *data_ptr)
  *	Returns: the CARD8 from the data stream.
  *
  * NOTE: data is modified to point to the next empty location in the stream.
+ * NOTE: Nothing here knows where the data ends; the caller must check
+ *       that there is room for the value.
  */
 
 CARD8

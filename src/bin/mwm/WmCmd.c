@@ -57,6 +57,62 @@ static unsigned long cmdKillListIndex;
 
 
 
+/*----------------------------------------------------------------------*
+ |                            StartCmdData                              |
+ | Starts reading a client command request.  Requests come from any     |
+ | client, so they are read through a stream that stops at the end of   |
+ | the data.  Returns False if the data cannot be a request.            |
+ *----------------------------------------------------------------------*/
+static Boolean
+StartCmdData (
+     UnpackStream  *stream,
+     MessageData    data,
+     unsigned long  len,
+     int            fmt)
+{
+  /* Requests are packed bytes, so only format 8 makes sense. */
+  if ((data == NULL) || (len == 0) || (fmt != 8))
+    return (False);
+
+  StreamInit(stream, data, len);
+  return (True);
+}
+
+
+/*----------------------------------------------------------------------*
+ |                           UnpackWindowList                           |
+ | Unpacks a window count and that many window IDs.  Every caller looks |
+ | at the first ID, so an empty list is as bad as one longer than the   |
+ | data left; both return NULL and mark the stream bad.                 |
+ *----------------------------------------------------------------------*/
+static Window *
+UnpackWindowList (
+     UnpackStream *stream,
+     CARD32       *count)
+{
+  Window *windowIDs;
+  CARD32  win;
+
+  *count = StreamCARD32(stream);
+  if ((*count == 0) || (*count > stream->left / sizeof(CARD32)))
+    {
+      stream->overrun = True;
+      *count = 0;
+      return (NULL);
+    }
+
+  windowIDs = (Window *) XtMalloc(sizeof(Window) * *count);
+  for (win = 0; win < *count; win++)
+    {
+      windowIDs[win] = StreamCARD32(stream);
+      PRINT("Got window ID %d.\n", windowIDs[win]);
+    }
+
+  return (windowIDs);
+}
+
+
+
 
 /*----------------------------------------------------------------------*
  |                              NewCommand                              |
@@ -290,21 +346,30 @@ DefineCommand (
   Boolean found = False;
   Window  owner;
   XWindowAttributes attr;
+  UnpackStream stream;
 
   /*
    * check data to make sure somethings there.
    */
-  if ((data == NULL) || (len == 0))
+  if (!StartCmdData(&stream, data, len, fmt))
     {
       PRINT("Bad data passed to DefineCommand.\n");
       return;
     }
 
-  commandID    = UnpackCARD32(&data);
-  selection    = UnpackCARD32(&data); /* selection to use for invoke cmd */
-  commandSet   = UnpackCARD32(&data);
-  name         = UnpackString(&data);
-  defaultLabel = UnpackString(&data);
+  commandID    = StreamCARD32(&stream);
+  selection    = StreamCARD32(&stream); /* selection to use for invoke cmd */
+  commandSet   = StreamCARD32(&stream);
+  name         = StreamString(&stream);
+  defaultLabel = StreamString(&stream);
+
+  if (stream.overrun)
+    {
+      PRINT("Bad data passed to DefineCommand.\n");
+      XtFree(name);
+      XtFree(defaultLabel);
+      return;
+    }
 
   PRINT("Define command: %d, %d, '%s', '%s'\n",
 	commandID, commandSet, name, defaultLabel);
@@ -348,6 +413,10 @@ DefineCommand (
       tmp->next = CCI_TREE(w)->next;
       CCI_TREE(w)->next = tmp;
     }
+
+  /* The command tree keeps copies. */
+  XtFree(name);
+  XtFree(defaultLabel);
 }
 
 
@@ -367,29 +436,30 @@ IncludeCommand (
   CARD32         inLine, commandID, selection, count;
   Window        *windowIDs = NULL;
   CmdTree       *tPtr, *pNext;
-  int            i, win;
+  int            i;
+  UnpackStream   stream;
   unsigned long  activeContext = 0L;
 
   /*
    * check data to make sure somethings there.
    */
-  if ((data == NULL) || (len == 0))
+  if (!StartCmdData(&stream, data, len, fmt))
     {
       PRINT("Bad data passed to IncludeCommand.\n");
       return;
     }
 
-  inLine    = UnpackCARD32(&data);
-  commandID = UnpackCARD32(&data);
-  selection = UnpackCARD32(&data);
-  count     = UnpackCARD32(&data);
+  inLine    = StreamCARD32(&stream);
+  commandID = StreamCARD32(&stream);
+  selection = StreamCARD32(&stream);
+  windowIDs = UnpackWindowList(&stream, &count);
 
-  if (count > 0) windowIDs = (Window *) XtMalloc(sizeof(Window)*count);
-  for (win=0; (CARD32)win<count; win++)
-  {
-      windowIDs[win] = UnpackCARD32(&data);
-      PRINT("Got window ID %d.\n", windowIDs[win]);
-  }
+  if (stream.overrun)
+    {
+      PRINT("Bad data passed to IncludeCommand.\n");
+      XtFree((char*)windowIDs);
+      return;
+    }
 
   /*
    *  Insert on root menu
@@ -494,26 +564,27 @@ EnableCommand (
   CARD32         commandID, count;
   Window        *windowIDs = NULL;
   CmdTree       *tPtr, *pNext;
-  int            i, win;
+  int            i;
+  UnpackStream   stream;
   unsigned long  activeContext = 0L;
 
   /*
    * check data to make sure somethings there.
    */
-  if ((data == NULL) || (len == 0))
+  if (!StartCmdData(&stream, data, len, fmt))
     {
       PRINT("Bad data passed to EnableCommand.\n");
       return;
     }
 
-  commandID = UnpackCARD32(&data);
-  count     = UnpackCARD32(&data);
+  commandID = StreamCARD32(&stream);
+  windowIDs = UnpackWindowList(&stream, &count);
 
-  if (count > 0) windowIDs = (Window *) XtMalloc(sizeof(Window)*count);
-  for (win=0; (CARD32)win<count; win++)
+  if (stream.overrun)
     {
-      windowIDs[win] = UnpackCARD32(&data);
-      PRINT("Got window ID %d.\n", windowIDs[win]);
+      PRINT("Bad data passed to EnableCommand.\n");
+      XtFree((char*)windowIDs);
+      return;
     }
 
   /*
@@ -616,26 +687,27 @@ DisableCommand (
   CARD32         commandID, count;
   Window        *windowIDs = NULL;
   CmdTree       *tPtr, *pNext;
-  int            i, win;
+  int            i;
+  UnpackStream   stream;
   unsigned long  activeContext = 0L;
 
   /*
    * check data to make sure somethings there.
    */
-  if ((data == NULL) || (len == 0))
+  if (!StartCmdData(&stream, data, len, fmt))
     {
       PRINT("Bad data passed to DisableCommand.\n");
       return;
     }
 
-  commandID = UnpackCARD32(&data);
-  count     = UnpackCARD32(&data);
+  commandID = StreamCARD32(&stream);
+  windowIDs = UnpackWindowList(&stream, &count);
 
-  if (count > 0) windowIDs = (Window *) XtMalloc(sizeof(Window)*count);
-  for (win=0; (CARD32)win<count; win++)
+  if (stream.overrun)
     {
-      windowIDs[win] = UnpackCARD32(&data);
-      PRINT("Got window ID %d.\n", windowIDs[win]);
+      PRINT("Bad data passed to DisableCommand.\n");
+      XtFree((char*)windowIDs);
+      return;
     }
 
   /*
@@ -738,28 +810,30 @@ RenameCommand (
   CARD32         commandID, count;
   Window        *windowIDs = NULL;
   CmdTree       *tPtr, *pNext;
-  int            i, win;
+  int            i;
+  UnpackStream   stream;
   unsigned long  activeContext = 0L;
   String	 newname;
 
   /*
    * check data to make sure somethings there.
    */
-  if ((data == NULL) || (len == 0))
+  if (!StartCmdData(&stream, data, len, fmt))
     {
       PRINT("Bad data passed to RenameCommand.\n");
       return;
     }
 
-  commandID = UnpackCARD32(&data);
-  newname   = UnpackString(&data);
-  count     = UnpackCARD32(&data);
+  commandID = StreamCARD32(&stream);
+  newname   = StreamString(&stream);
+  windowIDs = UnpackWindowList(&stream, &count);
 
-  if (count > 0) windowIDs = (Window *) XtMalloc(sizeof(Window)*count);
-  for (win=0; (CARD32)win<count; win++)
+  if (stream.overrun)
     {
-      windowIDs[win] = UnpackCARD32(&data);
-      PRINT("Got window ID %d.\n", windowIDs[win]);
+      PRINT("Bad data passed to RenameCommand.\n");
+      XtFree(newname);
+      XtFree((char*)windowIDs);
+      return;
     }
 
   /*
@@ -843,6 +917,9 @@ RenameCommand (
 
   if (count > 0)
     XtFree((char*)windowIDs);
+
+  /* The menu items keep copies. */
+  XtFree(newname);
 }
 
 
@@ -862,26 +939,27 @@ RemoveCommand (
   CARD32         commandID, count;
   Window        *windowIDs = NULL;
   CmdTree       *tPtr, *pNext;
-  int            i, win;
+  int            i;
+  UnpackStream   stream;
   unsigned long  activeContext = 0L;
 
   /*
    * check data to make sure somethings there.
    */
-  if ((data == NULL) || (len == 0))
+  if (!StartCmdData(&stream, data, len, fmt))
     {
       PRINT("Bad data passed to RemoveCommand.\n");
       return;
     }
 
-  commandID = UnpackCARD32(&data);
-  count     = UnpackCARD32(&data);
+  commandID = StreamCARD32(&stream);
+  windowIDs = UnpackWindowList(&stream, &count);
 
-  if (count > 0) windowIDs = (Window *) XtMalloc(sizeof(Window)*count);
-  for (win=0; (CARD32)win<count; win++)
+  if (stream.overrun)
     {
-      windowIDs[win] = UnpackCARD32(&data);
-      PRINT("Got window ID %d.\n", windowIDs[win]);
+      PRINT("Bad data passed to RemoveCommand.\n");
+      XtFree((char*)windowIDs);
+      return;
     }
 
   /*
@@ -2075,7 +2153,7 @@ GetRaiseInfo(ClientData *pcd, XtPointer reply)
  |                             GetAutomationData
  *----------------------------------------------------------------------*/
 void
-GetAutomationData (XtPointer input, Atom *outputType, XtPointer *output, unsigned long *outputLen, int *outputFmt)
+GetAutomationData (XtPointer input, unsigned long inputLen, int inputFmt, Atom *outputType, XtPointer *output, unsigned long *outputLen, int *outputFmt)
 {
   ClientData *pcd;
   CARD32 infoWanted;
@@ -2086,13 +2164,22 @@ GetAutomationData (XtPointer input, Atom *outputType, XtPointer *output, unsigne
 
   int i, n, menuItemCount = 0;
   MenuItem *menu_item;
+  UnpackStream stream;
 
+  if (!StartCmdData(&stream, (MessageData) input, inputLen, inputFmt))
+    {
+      PRINT ("Bad data passed to GetAutomationData\n");
+      return;
+    }
 
+  winId        = StreamCARD32(&stream);
+  infoWanted    = StreamCARD32(&stream);
 
-
-
-  winId        = UnpackCARD32(&input);
-  infoWanted    = UnpackCARD32(&input);
+  if (stream.overrun)
+    {
+      PRINT ("Bad data passed to GetAutomationData\n");
+      return;
+    }
 
 
 

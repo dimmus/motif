@@ -61,8 +61,6 @@ foreach(DEMO_DIR ${DEMO_DIRS})
                 set(DEMO_NAME "hellomotifi18n_demo")
             elseif(DEMO_NAME STREQUAL "periodic")
                 set(DEMO_NAME "periodic_demo")
-            elseif(DEMO_NAME STREQUAL "workspace")
-                set(DEMO_NAME "workspace")
             endif()
             
             # Create the executable
@@ -80,19 +78,11 @@ foreach(DEMO_DIR ${DEMO_DIRS})
             if(TARGET Xmd)
                 target_link_libraries(${DEMO_NAME} Xmd)
             endif()
-            if(TARGET WsmDemo)
-                target_link_libraries(${DEMO_NAME} WsmDemo)
-            endif()
             if(TARGET Exm)
                 target_link_libraries(${DEMO_NAME} Exm)
             endif()
             if(TARGET ExmMrm)
                 target_link_libraries(${DEMO_NAME} ExmMrm)
-            endif()
-            
-            # Special case for workspace program - ensure it links with WsmDemo
-            if(DEMO_NAME STREQUAL "workspace")
-                target_link_libraries(${DEMO_NAME} WsmDemo)
             endif()
             
             # Set include directories

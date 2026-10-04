@@ -35,7 +35,8 @@ Verification of this branch (2 CPUs, Arch Linux, GCC 16, Clang 23):
   hellomotifi18n_demo exit at once because the build does not put their
   .uid files where they look; the workspace demo's Wsm library
   (`src/examples/lib/Wsm/pack.c`) over-reads the empty reply of an mwm
-  built without WSM.
+  built without WSM.  (That demo has since been removed: it needs the
+  Mwm 2.0 workspace manager protocol, which mwm does not implement.)
 
 What remains, by priority:
 - **P0/P1, known open bugs** (reproducers in `src/tests/fuzz/crashes/`):

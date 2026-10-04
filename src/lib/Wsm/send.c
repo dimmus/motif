@@ -239,10 +239,16 @@ ReplyReceived(Widget w, XtPointer req_info_ptr,
     else {
 	screen_num = XScreenNumberOfScreen(XtScreen(w));
 
-	_WSMUnpackReply(dpy, screen_num, value, *length,
-			  req_info->request_type, &reply);
-
-	(*req_info->reply_callback)(w, req_info->reply_data, &reply,fail_code);
+	if (_WSMUnpackReply(dpy, screen_num, value, *length,
+			    req_info->request_type, &reply))
+	    (*req_info->reply_callback)(w, req_info->reply_data,
+					&reply, fail_code);
+	else {
+	    fprintf(stderr, "Reply to %s request is truncated or malformed\n",
+		    _WSMReqTypeToName(req_info->request_type));
+	    (*req_info->reply_callback)(w, req_info->reply_data, NULL,
+					WSM_ERROR_INTERNAL);
+	}
 
 	FreeReply(&reply);
     }

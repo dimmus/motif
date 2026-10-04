@@ -87,11 +87,11 @@ MessageData _WSMPackReply(
 Display *, int, WSMReply *, unsigned long *
 );
 
-void _WSMUnpackRequest(
+Boolean _WSMUnpackRequest(
 Display *, int, MessageData, unsigned long, WSMRequestType, WSMRequest *
 );
 
-void _WSMUnpackReply(
+Boolean _WSMUnpackReply(
 Display *, int, MessageData, unsigned long, WSMRequestType, WSMReply *
 );
 
@@ -125,6 +125,43 @@ MessageData, CARD32
 
 CARD32 UnpackCARD32(
 MessageData *
+);
+
+/*
+ * A read position in a message received from the wire.  "left" is the
+ * number of bytes still unread.  A read that would run past the end sets
+ * "overrun" and returns zero, as does every read after it.  Unlike the
+ * Unpack* routines above, these never read past the end of the message.
+ */
+
+typedef struct {
+    MessageData data;
+    unsigned long left;
+    Boolean overrun;
+} UnpackStream;
+
+void StreamInit(
+UnpackStream *, MessageData, unsigned long
+);
+
+int StreamListNum(
+UnpackStream *, unsigned long
+);
+
+String StreamString(
+UnpackStream *
+);
+
+CARD32 StreamCARD32(
+UnpackStream *
+);
+
+CARD16 StreamCARD16(
+UnpackStream *
+);
+
+CARD8 StreamCARD8(
+UnpackStream *
 );
 
 /*

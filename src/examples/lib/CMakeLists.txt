@@ -3,7 +3,6 @@
 
 # Add demo library subdirectories
 add_subdirectory(Xmd)
-add_subdirectory(Wsm)
 add_subdirectory(Exm)
 
 # Optional: add other demo libraries if they exist
