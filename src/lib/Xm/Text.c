@@ -1913,7 +1913,7 @@ static void InitializeHook(Widget wid, ArgList args, Cardinal *num_args_ptr)
   tw->text.pendingoff = True;
   tw->text.forget_past = 0;
   /* Translation table overwrite */
-  if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+  if (_XmTextIsVertical(tw)) {
     char *vevent_bindings;
     vevent_bindings = XtNewString(_XmTextIn_XmTextVEventBindings);
     tw->text.tm_table = (XtTranslations)XtParseTranslationTable(vevent_bindings);
@@ -2416,7 +2416,7 @@ void _XmTextEnableRedisplay(XmTextWidget widget)
   /* If this is a scrolled widget, better update the scroll bars to reflect
    * any changes that have occured while redisplay has been disabled.  */
   if (widget->text.disable_depth == 0) {
-    if (XmDirectionMatch(XmPrim_layout_direction(widget), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+    if (_XmTextIsVertical(widget)) {
       if (widget->text.output->data->scrollvertical && XmIsScrolledWindow(XtParent(widget)))
         _XmRedisplayVBar(widget);
       if (widget->text.output->data->scrollhorizontal && XmIsScrolledWindow(XtParent(widget)) &&

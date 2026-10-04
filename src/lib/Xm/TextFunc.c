@@ -571,7 +571,7 @@ int XmTextGetBaseline(Widget widget)
     XmTextFieldWidget tf = (XmTextFieldWidget)widget;
     Dimension margin_top;
     int ret_val;
-    if (XmDirectionMatch(XmPrim_layout_direction(tf), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+    if (_XmTextIsVertical(tf)) {
       _XmAppUnlock(app);
       return (0);
     }
@@ -587,7 +587,7 @@ int XmTextGetBaseline(Widget widget)
     int line_count = 0;
     XmPrimitiveClassExt *wcePtr;
     XmTextWidget tw = (XmTextWidget)widget;
-    if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+    if (_XmTextIsVertical(tw)) {
       _XmAppUnlock(app);
       return (0);
     }
@@ -612,7 +612,7 @@ int XmTextGetCenterline(Widget widget)
   XmTextWidget tw = (XmTextWidget)widget;
   _XmWidgetToAppContext(widget);
   _XmAppLock(app);
-  if (!XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+  if (!_XmTextIsVertical(tw)) {
     _XmAppUnlock(app);
     return (0);
   }
