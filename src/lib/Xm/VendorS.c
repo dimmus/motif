@@ -157,7 +157,17 @@ char _XmVersionString[] = XmVERSION_STRING;
 static XmDestroyGrabList destroy_list;
 static unsigned short destroy_list_size;
 static unsigned short destroy_list_cnt;
+/*
+ * The display _XmGetDefaultDisplay returns to the interfaces that have
+ * none: the one this thread last created a shell on, if its XmDisplay
+ * still exists, or else the one any thread did.  The displays whose
+ * XmDisplay exists are kept in liveDisplays.  All guarded by the process
+ * lock, except threadDisplay, which only its own thread uses.
+ */
 static Display *_XmDisplayHandle = NULL;
+static _Thread_local Display *threadDisplay = NULL;
+static Display **liveDisplays = NULL;
+static Cardinal numLiveDisplays = 0;
 static XtErrorMsgHandler previousWarningHandler = NULL;
 #if defined(__APPLE__)
 /* Hack necessary to handle Apple two-level namespaces */
@@ -1150,12 +1160,26 @@ static XmDesktopObject GetShellDesktopParent(VendorShellWidget vw,
  *
  ************************************************************************/
 /*ARGSUSED*/
+static int FindLiveDisplay(Display *display)
+{
+  Cardinal i;
+  for (i = 0; i < numLiveDisplays; i++)
+    if (liveDisplays[i] == display)
+      return (int)i;
+  return -1;
+}
+
 static void DisplayClosedCallback(Widget shellParent, /* unused */
                                   XtPointer closure,
                                   XtPointer callData) /* unused */
 {
+  Display *display = (Display *)closure;
+  int i;
   _XmProcessLock();
-  _XmDisplayHandle = NULL;
+  if ((i = FindLiveDisplay(display)) >= 0)
+    liveDisplays[i] = liveDisplays[--numLiveDisplays];
+  if (_XmDisplayHandle == display)
+    _XmDisplayHandle = numLiveDisplays ? liveDisplays[numLiveDisplays - 1] : NULL;
   _XmProcessUnlock();
 }
 
@@ -1174,13 +1198,20 @@ static void SecondaryObjectCreate(Widget req, Widget new_w, ArgList args, Cardin
   XtPointer newSec, reqSec;
   XmWidgetExtData extData;
   _XmProcessLock();
-  if (!_XmDisplayHandle) {
+  if (FindLiveDisplay(XtDisplay(new_w)) < 0) {
     XmDisplay xmDisplay;
+    liveDisplays = (Display **)_XmReallocArray(
+        (char *)liveDisplays, numLiveDisplays + 1, sizeof(Display *));
+    liveDisplays[numLiveDisplays++] = XtDisplay(new_w);
     if ((xmDisplay = (XmDisplay)XmGetXmDisplay(XtDisplay(new_w))) != NULL)
-      XtAddCallback((Widget)xmDisplay, XmNdestroyCallback, DisplayClosedCallback, NULL);
+      XtAddCallback((Widget)xmDisplay,
+                    XmNdestroyCallback,
+                    DisplayClosedCallback,
+                    (XtPointer)XtDisplay(new_w));
   }
   _XmDisplayHandle = XtDisplay(new_w);
   _XmProcessUnlock();
+  threadDisplay = XtDisplay(new_w);
   desktopParent = GetShellDesktopParent((VendorShellWidget)new_w, args, num_args);
   if (desktopParent) {
     /*
@@ -2406,7 +2437,9 @@ Display *_XmGetDefaultDisplay(void)
 {
   Display *theDisplay = NULL;
   _XmProcessLock();
-  if (_XmDisplayHandle)
+  if (threadDisplay && FindLiveDisplay(threadDisplay) >= 0)
+    theDisplay = threadDisplay;
+  else if (_XmDisplayHandle)
     theDisplay = _XmDisplayHandle;
   else {
     XtWarning(MSG4);

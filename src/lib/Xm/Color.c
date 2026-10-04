@@ -72,10 +72,25 @@ static unsigned int FromColorToBlackAndWhite(char *col);
 /*
  * GLOBAL VARIABLES
  *
- * These variables define the color cache.
+ * These variables define the color cache, which all displays share; it
+ * and everything else here is guarded by the process lock.  The cache
+ * grows by blocks that never move, as _XmSearchColorCache and
+ * _XmAddToColorCache hand out pointers into it, and the entries of a
+ * display are dropped (screen set to NULL, for reuse) when its
+ * XmDisplay is destroyed: a later display may get the same Screen
+ * address.
  */
-static int Set_Count = 0, Set_Size = 0;
-static XmColorData *Color_Set = NULL;
+#define COLOR_BLOCK_SIZE 16
+typedef struct _ColorBlockRec {
+  struct _ColorBlockRec *next;
+  int count;
+  XmColorData colors[COLOR_BLOCK_SIZE];
+} ColorBlockRec, *ColorBlock;
+static ColorBlock colorBlocks = NULL, lastColorBlock = NULL;
+/* The default colors of each screen and colormap, copied from the cache */
+static XmColorData *default_set = NULL;
+static int default_set_count = 0;
+static int default_set_size = 0;
 /* Thresholds for brightness
    above LITE threshold, LITE color model is used
    below DARK threshold, DARK color model is be used
@@ -93,9 +108,9 @@ static void GetDefaultThresholdsForScreen(Screen *screen)
   int default_light_threshold_spec;
   int default_dark_threshold_spec;
   int default_foreground_threshold_spec;
+  /* The thresholds are shared but come from each screen: callers keep
+     the lock until they have used them. */
   _XmProcessLock();
-  XmTHRESHOLDS_INITD = True;
-  _XmProcessUnlock();
   xmScreen = (XmScreen)XmGetXmScreen(screen);
   /* Get resources from the XmScreen */
   default_light_threshold_spec = xmScreen->screen.lightThreshold;
@@ -107,10 +122,10 @@ static void GetDefaultThresholdsForScreen(Screen *screen)
     default_dark_threshold_spec = XmDEFAULT_DARK_THRESHOLD;
   if ((default_foreground_threshold_spec <= 0) || (default_foreground_threshold_spec > 100))
     default_foreground_threshold_spec = XmDEFAULT_FOREGROUND_THRESHOLD;
-  _XmProcessLock();
   XmCOLOR_LITE_THRESHOLD = default_light_threshold_spec * XmCOLOR_PERCENTILE;
   XmCOLOR_DARK_THRESHOLD = default_dark_threshold_spec * XmCOLOR_PERCENTILE;
   XmFOREGROUND_THRESHOLD = default_foreground_threshold_spec * XmCOLOR_PERCENTILE;
+  XmTHRESHOLDS_INITD = True;
   _XmProcessUnlock();
 }
 
@@ -144,9 +159,6 @@ static XColor *GetDefaultBackgroundColor(Screen *screen, Colormap color_map)
 
 static XmColorData *GetDefaultColors(Screen *screen, Colormap color_map)
 {
-  static XmColorData *default_set = NULL;
-  static int default_set_count = 0;
-  static int default_set_size = 0;
   int i;
   XColor *color_def;
   static Pixel background;
@@ -232,33 +244,37 @@ static XmColorData *GetDefaultColors(Screen *screen, Colormap color_map)
 
 Boolean _XmSearchColorCache(unsigned int which, XmColorData *values, XmColorData **ret)
 {
+  ColorBlock block;
+  XmColorData *cd;
   int i;
   /*
    * Look through  a set of screen, color_map, background triplets
    * to see if these colors have already been generated.
    */
   _XmProcessLock();
-  for (i = 0; i < Set_Count; i++) {
-    if ((!(which & XmLOOK_AT_SCREEN) || ((Color_Set + i)->screen == values->screen)) &&
-        (!(which & XmLOOK_AT_CMAP) || ((Color_Set + i)->color_map == values->color_map)) &&
-        (!(which & XmLOOK_AT_BACKGROUND) ||
-         (((Color_Set + i)->allocated & XmBACKGROUND) &&
-          ((Color_Set + i)->background.pixel == values->background.pixel))) &&
-        (!(which & XmLOOK_AT_FOREGROUND) ||
-         (((Color_Set + i)->allocated & XmFOREGROUND) &&
-          ((Color_Set + i)->foreground.pixel == values->foreground.pixel))) &&
-        (!(which & XmLOOK_AT_TOP_SHADOW) ||
-         (((Color_Set + i)->allocated & XmTOP_SHADOW) &&
-          ((Color_Set + i)->top_shadow.pixel == values->top_shadow.pixel))) &&
-        (!(which & XmLOOK_AT_BOTTOM_SHADOW) ||
-         (((Color_Set + i)->allocated & XmBOTTOM_SHADOW) &&
-          ((Color_Set + i)->bottom_shadow.pixel == values->bottom_shadow.pixel))) &&
-        (!(which & XmLOOK_AT_SELECT) || (((Color_Set + i)->allocated & XmSELECT) &&
-                                         ((Color_Set + i)->select.pixel == values->select.pixel))))
-    {
-      *ret = (Color_Set + i);
-      _XmProcessUnlock();
-      return (TRUE);
+  for (block = colorBlocks; block != NULL; block = block->next) {
+    for (i = 0, cd = block->colors; i < block->count; i++, cd++) {
+      if (cd->screen != NULL && (!(which & XmLOOK_AT_SCREEN) || (cd->screen == values->screen)) &&
+          (!(which & XmLOOK_AT_CMAP) || (cd->color_map == values->color_map)) &&
+          (!(which & XmLOOK_AT_BACKGROUND) ||
+           ((cd->allocated & XmBACKGROUND) &&
+            (cd->background.pixel == values->background.pixel))) &&
+          (!(which & XmLOOK_AT_FOREGROUND) ||
+           ((cd->allocated & XmFOREGROUND) &&
+            (cd->foreground.pixel == values->foreground.pixel))) &&
+          (!(which & XmLOOK_AT_TOP_SHADOW) ||
+           ((cd->allocated & XmTOP_SHADOW) &&
+            (cd->top_shadow.pixel == values->top_shadow.pixel))) &&
+          (!(which & XmLOOK_AT_BOTTOM_SHADOW) ||
+           ((cd->allocated & XmBOTTOM_SHADOW) &&
+            (cd->bottom_shadow.pixel == values->bottom_shadow.pixel))) &&
+          (!(which & XmLOOK_AT_SELECT) ||
+           ((cd->allocated & XmSELECT) && (cd->select.pixel == values->select.pixel))))
+      {
+        *ret = cd;
+        _XmProcessUnlock();
+        return (TRUE);
+      }
     }
   }
   *ret = NULL;
@@ -268,18 +284,55 @@ Boolean _XmSearchColorCache(unsigned int which, XmColorData *values, XmColorData
 
 XmColorData *_XmAddToColorCache(XmColorData *new_rec)
 {
-  XmColorData *result;
-  /*  See if more space is needed */
+  ColorBlock block;
+  XmColorData *result = NULL;
+  int i;
   _XmProcessLock();
-  if (Set_Count == Set_Size) {
-    Set_Size += 10;
-    Color_Set = (XmColorData *)_XmReallocArray((char *)Color_Set, Set_Size, sizeof(XmColorData));
+  /* Reuse an entry of a closed display, or take the next free one */
+  for (block = colorBlocks; block != NULL && result == NULL; block = block->next) {
+    for (i = 0; i < block->count; i++) {
+      if (block->colors[i].screen == NULL) {
+        result = &block->colors[i];
+        break;
+      }
+    }
   }
-  *(Color_Set + Set_Count) = *new_rec;
-  Set_Count++;
-  result = Color_Set + (Set_Count - 1);
+  if (result == NULL) {
+    if (lastColorBlock == NULL || lastColorBlock->count == COLOR_BLOCK_SIZE) {
+      block = (ColorBlock)XtMalloc(sizeof(ColorBlockRec));
+      block->next = NULL;
+      block->count = 0;
+      if (lastColorBlock)
+        lastColorBlock->next = block;
+      else
+        colorBlocks = block;
+      lastColorBlock = block;
+    }
+    result = &lastColorBlock->colors[lastColorBlock->count++];
+  }
+  *result = *new_rec;
   _XmProcessUnlock();
   return result;
+}
+
+/*
+ * Drop the cached colors of the screens of a display; called when its
+ * XmDisplay is destroyed.
+ */
+void _XmFlushColorCache(Display *display)
+{
+  ColorBlock block;
+  int i, j;
+  _XmProcessLock();
+  for (block = colorBlocks; block != NULL; block = block->next)
+    for (i = 0; i < block->count; i++)
+      if (block->colors[i].screen != NULL && DisplayOfScreen(block->colors[i].screen) == display)
+        block->colors[i].screen = NULL;
+  for (i = j = 0; i < default_set_count; i++)
+    if (DisplayOfScreen(default_set[i].screen) != display)
+      default_set[j++] = default_set[i];
+  default_set_count = j;
+  _XmProcessUnlock();
 }
 
 static Pixel GetBlackPixel(Screen *screen, Colormap colormap, XColor blackcolor)
@@ -631,6 +684,8 @@ static void CalculateColorsRGB(
     XColor *bg_color, XColor *fg_color, XColor *sel_color, XColor *ts_color, XColor *bs_color)
 {
   int brightness = Brightness(bg_color);
+  /* An application may call this through XmGetColorCalculation */
+  _XmProcessLock();
   /* make sure DefaultThresholds are inited */
   if (!XmTHRESHOLDS_INITD)
     GetDefaultThresholdsForScreen(DefaultScreenOfDisplay(_XmGetDefaultDisplay()));
@@ -640,6 +695,7 @@ static void CalculateColorsRGB(
     CalculateColorsForLightBackground(bg_color, fg_color, sel_color, ts_color, bs_color);
   else
     CalculateColorsForMediumBackground(bg_color, fg_color, sel_color, ts_color, bs_color);
+  _XmProcessUnlock();
 }
 
 /*********************************************************************
@@ -650,8 +706,10 @@ static void CalculateColorsRGB(
 static XmColorData *GetColors(Screen *screen, Colormap color_map, Pixel background)
 {
   Display *display = DisplayOfScreen(screen);
-  XmColorData *old_colors;
+  XmColorData *old_colors, *result;
   XmColorData new_colors = {0}; /* Initialize all fields to zero */
+  /* The callers hold the lock as well, while they use the entry */
+  _XmProcessLock();
   new_colors.screen = screen;
   new_colors.color_map = color_map;
   new_colors.background.pixel = background;
@@ -665,6 +723,7 @@ static XmColorData *GetColors(Screen *screen, Colormap color_map, Pixel backgrou
      */
     if (!XmTHRESHOLDS_INITD)
       GetDefaultThresholdsForScreen(screen);
+    _XmProcessUnlock();
     return (old_colors);
   }
   XQueryColor(display, color_map, &(new_colors.background));
@@ -705,7 +764,9 @@ static XmColorData *GetColors(Screen *screen, Colormap color_map, Pixel backgrou
                            &(new_colors.bottom_shadow));
     }
   }
-  return (_XmAddToColorCache(&new_colors));
+  result = _XmAddToColorCache(&new_colors);
+  _XmProcessUnlock();
+  return result;
 }
 
 /*********************************************************************
@@ -715,8 +776,9 @@ static XmColorData *GetColors(Screen *screen, Colormap color_map, Pixel backgrou
    that takes a Screen in argument (while colorProc doesn't) */
 XmColorProc XmSetColorCalculation(XmColorProc proc)
 {
-  XmColorProc a = ColorRGBCalcProc;
+  XmColorProc a;
   _XmProcessLock();
+  a = ColorRGBCalcProc;
   if (proc != NULL)
     ColorRGBCalcProc = proc;
   else
@@ -728,7 +790,11 @@ XmColorProc XmSetColorCalculation(XmColorProc proc)
 /* DEPRECATED */
 XmColorProc XmGetColorCalculation(void)
 {
-  return (ColorRGBCalcProc);
+  XmColorProc proc;
+  _XmProcessLock();
+  proc = ColorRGBCalcProc;
+  _XmProcessUnlock();
+  return proc;
 }
 
 void XmGetColors(Screen *screen,
@@ -774,6 +840,8 @@ void XmeGetDefaultPixel(Widget widget, int type, int offset, XrmValue *value)
   Widget parent;
   _XmWidgetToAppContext(widget);
   _XmAppLock(app);
+  /* The cache entries, and new_value, are shared by all displays */
+  _XmProcessLock();
   value->size = sizeof(new_value);
   value->addr = (char *)&new_value;
   if (!XtIsWidget(widget)) {
@@ -810,6 +878,7 @@ void XmeGetDefaultPixel(Widget widget, int type, int offset, XrmValue *value)
     color_data = GetColors(screen, color_map, background);
   }
   new_value = AccessColorData(color_data, type);
+  _XmProcessUnlock();
   _XmAppUnlock(app);
 }
 

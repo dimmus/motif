@@ -3869,13 +3869,15 @@ static Boolean OutputSetValues(
     XmRenderTableFree(data->fontlist);
     if (CK(rendertable)) {
       if (newdata->rendertable == NULL)
-        newdata->fontlist = XmeGetDefaultRenderTable(new_w, XmTEXT_FONTLIST);
+        newdata->fontlist = XmRenderTableCopy(
+            XmeGetDefaultRenderTable(new_w, XmTEXT_FONTLIST), NULL, 0);
       else
         newdata->fontlist = XmRenderTableCopy(newdata->rendertable, NULL, 0);
     }
     else if (CK(fontlist)) {
       if (newdata->fontlist == NULL)
-        newdata->fontlist = XmeGetDefaultRenderTable(new_w, XmTEXT_FONTLIST);
+        newdata->fontlist = XmRenderTableCopy(
+            XmeGetDefaultRenderTable(new_w, XmTEXT_FONTLIST), NULL, 0);
       else
         newdata->fontlist = XmRenderTableCopy(newdata->fontlist, NULL, 0);
     }
@@ -3884,7 +3886,8 @@ static Boolean OutputSetValues(
     CP(rendertable);
     if (!LoadFontMetrics(newtw)) {
       XmRenderTableFree(newdata->fontlist);
-      newdata->fontlist = XmeGetDefaultRenderTable(new_w, XmTEXT_FONTLIST);
+      newdata->fontlist = XmRenderTableCopy(
+          XmeGetDefaultRenderTable(new_w, XmTEXT_FONTLIST), NULL, 0);
       newdata->rendertable = newdata->fontlist;
       CP(fontlist);
       CP(rendertable);
