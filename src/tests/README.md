@@ -15,7 +15,7 @@ relative path, so CTest runs them from a copy of those directories in the
 build tree (`<build>/src/tests/fixtures`).
 
 Suites labelled `X11` (`FontList`, `FontListEntry`, `XmStringCT`,
-`Widgets`, `Text`, `Layout`, `I18nLocale`, `Rtl`, `Xim`) need
+`Widgets`, `Text`, `Layout`, `I18nLocale`, `MsgCat`, `Rtl`, `Xim`) need
 an X server, as do the `Uil.load*`
 tests, those in `interactive/` and `visual/` and some in `fuzz/`.  When
 `xvfb-run` is found at configure time, CTest starts each of them under
@@ -51,6 +51,11 @@ The i18n suites:
   off-the-spot areas, commits and XIC resets run end to end.  It runs in
   a UTF-8 locale and, as `Xm.Xim.<locale>`, in the generated `ja_JP`
   ones.
+- `MsgCat` checks that a Motif warning comes from the message catalog
+  `NLSPATH` finds: `Xm.MsgCat.C` with a test catalog, and
+  `Xm.MsgCat.de_DE.UTF-8` with the German one of `localized/`.  They need
+  `-DWITH_MESSAGE_CATALOG=ON` and `gencat`; `Xm.MsgCat` checks the
+  built-in message.
 
 The other directories:
 
