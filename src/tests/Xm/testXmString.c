@@ -12,6 +12,7 @@
  * they are meant to be run under ASan and UBSan as well, where the
  * memory errors those fixes removed would be reported.
  */
+#include <langinfo.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -968,10 +969,14 @@ END_TEST
 
 START_TEST(ct_round_trip)
 {
+	/* "cafe" with an e acute, in the encoding of the suite's locale */
+	const char *cafe = strcmp(nl_langinfo(CODESET), "UTF-8") == 0 ?
+			   "caf\xc3\xa9" : "caf\xe9";
 	XmString s = cat(XmStringCreate("plain", XmFONTLIST_DEFAULT_TAG), sep(),
-			 XmStringCreate("caf\xe9", XmFONTLIST_DEFAULT_TAG), NULL);
+			 XmStringCreate((char *)cafe, XmFONTLIST_DEFAULT_TAG), NULL);
 	XmString back;
 	char *ct, *t;
+	char expect[16];
 
 	ct = XmCvtXmStringToCT(s);
 	ck_assert_ptr_nonnull(ct);
@@ -979,7 +984,8 @@ START_TEST(ct_round_trip)
 	ck_assert_ptr_nonnull(back);
 	ck_assert_int_eq(XmStringLineCount(back), 2);
 	t = text_of(back);
-	ck_assert_str_eq(t, "plaincaf\xe9");
+	snprintf(expect, sizeof(expect), "plain%s", cafe);
+	ck_assert_str_eq(t, expect);
 	XtFree(t);
 	XmStringFree(back);
 	XtFree(ct);

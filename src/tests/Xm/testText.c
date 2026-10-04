@@ -130,13 +130,14 @@ END_TEST
 
 /*
  * A wide string that does not convert to the locale's multibyte encoding
- * (the tests run in the C locale) sets an empty string.  The Wcs
- * functions used to replace their conversion buffer with "" on failure
- * and then XtFree() it.
+ * sets an empty string.  The Wcs functions used to replace their
+ * conversion buffer with "" on failure and then XtFree() it.  A lone
+ * surrogate converts in no locale, UTF-8 ones included, so the test does
+ * not depend on the locale the suite runs in.
  */
 START_TEST(textfield_unconvertible_wcs)
 {
-	static wchar_t bad[] = { L'a', 0x263a, L'b', 0 };
+	static wchar_t bad[] = { L'a', 0xd800, L'b', 0 };
 	Widget tf = XmCreateTextField(bb, "tf", NULL, 0);
 	Widget df = XmCreateDataField(bb, "df", NULL, 0);
 
