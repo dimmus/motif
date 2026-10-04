@@ -109,6 +109,9 @@ files fixed a large number of memory-safety bugs.  See
 ### Code
 
 - HP-UX and AIX code removed; `demos` renamed to `src/examples`.
+- The `workspace` demo and its `WsmDemo` library are gone: the demo needs
+  the workspace manager protocol of Mwm 2.0, which this mwm does not
+  implement, so it could never connect.
 - Performance: `XmForm` sorts and sizes its children in O(n log n) and
   `XmContainer` appends children without walking their level; `XmList`
   scrolls by copying the rows that stay visible and no longer rescans
