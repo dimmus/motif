@@ -567,8 +567,9 @@ static void SetDefault(XmRendition rend)
   _XmRendBGState(rend) = DEFAULT_backgroundState;
   _XmRendFGState(rend) = DEFAULT_foregroundState;
 #if USE_XFT
-  _XmRendXftFG(rend).color.alpha = 0xFFFF; /*TODO: it is really needed? (yura)*/
-  _XmRendXftBG(rend).color.alpha = 0xFFFF; /*TODO: it is really needed? (yura)*/
+  /* Opaque: Xft draws with the alpha, and text drawn with 0 is invisible. */
+  _XmRendXftFG(rend).color.alpha = 0xFFFF;
+  _XmRendXftBG(rend).color.alpha = 0xFFFF;
   _XmRendXftFont(rend) = DEFAULT_xftFont;
   _XmRendPattern(rend) = NULL;
   _XmRendFontStyle(rend) = DEFAULT_fontStyle;

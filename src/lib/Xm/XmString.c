@@ -3299,7 +3299,7 @@ extern void _XmStringDrawSegment(Display *d,
     if (_XmRendFontType(rend) == XmFONT_IS_XFT) {
       _XmXftDrawString(d, w, rend, 1, x, y, draw_text, seg_len, image);
     }
-    else /* TODO: fix indentation */
+    else
 #endif
     {
       if (image) {
@@ -5139,10 +5139,10 @@ static void ComputeMetrics(XmRendition rend,
     case XmFONT_IS_XFT:
       asc = _XmRendXftFont(rend)->ascent;
       desc = _XmRendXftFont(rend)->descent;
-      /* FIXME
-       * Following Keith Packard comments it should be
-       *  hi = _XmRendXftFont(rend)->height;
-       * but is looking ascent + descent better. Is it a bug?
+      /*
+       * Not _XmRendXftFont(rend)->height, which includes the font's line
+       * gap: ascent + descent is what the core font case above uses, so
+       * Xft text gets the same line spacing.
        */
       hi = asc + desc;
       {
