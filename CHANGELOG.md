@@ -3,10 +3,9 @@
 This file summarises the changes in this tree since Motif 2.3.8, the last
 upstream release (December 2017).  The git history has the details.
 
-## Unreleased
+## 2.4.2 (2026-10-04)
 
-Changes since 2.4.1.  The project version in `CMakeLists.txt` is still
-2.4.1.
+Changes since 2.4.1.
 
 ### Compatibility
 
