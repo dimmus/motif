@@ -171,6 +171,14 @@ extern Boolean _XmGetWindowPropertyChecked(Display *display,
                                            unsigned long *nitems_return,
                                            unsigned long *bytes_after_return,
                                            unsigned char **prop_return);
+extern void _XmGetSubresources(Widget w,
+                               XtPointer base,
+                               _Xconst char *name,
+                               _Xconst char *class_name,
+                               XtResourceList resources,
+                               Cardinal num_resources,
+                               ArgList args,
+                               Cardinal num_args);
 /* A trap for X errors, see _XmStartErrorTrap; it lives on the stack. */
 typedef struct _XmErrorTrapRec {
   Display *display;

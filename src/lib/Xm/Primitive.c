@@ -607,7 +607,7 @@ static void Initialize(Widget rw, Widget nw, ArgList args, Cardinal *num_args)
   translations =
       (XtTranslations)((XmPrimitiveClassRec *)XtClass(pw))->primitive_class.translations;
   _XmProcessUnlock();
-  XtGetSubresources(
+  _XmGetSubresources(
       nw, &tool_tip_string, NULL, NULL, subresources, XtNumber(subresources), args, *num_args);
   XmSetToolTipString(nw, (XmString)tool_tip_string);
   if (pw->primitive.traversal_on && translations && pw->core.tm.translations && !XmIsLabel(pw)) {

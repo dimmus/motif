@@ -440,6 +440,31 @@ Boolean _XmGetWindowPropertyChecked(Display *display,
 
 /************************************************************************
  *
+ *  _XmGetSubresources
+ *	XtGetSubresources, under the process lock.
+ *
+ *	Xt compiles a resource list in place the first time it is used,
+ *	holding only the lock of the application context of the widget.
+ *	Motif's static lists are shared by all application contexts, so
+ *	two threads could compile one at the same time.
+ *
+ ************************************************************************/
+void _XmGetSubresources(Widget w,
+                        XtPointer base,
+                        _Xconst char *name,
+                        _Xconst char *class_name,
+                        XtResourceList resources,
+                        Cardinal num_resources,
+                        ArgList args,
+                        Cardinal num_args)
+{
+  _XmProcessLock();
+  XtGetSubresources(w, base, name, class_name, resources, num_resources, args, num_args);
+  _XmProcessUnlock();
+}
+
+/************************************************************************
+ *
  *  _XmStartErrorTrap, _XmEndErrorTrap
  *	Catch the X errors that the requests made on a display between
  *	the two calls cause, instead of letting them reach the

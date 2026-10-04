@@ -4886,14 +4886,14 @@ void _XmTextOutputCreate(Widget wid, ArgList args, Cardinal num_args)
   XmScrollFrameTrait scrollFrameTrait;
   tw->text.output = output = (Output)XtMalloc((unsigned)sizeof(OutputRec));
   output->data = data = (OutputData)XtMalloc((unsigned)sizeof(OutputDataRec));
-  XtGetSubresources(wid,
-                    (XtPointer)data,
-                    NULL,
-                    NULL,
-                    output_resources,
-                    XtNumber(output_resources),
-                    args,
-                    num_args);
+  _XmGetSubresources(wid,
+                     (XtPointer)data,
+                     NULL,
+                     NULL,
+                     output_resources,
+                     XtNumber(output_resources),
+                     args,
+                     num_args);
   if (output->data->scrollleftside == XmDYNAMIC_BOOL) {
     if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT))
       output->data->scrollleftside = True;

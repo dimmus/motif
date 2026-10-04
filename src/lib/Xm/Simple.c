@@ -240,14 +240,14 @@ Widget XmCreateSimpleMenuBar(Widget parent, String name, ArgList args, Cardinal 
   XmSimpleMenuRec mr;
   _XmWidgetToAppContext(parent);
   _XmAppLock(app);
-  XtGetSubresources(parent,
-                    &mr,
-                    name,
-                    XmCSimpleMenuBar,
-                    SimpleMenuResources,
-                    XtNumber(SimpleMenuResources),
-                    args,
-                    arg_count);
+  _XmGetSubresources(parent,
+                     &mr,
+                     name,
+                     XmCSimpleMenuBar,
+                     SimpleMenuResources,
+                     XtNumber(SimpleMenuResources),
+                     args,
+                     arg_count);
   rc = XmCreateMenuBar(parent, name, args, arg_count);
   EvaluateConvenienceStructure(rc, &mr);
   _XmAppUnlock(app);
@@ -260,14 +260,14 @@ Widget XmCreateSimplePopupMenu(Widget parent, String name, ArgList args, Cardina
   XmSimpleMenuRec mr;
   _XmWidgetToAppContext(parent);
   _XmAppLock(app);
-  XtGetSubresources(parent,
-                    &mr,
-                    name,
-                    XmCSimplePopupMenu,
-                    SimpleMenuResources,
-                    XtNumber(SimpleMenuResources),
-                    args,
-                    arg_count);
+  _XmGetSubresources(parent,
+                     &mr,
+                     name,
+                     XmCSimplePopupMenu,
+                     SimpleMenuResources,
+                     XtNumber(SimpleMenuResources),
+                     args,
+                     arg_count);
   rc = XmCreatePopupMenu(parent, name, args, arg_count);
   EvaluateConvenienceStructure(rc, &mr);
   _XmAppUnlock(app);
@@ -284,14 +284,14 @@ Widget XmCreateSimplePulldownMenu(Widget parent, String name, ArgList args, Card
   Cardinal num_buttons;
   _XmWidgetToAppContext(parent);
   _XmAppLock(app);
-  XtGetSubresources(parent,
-                    &mr,
-                    name,
-                    XmCSimplePulldownMenu,
-                    SimpleMenuResources,
-                    XtNumber(SimpleMenuResources),
-                    args,
-                    arg_count);
+  _XmGetSubresources(parent,
+                     &mr,
+                     name,
+                     XmCSimplePulldownMenu,
+                     SimpleMenuResources,
+                     XtNumber(SimpleMenuResources),
+                     args,
+                     arg_count);
   rc = XmCreatePulldownMenu(parent, name, args, arg_count);
   EvaluateConvenienceStructure(rc, &mr);
   if (mr.post_from_button >= 0) {
@@ -334,14 +334,14 @@ Widget XmCreateSimpleOptionMenu(Widget parent, String name, ArgList args, Cardin
   Cardinal num_buttons;
   _XmWidgetToAppContext(parent);
   _XmAppLock(app);
-  XtGetSubresources(parent,
-                    &mr,
-                    name,
-                    XmCSimpleOptionMenu,
-                    SimpleMenuResources,
-                    XtNumber(SimpleMenuResources),
-                    args,
-                    arg_count);
+  _XmGetSubresources(parent,
+                     &mr,
+                     name,
+                     XmCSimpleOptionMenu,
+                     SimpleMenuResources,
+                     XtNumber(SimpleMenuResources),
+                     args,
+                     arg_count);
   rc = XmCreateOptionMenu(parent, name, args, arg_count);
   sub_rc = XmCreatePulldownMenu(parent, name, args, arg_count);
   EvaluateConvenienceStructure(sub_rc, &mr);
@@ -398,14 +398,14 @@ Widget XmCreateSimpleRadioBox(Widget parent, String name, ArgList args, Cardinal
   XmSimpleMenuRec mr;
   char name_buf[20];
   rc = XmCreateRadioBox(parent, name, args, arg_count);
-  XtGetSubresources(parent,
-                    &mr,
-                    name,
-                    XmCSimpleRadioBox,
-                    SimpleMenuResources,
-                    XtNumber(SimpleMenuResources),
-                    args,
-                    arg_count);
+  _XmGetSubresources(parent,
+                     &mr,
+                     name,
+                     XmCSimpleRadioBox,
+                     SimpleMenuResources,
+                     XtNumber(SimpleMenuResources),
+                     args,
+                     arg_count);
   for (i = 0; i < mr.count; i++) {
     snprintf(name_buf, sizeof(name_buf), "button_%d", i);
     n = 0;
@@ -436,14 +436,14 @@ Widget XmCreateSimpleCheckBox(Widget parent, String name, ArgList args, Cardinal
   XtSetArg(local_args[n], XmNradioBehavior, FALSE);
   n++;
   XtSetValues(rc, local_args, n);
-  XtGetSubresources(parent,
-                    &mr,
-                    name,
-                    XmCSimpleCheckBox,
-                    SimpleMenuResources,
-                    XtNumber(SimpleMenuResources),
-                    args,
-                    arg_count);
+  _XmGetSubresources(parent,
+                     &mr,
+                     name,
+                     XmCSimpleCheckBox,
+                     SimpleMenuResources,
+                     XtNumber(SimpleMenuResources),
+                     args,
+                     arg_count);
   for (i = 0; i < mr.count; i++) {
     snprintf(name_buf, sizeof(name_buf), "button_%d", i);
     n = 0;

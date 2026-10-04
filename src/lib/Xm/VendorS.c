@@ -1212,14 +1212,14 @@ static void SecondaryObjectCreate(Widget req, Widget new_w, ArgList args, Cardin
      * fetch the resources in superclass to subclass order
      */
     _XmProcessLock();
-    XtGetSubresources(new_w,
-                      newSec,
-                      NULL,
-                      NULL,
-                      vec->core_class.resources,
-                      vec->core_class.num_resources,
-                      args,
-                      *num_args);
+    _XmGetSubresources(new_w,
+                       newSec,
+                       NULL,
+                       NULL,
+                       vec->core_class.resources,
+                       vec->core_class.num_resources,
+                       args,
+                       *num_args);
     _XmProcessUnlock();
     memcpy(reqSec, newSec, size);
     _XmExtImportArgs((Widget)newSec, args, num_args);
@@ -1255,7 +1255,7 @@ static void InitializePrehook(Widget req, Widget new_w, ArgList args, Cardinal *
     ttp->duration_timer = 0;
     ttp->leave_time = 0;
     ttp->slider = ttp->label = NULL;
-    XtGetSubresources(
+    _XmGetSubresources(
         new_w, &base, NULL, NULL, subresources, XtNumber(subresources), args, *num_args);
     ttp->post_delay = base.post_delay;
     ttp->post_duration = base.post_duration;

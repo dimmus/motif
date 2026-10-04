@@ -336,7 +336,7 @@ static void DropSiteManagerInitialize(Widget rw, Widget nw, ArgList args, Cardin
   dsm->dropManager.updateTimeOutId = 0;
   dsm->dropManager.dragUnderData = NULL;
   /* Patch around broken Xt interfaces */
-  XtGetSubresources(nw, info, NULL, NULL, _XmDSResources, _XmNumDSResources, NULL, 0);
+  _XmGetSubresources(nw, info, NULL, NULL, _XmDSResources, _XmNumDSResources, NULL, 0);
 }
 
 static void Destroy(Widget w)
@@ -2279,7 +2279,7 @@ static void CreateInfo(XmDropSiteManagerObject dsm, Widget widget, ArgList args,
   /* Load that puppy */
   SetDSLeaf(&fullInfoRec, True);
   fullInfoRec.widget = widget;
-  XtGetSubresources(
+  _XmGetSubresources(
       widget, &fullInfoRec, NULL, NULL, _XmDSResources, _XmNumDSResources, args, argCount);
   /* Handle ignore first. */
   if (fullInfoRec.activity == XmDROP_SITE_IGNORE) {

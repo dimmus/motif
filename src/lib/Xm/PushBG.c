@@ -1301,14 +1301,14 @@ static void SecondaryObjectCreate(Widget req, Widget new_w, ArgList args, Cardin
    * ClassInitialize time we need to make only one call to
    * XtGetSubresources()
    */
-  XtGetSubresources(new_w,
-                    newSec,
-                    NULL,
-                    NULL,
-                    wc->core_class.resources,
-                    wc->core_class.num_resources,
-                    args,
-                    *num_args);
+  _XmGetSubresources(new_w,
+                     newSec,
+                     NULL,
+                     NULL,
+                     wc->core_class.resources,
+                     wc->core_class.num_resources,
+                     args,
+                     *num_args);
   extData = (XmWidgetExtData)XtCalloc(1, sizeof(XmWidgetExtDataRec));
   extData->widget = (Widget)newSec;
   extData->reqWidget = (Widget)reqSec;

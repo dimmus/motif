@@ -686,28 +686,28 @@ static void InitializePrehook(Widget req, Widget new_w, ArgList args, Cardinal *
       XtGetResourceList(
           (WidgetClass)pec, &((*pcePtr)->ext_resources), &((*pcePtr)->num_ext_resources));
     }
-    XtGetSubresources(parent,
-                      (XtPointer)new_w,
-                      NULL,
-                      NULL,
-                      (*wcePtr)->ext_resources,
-                      (*wcePtr)->num_ext_resources,
-                      args,
-                      *num_args);
+    _XmGetSubresources(parent,
+                       (XtPointer)new_w,
+                       NULL,
+                       NULL,
+                       (*wcePtr)->ext_resources,
+                       (*wcePtr)->num_ext_resources,
+                       args,
+                       *num_args);
     extData = (XmWidgetExtData)XtCalloc(1, sizeof(XmWidgetExtDataRec));
     _XmPushWidgetExtData(parent, extData, ne->ext.extensionType);
     extData->widget = new_w;
     extData->reqWidget = (Widget)XtMalloc(XtClass(new_w)->core_class.widget_size);
     memcpy(extData->reqWidget, req, XtClass(new_w)->core_class.widget_size);
     /*  Convert the fields from unit values to pixel values  */
-    XtGetSubresources(parent,
-                      (XtPointer)parent,
-                      NULL,
-                      NULL,
-                      (*pcePtr)->ext_resources,
-                      (*pcePtr)->num_ext_resources,
-                      args,
-                      *num_args);
+    _XmGetSubresources(parent,
+                       (XtPointer)parent,
+                       NULL,
+                       NULL,
+                       (*pcePtr)->ext_resources,
+                       (*pcePtr)->num_ext_resources,
+                       args,
+                       *num_args);
     _XmExtImportArgs(new_w, args, num_args);
     _XmProcessUnlock();
   }
