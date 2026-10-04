@@ -31,7 +31,7 @@ case "$os:$id" in
     export DEBIAN_FRONTEND=noninteractive
     $SUDO apt-get update -qq
     $SUDO apt-get install -y -qq --no-install-recommends \
-      build-essential gcc g++ clang lld llvm cmake ninja-build pkg-config ccache \
+      build-essential gcc g++ clang libclang-rt-dev lld llvm cmake ninja-build pkg-config ccache \
       flex libfl-dev bison file ca-certificates \
       libx11-dev libxt-dev libxmu-dev libxext-dev libxft-dev libxpm-dev \
       libxrender-dev libfontconfig-dev libfreetype-dev libpng-dev libjpeg-dev \
