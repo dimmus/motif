@@ -106,20 +106,11 @@ foreach(DEMO_DIR ${DEMO_DIRS})
             
             # Check for UIL files and process them
             file(GLOB UIL_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${DEMO_DIR}/*.uil")
-            # Remove problematic UIL files that cause UIL compiler segfault
+            # periodic.uil includes periodic_l.uil, which is a module of
+            # its own; neither compiles alone.
             if(DEMO_DIR STREQUAL "periodic")
                 list(REMOVE_ITEM UIL_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${DEMO_DIR}/periodic_l.uil")
                 list(REMOVE_ITEM UIL_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${DEMO_DIR}/periodic.uil")
-            endif()
-            if(DEMO_DIR STREQUAL "hellomotif")
-                list(REMOVE_ITEM UIL_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${DEMO_DIR}/hellomotif.uil")
-            endif()
-            if(DEMO_DIR STREQUAL "animate")
-                list(REMOVE_ITEM UIL_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${DEMO_DIR}/animate.uil")
-                list(REMOVE_ITEM UIL_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${DEMO_DIR}/dog.uil")
-                list(REMOVE_ITEM UIL_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${DEMO_DIR}/plane.uil")
-                list(REMOVE_ITEM UIL_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${DEMO_DIR}/superman.uil")
-                list(REMOVE_ITEM UIL_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${DEMO_DIR}/xmanimate.uil")
             endif()
             if(UIL_FILES)
                 # Ensure the output directory exists

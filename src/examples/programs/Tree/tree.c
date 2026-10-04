@@ -644,8 +644,8 @@ static void ChangePixmap(Widget w, XtPointer client, XtPointer call)
   static Boolean TreeUsingPixmaps = False;
 
   if (TreeUsingPixmaps){
-    XtVaSetValues( G_tree, XmNopenFolderPixmap, XmUNSPECIFIED_PIXMAP,
-		  XmNcloseFolderPixmap, XmUNSPECIFIED_PIXMAP, NULL );
+    XtVaSetValues( G_tree, XmNopenFolderPixmap, (Pixmap)XmUNSPECIFIED_PIXMAP,
+		  XmNcloseFolderPixmap, (Pixmap)XmUNSPECIFIED_PIXMAP, NULL );
     XtVaSetValues( label, XmNlabelString, XmStringCreateLocalized("Default"),
 		  NULL);
   }
@@ -896,7 +896,7 @@ void MakeControlPanel(Widget right_pane)
     /* this is just to line things up nicely */
     (void)XtVaCreateManagedWidget("dummy", xmLabelWidgetClass,rightBbox,
 				  XmNlabelType, XmPIXMAP,
-				  XmNlabelPixmap, XmUNSPECIFIED_PIXMAP,
+				  XmNlabelPixmap, (Pixmap)XmUNSPECIFIED_PIXMAP,
 				  NULL);
 
     XtVaCreateManagedWidget("orientation",
