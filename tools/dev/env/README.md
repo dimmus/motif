@@ -358,6 +358,7 @@ the source tree:
 | `static-analysis.sh TOOL BUILD OUT` | Run `scan-build`, `clang-tidy` (with the top-level `.clang-tidy`) or `cppcheck` and ratchet the findings against `ci/baselines/TOOL.txt` |
 | `abi-check.sh REF...` | Compare the libXm/libMrm ABI with older revisions using libabigail |
 | `repro-check.sh WORK` | Build twice with `SOURCE_DATE_EPOCH` and compare the installs with diffoscope |
+| `dist.sh TAG [OUT]` | Make the release tarball of a version tag (`git archive`, `xz`), its SHA-256 and the release notes from `CHANGELOG.md` |
 
 For example, `CC=clang MOTIF_CI_PROFILE=debug-asan tools/dev/env/ci/build.sh`
 is the "Ubuntu clang debug-asan" job.  The static-analysis ratchet fails

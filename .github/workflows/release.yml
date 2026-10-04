@@ -1,0 +1,114 @@
+name: Release
+
+# Pushing a version tag (2.5.0, or 2.6.0-rc1 for a prerelease) makes the
+# source tarball with tools/dev/env/ci/dist.sh, builds and tests Motif
+# from that tarball, and publishes a GitHub release with the tarball, its
+# checksum and the tag's CHANGELOG.md section as notes.  The tag must
+# match project(VERSION) in CMakeLists.txt.  For a tag pushed before
+# this workflow existed, run it by hand with the tag as input.  When the
+# release already exists, only its files are replaced; its title and
+# notes are left as they are.
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+      - '[0-9]+.[0-9]+.[0-9]+-*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing version tag to release, e.g. 2.5.0
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+env:
+  TAG: ${{ inputs.tag || github.ref_name }}
+
+jobs:
+  dist:
+    name: Source tarball
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: refs/tags/${{ env.TAG }}
+          fetch-depth: 0
+      - name: Make the tarball and the notes
+        env:
+          MOTIF_REPO_URL: ${{ github.server_url }}/${{ github.repository }}
+        run: tools/dev/env/ci/dist.sh "$TAG" _dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: _dist/
+          if-no-files-found: error
+
+  verify:
+    # Build and test what is shipped: the tarball, not the checkout.
+    name: Build and test the tarball
+    needs: dist
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: _dist
+      - name: Check and unpack
+        run: |
+          cd _dist
+          sha256sum -c "motif-$TAG.tar.xz.sha256"
+          tar -xJf "motif-$TAG.tar.xz" -C "$RUNNER_TEMP"
+      - name: Install dependencies
+        run: sh "$RUNNER_TEMP/motif-$TAG/tools/dev/env/ci/deps.sh"
+      - name: Build and test
+        working-directory: ${{ runner.temp }}/motif-${{ env.TAG }}
+        env:
+          CC: gcc
+          MOTIF_CI_PROFILE: release
+          MOTIF_CI_NO_SKIP: "1"
+          MOTIF_CI_READONLY_SRC: "1"
+        run: tools/dev/env/ci/build.sh
+      - name: Upload test logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-logs-release
+          path: ${{ runner.temp }}/motif-${{ env.TAG }}/_build/ctest-output.log
+          if-no-files-found: ignore
+
+  publish:
+    name: Publish the release
+    needs: verify
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: _dist
+      - name: Create or update the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          files="_dist/motif-$TAG.tar.xz _dist/motif-$TAG.tar.xz.sha256"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            # shellcheck disable=SC2086
+            gh release upload "$TAG" $files --clobber
+          else
+            prerelease=
+            case $TAG in *-*) prerelease=--prerelease ;; esac
+            # shellcheck disable=SC2086
+            gh release create "$TAG" $files --verify-tag $prerelease \
+              --title "Motif $TAG" --notes-file "_dist/motif-$TAG-notes.md"
+          fi

@@ -105,6 +105,21 @@ New exported functions need a declaration in an installed header, an
 entry in `src/lib/Xm/libXm.elist` or `src/lib/Mrm/libMrm.elist`, and a
 manual page.
 
+## Releases
+
+1. Set the version in `project(Motif VERSION ...)` in `CMakeLists.txt`
+   and in `src/bin/mwm/version.c`, and give `CHANGELOG.md` a
+   `## X.Y.Z (date)` section.
+2. Tag the commit with that version, `git tag -a X.Y.Z -m "Motif X.Y.Z"`,
+   and push the tag.
+
+The Release workflow (`.github/workflows/release.yml`) then makes the
+tarball with `tools/dev/env/ci/dist.sh`, builds and tests Motif from it,
+and publishes the GitHub release with the tarball, its checksum and the
+`CHANGELOG.md` section as notes.  It refuses a tag that does not match
+the version in `CMakeLists.txt`.  The notes can be edited on the release
+page afterwards.
+
 ## Documentation
 
 The manual pages are in `doc/man/man3` (one page per function, in the
