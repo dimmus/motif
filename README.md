@@ -138,6 +138,7 @@ for the list.
 | `WITH_LTO` | OFF | Link-time optimization (optimized builds always use `-fno-semantic-interposition`) |
 | `WITH_PGO` | OFF | Profile-guided optimization: `GENERATE`, then `USE` (see [doc/abi-policy.md](doc/abi-policy.md)) |
 | `WITH_CPU_NATIVE` | OFF | `-march=native` (binaries are not portable) |
+| `WITH_WERROR` | OFF | Warnings are errors everywhere but in the examples (CMake 3.24 or later) |
 | `WITH_COMPILER_ASAN`, `WITH_UBSAN`, `WITH_TSAN`, `WITH_MSAN` | OFF | Sanitizers (see below) |
 | `WITH_COMPILER_CODE_COVERAGE` | OFF | Coverage instrumentation and the `coverage` target |
 | `WITH_FUZZERS` | OFF | libFuzzer targets in `src/tests/fuzz` (Clang, with `WITH_TESTS`) |

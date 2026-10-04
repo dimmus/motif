@@ -15,6 +15,10 @@ cmake --build _build
 ctest --test-dir _build --output-on-failure
 ```
 
+The libraries, mwm, the build tools and the tests build without
+warnings with GCC and Clang under the warning list in `CMakeLists.txt`;
+keep it that way by building with `-DWITH_WERROR=ON`, as CI does.
+
 The tests need libcheck, and `xvfb-run` for the suites that open a
 display (see [src/tests/README.md](src/tests/README.md)).  Tests that
 need an X server must exit with status 77 when `DISPLAY` is not set, so
