@@ -400,6 +400,7 @@ if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
     -Wimplicit-fallthrough
     -Wstrict-prototypes
     -Wold-style-definition
+    -Wmissing-prototypes
     -Werror=implicit-function-declaration
     -Werror=return-type
     -Werror=vla

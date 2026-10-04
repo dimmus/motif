@@ -41,6 +41,55 @@
 #include <Xm/XmP.h>
 #include <Xm/XmosP.h>
 
+/* Obsolete entry points, still exported for programs built against old
+   releases.  They are deliberately not declared in any installed header. */
+extern void _XmClearBorder(Display *display, Window w, Position x, Position y, Dimension width,
+                           Dimension height, Dimension shadow_thick);
+extern void _XmConfigureObject(Widget wid, Position x, Position y, Dimension width,
+                               Dimension height, Dimension border_width);
+extern void _XmDrawArrow(Display *display, Drawable d, GC top_gc, GC bot_gc, GC cent_gc, Position x,
+                         Position y, Dimension width, Dimension height, Dimension shadow_thick,
+                         unsigned char direction);
+extern void _XmDrawDiamond(Display *display, Drawable d, GC top_gc, GC bottom_gc, GC center_gc,
+                           Position x, Position y, Dimension width, Dimension height,
+                           Dimension shadow_thick, Dimension fill);
+extern void _XmDrawSeparator(Display *display, Drawable d, GC top_gc, GC bottom_gc, GC separator_gc,
+                             Position x, Position y, Dimension width, Dimension height,
+                             Dimension shadow_thick, Dimension margin, unsigned char orientation,
+                             unsigned char separator_type);
+extern void _XmDrawShadows(Display *display, Drawable d, GC top_gc, GC bottom_gc, Position x,
+                           Position y, Dimension width, Dimension height, Dimension shad_thick,
+                           unsigned int shad_type);
+extern void _XmDrawSimpleHighlight(Display *display, Drawable d, GC gc, Position x, Position y,
+                                   Dimension width, Dimension height,
+                                   Dimension highlight_thickness);
+extern Boolean _XmFontListGetDefaultFont(XmFontList fontlist, XFontStruct **font_struct);
+extern void _XmFromHorizontalPixels(Widget widget, int offset, XtArgVal *value);
+extern void _XmFromVerticalPixels(Widget widget, int offset, XtArgVal *value);
+extern XtGeometryResult _XmGMReplyToQueryGeometry(Widget widget, XtWidgetGeometry *intended,
+                                                  XtWidgetGeometry *desired);
+extern XmFontList _XmGetDefaultFontList(Widget w, unsigned char fontListType);
+extern void _XmGetMaxCursorSize(Widget w, Dimension *width, Dimension *height);
+extern Cursor _XmGetNullCursor(Widget w);
+extern Widget _XmGetTextualDragIcon(Widget w);
+extern XmGadget _XmInputInGadget(Widget wid, register int x, register int y);
+extern int _XmMicroSleep(long usecs);
+extern void _XmMoveObject(Widget wid, Position x, Position y);
+extern void _XmNavigChangeManaged(Widget wid);
+extern String _XmOSGetHomeDirName(void);
+extern XmString _XmOSGetLocalizedString(char *reserved, Widget widget, char *resource,
+                                        String string);
+extern void _XmRedisplayGadgets(Widget w, register XEvent *event, Region region);
+extern void _XmResizeObject(Widget wid, Dimension width, Dimension height, Dimension border_width);
+extern Boolean _XmStringIsXmString(XmString string);
+extern void _XmStringUpdateWMShellTitle(XmString xmstr, Widget shell);
+extern Boolean _XmStringsAreEqual(register char *in_str, register char *test_str);
+extern XmImportOperator _XmToHorizontalPixels(Widget widget, int offset, XtArgVal *value);
+extern XmImportOperator _XmToVerticalPixels(Widget widget, int offset, XtArgVal *value);
+extern void _XmVirtualToActualKeysym(Display *dpy, KeySym virtKeysym, KeySym *actualKeysymRtn,
+                                     Modifiers *modifiersRtn);
+extern void _XmWarning(Widget w, char *message);
+
 /****************************_XmDrawShadows****************************/
 void _XmDrawShadows(Display *display,
                     Drawable d,

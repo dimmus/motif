@@ -81,6 +81,101 @@
 #endif
 /********    Static Function Declarations    ********/
 /********    End Static Function Declarations    ********/
+
+/* Obsolete entry points, still exported for programs built against old
+   releases.  They are deliberately not declared in any installed header. */
+extern void XmRegisterConverters(void);
+extern Pixel _XmAccessColorData(XmColorData *cd, unsigned char which);
+extern void _XmBBUpdateDynDefaultButton(Widget bb);
+extern void _XmBaseClassPartInitialize(WidgetClass wc);
+extern Pixel _XmBlackPixel(Screen *screen, Colormap colormap, XColor blackcolor);
+extern void _XmBulletinBoardSetDefaultShadow(Widget button);
+extern void _XmClearBCompatibility(Widget pb);
+extern void _XmClearBGCompatibility(Widget pbg);
+extern void _XmClearBGPixmapName(void);
+extern void _XmClearIconPixmapName(void);
+extern Boolean _XmCreateVisibilityRect(Widget w, XRectangle *rectPtr);
+extern Boolean _XmDifferentBackground(Widget w, Widget parent);
+extern Cardinal _XmFilterResources(XtResource *resources, Cardinal numResources,
+                                   WidgetClass filterClass, XtResource **filteredResourcesRtn);
+extern Widget _XmFindNextTabGroup(Widget wid);
+extern Widget _XmFindPrevTabGroup(Widget wid);
+extern Boolean _XmFocusIsInShell(Widget wid);
+extern void _XmFreeWidgetExtData(Widget widget);
+extern WidgetClass _XmGetActualClass(Display *display, WidgetClass w_class);
+extern char *_XmGetBGPixmapName(void);
+extern XmColorData *_XmGetColors(Screen *screen, Colormap color_map, Pixel background);
+extern String _XmGetDefaultBackgroundColorSpec(Screen *screen);
+extern XmColorData *_XmGetDefaultColors(Screen *screen, Colormap color_map);
+extern void _XmGetDefaultThresholdsForScreen(Screen *screen);
+extern char *_XmGetIconPixmapName(void);
+extern XImage *_XmGetImageAndHotSpotFromFile(char *filename, int *hot_x, int *hot_y);
+extern XImage *_XmGetImageFromFile(char *filename);
+extern Pixmap _XmGetPixmap(Screen *screen, char *image_name, int depth, Pixel foreground,
+                           Pixel background);
+extern char *_XmGetRealXlations(Display *dpy, _XmBuildVirtualKeyStruct *keys, int num_keys);
+extern XmDesktopObject _XmGetWorldObject(Widget shell, ArgList args, Cardinal *num_args);
+extern Boolean _XmGrabTheFocus(Widget w, XEvent *event);
+extern void _XmInitializeScrollBars(Widget w);
+extern Boolean _XmInstallPixmap(Pixmap pixmap, Screen *screen, char *image_name, Pixel foreground,
+                                Pixel background);
+extern Boolean _XmIsSlowSubclass(WidgetClass wc, unsigned int bit);
+extern Boolean _XmIsStandardMotifWidgetClass(WidgetClass wc);
+extern void _XmManagerHighlightPixmapDefault(Widget widget, int offset, XrmValue *value);
+extern void _XmManagerTopShadowPixmapDefault(Widget widget, int offset, XrmValue *value);
+extern Boolean _XmMapKeyEvent(register String str, int *eventType, unsigned int *keysym,
+                              unsigned int *modifiers);
+extern int _XmOSPutenv(char *string);
+extern void _XmPrimitiveHighlightPixmapDefault(Widget widget, int offset, XrmValue *value);
+extern void _XmPrimitiveTopShadowPixmapDefault(Widget widget, int offset, XrmValue *value);
+extern void _XmProcessTraversal(Widget w, XmTraversalDirection dir, Boolean check);
+extern XtGeometryResult _XmRootGeometryManager(Widget w, XtWidgetGeometry *request,
+                                               XtWidgetGeometry *reply);
+extern void _XmSetActualClass(Display *display, WidgetClass w_class, WidgetClass actualClass);
+extern void _XmSetDefaultBackgroundColorSpec(Screen *screen, String new_color_spec);
+extern void _XmSetEtchedSlider(XmScrollBarWidget sbw);
+extern void _XmSetLastManagedMenuTime(Widget wid, Time newTime);
+extern void _XmSleep(unsigned int secs);
+extern void _XmSortResourceList(XrmResource *list[], Cardinal len);
+extern Dimension _XmStringBaseline(XmRenderTable rendertable, _XmString string);
+extern Boolean _XmStringByteCompare(_XmString a, _XmString b);
+extern _XmString _XmStringCopy(_XmString string);
+extern _XmString _XmStringCreate(XmString cs);
+extern XmString _XmStringCreateExternal(XmRenderTable rendertable, _XmString cs);
+extern void _XmStringDraw(Display *d, Window w, XmRenderTable rendertable, _XmString string, GC gc,
+                          Position x, Position y, Dimension width, unsigned char align,
+                          unsigned char lay_dir, XRectangle *clip);
+extern void _XmStringDrawImage(Display *d, Window w, XmRenderTable rendertable, _XmString string,
+                               GC gc, Position x, Position y, Dimension width, unsigned char align,
+                               unsigned char lay_dir, XRectangle *clip);
+extern void _XmStringDrawMnemonic(Display *d, Window w, XmRenderTable rendertable, _XmString string,
+                                  GC gc, Position x, Position y, Dimension width,
+                                  unsigned char align, unsigned char lay_dir, XRectangle *clip,
+                                  String mnemonic, XmStringTag tag);
+extern void _XmStringDrawUnderline(Display *d, Window w, XmRenderTable f, _XmString s, GC gc,
+                                   Position x, Position y, Dimension width, unsigned char align,
+                                   unsigned char lay_dir, XRectangle *clip, _XmString u);
+extern Boolean _XmStringEmpty(_XmString string);
+extern void _XmStringExtent(XmRenderTable rendertable, _XmString string, Dimension *width,
+                            Dimension *height);
+extern void _XmStringFree(_XmString string);
+extern void _XmStringFreeContext(_XmStringContext context);
+extern Boolean _XmStringHasSubstring(_XmString string, _XmString substring);
+extern Dimension _XmStringHeight(XmRenderTable rendertable, _XmString string);
+extern Boolean _XmStringInitContext(_XmStringContext *context, _XmString string);
+extern int _XmStringLineCount(_XmString string);
+extern Boolean _XmStringSourceFindString(Widget w, XmTextPosition start, char *string,
+                                         XmTextPosition *position);
+extern void _XmStringUpdate(XmFontList fontlist, _XmString string);
+extern Dimension _XmStringWidth(XmRenderTable rendertable, _XmString string);
+extern void _XmTextClearDestination(XmTextWidget tw, Boolean ignore_sens);
+extern void _XmTextDestinationVisible(Widget w, Boolean turn_on);
+extern void _XmTextDrawDestination(XmTextWidget tw);
+extern XmTextPosition _XmTextGetAnchor(XmTextWidget tw);
+extern void _XmVendorExtRealize(Widget w, XtPointer closure, XtPointer call_data);
+extern void _XmVirtKeysHandler(Widget widget, XtPointer client_data, XEvent *event,
+                               Boolean *dontSwallow);
+extern Pixel _XmWhitePixel(Screen *screen, Colormap colormap, XColor whitecolor);
 /* Exported variables that are now static. */
 XmPrimitiveClassExtRec _XmLabelPrimClassExtRec = {
     NULL, NULLQUARK, 1L, sizeof(XmPrimitiveClassExtRec), NULL, NULL, NULL};
@@ -610,11 +705,6 @@ void _XmInitializeScrollBars(Widget w)
     assert(i <= XtNumber(hSBArgs));
     XtSetValues((Widget)sw->swindow.hScrollBar, hSBArgs, i);
   }
-}
-
-void InitializeScrollBars(Widget w)
-{
-  _XmInitializeScrollBars(w);
 }
 
 void _XmClearBCompatibility(Widget pb)
@@ -1631,23 +1721,6 @@ XmTextPosition XmTextFieldGetCursorPosition(Widget w)
  *  TravAct.c functions
  *
  ****************************************************************/
-/*
- * Get the state of the 'ResettingFocus' flag, based upon the
- * display to which the widget is tied.
- */
-Boolean _XmGetFocusResetFlag(Widget w)
-{
-  return ((Boolean)_XmGetFocusFlag(w, XmFOCUS_RESET));
-}
-
-/*
- * Set the state of the 'ResettingFocus' flag.
- */
-void _XmSetFocusResetFlag(Widget w, Boolean value)
-{
-  _XmSetFocusFlag(w, XmFOCUS_RESET, value);
-}
-
 /********************************************************************/
 void _XmStringUpdate(XmFontList fontlist, /* unused */
                      _XmString string)    /* unused */

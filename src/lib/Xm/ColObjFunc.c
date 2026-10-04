@@ -31,6 +31,14 @@
 #include "ColorObjI.h"
 #include "XmI.h"
 
+/* Obsolete entry points, still exported for programs built against old
+   releases.  They are deliberately not declared in any installed header. */
+extern Boolean _XmGetIconControlInfo(Screen *screen, Boolean *useMaskRtn,
+                                     Boolean *useMultiColorIconsRtn, Boolean *useIconFileCacheRtn);
+extern Boolean _XmGetPixelData(int screen, int *colorUse, XmPixelSet *pixelSet, short *a, short *i,
+                               short *p, short *s);
+extern Boolean _XmUseColorObj(void);
+
 /**********************************************************************/
 /** XmeUseColorObj()                                                 **/
 /**           Return False if color is not working for some reason.  **/

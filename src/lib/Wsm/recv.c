@@ -203,7 +203,7 @@ WSMIsKnownTarget(Widget w, Atom target)
  *               XtMalloc, and must be free'd by the caller.
  */
 
-Atom *
+static Atom *
 WSMGetTargetList(Widget w, Boolean include_defaults, unsigned long *len_ret)
 {
     WSMDispInfo *disp_info = _WSMGetDispInfo(XtDisplay(w));

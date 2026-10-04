@@ -56,7 +56,7 @@ static void PrintConfigFormat(
  *	Returns: str - The string the request is printed to.
  */
 
-String
+static String
 PrintRequest(WSMRequest *request)
 {
     static char str[STRSIZE]; /* The vile hacks we do in debugging code. */
@@ -127,7 +127,7 @@ PrintRequest(WSMRequest *request)
  *	Returns: str - The string the reply is printed to.
  */
 
-String
+static String
 PrintReply(WSMReply *reply)
 {
     static char str[STRSIZE]; /* The vile hacks we do in debugging code. */
