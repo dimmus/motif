@@ -1766,7 +1766,7 @@ static void FireCallbacks(XmSpinBoxCallbackStruct *spinBoxCallData,
     spinBoxCallData->doit = True;
     position = spinC->position;
     GetPositionValue(
-        (Widget)spinW->spinBox.textw, XtOffset(XmSpinBoxConstraint, position), &position);
+        (Widget)spinW->spinBox.textw, XtOffsetOf(XmSpinBoxConstraintPart, position), &position);
     spinBoxCallData->position = position;
     if (spinC->sb_child_type == XmSTRING) {
       if ((spinC->num_values > 0) && (spinC->position < spinC->num_values))
@@ -1833,7 +1833,7 @@ static Boolean ArrowVerify(Widget arrowWidget, XEvent *arrowEvent, int arrowReas
     int int_pos;
     XmSpinBoxConstraint spinC = SB_GetConstraintRec(spinW->spinBox.textw);
     (void)SetPositionValue(
-        (Widget)spinW->spinBox.textw, XtOffset(XmSpinBoxConstraint, position), &position);
+        (Widget)spinW->spinBox.textw, XtOffsetOf(XmSpinBoxConstraintPart, position), &position);
     int_pos = position;
     error = ValidatePositionValue(spinC, &int_pos);
     if (error)
@@ -2054,7 +2054,7 @@ static void SpinNSetValue(Widget nav, XmNavigatorData nav_data, Boolean notify)
       {
         XtArgVal position = ACCESS_DIM(mask, nav_data->value);
         GetPositionValue((Widget)spinW->composite.children[i],
-                         XtOffset(XmSpinBoxConstraint, position),
+                         XtOffsetOf(XmSpinBoxConstraintPart, position),
                          &position);
         XtSetArg(arglist[argCount], XmNposition, ((int)position));
         argCount++;
@@ -2203,7 +2203,7 @@ static Boolean CvtStringToPositionValue(Display *display,
                                         XtPointer *converter_data) /* unused */
 {
   XtArgVal value;
-  int offset = XtOffset(XmSpinBoxConstraint, position);
+  int offset = XtOffsetOf(XmSpinBoxConstraintPart, position);
   Widget w = *((Widget *)args[0].addr);
   if (sscanf(from->addr, "%ld", (long *)&value) == 0) {
     XtDisplayStringConversionWarning(display, (char *)from->addr, XmRPositionValue);
@@ -2266,7 +2266,7 @@ int XmSpinBoxValidatePosition(Widget text_field, int *position)
   int i;
   float fPosition;
   int iPosition;
-  int positionOffset = XtOffset(XmSpinBoxConstraint, position);
+  int positionOffset = XtOffsetOf(XmSpinBoxConstraintPart, position);
   int iOffset;
   String string;
   XmAccessTextualTrait textT;
