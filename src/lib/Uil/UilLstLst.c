@@ -1000,7 +1000,7 @@ void	lst_debug_output
 	{
 	    _assert( ptr <= &(buffer[132]), "Overflowed debug listing buffer" );
 	    count = strcspn( ptr, "\n" );
-	    if (count == strlen( ptr ))
+	    if ((size_t)count == strlen( ptr ))
 	    {
 		cur_pos = ptr - buffer + count;
 		return;

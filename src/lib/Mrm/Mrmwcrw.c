@@ -1291,7 +1291,7 @@ Urm__CW_CreateArglist (Widget			parent,
    * most one pixmap.
    */
   max_used = *num_used + argdesc->count + argdesc->extra ;
-  if ( argdesc->count > XtNumber (pixargs_buf) )
+  if ( argdesc->count > (int)XtNumber (pixargs_buf) )
     pixargs = (_SavePixmapItemPtr)
       XtMalloc (argdesc->count * sizeof (_SavePixmapItem)) ;
 
@@ -1764,7 +1764,7 @@ Urm__CW_CreateArglist (Widget			parent,
     {
       Urm__CW_GetPixmapParms (parent, &screen, &display, &fgint, &bgint) ;
       for ( ndx=0,savepix=pixargs ;
-	    ndx<pixargs_cnt && *num_used<max_used ;
+	    (Cardinal)ndx<pixargs_cnt && *num_used<max_used ;
 	    ndx++,savepix++ )
         {
 	  if ( savepix->pixtype == MrmRtypeXBitmapFile ) {
@@ -3330,7 +3330,7 @@ Urm__CW_LoadIconImage (RGMIconImagePtr		iconptr ,
         }
     }
 
-  for ( ndx=URMColorTableUserMin ; ndx<ctable->count ; ndx++ )
+  for ( ndx=URMColorTableUserMin ; (int)ndx<ctable->count ; ndx++ )
     {
       citem = &ctable->item[ndx] ;
       if ( swap_needed )
@@ -3765,12 +3765,12 @@ Urm__CW_GetPixmapParms (Widget			w ,
    * widget. Fallback to Black/WhitePixelOfScreen if the widget
    * doesn't have these values.
    */
-  if ( *fgint == -1 )
+  if ( *fgint == (Pixel)-1 )
     {
       XtSetArg (pixarg[pcnt], XmNforeground, fgint) ;
       pcnt += 1 ;
     }
-  if ( *bgint == -1 )
+  if ( *bgint == (Pixel)-1 )
     {
       XtSetArg (pixarg[pcnt], XmNbackground, bgint) ;
       pcnt += 1 ;
@@ -3781,9 +3781,9 @@ Urm__CW_GetPixmapParms (Widget			w ,
   /*
    * Fall back on ...PixelOfScreen
    */
-  if ( *fgint == -1 )
+  if ( *fgint == (Pixel)-1 )
     *fgint = BlackPixelOfScreen (*screen) ;
-  if ( *bgint == -1 )
+  if ( *bgint == (Pixel)-1 )
     *bgint = WhitePixelOfScreen (*screen) ;
 
   /*

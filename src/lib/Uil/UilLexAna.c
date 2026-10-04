@@ -1479,7 +1479,7 @@ found_token:
 	    {
 	      /* check that the length of the name is in range */
 
-	      if (l_lex_pos > key_k_keyword_max_length)
+	      if ((unsigned long)l_lex_pos > key_k_keyword_max_length)
 		{
 		  l_lex_pos = key_k_keyword_max_length;
 		  az_current_lex_buffer->c_text[ l_lex_pos ] = 0;

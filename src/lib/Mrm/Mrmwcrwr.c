@@ -1668,7 +1668,7 @@ UrmCWRSetChild (URMResourceContextPtr	context_id,
 			  NULL, context_id, MrmNULL_DESC) ;
   listdesc = (RGMChildrenDescPtr) ((char*)widgetrec + widgetrec->children_offs);
 
-  if ( child_ndx >= listdesc->count )
+  if ( child_ndx >= (Cardinal)listdesc->count )
     return Urm__UT_Error ("UrmCWRSetChild", _MrmMMsg_0101,
 			  NULL, context_id, MrmOUT_OF_BOUNDS) ;
   childptr = &listdesc->child[child_ndx] ;
@@ -2353,7 +2353,7 @@ UrmCWR__BindArgPtrs (URMResourceContextPtr	context_id ,
   /*
    * Validate argument index and set pointer
    */
-  if ( argndx >= (*descptr)->count )
+  if ( argndx >= (Cardinal)(*descptr)->count )
     return Urm__UT_Error (routine, _MrmMMsg_0104,
 			  NULL, context_id, MrmOUT_OF_BOUNDS) ;
   *argptr = &(*descptr)->args[argndx] ;
@@ -2430,7 +2430,7 @@ UrmCWR__BindCallbackPtrs (URMResourceContextPtr		context_id,
   /*
    * validate item index and compute item pointer
    */
-  if ( itemndx >= (*descptr)->count )
+  if ( itemndx >= (Cardinal)(*descptr)->count )
     return Urm__UT_Error (routine, _MrmMMsg_0107,
 			  NULL, context_id, MrmOUT_OF_BOUNDS) ;
   *itmptr = &(*descptr)->item[itemndx] ;

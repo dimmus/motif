@@ -506,7 +506,7 @@ void	push(sym_entry_type *sym_entry)
     **	We reuse source buffers for the output queues.
     */
 
-    if (out_l_next_offset > out_k_last_offset)
+    if (out_l_next_offset > (int)out_k_last_offset)
     {
 	if (src_az_avail_source_buffer == NULL)
 	{

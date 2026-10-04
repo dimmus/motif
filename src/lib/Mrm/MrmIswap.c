@@ -167,7 +167,7 @@ Idb__BM_SwapRecordBytes (IDBRecordBufferPtr		buffer)
       if ( leaf_rec->leaf_header.index_count < 0 ||
 	   leaf_rec->leaf_header.index_count > (int) IDBIndexLeafMaxCount )
 	goto bad_record;
-      for( ndx=0 ; ndx < leaf_rec->leaf_header.index_count ; ndx++ )
+      for( ndx=0 ; (int)ndx < leaf_rec->leaf_header.index_count ; ndx++ )
 	{
 	  swapbytes( leaf_rec->index[ndx].index_stg );
 	  swap2bytes( leaf_rec->index[ndx].data.internal_id.rec_no );
@@ -184,7 +184,7 @@ Idb__BM_SwapRecordBytes (IDBRecordBufferPtr		buffer)
       if ( node_rec->node_header.index_count < 0 ||
 	   node_rec->node_header.index_count > (int) IDBIndexNodeMaxCount )
 	goto bad_record;
-      for( ndx=0 ; ndx < node_rec->node_header.index_count ; ndx++ )
+      for( ndx=0 ; (int)ndx < node_rec->node_header.index_count ; ndx++ )
 	{
 	  swapbytes( node_rec->index[ndx].index_stg );
 	  swap2bytes( node_rec->index[ndx].data.internal_id.rec_no );

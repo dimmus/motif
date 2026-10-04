@@ -195,7 +195,7 @@ Urm__CW_AddWRef (URMResourceContextPtr	wref_id,
       old_heap = (char *) refdsc+old_size-refdsc->heap_size;
       new_heap = (char *) (old_heap+delta);
       UrmBCopy (old_heap, new_heap, refdsc->heap_size);
-      for ( ndx=0 ; ndx<refdsc->num_refs ; ndx++ )
+      for ( ndx=0 ; (int)ndx<refdsc->num_refs ; ndx++ )
 	refdsc->refs[ndx].w_name_offs += delta;
     }
 

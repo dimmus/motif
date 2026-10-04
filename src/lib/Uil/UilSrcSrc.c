@@ -697,7 +697,7 @@ open_source_file( XmConst char           *c_file_name,
 
 /*    Look in the command line specified include directories, if any.    */
 
-	for (i = 0; i < Uil_cmd_z_command.include_dir_count; i++) {
+	for (i = 0; (unsigned int)i < Uil_cmd_z_command.include_dir_count; i++) {
 	    size_t	inc_dir_len;
 	    boolean	add_slash;
 

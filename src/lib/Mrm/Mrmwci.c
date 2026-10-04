@@ -874,7 +874,7 @@ hash_function(int	l_length,
 
   /* BEGIN OSF Fix CR 5232 */
   /* Don't go past array bounds - leave room for null terminator */
-  if (l_length >= (sizeof(int) * 20)) l_length = (sizeof(int) * 20) - 1;
+  if (l_length >= (int)(sizeof(int) * 20)) l_length = (sizeof(int) * 20) - 1;
   /* END OSF Fix CR 5232 */
 
   l_limit = (l_length-1) >> _shift;	/* divide by wordsize */

@@ -181,7 +181,7 @@ Idb__BM_InitBufferVector (void)
 			  NULL, NULL, MrmFAILURE) ;
 
   for ( ndx=0,bufptr=idb__buffer_pool_vec ;
-        ndx<idb__buffer_pool_size ;
+        (int)ndx<idb__buffer_pool_size ;
         ndx++,bufptr++ )
     {
       bufptr->validation = IDBRecordBufferValid;
@@ -846,7 +846,7 @@ Idb__BM_DecommitAll (IDBFile		file_id)
     return MrmFAILURE;
 
   for ( ndx=0,curbuf=idb__buffer_pool_vec ;
-        ndx<idb__buffer_pool_size ;
+        (int)ndx<idb__buffer_pool_size ;
         ndx++,curbuf++ )
     {
       if (curbuf->cur_file == file_id)
