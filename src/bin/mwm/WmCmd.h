@@ -50,7 +50,7 @@ extern void    DeleteCommand       (long, CmdTree **);
 extern void    SendInvokeMessage   (CARD32, CARD32, Atom, Time);
 
 extern void
-GetAutomationData (XtPointer input, Atom *outputType, XtPointer *output, unsigned long *outputLen, int *outputFmt);
+GetAutomationData (XtPointer input, unsigned long inputLen, int inputFmt, Atom *outputType, XtPointer *output, unsigned long *outputLen, int *outputFmt);
 
 
 #endif /* _WM_CMD_ */

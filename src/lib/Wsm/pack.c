@@ -88,28 +88,11 @@ static int WinDataSizePacked(Display *, int,
  * Routines for unpacking protocol data stream.
  */
 
-/*
- * A read position in a message received from the wire.  "left" is the
- * number of bytes still unread.  A read that would run past the end sets
- * "overrun" and returns zero, as does every read after it, so list counts
- * read from a truncated message are zero and nothing more is allocated.
- */
-typedef struct {
-    MessageData data;
-    unsigned long left;
-    Boolean overrun;
-} UnpackStream;
-
 static void UnpackWinData(UnpackStream *, Display *,
 			  int, WSMConfigFormatType, WSMWinData **, int *);
 static void UnpackSingleWinDataRec(UnpackStream *, WSMAttribute *,WSMWinData *);
 static void UnpackWinInfo(UnpackStream *, Display *, int, WSMWinInfo *);
 static void UnpackWinEntry(UnpackStream *, Display *, int, WSMWinEntry *);
-static int StreamListNum(UnpackStream *, unsigned long);
-static String StreamString(UnpackStream *);
-static CARD32 StreamCARD32(UnpackStream *);
-static CARD16 StreamCARD16(UnpackStream *);
-static CARD8 StreamCARD8(UnpackStream *);
 
 /* public */ String UnpackString(MessageData *);
 /* public */ CARD32 UnpackCARD32(MessageData *);
@@ -510,9 +493,7 @@ _WSMUnpackRequest(Display *dpy, int screen_num, MessageData data,
     int i, j, num;
     UnpackStream stream;
 
-    stream.data = data;
-    stream.left = len;
-    stream.overrun = False;
+    StreamInit(&stream, data, len);
 
     request->any.type = type;	/* Save the type. */
     request->any.allocated = False;
@@ -648,9 +629,7 @@ _WSMUnpackReply(Display *dpy, int screen_num, MessageData data,
     int i;
     UnpackStream stream;
 
-    stream.data = data;
-    stream.left = len;
-    stream.overrun = False;
+    StreamInit(&stream, data, len);
 
     reply->any.type = type;		/* Save the type. */
     reply->any.allocated = False;
@@ -1381,6 +1360,22 @@ UnpackWinEntry(UnpackStream *stream, Display *dpy,
       win_entry->match_properties[i] = StreamProperty(stream);
 }
 
+/*	Function Name: StreamInit
+ *	Description: Starts reading a message from the wire.
+ *	Arguments: stream - The stream to set up.
+ *                 data - The message.
+ *                 len - The length of the message in bytes.
+ *	Returns: none
+ */
+
+void
+StreamInit(UnpackStream *stream, MessageData data, unsigned long len)
+{
+    stream->data = data;
+    stream->left = len;
+    stream->overrun = False;
+}
+
 /*	Function Name: StreamListNum
  *	Description: Unpacks a list count from the protocol data stream.
  *	Arguments: stream - The message data stream.
@@ -1389,7 +1384,7 @@ UnpackWinEntry(UnpackStream *stream, Display *dpy,
  *               that many elements need.
  */
 
-static int
+int
 StreamListNum(UnpackStream *stream, unsigned long elem_size)
 {
     int num = (int) StreamCARD16(stream);
@@ -1408,7 +1403,7 @@ StreamListNum(UnpackStream *stream, unsigned long elem_size)
  *	Returns: the string, empty if the stream is too short.
  */
 
-static String
+String
 StreamString(UnpackStream *stream)
 {
     int i;
@@ -1429,7 +1424,7 @@ StreamString(UnpackStream *stream)
  *	Returns: the CARD32, or zero if the stream is too short.
  */
 
-static CARD32
+CARD32
 StreamCARD32(UnpackStream *stream)
 {
     if (stream->overrun || stream->left < sizeof(CARD32)) {
@@ -1447,7 +1442,7 @@ StreamCARD32(UnpackStream *stream)
  *	Returns: the CARD16, or zero if the stream is too short.
  */
 
-static CARD16
+CARD16
 StreamCARD16(UnpackStream *stream)
 {
     if (stream->overrun || stream->left < sizeof(CARD16)) {
@@ -1465,7 +1460,7 @@ StreamCARD16(UnpackStream *stream)
  *	Returns: the CARD8, or zero if the stream is too short.
  */
 
-static CARD8
+CARD8
 StreamCARD8(UnpackStream *stream)
 {
     if (stream->overrun || stream->left < sizeof(CARD8)) {

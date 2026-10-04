@@ -1445,7 +1445,8 @@ WMiConvert (
 	 * output data variable to send back to the requesting
 	 */
 
-	GetAutomationData(input,outputType,output,outputLen,outputFmt);
+	GetAutomationData(input,inputLen,inputFmt,
+			  outputType,output,outputLen,outputFmt);
 	found = True;
       }
 
