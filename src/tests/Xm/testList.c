@@ -773,6 +773,28 @@ START_TEST(list_selection_resources)
 }
 END_TEST
 
+/*
+ * XmNselectedPositions replacing a selection used to leave the widget
+ * with the selected items it had just freed.
+ */
+START_TEST(list_selected_positions_replace_selection)
+{
+	Widget list = make_list(XmMULTIPLE_SELECT, 50, "item %d", 0);
+	XmString *sel = NULL, s = item("item %d", 9);
+	int p[] = { 10, 20 };
+	int nsel = 0;
+
+	XmListSelectPos(list, 1, False);
+	XmListSelectPos(list, 2, False);
+	XtVaSetValues(list, XmNselectedPositions, p, XmNselectedPositionCount, 2, NULL);
+	ck_assert_int_eq(check_selection(list), 2);
+	XtVaGetValues(list, XmNselectedItems, &sel, XmNselectedItemCount, &nsel, NULL);
+	ck_assert_int_eq(nsel, 2);
+	ck_assert(XmStringCompare(sel[0], s));
+	XmStringFree(s);
+}
+END_TEST
+
 /* Many items added and deleted one at a time, at both ends. */
 START_TEST(list_grow_and_shrink)
 {
@@ -837,6 +859,7 @@ void list_suite(SRunner *runner)
 	tcase_add_test(t, list_replace_all_matches);
 	tcase_add_test(t, list_replace_selected);
 	tcase_add_test(t, list_selection_resources);
+	tcase_add_test(t, list_selected_positions_replace_selection);
 	tcase_add_checked_fixture(t, _init_xt, uninit_xt);
 	tcase_set_timeout(t, 60);
 	suite_add_tcase(s, t);

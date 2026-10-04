@@ -1338,6 +1338,9 @@ static Boolean SetValues(
   {
     if (newlw->list.selectedPositions && (newlw->list.selectedPositionCount > 0)) {
       ClearSelectedList(oldlw);
+      /* The new widget shares the selected items just freed. */
+      newlw->list.selectedItems = NULL;
+      newlw->list.selectedItemCount = 0;
       ClearSelectedPositions(oldlw);
       CopySelectedPositions(newlw);
       reset_select = TRUE;
