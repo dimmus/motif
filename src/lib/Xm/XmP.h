@@ -70,15 +70,15 @@ extern "C" {
 #    ifdef XtDisplay
 #      undef XtDisplay
 #    endif
-#    define XtDisplay(widget) XtDisplayOfObject((Widget)widget)
+#    define XtDisplay(widget) XtDisplayOfObject((Widget)(widget))
 #    ifdef XtScreen
 #      undef XtScreen
 #    endif
-#    define XtScreen(widget) XtScreenOfObject((Widget)widget)
+#    define XtScreen(widget) XtScreenOfObject((Widget)(widget))
 #    ifdef XtWindow
 #      undef XtWindow
 #    endif
-#    define XtWindow(widget) XtWindowOfObject((Widget)widget)
+#    define XtWindow(widget) XtWindowOfObject((Widget)(widget))
 /* The following macros are not provided by Xt */
 #    define XtX(w) ((w)->core.x)
 #    define XtY(w) ((w)->core.y)
