@@ -32,7 +32,7 @@ case "$os:$id" in
     $SUDO apt-get update -qq
     $SUDO apt-get install -y -qq --no-install-recommends \
       build-essential gcc g++ clang lld llvm cmake ninja-build pkg-config ccache \
-      flex bison file ca-certificates \
+      flex libfl-dev bison file ca-certificates \
       libx11-dev libxt-dev libxmu-dev libxext-dev libxft-dev libxpm-dev \
       libxrender-dev libfontconfig-dev libfreetype-dev libpng-dev libjpeg-dev \
       x11proto-dev xbitmaps check \
@@ -44,7 +44,7 @@ case "$os:$id" in
     # change when Fedora renames a package.
     $SUDO dnf install -y --setopt=install_weak_deps=False \
       gcc gcc-c++ clang lld llvm cmake ninja-build pkgconf-pkg-config ccache \
-      flex bison byacc file findutils which \
+      flex libfl-devel bison byacc file findutils which \
       'pkgconfig(x11)' 'pkgconfig(xt)' 'pkgconfig(xmu)' 'pkgconfig(xext)' \
       'pkgconfig(xft)' 'pkgconfig(xpm)' 'pkgconfig(xrender)' \
       'pkgconfig(fontconfig)' 'pkgconfig(freetype2)' 'pkgconfig(libpng)' \
@@ -57,7 +57,7 @@ case "$os:$id" in
   Linux:alpine)
     $SUDO apk add --no-cache \
       build-base gcc g++ clang lld cmake ninja pkgconf ccache \
-      flex flex-dev bison byacc file linux-headers \
+      flex flex-dev bison file linux-headers \
       libx11-dev libxt-dev libxmu-dev libxext-dev libxft-dev libxpm-dev \
       libxrender-dev fontconfig-dev freetype-dev libpng-dev \
       libjpeg-turbo-dev xorgproto xbitmaps check-dev \
