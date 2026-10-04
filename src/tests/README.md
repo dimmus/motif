@@ -15,7 +15,7 @@ relative path, so CTest runs them from a copy of those directories in the
 build tree (`<build>/src/tests/fixtures`).
 
 Suites labelled `X11` (`FontList`, `FontListEntry`, `XmStringCT`,
-`Widgets`, `Text`, `Layout`, `I18nLocale`) need
+`Widgets`, `Text`, `Layout`, `I18nLocale`, `Rtl`) need
 an X server, as do the `Uil.load*`
 tests, those in `interactive/` and `visual/` and some in `fuzz/`.  When
 `xvfb-run` is found at configure time, CTest starts each of them under
@@ -42,6 +42,9 @@ The i18n suites:
   (`/usr/share/i18n`, the `locales` package on Debian and Ubuntu,
   `glibc-locale-source` on Fedora) only the default-locale tests are
   registered.
+- `Rtl` builds widgets under a left-to-right and a right-to-left shell
+  and checks that the second layout is the mirror of the first (Label,
+  PushButton, Form, RowColumn, ScrolledWindow, scrolled Text and List).
 
 The other directories:
 

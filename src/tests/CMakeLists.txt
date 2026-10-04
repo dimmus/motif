@@ -36,12 +36,13 @@ set(MOTIF_TEST_SRCS
     Xm/testI18n.c
     Xm/testI18nLocale.c
     Xm/testLayout.c
+    Xm/testRtl.c
     i18n_util.c
 )
 
 # Suites that open a display, and suites that do not.
 set(MOTIF_TEST_X_SUITES FontListEntry FontList XmStringCT Widgets Text Layout
-    I18nLocale)
+    I18nLocale Rtl)
 set(MOTIF_TEST_SUITES Svg Log LogConfig XmString I18n)
 set(MOTIF_TEST_DEFS "")
 
