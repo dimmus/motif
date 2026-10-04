@@ -15,6 +15,7 @@
 #include <X11/Xatom.h>
 #include <Xm/Xm.h>
 #include <Xm/BulletinB.h>
+#include <Xm/DataF.h>
 #include <Xm/Text.h>
 #include <Xm/TextF.h>
 #include <check.h>
@@ -118,6 +119,37 @@ START_TEST(textfield_editing)
 	XmTextFieldSetString(tf, "");
 	assert_tf(tf, "");
 	ck_assert_int_eq(XmTextFieldGetLastPosition(tf), 0);
+	pump();
+}
+END_TEST
+
+/*
+ * A wide string that does not convert to the locale's multibyte encoding
+ * (the tests run in the C locale) sets an empty string.  The Wcs
+ * functions used to replace their conversion buffer with "" on failure
+ * and then XtFree() it.
+ */
+START_TEST(textfield_unconvertible_wcs)
+{
+	static wchar_t bad[] = { L'a', 0x263a, L'b', 0 };
+	Widget tf = XmCreateTextField(bb, "tf", NULL, 0);
+	Widget df = XmCreateDataField(bb, "df", NULL, 0);
+
+	XtManageChild(tf);
+	XtManageChild(df);
+	XtRealizeWidget(top);
+	XmTextFieldSetString(tf, "keep");
+	XmTextFieldSetStringWcs(tf, bad);
+	assert_tf(tf, "");
+
+	XmDataFieldSetString(df, "keep");
+	XmDataFieldReplaceWcs(df, 0, 4, bad);
+	{
+		char *s = XmDataFieldGetString(df);
+
+		ck_assert_str_eq(s, "");
+		XtFree(s);
+	}
 	pump();
 }
 END_TEST
@@ -295,6 +327,7 @@ void text_suite(SRunner *runner)
 	tcase_add_checked_fixture(t, setup, teardown);
 	tcase_add_test(t, textfield_editing);
 	tcase_add_test(t, textfield_selection_and_clipboard);
+	tcase_add_test(t, textfield_unconvertible_wcs);
 	tcase_set_timeout(t, 60);
 	suite_add_tcase(s, t);
 

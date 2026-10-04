@@ -7868,8 +7868,8 @@ static void XmDataFieldSetStringWcs(Widget w, wchar_t *wc_value)
     tmp_wc++; /* count number of wchar_t's */
   tmp = _XmMallocArray(num_chars + 1, XmTextF_max_char_size(tf));
   result = wcstombs(tmp, wc_value, (num_chars + 1) * XmTextF_max_char_size(tf));
-  if (result == (size_t)-1) /* if wcstombs fails, it returns (size_t) -1 */
-    tmp = "";               /* if invalid data, pass in the empty string */
+  if (result == -1) /* invalid data: set the empty string */
+    tmp[0] = '\0';
   XmDataFieldSetString(w, tmp);
   XtFree(tmp);
   _XmAppUnlock(app);
@@ -7994,9 +7994,8 @@ void XmDataFieldReplaceWcs(Widget w,
     else {
       tmp = _XmMallocArray(wc_length + 1, XmTextF_max_char_size(tf));
       wc_length = wcstombs(tmp, wc_value, (wc_length + 1) * XmTextF_max_char_size(tf));
-      if (wc_length == (size_t)-1) { /* if wcstombs fails, it returns -1 */
-        tmp = "";                    /* if invalid data, pass in the empty
-                                      * string */
+      if (wc_length == -1) { /* invalid data: insert the empty string */
+        tmp[0] = '\0';
         wc_length = 0;
       }
       rep_result = _XmDataFieldReplaceText(tf, NULL, from_pos, to_pos, tmp, wc_length, False);

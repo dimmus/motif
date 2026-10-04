@@ -7754,8 +7754,8 @@ void XmTextFieldSetStringWcs(Widget w, wchar_t *wc_value)
     tmp_wc++; /* count number of wchar_t's */
   tmp = _XmMallocArray(num_chars + 1, tf->text.max_char_size);
   result = wcstombs(tmp, wc_value, (num_chars + 1) * tf->text.max_char_size);
-  if (result == (size_t)-1) /* if wcstombs fails, it returns (size_t) -1 */
-    tmp = "";               /* if invalid data, pass in the empty string */
+  if (result == -1) /* invalid data: set the empty string */
+    tmp[0] = '\0';
   XmTextFieldSetString(w, tmp);
   XtFree(tmp);
   _XmAppUnlock(app);
