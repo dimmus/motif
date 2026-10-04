@@ -3180,7 +3180,7 @@ static void MakePositionVisible(XmTextWidget tw, XmTextPosition position)
         else {
           line_num = _XmTextGetTableIndex(tw, position);
           if (position == tw->text.bottom_position ||
-              (line_num < (LineNum)tw->text.total_lines &&
+              (line_num + 1 < (LineNum)tw->text.total_lines &&
                position == tw->text.line_table[line_num + 1].start_pos - 1))
             position = MAX(position - (int)data->rows / 2,
                            line_num ? (int)(tw->text.line_table[line_num].start_pos) : 0);
@@ -3209,7 +3209,7 @@ static void MakePositionVisible(XmTextWidget tw, XmTextPosition position)
         else {
           line_num = _XmTextGetTableIndex(tw, position);
           if (position == tw->text.bottom_position ||
-              (line_num < (LineNum)tw->text.total_lines &&
+              (line_num + 1 < (LineNum)tw->text.total_lines &&
                position == tw->text.line_table[line_num + 1].start_pos - 1))
             position = MAX(position - data->columns / 2,
                            line_num ? (int)(tw->text.line_table[line_num].start_pos) : 0);
