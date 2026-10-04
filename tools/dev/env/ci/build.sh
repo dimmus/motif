@@ -13,6 +13,9 @@
 #   JOBS                parallel jobs (default: number of CPUs)
 #   MOTIF_CI_NO_SKIP    1 to fail when ctest reports a skipped test
 #   MOTIF_CI_TEST_TIMEOUT  per-test timeout in seconds (default: 300)
+#   MOTIF_CI_READONLY_SRC  1 to make the source tree read-only while
+#                       configuring, building and testing, so that a
+#                       write into it fails the job (default: 0)
 #
 # The tests are run with ctest --no-tests=error, so a configuration that
 # registers no tests fails instead of reporting success.  CTest itself
@@ -72,6 +75,43 @@ fi
 generator="Unix Makefiles"
 if command -v ninja >/dev/null 2>&1; then
   generator=Ninja
+fi
+
+# The build must not write into the source tree (generated files belong
+# in the build directory).  With MOTIF_CI_READONLY_SRC=1 everything at
+# the top of the tree except .git and the entries that hold the build or
+# ccache directory is made read-only until this script exits.  (This
+# proves nothing when run as root, which ignores the permissions.)
+ro_list=
+restore_source_tree() {
+  if [ -n "$ro_list" ]; then
+    chmod u+w .
+    while IFS= read -r entry; do
+      chmod -R u+w "$entry"
+    done <"$ro_list"
+    rm -f "$ro_list"
+  fi
+}
+if [ "${MOTIF_CI_READONLY_SRC:-0}" = 1 ]; then
+  build_abs=$(mkdir -p "$BUILD_DIR" && cd "$BUILD_DIR" && pwd)
+  ccache_abs=
+  if [ -n "${CCACHE_DIR:-}" ]; then
+    ccache_abs=$(mkdir -p "$CCACHE_DIR" && cd "$CCACHE_DIR" && pwd)
+  fi
+  ro_list=$(mktemp)
+  for entry in * .[!.]*; do
+    [ -e "$entry" ] || continue
+    [ "$entry" = .git ] && continue
+    case "$build_abs/" in "$(pwd)/$entry"/*) continue ;; esac
+    case "${ccache_abs:+$ccache_abs/}" in "$(pwd)/$entry"/*) continue ;; esac
+    echo "$entry" >>"$ro_list"
+  done
+  trap restore_source_tree EXIT
+  while IFS= read -r entry; do
+    chmod -R a-w "$entry"
+  done <"$ro_list"
+  chmod a-w .
+  echo "build.sh: source tree is read-only until the end of this run"
 fi
 
 echo "::group::Configure ($MOTIF_CI_PROFILE, $CC)"

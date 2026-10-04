@@ -50,6 +50,8 @@ jobs:
           CC: ${{ matrix.cc }}
           MOTIF_CI_PROFILE: ${{ matrix.profile }}
           MOTIF_CI_NO_SKIP: "1"
+          # The runner user is not root, so read-only really means it.
+          MOTIF_CI_READONLY_SRC: "1"
         run: tools/dev/env/ci/build.sh
       - name: Upload test logs
         if: always()
