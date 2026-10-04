@@ -2,12 +2,6 @@
 # that a fuzzing run is not stopped by them.  Remove an entry when its
 # bug is fixed.  See also ../lsan.supp.
 
-# XmString.c: _XmStringNonOptCreate() leaks the rendition tag arrays of
-# every segment that has rendition components (finish_segment() copies
-# its stack record and resets it without freeing them); the XmString
-# suite's byte_stream_rendition_leak case checks this one.
-leak:_XmStringNonOptCreate
-
 # The same as in ../lsan.supp.
 leak:XtOwnSelection
 leak:XtDisownSelection
@@ -18,11 +12,6 @@ leak:_XmSFAddNavigator
 # Urm__CW_InitWRef() and the SetValues list are not freed.
 leak:Urm__CW_InitWRef
 leak:ClipboardGetByNameItem
-
-# XmStringFunc.c, XmStringToXmStringTable: the rendition list of its
-# string context (XmString.c, begin_context_rends) is not freed for some
-# strings with rendition tags; crashes/xmstring/table-rendition-context-leak.
-leak:begin_context_rends
 
 # ResEncod.c, XmCvtCTToXmString: the separator it caches for newlines
 # leaks for some inputs with direction sequences between newlines, for

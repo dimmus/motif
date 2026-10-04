@@ -4368,6 +4368,9 @@ static void finish_segment(
     _XmStringSegmentNew(str, _XmStrImplicitLine(str) ? *lc : *sc, (_XmStringEntry)seg, True);
   (*sc)++;
   *unopt = False;
+  /* Both branches above copy the rendition tag lists, if they need them. */
+  XtFree((char *)_XmUnoptSegRendBegins(seg));
+  XtFree((char *)_XmUnoptSegRendEnds(seg));
   _XmEntryInit((_XmStringEntry)seg, XmSTRING_ENTRY_UNOPTIMIZED);
 }
 

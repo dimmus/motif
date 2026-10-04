@@ -134,52 +134,6 @@ static XmString cat(XmString first, ...)
 	return s;
 }
 
-/* Whether a well formed byte stream holds rendition components */
-static int has_renditions(const unsigned char *p)
-{
-	size_t len = XmStringByteStreamLength((unsigned char *)p);
-	size_t i = (p[3] & 0x80) ? 6 : 4, n;
-
-	while (i + 2 <= len) {
-		if (p[i] == XmSTRING_COMPONENT_RENDITION_BEGIN ||
-		    p[i] == XmSTRING_COMPONENT_RENDITION_END)
-			return 1;
-		if (p[i + 1] & 0x80) {
-			if (i + 4 > len)
-				break;
-			n = 4 + ((size_t)p[i + 2] << 8 | p[i + 3]);
-		} else {
-			n = 2 + p[i + 1];
-		}
-		i += n;
-	}
-	return 0;
-}
-
-/*
- * XmCvtByteStreamToXmString, minus a known leak: _XmStringNonOptCreate()
- * builds each segment in a stack record, and finish_segment() copies
- * the record, rendition tag arrays included, then resets it without
- * freeing its arrays.  So every segment with rendition components
- * leaks them (byte_stream_rendition_leak shows it).  Only conversions
- * of streams that hold renditions are excluded from leak checking.
- */
-static XmString cvt_stream(unsigned char *stream)
-{
-	XmString s;
-
-	if (_XmStringByteStreamValidLength(stream,
-					   XmStringByteStreamLength(stream)) &&
-	    has_renditions(stream)) {
-		KNOWN_LEAK_BEGIN();
-		s = XmCvtByteStreamToXmString(stream);
-		KNOWN_LEAK_END();
-	} else {
-		s = XmCvtByteStreamToXmString(stream);
-	}
-	return s;
-}
-
 /* Whether a and b have the same components with the same values */
 static int same_comps(XmString a, XmString b)
 {
@@ -217,7 +171,7 @@ static void assert_byte_stream_round_trip(XmString s, int check)
 	ck_assert_uint_eq(_XmStringByteStreamValidLength(stream, len), len);
 	ck_assert_uint_eq(_XmStringByteStreamValidLength(stream, len - 1), 0);
 
-	back = cvt_stream(stream);
+	back = XmCvtByteStreamToXmString(stream);
 	ck_assert_ptr_nonnull(back);
 	if (check & SAME_COMPS)
 		ck_assert_msg(same_comps(s, back),
@@ -262,7 +216,7 @@ static XmString cvt_exact(const unsigned char *buf, size_t len)
 	XmString s;
 
 	memcpy(copy, buf, len);
-	s = cvt_stream(copy);
+	s = XmCvtByteStreamToXmString(copy);
 	free(copy);
 	return s;
 }
@@ -587,7 +541,7 @@ START_TEST(byte_stream_mutations)
 			copy[i] = vals[v];
 			if (!_XmStringByteStreamValidLength(copy, len))
 				continue;
-			r = cvt_stream(copy);
+			r = XmCvtByteStreamToXmString(copy);
 			if (r) {
 				XtFree(text_of(r));
 				XmStringFree(r);
@@ -896,7 +850,7 @@ START_TEST(compare_ignores_segmentation)
 		XmStringComponentCreate(XmSTRING_COMPONENT_RENDITION_END,
 					2, "r1"), NULL);
 	ck_assert_uint_gt(XmCvtXmStringToByteStream(a, &stream), 0);
-	b = cvt_stream(stream);
+	b = XmCvtByteStreamToXmString(stream);
 	ck_assert(same_comps(a, b));
 	ck_assert_msg(XmStringCompare(a, b),
 		      "same components, but XmStringCompare() says different");
@@ -907,7 +861,11 @@ START_TEST(compare_ignores_segmentation)
 END_TEST
 
 #ifdef HAVE_LSAN
-/* The leak cvt_stream() works around */
+/*
+ * _XmStringNonOptCreate() builds each segment in a stack record, and
+ * finish_segment() used to reset it without freeing its rendition tag
+ * arrays, which it had copied.
+ */
 START_TEST(byte_stream_rendition_leak)
 {
 	static const unsigned char body[] = {
@@ -925,6 +883,33 @@ START_TEST(byte_stream_rendition_leak)
 	XmStringFree(s);
 	XtFree((char *)stream);
 	ck_assert_msg(!leaks_found(), "XmCvtByteStreamToXmString leaked");
+}
+END_TEST
+
+/*
+ * XmStringToXmStringTable() counts the pieces with one string context
+ * and then starts it again; the renditions still active at the end of
+ * the count used to be lost with it.
+ */
+START_TEST(table_open_rendition_leak)
+{
+	XmString s, sep_str = sep();
+	XmStringTable table;
+	Cardinal i, n;
+
+	s = cat(XmStringComponentCreate(XmSTRING_COMPONENT_RENDITION_BEGIN,
+					1, "r"),
+		XmStringCreateLocalized("a"), sep(),
+		XmStringCreateLocalized("b"), sep(),
+		XmStringCreateLocalized("c"), NULL);
+	n = XmStringToXmStringTable(s, sep_str, &table);
+	ck_assert_uint_eq(n, 3);
+	for (i = 0; i < n; i++)
+		XmStringFree(table[i]);
+	XtFree((char *)table);
+	XmStringFree(s);
+	XmStringFree(sep_str);
+	ck_assert_msg(!leaks_found(), "XmStringToXmStringTable leaked");
 }
 END_TEST
 #endif
@@ -1124,12 +1109,18 @@ void xmstring_suite(SRunner *runner)
 	tcase_add_test(t, byte_stream_too_long);
 	tcase_add_test(t, byte_stream_many_renditions);
 	tcase_add_test(t, byte_stream_tag_with_nul);
+#ifdef HAVE_LSAN
+	tcase_add_test(t, byte_stream_rendition_leak);
+#endif
 	suite_add_tcase(s, t);
 
 	t = tcase_create("String tables");
 	tcase_add_test(t, table_pieces_match_man_page);
 	tcase_add_test(t, table_multi_segment_lines);
 	tcase_add_test(t, table_mid_segment_keeps_tag);
+#ifdef HAVE_LSAN
+	tcase_add_test(t, table_open_rendition_leak);
+#endif
 	suite_add_tcase(s, t);
 
 	t = tcase_create("Parse tables");
@@ -1148,9 +1139,6 @@ void xmstring_suite(SRunner *runner)
 
 	t = tcase_create("Known bugs");
 	tcase_add_test(t, compare_ignores_segmentation);
-#ifdef HAVE_LSAN
-	tcase_add_test(t, byte_stream_rendition_leak);
-#endif
 	tcase_set_tags(t, "xfail");
 	suite_add_tcase(s, t);
 

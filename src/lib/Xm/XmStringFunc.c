@@ -638,6 +638,8 @@ Cardinal XmStringToXmStringTable(XmString string, XmString break_component, XmSt
       (*table)[0] = XmStringCopy(string);
     }
     else {
+      /* The counting pass may have left active renditions in it. */
+      _XmStringContextFree(&stack_context);
       _XmStringContextReInit(&stack_context, string);
       _XmStringContextReInit(&stack_start, string);
       i = 0;
