@@ -1436,7 +1436,7 @@ static void FileSearchProc(Widget w, XtPointer sd)
     XmStringFileList = (XmString *)_XmMallocArray(numFiles, sizeof(XmString));
     Index = 0;
     dirLen = strlen(dir);
-    while (Index < numFiles) {
+    while ((unsigned int)Index < numFiles) {
       if (showDotFiles || ((fileList[Index])[dirLen] != '.')) {
         if (FS_PathMode(fs) == XmPATH_MODE_FULL)
           XmStringFileList[numItems++] = XmStringGenerate(
@@ -1800,7 +1800,7 @@ static void DirSearchProc(Widget w, XtPointer sd)
     XmStringDirList = (XmString *)_XmMallocArray(numDirs, sizeof(XmString));
     Index = 0;
     dirLen = strlen(qualifiedDir);
-    while (Index < numDirs) {
+    while ((unsigned int)Index < numDirs) {
       /* Assume first entry is "." and second is "..".
        */
       if (showDotFiles || (Index == 1) || ((dirList[Index])[dirLen] != '.')) {

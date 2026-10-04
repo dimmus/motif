@@ -3171,18 +3171,18 @@ void XmDropSiteConfigureStackingOrder(Widget widget, Widget sibling, Cardinal st
     switch (stack_mode) {
       case XmABOVE:
         if (index > sib_index)
-          for (i = index; i > sib_index; i--)
+          for (i = index; i > (int)sib_index; i--)
             SwapDSChildren(parent, i, i - 1);
         else
-          for (i = index; i < (sib_index - 1); i++)
+          for (i = index; i < (int)sib_index - 1; i++)
             SwapDSChildren(parent, i, i + 1);
         break;
       case XmBELOW:
         if (index > sib_index)
-          for (i = index; i > (sib_index + 1); i--)
+          for (i = index; i > (int)sib_index + 1; i--)
             SwapDSChildren(parent, i, i - 1);
         else
-          for (i = index; i < sib_index; i++)
+          for (i = index; i < (int)sib_index; i++)
             SwapDSChildren(parent, i, i + 1);
         break;
       default:

@@ -1161,12 +1161,12 @@ static void DataFieldSetHighlight(XmDataFieldWidget tf,
   df_InsertHighlight(tf, right, endmode);
   l = XmTextF_highlight(tf).list;
   i = 1;
-  while (i < XmTextF_highlight(tf).number) {
+  while ((Cardinal)i < XmTextF_highlight(tf).number) {
     if (l[i].position >= left && l[i].position < right)
       l[i].mode = mode;
     if (l[i].mode == l[i - 1].mode) {
       XmTextF_highlight(tf).number--;
-      for (j = i; j < XmTextF_highlight(tf).number; j++)
+      for (j = i; (Cardinal)j < XmTextF_highlight(tf).number; j++)
         l[j] = l[j + 1];
     }
     else
@@ -1839,7 +1839,7 @@ static void df_RedisplayText(XmDataFieldWidget tf, XmTextPosition start, XmTextP
   if (!XtIsSensitive((Widget)tf))
     stipple = True;
   /* search through the highlight array and draw the text */
-  for (i = 0; i + 1 < XmTextF_highlight(tf).number; i++) {
+  for (i = 0; (Cardinal)i + 1 < XmTextF_highlight(tf).number; i++) {
 #if PWC_DEBUG
     printf("XmTextF_value(\"%s\")::Highlight #%d = pos(%d), start(%d), end(%d)\n",
            (char *)XmTextF_value(tf),
@@ -2623,9 +2623,9 @@ Boolean _XmDataFieldReplaceText(XmDataFieldWidget tf,
   }
   else {
     if ((XmTextF_string_length(tf) + insert_length - replace_length) * sizeof(wchar_t) >=
-        XmTextF_size_allocd(tf))
+        (size_t)XmTextF_size_allocd(tf))
     {
-      XmTextF_size_allocd(tf) += MAX((insert_length + TEXT_INCREMENT) * sizeof(wchar_t),
+      XmTextF_size_allocd(tf) += MAX((int)((insert_length + TEXT_INCREMENT) * sizeof(wchar_t)),
                                      (XmTextF_size_allocd(tf) * 2));
       XmTextF_wc_value(tf) = (wchar_t *)XtRealloc((char *)XmTextF_wc_value(tf),
                                                   (unsigned)XmTextF_size_allocd(tf));
@@ -3308,7 +3308,7 @@ static Boolean PrintableString(XmDataFieldWidget tf,
         tmp += ret_val;
         buf_size -= ret_val;
         tmp_str++;
-      } while ((ret_val > 0) && (buf_size >= MB_CUR_MAX) && (count < n));
+      } while ((ret_val > 0) && (buf_size >= (int)MB_CUR_MAX) && (count < n));
       if (ret_val == -1) /* bad character */
         return (False);
       is_printable = XTextWidth(TextF_Font(tf), cache_ptr, tmp - cache_ptr);
@@ -4209,7 +4209,7 @@ static void df_SetScanIndex(XmDataFieldWidget tf, XEvent *event)
   else
     sel_time = event->xkey.time;
   if (sel_time > XmTextF_last_time(tf) &&
-      sel_time - XmTextF_last_time(tf) < XtGetMultiClickTime(XtDisplay(tf)))
+      sel_time - XmTextF_last_time(tf) < (Time)XtGetMultiClickTime(XtDisplay(tf)))
   {
     /*
      * Fix for HaL DTS 9841 - Increment the sarray_index first, then check to

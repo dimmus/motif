@@ -556,7 +556,7 @@ int XmCvtTextPropertyToXmStringTable(Display *display,
     /* The value need not be NUL terminated: work on a copy that is. */
     value = CopyTextPropertyValue(text_prop);
     /* First found how many XmString we need to allocate. */
-    for (*count_return = 1, i = 0; i < text_prop->nitems; i++) {
+    for (*count_return = 1, i = 0; (unsigned long)i < text_prop->nitems; i++) {
       if (value[i] == '\0')
         (*count_return)++;
     }
@@ -634,7 +634,7 @@ int XmCvtTextPropertyToXmStringTable(Display *display,
        be NUL terminated: work on a copy that is. */
   value = CopyTextPropertyValue(text_prop);
   /* First count up how many string elements there are in the value. */
-  for (i = 0, elements = 1; i + 1 < text_prop->nitems; ++i) {
+  for (i = 0, elements = 1; (unsigned long)i + 1 < text_prop->nitems; ++i) {
     /* The text prop value will have two NULL's at the end,
            one for the end of the last string and one to terminate
            the entire value. The terminating NULL will be excluded
@@ -647,7 +647,7 @@ int XmCvtTextPropertyToXmStringTable(Display *display,
   string_table = (XmStringTable)_XmMallocArray(elements, sizeof(XmString));
   /* Create XmStrings from each string in the value field */
   string_table[0] = XmStringGenerate((XtPointer)value, tag, type, NULL);
-  for (i = 0, elements = 1; i + 1 < text_prop->nitems; ++i) {
+  for (i = 0, elements = 1; (unsigned long)i + 1 < text_prop->nitems; ++i) {
     if (value[i] == '\0')
       string_table[elements++] = XmStringGenerate((XtPointer) & (value[i + 1]), tag, type, NULL);
   }

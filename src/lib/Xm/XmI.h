@@ -77,7 +77,7 @@ void _XmInitModifiers(void);
 #  define IsQueryOnly(g) (GMode(g) & XtCWQueryOnly)
 #  define XmStrlen(s) ((s) ? strlen(s) : 0)
 #  define XmStackAlloc(size, stack_cache_array) \
-    ((((char *)(stack_cache_array) != NULL) && ((size) <= sizeof(stack_cache_array))) ? \
+    ((((char *)(stack_cache_array) != NULL) && ((size_t)(size) <= sizeof(stack_cache_array))) ? \
          (char *)(stack_cache_array) : \
          _XmMallocArray(1, (size)))
 #  define XmStackFree(pointer, stack_cache_array) \

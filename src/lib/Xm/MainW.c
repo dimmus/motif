@@ -857,7 +857,7 @@ static void ChangeManaged(Widget wid)
         /* remove it from the clipwindow child list by
                    moving all the siblings that comes after it
                    one slot down */
-        for (j = i + 1; j < cw->composite.num_children; j++) {
+        for (j = i + 1; (Cardinal)j < cw->composite.num_children; j++) {
           cw->composite.children[i - 1] = cw->composite.children[i];
         }
         cw->composite.num_children--;

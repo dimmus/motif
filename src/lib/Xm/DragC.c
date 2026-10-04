@@ -1456,7 +1456,7 @@ static void NewScreen(XmDragContext dc, Window newRoot)
   Arg args[8];
   Widget old = (Widget)(dc->drag.curDragOver);
   /* Find the new screen number */
-  for (i = 0; i < XScreenCount(XtDisplayOfObject((Widget)dc)); i++)
+  for (i = 0; (int)i < XScreenCount(XtDisplayOfObject((Widget)dc)); i++)
     if (RootWindow(XtDisplayOfObject((Widget)dc), i) == newRoot)
       break;
   dc->drag.currScreen = ScreenOfDisplay(XtDisplayOfObject((Widget)dc), i);

@@ -379,7 +379,7 @@ static void DrawCascade(register XmCascadeButtonWidget cb)
     pixmap = CB_IsArmed(cb) && (CB_ArmedPixmap(cb) != XmUNSPECIFIED_PIXMAP) ? CB_ArmedPixmap(cb) :
                                                                               CB_CascadePixmap(cb);
     XmeGetPixmapData(XtScreen(cb), pixmap, NULL, &depth, NULL, NULL, NULL, NULL, NULL, NULL);
-    if (depth == cb->core.depth)
+    if (depth == (int)cb->core.depth)
       XCopyArea(XtDisplay(cb),
                 pixmap,
                 XtWindow(cb),

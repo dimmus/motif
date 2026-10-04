@@ -228,13 +228,13 @@ static int CreateColors(char **dataptr,
       return (XpmNoMemory);
     strncpy(buf, *defaults++, cpp);
     s = buf + cpp;
-    if (sizeof(buf) <= (s - buf))
+    if (sizeof(buf) <= (size_t)(s - buf))
       return XpmNoMemory;
     for (key = 1; key <= NKEYS; key++, defaults++) {
       if ((s2 = *defaults)) {
         s += snprintf(s, sizeof(buf) - (s - buf), "\t%s %s", xpmColorKeys[key - 1], s2);
         /* does s point out-of-bounds? */
-        if (sizeof(buf) < (s - buf))
+        if (sizeof(buf) < (size_t)(s - buf))
           return XpmNoMemory;
       }
     }

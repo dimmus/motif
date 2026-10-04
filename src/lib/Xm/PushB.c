@@ -1660,7 +1660,7 @@ static void MultiActivate(Widget wid, XEvent *buttonEvent, String *params, Cardi
    */
   if (pb->pushbutton.multiClick == XmMULTICLICK_KEEP) {
     if ((buttonEvent->xbutton.time - pb->pushbutton.armTimeStamp) >
-        XtGetMultiClickTime(XtDisplay(pb)))
+        (Time)XtGetMultiClickTime(XtDisplay(pb)))
       pb->pushbutton.click_count = 1;
     else
       pb->pushbutton.click_count++;

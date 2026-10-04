@@ -846,7 +846,7 @@ static Boolean ReadTargetsTable(Display *display, xmTargetsTable targetsTable)
           XmeWarning((Widget)XmGetXmDisplay(display), MESSAGE6);
         }
       }
-      if (i == targetsTable->numEntries) {
+      if ((Cardinal)i == targetsTable->numEntries) {
         for (; i < (int)propertyRecPtr->info.num_target_lists; i++) {
           if (!ReadTargetsCount(&bufptr, bufend, propertyRecPtr->info.byte_order, &num_targets))
             break;

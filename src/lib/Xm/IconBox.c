@@ -730,9 +730,9 @@ static void GetMinCells(Widget w, Cardinal *min_x, Cardinal *min_y)
     info = GetIconInfo(*childp);
     x = (info->cell_x < 0) ? 0 : info->cell_x;
     y = (info->cell_y < 0) ? 0 : info->cell_y;
-    if (x > *min_x)
+    if ((Cardinal)x > *min_x)
       *min_x = x;
-    if (y > *min_y)
+    if ((Cardinal)y > *min_y)
       *min_y = y;
   }
 }

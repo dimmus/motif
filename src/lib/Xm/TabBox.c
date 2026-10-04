@@ -4800,7 +4800,7 @@ static void DrawLeftToRightTab(XmTabBoxWidget tab,
                  y,
                  1);
     }
-    else if (pix_depth == XmTabBox__canvas(tab)->core.depth) {
+    else if (pix_depth == (int)XmTabBox__canvas(tab)->core.depth) {
       XCopyArea(XtDisplay(tab),
                 info->label_pixmap,
                 XiCanvas(tab),

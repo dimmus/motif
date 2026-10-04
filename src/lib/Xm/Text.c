@@ -734,7 +734,7 @@ static void RedrawChanges(XmTextWidget tw)
     r[w].from = r[tw->text.repaint.number].from;
     r[w].to = r[tw->text.repaint.number].to;
     for (i = tw->text.repaint.number - 1; i >= 0; i--) {
-      while (i < tw->text.repaint.number) {
+      while ((Cardinal)i < tw->text.repaint.number) {
         updateTo = MAX(r[i].to, updateTo);
         tw->text.repaint.number--;
         r[i].from = r[tw->text.repaint.number].from;
@@ -753,7 +753,7 @@ static void RedrawChanges(XmTextWidget tw)
 static void DoMove(XmTextWidget tw, int startcopy, int endcopy, int destcopy)
 {
   Line line = tw->text.line;
-  LineNum i;
+  int i;
   EraseInsertionPoint(tw);
   if (tw->text.disable_depth == 0 &&
       (*tw->text.output->MoveLines)(tw, (LineNum)startcopy, (LineNum)endcopy, (LineNum)destcopy))
@@ -775,7 +775,7 @@ XmTextPosition _XmTextFindScroll(XmTextWidget tw, XmTextPosition start, int delt
   register XmTextLineTable line_table;
   register unsigned int t_index;
   register unsigned int max_index = 0;
-  if (tw->text.total_lines <= tw->text.table_index)
+  if ((unsigned int)tw->text.total_lines <= tw->text.table_index)
     tw->text.table_index = tw->text.total_lines - 1;
   line_table = tw->text.line_table;
   t_index = tw->text.table_index;
@@ -786,7 +786,7 @@ XmTextPosition _XmTextFindScroll(XmTextWidget tw, XmTextPosition start, int delt
       t_index++;
     /* special handling if last lines of text are blank */
     if (t_index <= max_index && (line_table[t_index].start_pos == tw->text.last_position) &&
-        (tw->text.number_lines == -delta) && t_index == max_index)
+        ((int)tw->text.number_lines == -delta) && t_index == max_index)
       t_index++;
   }
   else
@@ -795,11 +795,11 @@ XmTextPosition _XmTextFindScroll(XmTextWidget tw, XmTextPosition start, int delt
       t_index--;
   if (delta > 0) {
     t_index += delta;
-    if (t_index > tw->text.total_lines - 1)
+    if (t_index > (unsigned int)tw->text.total_lines - 1)
       t_index = tw->text.total_lines - 1;
   }
   else {
-    if (t_index > -delta)
+    if (t_index > (unsigned int)-delta)
       t_index += delta;
     else
       t_index = 0;
@@ -818,7 +818,7 @@ static void RefigureLines(XmTextWidget tw)
   LineNum i, j;
   Line oldline = NULL;
   static XmTextPosition tell_output_force_display = -1;
-  int oldNumLines = tw->text.number_lines;
+  LineNum oldNumLines = tw->text.number_lines;
   int startcopy, endcopy, destcopy, lastcopy; /* %%% Document! */
   if (tw->text.in_refigure_lines || !tw->text.needs_refigure_lines)
     return;
@@ -880,11 +880,11 @@ static void RefigureLines(XmTextWidget tw)
         if (oldline[j].changed)
           AddRedraw(tw, oldline[j].changed_position, line[i + 1].start);
         if (i != j && line[i].start != PASTENDPOS) {
-          if (endcopy == j - 1) {
+          if (endcopy == (int)j - 1) {
             endcopy = j;
             lastcopy++;
           }
-          else if (lastcopy >= 0 && j <= lastcopy) {
+          else if (lastcopy >= 0 && j <= (LineNum)lastcopy) {
             /* This line was stomped by a previous move. */
             AddRedraw(tw, line[i].start, line[i + 1].start);
           }
@@ -978,22 +978,22 @@ static void RemoveLines(XmTextWidget tw, int num_lines, unsigned int cur_index)
   if (!num_lines)
     return;
   /* move the existing lines at the end of the buffer */
-  if (tw->text.total_lines > cur_index)
+  if ((unsigned int)tw->text.total_lines > cur_index)
     memmove((void *)&tw->text.line_table[cur_index - num_lines],
             (void *)&tw->text.line_table[cur_index],
             (size_t)((tw->text.total_lines - (cur_index)) * sizeof(XmTextLineTableRec)));
   /* reduce total line count */
   tw->text.total_lines -= num_lines;
   /* fix for bug 5166 */
-  if (tw->text.total_lines <= tw->text.table_index)
+  if ((unsigned int)tw->text.total_lines <= tw->text.table_index)
     tw->text.table_index = tw->text.total_lines - 1;
   /* Shrink Table if Necessary */
   if ((tw->text.table_size > TABLE_INCREMENT &&
-       tw->text.total_lines <= tw->text.table_size - TABLE_INCREMENT) ||
-      tw->text.total_lines <= tw->text.table_size >> 1)
+       (unsigned int)tw->text.total_lines <= tw->text.table_size - TABLE_INCREMENT) ||
+      (unsigned int)tw->text.total_lines <= tw->text.table_size >> 1)
   {
     tw->text.table_size = INIT_TABLE_SIZE;
-    while (tw->text.total_lines >= tw->text.table_size) {
+    while ((unsigned int)tw->text.total_lines >= tw->text.table_size) {
       if (tw->text.table_size < TABLE_INCREMENT)
         tw->text.table_size *= 2;
       else
@@ -1029,7 +1029,7 @@ static void AddLines(XmTextWidget tw,
                                                            sizeof(XmTextLineTableRec));
   }
   /* move the existing lines at the end of the buffer */
-  if (tw->text.total_lines > cur_index)
+  if ((unsigned int)tw->text.total_lines > cur_index)
     memmove((void *)&tw->text.line_table[cur_index + temp_index],
             (void *)&tw->text.line_table[cur_index],
             (size_t)((tw->text.total_lines - cur_index) * sizeof(XmTextLineTableRec)));
@@ -1077,7 +1077,7 @@ void _XmTextRealignLineTable(XmTextWidget tw,
     if (next_start == cur_start)
       next_start = (*tw->text.source->Scan)(
           tw->text.source, cur_start, XmSELECT_POSITION, XmsdRight, 1, TRUE);
-    if (cur_index >= table_size) {
+    if (cur_index >= (unsigned int)table_size) {
       if (table_size < TABLE_INCREMENT)
         table_size *= 2;
       else
@@ -1113,7 +1113,7 @@ static void InitializeLineTable(XmTextWidget tw, register int size)
   register unsigned int t_index;
   register XmTextLineTable line_table;
   line_table = (XmTextLineTable)_XmMallocArray(size, sizeof(XmTextLineTableRec));
-  for (t_index = 0; t_index < size; t_index++) {
+  for (t_index = 0; t_index < (unsigned int)size; t_index++) {
     line_table[t_index].start_pos = 0;
     line_table[t_index].virt_line = 0;
   }
@@ -1201,7 +1201,7 @@ void _XmTextUpdateLineTable(
   /* Find the cur_end position.
      Count the number of lines that were deleted. */
   if (end > start) {
-    if (end_index < tw->text.total_lines) {
+    if (end_index < (unsigned int)tw->text.total_lines) {
       while (end_index < max_index && line_table[end_index + 1].start_pos <= (unsigned int)cur_end)
       {
         end_index++;
@@ -1305,7 +1305,7 @@ void _XmTextUpdateLineTable(
         cur_start += (nl - ptr);
         length -= (nl - ptr);
         ptr = nl;
-        if (lines_avail && begin_index < tw->text.total_lines) {
+        if (lines_avail && begin_index < (unsigned int)tw->text.total_lines) {
           begin_index++;
           lines_avail--;
           line_table[begin_index].start_pos = (unsigned int)cur_start;
@@ -1345,7 +1345,7 @@ void _XmTextUpdateLineTable(
         cur_start++;
         if (char_size == 1 && *ptr == '\012') {
           ptr++;
-          if (lines_avail && begin_index < tw->text.total_lines) {
+          if (lines_avail && begin_index < (unsigned int)tw->text.total_lines) {
             begin_index++;
             lines_avail--;
             line_table[begin_index].start_pos = (unsigned int)cur_start;
@@ -1430,7 +1430,7 @@ void _XmTextUpdateLineTable(
       if (tw->text.top_line > tw->text.total_lines)
         tw->text.top_line = tw->text.total_lines - 1;
     }
-    if (tw->text.table_index > tw->text.total_lines)
+    if (tw->text.table_index > (unsigned int)tw->text.total_lines)
       tw->text.table_index = tw->text.total_lines;
     if (tw->text.on_or_off == on) {
       XmTextPosition cursorPos = tw->text.cursor_position;
@@ -1561,7 +1561,7 @@ void _XmTextLineInfo(XmTextWidget tw,
   else {
     if (startpos) {
       unsigned int cur_index = _XmTextGetTableIndex(tw, tw->text.line[line - 1].start);
-      if (cur_index < tw->text.total_lines - 1)
+      if (cur_index < (unsigned int)tw->text.total_lines - 1)
         *startpos = tw->text.line_table[cur_index + 1].start_pos;
       else
         *startpos = tw->text.last_position;
@@ -1689,10 +1689,10 @@ void _XmTextInvalidate(XmTextWidget tw, XmTextPosition position, XmTextPosition 
       }
     }
     if (shift) {
-      for (i = shift_start; i < tw->text.number_lines; i++) {
+      for (i = shift_start; (Cardinal)i < tw->text.number_lines; i++) {
         if ((i < (shift_start + shift)) && tw->text.line[i].extra)
           XtFree((char *)tw->text.line[i].extra);
-        if (i + shift < tw->text.number_lines) {
+        if ((Cardinal)(i + shift) < tw->text.number_lines) {
           tw->text.line[i].start = tw->text.line[i + shift].start;
           tw->text.line[i].extra = tw->text.line[i + shift].extra;
         }
@@ -2562,12 +2562,12 @@ void _XmTextSetHighlight(Widget w, XmTextPosition left, XmTextPosition right, Xm
   InsertHighlight(tw, right, endmode);
   l = tw->text.highlight.list;
   i = 1;
-  while (i < tw->text.highlight.number) {
+  while ((Cardinal)i < tw->text.highlight.number) {
     if (l[i].position >= left && l[i].position < right)
       l[i].mode = mode;
     if (l[i].mode == l[i - 1].mode) {
       tw->text.highlight.number--;
-      for (j = i; j < tw->text.highlight.number; j++)
+      for (j = i; (Cardinal)j < tw->text.highlight.number; j++)
         l[j] = l[j + 1];
     }
     else
@@ -3287,7 +3287,7 @@ void XmTextSetStringWcs(Widget widget, wchar_t *wc_value)
       /*EMPTY*/;
     tmp = _XmMallocArray(num_chars + 1, tw->text.char_size);
     result = wcstombs(tmp, wc_value, (num_chars + 1) * (int)tw->text.char_size);
-    if (result == (size_t)-1) { /* if wcstombs fails, it returns (size_t) -1 */
+    if (result == -1) { /* if wcstombs fails, it returns (size_t) -1 */
       XtFree(tmp);              /* if invalid data, pass in the empty string */
       _XmTextSetString(widget, "");
     }

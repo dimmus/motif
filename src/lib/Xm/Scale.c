@@ -1667,7 +1667,7 @@ static Dimension ScrollWidth(XmScaleWidget sw)
         if (num_managed > 3) {
           Dimension tic, diff;
           XmScrollBarWidget sb = (XmScrollBarWidget)sw->composite.children[1];
-          tmp = MAX((num_managed - 2) * MaxLabelWidth(sw), SCALE_DEFAULT_MAJOR_SIZE);
+          tmp = MAX((int)((num_managed - 2) * MaxLabelWidth(sw)), SCALE_DEFAULT_MAJOR_SIZE);
           tic = sb->primitive.highlight_thickness + sb->primitive.shadow_thickness +
                 (Dimension)(((float)SLIDER_SIZE(sw) / 2.0) + 0.5);
           diff = tic - ((int)MaxLabelWidth(sw) / 2);
@@ -1720,7 +1720,7 @@ static Dimension ScrollHeight(XmScaleWidget sw)
         if (num_managed > 3) {
           Dimension tic, diff;
           XmScrollBarWidget sb = (XmScrollBarWidget)sw->composite.children[1];
-          tmp = MAX((num_managed - 2) * MaxLabelHeight(sw), SCALE_DEFAULT_MAJOR_SIZE);
+          tmp = MAX((int)((num_managed - 2) * MaxLabelHeight(sw)), SCALE_DEFAULT_MAJOR_SIZE);
           tic = sb->primitive.highlight_thickness + sb->primitive.shadow_thickness +
                 (Dimension)(((float)SLIDER_SIZE(sw) / 2.0) + 0.5);
           diff = tic - (MaxLabelHeight(sw) / 2);
@@ -1755,7 +1755,7 @@ static void LayoutHorizontalLabels(XmScaleWidget sw,
     first_tic_dim = scrollBox->x + LeadXTic(sb, sw);
     last_tic_dim = (scrollBox->x + sb->core.width) - TrailXTic(sb, sw);
     tic_interval = (float)(last_tic_dim - first_tic_dim) / (num_managed - 3);
-    for (i = 2, tmp = first_tic_dim; i < sw->composite.num_children; i++) {
+    for (i = 2, tmp = first_tic_dim; (Cardinal)i < sw->composite.num_children; i++) {
       if (LayoutIsRtoLM(sw) && sw->scale.processing_direction == XmMAX_ON_LEFT)
         w = sw->composite.children[sw->composite.num_children - i + 1];
       else
@@ -1937,7 +1937,7 @@ static void LayoutVerticalLabels(XmScaleWidget sw,
     first_tic_dim = scrollBox->y + LeadYTic(sb, sw);
     last_tic_dim = (scrollBox->y + sb->core.height) - TrailYTic(sb, sw);
     tic_interval = (float)(last_tic_dim - first_tic_dim) / (num_managed - 3);
-    for (i = 2, tmp = first_tic_dim; i < sw->composite.num_children; i++) {
+    for (i = 2, tmp = first_tic_dim; (Cardinal)i < sw->composite.num_children; i++) {
       w = sw->composite.children[i];
       if (!XtIsManaged(w) || ((Object)w)->object.being_destroyed)
         continue;

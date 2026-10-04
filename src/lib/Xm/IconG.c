@@ -1654,7 +1654,7 @@ static void Redisplay(Widget wid,
     else {
       XSetClipMask(XtDisplay(wid), IG_NormalGC(wid), None);
     }
-    if (depth == XtParent(wid)->core.depth)
+    if (depth == (int)XtParent(wid)->core.depth)
       XCopyArea(XtDisplay(wid),
                 IG_LargeIconPixmap(wid),
                 XtWindow(wid),
@@ -1711,7 +1711,7 @@ static void Redisplay(Widget wid,
     else {
       XSetClipMask(XtDisplay(wid), IG_NormalGC(wid), None);
     }
-    if (depth == XtParent(wid)->core.depth)
+    if (depth == (int)XtParent(wid)->core.depth)
       XCopyArea(XtDisplay(wid),
                 IG_SmallIconPixmap(wid),
                 XtWindow(wid),

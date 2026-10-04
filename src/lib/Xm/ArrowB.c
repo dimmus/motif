@@ -412,7 +412,7 @@ static void MultiActivate(Widget wid, XEvent *buttonEvent, String *params, Cardi
   XmArrowButtonWidget aw = (XmArrowButtonWidget)wid;
   if (aw->arrowbutton.multiClick == XmMULTICLICK_KEEP) {
     if ((buttonEvent->xbutton.time - aw->arrowbutton.armTimeStamp) >
-        XtGetMultiClickTime(XtDisplay(aw)))
+        (Time)XtGetMultiClickTime(XtDisplay(aw)))
       aw->arrowbutton.click_count = 1;
     else
       aw->arrowbutton.click_count++;

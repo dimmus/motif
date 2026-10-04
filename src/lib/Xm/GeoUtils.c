@@ -1366,7 +1366,7 @@ static void FitBoxesProportional(XmKidGeometry rowPtr,
     }
   }
   else /* boxWidth < numBoxes */ {
-    if ((-amtOffset) > numBoxes) {
+    if ((-amtOffset) > (int)numBoxes) {
       boxWidth = (-amtOffset) / numBoxes;
     }
     else {

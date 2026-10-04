@@ -241,7 +241,7 @@ static int _XmTypedArgToArg(Widget widget,
   }
   to_val.addr = NULL;
   from_val.size = typed_arg->size;
-  if ((strcmp(typed_arg->type, XtRString) == 0) || (typed_arg->size > sizeof(XtArgVal))) {
+  if ((strcmp(typed_arg->type, XtRString) == 0) || ((size_t)typed_arg->size > sizeof(XtArgVal))) {
     from_val.addr = (XPointer)typed_arg->value;
   }
   else {

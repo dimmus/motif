@@ -1848,7 +1848,7 @@ void _XmRedisplayLabG(Widget wid, XEvent *event, Region region, LRectangle *back
       if (Pix(lw) != XmUNSPECIFIED_PIXMAP) {
         gc = LabG_NormalGC(lw);
         XmeGetPixmapData(XtScreen(lw), Pix(lw), NULL, &depth, NULL, NULL, NULL, NULL, NULL, NULL);
-        if (depth == XtParent(lw)->core.depth)
+        if (depth == (int)XtParent(lw)->core.depth)
           XCopyArea(XtDisplay(lw),
                     Pix(lw),
                     XtWindow(lw),
@@ -1880,7 +1880,7 @@ void _XmRedisplayLabG(Widget wid, XEvent *event, Region region, LRectangle *back
       if (pix_use != XmUNSPECIFIED_PIXMAP) {
         gc = LabG_InsensitiveGC(lw);
         XmeGetPixmapData(XtScreen(lw), pix_use, NULL, &depth, NULL, NULL, NULL, NULL, NULL, NULL);
-        if (depth == XtParent(lw)->core.depth)
+        if (depth == (int)XtParent(lw)->core.depth)
           XCopyArea(XtDisplay(lw),
                     pix_use,
                     XtWindow(lw),

@@ -4369,7 +4369,7 @@ static void RepositionChild(XmNotebookWidget nb, Widget child)
     return;
   /* found no one less than, move others down, and insert at last position */
   if (ins_pos < 0) {
-    for (i = cur_pos; i < nb->composite.num_children - 1; i++)
+    for (i = cur_pos; (Cardinal)i < nb->composite.num_children - 1; i++)
       nb->composite.children[i] = nb->composite.children[i + 1];
     nb->composite.children[nb->composite.num_children - 1] = child;
   }
@@ -4923,7 +4923,7 @@ static Widget GetNextTab(XmNotebookWidget nb,
   target = NULL;
   target_found = False;
   if (NB_IS_CHILD_MAJOR(target_child_type)) {
-    while ((!target_found) && (i < nb->composite.num_children)) {
+    while ((!target_found) && ((Cardinal)i < nb->composite.num_children)) {
       child = nb->composite.children[i];
       nc = NotebookConstraint(child);
       if ((nc->active) && (NB_IS_CHILD_MAJOR(nc->child_type)))
@@ -4965,7 +4965,7 @@ static Widget GetNextTab(XmNotebookWidget nb,
     top_major_page = nb->notebook.top_major ?
                          NotebookConstraint(nb->notebook.top_major)->page_number :
                          nb->notebook.first_page_number - 1;
-    while ((!target_found) && (i < nb->composite.num_children)) {
+    while ((!target_found) && ((Cardinal)i < nb->composite.num_children)) {
       child = nb->composite.children[i];
       nc = NotebookConstraint(child);
       if (NB_IS_CHILD_MAJOR(nc->child_type) && (nc->page_number > top_major_page))

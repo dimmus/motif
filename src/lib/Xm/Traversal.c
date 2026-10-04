@@ -1163,7 +1163,7 @@ XmVisibility XmGetVisibility(Widget wid)
   i++;
   windowptr++;
   /* process windows above the window of interest */
-  if (i < numchildren) {
+  if ((unsigned int)i < numchildren) {
     XRectangle parent_rect, srcRectB, intersect_rect;
     Region region = XCreateRegion();
     Region tmp_region = XCreateRegion();
@@ -1171,7 +1171,7 @@ XmVisibility XmGetVisibility(Widget wid)
     XmVisibility value;
     XUnionRectWithRegion(&rect, region, region);
     _XmSetRect(&parent_rect, XtParent(wid));
-    while (i < numchildren) {
+    while ((unsigned int)i < numchildren) {
       if (SiblingGeometry(XtParent(wid), *windowptr, &srcRectB)) {
         srcRectB.x += parent_rect.x;
         srcRectB.y += parent_rect.y;

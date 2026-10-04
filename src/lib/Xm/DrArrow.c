@@ -74,7 +74,7 @@ void XmeDrawArrow(Display *display,
     _XmAppUnlock(app);
     return;
   }
-  if (allocated < size) {
+  if (allocated < (unsigned int)size) {
     _XmProcessLock();
     top = (XRectangle *)_XmReallocArray((char *)top, size / 2 + 6, sizeof(XRectangle));
     cent = (XRectangle *)_XmReallocArray((char *)cent, size / 2 + 6, sizeof(XRectangle));

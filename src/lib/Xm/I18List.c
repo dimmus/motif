@@ -845,7 +845,7 @@ static void ButtonDownAction(Widget w, XEvent *event, String *params, Cardinal *
   }
   else /* reset search column since user selected a new row */
     XmI18List_search_column(ilist) = -1;
-  if ((event->xbutton.time - XmI18List_time(ilist)) > XtGetMultiClickTime(XtDisplay(w))) {
+  if ((event->xbutton.time - XmI18List_time(ilist)) > (Time)XtGetMultiClickTime(XtDisplay(w))) {
     SingleClick(ilist);
   }
 }
@@ -880,7 +880,7 @@ static void ButtonUpOrLeaveAction(Widget w, XEvent *event, String *params, Cardi
    * notify_type == True specifies double click, False is a single click.
    */
   notify_type = ((event->xbutton.time - XmI18List_time(ilist)) <=
-                 XtGetMultiClickTime(XtDisplay(w)));
+                 (Time)XtGetMultiClickTime(XtDisplay(w)));
   Notify(w, notify_type);
   XmI18List_time(ilist) = event->xbutton.time;
   /*
@@ -3127,14 +3127,14 @@ static void ListConvert(Widget w, XtPointer client_data, XmConvertCallbackStruct
       int rowcount;
       int *rows = GetSelectedRows(lw, &rowcount);
       concat = NULL;
-      for (row = 0; row < rowcount; row++) {
+      for (row = 0; (int)row < rowcount; row++) {
         if (concat) {
           concat = XmStringConcatAndFree(concat, XmStringCopy(GetConcatenatedRow(w, rows[row])));
         }
         else {
           concat = GetConcatenatedRow(w, rows[row]);
         }
-        if (row < rowcount - 1) {
+        if ((int)row < rowcount - 1) {
           concat = XmStringConcatAndFree(concat, XmStringCopy(sep));
         }
       }

@@ -1385,7 +1385,7 @@ static void ConstantLayout(XmScrolledWindowWidget sw)
       break;
   }
   /* ran thru the entire list: no managed child in the clipwindow */
-  if (i == clip->composite.num_children) {
+  if ((Cardinal)i == clip->composite.num_children) {
     if (VSBExists) {
       XmeConfigureObject((Widget)sw->swindow.vScrollBar,
                          sw->core.width,

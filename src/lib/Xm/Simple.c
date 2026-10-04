@@ -312,7 +312,7 @@ Widget XmCreateSimplePulldownMenu(Widget parent, String name, ArgList args, Card
             (i == mr.post_from_button))
           break;
       }
-      if (i < num_buttons) {
+      if ((Cardinal)i < num_buttons) {
         n = 0;
         XtSetArg(local_args[n], XmNsubMenuId, rc);
         n++;
@@ -378,7 +378,7 @@ Widget XmCreateSimpleOptionMenu(Widget parent, String name, ArgList args, Cardin
           button_count++;
         }
       }
-      if (i < num_buttons) {
+      if ((Cardinal)i < num_buttons) {
         n = 0;
         XtSetArg(local_args[n], XmNmenuHistory, buttons[i]);
         n++;

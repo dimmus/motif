@@ -582,7 +582,7 @@ static void ClassInitialize(void)
   }
   _XmProcessUnlock();
   _XmProcessLock();
-  for (i = 0, j = num; i < wc_num_res; i++, j++) {
+  for (i = 0, j = num; (Cardinal)i < wc_num_res; i++, j++) {
     merged_list[j] = xmVendorShellExtClassRec.object_class.resources[i];
   }
   _XmProcessUnlock();

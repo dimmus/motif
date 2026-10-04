@@ -782,7 +782,7 @@ int _XmVirtKeysLoadFallbackBindings(Display *display, String *binding)
   }
   /* Check hardcoded fallbacks (for 1.1 bc) */
   if (*binding == NULL) {
-    for (i = 0, currDefault = fallbackBindingStrings; i < XtNumber(fallbackBindingStrings);
+    for (i = 0, currDefault = fallbackBindingStrings; (unsigned int)i < XtNumber(fallbackBindingStrings);
          i++, currDefault++)
     {
       if (strcmp(currDefault->vendorName, ServerVendor(display)) == 0) {

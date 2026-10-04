@@ -642,7 +642,7 @@ XmString _XmStringNCreate(char *text, XmStringTag tag, int len)
     return ((XmString)NULL);
   if (!tag)
     return ((XmString)NULL);
-  t_length = ((len >= 0) ? len : strlen(text));
+  t_length = ((len >= 0) ? len : (int)strlen(text));
   if ((tag == XmFONTLIST_DEFAULT_TAG) || (strcmp(tag, XmFONTLIST_DEFAULT_TAG) == 0)) {
     curtag = tag;
     type = XmMULTIBYTE_TEXT;
@@ -704,13 +704,13 @@ XmString XmStringDirectionCreate(XmStringDirection direction)
       break;
     }
   /* Create the return string if necessary and this is a known direction. */
-  if (!opt_str && (index < XtNumber(dir_index))) {
+  if (!opt_str && ((unsigned int)index < XtNumber(dir_index))) {
     _XmStrCreate(opt_str, XmSTRING_OPTIMIZED, 0);
     _XmStrDirection(opt_str) = direction;
     cache_str[index] = opt_str;
   }
   /* Try to copy a cached string by incrementing its reference count. */
-  if ((index < XtNumber(dir_index)) && (_XmStrRefCountInc(opt_str) == 0)) {
+  if (((unsigned int)index < XtNumber(dir_index)) && (_XmStrRefCountInc(opt_str) == 0)) {
     _XmStrRefCountDec(opt_str); /* Undo previous increment. */
     XmStringFree(opt_str);      /* Release our cached copy. */
     cache_str[index] = NULL;
@@ -1171,7 +1171,7 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
     }
     _XmStrEntry(a_str) =
         (_XmStringEntry *)_XmReallocArray((char *)_XmStrEntry(a_str), lc, sizeof(_XmStringEntry));
-    for (i = (segs ? 0 : a_lc); i < lc; i++)
+    for (i = (segs ? 0 : a_lc); (unsigned int)i < lc; i++)
       _XmStrEntry(a_str)[i] = NULL;
   }
   else if (_XmStrOptimized(a)) {
@@ -1182,7 +1182,7 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
     }
     _XmStrEntry(a_str) =
         (_XmStringEntry *)_XmReallocArray((char *)_XmStrEntry(a_str), lc, sizeof(_XmStringEntry));
-    for (i = (segs ? 0 : a_lc); i < lc; i++)
+    for (i = (segs ? 0 : a_lc); (unsigned int)i < lc; i++)
       _XmStrEntry(a_str)[i] = NULL;
   }
   else {
@@ -2903,7 +2903,7 @@ static void SubStringPosition(Boolean one_byte,
       begin = i;
       if (type == XmWIDECHAR_TEXT) {
         len_a = sizeof(wchar_t);
-        for (j = 0; j < under_seg_len; j += sizeof(wchar_t))
+        for (j = 0; (unsigned int)j < under_seg_len; j += sizeof(wchar_t))
           if (((wchar_t *)a)[(i + j) / len_a] != ((wchar_t *)b)[j / len_a]) {
             fail = TRUE;
             break;
@@ -2914,7 +2914,7 @@ static void SubStringPosition(Boolean one_byte,
         if (len_a < 1)
           return;
         len_a1 = len_a;
-        for (j = 0; j < under_seg_len; j += len_b) {
+        for (j = 0; (unsigned int)j < under_seg_len; j += len_b) {
           len_b = mblen(&b[j], MB_CUR_MAX);
           if (len_b < 1)
             return;
@@ -3196,7 +3196,7 @@ extern void _XmStringDrawSegment(Display *d,
         int len;
         q = ltor_text;
         p += seg_len;
-        for (i = 0; i < seg_len; i += len) {
+        for (i = 0; (unsigned int)i < seg_len; i += len) {
           len = mblen(q, MB_CUR_MAX);
           if (len < 1) { /* Something went wrong, just return for now. */
             XtFree(flip_char_extra);
@@ -5472,7 +5472,7 @@ static Boolean SpecifiedSegmentExtents(_XmStringEntry entry,
             break;
           }
       j = depth;
-      for (i = (depth + 1); i < tag_count; i++)
+      for (i = (depth + 1); (unsigned int)i < tag_count; i++)
         if (tags[i] != NULL) {
           tags[j] = tags[i];
           j++;
@@ -6361,7 +6361,7 @@ static Boolean match_pattern(XtPointer text,
     (void)tmp; /* suppress unused variable warning */
     return !strncmp((char *)text, mb_pattern, char_len);
   }
-  else if (strlen((char *)pattern->pattern) == char_len) {
+  else if (strlen((char *)pattern->pattern) == (size_t)char_len) {
     /* The normal case: mbs text and pattern. */
     return !strncmp((char *)text, (char *)pattern->pattern, char_len);
   }
@@ -6542,7 +6542,7 @@ XmString XmStringParseText(XtPointer text,
   init_char_proc = (XmInitialDirectionProc)method;
   halt = (end_ptr && (ptr >= (char *)end_ptr));
   while (!halt && (wide_char ? *((wchar_t *)ptr) : *ptr)) {
-    int len = (wide_char ? sizeof(wchar_t) : mblen(ptr, MB_CUR_MAX));
+    int len = (wide_char ? (int)sizeof(wchar_t) : mblen(ptr, MB_CUR_MAX));
     advanced = False;
     /* If we have an invalid character, treat it as a single byte. */
     if (len < 0)
@@ -6762,7 +6762,7 @@ static void unparse_components(char **result,
   int n_pat;
   int n_comp;
   /* Compare each pattern component. */
-  for (n_pat = 0; !match && (n_pat < parse_count); n_pat++) {
+  for (n_pat = 0; !match && ((Cardinal)n_pat < parse_count); n_pat++) {
     pat = parse_table[n_pat];
     if (unparse_is_plausible(pat)) {
       _XmStringContextRec m_context, p_context;

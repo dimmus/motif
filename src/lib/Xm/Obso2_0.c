@@ -363,7 +363,7 @@ void _XmSortResourceList(XrmResource *list[], Cardinal len)
       p = list[n];
       break;
     }
-  if (n == len)
+  if ((Cardinal)n == len)
     return; /* No unit type resource found in this list. */
   else {
     for (i = n; i > 0; i--)

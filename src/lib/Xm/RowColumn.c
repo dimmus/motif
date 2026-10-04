@@ -852,7 +852,7 @@ static Cardinal InsertPosition(Widget w)
    * use it as the new position for this child
    */
   if (RCIndex(w) != XmLAST_POSITION) {
-    if ((RCIndex(w) >= 0) && (RCIndex(w) <= rc->composite.num_children)) {
+    if ((RCIndex(w) >= 0) && ((Cardinal)RCIndex(w) <= rc->composite.num_children)) {
       return RCIndex(w);
     }
   }
@@ -935,10 +935,10 @@ static void InsertChild(Widget w)
   if (RCIndex(w) == XmLAST_POSITION) {
     RCIndex(w) = m->composite.num_children - 1;
   }
-  if (RCIndex(w) != (m->composite.num_children - 1)) {
+  if (RCIndex(w) != (int)m->composite.num_children - 1) {
     i = RCIndex(w);
     p = m->composite.children + i;
-    while (++i < m->composite.num_children) {
+    while ((Cardinal)++i < m->composite.num_children) {
       ++p;
       RCIndex(*p) = i;
     }
@@ -1032,7 +1032,7 @@ static void DeleteChild(Widget child)
    * the new kid was not deleted from the end of the list.
    * Composite class delete_child has already decremented num_chidren!
    */
-  if (RCIndex(child) != m->composite.num_children)
+  if (RCIndex(child) != (int)m->composite.num_children)
     ForAllChildren(m, i, p)
     {
       RCIndex(*p) = i;
@@ -2385,7 +2385,7 @@ static Boolean ConstraintSetValues(Widget old,
     /* special public value */
     if (RCIndex(new_w) == XmLAST_POSITION)
       RCIndex(new_w) = rc->composite.num_children - 1;
-    if ((RCIndex(new_w) < 0) || (RCIndex(new_w) >= rc->composite.num_children)) {
+    if ((RCIndex(new_w) < 0) || ((Cardinal)RCIndex(new_w) >= rc->composite.num_children)) {
       RCIndex(new_w) = RCIndex(old);
     }
     else {

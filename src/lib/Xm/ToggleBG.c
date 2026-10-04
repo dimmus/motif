@@ -515,7 +515,7 @@ static void ClassInitialize(void)
   for (i = 0; (Cardinal)i < num; i++)
     merged_list[i] = uncompiled[i];
   XtFree((char *)uncompiled);
-  for (i = 0, j = num; i < wc_num_res; i++, j++)
+  for (i = 0, j = num; (Cardinal)i < wc_num_res; i++, j++)
     merged_list[j] = xmToggleButtonGCacheObjClassRec.object_class.resources[i];
   xmToggleButtonGCacheObjClassRec.object_class.resources = merged_list;
   xmToggleButtonGCacheObjClassRec.object_class.num_resources = wc_num_res + sc_num_res;

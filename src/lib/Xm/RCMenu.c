@@ -879,7 +879,7 @@ void _XmRCArmAndActivate(Widget w, XEvent *event, String *parms, Cardinal *num_p
           break;
       }
       /* See if we found one */
-      if (i >= m->composite.num_children) {
+      if ((Cardinal)i >= m->composite.num_children) {
         /* If we haven't,  and there's no help menu,  then fail */
         if (!(RC_HelpPb(m) && XmIsTraversable((Widget)RC_HelpPb(m)))) {
           m->manager.traversal_on = False;
@@ -2286,7 +2286,7 @@ static Boolean SearchMenu(XmRowColumnWidget search_m,
   register Widget *q;
   register int i;
   if (!InMenu(search_m, parent_m, child, w)) {
-    for (i = 0, q = search_m->composite.children; i < search_m->composite.num_children; i++, q++) {
+    for (i = 0, q = search_m->composite.children; (Cardinal)i < search_m->composite.num_children; i++, q++) {
       if (XtIsManaged(*q)) {
         if (XmIsCascadeButtonGadget(*q)) {
           XmCascadeButtonGadget p = (XmCascadeButtonGadget)*q;
@@ -2354,7 +2354,7 @@ static int IsInWidgetList(register XmRowColumnWidget m, RectObj w)
   register int i;
   if ((m == NULL) || (w == NULL))
     return (FALSE);
-  for (i = 0, q = m->composite.children; i < m->composite.num_children; i++, q++)
+  for (i = 0, q = m->composite.children; (Cardinal)i < m->composite.num_children; i++, q++)
     if ((*q == (Widget)w) && IsManaged(*q))
       return (TRUE);
   return (FALSE);

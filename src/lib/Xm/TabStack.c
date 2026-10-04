@@ -2575,7 +2575,7 @@ static void Layout(XmTabStackWidget tab)
   /*
    * ... And now place the kiddies.
    */
-  for (i = 0, kid = tab->composite.children; i < tab->composite.num_children; ++i, ++kid) {
+  for (i = 0, kid = tab->composite.children; (Cardinal)i < tab->composite.num_children; ++i, ++kid) {
     if (*kid == XmTabStack_tab_box(tab) || !XtIsManaged(*kid))
       continue;
     if (XmTabStack__active_child(tab) == *kid) {
@@ -2622,7 +2622,7 @@ static void TabSelectedCallback(Widget widget, XtPointer client, XtPointer cbdat
   for (i = 0; i < tab->composite.num_children; ++i, ++kid) {
     if (!XtIsManaged(*kid) || IsTabBox(tab, *kid))
       continue;
-    if (idx == info->tab_index) {
+    if ((int)idx == info->tab_index) {
       active = *kid;
       break;
     }
@@ -3439,7 +3439,7 @@ Widget XmTabStackIndexToWidget(Widget widget, int idx)
   {
     if (IsTabBox(tab, *kid) || !XtIsManaged(*kid))
       continue;
-    if (cnt++ == idx) {
+    if ((int)cnt++ == idx) {
       _XmAppUnlock(app);
       return (*kid);
     }

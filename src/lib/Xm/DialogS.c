@@ -167,12 +167,12 @@ static void ClassInitialize(void)
   }
   XtFree((char *)uncompiled);
   res_list = xmDialogShellExtClassRec.object_class.resources;
-  for (i = 0, j = num; i < wc_num_res; i++) {
+  for (i = 0, j = num; (Cardinal)i < wc_num_res; i++) {
     k = 0;
-    while ((k < sc_num_res) &&
+    while (((Cardinal)k < sc_num_res) &&
            (strcmp(merged_list[k].resource_name, res_list[i].resource_name) != 0))
       k++;
-    if ((k < sc_num_res) && (strcmp(merged_list[k].resource_name, res_list[i].resource_name) == 0))
+    if (((Cardinal)k < sc_num_res) && (strcmp(merged_list[k].resource_name, res_list[i].resource_name) == 0))
       merged_list[k] = res_list[i];
     else {
       merged_list[j] = xmDialogShellExtClassRec.object_class.resources[i];

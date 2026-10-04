@@ -694,7 +694,7 @@ static Boolean ProcessKey(XmRowColumnWidget rowcol, XEvent *event)
   /* Try to use it on the current rowcol */
   if (!CheckKey(rowcol, event)) {
     /* not used, try moving down the cascade */
-    for (i = 0; (i < rowcol->composite.num_children) && (!found); i++) {
+    for (i = 0; ((Cardinal)i < rowcol->composite.num_children) && (!found); i++) {
       child = rowcol->composite.children[i];
       /* only check sensitive and managed cascade buttons */
       if (XtIsSensitive(child) && XtIsManaged(child)) {
@@ -998,10 +998,10 @@ void XmRemoveFromPostFromList(Widget m, Widget widget)
            is beyond me.  But just in case,  avoid crashing */
       list = (PopupList)_XmGetHashEntry(popup_table, (XmHashKey)widget);
       /* Remove from associated list */
-      for (i = 0; i < list->num_popups;) {
+      for (i = 0; (Cardinal)i < list->num_popups;) {
         if (list->popups[i] == XtParent(m)) {
           /* First shift all the remaining elements */
-          for (j = i; j < list->num_popups - 1; j++) {
+          for (j = i; (Cardinal)j < list->num_popups - 1; j++) {
             list->popups[j] = list->popups[j + 1];
           }
           list->num_popups--;

@@ -486,7 +486,7 @@ static void Initialize(Widget rq, /* unused */
         }
       }
     }
-    if (savetimeout != -1) /* Restore the timeout if we had changed it */
+    if (savetimeout != (unsigned long)-1) /* Restore the timeout if we had changed it */
       XtAppSetSelectionTimeout(XtWidgetToApplicationContext(nw), savetimeout);
   }
   if (new_obj->color_obj.useMultiColorIcons == UNSPECIFIED_USE_MULTI_COLOR_ICONS) {

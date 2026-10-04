@@ -2026,7 +2026,7 @@ static void SpinNSetValue(Widget nav, XmNavigatorData nav_data, Boolean notify)
      If there is only one dimension set, the following loop is only
      rnu once since the mask is update at the end of it */
   mask = spinW->spinBox.dim_mask;
-  for (numericCount = 0, i = 0; i < SB_ChildCount(spinW) && numericCount < 2 && mask; i++) {
+  for (numericCount = 0, i = 0; (Cardinal)i < SB_ChildCount(spinW) && numericCount < 2 && mask; i++) {
     spinC = SB_GetConstraintRec(spinW->composite.children[i]);
     if (SB_ChildIsNumeric(spinC)) {
       argCount = 0;
@@ -2097,7 +2097,7 @@ static void SpinNGetValue(Widget nav, XmNavigatorData nav_data)
   mask = nav_data->dimMask = spinW->spinBox.dim_mask;
   if (nav_data->valueMask & (NavValue | NavMinimum | NavMaximum | NavIncrement)) {
     /* get the value out of the numeric children, in order  */
-    for (numericCount = 0, i = 0; i < SB_ChildCount(spinW) && numericCount < 2 && mask; i++) {
+    for (numericCount = 0, i = 0; (Cardinal)i < SB_ChildCount(spinW) && numericCount < 2 && mask; i++) {
       spinC = SB_GetConstraintRec(spinW->composite.children[i]);
       if (SB_ChildIsNumeric(spinC)) {
         numericCount++;

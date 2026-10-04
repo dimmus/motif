@@ -143,7 +143,7 @@ static int HashTableGrows(xpmHashTable *table)
   table->atomTable = atomTable;
   for (p = atomTable + size; p > atomTable;)
     *--p = NULL;
-  for (i = 0, p = t; i < oldSize; i++, p++)
+  for (i = 0, p = t; (unsigned int)i < oldSize; i++, p++)
     if (*p) {
       xpmHashAtom *ps = xpmHashSlot(table, (*p)->name);
       *ps = *p;

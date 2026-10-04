@@ -182,7 +182,7 @@ static DtCachedDir MakeCachedDirEntry(String dirName)
       validDir->nameOffsets[0] = 0;
       nameHeap = (String) & (validDir->nameOffsets[numFiles + 1]);
       /* Copy the strings from stackBuf to nameHeap.  Omit the nulls. */
-      for (i = 0, p = stackBuf; i < validDir->numFiles; i++, p = p + strlen(p) + 1) {
+      for (i = 0, p = stackBuf; (int)i < validDir->numFiles; i++, p = p + strlen(p) + 1) {
         validDir->nameOffsets[i + 1] = validDir->nameOffsets[i] + strlen(p);
         memcpy(&(nameHeap[validDir->nameOffsets[i]]), p, strlen(p));
       }
@@ -220,17 +220,17 @@ void XmeFlushIconFileCache(String path)
     dirNameLen = strlen(path);
   else
     dirNameLen = 0;
-  for (i = 0; i < cacheList.numDirs; i++) {
+  for (i = 0; (int)i < cacheList.numDirs; i++) {
     DtValidCachedDir currDir;
     currDir = (DtValidCachedDir)cacheList.dirs[i];
-    if (!path || ((currDir->dirNameLen == dirNameLen) &&
+    if (!path || ((currDir->dirNameLen == (int)dirNameLen) &&
                   (strncmp(currDir->dirName, path, dirNameLen) == 0)))
     {
       XtFree(currDir->dirName);
       XtFree((char *)currDir);
       if (path) {
         /* ripple down the dir array */
-        for (; i < cacheList.numDirs - 1; i++)
+        for (; (int)i < cacheList.numDirs - 1; i++)
           cacheList.dirs[i] = cacheList.dirs[i + 1];
         cacheList.numDirs--;
         _XmProcessUnlock();
@@ -238,7 +238,7 @@ void XmeFlushIconFileCache(String path)
       }
     }
   }
-  if (path && (i == cacheList.numDirs)) {
+  if (path && ((int)i == cacheList.numDirs)) {
     _XmProcessUnlock();
     return;
   }
@@ -274,12 +274,12 @@ static int CheckDirCache(String path)
    */
   _XmProcessLock();
   numDirs = cacheList.numDirs;
-  for (i = 0; i <= numDirs; i++) {
+  for (i = 0; (int)i <= numDirs; i++) {
     String currName;
     int currNameLen;
     String nameHeap;
     DtValidCachedDir currDir;
-    if (i == cacheList.numDirs) {
+    if ((int)i == cacheList.numDirs) {
       /*
        * we didn't get a hit on the directory list so create a new one
        */
@@ -304,7 +304,7 @@ static int CheckDirCache(String path)
           break;
         case DtVALID_CACHED_DIR:
           nameHeap = (String) & (currDir->nameOffsets[currDir->numFiles + 1]);
-          for (j = 0; j < currDir->numFiles; j++) {
+          for (j = 0; (int)j < currDir->numFiles; j++) {
             /*
              * nameOffsets has an extra offset to indicate the
              * end of the last name (to handle border condition

@@ -386,7 +386,7 @@ static void MultiActivate(Widget wid, XEvent *buttonEvent, String *params, Cardi
    */
   if (db->drawnbutton.multiClick == XmMULTICLICK_KEEP) {
     if ((buttonEvent->xbutton.time - db->drawnbutton.armTimeStamp) >
-        XtGetMultiClickTime(XtDisplay(db)))
+        (Time)XtGetMultiClickTime(XtDisplay(db)))
       db->drawnbutton.click_count = 1;
     else
       db->drawnbutton.click_count++;

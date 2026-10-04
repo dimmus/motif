@@ -390,7 +390,7 @@ int xpmGetCmt(xpmData *data, char **cmt)
 {
   if (!data->type)
     *cmt = NULL;
-  else if (data->CommentLength != 0 && data->CommentLength < UINT_MAX - 1) {
+  else if (data->CommentLength != 0 && (unsigned int)data->CommentLength < UINT_MAX - 1) {
     if ((*cmt = (char *)XpmMalloc(data->CommentLength + 1)) == NULL)
       return XpmNoMemory;
     strncpy(*cmt, data->Comment, data->CommentLength);

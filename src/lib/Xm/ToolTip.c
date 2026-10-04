@@ -179,7 +179,7 @@ void _XmToolTipEnter(Widget wid, XEvent *event, String *params, Cardinal *num_pa
   if ((XmIsPrimitive(wid) || XmIsGadget(wid)) && XmGetToolTipString(wid)) {
     if (ttp->enable && !ttp->timer) {
       unsigned long delay;
-      if (event && (event->xcrossing.time - ttp->leave_time < ttp->post_delay)) {
+      if (event && (event->xcrossing.time - ttp->leave_time < (Time)ttp->post_delay)) {
         delay = 0;
       }
       else {

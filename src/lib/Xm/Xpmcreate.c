@@ -996,7 +996,7 @@ static int CreateXImage(Display *display,
    * On failure, destroy the image and clear *image_return, so that our
    * callers' error paths don't destroy it a second time.
    */
-  if (height != 0 && (*image_return)->bytes_per_line >= INT_MAX / height) {
+  if (height != 0 && (unsigned int)(*image_return)->bytes_per_line >= INT_MAX / height) {
     XDestroyImage(*image_return);
     *image_return = NULL;
     return XpmNoMemory;
@@ -1181,7 +1181,7 @@ static void PutImagePixels(XImage *image,
     for (y = 0; y < height; y++)            /* how can we trust height */
       for (x = 0; x < width; x++, iptr++) { /* how can we trust width */
         pixel = pixels[*iptr];
-        for (i = 0, px = pixel; i < sizeof(unsigned long); i++, px >>= 8)
+        for (i = 0, px = pixel; i < (int)sizeof(unsigned long); i++, px >>= 8)
           ((unsigned char *)&pixel)[i] = px;
         src = &data[XYINDEX(x, y, image)];
         dst = (char *)&px;
@@ -1205,7 +1205,7 @@ static void PutImagePixels(XImage *image,
         pixel = pixels[*iptr];
         if (depth == 4)
           pixel &= 0xf;
-        for (i = 0, px = pixel; i < sizeof(unsigned long); i++, px >>= 8)
+        for (i = 0, px = pixel; i < (int)sizeof(unsigned long); i++, px >>= 8)
           ((unsigned char *)&pixel)[i] = px;
         src = &data[ZINDEX(x, y, image)];
         dst = (char *)&px;
@@ -1627,7 +1627,7 @@ static int PutPixel1(register XImage *ximage, int x, int y, unsigned long pixel)
   int nbytes;
   if (x < 0 || y < 0)
     return 0;
-  for (i = 0, px = pixel; i < sizeof(unsigned long); i++, px >>= 8)
+  for (i = 0, px = pixel; i < (int)sizeof(unsigned long); i++, px >>= 8)
     ((unsigned char *)&pixel)[i] = px;
   src = &ximage->data[XYINDEX(x, y, ximage)];
   dst = (char *)&px;
@@ -1658,7 +1658,7 @@ static int PutPixel(register XImage *ximage, int x, int y, unsigned long pixel)
   ibpp = ximage->bits_per_pixel;
   if (ximage->depth == 4)
     pixel &= 0xf;
-  for (i = 0, px = pixel; i < sizeof(unsigned long); i++, px >>= 8)
+  for (i = 0, px = pixel; i < (int)sizeof(unsigned long); i++, px >>= 8)
     ((unsigned char *)&pixel)[i] = px;
   src = &ximage->data[ZINDEX(x, y, ximage)];
   dst = (char *)&px;

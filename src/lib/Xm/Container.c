@@ -4521,12 +4521,12 @@ static XmTabList GetDumbTabList(int tab_size, Cardinal asked_num_tab)
   XmTabList Tab_list = NULL;
   Cardinal i, prev_num_tab = Num_tab;
   _XmProcessLock();
-  if (Num_tab < asked_num_tab) {
+  if ((Cardinal)Num_tab < asked_num_tab) {
     Num_tab = MAX(asked_num_tab, 100); /* HACKKKK */
     Tab_pool = (XmTab *)_XmReallocArray((char *)Tab_pool, Num_tab, sizeof(XmTab));
   }
   /* create more tabs */
-  for (i = prev_num_tab; i < Num_tab; i++)
+  for (i = prev_num_tab; i < (Cardinal)Num_tab; i++)
     Tab_pool[i] = XmTabCreate(0.0, XmPIXELS, XmABSOLUTE, XmALIGNMENT_BEGINNING, XmS);
   /* update the values */
   for (i = 0; i < asked_num_tab; i++)
@@ -5971,7 +5971,7 @@ static Boolean SetupDrag(Widget wid,
   multi_click_time = XtGetMultiClickTime(XtDisplay(wid));
   click_time = event->xbutton.time;
   if ((cw->container.anchor_cwid == current_cwid) &&
-      ((click_time - cw->container.last_click_time) < multi_click_time))
+      ((click_time - cw->container.last_click_time) < (Time)multi_click_time))
   {
     cw->container.last_click_time = click_time;
     if (cw->container.anchor_cwid)

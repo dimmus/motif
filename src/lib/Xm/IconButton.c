@@ -991,7 +991,7 @@ static void Notify(Widget w, XEvent *event, String *params, Cardinal *num_params
   XmIconButtonCallbackInfo info;
   Boolean dclick;
   if ((event->type == ButtonPress) || (event->type == ButtonRelease))
-    dclick = ((event->xbutton.time - XmIconButton_time(iw)) <= XtGetMultiClickTime(XtDisplay(w)));
+    dclick = ((event->xbutton.time - XmIconButton_time(iw)) <= (Time)XtGetMultiClickTime(XtDisplay(w)));
   else
     dclick = False;
   info.state = XmIconButton_set(iw);

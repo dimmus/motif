@@ -728,7 +728,7 @@ XmTabList XmStringTableProposeTablist(XmStringTable strings,
         continue;
       }
       val = width + pad_value;
-      if (j >= _XmTabLCount(tl))
+      if ((unsigned int)j >= _XmTabLCount(tl))
       /* Need to add a tab */
       {
         tab = XmTabCreate(0.0, units, offset_model, XmALIGNMENT_BEGINNING, ".");

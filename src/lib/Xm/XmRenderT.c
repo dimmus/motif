@@ -438,9 +438,9 @@ static Boolean GetResources(XmRendition rend,
     Qfont = XrmPermStringToQuark(XmNfont);
   }
   /* Set resources from arglist. */
-  for (arg = arglist, i = 0; i < argcount; arg++, i++) {
+  for (arg = arglist, i = 0; (Cardinal)i < argcount; arg++, i++) {
     argName = quarks[i];
-    for (j = 0, res = table; j < _XmNumRenditionResources; j++, res++) {
+    for (j = 0, res = table; (Cardinal)j < _XmNumRenditionResources; j++, res++) {
       if (res->xrm_name == argName) {
         CopyFromArg((arg->value), ((char *)GetPtr(rend) + res->xrm_offset), res->xrm_size);
         found[j] = TRUE;
@@ -465,7 +465,7 @@ static Boolean GetResources(XmRendition rend,
     }
   }
   /* Loop over table */
-  for (j = 0, res = table; j < _XmNumRenditionResources; j++, res++) {
+  for (j = 0, res = table; (Cardinal)j < _XmNumRenditionResources; j++, res++) {
     if (!found[j]) {
       copied = False;
       have_value = False;
@@ -1551,7 +1551,7 @@ XmRendition *XmRenderTableGetRenditions(XmRenderTable table, char **tags, Cardin
       count++;
     }
   }
-  if (count < tag_count)
+  if ((Cardinal)count < tag_count)
     rends = (XmRendition *)_XmReallocArray((char *)rends, count, sizeof(XmRendition));
   if (app) {
     _XmAppUnlock(app);
@@ -2088,8 +2088,8 @@ static int CVTtvinited = 0;
    room for it and the terminating NUL. */
 #define CVTaddString(dest, src, srcsize) \
   { \
-    if ((chars_used + (srcsize)) >= allocated_size) { \
-      while ((chars_used + (srcsize)) >= allocated_size) \
+    if ((size_t)(chars_used + (srcsize)) >= (size_t)allocated_size) { \
+      while ((size_t)(chars_used + (srcsize)) >= (size_t)allocated_size) \
         allocated_size *= 2; \
       dest = XtRealloc(dest, allocated_size); \
     } \

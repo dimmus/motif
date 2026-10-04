@@ -738,9 +738,9 @@ static void ClipboardEventHandler(Widget widget, XtPointer closure, XEvent *even
   if (callbackroutine == NULL)
     return;
   reason = 0;
-  if (event_rcvd->data.l[0] == atoms[XmA_MOTIF_CLIP_DATA_REQUEST])
+  if ((Atom)event_rcvd->data.l[0] == atoms[XmA_MOTIF_CLIP_DATA_REQUEST])
     reason = XmCR_CLIPBOARD_DATA_REQUEST;
-  if (event_rcvd->data.l[0] == atoms[XmA_MOTIF_CLIP_DATA_DELETE])
+  if ((Atom)event_rcvd->data.l[0] == atoms[XmA_MOTIF_CLIP_DATA_DELETE])
     reason = XmCR_CLIPBOARD_DATA_DELETE;
   if (reason == 0)
     return;
@@ -1546,7 +1546,7 @@ static void ClipboardDeleteItem(Display *display,
   if (!header->currItems) {
     return;
   }
-  while (i < header->currItems) {
+  while ((unsigned long)i < header->currItems) {
     i++;
     if (*nextid == deleteid) {
       nextid++;
@@ -1585,7 +1585,7 @@ static void ClipboardDeleteItem(Display *display,
     if (nextpasteid == 0) {
       /* restore this value */
       nextpasteindex = i;
-      while (nextpasteindex < header->currItems) {
+      while ((unsigned long)nextpasteindex < header->currItems) {
         thisid = listptr + nextpasteindex;
         if (!ClipboardIsMarkedForDelete(display, header, *thisid)) {
           nextpasteid = *thisid;
@@ -3192,7 +3192,7 @@ int XmClipboardInquireCount(Display *display,
           if (str != NULL) {
             temp = strlen(str);
             XFree(str);
-            if (temp > loc_maxlength) {
+            if ((unsigned long)temp > loc_maxlength) {
               loc_maxlength = temp;
             }
           }

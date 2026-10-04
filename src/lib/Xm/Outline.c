@@ -968,7 +968,7 @@ static void LayoutChildren(Widget w, Widget assign_child)
   /*
    * We have used all the window, unmap all other nodes.
    */
-  while (cur_node < num_nodes) {
+  while ((Cardinal)cur_node < num_nodes) {
     UnmapNode(ow, (OutlineConstraints)*node_table);
     cur_node++;
     node_table++;

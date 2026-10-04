@@ -373,7 +373,7 @@ static void ClassInitialize(void)
     merged_list[i] = uncompiled[i];
   }
   XtFree((char *)uncompiled);
-  for (i = 0, j = num; i < wc_num_res; i++, j++) {
+  for (i = 0, j = num; (Cardinal)i < wc_num_res; i++, j++) {
     merged_list[j] = xmCascadeButtonGCacheObjClassRec.object_class.resources[i];
   }
   _XmProcessLock();
@@ -685,7 +685,7 @@ static void DrawCascade(register XmCascadeButtonGadget cb)
                    CBG_ArmedPixmap(cb) :
                    CBG_CascadePixmap(cb);
       XmeGetPixmapData(XtScreen(cb), pixmap, NULL, &depth, NULL, NULL, NULL, NULL, NULL, NULL);
-      if (depth == XtParent(cb)->core.depth)
+      if (depth == (int)XtParent(cb)->core.depth)
         XCopyArea(XtDisplay(cb),
                   pixmap,
                   XtWindow(XtParent(cb)),

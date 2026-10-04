@@ -1669,8 +1669,8 @@ static void ImSetGeo(Widget vw, XmImXICInfo this_icp)
         break;
       margin = ((XmPrimitiveWidget)im_info->current_widget)->primitive.shadow_thickness +
                ((XmPrimitiveWidget)im_info->current_widget)->primitive.highlight_thickness;
-      rect_preedit.width = MIN(icp->preedit_width, XtWidth(im_info->current_widget) - 2 * margin);
-      rect_preedit.height = MIN(icp->sp_height, XtHeight(im_info->current_widget) - 2 * margin);
+      rect_preedit.width = MIN((unsigned int)icp->preedit_width, XtWidth(im_info->current_widget) - 2 * margin);
+      rect_preedit.height = MIN((unsigned int)icp->sp_height, XtHeight(im_info->current_widget) - 2 * margin);
     }
     if (use_slist && use_plist)
       XSetICValues(icp->xic, XNStatusAttributes, va_slist, XNPreeditAttributes, va_plist, NULL);
@@ -2053,7 +2053,7 @@ static Cardinal remove_ref(XmImRefInfo refs, Widget widget)
   if (refs->num_refs > 0) {
     /* Just remove this reference. */
     int index = 0;
-    while (index <= refs->num_refs) {
+    while ((Cardinal)index <= refs->num_refs) {
       if (refs->refs[index] == widget) {
         refs->refs[index] = refs->refs[refs->num_refs];
         refs->refs[refs->num_refs] = NULL;
