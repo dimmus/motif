@@ -106,6 +106,8 @@ motif_option(WITH_PNG "Enable PNG support" ON)
 motif_option(WITH_XFT "Enable Xft support" ON)
 motif_option(WITH_LTO "Enable link-time optimization (and -fno-semantic-interposition)" OFF)
 motif_option(WITH_CPU_NATIVE "Optimize for the build machine's CPU (-march=native, binaries are not portable)" OFF)
+motif_option(WITH_WERROR
+  "Treat compiler warnings as errors in the libraries, programs, build tools and tests (not the examples); needs CMake 3.24" OFF)
 set(WITH_PGO OFF CACHE STRING
   "Profile-guided optimization: OFF, GENERATE (instrumented build for the pgo-train target) or USE (build with the profiles in MOTIF_PGO_DIR)")
 set_property(CACHE WITH_PGO PROPERTY STRINGS OFF GENERATE USE)
@@ -377,7 +379,7 @@ list(APPEND MOTIF_CONFIG_DEFINITIONS
 #
 # One curated list, which the library code (Xm, Mrm, Uil, mwm, wml) and
 # the tests build without warnings with GCC and Clang.  Warnings are not
-# errors (set CMAKE_COMPILE_WARNING_AS_ERROR to make them so, as CI does),
+# errors (WITH_WERROR=ON makes them so outside the examples, as CI does),
 # apart from the few -Werror= below that always indicate a bug.
 
 set(MOTIF_C_WARNINGS)
@@ -776,6 +778,17 @@ set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS ON)
 
+# WITH_WERROR: CMAKE_COMPILE_WARNING_AS_ERROR initializes the
+# COMPILE_WARNING_AS_ERROR property of the targets created after it is set,
+# so it is on for everything below except the examples, which are older code
+# that is not kept free of the curated warnings.
+if(WITH_WERROR)
+  if(CMAKE_VERSION VERSION_LESS 3.24)
+    message(FATAL_ERROR "WITH_WERROR needs CMake 3.24 or later")
+  endif()
+  set(CMAKE_COMPILE_WARNING_AS_ERROR ON)
+endif()
+
 # Add subdirectories
 add_subdirectory(include)
 add_subdirectory(src/lib)
@@ -787,7 +800,13 @@ if(WITH_MESSAGE_CATALOG)
 endif()
 
 if(WITH_DEMOS)
+    if(WITH_WERROR)
+        set(CMAKE_COMPILE_WARNING_AS_ERROR OFF)
+    endif()
     add_subdirectory(src/examples)
+    if(WITH_WERROR)
+        set(CMAKE_COMPILE_WARNING_AS_ERROR ON)
+    endif()
 endif()
 
 if(WITH_TESTS)
