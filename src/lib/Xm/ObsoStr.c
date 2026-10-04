@@ -34,11 +34,7 @@
  * declarations will be in agreement with the definitions.
  */
 #ifndef _XmConst
-#  if defined(__STDC__) || !defined(NO_CONST)
-#    define _XmConst const
-#  else
-#    define _XmConst
-#  endif /* __STDC__ */
+#  define _XmConst const
 #endif   /* _XmConst */
 #include <Xm/XmP.h>
 _XmConst char _XmSCAcceleratorText[] = "AcceleratorText";

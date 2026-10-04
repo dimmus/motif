@@ -43,7 +43,7 @@
 #include <X11/Intrinsic.h>	/* externalref */
 #include "UilDBDef.h"		/* key_keytable_entry_type, UilEnumSetDescDef */
 
-#if defined(__cplusplus) || defined(c_plusplus)
+#if defined(__cplusplus)
 extern "C" {
 #endif
 
@@ -101,7 +101,7 @@ externalref unsigned short int uil_sym_isolatin1_charset;
 externalref int uil_max_value;
 externalref char *uil_datatype_names[];
 
-#if defined(__cplusplus) || defined(c_plusplus)
+#if defined(__cplusplus)
 }
 #endif
 

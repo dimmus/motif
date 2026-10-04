@@ -36,9 +36,7 @@
 /*
  * HISTORY
  */
-#if defined(__STDC__)
 #include <string.h>
-#endif
 #include <stdio.h>
 #include <unistd.h>
 #include "wml.h"
@@ -50,11 +48,7 @@ extern int fileno(FILE *stream);
 #endif
 
 #ifndef XmConst
-#if defined(__STDC__) || !defined( NO_CONST )
 #define XmConst const
-#else
-#define XmConst
-#endif /* __STDC__ */
 #endif /* XmConst */
 
 #ifdef YY_BUFFER_SIZE

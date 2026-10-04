@@ -140,7 +140,7 @@ typedef unsigned int	Uil_continue_type;
 #define _ARGUMENTS(arglist) arglist
 #endif
 
-#if defined(__cplusplus) || defined(c_plusplus)
+#if defined(__cplusplus)
 extern "C" {
 #endif
 
@@ -154,7 +154,7 @@ extern Uil_status_type Uil
 			char *status_data ));
 
 
-#if defined(__cplusplus) || defined(c_plusplus)
+#if defined(__cplusplus)
 }
 #endif
 

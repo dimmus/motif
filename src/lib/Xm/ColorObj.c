@@ -35,7 +35,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
-#if defined(__cplusplus) || defined(c_plusplus)
+#if defined(__cplusplus)
 #  define OBJ_CLASS(w) (((ApplicationShellWidget)(w))->application.c_class)
 #else
 #  define OBJ_CLASS(w) (((ApplicationShellWidget)(w))->application.class)

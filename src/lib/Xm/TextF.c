@@ -75,65 +75,7 @@ static char rcsid[] = "$TOG: TextF.c /main/65 1999/09/01 17:28:48 mgreess $"
 #  include <X11/Xft/Xft.h>
 #endif
 #include <Xm/XmP.h>
-#if (defined(__FreeBSD__) && (__FreeBSD__ < 4)) || \
-    (defined(__APPLE__) || defined(__NetBSD__) || defined(__OpenBSD__))
-/*
- * Modification by Integrated Computer Solutions, Inc.  May 2000
- *
- * FreeBSD (pre-4.0), DARWIN, NetBSD, and OpenBSD do not include the necessary
- * wide character string functions.  Use the internal _Xwc... routines and add
- * the other missing functions as _Xmwc... routines.  The new functions are
- * added static to this file.
- */
-#  define wcslen(c) _Xwcslen(c)
-#  define wcscpy(d, s) _Xwcscpy(d, s)
-#  define wcsncpy(d, s, l) _Xwcsncpy(d, s, l)
-                      static wchar_t *
-                      _Xmwcschr(const wchar_t *ws, wchar_t wc)
-{
-  for (;; ++ws) {
-    if (*ws == wc)
-      return ((wchar_t *)ws);
-    if (!*ws)
-      return ((wchar_t *)NULL);
-  }
-  /* NOTREACHED */
-}
-#  define wcschr(w, c) _Xmwcschr(w, c)
-
-static wchar_t *_Xmwcscat(wchar_t *ws1, const wchar_t *ws2)
-{
-  wchar_t *save = ws1;
-  for (; *ws1; ++ws1)
-    ;
-  while (*ws1++ = *ws2++)
-    ;
-  return save;
-}
-
-#  define wcscat(w1, w2) _Xmwcscat(w1, w2)
-
-static wchar_t *_Xmwcsncat(wchar_t *ws1, const wchar_t *ws2, size_t n)
-{
-  if (n != 0) {
-    register wchar_t *d = ws1;
-    register const wchar_t *s = ws2;
-    while (*d != 0)
-      d++;
-    do {
-      if ((*d = *s++) == 0)
-        break;
-      d++;
-    } while (--n != 0);
-    *d = 0;
-  }
-  return ws1;
-}
-
-#  define wcsncat(w1, w2, l) _Xmwcsncat(w1, w2, l)
-#else /* !__FreeBSD__ */
-#  include <wchar.h>
-#endif /* __FreeBSD__ */
+#include <wchar.h>
 #define MSG1 _XmMMsgTextF_0000
 #define MSG2 _XmMMsgTextF_0001
 #define MSG3 _XmMMsgTextF_0002

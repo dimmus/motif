@@ -32,11 +32,7 @@ static char rcsid[] = "$TOG: Messages.c /main/23 1997/03/19 11:49:58 dbl $"
  * declarations will be in agreement with the definitions.
  */
 #ifndef _XmConst
-#  if defined(__STDC__) || !defined(NO_CONST)
-#    define _XmConst const
-#  else
-#    define _XmConst
-#  endif /* __STDC__ */
+#  define _XmConst const
 #endif   /* _XmConst */
 #include "MessagesI.h"
 #include <Xm/XmP.h>

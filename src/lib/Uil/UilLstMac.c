@@ -107,13 +107,8 @@ static int		off_info_cnt = 0;
 #define _Offset(type,base,field)    \
         ((unsigned int)(base + XtOffsetOf(type, field)))
 
-#if defined(__STDC__)
 #define _OffsetArray(type,base,field)    \
         ((unsigned int)(base + XtOffsetOf(type, field)))
-#else
-#define _OffsetArray(type,base,field)    \
-        ((unsigned int)(base + XtOffsetOf(type, field[0])))
-#endif
 #define	_Pointer(base,offset) ((char *)(base)+(offset))
 
 #define ASNHEADERLEN 3

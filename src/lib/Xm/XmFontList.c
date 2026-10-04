@@ -31,13 +31,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#ifdef __cplusplus
-extern "C" { /* some 'locale.h' do not have prototypes (sun) */
-#endif
 #include <X11/Xlocale.h>
-#ifdef __cplusplus
-} /* Close scope of 'extern "C"' declaration */
-#endif /* __cplusplus */
 #include "XmI.h"
 #include "XmRenderTI.h"
 #include "XmStringI.h"

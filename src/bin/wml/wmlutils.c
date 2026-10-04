@@ -37,10 +37,8 @@ static char rcsid[] = "$XConsortium: wmlutils.c /main/8 1995/08/29 11:11:24 drk 
 
 #include "wml.h"
 
-#if defined(__STDC__)
 #include <stdlib.h>
 #include <string.h>
-#endif
 #include <stdio.h>
 
 

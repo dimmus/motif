@@ -37,13 +37,7 @@ static char rcsid[] = "$XConsortium: Mrmos.c /main/7 1996/11/13 14:03:33 drk $"
 
 #include <X11/Intrinsic.h>
 
-#ifdef __cplusplus
-extern "C" { /* some 'locale.h' do not have prototypes (sun) */
-#endif
 #include <X11/Xlocale.h>
-#ifdef __cplusplus
-} /* Close scope of 'extern "C"' declaration */
-#endif /* __cplusplus */
 
 #include <Xm/Xm.h>	/* For _NO_PROTO declaration. */
 #include "MrmosI.h"

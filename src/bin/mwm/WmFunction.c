@@ -106,7 +106,7 @@ static unsigned int GetEventInverseMask(XEvent *event);
 
 #ifdef WSM
 
-#if (defined(USL) || defined(__uxp__) || defined(linux)) && !defined(_NFILE)
+#ifndef _NFILE
 #define _NFILE FOPEN_MAX
 #endif
 #define CLOSE_FILES_ON_EXEC() \
@@ -1046,14 +1046,7 @@ Boolean F_Exec (String args, ClientData *pCD, XEvent *event)
     {
 
 #ifndef NO_SETPGRP
-#if defined(__OSF1__) || defined(__osf__) || defined(_POSIX_JOB_CONTROL)
 	setsid();
-#else
-	int tpid;
-
-	tpid = getpid();
-	setpgrp(tpid, tpid);
-#endif
 #endif /* NO_SETPGRP */
 #ifdef WSM
 	/*

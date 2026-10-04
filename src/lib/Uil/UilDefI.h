@@ -99,11 +99,7 @@ typedef int boolean;
 */
 
 #ifndef XmConst
-#if defined(__STDC__) || !defined( NO_CONST )
 #define XmConst const
-#else
-#define XmConst
-#endif /* __STDC__ */
 #endif /* XmConst */
 
 /* Uil will automatically strip this prefix when saving name of automatically
@@ -245,7 +241,7 @@ typedef int boolean;
 
 /* uilcmd.c */
 
-#if defined(__cplusplus) || defined(c_plusplus)
+#if defined(__cplusplus)
 extern "C" {
 #endif
 
@@ -559,7 +555,7 @@ extern void sym_dump_root_entry  _ARGUMENTS(( sym_root_entry_type *az_symbol_ent
 extern char *sym_section_text  _ARGUMENTS(( int b_type ));
 extern void dump_free_list  _ARGUMENTS(( void ));
 extern int sar_get_units_type (yystype *parse_frame);
-#if defined(__cplusplus) || defined(c_plusplus)
+#if defined(__cplusplus)
 }
 #endif
 

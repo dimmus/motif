@@ -65,7 +65,7 @@
 */
 #define _ARGUMENTS(arglist) arglist
 
-#if defined(__cplusplus) || defined(c_plusplus)
+#if defined(__cplusplus)
 extern "C" {
 #endif
 
@@ -78,7 +78,7 @@ char *status_data));
 /* uilsymstor.c */
 extern void UilDumpSymbolTable  _ARGUMENTS(( sym_entry_type *node_entry ));
 
-#if defined(__cplusplus) || defined(c_plusplus)
+#if defined(__cplusplus)
 }
 #endif
 
