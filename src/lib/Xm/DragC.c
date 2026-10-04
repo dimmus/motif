@@ -1558,6 +1558,7 @@ static void LocalNotifyHandler(Widget w, XtPointer client, XtPointer call)
       dc->drag.dragDropCompletionStatus = cb->completionStatus;
       dc->drag.dropFinishTime = XtLastTimestampProcessed(XtDisplay(dc));
       DragDropFinish(dc);
+      break;
     default:
       break;
   }
@@ -1898,10 +1899,12 @@ static void DragStart(XmDragContext dc, Widget src, XEvent *event)
   switch (dc->drag.activeProtocolStyle) {
     case XmDRAG_PREREGISTER:
       dc->drag.activeProtocolStyle = XmDRAG_DYNAMIC;
+      break;
     case XmDRAG_DYNAMIC:
       break;
     case XmDRAG_DROP_ONLY:
       dc->drag.activeProtocolStyle = XmDRAG_NONE;
+      break;
     case XmDRAG_NONE:
       break;
   }

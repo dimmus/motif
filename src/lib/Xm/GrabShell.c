@@ -555,6 +555,7 @@ static void ChangeManaged(Widget wid)
     case XtGeometryAlmost:
       XtMakeGeometryRequest((Widget)shell, &replygeom, NULL);
       /* fall through. */
+      XM_FALLTHROUGH;
     case XtGeometryYes:
       DoLayout(wid);
       break;

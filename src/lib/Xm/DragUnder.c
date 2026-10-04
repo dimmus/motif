@@ -196,6 +196,7 @@ static void FreeAnimationData(XmAnimationSaveData aSaveData)
       break;
     case XmDRAG_UNDER_PIXMAP:
       XFreeGC(aSaveData->display, aSaveData->drawGC);
+      break;
     case XmDRAG_UNDER_NONE:
     default:
       break;

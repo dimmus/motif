@@ -301,6 +301,7 @@ Urm__SwapCallbackDescIn (RGMWidgetRecordPtr	widget_rec,
 	case MrmRtypeSingleFloat:
 	  swapbytes( item->cb_item.datum.ival );
 	  _MrmOSIEEEFloatToHost((float *) &(item->cb_item.datum.ival));
+	  break;
 	case MrmRtypeNull:
 	  break;
 	case MrmRtypeResource:

@@ -1365,7 +1365,7 @@ Urm__CW_CreateArglist (Widget			parent,
 	      Urm__CW_AppendCBSVWidgetRef
 		(file_id, svlist, cbptr, argptr->tag_code,
 		 (String) ((char *)widgetrec+argptr->stg_or_relcode.tag_offs));
-	      /* No break */
+	      continue;
 	    default:
 	      continue;
 	    }
@@ -2673,6 +2673,7 @@ Urm__CW_ConvertValue (Widget			parent,
     case MrmRtypeHorizontalInteger:
       orientation = XmHORIZONTAL;
       /* fall through */
+      XM_FALLTHROUGH;
     case MrmRtypeVerticalInteger:
       if (orientation == XmNO_ORIENTATION)
 	{
@@ -2696,6 +2697,7 @@ Urm__CW_ConvertValue (Widget			parent,
     case MrmRtypeHorizontalFloat:
       orientation = XmHORIZONTAL;
       /* fall through */
+      XM_FALLTHROUGH;
     case MrmRtypeVerticalFloat:
       {
 	float float_val, int_value;

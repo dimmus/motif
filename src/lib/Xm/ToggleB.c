@@ -1790,6 +1790,7 @@ static void DrawToggle(XmToggleButtonWidget w)
       case XmONE_OF_MANY:
         /* This value should have been normalized away! */
         assert(FALSE);
+        XM_FALLTHROUGH;
       case XmONE_OF_MANY_DIAMOND:
         XmeDrawDiamond(dpy,
                        drawable,

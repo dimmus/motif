@@ -4469,6 +4469,7 @@ static _XmString _XmStringNonOptCreate(unsigned char *c, unsigned char *end, Boo
         _XmEntryTextTypeSet(&seg, XmWIDECHAR_TEXT);
         prev_type = XmWIDECHAR_TEXT;
         /* Fall through */
+        XM_FALLTHROUGH;
       case XmSTRING_COMPONENT_LOCALE_TEXT:
         if (txt_seen) {
           finish_segment(string, &seg, &lc, &sc, &needs_unopt, dir);
@@ -5199,6 +5200,7 @@ static Dimension ComputeWidth(unsigned char which, XCharStruct char_ret)
       if (char_ret.lbearing < 0)
         wid = -(char_ret.lbearing);
       /* Fall through */
+      XM_FALLTHROUGH;
     case XmSTRING_MIDDLE_SEG:
       wid += char_ret.width;
       break;
@@ -6442,6 +6444,7 @@ static Boolean parse_pattern(XmString *result,
     case XmTERMINATE:
       *terminate = True;
       /* Fall through. */
+      XM_FALLTHROUGH;
     case XmINSERT:
       if (insertion != NULL)
         *result = XmStringConcatAndFree(*result, insertion);
@@ -6499,6 +6502,7 @@ XmString XmStringParseText(XtPointer text,
     case XmWIDECHAR_TEXT:
       wide_char = True;
       /* Fall through */
+      XM_FALLTHROUGH;
     case XmMULTIBYTE_TEXT:
       /* Non-NULL values (except _MOTIF_DEFAULT_LOCALE)
      are not accepted in Motif 2.0. */
@@ -7443,6 +7447,7 @@ XmStringComponentType XmeStringGetComponent(_XmStringContext context,
             case XmNO_TEXT:
               assert(FALSE);
           }
+          break;
         case XmNO_TEXT:
           break;
         default:

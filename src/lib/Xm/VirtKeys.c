@@ -585,6 +585,7 @@ static Modifiers EffectiveStdModMask(Display *dpy, KeySym *kc_map, int ks_per_kc
        * the Shift modifier is not effective; mask it out.
        */
       esm_mask &= ~ShiftMask;
+      break;
     case 0:
       break;
   }

@@ -2038,6 +2038,19 @@ extern Cardinal Urm__SwapRGMWidgetRecord _ARGUMENTS(( RGMWidgetRecordPtr widget_
 
 #endif /* UNALIGNED */
 
+/*
+ * Marks a deliberate fall-through to the next case label, for
+ * -Wimplicit-fallthrough (Clang does not accept comments for it).
+ */
+#if defined(__has_attribute)
+#if __has_attribute(fallthrough)
+#define XM_FALLTHROUGH __attribute__((fallthrough))
+#endif
+#endif
+#ifndef XM_FALLTHROUGH
+#define XM_FALLTHROUGH do {} while (0)
+#endif
+
 /********    Macros for thread-safe Mrm    ********/
 #define _MrmWidgetToAppContext(w) \
         XtAppContext app = XtWidgetToApplicationContext(w)

@@ -1710,6 +1710,7 @@ static Boolean cvtXmStringToUTF8String(XrmValue *from, XrmValue *to)
       case XmSTRING_COMPONENT_LOCALE_TEXT:
         cset_save = XmFONTLIST_DEFAULT_TAG;
         /* Fall through */
+        XM_FALLTHROUGH;
       case XmSTRING_COMPONENT_TEXT:
         if (cset_save != NULL) {
           /* Check Registry */
@@ -1840,6 +1841,7 @@ static Boolean cvtXmStringToText(XrmValue *from, XrmValue *to)
       case XmSTRING_COMPONENT_LOCALE_TEXT:
         cset_save = XmFONTLIST_DEFAULT_TAG;
         /* Fall through */
+        XM_FALLTHROUGH;
       case XmSTRING_COMPONENT_TEXT:
         if (cset_save != NULL) {
           /* Check Registry */

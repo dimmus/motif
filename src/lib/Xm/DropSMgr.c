@@ -1778,6 +1778,7 @@ static void PutDSToStream(XmDropSiteManagerObject dsm,
         else
           info->animation_data.borderWidth = 0;
       }
+        break;
       default: {
         /*EMPTY*/
       } break;
@@ -1866,6 +1867,7 @@ static void PutDSToStream(XmDropSiteManagerObject dsm,
         else
           info->animation_data.borderWidth = 0;
       }
+        break;
       default: {
         /*EMPTY*/
       } break;
@@ -1964,6 +1966,7 @@ static void PutDSToStream(XmDropSiteManagerObject dsm,
         else
           info->animation_data.borderWidth = 0;
       }
+        break;
       default: {
         /*EMPTY*/
       } break;
@@ -2913,6 +2916,7 @@ static void Update(XmDropSiteManagerObject dsm, XtPointer clientData, XtPointer 
       break;
     case XmCR_OPERATION_CHANGED:
       DSMOperationChanged(dsm, clientData, callData);
+      break;
     default:
       break;
   }

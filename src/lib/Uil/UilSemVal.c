@@ -2683,6 +2683,7 @@ if ((val_entry->b_aux_flags & sym_m_exp_eval) == 0)
 			}
 
 		}
+	      break;
 	    case sym_k_error_value:
 		break;
 	    default:

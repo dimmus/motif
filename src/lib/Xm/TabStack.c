@@ -2046,6 +2046,7 @@ static void ChangeManaged(Widget widget)
       switch (XtMakeResizeRequest((Widget)tab, geom.width, geom.height, &width, &height)) {
         case XtGeometryYes:
           changed_size = True;
+          break;
         case XtGeometryNo:
         default:
           break;

@@ -2579,6 +2579,7 @@ void _XmDragOverChange(Widget w, unsigned char dropSiteStatus)
         }
       }
       /* fall through */
+      XM_FALLTHROUGH;
     case XmBLEND_STATE_SOURCE:
       /*
        *  Get the state icon bitmap.
