@@ -17,16 +17,22 @@ file(MAKE_DIRECTORY "${_dir}")
 file(REMOVE "${OUTPUT}")
 
 set(_input "${SOURCE}")
+set(_args -o "${OUTPUT}")
 if(FRAGMENT)
+  # Include the fragment by its name and find it through -I: UIL source
+  # lines end at 132 characters, which a deep source tree's absolute
+  # path alone can exceed.
+  get_filename_component(_src_dir "${SOURCE}" DIRECTORY)
+  get_filename_component(_src_name "${SOURCE}" NAME)
   set(_input "${OUTPUT}.wrapper.uil")
   file(WRITE "${_input}"
     "module uil_test_fragment\n"
     "    names = case_sensitive\n"
-    "include file '${SOURCE}';\n"
+    "include file '${_src_name}';\n"
     "end module;\n")
+  list(APPEND _args "-I${_src_dir}")
 endif()
 
-set(_args -o "${OUTPUT}")
 string(REPLACE "," ";" INCLUDES "${INCLUDES}")
 foreach(_inc IN LISTS INCLUDES)
   list(APPEND _args "-I${_inc}")
