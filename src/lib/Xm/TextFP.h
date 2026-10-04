@@ -220,6 +220,9 @@ typedef struct _XmTextFieldPart {
 #if USE_XFT
   Boolean use_xft;
 #endif
+  unsigned char alignment; /* XmNalignment.  It sits in what was tail
+                              padding, so adding it changed neither the
+                              size of the part nor any other offset. */
 } XmTextFieldPart;
 
 typedef struct _XmTextFieldRec {
@@ -256,6 +259,7 @@ typedef struct _XmTextFieldRec {
 #define TextF_SelectionArray(tfg) (((XmTextFieldWidget)(tfg))->text.selection_array)
 #define TextF_SelectionArrayCount(tfg) (((XmTextFieldWidget)(tfg))->text.selection_array_count)
 #define TextF_ResizeWidth(tfg) (((XmTextFieldWidget)(tfg))->text.resize_width)
+#define TextF_Alignment(tfg) (((XmTextFieldWidget)(tfg))->text.alignment)
 #define TextF_PendingDelete(tfg) (((XmTextFieldWidget)(tfg))->text.pending_delete)
 #define TextF_Editable(tfg) (((XmTextFieldWidget)(tfg))->text.editable)
 #define TextF_CursorPositionVisible(tfg) (((XmTextFieldWidget)(tfg))->text.cursor_position_visible)

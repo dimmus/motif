@@ -10,7 +10,8 @@ The DataField widget is a Data Presentation widget that handles display and entr
 The DataField widget is a subclass of the XmTextField widget intended for data entry
 applications. In addition to all of the normal XmTextField functionality, it supports regular
 expression-based parsing and acceptance/rejection of its input through the XmNpicture resource,
-and right justification through the XmNalignment resource.
+and validation of its value before the focus moves on through the XmNvalidateCallback resource.
+Right justification, through the XmNalignment resource, comes from XmTextField.
 .PP
 The DataField widget provides added capability by supporting several types of validation: a
 DataField widget containing an invalid value will not give-up focus; the user must enter a
@@ -45,8 +46,6 @@ l| l| l| l| l.
 \fBXmDataField Resource Set\fP
 \fBName\fP\fBClass\fP\fBType\fP\fBDefault\fP\fBAccess\fP
 _____
-XmNalignmentXmCAlignmentunsigned charXmALIGNMENT_BEGINNINGCSG
-_____
 XmNautoFillXmCAutoFillBooleanTrueCSG
 _____
 XmNpictureXmCPictureStringNULLCSG
@@ -56,9 +55,6 @@ _____
 XmNvalidateCallbackXmCCallbackXtCallbackListNULLC
 _____
 .TE
-.IP "\fBXmNalignment\fP" 10
-When set to XmALIGNMENT_END, the widget aligns all its text with the right hand side of the
-input area.
 .IP "\fBXmNautoFill\fP" 10
 When set to True, the widget "auto-fills" its contents when it can determine that the next
 character in the string must be a particular literal\&. For instance, the picture "###-####"
@@ -121,6 +117,8 @@ l| l| l| l| l.
 \fBName\fP\fBClass\fP\fBType\fP\fBDefault\fP\fBAccess\fP
 _____
 XmNactivateCallbackXmCCallbackXtCallbackListNULLC
+_____
+XmNalignmentXmCAlignmentunsigned charXmALIGNMENT_BEGINNINGCSG
 _____
 XmNblinkRateXmCBlinkRateint500CSG
 _____

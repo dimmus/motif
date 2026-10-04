@@ -40,6 +40,21 @@ Changes since 2.4.1.  The project version in `CMakeLists.txt` is still
   functions it lacked, and `<Xm/TabList.h>` declares
   `XmTabAttributesFree` (it declared the misspelt `XmTabAttibutesFree`,
   which is kept as a macro).
+- `XmDataField` is now a subclass of `XmTextField`, as its manual page
+  always said, instead of a copy of it.  `XmIsTextField()` is true for a
+  DataField, so the `XmTextField*` functions, `XmTextGetString` and the
+  other `XmText*` functions that accept a TextField, SpinBox,
+  BulletinBoard's `XmNtextTranslations` and RowColumn's text alignment
+  all handle it.  It gets TextField's selection, clipboard and drag and
+  drop code, translations and resource defaults.  The `XmDataField*`
+  functions and the exported `_XmDataField*` ones remain, as wrappers.
+- `XmTextField` has the `XmNalignment` resource that only DataField had:
+  `XmALIGNMENT_END` keeps the end of the text at the right margin.  The
+  new `alignment` member of `XmTextFieldPart` is in what was tail
+  padding, so the size of the record and the offsets of the other
+  members did not change (abidiff: compatible change).  The `alignment`
+  member of `XmDataFieldPart` is unused; `XmDataField_alignment()` reads
+  the TextField one.
 
 ### Security
 
@@ -121,6 +136,15 @@ files fixed a large number of memory-safety bugs.  See
   and the input method spot location make fewer X requests; the
   Text gap buffer grows geometrically.  `xmbench` (`--target bench`)
   measures these.
+- `DataF.c` shrank from 8683 lines, plus 748 in the removed `DataFSel.c`,
+  to about 570 now that DataField subclasses TextField.  Fixed on the
+  way: DataField installed a pointer to a local variable as its transfer
+  trait; setting `XmNpicture` registered the picture check a second time,
+  so a rejected character called `XmNpictureErrorCallback` twice; and
+  the picture check leaked a copy of the value for every character it
+  checked.  `XmTextFieldReplaceWcs` still freed a string literal when its
+  argument did not convert to the locale's encoding; that had been fixed
+  only in DataField's copy.
 
 ### Tests and CI
 
