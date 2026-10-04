@@ -375,14 +375,11 @@ list(APPEND MOTIF_CONFIG_DEFINITIONS
 # -----------------------------------------------------------------------------
 # Warnings
 #
-# One curated list.  These are not enabled yet because the code still
-# triggers them; fix and enable them in this order:
-#   -Wimplicit-fallthrough, -Wstrict-prototypes, -Wmissing-prototypes,
-#   -Wdiscarded-qualifiers, -Wstringop-overflow, -Wsign-compare.
-# The compiler enables -Wdiscarded-qualifiers and -Wstringop-overflow by
-# default, so they are switched off explicitly until then.  Warnings are not
-# errors (set CMAKE_COMPILE_WARNING_AS_ERROR to make them so), apart from the
-# few -Werror= below that always indicate a bug.
+# One curated list, which the library code (Xm, Mrm, Uil, mwm, wml) builds
+# without warnings with GCC and Clang.  -Wsign-compare (part of -Wextra)
+# is still to be enabled.  Warnings are not errors (set
+# CMAKE_COMPILE_WARNING_AS_ERROR to make them so, as CI does), apart from
+# the few -Werror= below that always indicate a bug.
 
 set(MOTIF_C_WARNINGS)
 if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
@@ -404,10 +401,6 @@ if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
     -Werror=implicit-function-declaration
     -Werror=return-type
     -Werror=vla
-    # To be fixed, see above
-    -Wno-discarded-qualifiers
-    -Wno-incompatible-pointer-types-discards-qualifiers
-    -Wno-stringop-overflow
     # Legacy code patterns that are not worth the churn
     -Wno-char-subscripts
     -Wno-unknown-pragmas
