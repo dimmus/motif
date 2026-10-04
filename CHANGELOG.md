@@ -3,6 +3,16 @@
 This file summarises the changes in this tree since Motif 2.3.8, the last
 upstream release (December 2017).  The git history has the details.
 
+## Unreleased
+
+### Security
+
+- XmString layout: a string with layout direction pushes that are not
+  popped (or popped on a later line) could make `XmStringExtent` and
+  `XmStringDraw` loop forever or read past the string's segments, so a
+  pasted or dropped compound string could hang a client.  Pops without
+  a push no longer leave segments unmeasured.
+
 ## 2.5.0 (2026-10-04)
 
 Changes since 2.4.1.  The release is 2.5.0 rather than 2.4.2 because

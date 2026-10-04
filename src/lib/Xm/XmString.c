@@ -3390,6 +3390,41 @@ extern void _XmStringDrawSegment(Display *d,
 }
 
 /****************************************************************
+ * attach_pending_pop:
+ *    A level of recursive_layout() that meets the pop of a push
+ *    made on an earlier line lays out the popped run after the
+ *    end of its own chain on that line.  Attach pop_seg, the end
+ *    of that run, to the end of the chain that goes through seg.
+ ****************************************************************/
+static void attach_pending_pop(_XmStringNREntry pop_seg,
+                               XmDirection pop_dir,
+                               _XmStringNREntry seg,
+                               XmDirection direction,
+                               XmDirection p_direction)
+{
+  if (XmDirectionMatch(direction, XmLEFT_TO_RIGHT)) {
+    while (_XmEntryRightGet(seg, p_direction))
+      seg = (_XmStringNREntry)_XmEntryRightGet(seg, p_direction);
+  }
+  else {
+    while (_XmEntryLeftGet(seg, p_direction))
+      seg = (_XmStringNREntry)_XmEntryLeftGet(seg, p_direction);
+  }
+  if (seg == pop_seg)
+    return;
+  if (XmDirectionMatch(pop_dir, XmLEFT_TO_RIGHT)) {
+    _XmEntryRightSet(pop_seg, p_direction, seg);
+    _XmEntryLeftSet(seg, p_direction, pop_seg);
+  }
+  else {
+    _XmEntryLeftSet(pop_seg, p_direction, seg);
+    _XmEntryRightSet(seg, p_direction, pop_seg);
+  }
+  _XmEntryDirtySet(seg, _XmSCANNING_CACHE, p_direction, False);
+  _XmEntryDirtySet(pop_seg, _XmSCANNING_CACHE, p_direction, False);
+}
+
+/****************************************************************
  * recursive_layout:
  *    This (partly) recursive function sets up the left/right
  *    pointers for segments to ensure that segments will be
@@ -3467,32 +3502,52 @@ static void recursive_layout(_XmString string,
             _XmEntryRightSet(seg, p_direction, last);
             _XmEntryDirtySet(last, _XmSCANNING_CACHE, p_direction, False);
           }
-          if (_XmStrImplicitLine(string)) {
-            if (*line_index < nline) {
-              line = _XmStrEntry(string)[*line_index];
-              nseg = _XmEntrySegmentCountGet(line);
-              last = _XmEntrySegmentGet(line)[*seg_index];
-            }
-            else {
-              line = NULL;
-              nseg = 0;
-              last = NULL;
-            }
+          if (pop_index >= 0 && *line_index != push_line) {
+            /* the run went on past the end of the push line: lay out
+               the pending pop there now, pop_index is for that line */
+            if (_XmStrImplicitLine(string))
+              seg2 = _XmEntrySegmentGet(line)[pop_index];
+            else
+              seg2 = (_XmStringNREntry)_XmStrEntry(string)[pop_index];
+            attach_pending_pop(seg2, pop_dir, seg, direction, p_direction);
+            pop_index = -1;
+          }
+          if (*line_index >= nline) {
+            /* No pop: the push ran to the end of the string, and the
+               recursive call laid out the rest of it as if popped there.
+               Going on would lay out segments again, in a cycle. */
+            line = NULL;
+            nseg = 0;
+            last = NULL;
           }
           else {
-            nseg = _XmStrEntryCount(string);
-            last = (_XmStringNREntry)_XmStrEntry(string)[*seg_index];
+            if (_XmStrImplicitLine(string)) {
+              line = _XmStrEntry(string)[*line_index];
+              nseg = _XmEntrySegmentCountGet(line);
+            }
+            else
+              nseg = _XmStrEntryCount(string);
+            if (*seg_index < nseg) {
+              if (_XmStrImplicitLine(string))
+                last = _XmEntrySegmentGet(line)[*seg_index];
+              else
+                last = (_XmStringNREntry)_XmStrEntry(string)[*seg_index];
+            }
+            else
+              last = NULL;
           }
         }
         else if (*line_index == push_line) {
           /* connect segment before push with pop segment
            */
-          if (_XmStrImplicitLine(string))
+          if (*seg_index >= nseg)
+            seg2 = NULL;
+          else if (_XmStrImplicitLine(string))
             seg2 = _XmEntrySegmentGet(line)[*seg_index];
           else
             seg2 = (_XmStringNREntry)_XmStrEntry(string)[*seg_index];
           if (XmDirectionMatch(_XmEntryPushGet((_XmStringEntry)seg), XmLEFT_TO_RIGHT)) {
-            if (last) {
+            if (last && seg2) {
               _XmEntryLeftSet(last, p_direction, seg2);
               _XmEntryRightSet(seg2, p_direction, last);
               _XmEntryDirtySet(last, _XmSCANNING_CACHE, p_direction, False);
@@ -3500,7 +3555,7 @@ static void recursive_layout(_XmString string,
             }
           }
           else {
-            if (last) {
+            if (last && seg2) {
               _XmEntryRightSet(last, p_direction, seg2);
               _XmEntryLeftSet(seg2, p_direction, last);
               _XmEntryDirtySet(last, _XmSCANNING_CACHE, p_direction, False);
@@ -3512,8 +3567,9 @@ static void recursive_layout(_XmString string,
         else {
           /* pop is on a different line
            */
-          if (last && nseg > 0) {
-            /* connect last segment on line with the one before push
+          if ((last || pop_index >= 0) && nseg > 0) {
+            /* connect last segment on line with the one before push,
+               and lay out a pending pop on the line after them
              */
             _XmStringNREntry conn_seg;
             if (_XmStrImplicitLine(string))
@@ -3523,18 +3579,30 @@ static void recursive_layout(_XmString string,
             if (XmDirectionMatch(_XmEntryPushGet((_XmStringEntry)seg), XmLEFT_TO_RIGHT)) {
               while (_XmEntryRightGet(conn_seg, p_direction))
                 conn_seg = (_XmStringNREntry)_XmEntryRightGet(conn_seg, p_direction);
-              _XmEntryLeftSet(last, p_direction, conn_seg);
-              _XmEntryRightSet(conn_seg, p_direction, last);
-              _XmEntryDirtySet(last, _XmSCANNING_CACHE, p_direction, False);
-              _XmEntryDirtySet(conn_seg, _XmSCANNING_CACHE, p_direction, False);
+              if (last) {
+                _XmEntryLeftSet(last, p_direction, conn_seg);
+                _XmEntryRightSet(conn_seg, p_direction, last);
+                _XmEntryDirtySet(last, _XmSCANNING_CACHE, p_direction, False);
+                _XmEntryDirtySet(conn_seg, _XmSCANNING_CACHE, p_direction, False);
+              }
             }
             else {
               while (_XmEntryLeftGet(conn_seg, p_direction))
                 conn_seg = (_XmStringNREntry)_XmEntryLeftGet(conn_seg, p_direction);
-              _XmEntryRightSet(last, p_direction, conn_seg);
-              _XmEntryLeftSet(conn_seg, p_direction, last);
-              _XmEntryDirtySet(last, _XmSCANNING_CACHE, p_direction, False);
-              _XmEntryDirtySet(conn_seg, _XmSCANNING_CACHE, p_direction, False);
+              if (last) {
+                _XmEntryRightSet(last, p_direction, conn_seg);
+                _XmEntryLeftSet(conn_seg, p_direction, last);
+                _XmEntryDirtySet(last, _XmSCANNING_CACHE, p_direction, False);
+                _XmEntryDirtySet(conn_seg, _XmSCANNING_CACHE, p_direction, False);
+              }
+            }
+            if (pop_index >= 0) {
+              if (_XmStrImplicitLine(string))
+                seg2 = _XmEntrySegmentGet(line)[pop_index];
+              else
+                seg2 = (_XmStringNREntry)_XmStrEntry(string)[pop_index];
+              attach_pending_pop(seg2, pop_dir, conn_seg, direction, p_direction);
+              pop_index = -1;
             }
             last = NULL;
           }
@@ -3555,9 +3623,12 @@ static void recursive_layout(_XmString string,
           else
             nseg = _XmStrEntryCount(string);
           /* save these things till we return from this level
+             (unless there is no pop: the push ran to the end)
            */
-          pop_index = *seg_index;
-          pop_dir = _XmEntryPushGet((_XmStringEntry)seg);
+          if (*line_index < nline) {
+            pop_index = *seg_index;
+            pop_dir = _XmEntryPushGet((_XmStringEntry)seg);
+          }
         }
         (*seg_index)++;
       }
@@ -3661,7 +3732,7 @@ static void recursive_layout(_XmString string,
 
 void _XmStringLayout(_XmString string, XmDirection direction)
 {
-  int seg_index = 0, line_index = 0;
+  int seg_index = 0, line_index = 0, nseg;
   _XmStringEntry line;
   _XmStringNREntry seg;
   Boolean needs_recompute = False;
@@ -3676,11 +3747,21 @@ void _XmStringLayout(_XmString string, XmDirection direction)
   }
   if (!needs_recompute)
     return;
-  while (line_index < _XmStrEntryCount(string)) {
-    line = _XmStrEntry(string)[line_index];
-    while (seg_index < _XmEntrySegmentCountGet(line)) {
-      seg = _XmEntrySegmentGet(line)[seg_index];
-      if (_XmEntrySegmentCountGet(line) > 1) {
+  /* Clear the links of the last layout.  Without implicit lines the
+     entries are the segments of a single line. */
+  while (line_index < _XmStrLineCountGet(string)) {
+    if (_XmStrImplicitLine(string)) {
+      line = _XmStrEntry(string)[line_index];
+      nseg = _XmEntrySegmentCountGet(line);
+    }
+    else
+      nseg = _XmStrEntryCount(string);
+    while (seg_index < nseg) {
+      if (_XmStrImplicitLine(string))
+        seg = _XmEntrySegmentGet(line)[seg_index];
+      else
+        seg = (_XmStringNREntry)_XmStrEntry(string)[seg_index];
+      if (nseg > 1) {
         _XmEntryDirtySet(seg, _XmSCANNING_CACHE, direction, True);
         _XmEntryLeftSet(seg, direction, NULL);
         _XmEntryRightSet(seg, direction, NULL);
@@ -3692,15 +3773,11 @@ void _XmStringLayout(_XmString string, XmDirection direction)
   }
   line_index = seg_index = 0;
   recursive_layout(string, &line_index, &seg_index, direction, direction, 0);
-  /* if there are pops w/o matching pushes, ignore them */
-  while (line_index < _XmStrLineCountGet(string) &&
-         seg_index < _XmEntrySegmentCountGet(_XmStrEntry(string)[line_index]))
-  {
-    line = _XmStrEntry(string)[line_index];
-    seg = _XmEntrySegmentGet(line)[seg_index];
-    _XmEntryPopSet(seg, False);
+  /* if there are pops w/o matching pushes, ignore them: the pop has been
+     laid out as a plain segment at the end of the chain, so go on after it */
+  while (line_index < _XmStrLineCountGet(string)) {
+    seg_index++;
     recursive_layout(string, &line_index, &seg_index, direction, direction, 0);
-    _XmEntryPopSet(seg, True);
   }
 }
 

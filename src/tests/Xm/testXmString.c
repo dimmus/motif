@@ -6,17 +6,20 @@
  *
  * Headless XmString tests: creation, comparison, concatenation, the
  * ASN.1 byte stream, XmStringToXmStringTable / XmStringTableToXmString,
- * parse tables and compound text.  None of this needs an X server.
+ * parse tables and compound text.  Apart from the XmStringCT and
+ * XmStringExtent suites at the end, none of this needs an X server.
  *
  * Most cases are regression tests for specific fixes and say which;
  * they are meant to be run under ASan and UBSan as well, where the
  * memory errors those fixes removed would be reported.
  */
 #include <langinfo.h>
+#include <signal.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include <X11/Intrinsic.h>
 #include <Xm/Xm.h>
 #include <Xm/XmStringI.h>
@@ -1196,6 +1199,167 @@ void xmstring_ct_suite(SRunner *runner)
 	tcase_add_test(t, ct_malformed);
 	tcase_add_test(t, text_property_joins_segments);
 	tcase_add_checked_fixture(t, _init_xt, uninit_xt);
+	suite_add_tcase(s, t);
+
+	srunner_add_suite(runner, s);
+}
+
+/*
+ * Layout direction pushes and pops, as laid out by XmStringExtent and
+ * XmStringDraw.  _XmStringLayout links the segments of each line through
+ * left/right pointers in their scanning caches, which the measuring and
+ * drawing code follows until NULL.
+ */
+static Widget extent_shell;
+
+static void _init_extent(void)
+{
+	extent_shell = init_xt("check_XmStringExtent");
+}
+
+/*
+ * The string of a spec: 't' is the text "ab", 'L' and 'R' push a
+ * left-to-right and a right-to-left layout direction, 'P' pops one and
+ * 'S' is a separator.  With plain set, only the text and the separators.
+ * With rt set, the string is measured after every component, so that
+ * the segments ConcatAndFree reuses keep the links of an older layout.
+ */
+static XmString layout_string(const char *spec, Boolean plain,
+			      XmRenderTable rt)
+{
+	XmDirection ltr = XmLEFT_TO_RIGHT, rtl = XmRIGHT_TO_LEFT;
+	XmString s = NULL, c;
+	Dimension w, h;
+
+	for (; *spec; spec++) {
+		switch (*spec) {
+		case 't':
+			c = XmStringCreateLocalized("ab");
+			break;
+		case 'S':
+			c = XmStringSeparatorCreate();
+			break;
+		case 'L':
+		case 'R':
+			if (plain)
+				continue;
+			c = XmStringComponentCreate(XmSTRING_COMPONENT_LAYOUT_PUSH,
+						    sizeof(XmDirection),
+						    *spec == 'L' ? &ltr : &rtl);
+			break;
+		case 'P':
+			if (plain)
+				continue;
+			c = XmStringComponentCreate(XmSTRING_COMPONENT_LAYOUT_POP,
+						    0, NULL);
+			break;
+		default:
+			ck_abort_msg("bad spec character '%c'", *spec);
+		}
+		s = XmStringConcatAndFree(s, c);
+		if (rt)
+			XmStringExtent(rt, s, &w, &h);
+	}
+	return s;
+}
+
+static const char *const layout_specs[] = {
+	/* pushes that are never popped: XmStringExtent or XmStringDraw
+	   followed a cycle of segments forever, or read past the last
+	   segment (tLLLRR) */
+	"tRtR",		/* text pushR text pushR */
+	"LtRtR",	/* pushL text pushR text pushR */
+	"tLLLRR",	/* text pushL pushL pushL pushR pushR */
+	"tLtL",		/* the same in right-to-left drawing */
+	/* a push popped on the next line, then another: a cycle, even
+	   though every push is popped */
+	"RSPLSPt",
+	"LSPRSPt",
+	"RSPLt",	/* the last segment was not measured */
+	/* pops without a push: segments after them were left out */
+	"tPPt",
+	"RLtPPP",
+	/* balanced */
+	"tRtPt",
+	/* links left from an earlier layout of a shorter string (with
+	   after_concat) were not cleared and could close a cycle */
+	"tRt",
+};
+
+/*
+ * Measure and draw a string with layout pushes and pops; every segment
+ * must be laid out exactly once, so the width is that of the text alone.
+ * A regression hangs: the alarm makes it fail instead.
+ */
+static void check_layout(const char *spec, Boolean after_concat)
+{
+	Arg args[2];
+	XmRendition rend;
+	XmRenderTable rt;
+	XmString s, plain;
+	Display *dpy = XtDisplay(extent_shell);
+	Pixmap pm;
+	GC gc;
+	Dimension w, h, pw, ph;
+
+	XtSetArg(args[0], XmNfontName, "fixed");
+	XtSetArg(args[1], XmNfontType, XmFONT_IS_FONT);
+	rend = XmRenditionCreate(extent_shell, XmFONTLIST_DEFAULT_TAG, args, 2);
+	rt = XmRenderTableAddRenditions(NULL, &rend, 1, XmMERGE_REPLACE);
+	XmRenditionFree(rend);
+	pm = XCreatePixmap(dpy, DefaultRootWindow(dpy), 200, 100,
+			   DefaultDepth(dpy, DefaultScreen(dpy)));
+	gc = XCreateGC(dpy, pm, 0, NULL);
+
+	/* not the handler the test inherits from check, which kills it with
+	   SIGKILL: report a hang as one */
+	signal(SIGALRM, SIG_DFL);
+	alarm(10);
+	s = layout_string(spec, False, after_concat ? rt : NULL);
+	plain = layout_string(spec, True, NULL);
+	XmStringExtent(rt, plain, &pw, &ph);
+	XmStringExtent(rt, s, &w, &h);
+	ck_assert_msg(w == pw, "%s: width %u, the text alone %u", spec, w, pw);
+	ck_assert_msg(h == ph, "%s: height %u, the text alone %u", spec, h, ph);
+	XmStringDraw(dpy, pm, rt, s, gc, 0, 20, 200, XmALIGNMENT_BEGINNING,
+		     XmSTRING_DIRECTION_L_TO_R, NULL);
+	XmStringDraw(dpy, pm, rt, s, gc, 0, 20, 200, XmALIGNMENT_END,
+		     XmSTRING_DIRECTION_R_TO_L, NULL);
+	XmStringDrawImage(dpy, pm, rt, s, gc, 0, 20, 200, XmALIGNMENT_CENTER,
+			  XmSTRING_DIRECTION_R_TO_L, NULL);
+	XSync(dpy, False);
+	alarm(0);
+
+	XmStringFree(s);
+	XmStringFree(plain);
+	XFreeGC(dpy, gc);
+	XFreePixmap(dpy, pm);
+	XmRenderTableFree(rt);
+}
+
+START_TEST(layout_push_pop)
+{
+	check_layout(layout_specs[_i], False);
+}
+END_TEST
+
+START_TEST(layout_push_pop_after_concat)
+{
+	check_layout(layout_specs[_i], True);
+}
+END_TEST
+
+void xmstring_extent_suite(SRunner *runner)
+{
+	TCase *t;
+	Suite *s = suite_create("XmStringExtent");
+	int n = (int)XtNumber(layout_specs);
+
+	t = tcase_create("Layout pushes and pops");
+	tcase_add_loop_test(t, layout_push_pop, 0, n);
+	tcase_add_loop_test(t, layout_push_pop_after_concat, 0, n);
+	tcase_add_checked_fixture(t, _init_extent, uninit_xt);
+	tcase_set_timeout(t, 30);
 	suite_add_tcase(s, t);
 
 	srunner_add_suite(runner, s);
