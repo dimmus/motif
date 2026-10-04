@@ -398,10 +398,6 @@ static Boolean CacheMixedIcon(XmDragOverShellWidget dos,
   if (mixedIcon == NULL)
     return False;
   cache_ptr = XtNew(MixedIconCache);
-  _XmProcessLock();
-  cache_ptr->next = mixed_cache;
-  mixed_cache = cache_ptr;
-  _XmProcessUnlock();
   cache_ptr->depth = depth;
   cache_ptr->width = width;
   cache_ptr->height = height;
@@ -430,6 +426,11 @@ static Boolean CacheMixedIcon(XmDragOverShellWidget dos,
     cache_ptr->opPixmap = 0;
   }
   cache_ptr->mixedIcon = mixedIcon;
+  /* The cache is shared by all displays: add the entry once complete */
+  _XmProcessLock();
+  cache_ptr->next = mixed_cache;
+  mixed_cache = cache_ptr;
+  _XmProcessUnlock();
   return True;
 }
 
@@ -448,8 +449,13 @@ static XmDragIconObject GetMixedIcon(XmDragOverShellWidget dos,
                                      Position opY)
 {
   MixedIconCache *cache_ptr;
+  XmDragIconObject mixedIcon = NULL;
+  /* The cache is shared by all displays: pixmap ids are only compared
+     for icons of this display */
+  _XmProcessLock();
   for (cache_ptr = mixed_cache; cache_ptr; cache_ptr = cache_ptr->next) {
-    if (cache_ptr->depth == depth && cache_ptr->width == width && cache_ptr->height == height &&
+    if (XtDisplay(cache_ptr->mixedIcon) == XtDisplay(dos) && cache_ptr->depth == depth &&
+        cache_ptr->width == width && cache_ptr->height == height &&
         cache_ptr->cursorForeground == dos->drag.cursorForeground &&
         cache_ptr->cursorBackground == dos->drag.cursorBackground &&
         cache_ptr->sourcePixmap == sourceIcon->drag.pixmap &&
@@ -464,10 +470,12 @@ static XmDragIconObject GetMixedIcon(XmDragOverShellWidget dos,
           cache_ptr->opMask == opIcon->drag.mask && cache_ptr->opX == opX &&
           cache_ptr->opY == opY)))
     {
-      return (cache_ptr->mixedIcon);
+      mixedIcon = cache_ptr->mixedIcon;
+      break;
     }
   }
-  return ((XmDragIconObject)NULL);
+  _XmProcessUnlock();
+  return (mixedIcon);
 }
 
 /************************************************************************

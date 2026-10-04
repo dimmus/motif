@@ -116,8 +116,12 @@ static XmAnimationSaveData CreateAnimationSaveData(XmDragContext dc,
     XmeWarning((Widget)dc, MESSAGE1);
     aSaveData->windowDepth = 0;
   }
-  aSaveData->clipRegion = aData->clipRegion;
-  aSaveData->dropSiteRegion = aData->dropSiteRegion;
+  /* Copies: the regions passed in are the caller's, and are gone by
+     the time of the expose and leave */
+  aSaveData->clipRegion = _XmRegionCreate();
+  _XmRegionUnion(aData->clipRegion, aData->clipRegion, aSaveData->clipRegion);
+  aSaveData->dropSiteRegion = _XmRegionCreate();
+  _XmRegionUnion(aData->dropSiteRegion, aData->dropSiteRegion, aSaveData->dropSiteRegion);
   dsv = XmDropSiteGetActiveVisuals((Widget)dc);
   aSaveData->background = dsv->background;
   aSaveData->foreground = dsv->foreground;
@@ -207,6 +211,8 @@ static void FreeAnimationData(XmAnimationSaveData aSaveData)
     }
     XtFree((char *)aSaveData->savedPixmaps);
   }
+  _XmRegionDestroy(aSaveData->clipRegion);
+  _XmRegionDestroy(aSaveData->dropSiteRegion);
   XtFree((char *)aSaveData);
 }
 

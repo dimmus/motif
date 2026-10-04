@@ -327,12 +327,15 @@ static void SecondaryConvertHandler(Widget w,
   XtIntervalId timer;
   Boolean timed_out = False;
   Boolean done;
+  /* Take the lock now, in the same critical section as the test: the
+     convert procs of two displays can run at once in two threads. */
   _XmProcessLock();
   if (secondary_lock != 0) {
     cs->status = XmCONVERT_REFUSE;
     _XmProcessUnlock();
     return;
   }
+  secondary_lock = 1;
   _XmProcessUnlock();
   req_event = XtGetSelectionRequest(w, cs->selection, NULL);
   cs->event = (XEvent *)req_event;
@@ -341,23 +344,24 @@ static void SecondaryConvertHandler(Widget w,
   if (req_event != NULL && old_serial != req_event->serial)
     old_serial = req_event->serial;
   else {
+    secondary_lock = 0;
+    cs->status = XmCONVERT_REFUSE;
+    _XmProcessUnlock();
+    return;
+  }
+  /* The parameter is the ATOM_PAIR (selection, target) written by the
+     requestor, another client. */
+  if (cs->parm == NULL || cs->parm_format != 32 || cs->parm_length < 2) {
+    secondary_lock = 0;
     cs->status = XmCONVERT_REFUSE;
     _XmProcessUnlock();
     return;
   }
   _XmProcessUnlock();
-  /* The parameter is the ATOM_PAIR (selection, target) written by the
-     requestor, another client. */
-  if (cs->parm == NULL || cs->parm_format != 32 || cs->parm_length < 2) {
-    cs->status = XmCONVERT_REFUSE;
-    return;
-  }
   pair = (_XmTextInsertPair *)cs->parm;
   event_copy = (XSelectionRequestEvent *)XtMalloc(sizeof(XSelectionRequestEvent));
   *event_copy = *req_event;
   _XmProcessLock();
-  /* Lock */
-  secondary_lock = 1;
   secondary_event = event_copy;
   _XmProcessUnlock();
   assert(XtNumber(atom_names) == NUM_ATOMS);
@@ -1611,11 +1615,11 @@ static ConvertContext LookupContextBlock(Display *d, Atom a)
   _XmCCKeyRec x;
   x.display = d;
   x.selection = a;
+  /* The table is shared by all displays: look up and add under one lock */
   _XmProcessLock();
   if (ConvertHashTable == (XmHashTable)NULL)
     ConvertHashTable = _XmAllocHashTable(10, CCMatch, CCHash);
   cc = (ConvertContext)_XmGetHashEntry(ConvertHashTable, (XmHashKey)&x);
-  _XmProcessUnlock();
   if (cc == NULL) {
     _XmCCKey new_k;
     new_k = (_XmCCKey)XtMalloc(sizeof(_XmCCKeyRec));
@@ -1623,10 +1627,9 @@ static ConvertContext LookupContextBlock(Display *d, Atom a)
     new_k->selection = a;
     /* Allocate a context block for this selection */
     cc = (ConvertContext)XtMalloc(sizeof(ConvertContextRec));
-    _XmProcessLock();
     _XmAddHashEntry(ConvertHashTable, (XmHashKey)new_k, (XtPointer)cc);
-    _XmProcessUnlock();
   }
+  _XmProcessUnlock();
   return (cc);
 }
 
@@ -1681,13 +1684,12 @@ static void FreeTransferID(XtPointer id)
   /* Free done_proc list */
   if (tid->doneProcs != NULL)
     XtFree((char *)tid->doneProcs);
-  /* first unchain from global_tc */
+  /* first unchain from global_tc, which every thread's transfers share */
+  _XmProcessLock();
   if (global_tc == tid) {
-    _XmProcessLock();
     global_tc = (TransferContext)tid->next;
     if (global_tc != NULL)
       global_tc->prev = NULL;
-    _XmProcessUnlock();
   }
   else {
     /* Get previous and next */
@@ -1699,7 +1701,6 @@ static void FreeTransferID(XtPointer id)
     if (nid != NULL)
       nid->prev = (XtPointer)pid;
   }
-  _XmProcessLock();
   /* Put on free list */
   tid->next = (XtPointer)free_tc;
   free_tc = tid;

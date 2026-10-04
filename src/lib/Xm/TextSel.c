@@ -79,8 +79,34 @@ static XmConst XmTransferTraitRec TextTransfer = {
     (XmDestinationCallbackProc)NULL,
 };
 static XContext _XmTextDNDContext = 0;
-static _XmTextPrimSelect *prim_select;
+/* The secondary selection transfer; Transfer.c lets only one run at a
+   time in the process */
 static _XmInsertSelect insert_select;
+/*
+ * The record of the primary selection transfer to each widget, kept in
+ * a context of the widget's display: widgets of different displays,
+ * which different threads may serve, transfer at the same time.  Used
+ * with the process lock held.
+ */
+static XContext primSelectContext = 0;
+
+static _XmTextPrimSelect *GetPrimSelect(Widget w)
+{
+  XPointer data;
+  if (primSelectContext == 0 || XFindContext(XtDisplay(w), (XID)w, primSelectContext, &data))
+    return NULL;
+  return (_XmTextPrimSelect *)data;
+}
+
+static void SetPrimSelect(Widget w, _XmTextPrimSelect *prim_select)
+{
+  if (primSelectContext == 0)
+    primSelectContext = XUniqueContext();
+  if (prim_select)
+    XSaveContext(XtDisplay(w), (XID)w, primSelectContext, (XPointer)prim_select);
+  else
+    XDeleteContext(XtDisplay(w), (XID)w, primSelectContext);
+}
 
 /*ARGSUSED*/
 static void SetPrimarySelection(Widget w,
@@ -90,7 +116,9 @@ static void SetPrimarySelection(Widget w,
   XmTextWidget tw = (XmTextWidget)w;
   InputData data = tw->text.input->data;
   XmTextPosition cursorPos = tw->text.cursor_position;
+  _XmTextPrimSelect *prim_select;
   _XmProcessLock();
+  prim_select = GetPrimSelect(w);
   if (!prim_select) {
     _XmProcessUnlock();
     return;
@@ -105,7 +133,7 @@ static void SetPrimarySelection(Widget w,
   }
   if (--prim_select->ref_count == 0) {
     XtFree((char *)prim_select);
-    prim_select = NULL;
+    SetPrimSelect(w, NULL);
   }
   _XmProcessUnlock();
 }
@@ -115,14 +143,16 @@ static void CleanPrimarySelection(Widget w,
                                   XtEnum op,                        /* unused */
                                   XmTransferDoneCallbackStruct *ts) /* unused */
 {
+  _XmTextPrimSelect *prim_select;
   _XmProcessLock();
+  prim_select = GetPrimSelect(w);
   if (!prim_select) {
     _XmProcessUnlock();
     return;
   }
   if (--prim_select->ref_count == 0) {
     XtFree((char *)prim_select);
-    prim_select = NULL;
+    SetPrimSelect(w, NULL);
   }
   _XmProcessUnlock();
 }
@@ -805,6 +835,7 @@ static void HandleTargets(Widget w, XtPointer closure, XmSelectionCallbackStruct
   XmTextWidget tw = (XmTextWidget)w;
   Atom CS_OF_ENCODING;
   Atom atoms[XtNumber(atom_names)];
+  _XmTextPrimSelect *prim_select;
   Boolean supports_encoding_data = False;
   Boolean supports_CT = False;
   Boolean supports_text = False;
@@ -857,11 +888,13 @@ static void HandleTargets(Widget w, XtPointer closure, XmSelectionCallbackStruct
     }
   }
   _XmProcessLock();
+  prim_select = GetPrimSelect(w);
   if (prim_select) {
     prim_select->ref_count++;
   }
   else {
     prim_select = (_XmTextPrimSelect *)XtMalloc((unsigned)sizeof(_XmTextPrimSelect));
+    SetPrimSelect(w, prim_select);
   }
   prim_select->position = select_pos;
   prim_select->time = XtLastTimestampProcessed(XtDisplay(w));
