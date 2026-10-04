@@ -63,8 +63,7 @@ int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
 	cmd.report_info_msg_flag = 0;
 	cmd.report_warn_msg_flag = 0;
 	cmd.issue_summary = 0;
-	Uil(&cmd, &desc, (Uil_continue_type (*)())quiet_message, NULL,
-	    (Uil_continue_type (*)())quiet_status, NULL);
+	Uil(&cmd, &desc, quiet_message, NULL, quiet_status, NULL);
 	unlink(uid_path);
 	return 0;
 }
