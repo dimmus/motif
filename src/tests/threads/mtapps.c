@@ -59,6 +59,37 @@
 
 #define MAX_THREADS 8
 
+/*
+ * For AddressSanitizer builds.  libX11 looks a quark name up with
+ * memcmp(name, stored, length of name) once the hash signatures match,
+ * and a colliding stored name can be shorter: memcmp stops at the stored
+ * NUL, which differs, but ASan's strict check covers the whole range.
+ * The two threads intern names in an order where this happens.
+ */
+const char *__asan_default_options(void);
+const char *__asan_default_options(void)
+{
+	return "strict_memcmp=0";
+}
+
+/*
+ * For LeakSanitizer: leaks of Motif that this test reaches and that
+ * happen on master as well, with one thread, so have nothing to do with
+ * threads.  Remove these when they are fixed.
+ * - The drop-down XmComboBox and the option menu leave references to
+ *   shared GCs when they are destroyed.  XtCloseDisplay frees Xt's GC
+ *   cache records but not the GCs, so the GC structures leak (reported
+ *   from whichever widget created the shared GC first).
+ * - XmListReplaceItemsPos after XmListSelectPos loses the list's array
+ *   of selected items (allocated by UpdateSelection).
+ */
+const char *__lsan_default_suppressions(void);
+const char *__lsan_default_suppressions(void)
+{
+	return "leak:XtAllocateGC\n"
+	       "leak:UpdateSelection\n";
+}
+
 struct worker {
 	pthread_t thread;
 	int id;
@@ -244,9 +275,8 @@ static void exercise_list(struct worker *w, Widget list)
 	XmListAddItems(list, items, 8, 0);
 	XmListSelectPos(list, 3, False);
 	XmListSetBottomPos(list, 8);
-	CHECK(w, XmListGetSelectedPos(list, &pos, &count));
-	if (count > 0)
-		XtFree((char *)pos);
+	XtVaGetValues(list, XmNselectedPositions, &pos, XmNselectedPositionCount, &count, NULL);
+	CHECK(w, count == 1 && pos[0] == 3);
 	CHECK(w, XmListItemExists(list, items[5]));
 	XmListDeletePos(list, 1);
 	XmListReplaceItemsPos(list, &items[0], 1, 1);
