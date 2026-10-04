@@ -284,8 +284,7 @@ set(MOTIF_CONFIG_DEFINITIONS)
 
 set(CMAKE_REQUIRED_INCLUDES ${MOTIF_XT_INCLUDE_DIRS})
 foreach(_header
-    alloca.h iconv.h wctype.h fcntl.h sys/poll.h sys/time.h stdint.h
-    inttypes.h X11/Xpoll.h)
+    alloca.h iconv.h wctype.h fcntl.h sys/poll.h stdint.h inttypes.h)
   string(MAKE_C_IDENTIFIER "HAVE_${_header}" _var)
   string(TOUPPER "${_var}" _var)
   check_include_file("${_header}" ${_var})
@@ -295,18 +294,13 @@ foreach(_header
 endforeach()
 
 foreach(_func
-    getcwd getwd iconv nanosleep putenv regcomp strcasecmp strdup strlcat
-    getpwnam getpwuid re_comp re_exec)
+    iconv putenv strcasecmp strdup strlcat getpwnam getpwuid)
   string(TOUPPER "HAVE_${_func}" _var)
   check_function_exists(${_func} ${_var})
   if(${_var})
     list(APPEND MOTIF_CONFIG_DEFINITIONS ${_var})
   endif()
 endforeach()
-check_function_exists(regexec HAVE_REGEX)
-if(HAVE_REGEX)
-  list(APPEND MOTIF_CONFIG_DEFINITIONS HAVE_REGEX)
-endif()
 
 # Always defined, to 0 or 1, as the sources test it with #if
 check_symbol_exists(XICProc "X11/Xlib.h" HAVE_XICPROC)

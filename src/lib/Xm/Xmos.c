@@ -29,58 +29,20 @@ static char rcsid[] = "$TOG: Xmos.c /main/33 1998/01/21 11:07:25 csn $"
 #  endif
 #endif
 #include <stdio.h>
-#ifdef __cplusplus
-    extern "C"
-{ /* some 'locale.h' do not have prototypes (sun) */
-#endif
 #include <X11/Xlocale.h>
-#ifdef __cplusplus
-} /* Close scope of 'extern "C"' declaration */
-#endif /* __cplusplus */
-#if HAVE_X11_XPOLL_H
-#  include <X11/Xpoll.h>
-#else
-#  include <Xm/Xmpoll.h>
-#endif
-#if HAVE_NANOSLEEP
-#  include <time.h>
-#elif HAVE_SYS_TIME_H
-#  include <sys/time.h>
-#endif
+#include <time.h>
 #include <ctype.h> /* for isspace() */
 #include <stdlib.h>
 #include <string.h> /* for strdup, strlcat */
 #include <unistd.h>
 #include <pwd.h> /* for getpwnam, getpwuid */
-
-/* Ensure nanosleep is properly declared */
-#if HAVE_NANOSLEEP
-extern int nanosleep(const struct timespec *req, struct timespec *rem);
-#endif
-#if HAVE_REGEX && !HAVE_REGCOMP
-#  if defined(SVR4)
-#    include <libgen.h>
-#  elif defined(SYSV)
-extern char *regcmp();
-extern int regex();
-#  endif
-#endif /* HAVE_REGEX && !HAVE_REGCOMP */
-#if HAVE_REGCOMP
-#  include <regex.h>
-#endif
+#include <regex.h>
 #include <sys/stat.h>
-/* X_INCLUDE_PWD_H is now configured by build system */
 #include <dirent.h>
 #include <sys/types.h>
 #include "XmI.h"
 #include "XmosI.h"
-#if !HAVE_GETCWD && HAVE_GETWD
-#  include <sys/param.h>
-#  define MAX_DIR_PATH_LEN MAXPATHLEN
-#  define getcwd(buf, len) ((char *)getwd(buf))
-#else
-#  define MAX_DIR_PATH_LEN 1024
-#endif
+#define MAX_DIR_PATH_LEN 1024
 #define MAX_USER_NAME_LEN 256
 #ifndef S_ISDIR
 #  define S_ISDIR(m) ((m & S_IFMT) == S_IFDIR)
@@ -514,7 +476,7 @@ void _XmOSGetDirEntries(String qualifiedDir,
 /***********UNIX:
  * Fully qualified directory means begins with '/', does not have
  * embedded "." or "..", but does not need trailing '/'.
- * Regular expression parsing is regcmp or re_comp.
+ * Regular expression parsing is regcomp.
  * Directory entries are also Unix dependent.
  ****************/
 {
@@ -528,12 +490,8 @@ void _XmOSGetDirEntries(String qualifiedDir,
   Boolean loadCache = FALSE;
   unsigned readCacheIndex = 0;
   unsigned char dirFileType = 0;
-#if HAVE_REGCOMP
   regex_t preg;
-  int comp_status = 0;
-#elif HAVE_REGEX
-  char *compiledRE = NULL;
-#endif
+  Boolean have_preg = FALSE;
   /****************/
   _XmProcessLock();
   if (!*pEntries) {
@@ -548,16 +506,9 @@ void _XmOSGetDirEntries(String qualifiedDir,
       fixedMatchPattern = NULL;
     }
     else {
-#if HAVE_REGCOMP
-      comp_status = regcomp(&preg, fixedMatchPattern, REG_NOSUB);
-      if (comp_status)
-#elif HAVE_REGEX
-      compiledRE = (char *)regcmp(fixedMatchPattern, (char *)NULL);
-      if (!compiledRE)
-#else /* Obsolete BSD re_comp */
-      if (re_comp(fixedMatchPattern))
-#endif
-      {
+      if (regcomp(&preg, fixedMatchPattern, REG_NOSUB) == 0)
+        have_preg = TRUE;
+      else {
         XtFree(fixedMatchPattern);
         fixedMatchPattern = NULL;
       }
@@ -645,13 +596,7 @@ void _XmOSGetDirEntries(String qualifiedDir,
           break; /* Exit from outer loop. */
       }
       if (fixedMatchPattern) {
-#if HAVE_REGCOMP
         if (regexec(&preg, dirName, 0, NULL, 0))
-#elif HAVE_REGEX
-        if (!regex(compiledRE, dirName))
-#else /* obsolete BSD re_exec */
-        if (!re_exec(dirName))
-#endif
           continue;
       }
       if (matchDotsLiterally && (dirName[0] == '.') && (*matchPattern != '.'))
@@ -707,15 +652,8 @@ void _XmOSGetDirEntries(String qualifiedDir,
     if (!useCache)
       closedir(dirStream);
   }
-#if HAVE_REGCOMP
-  if (!comp_status)
+  if (have_preg)
     regfree(&preg);
-#elif !HAVE_REGEX
-  if (compiledRE) {
-    /* Use free instead of XtFree since malloc is inside of regex(). */
-    free(compiledRE);
-  }
-#endif
   XtFree(fixedMatchPattern);
   if (!loadCache)
     FreeDirCache();
@@ -1119,20 +1057,10 @@ String _XmOSInitPath(String file_name, String env_pathname, Boolean *user_path)
 
 int XmeMicroSleep(long usecs)
 {
-#if HAVE_NANOSLEEP
   struct timespec ts;
   ts.tv_sec = usecs / 1000000;
   ts.tv_nsec = (usecs % 1000000) * 1000;
   return nanosleep(&ts, NULL);
-#elif defined(USE_POLL)
-  return poll(NULL, 0, usecs / 1000);
-#else
-  struct timeval timeoutVal;
-  /* split the micro seconds in seconds and remainder */
-  timeoutVal.tv_sec = usecs / 1000000;
-  timeoutVal.tv_usec = usecs - timeoutVal.tv_sec * 1000000;
-  return Select(0, NULL, NULL, NULL, &timeoutVal);
-#endif
 }
 
 /************************************************************************

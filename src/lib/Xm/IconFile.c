@@ -56,13 +56,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
-#if !HAVE_GETCWD && HAVE_GETWD
-#  include <sys/param.h>
-#  define MAX_DIR_PATH_LEN MAXPATHLEN
-#  define getcwd(buf, len) ((char *)getwd(buf))
-#else
-#  define MAX_DIR_PATH_LEN 1024
-#endif
+#define MAX_DIR_PATH_LEN 1024
 #define MAX_USER_NAME_LEN 256
 #ifndef S_ISDIR
 #  define S_ISDIR(m) ((m & S_IFMT) == S_IFDIR)
