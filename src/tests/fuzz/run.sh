@@ -40,7 +40,15 @@ fi
 LSAN_OPTIONS=suppressions=$here/lsan.supp:print_suppressions=0
 export LSAN_OPTIONS
 
-ASAN_OPTIONS_SAVED=${ASAN_OPTIONS-}
+# libX11's quark lookup (_XrmInternalStringToQuark, reached through
+# XrmGetStringDatabase and XrmStringToQuark) compares a new name with
+# memcmp() over the new name's length against an interned name that can
+# be shorter.  ASan's default strict_memcmp=1 reports that as an
+# over-read of the shorter name although the bytes differ before its
+# end; which names collide depends on everything interned earlier in
+# the run, so the reports cannot be replayed.  Only check memcmp up to
+# the first difference.
+ASAN_OPTIONS_SAVED=${ASAN_OPTIONS:-strict_memcmp=0}
 status=0
 for t in $targets; do
 	exe=$bin/fuzz_$t
