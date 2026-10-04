@@ -274,6 +274,62 @@ START_TEST(concat_text)
 }
 END_TEST
 
+/* n copies of piece, as a C string */
+static char *repeat(const char *piece, int n)
+{
+	size_t len = strlen(piece);
+	char *s = XtMalloc(len * n + 1);
+	int i;
+
+	for (i = 0; i < n; i++)
+		memcpy(s + i * len, piece, len);
+	s[len * n] = '\0';
+	return s;
+}
+
+/*
+ * Concatenating text onto an optimized segment past 255 bytes wrapped
+ * its 8-bit byte count: 33 pieces of 8 bytes came out as 8 bytes.  The
+ * merged text must stay one text component, also on the last line of
+ * a multi-line string and with a tag.
+ */
+START_TEST(concat_long_text)
+{
+	static const char *const tags[] = { NULL, "tag1" };
+	int t, n, lines;
+
+	for (t = 0; t < 2; t++)
+		for (lines = 1; lines <= 2; lines++)
+			for (n = 30; n <= 100; n += 7) {
+				XmString s = NULL;
+				char *expect = repeat("segment ", n);
+				char *first = NULL, *all;
+				int i;
+
+				if (lines == 2) {
+					s = cat(XmStringCreateLocalized("first"),
+						sep(), NULL);
+					first = "first"; /* text_of() drops separators */
+				}
+				for (i = 0; i < n; i++)
+					s = XmStringConcatAndFree(s,
+						tags[t] ? tagged("segment ", tags[t]) :
+							  XmStringCreateLocalized("segment "));
+				all = XtMalloc(strlen(expect) + 7);
+				sprintf(all, "%s%s", first ? first : "", expect);
+				assert_text(s, all);
+				ck_assert_int_eq(XmStringLineCount(s), lines);
+				ck_assert_int_eq(count_comps(s, XmSTRING_COMPONENT_TEXT) +
+						 count_comps(s, XmSTRING_COMPONENT_LOCALE_TEXT),
+						 lines);
+				assert_byte_stream_round_trip(s, SAME_COMPS | SAME_STRING);
+				XtFree(all);
+				XtFree(expect);
+				XmStringFree(s);
+			}
+}
+END_TEST
+
 START_TEST(line_count)
 {
 	XmString s = cat(XmStringCreateLocalized("one"), sep(),
@@ -1098,6 +1154,7 @@ void xmstring_suite(SRunner *runner)
 	tcase_add_test(t, create_and_compare);
 	tcase_add_test(t, empty_strings);
 	tcase_add_test(t, concat_text);
+	tcase_add_test(t, concat_long_text);
 	tcase_add_test(t, line_count);
 	tcase_add_test(t, concat_keeps_tab_after_text);
 	tcase_add_test(t, empty_text_component);

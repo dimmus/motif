@@ -1313,6 +1313,19 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
         !_XmEntryPopGet((_XmStringEntry)a_last) && !_XmEntryPushGet((_XmStringEntry)b_seg) &&
         (((a_len != 0) && b_tabs == 0) || ((a_len == 0) && a_tabs + b_tabs <= 7)))
     {
+      if (_XmEntryOptimized(a_last) && (a_len + b_len >= (1 << BYTE_COUNT_BITS))) {
+        /*
+         * The byte count of an optimized segment is 8 bits wide: the
+         * merged text needs an unoptimized one.  A string whose first
+         * segment is unoptimized must have only unoptimized segments
+         * (see IsUnopt), so convert all of a, and b's segments below.
+         */
+        for (i = 0; (unsigned int)i < a_lc; i++)
+          _XmStrEntry(a_str)[i] = Unoptimize(_XmStrEntry(a_str)[i], True);
+        a_needs_unopt = True;
+        a_line = _XmStrEntry(a_str)[a_lc - 1];
+        a_last = _XmEntrySegmentGet(a_line)[a_sc - 1];
+      }
       if (b_len) {
         if ((_XmEntryType(a_last) == XmSTRING_ENTRY_OPTIMIZED) && _XmEntryImm(a_last)) {
           unsigned int size = sizeof(_XmStringOptSegRec);
