@@ -149,6 +149,16 @@ file(WRITE "${WORK_DIR}/undeclared.uil"
 uil_case(undeclared_operand 1 "value nosuch2 was never defined"
          FORBID "circularly defined" ARGS -o a.uid undeclared.uil)
 
+# A widget name as an operand, declared before or after its use: the
+# widget entry used to be evaluated as a value entry (heap over-read).
+file(WRITE "${WORK_DIR}/widget_operand.uil"
+  "module m\nobject w1 : XmLabel { arguments { XmNx = 1; }; };\n"
+  "object w2 : XmLabel { arguments {\n"
+  "XmNx = 1 + w1; XmNlabelString = compound_string('a') & w3; }; };\n"
+  "object w3 : XmLabel { arguments { XmNx = 1; }; };\nend module;\n")
+uil_case(widget_operand 1 "context requires a value - widget was specified"
+         ARGS -o a.uid widget_operand.uil)
+
 # "^" used to compile as "|".
 file(WRITE "${WORK_DIR}/xor.uil" "module m\nvalue a : exported 6 ^ 3;\nend module;\n")
 uil_case(xor_operator 0 "" ARGS -o a.uid -m -v xor.lis xor.uil)

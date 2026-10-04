@@ -2859,6 +2859,26 @@ return (csval_entry);
 /* END OSF Fix CR 4859 */
 
 /*
+ * An expression operand must be a value.  A name declared as a widget is
+ * accepted where a value is referenced (sar_value_ref allows widgets as
+ * argument values), and a forward reference is resolved to whatever the
+ * name turns out to be, so check before an operand is evaluated, which
+ * reads it as a value entry.
+ */
+static int operand_is_value(sym_value_entry_type *expr_entry,
+			    sym_value_entry_type *op_entry)
+{
+    if (op_entry->header.b_tag == sym_k_value_entry)
+	return TRUE;
+    diag_issue_diagnostic
+	( d_ctx_req,
+	  _sar_source_pos2( expr_entry ),
+	  diag_tag_text( sym_k_value_entry ),
+	  diag_tag_text( op_entry->header.b_tag ) );
+    return FALSE;
+}
+
+/*
 **++
 **  FUNCTIONAL DESCRIPTION:
 **
@@ -2960,6 +2980,8 @@ sym_value_entry_type *sem_evaluate_value_expr(sym_value_entry_type *value_entry)
 	in_expr = FALSE;
 	return NULL;
     }
+    if ( !operand_is_value (value_entry, value_entry->az_exp_op1) )
+      goto operand_error;
     sem_evaluate_value_expr(value_entry->az_exp_op1);
     in_expr = TRUE;
     op1_type = validate_arg (value_entry->az_exp_op1,
@@ -2979,6 +3001,9 @@ sym_value_entry_type *sem_evaluate_value_expr(sym_value_entry_type *value_entry)
 	in_expr = FALSE;
 	return NULL;
     }
+    if (value_entry->az_exp_op2 != NULL &&
+	!operand_is_value (value_entry, value_entry->az_exp_op2))
+      goto operand_error;
 
     /*
      ** If it's a binary expression, evaluate the second argument and
@@ -4043,6 +4068,18 @@ sym_value_entry_type *sem_evaluate_value_expr(sym_value_entry_type *value_entry)
      ** indicate that this expression has been evaluated
      */
 
+    value_entry->b_aux_flags |= sym_m_exp_eval;
+    in_expr = FALSE;
+    return value_entry;
+
+    /*
+     ** An operand is not a value (already reported): the expression is
+     ** an error, and is not evaluated, or reported, again.
+     */
+
+  operand_error:
+
+    value_entry->b_type = sym_k_error_value;
     value_entry->b_aux_flags |= sym_m_exp_eval;
     in_expr = FALSE;
     return value_entry;
