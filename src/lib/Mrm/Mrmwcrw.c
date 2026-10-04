@@ -832,8 +832,12 @@ UrmCreateWidgetInstance (URMResourceContextPtr	context_id,
 	Urm__UT_Error("UrmCreateWidgetInstance", _MrmMMsg_0056,
 		      NULL, NULL, MrmFAILURE) ;
       else
-	return Urm__UT_Error("UrmCreateWidgetInstance", _MrmMMsg_0057,
-			     NULL, NULL, MrmFAILURE);
+	{
+	  if (strcmp(file_id->db_version, URM1_1version) <= 0)
+	    XtFree((char *)cbptr);
+	  return Urm__UT_Error("UrmCreateWidgetInstance", _MrmMMsg_0057,
+			       NULL, NULL, MrmFAILURE);
+	}
 
       if (strcmp(file_id->db_version, URM1_1version) <= 0)
 	XtFree((char *)cbptr);
@@ -1122,8 +1126,12 @@ UrmSetWidgetInstance (URMResourceContextPtr	context_id,
 	Urm__UT_Error("UrmCreateWidgetInstance", _MrmMMsg_0056,
 		      NULL, NULL, MrmFAILURE) ;
       else
-	return Urm__UT_Error("UrmCreateWidgetInstance", _MrmMMsg_0057,
-			     NULL, NULL, MrmFAILURE);
+	{
+	  if (strcmp(file_id->db_version, URM1_1version) <= 0)
+	    XtFree((char *)cbptr);
+	  return Urm__UT_Error("UrmCreateWidgetInstance", _MrmMMsg_0057,
+			       NULL, NULL, MrmFAILURE);
+	}
 
       if (strcmp(file_id->db_version, URM1_1version) <= 0)
 	XtFree((char *)cbptr);
@@ -1362,11 +1370,16 @@ Urm__CW_CreateArglist (Widget			parent,
 	      val = (long)callbacks;
 	      break;
 	    case MrmUNRESOLVED_REFS:
+	      /* This keeps a copy of the descriptor. */
 	      Urm__CW_AppendCBSVWidgetRef
 		(file_id, svlist, cbptr, argptr->tag_code,
 		 (String) ((char *)widgetrec+argptr->stg_or_relcode.tag_offs));
+	      if (strcmp(file_id->db_version, URM1_1version) <= 0)
+		XtFree((char *)cbptr);
 	      continue;
 	    default:
+	      if (strcmp(file_id->db_version, URM1_1version) <= 0)
+		XtFree((char *)cbptr);
 	      continue;
 	    }
 	  if (strcmp(file_id->db_version, URM1_1version) <= 0)
