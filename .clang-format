@@ -1,0 +1,71 @@
+# clang-format configuration for Motif.
+#
+# This is the style that src/lib/Xm was formatted in: two-space indents, a
+# 99-column limit, one argument or parameter per line when a call or a
+# declaration does not fit on one, the opening brace of a function on its
+# own line, and "else" on the line after the closing brace.  Mrm, Uil, mwm
+# and wml keep their original tab-based style; their directories have a
+# .clang-format that turns formatting off.
+#
+# Do not reformat existing code wholesale.  Format only the lines you add
+# or change, for example with "git clang-format" (the pre-commit hook in
+# .pre-commit-config.yaml runs it on the staged changes).
+#
+# Tested with clang-format 18 to 23.
+---
+Language: Cpp
+BasedOnStyle: LLVM
+
+ColumnLimit: 99
+IndentWidth: 2
+TabWidth: 2
+UseTab: Never
+ContinuationIndentWidth: 4
+
+#   like_this_long_name(parameter_one,
+#                       parameter_two,
+#                       parameter_three);
+AlignAfterOpenBracket: Align
+BinPackArguments: false
+BinPackParameters: false
+
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterControlStatement: MultiLine
+  AfterEnum: false
+  AfterFunction: true
+  AfterStruct: false
+  AfterUnion: false
+  BeforeElse: true
+  IndentBraces: false
+
+AllowShortBlocksOnASingleLine: false
+AllowShortFunctionsOnASingleLine: Empty
+
+IndentCaseLabels: true
+IndentPPDirectives: AfterHash
+
+BreakBeforeTernaryOperators: false
+AlwaysBreakBeforeMultilineStrings: true
+AlignEscapedNewlines: DontAlign
+
+SpaceBeforeParens: ControlStatements
+SpaceInEmptyParentheses: false
+SpacesBeforeTrailingComments: 2
+
+#   static void foo(...)
+# rather than the return type on a line of its own.
+PenaltyReturnTypeOnItsOwnLine: 10000
+#   int a = foo(long, list, of, many, params);
+# is broken after "foo(" rather than after "=".
+PenaltyBreakAssignment: 100
+PenaltyBreakString: 1000000
+
+ReflowComments: true
+SortIncludes: true
+
+StatementMacros:
+  - XM_FALLTHROUGH
+
+InsertNewlineAtEOF: true
+KeepEmptyLinesAtEOF: false

@@ -1,0 +1,47 @@
+# EditorConfig: https://editorconfig.org
+#
+# Only what is uniform across the tree is set here.  The C sources of
+# src/lib/Xm use two-space indentation (see .clang-format); most of the
+# rest of the C code is older and indents with a mix of tabs and spaces,
+# so the indentation of C files is left to the surrounding code.
+
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# The libXm sources and headers
+[src/lib/Xm/*.{c,h}]
+indent_style = space
+indent_size = 2
+
+# The OSF/1 sources mix tabs and spaces with 8-column tabs.
+[src/{bin,lib/Mrm,lib/Uil,lib/Wsm}/**.{c,h,y,l}]
+tab_width = 8
+
+[{CMakeLists.txt,*.cmake}]
+indent_style = space
+
+[*.{sh,py}]
+indent_style = space
+
+[*.{yml,yaml}]
+indent_style = space
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false
+
+[{Makefile,GNUmakefile,*.mk}]
+indent_style = tab
+
+# Message catalogs, UIL sources, localized example data and test inputs
+# are byte-exact, and some of them are not UTF-8.
+[{*.msg,*.uil,*.uid,*.df,*.help,*.xpm,*.xbm,*.bdf,*.ppm,*.png,*.jpg,*.svg,src/tests/fuzz/**}]
+charset = unset
+end_of_line = unset
+insert_final_newline = unset
+trim_trailing_whitespace = unset

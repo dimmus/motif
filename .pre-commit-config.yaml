@@ -1,0 +1,37 @@
+# Hooks for https://pre-commit.com: "pre-commit install" once, then they run
+# on every "git commit".  All hooks are local and use tools from the
+# system (git and clang-format), so they work offline.
+#
+# They only look at what the commit changes; nothing here reformats whole
+# files (see CONTRIBUTING.md).
+
+repos:
+  - repo: local
+    hooks:
+      # Format the changed lines of C sources with .clang-format.  The
+      # directories that keep the old style disable formatting in their own
+      # .clang-format.  When something was reformatted the hook fails and
+      # leaves the change in the working tree: review it and "git add" it.
+      - id: clang-format
+        name: clang-format (changed lines only)
+        language: system
+        entry: git clang-format --extensions c,h
+        files: \.[ch]$
+        pass_filenames: false
+
+      # Whitespace errors (trailing blanks, space before tab, conflict
+      # markers) in the lines being committed.
+      - id: whitespace
+        name: whitespace in changed lines
+        language: system
+        entry: git diff --cached --check
+        pass_filenames: false
+
+      # Build output must never be committed (CMake writes only to the
+      # build directory; see CONTRIBUTING.md).
+      - id: no-build-output
+        name: no build output
+        language: fail
+        entry: build output must not be committed
+        files: (^|/)(_build|build)/|\.(o|a|so|uid)$|^src/lib/Xm/Xm\.h$
+        exclude: ^src/(examples|tests)/.*\.uid$
