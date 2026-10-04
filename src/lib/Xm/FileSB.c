@@ -1432,7 +1432,7 @@ static void FileSearchProc(Widget w, XtPointer sd)
     Boolean showDotFiles = (FS_FileFilterStyle(fs) == XmFILTER_NONE);
     if (numFiles > 1)
       qsort((void *)fileList, numFiles, sizeof(char *), _XmOSFileCompare);
-    XmStringFileList = (XmString *)XtMalloc(numFiles * sizeof(XmString));
+    XmStringFileList = (XmString *)_XmMallocArray(numFiles, sizeof(XmString));
     Index = 0;
     dirLen = strlen(dir);
     while (Index < numFiles) {
@@ -1500,7 +1500,6 @@ static void QualifySearchDataProc(Widget w, XtPointer sd, XtPointer qsd)
   String qualifiedMask;
   char *dirPartPtr;
   char *patternPartPtr;
-  unsigned int qDirLen;
   /****************/
   maskString = _XmStringGetTextConcat(searchData->mask);
   dirString = _XmStringGetTextConcat(searchData->dir);
@@ -1568,10 +1567,7 @@ static void QualifySearchDataProc(Widget w, XtPointer sd, XtPointer qsd)
     }
     _XmOSQualifyFileSpec(dirPartPtr, patternPartPtr, &qualifiedDir, &qualifiedPattern);
   }
-  qDirLen = strlen(qualifiedDir);
-  qualifiedMask = XtMalloc(1 + qDirLen + strlen(qualifiedPattern));
-  strncpy(qualifiedMask, qualifiedDir, qDirLen + 1);
-  strcpy(&qualifiedMask[qDirLen], qualifiedPattern);
+  qualifiedMask = _XmConcatStrings((char *[]){qualifiedDir, qualifiedPattern}, 2);
   qualifiedSearchData->reason = searchData->reason;
   qualifiedSearchData->event = searchData->event;
   if (searchData->value) {
@@ -1591,10 +1587,7 @@ static void QualifySearchDataProc(Widget w, XtPointer sd, XtPointer qsd)
       }
       else {
         String dirStr = _XmStringGetTextConcat(FS_Directory(fs));
-        unsigned dirLen = strlen(dirStr);
-        valueString = XtMalloc(dirLen + strlen(fileStr) + 1);
-        strncpy(valueString, dirStr, dirLen + 1);
-        strcpy(&valueString[dirLen], fileStr);
+        valueString = _XmConcatStrings((char *[]){dirStr, fileStr}, 2);
         XtFree(fileStr);
         XtFree(dirStr);
       }
@@ -1634,7 +1627,6 @@ static void FileSelectionBoxUpdate(XmFileSelectionBoxWidget fs,
   String dirString;
   String maskString;
   String patternString;
-  int len;
   XmFileSelectionBoxCallbackStruct qualifiedSearchData;
   /****************/
   /* Unmap file list, so if it takes a long time to generate the
@@ -1672,10 +1664,7 @@ static void FileSelectionBoxUpdate(XmFileSelectionBoxWidget fs,
     if (FS_PathMode(fs) == XmPATH_MODE_FULL) {
       if ((dirString = _XmStringGetTextConcat(FS_Directory(fs))) != NULL) {
         if ((patternString = _XmStringGetTextConcat(FS_Pattern(fs))) != NULL) {
-          len = strlen(dirString);
-          maskString = XtMalloc(len + strlen(patternString) + 1);
-          strncpy(maskString, dirString, len + 1);
-          strcpy(&maskString[len], patternString);
+          maskString = _XmConcatStrings((char *[]){dirString, patternString}, 2);
           XmTextFieldSetString(FS_FilterText(fs), maskString);
           XmTextFieldSetInsertionPosition(FS_FilterText(fs),
                                           XmTextFieldGetLastPosition(FS_FilterText(fs)));
@@ -1807,7 +1796,7 @@ static void DirSearchProc(Widget w, XtPointer sd)
     if (numDirs > 1) {
       qsort((void *)dirList, numDirs, sizeof(char *), _XmOSFileCompare);
     }
-    XmStringDirList = (XmString *)XtMalloc(numDirs * sizeof(XmString));
+    XmStringDirList = (XmString *)_XmMallocArray(numDirs, sizeof(XmString));
     Index = 0;
     dirLen = strlen(qualifiedDir);
     while (Index < numDirs) {
@@ -1866,7 +1855,6 @@ static void ListCallback(Widget wid, XtPointer client_data, XtPointer call_data)
   String dirString;
   String maskString;
   String patternString;
-  int len;
   /****************/
   callback = (XmListCallbackStruct *)call_data;
   fsb = (XmFileSelectionBoxWidget)client_data;
@@ -1899,10 +1887,7 @@ static void ListCallback(Widget wid, XtPointer client_data, XtPointer call_data)
         if (FS_PathMode(fsb) == XmPATH_MODE_FULL) {
           if ((dirString = _XmStringGetTextConcat(qualified_change_data.dir)) != NULL) {
             if ((patternString = _XmStringGetTextConcat(qualified_change_data.pattern)) != NULL) {
-              len = strlen(dirString);
-              maskString = XtMalloc(len + strlen(patternString) + 1);
-              strncpy(maskString, dirString, len + 1);
-              strcpy(&maskString[len], patternString);
+              maskString = _XmConcatStrings((char *[]){dirString, patternString}, 2);
               XmTextFieldSetString(FS_FilterText(fsb), maskString);
               XmTextFieldSetInsertionPosition(FS_FilterText(fsb),
                                               XmTextFieldGetLastPosition(FS_FilterText(fsb)));

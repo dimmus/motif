@@ -129,6 +129,7 @@ add_library(Motif::Uil ALIAS Uil)
 
 # Export only the symbols of libUil.map (see doc/abi-policy.md)
 motif_version_script(Uil ${CMAKE_CURRENT_SOURCE_DIR}/libUil.map)
+motif_ban_unsafe_string_functions(UilCompiler Uil)
 
 add_dependencies(Uil UilCompiler)
 motif_uil_compiler_setup(Uil)

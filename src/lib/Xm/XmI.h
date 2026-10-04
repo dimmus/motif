@@ -89,7 +89,7 @@ void _XmInitModifiers(void);
 #  define XmStackAlloc(size, stack_cache_array) \
     ((((char *)(stack_cache_array) != NULL) && ((size) <= sizeof(stack_cache_array))) ? \
          (char *)(stack_cache_array) : \
-         XtMalloc((unsigned)(size)))
+         _XmMallocArray(1, (size)))
 #  define XmStackFree(pointer, stack_cache_array) \
     if ((pointer) != ((char *)(stack_cache_array))) \
       XtFree(pointer);
@@ -166,6 +166,21 @@ extern Boolean _XmIsISO10646(Display *dpy, XFontStruct *font);
 extern XChar2b *_XmUtf8ToUcs2(char *draw_text, size_t seg_len, size_t *ret_str_len);
 extern size_t _XmUtf8ToUcs2Buf(char *draw_text, size_t seg_len, XChar2b *buf);
 extern Pixel _XmAssignInsensitiveColor(Widget w);
+extern char *_XmMallocArray(size_t num, size_t size);
+extern char *_XmReallocArray(char *ptr, size_t num, size_t size);
+extern char *_XmConcatStrings(char **list, int count);
+extern Boolean _XmGetWindowPropertyChecked(Display *display,
+                                           Window w,
+                                           Atom property,
+                                           long long_length,
+                                           Atom req_type,
+                                           int format,
+                                           unsigned long min_items,
+                                           Atom *actual_type_return,
+                                           int *actual_format_return,
+                                           unsigned long *nitems_return,
+                                           unsigned long *bytes_after_return,
+                                           unsigned char **prop_return);
 /********    End Private Function Declarations    ********/
 /********    Conditionally defined macros for thread_safe Motif ******/
 #  if defined(XTHREADS) && defined(XUSE_MTSAFE_API)

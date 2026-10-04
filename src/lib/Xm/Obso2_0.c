@@ -190,15 +190,18 @@ externaldef(worldobjectclass) WidgetClass xmWorldClass = (WidgetClass)&xmWorldCl
  ************************************************************************/
 char *_XmGetRealXlations(Display *dpy, _XmBuildVirtualKeyStruct *keys, int num_keys)
 {
-  char *result, buf[1000];
-  char *tmp = buf;
+  /* The bindings come from the root window _MOTIF_BINDINGS property,
+     which any client can set: the result can be arbitrarily long. */
+  char *buf;
+  size_t len = 0, size = 256, need;
   char *keystring;
   register int i;
   int num_vkeys;
   XmKeyBinding vkeys;
   KeySym keysym;
   Modifiers mods;
-  *tmp = '\0';
+  buf = XtMalloc(size);
+  *buf = '\0';
   for (i = 0; i < num_keys; i++) {
     keysym = XStringToKeysym(keys[i].key);
     if (keysym == NoSymbol)
@@ -210,26 +213,28 @@ char *_XmGetRealXlations(Display *dpy, _XmBuildVirtualKeyStruct *keys, int num_k
       if (!keystring)
         break;
       mods = vkeys[num_vkeys].modifiers | keys[i].mod;
-      if (mods & ControlMask)
-        strcat(tmp, "Ctrl ");
-      if (mods & ShiftMask)
-        strcat(tmp, "Shift ");
-      if (mods & Mod1Mask)
-        strcat(tmp, "Mod1 "); /* "Alt" may not be right on some systems */
-      strcat(tmp, "<Key>");
-      strcat(tmp, keystring);
-      strcat(tmp, ": ");
-      strcat(tmp, keys[i].action);
-      tmp += strlen(tmp);
-      assert((tmp - buf) < 1000);
+      need = len + sizeof("Ctrl Shift Mod1 <Key>: ") + strlen(keystring) + strlen(keys[i].action);
+      if (need > size) {
+        size = 2 * need;
+        buf = XtRealloc(buf, size);
+      }
+      /* "Alt" may not be right on some systems, hence Mod1 */
+      len += snprintf(buf + len,
+                      size - len,
+                      "%s%s%s<Key>%s: %s",
+                      (mods & ControlMask) ? "Ctrl " : "",
+                      (mods & ShiftMask) ? "Shift " : "",
+                      (mods & Mod1Mask) ? "Mod1 " : "",
+                      keystring,
+                      keys[i].action);
     }
     XtFree((char *)vkeys);
   }
-  if (buf[0] != '\0')
-    result = XtNewString(buf);
-  else
-    result = NULL;
-  return (result);
+  if (buf[0] == '\0') {
+    XtFree(buf);
+    buf = NULL;
+  }
+  return (buf);
 }
 
 /************************************************************************
@@ -367,9 +372,8 @@ void _XmSetDefaultBackgroundColorSpec(Screen *screen, /* unused */
   if (app_defined) {
     XtFree(default_background_color_spec);
   }
-  default_background_color_spec = (String)XtMalloc(strlen(new_color_spec) + 1);
   /* this needs to be set per screen */
-  strcpy(default_background_color_spec, new_color_spec);
+  default_background_color_spec = XtNewString(new_color_spec);
   app_defined = TRUE;
 }
 
@@ -808,13 +812,15 @@ XmColorData *_XmGetDefaultColors(Screen *screen, Colormap color_map)
   /*  See if more space is needed in the array  */
   if (default_set == NULL) {
     default_set_size = 10;
-    default_set = (XmColorData **)XtRealloc((char *)default_set,
-                                            (sizeof(XmColorData *) * default_set_size));
+    default_set = (XmColorData **)_XmReallocArray((char *)default_set,
+                                                  default_set_size,
+                                                  sizeof(XmColorData *));
   }
   else if (default_set_count == default_set_size) {
     default_set_size += 10;
-    default_set = (XmColorData **)XtRealloc((char *)default_set,
-                                            sizeof(XmColorData *) * default_set_size);
+    default_set = (XmColorData **)_XmReallocArray((char *)default_set,
+                                                  default_set_size,
+                                                  sizeof(XmColorData *));
   }
   /* Find the background based on the depth of the screen */
   if (DefaultDepthOfScreen(screen) == 1) {
@@ -1109,7 +1115,7 @@ Cardinal _XmFilterResources(XtResource *resources,
       copyIndexes[j++] = i;
     }
   }
-  filteredResources = (XtResource *)XtMalloc(j * sizeof(XtResource));
+  filteredResources = (XtResource *)_XmMallocArray(j, sizeof(XtResource));
   for (i = 0; i < j; i++) {
     filteredResources[i] = resources[copyIndexes[i]];
   }

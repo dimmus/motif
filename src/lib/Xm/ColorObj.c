@@ -426,7 +426,7 @@ static void Initialize(Widget rq, /* unused */
       for (i = 0; i < nscreens; i++) {
         names[i] = ((nscreens <= MAX_SCREENS) ? &buf[i * MAX_ATOM_LENGTH] :
                                                 XtMalloc(MAX_ATOM_LENGTH));
-        sprintf(names[i], "%s%d", XmSCUSTOMIZE_DATA, i);
+        snprintf(names[i], MAX_ATOM_LENGTH, "%s%d", XmSCUSTOMIZE_DATA, i);
       }
       XInternAtoms(new_obj->color_obj.display, names, nscreens, FALSE, new_obj->color_obj.atoms);
       if (nscreens > MAX_SCREENS)
@@ -536,7 +536,7 @@ static Boolean FetchPixelData(Widget w, char *value, unsigned long length, int s
   if (value == NULL || length == 0 || length > 4096)
     return False;
   /* the data need not be NUL terminated */
-  copy = XtMalloc((Cardinal)length + 1);
+  copy = _XmMallocArray(length + 1, 1);
   memcpy(copy, value, (size_t)length);
   copy[length] = '\0';
   cursor = copy;
@@ -560,42 +560,33 @@ static Boolean FetchPixelData(Widget w, char *value, unsigned long length, int s
 static Boolean ColorCachePropertyExists(Display *dpy, Window SelOwner, Widget w, int screen)
 {
   Atom pixel_set_atom;
-  unsigned long bytesafter, length;
+  unsigned long length;
   char *value = NULL;
-  int format = 0;
-  Atom target;
-  int result = False;
+  Boolean result;
   if (!SelOwner)
     return False;
   /* try to get the property if it exist only */
   if ((pixel_set_atom = XInternAtom(dpy, XmSPIXEL_SET_PROP, TRUE)) == None)
     return False;
   /* get the content of the property */
-  result = XGetWindowProperty(dpy,
-                              SelOwner,
-                              pixel_set_atom,
-                              0L,
-                              1000000,
-                              False,
-                              (Atom)AnyPropertyType,
-                              &target,
-                              &format,
-                              &length,
-                              &bytesafter,
-                              (unsigned char **)&value);
-  if (result != Success)
+  if (!_XmGetWindowPropertyChecked(dpy,
+                                   SelOwner,
+                                   pixel_set_atom,
+                                   1000000,
+                                   (Atom)AnyPropertyType,
+                                   8,
+                                   2,
+                                   NULL,
+                                   NULL,
+                                   &length,
+                                   NULL,
+                                   (unsigned char **)&value))
     return False;
   /* the last byte of the string is the version */
-  if (format != 8 || target == None || value == NULL || length < 2 ||
-      value[length - 1] != XmPIXEL_SET_PROP_VERSION ||
-      !FetchPixelData(w, value, length - 1, screen))
-  {
-    if (value != NULL)
-      XFree(value);
-    return False;
-  }
+  result = value[length - 1] == XmPIXEL_SET_PROP_VERSION &&
+           FetchPixelData(w, value, length - 1, screen);
   XFree(value);
-  return True;
+  return result;
 }
 
 /**********************************************************************/

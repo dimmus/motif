@@ -392,10 +392,7 @@ static int RMW_ErrorHandler(Display *display,   /* unused */
 static Window ReadMotifWindow(Display *display)
 {
   Atom motifWindowAtom;
-  Atom type;
-  int format;
   unsigned long lengthRtn;
-  unsigned long bytesafter;
   Window *property = NULL;
   Window motifWindow = None;
   XErrorHandler old_Handler;
@@ -405,19 +402,19 @@ static Window ReadMotifWindow(Display *display)
   RMW_ErrorFlag = False;
   _XmProcessUnlock();
   motifWindowAtom = XInternAtom(display, XmI_MOTIF_DRAG_WINDOW, False);
-  if ((XGetWindowProperty(display,
-                          RootWindow(display, 0),
-                          motifWindowAtom,
-                          0L,
-                          MAXPROPLEN,
-                          False,
-                          AnyPropertyType,
-                          &type,
-                          &format,
-                          &lengthRtn,
-                          &bytesafter,
-                          (unsigned char **)&property) == Success) &&
-      (type == XA_WINDOW) && (format == 32) && (lengthRtn == 1))
+  if (_XmGetWindowPropertyChecked(display,
+                                  RootWindow(display, 0),
+                                  motifWindowAtom,
+                                  MAXPROPLEN,
+                                  XA_WINDOW,
+                                  32,
+                                  1,
+                                  NULL,
+                                  NULL,
+                                  &lengthRtn,
+                                  NULL,
+                                  (unsigned char **)&property) &&
+      lengthRtn == 1)
   {
     motifWindow = *property;
   }
@@ -571,9 +568,7 @@ static Boolean ReadAtomsTable(Display *display, xmAtomsTable atomsTable)
   } *propertyRecPtr = NULL;
 
   Atom atomsTableAtom;
-  int format;
-  unsigned long bytesafter, lengthRtn;
-  Atom type;
+  unsigned long lengthRtn;
   int i;
   Cardinal num_atoms;
   Boolean ret;
@@ -582,22 +577,18 @@ static Boolean ReadAtomsTable(Display *display, xmAtomsTable atomsTable)
   motifWindow = GetMotifWindow(display);
   _XmProcessLock();
   StartProtectedSection(display, motifWindow);
-  ret = ((XGetWindowProperty(display,        /* display* */
-                             motifWindow,    /* window */
-                             atomsTableAtom, /* property atom */
-                             0L,
-                             MAXPROPLEN,     /* long_offset, long_length */
-                             False,          /* delete flag */
-                             atomsTableAtom, /* property type */
-                             &type,          /* returned actual type */
-                             &format,        /* returned actual format */
-                             &lengthRtn,     /* returned item count */
-                             &bytesafter,    /* returned bytes remaining */
-                             (unsigned char **)&propertyRecPtr)
-          /* returned data */
-          == Success) &&
-         (type == atomsTableAtom) && (format == 8) &&
-         (lengthRtn >= sizeof(xmMotifAtomsPropertyRec)));
+  ret = _XmGetWindowPropertyChecked(display,
+                                    motifWindow,
+                                    atomsTableAtom,
+                                    MAXPROPLEN,
+                                    atomsTableAtom,
+                                    8,
+                                    sizeof(xmMotifAtomsPropertyRec),
+                                    NULL,
+                                    NULL,
+                                    &lengthRtn,
+                                    NULL,
+                                    (unsigned char **)&propertyRecPtr);
   EndProtectedSection(display);
   if (bad_window) {
     static Boolean first_time = True;
@@ -641,8 +632,9 @@ static Boolean ReadAtomsTable(Display *display, xmAtomsTable atomsTable)
       /*
        *  expand the atoms table
        */
-      atomsTable->entries = (xmAtomsTableEntry)XtRealloc((char *)atomsTable->entries, /* NULL ok */
-                                                         sizeof(xmAtomsTableEntryRec) * num_atoms);
+      atomsTable->entries = (xmAtomsTableEntry)_XmReallocArray((char *)atomsTable->entries,
+                                                               num_atoms,
+                                                               sizeof(xmAtomsTableEntryRec));
     }
     /*
      *  Read the atom table entries.
@@ -788,9 +780,7 @@ static Boolean ReadTargetsTable(Display *display, xmTargetsTable targetsTable)
   char *bufptr, *bufend;
   Cardinal num_targets;
   Atom targetsTableAtom;
-  int format;
-  unsigned long bytesafter, lengthRtn;
-  Atom type;
+  unsigned long lengthRtn;
   int i, j;
   Atom *targets;
   Boolean ret;
@@ -800,20 +790,18 @@ static Boolean ReadTargetsTable(Display *display, xmTargetsTable targetsTable)
   motifWindow = GetMotifWindow(display);
   _XmProcessLock();
   StartProtectedSection(display, motifWindow);
-  ret = ((XGetWindowProperty(display,
-                             motifWindow,
-                             targetsTableAtom,
-                             0L,
-                             MAXPROPLEN,
-                             False,
-                             targetsTableAtom,
-                             &type,
-                             &format,
-                             &lengthRtn,
-                             &bytesafter,
-                             (unsigned char **)&propertyRecPtr) == Success) &&
-         (type == targetsTableAtom) && (format == 8) &&
-         (lengthRtn >= sizeof(xmMotifTargetsPropertyRec)));
+  ret = _XmGetWindowPropertyChecked(display,
+                                    motifWindow,
+                                    targetsTableAtom,
+                                    MAXPROPLEN,
+                                    targetsTableAtom,
+                                    8,
+                                    sizeof(xmMotifTargetsPropertyRec),
+                                    NULL,
+                                    NULL,
+                                    &lengthRtn,
+                                    NULL,
+                                    (unsigned char **)&propertyRecPtr);
   EndProtectedSection(display);
   if (bad_window) {
     XmeWarning((Widget)XmGetXmDisplay(display), MESSAGE1);
@@ -838,9 +826,10 @@ static Boolean ReadTargetsTable(Display *display, xmTargetsTable targetsTable)
       /*
        *  expand the target table
        */
-      targetsTable->entries = (xmTargetsTableEntry)XtRealloc(
-          (char *)targetsTable->entries, /* NULL ok */
-          sizeof(xmTargetsTableEntryRec) * propertyRecPtr->info.num_target_lists);
+      targetsTable->entries =
+          (xmTargetsTableEntry)_XmReallocArray((char *)targetsTable->entries,
+                                               propertyRecPtr->info.num_target_lists,
+                                               sizeof(xmTargetsTableEntryRec));
       /*
        *  read the new entries.  The property can be written by any
        *  client, so every list is checked against the end of the data
@@ -864,7 +853,7 @@ static Boolean ReadTargetsTable(Display *display, xmTargetsTable targetsTable)
           if (!num_targets)
             targets = NULL;
           else
-            targets = (Atom *)XtMalloc(sizeof(Atom) * num_targets);
+            targets = (Atom *)_XmMallocArray(num_targets, sizeof(Atom));
           /*
            *  Read each Atom in one at a time.
            */
@@ -1132,9 +1121,9 @@ Cardinal _XmTargetsToIndex(Widget shell, Atom *targets, Cardinal numTargets)
   }
   if (i == targetsTable->numEntries) {
     targetsTable->numEntries++;
-    targetsTable->entries = (xmTargetsTableEntry)XtRealloc(
-        (char *)targetsTable->entries, /* NULL ok */
-        sizeof(xmTargetsTableEntryRec) * (targetsTable->numEntries));
+    targetsTable->entries = (xmTargetsTableEntry)_XmReallocArray((char *)targetsTable->entries,
+                                                                 targetsTable->numEntries,
+                                                                 sizeof(xmTargetsTableEntryRec));
     targetsTable->entries[i].numTargets = numTargets;
     targetsTable->entries[i].targets = newTargets;
     WriteTargetsTable(display, targetsTable);
@@ -1187,10 +1176,10 @@ Atom _XmAllocMotifAtom(Widget shell, Time time)
   }
   if (atomReturn == None) {
     i = atomsTable->numEntries++;
-    atomsTable->entries = (xmAtomsTableEntry)XtRealloc(
-        (char *)atomsTable->entries, /* NULL ok */
-        (atomsTable->numEntries * sizeof(xmAtomsTableEntryRec)));
-    sprintf(atomname, "%s%u", "_MOTIF_ATOM_", i);
+    atomsTable->entries = (xmAtomsTableEntry)_XmReallocArray((char *)atomsTable->entries,
+                                                             atomsTable->numEntries,
+                                                             sizeof(xmAtomsTableEntryRec));
+    snprintf(atomname, sizeof(atomname), "%s%u", "_MOTIF_ATOM_", i);
     atomsTable->entries[i].atom = XInternAtom(display, atomname, False);
     atomsTable->entries[i].time = time;
     atomReturn = atomsTable->entries[i].atom;
@@ -1329,10 +1318,7 @@ void _XmDestroyMotifWindow(Display *display)
 Window _XmGetDragProxyWindow(Display *display)
 {
   Atom motifProxyWindowAtom;
-  Atom type;
-  int format;
   unsigned long lengthRtn;
-  unsigned long bytesafter;
   Window *property = NULL;
   Window motifWindow;
   Window motifProxyWindow = None;
@@ -1340,19 +1326,19 @@ Window _XmGetDragProxyWindow(Display *display)
     motifProxyWindowAtom = XInternAtom(display, XmI_MOTIF_DRAG_PROXY_WINDOW, False);
     _XmProcessLock();
     StartProtectedSection(display, motifWindow);
-    if ((XGetWindowProperty(display,
-                            motifWindow,
-                            motifProxyWindowAtom,
-                            0L,
-                            MAXPROPLEN,
-                            False,
-                            AnyPropertyType,
-                            &type,
-                            &format,
-                            &lengthRtn,
-                            &bytesafter,
-                            (unsigned char **)&property) == Success) &&
-        (type == XA_WINDOW) && (format == 32) && (lengthRtn == 1))
+    if (_XmGetWindowPropertyChecked(display,
+                                    motifWindow,
+                                    motifProxyWindowAtom,
+                                    MAXPROPLEN,
+                                    XA_WINDOW,
+                                    32,
+                                    1,
+                                    NULL,
+                                    NULL,
+                                    &lengthRtn,
+                                    NULL,
+                                    (unsigned char **)&property) &&
+        lengthRtn == 1)
     {
       motifProxyWindow = *property;
     }

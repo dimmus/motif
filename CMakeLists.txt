@@ -612,6 +612,19 @@ if(WITH_HARDENING AND CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
   endif()
 endif()
 
+# Strict aliasing
+#
+# The sources still hand typed pointers to X functions that take a generic
+# one by address, (XPointer *)&ptr to XFindContext, (unsigned char **)&ptr
+# to XGetWindowProperty and so on, about 90 places in libXm alone, and the
+# value is then written through one type and read through another.  Until
+# they are gone, do not let the optimizer assume that this never happens:
+# it did in 97547c53, and the result was heap corruption.
+
+if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
+  add_compile_options(-fno-strict-aliasing)
+endif()
+
 # Optimization options. These are applied here rather than in the presets in
 # tools/cmake/config, because presets run before the compiler is detected.
 if(WITH_LTO)
@@ -732,6 +745,22 @@ function(motif_version_script target script)
     endif()
     set_property(TARGET ${target} APPEND PROPERTY LINK_DEPENDS ${script})
   endif()
+endfunction()
+
+# motif_ban_unsafe_string_functions(<target>...)
+#
+# Compile the sources of the library <target>s with src/lib/XmBannedI.h
+# force-included, so that a call of sprintf, vsprintf, strcpy or strcat
+# fails to compile (GCC and Clang).
+function(motif_ban_unsafe_string_functions)
+  if(NOT CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
+    return()
+  endif()
+  foreach(_target IN LISTS ARGN)
+    target_compile_options(${_target} PRIVATE
+      "SHELL:-include ${CMAKE_SOURCE_DIR}/src/lib/XmBannedI.h"
+      -Werror=deprecated-declarations)
+  endforeach()
 endfunction()
 
 # motif_exports_test(<target> <script> HEADERS <header>...

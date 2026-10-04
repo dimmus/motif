@@ -31,6 +31,7 @@ static char rcsid[] = "$XConsortium: DropSMgrI.c /main/11 1995/07/14 10:30:45 dr
 #include "DropSMgrI.h"
 #include "MessagesI.h"
 #include "RegionI.h"
+#include "XmI.h"
 #include <Xm/DropSMgrP.h>
 #include <stdio.h>
 #define MESSAGE1 _XmMMsgDropSMgrI_0001
@@ -159,8 +160,9 @@ void _XmDSIAddChild(XmDSInfo parentInfo, XmDSInfo childInfo, Cardinal childPosit
   if (num_children == GetDSMaxChildren(parentInfo)) {
     SetDSMaxChildren(parentInfo, num_children + CHILDREN_INCREMENT);
     SetDSChildren(parentInfo,
-                  (XtPointer *)XtRealloc((char *)GetDSChildren(parentInfo),
-                                         sizeof(XmDSInfo) * GetDSMaxChildren(parentInfo)));
+                  (XtPointer *)_XmReallocArray((char *)GetDSChildren(parentInfo),
+                                               GetDSMaxChildren(parentInfo),
+                                               sizeof(XmDSInfo)));
   }
   for (i = num_children; i > childPosition; i--)
     GetDSChildren(parentInfo)[i] = GetDSChildren(parentInfo)[i - 1];

@@ -46,6 +46,13 @@ in the same change (`UPDATE_BASELINE=1 tools/dev/env/ci/static-analysis.sh
 - Follow the style of the surrounding code: C17, two-space indentation in
   the libraries.  `tools/dev/.clang-format` describes the style; use it on
   the lines you change, not on whole files.
+- In libXm, allocate arrays with `_XmMallocArray`/`_XmReallocArray`
+  (`XmI.h`) rather than multiplying sizes for `XtMalloc`, and read window
+  properties with `_XmGetWindowPropertyChecked`: any client can write
+  them.  The libraries cannot call `sprintf`, `vsprintf`, `strcpy` or
+  `strcat` (`src/lib/XmBannedI.h` makes that a compile error); use
+  `snprintf`, `memcpy` with a known length, `XtNewString` or
+  `_XmConcatStrings`.
 - Add a test for a bug fix where the test suite can express it: a
   libcheck case in `src/tests/Xm`, or a case in
   `src/bin/uil/tests/uil_robustness.cmake` for the UIL compiler.  Tests

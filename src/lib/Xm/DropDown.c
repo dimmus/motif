@@ -1944,7 +1944,7 @@ static Boolean SetListFromText(Widget w, Boolean no_action)
     if (table != NULL) {
       for (tptr = table, count = 0; *tptr != NULL; tptr++)
         count++;
-      sel_table = (XmStringTable)XtMalloc(sizeof(XmString) * count);
+      sel_table = (XmStringTable)_XmMallocArray(count, sizeof(XmString));
       for (tptr = table, count = 0; *tptr != NULL; tptr++) {
         if (XmListItemExists(XmDropDown_list(cbw), *tptr))
           sel_table[count++] = *tptr;

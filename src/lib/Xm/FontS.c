@@ -547,7 +547,7 @@ static void ProcessXlfdFontData(XmFontSelectorWidget fsw,
    */
   num = 1;
   alloc = FAMILY_INC;
-  fam = (FamilyInfo *)XtMalloc(sizeof(FamilyInfo) * alloc);
+  fam = (FamilyInfo *)_XmMallocArray(alloc, sizeof(FamilyInfo));
   fam->nameq = NULLQUARK; /* Don't use this family yet. */
   /*
    * Set up the "Any" family.
@@ -557,7 +557,7 @@ static void ProcessXlfdFontData(XmFontSelectorWidget fsw,
     if (cur_family == NULL) {
       if (num >= alloc) {
         alloc += FAMILY_INC;
-        fam = (FamilyInfo *)XtRealloc((XtPointer)fam, sizeof(FamilyInfo) * alloc);
+        fam = (FamilyInfo *)_XmReallocArray((XtPointer)fam, alloc, sizeof(FamilyInfo));
       }
       FillNewFamily(fam + num, data);
       num++;
@@ -715,7 +715,7 @@ static void AddToXlfdList(
   FontData *current;
   if (*num >= *alloc) {
     *alloc += ALLOC_INC;
-    *list = (FontData *)XtRealloc((XtPointer)*list, sizeof(FontData) * *alloc);
+    *list = (FontData *)_XmReallocArray((XtPointer)*list, *alloc, sizeof(FontData));
   }
   current = (*list) + *num;
   /*
@@ -737,7 +737,7 @@ static void AddToOtherList(char *name, String **list, int *num, int *alloc)
 {
   if (*num >= *alloc) {
     *alloc += ALLOC_INC;
-    *list = (String *)XtRealloc((XtPointer)*list, sizeof(String) * *alloc);
+    *list = (String *)_XmReallocArray((XtPointer)*list, *alloc, sizeof(String));
   }
   (*list)[(*num)++] = XtNewString(name);
 }
@@ -990,8 +990,9 @@ static void UpdateExistingFamily(FamilyInfo *fam, FontData *font)
   for (i = 0; TRUE; i++) {
     if (i == fam->encoding_alloc) {
       fam->encoding_alloc += NUM_BUTTONS;
-      fam->encodings = (XrmQuark *)XtRealloc((char *)fam->encodings,
-                                             sizeof(XrmQuark) * fam->encoding_alloc);
+      fam->encodings = (XrmQuark *)_XmReallocArray((char *)fam->encodings,
+                                                   fam->encoding_alloc,
+                                                   sizeof(XrmQuark));
       memset((char *)(fam->encodings + i), 0, sizeof(XrmQuark) * NUM_BUTTONS);
     }
     if (fam->encodings[i] == font->encoding)
@@ -1370,7 +1371,7 @@ static void UpdateFamilies(XmFontSelectorWidget fsw)
   Boolean str_match = False;
   String temp;
   num = XmFontS_font_info(fsw)->num_families;
-  strs = (XmString *)XtMalloc(sizeof(XmString) * num);
+  strs = (XmString *)_XmMallocArray(num, sizeof(XmString));
   size_flag = SizeMapping(cf->point_size);
   for (i = count = 0; i < num; i++, fam++) {
     Boolean ok_75, ok_100, spacing_match, resolution_ok, has_sizes;
@@ -1482,7 +1483,7 @@ static void UpdateSizes(XmFontSelectorWidget fsw)
   if (CheckFlag(XmFontS_user_state(fsw), DPI_100))
     size_flag |= family->sizes_100;
   size = sizeof(LongFlag) * 8; /* There are 8 bits in a BYTE */
-  strs = (XmString *)XtMalloc(sizeof(XmString) * (size + 1));
+  strs = (XmString *)_XmMallocArray(size + 1, sizeof(XmString));
   /*
    * DMS - fix to work around apparent Motif 1.2.4 bug concerning
    *       XmStrings containing as the empty string
@@ -1496,7 +1497,7 @@ static void UpdateSizes(XmFontSelectorWidget fsw)
     LongFlag flag = ((LongFlag)1) << i;
     if (!CheckLongFlag(size_flag, flag) && !IsScaled(fsw, family))
       continue;
-    sprintf(buf, "%d", GValidSizes[i]);
+    snprintf(buf, sizeof(buf), "%d", GValidSizes[i]);
     strs[count++] = XmStringCreateLocalized(buf);
     match |= (SizeMapping(cf->point_size) == flag);
   }
@@ -1689,7 +1690,7 @@ static void SetDisplayedFont(XmFontSelectorWidget fsw, String new_font)
   num_largs++;
   XtSetValues(XmFontS_bold_toggle(fsw), largs, num_largs);
   SetComboValue(XmFontS_family_box(fsw), XrmQuarkToString(cf->familyq));
-  sprintf(buf, "%d", cf->point_size / POINT_DIVIDE);
+  snprintf(buf, sizeof(buf), "%d", cf->point_size / POINT_DIVIDE);
   SetComboValue(XmFontS_size_box(fsw), buf);
   SetResolution(fsw, cf);
   XmCopyISOLatin1Lowered(buf, cf->spacing);
@@ -1731,8 +1732,8 @@ static void AddToXlfdOnlyList(XmFontSelectorWidget fsw, Widget w)
   int alloc = (int)XmFontS_alloc_xlfd_only(fsw);
   if (num >= alloc) {
     alloc += WIDGET_LIST_INC;
-    XmFontS_xlfd_only(fsw) = (WidgetList)XtRealloc((XtPointer)XmFontS_xlfd_only(fsw),
-                                                   sizeof(Widget) * alloc);
+    XmFontS_xlfd_only(fsw) =
+        (WidgetList)_XmReallocArray((XtPointer)XmFontS_xlfd_only(fsw), alloc, sizeof(Widget));
     XmFontS_alloc_xlfd_only(fsw) = alloc;
   }
   XmFontS_xlfd_only(fsw)[num] = w;
@@ -1751,8 +1752,8 @@ static void AddToXlfdSensitiveList(XmFontSelectorWidget fsw, Widget w)
   int alloc = (int)XmFontS_alloc_xlfd_sensitive(fsw);
   if (num >= alloc) {
     alloc += WIDGET_LIST_INC;
-    XmFontS_xlfd_sensitive(fsw) = (WidgetList)XtRealloc((XtPointer)XmFontS_xlfd_sensitive(fsw),
-                                                        sizeof(Widget) * alloc);
+    XmFontS_xlfd_sensitive(fsw) =
+        (WidgetList)_XmReallocArray((XtPointer)XmFontS_xlfd_sensitive(fsw), alloc, sizeof(Widget));
     XmFontS_alloc_xlfd_sensitive(fsw) = alloc;
   }
   XmFontS_xlfd_sensitive(fsw)[num] = w;
@@ -1866,7 +1867,7 @@ static void SetOtherList(XmFontSelectorWidget fsw, Boolean force)
     XtSetArg(largs[num_largs], XmNvalue, " ");
     num_largs++;
   }
-  strs = (XmString *)XtMalloc(sizeof(XmString) * num);
+  strs = (XmString *)_XmMallocArray(num, sizeof(XmString));
   for (i = count = 0; i < num; i++, others++)
     strs[count++] = XmStringCreateLocalized(*others);
   XtSetArg(largs[num_largs], XmNitems, strs);
@@ -2475,7 +2476,7 @@ static Widget CreateEncodingMenu(XmFontSelectorWidget fsw,
     char name[BUFSIZ];
     XmString label = XmStringCreateLocalized(*encodings);
     margs[button_label].value = (XtArgVal)label;
-    sprintf(name, "button_%d", i);
+    snprintf(name, sizeof(name), "button_%d", i);
     button = XtCreateManagedWidget(
         name, xmPushButtonWidgetClass, pulldownMenu, margs, num_args + num_largs);
     XmStringFree(label);
@@ -3064,7 +3065,7 @@ static void Initialize(Widget request, Widget set, ArgList args, Cardinal *num_a
     for (i = 0, encodings = ENCODING_LIST(fsw); *encodings != NULL; i++, encodings++)
       i++;
     i++;
-    newList = (String *)XtMalloc(sizeof(String) * i);
+    newList = (String *)_XmMallocArray(i, sizeof(String));
     for (i = 0, encodings = ENCODING_LIST(fsw); *encodings != NULL; i++, encodings++)
       newList[i] = XtNewString(*encodings);
     newList[i] = NULL;
@@ -3210,7 +3211,7 @@ static Boolean SetValues(Widget old, Widget request, Widget set, ArgList args, C
       if (strcmp(*encodings, ENCODING_STRING(set_fsw)) == 0)
         current = i;
     }
-    sprintf(buf, "*button_%d", current);
+    snprintf(buf, sizeof(buf), "*button_%d", current);
     if ((button = XtNameToWidget(XtParent(XmFontS_option_menu(set_fsw)), buf)) != NULL) {
       num_largs = 0;
       XtSetArg(largs[num_largs], XmNmenuHistory, button);

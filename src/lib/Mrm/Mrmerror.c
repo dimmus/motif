@@ -206,8 +206,7 @@ Urm__UT_Error (char			*module,
     case URMErrOutMemory:
       if ( urm__latest_error_msg != NULL )
 	XtFree (urm__latest_error_msg) ;
-      urm__latest_error_msg = (String) XtMalloc (strlen(msg)+1) ;
-      strcpy (urm__latest_error_msg, msg) ;
+      urm__latest_error_msg = XtNewString (msg) ;
       return status ;
     case URMErrOutStdout:
     default:

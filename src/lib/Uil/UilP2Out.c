@@ -663,7 +663,7 @@ if (widget_variety == UilMrmAutoChildVariety)
   widget_name = "";
 else if (widget_entry->obj_header.az_name == NULL)
   {
-    sprintf(buffer, "widget-%d-%d-%d",
+    snprintf(buffer, sizeof(buffer), "widget-%d-%d-%d",
 	    widget_entry->header.az_src_rec->b_file_number,
 	    widget_entry->header.az_src_rec->w_line_number,
 	    widget_entry->header.b_src_pos);
@@ -1677,11 +1677,12 @@ void	out_emit_value(sym_value_entry_type *value_entry)
 
 	    fontitem->type = Urm_code_from_uil_type(value_entry->b_type);
 	    fontitem->cset.cs_offs = textoffs;
-	    strcpy (textptr, charset_name);
+	    memcpy (textptr, charset_name, text_len);
 	    textoffs += text_len;
 	    textptr += text_len;
 	    fontitem->font.font_offs = textoffs;
-	    strcpy (textptr, value_entry->value.c_value);
+	    memcpy (textptr, value_entry->value.c_value,
+		    strlen(value_entry->value.c_value) + 1);
 
 	    break;
 	    }
@@ -1897,13 +1898,13 @@ void	out_emit_value(sym_value_entry_type *value_entry)
 
 		fontitem->type = Urm_code_from_uil_type(font_value->b_type);
 		fontitem->cset.cs_offs = textoffs;
-		strcpy (textptr, charset_name);
 		text_len = strlen(charset_name) + 1;
+		memcpy (textptr, charset_name, text_len);
 		textoffs += text_len;
 		textptr += text_len;
 		fontitem->font.font_offs = textoffs;
-		strcpy (textptr, font_value->value.c_value);
 		text_len = strlen(font_value->value.c_value) + 1;
+		memcpy (textptr, font_value->value.c_value, text_len);
 		textoffs += text_len;
 		textptr += text_len;
 		}

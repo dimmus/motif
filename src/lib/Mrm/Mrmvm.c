@@ -104,7 +104,7 @@ Urm__UT_AllocString (String		stg)
   if ( stg == NULL ) return NULL ;
   new_stg = (String) XtMalloc (strlen(stg)+1) ;
   if ( new_stg != NULL )
-    strcpy (new_stg, stg) ;
+    memcpy (new_stg, stg, strlen(stg) + 1) ;
   return new_stg ;
 
 }

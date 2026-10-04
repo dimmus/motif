@@ -1299,8 +1299,9 @@ static void AddKeycodeToKeyboardList(Widget w,
   if (MGR_NumKeyboardEntries(rowcol) >= MGR_SizeKeyboardList(rowcol)) {
     /* Grow list */
     MGR_SizeKeyboardList(rowcol) += 10;
-    MGR_KeyboardList(rowcol) = (XmKeyboardData *)XtRealloc(
-        (char *)MGR_KeyboardList(rowcol), (MGR_SizeKeyboardList(rowcol) * sizeof(XmKeyboardData)));
+    MGR_KeyboardList(rowcol) = (XmKeyboardData *)_XmReallocArray((char *)MGR_KeyboardList(rowcol),
+                                                                 MGR_SizeKeyboardList(rowcol),
+                                                                 sizeof(XmKeyboardData));
   }
   list = MGR_KeyboardList(rowcol);
   i = MGR_NumKeyboardEntries(rowcol);
@@ -1542,8 +1543,9 @@ void _XmRC_AddToPostFromList(XmRowColumnWidget m, Widget widget)
   if (m->row_column.postFromListSize == m->row_column.postFromCount) {
     /* increase the size to fit the new one and one more */
     m->row_column.postFromListSize += 2;
-    m->row_column.postFromList = (Widget *)XtRealloc(
-        (char *)m->row_column.postFromList, m->row_column.postFromListSize * sizeof(Widget));
+    m->row_column.postFromList = (Widget *)_XmReallocArray((char *)m->row_column.postFromList,
+                                                           m->row_column.postFromListSize,
+                                                           sizeof(Widget));
   }
   m->row_column.postFromList[m->row_column.postFromCount++] = widget;
   /* If the popup's attach widget mysteriously is destroyed, remove the
@@ -2229,8 +2231,8 @@ static void ButtonMenuPopDown(Widget w, XEvent *event, Boolean *popped_up)
   {
     if ((depth + 1) > excPP->pane_list_size) {
       excPP->pane_list_size += 4;
-      excPP->pane = (Widget *)XtRealloc((char *)excPP->pane,
-                                        sizeof(Widget) * excPP->pane_list_size);
+      excPP->pane =
+          (Widget *)_XmReallocArray((char *)excPP->pane, excPP->pane_list_size, sizeof(Widget));
     }
     (excPP->pane)[depth] = (Widget)pane;
     /* Someone (mwm?) has posted a popup in an unorthodox manner.  Either
@@ -2568,7 +2570,7 @@ static void ChildsActivateCallback(XmRowColumnWidget rowcol, Widget child, XtPoi
       count = 0;
       while (callbacks[count].callback != NULL)
         count++;
-      callbackClosure = (XtPointer *)XtMalloc(sizeof(XtPointer) * count);
+      callbackClosure = (XtPointer *)_XmMallocArray(count, sizeof(XtPointer));
       for (i = 0; i < count; i++)
         callbackClosure[i] = callbacks[i].closure;
       for (i = 0; i < count; i++)

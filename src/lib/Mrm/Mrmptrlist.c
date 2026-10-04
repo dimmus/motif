@@ -339,7 +339,7 @@ UrmPlistAppendString (URMPointerListPtr		list_id ,
     return Urm__UT_Error ("UrmPlistAppendString", _MrmMMsg_0049,
 			  NULL, NULL, MrmFAILURE) ;
 
-  strcpy (newstg, stg) ;
+  memcpy (newstg, stg, strlen(stg) + 1) ;
   result = UrmPlistAppendPointer (list_id, newstg) ;
   return result ;
 

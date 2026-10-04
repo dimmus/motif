@@ -334,8 +334,7 @@ Urm__CW_AppendSVWidgetRef (IDBFile		file_id,
   svdesc->tagcode = argtag ;
   if ( argtag == UilMrmUnknownCode )
     {
-      svdesc->tagname = (String) XtMalloc (strlen(argname)+1);
-      strcpy (svdesc->tagname, argname);
+      svdesc->tagname = XtNewString (argname);
     }
   else
     {
@@ -420,8 +419,7 @@ Urm__CW_AppendCBSVWidgetRef (IDBFile			file_id,
   svdesc->tagcode = argtag ;
   if ( argtag == UilMrmUnknownCode )
     {
-      svdesc->tagname = (String) XtMalloc (strlen(argname)+1);
-      strcpy (svdesc->tagname, argname);
+      svdesc->tagname = XtNewString (argname);
     }
   else
     {

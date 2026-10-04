@@ -641,7 +641,7 @@ open_source_file( XmConst char           *c_file_name,
 
 	if (name_len >= sizeof (buffer))
 	    return src_k_open_error;
-	strcpy (buffer, c_file_name);
+	memcpy (buffer, c_file_name, name_len + 1);
 
 /*    Save the directory info for the main file.    */
 
@@ -684,7 +684,7 @@ open_source_file( XmConst char           *c_file_name,
 		az_fcb->az_file_ptr = fopen (buffer, "r");
 	    }
 	} else if (name_len < sizeof (buffer)) {
-	    strcpy (buffer, c_file_name);
+	    memcpy (buffer, c_file_name, name_len + 1);
 	    az_fcb->az_file_ptr = fopen (buffer, "r");
 	}
 
@@ -756,7 +756,8 @@ open_label:
 
     az_fcb->c_buffer = az_source_buffer->c_text;
     az_fcb->c_buffer[ src_k_max_source_line_length ] = 0;
-    strcpy(az_fcb->expanded_name, buffer);
+    /* buffer is as large as expanded_name */
+    memcpy(az_fcb->expanded_name, buffer, strlen(buffer) + 1);
 
     return src_k_open_normal;
 }
@@ -1103,8 +1104,9 @@ boolean	src_retrieve_source
 	 src_az_current_source_buffer->w_current_line_number)
        )
     {
-	strcpy( c_buffer,
-	       src_az_current_source_buffer->c_text);
+	memcpy( c_buffer,
+	       src_az_current_source_buffer->c_text,
+	       strlen(src_az_current_source_buffer->c_text) + 1);
 	return TRUE;
     }
 

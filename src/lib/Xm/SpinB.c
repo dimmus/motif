@@ -779,7 +779,7 @@ static void ConstraintInitialize(Widget req,
   else {
     if (reqC->values != NULL) {
       /* buffer the values XmStringTable */
-      newC->values = (XmString *)XtMalloc(reqC->num_values * sizeof(XmString));
+      newC->values = (XmString *)_XmMallocArray(reqC->num_values, sizeof(XmString));
       if (newC->values != NULL)
         for (valLoop = 0; valLoop < reqC->num_values; valLoop++)
           newC->values[valLoop] = XmStringCopy(reqC->values[valLoop]);
@@ -884,7 +884,7 @@ static Boolean ConstraintSetValues(Widget old,
     if (reqC->values == NULL)
       reqC->values = oldC->values;
     else if (reqC->values != oldC->values) {
-      newC->values = (XmString *)XtMalloc(reqC->num_values * sizeof(XmString));
+      newC->values = (XmString *)_XmMallocArray(reqC->num_values, sizeof(XmString));
       if (newC->values != NULL)
         for (valLoop = 0; valLoop < reqC->num_values; valLoop++)
           newC->values[valLoop] = XmStringCopy(reqC->values[valLoop]);
@@ -1506,8 +1506,9 @@ static void LayoutSpinBox(Widget w, XtWidgetGeometry *spinG, Widget child) /* un
 static void NumToString(char **buffer, int min, int max, int decimal, int value)
 {
   float result;
-  int digits;
+  int digits, len;
   int test;
+  unsigned int magnitude;
   digits = 0;
   if (decimal < 1)
     decimal = 0;
@@ -1526,9 +1527,10 @@ static void NumToString(char **buffer, int min, int max, int decimal, int value)
       digits += decimal + 1;
   }
   else {
-    test = abs(value);
-    while (test > 0) {
-      test = test / 10;
+    /* not abs(), which overflows for INT_MIN */
+    magnitude = value < 0 ? 0U - (unsigned int)value : (unsigned int)value;
+    while (magnitude > 0) {
+      magnitude = magnitude / 10;
       digits++;
     }
     if (decimal > 0)
@@ -1542,15 +1544,16 @@ static void NumToString(char **buffer, int min, int max, int decimal, int value)
     test--;
     result /= 10.0;
   }
-  *buffer = (char *)XtMalloc((digits + 1) * sizeof(char));
-  if (*buffer) {
-#ifdef __osf__
-    if (decimal == 0)
-      sprintf(*buffer, "%*.0f", digits, result);
-    else
-#endif
-      sprintf(*buffer, "%*.*f", digits, decimal, result);
+  /* digits is only the minimum width: the float can round up to one
+     more digit, so size the buffer from what is actually printed */
+  len = snprintf(NULL, 0, "%*.*f", digits, decimal, result);
+  if (len < 0) {
+    *buffer = XtNewString("");
+    return;
   }
+  *buffer = (char *)_XmMallocArray(len + 1, sizeof(char));
+  if (*buffer)
+    snprintf(*buffer, len + 1, "%*.*f", digits, decimal, result);
 }
 
 /******************************************************************************

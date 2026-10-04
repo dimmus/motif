@@ -961,8 +961,8 @@ void XmAddToPostFromList(Widget m, Widget widget)
     }
     _XmProcessUnlock();
     /* Add to list,  we add the menu's shell parent */
-    list->popups = (WidgetList)XtRealloc((char *)list->popups,
-                                         sizeof(Widget) * (list->num_popups + 1));
+    list->popups =
+        (WidgetList)_XmReallocArray((char *)list->popups, list->num_popups + 1, sizeof(Widget));
     list->popups[list->num_popups] = XtParent(m);
     list->num_popups++;
     if (IsPulldown(menu)) {

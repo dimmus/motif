@@ -150,8 +150,7 @@ extern yystype			yylval;
 void		sar_assoc_comment(sym_obj_entry_type *object)
 {
 
-  object->obj_header.az_comment = (char *)XtMalloc(strlen(comment_text)+1);
-  strcpy(object->obj_header.az_comment, comment_text);
+  object->obj_header.az_comment = XtNewString(comment_text);
   comment_text[0] = '\0';
 
 }

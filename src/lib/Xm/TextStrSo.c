@@ -247,7 +247,7 @@ char *_XmStringSourceGetString(XmTextWidget tw,
   destpos = 0;
   if (!want_wchar) {
     /* NOTE: to - from could result in a truncated long. */
-    buf = XtMalloc(((int)(to - from) + 1) * (int)tw->text.char_size);
+    buf = _XmMallocArray((to - from) + 1, tw->text.char_size);
     for (pos = from; pos < to;) {
       pos = ReadSource(tw->text.source, pos, to, &block);
       if (block.length == 0)
@@ -260,7 +260,7 @@ char *_XmStringSourceGetString(XmTextWidget tw,
   }
   else { /* want buffer of wchar_t * data */
     /* NOTE: to - from could result in a truncated long. */
-    buf = XtMalloc(((int)(to - from) + 1) * sizeof(wchar_t));
+    buf = _XmMallocArray((to - from) + 1, sizeof(wchar_t));
     wc_buf = (wchar_t *)buf;
     for (pos = from; pos < to;) {
       ret_pos = ReadSource(tw->text.source, pos, to, &block);
@@ -281,15 +281,17 @@ static void AddWidget(XmTextSource source, XmTextWidget tw)
 {
   XmSourceData data = source->data;
   data->numwidgets++;
-  data->widgets = (XmTextWidget *)XtRealloc((char *)data->widgets,
-                                            (unsigned)(sizeof(XmTextWidget) * data->numwidgets));
+  data->widgets = (XmTextWidget *)_XmReallocArray((char *)data->widgets,
+                                                  data->numwidgets,
+                                                  sizeof(XmTextWidget));
   data->widgets[data->numwidgets - 1] = tw;
   if (data->numwidgets == 1)
     _XmTextSetHighlight((Widget)tw, 0, tw->text.last_position, XmHIGHLIGHT_NORMAL);
   else {
-    tw->text.highlight.list = (_XmHighlightRec *)XtRealloc(
-        (char *)tw->text.highlight.list,
-        data->widgets[0]->text.highlight.maximum * sizeof(_XmHighlightRec));
+    tw->text.highlight.list =
+        (_XmHighlightRec *)_XmReallocArray((char *)tw->text.highlight.list,
+                                           data->widgets[0]->text.highlight.maximum,
+                                           sizeof(_XmHighlightRec));
     tw->text.highlight.maximum = data->widgets[0]->text.highlight.maximum;
     tw->text.highlight.number = data->widgets[0]->text.highlight.number;
     memmove((void *)tw->text.highlight.list,
@@ -477,7 +479,7 @@ Boolean *_XmStringSourceGetPending(XmTextWidget tw)
   Boolean *pending;
   XmSourceData data = tw->text.source->data;
   int i;
-  pending = (Boolean *)XtMalloc(data->numwidgets * sizeof(Boolean));
+  pending = (Boolean *)_XmMallocArray(data->numwidgets, sizeof(Boolean));
   for (i = 0; i < data->numwidgets; i++)
     pending[i] = ((XmTextWidget)data->widgets[i])->text.pendingoff;
   return pending;
@@ -566,12 +568,11 @@ static XmTextPosition ReadSource(XmTextSource source,
   _XmStringSourceReadString(source, (int)position, block);
   if (block->length > 0) {
     if (data->old_length == 0) {
-      data->value = (char *)XtMalloc((unsigned)(block->length + 1) * (int)tw->text.char_size);
+      data->value = (char *)_XmMallocArray(block->length + 1, tw->text.char_size);
       data->old_length = block->length;
     }
     else if (block->length > data->old_length) {
-      data->value = XtRealloc(data->value,
-                              (unsigned)((block->length + 1) * (int)tw->text.char_size));
+      data->value = _XmReallocArray(data->value, block->length + 1, tw->text.char_size);
       data->old_length = block->length;
     }
     if ((int)tw->text.char_size == 1) {
@@ -732,7 +733,7 @@ Boolean _XmTextModifyVerify(XmTextWidget initiator,
     }
   } /* end if there are char* modify verify callbacks */
   if (initiator->text.wcs_modify_verify_callback) {
-    wcs_newblock.wcsptr = (wchar_t *)XtMalloc((unsigned)sizeof(wchar_t) * (newblock->length + 1));
+    wcs_newblock.wcsptr = (wchar_t *)_XmMallocArray(newblock->length + 1, sizeof(wchar_t));
     wcs_newblock.length = mbstowcs(wcs_newblock.wcsptr, newblock->ptr, block_num_chars);
     if (wcs_newblock.length < 0)
       wcs_newblock.length = 0;
@@ -767,8 +768,8 @@ Boolean _XmTextModifyVerify(XmTextWidget initiator,
       }
       *freeBlock = False;
       if (wcs_tvcb.text->length) {
-        newblock->ptr = (char *)XtMalloc((unsigned)(1 + wcs_tvcb.text->length) *
-                                         (int)initiator->text.char_size);
+        newblock->ptr =
+            (char *)_XmMallocArray(1 + wcs_tvcb.text->length, initiator->text.char_size);
         *freeBlock = True;
         wcs_tvcb.text->wcsptr[wcs_tvcb.text->length] = (wchar_t)0L;
         /* NOTE: wcstombs returns a long which could be truncated */
@@ -864,7 +865,7 @@ static XmTextStatus Replace(XmTextWidget initiator,
     data->maxlength = new_maxlength;
     gap_start_offset = data->gap_start - data->ptr;
     gap_end_offset = data->gap_end - data->ptr;
-    data->ptr = XtRealloc(data->ptr, (unsigned)((data->maxlength) * char_size));
+    data->ptr = _XmReallocArray(data->ptr, data->maxlength, char_size);
     data->gap_start = data->ptr + gap_start_offset;
     data->gap_end = data->ptr + gap_end_offset + (char_size * (data->maxlength - old_maxlength));
     if (gap_end_offset != (old_maxlength * char_size))
@@ -942,7 +943,7 @@ static XmTextStatus Replace(XmTextWidget initiator,
     /* Move the gap to the last position. */
     _XmStringSourceSetGappedBuffer(data, data->length);
     data->maxlength = BufferLength(TEXT_INITIAL_INCREM, data->length, char_size);
-    data->ptr = XtRealloc(data->ptr, (unsigned)((data->maxlength) * char_size));
+    data->ptr = _XmReallocArray(data->ptr, data->maxlength, char_size);
     data->gap_start = data->ptr + (data->length * char_size);
     data->gap_end = data->ptr + ((data->maxlength - 1) * char_size);
   }
@@ -1333,8 +1334,8 @@ XmTextSource _XmStringSourceCreate(char *value, Boolean is_wchar)
         data->maxlength += TEXT_INCREMENT;
     }
     data->old_length = 0;
-    data->ptr = XtMalloc((unsigned)((data->maxlength) * char_size));
-    tmp_value = XtMalloc((unsigned)((num_chars + 1) * max_char_size));
+    data->ptr = _XmMallocArray(data->maxlength, char_size);
+    tmp_value = _XmMallocArray(num_chars + 1, max_char_size);
     ret_value = wcstombs(tmp_value, wc_value, (num_chars + 1) * max_char_size);
     data->value = NULL; /* Scratch area for block->ptr conversions */
     /* Doesnt include NULL */
@@ -1358,7 +1359,7 @@ XmTextSource _XmStringSourceCreate(char *value, Boolean is_wchar)
         data->maxlength += TEXT_INCREMENT;
     }
     data->old_length = 0;
-    data->ptr = XtMalloc((unsigned)((data->maxlength) * char_size));
+    data->ptr = _XmMallocArray(data->maxlength, char_size);
     data->value = NULL; /* Scratch area for block->ptr conversions */
     data->length = _XmTextBytesToCharacters(data->ptr, value, num_chars, False, max_char_size);
   }
@@ -1402,7 +1403,7 @@ char *_XmStringSourceGetValue(XmTextSource source, Boolean want_wchar)
   int return_val;
   if (!want_wchar) {
     if (data->length > 0)
-      temp = (char *)XtMalloc((unsigned)(data->length + 1) * (int)tw->text.char_size);
+      temp = (char *)_XmMallocArray(data->length + 1, tw->text.char_size);
     else
       return (XtNewString(""));
     last_pos = (XmTextPosition)data->length;
@@ -1419,7 +1420,7 @@ char *_XmStringSourceGetValue(XmTextSource source, Boolean want_wchar)
   }
   else {
     if (data->length > 0)
-      wc_temp = (wchar_t *)XtMalloc((unsigned)(data->length + 1) * sizeof(wchar_t));
+      wc_temp = (wchar_t *)_XmMallocArray(data->length + 1, sizeof(wchar_t));
     else {
       wc_temp = (wchar_t *)XtMalloc((unsigned)sizeof(wchar_t));
       wc_temp[0] = (wchar_t)0L;

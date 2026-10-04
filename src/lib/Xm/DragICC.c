@@ -784,13 +784,16 @@ _XmWriteDragBuffer(xmPropertyBuffer propBuf, BYTE which, BYTE *ptr, CARD32 size)
   else
     buf = &propBuf->heap;
   if (buf->size + size > buf->max) {
-    buf->max += 1000;
+    /* grow by at least what is written, not by a fixed amount */
+    if (buf->size + size > (Cardinal)~0 - 1000)
+      return (CARD16)buf->size; /* no property can be that big: drop it */
+    buf->max = (Cardinal)(buf->size + size + 1000);
     if (buf->bytes == buf->stack) {
       buf->bytes = (BYTE *)XtMalloc(buf->max);
       memcpy(buf->bytes, buf->stack, buf->size);
     }
     else {
-      buf->bytes = (BYTE *)XtRealloc((char *)buf->bytes, (Cardinal)buf->max);
+      buf->bytes = (BYTE *)XtRealloc((char *)buf->bytes, buf->max);
     }
   }
   memcpy(buf->bytes + buf->size, ptr, (size_t)size);
@@ -853,32 +856,29 @@ void _XmWriteInitiatorInfo(Widget dc)
 void _XmReadInitiatorInfo(Widget dc)
 {
   xmDragInitiatorInfoStruct *info = NULL;
-  int format, set_exports = 0;
-  unsigned long bytesafter, lengthRtn;
-  long length;
+  int set_exports = 0;
+  unsigned long lengthRtn;
   Arg args[3];
   Window srcWindow;
   Cardinal numExportTargets = 0;
-  Atom initiatorAtom, type, iccHandle, xdndTypeList, *exportTargets = NULL;
+  Atom initiatorAtom, iccHandle, xdndTypeList, *exportTargets = NULL;
   unsigned char *data = NULL;
   XtSetArg(args[0], XmNsourceWindow, &srcWindow);
   XtSetArg(args[1], XmNiccHandle, &iccHandle);
   XtGetValues(dc, args, 2);
   initiatorAtom = XInternAtom(XtDisplayOfObject(dc), XmI_MOTIF_DRAG_INITIATOR_INFO, FALSE);
-  length = 100000L;
-  if (XGetWindowProperty(XtDisplayOfObject(dc),
-                         srcWindow,
-                         iccHandle,
-                         0L,
-                         length,
-                         False,
-                         initiatorAtom,
-                         &type,
-                         &format,
-                         &lengthRtn,
-                         &bytesafter,
-                         (unsigned char **)&info) == Success &&
-      type == initiatorAtom && format == 8 && lengthRtn >= sizeof(xmDragInitiatorInfoStruct))
+  if (_XmGetWindowPropertyChecked(XtDisplayOfObject(dc),
+                                  srcWindow,
+                                  iccHandle,
+                                  100000L,
+                                  initiatorAtom,
+                                  8,
+                                  sizeof(xmDragInitiatorInfoStruct),
+                                  NULL,
+                                  NULL,
+                                  &lengthRtn,
+                                  NULL,
+                                  (unsigned char **)&info))
   {
     if (info->byte_order != _XmByteOrderChar) {
       swap2bytes(info->targets_index);
@@ -893,24 +893,22 @@ void _XmReadInitiatorInfo(Widget dc)
      * has published it
      */
     xdndTypeList = XInternAtom(XtDisplayOfObject(dc), "XdndTypeList", False);
-    if (XGetWindowProperty(XtDisplayOfObject(dc),
-                           srcWindow,
-                           xdndTypeList,
-                           0,
-                           65536,
-                           False,
-                           XA_ATOM,
-                           &type,
-                           &format,
-                           &lengthRtn,
-                           &bytesafter,
-                           &data) == Success)
+    if (_XmGetWindowPropertyChecked(XtDisplayOfObject(dc),
+                                    srcWindow,
+                                    xdndTypeList,
+                                    65536,
+                                    XA_ATOM,
+                                    32,
+                                    0,
+                                    NULL,
+                                    NULL,
+                                    &lengthRtn,
+                                    NULL,
+                                    &data))
     {
-      if (type == XA_ATOM && format == 32) {
-        ++set_exports;
-        exportTargets = (Atom *)data;
-        numExportTargets = lengthRtn;
-      }
+      ++set_exports;
+      exportTargets = (Atom *)data;
+      numExportTargets = lengthRtn;
     }
   }
   /* exportTargets gets duplicated in DragContextSetValues() */
@@ -936,27 +934,15 @@ void _XmReadInitiatorInfo(Widget dc)
  ***********************************************************************/
 static Window ReadXdndProxy(Display *display, Window window, Atom xdndProxy)
 {
-  Atom type;
-  int format;
-  unsigned long lengthRtn, bytesafter;
-  unsigned char *data = NULL;
+  unsigned long lengthRtn;
+  unsigned char *data;
   Window proxy = None;
-  if (XGetWindowProperty(display,
-                         window,
-                         xdndProxy,
-                         0,
-                         1,
-                         False,
-                         XA_WINDOW,
-                         &type,
-                         &format,
-                         &lengthRtn,
-                         &bytesafter,
-                         &data) == Success &&
-      type == XA_WINDOW && format == 32 && lengthRtn == 1)
+  if (_XmGetWindowPropertyChecked(
+          display, window, xdndProxy, 1, XA_WINDOW, 32, 1, NULL, NULL, &lengthRtn, NULL, &data))
+  {
     proxy = *(Window *)data;
-  if (data)
     XFree(data);
+  }
   return proxy;
 }
 
@@ -1007,13 +993,12 @@ Boolean _XmGetDragReceiverInfo(Display *display,
                                XmDragReceiverInfoStruct *receiverInfoRtn)
 {
   xmDragReceiverInfoStruct *iccInfo = NULL;
-  int format;
-  unsigned long bytesafter, lengthRtn, length;
+  unsigned long lengthRtn, length;
   XmReceiverDSTreeStruct *dsmInfo;
   Window root;
   unsigned int bw;
   unsigned char *data;
-  Atom drag_hints_atom, type = None;
+  Atom drag_hints_atom;
   Atom xdndAware;
   XmDisplay dd = (XmDisplay)XmGetXmDisplay(display);
   /* get their geometry */
@@ -1036,20 +1021,18 @@ Boolean _XmGetDragReceiverInfo(Display *display,
                         &(receiverInfoRtn->yOrigin),
                         &root);
   drag_hints_atom = XInternAtom(display, XmI_MOTIF_DRAG_RECEIVER_INFO, FALSE);
-  length = 100000L;
-  if (XGetWindowProperty(display,
-                         window,
-                         drag_hints_atom,
-                         0L,
-                         length,
-                         False,
-                         drag_hints_atom,
-                         &type,
-                         &format,
-                         &lengthRtn,
-                         &bytesafter,
-                         (unsigned char **)&iccInfo) == Success &&
-      type == drag_hints_atom && format == 8 && lengthRtn >= sizeof(xmDragReceiverInfoStruct))
+  if (_XmGetWindowPropertyChecked(display,
+                                  window,
+                                  drag_hints_atom,
+                                  100000L,
+                                  drag_hints_atom,
+                                  8,
+                                  sizeof(xmDragReceiverInfoStruct),
+                                  NULL,
+                                  NULL,
+                                  &lengthRtn,
+                                  NULL,
+                                  (unsigned char **)&iccInfo))
   {
     if (iccInfo->protocol_version != _MOTIF_DRAG_PROTOCOL_VERSION) {
       XmeWarning((Widget)dd, MESSAGE2);
@@ -1097,25 +1080,23 @@ Boolean _XmGetDragReceiverInfo(Display *display,
   xdndAware = XInternAtom(display, "XdndAware", False);
   dd->display.proxyWindow = GetXdndProxy(display, window);
   /* Check for XdndAware and protocol version */
-  if (XGetWindowProperty(display,
-                         dd->display.proxyWindow,
-                         xdndAware,
-                         0,
-                         1,
-                         False,
-                         AnyPropertyType,
-                         &type,
-                         &format,
-                         &length,
-                         &bytesafter,
-                         &data) == Success)
+  if (_XmGetWindowPropertyChecked(display,
+                                  dd->display.proxyWindow,
+                                  xdndAware,
+                                  1,
+                                  AnyPropertyType,
+                                  32,
+                                  1,
+                                  NULL,
+                                  NULL,
+                                  &length,
+                                  NULL,
+                                  &data))
   {
-    if (type != None && format == 32 && length == 1) {
-      if (*(Atom *)data >= (Atom)xdnd_version_min) {
-        receiverInfoRtn->dragProtocolStyle = XmDRAG_XDND;
-        XFree(data);
-        return True;
-      }
+    if (*(Atom *)data >= (Atom)xdnd_version_min) {
+      receiverInfoRtn->dragProtocolStyle = XmDRAG_XDND;
+      XFree(data);
+      return True;
     }
     /* Xdnd versions < 3 are not supported */
     XFree(data);

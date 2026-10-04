@@ -1960,8 +1960,8 @@ static void PreparePostFromList(XmRowColumnWidget rowcol)
   /* malloc enough space for 1 more addition to the list */
   rowcol->row_column.postFromListSize = rowcol->row_column.postFromCount + 1;
   tempPtr = rowcol->row_column.postFromList;
-  rowcol->row_column.postFromList = (Widget *)XtMalloc(rowcol->row_column.postFromListSize *
-                                                       sizeof(Widget));
+  rowcol->row_column.postFromList =
+      (Widget *)_XmMallocArray(rowcol->row_column.postFromListSize, sizeof(Widget));
   if (tempPtr) {
     /* use temp - postFromCount incremented in _XmRC_AddToPostFromList() */
     int cnt = rowcol->row_column.postFromCount;
@@ -2496,6 +2496,7 @@ static Widget create(Widget p, /* parent widget */
     /* No shell - create a new one */
     if (pop == NULL) {
       char *b;
+      size_t size;
       /* should pass in the old al */
       for (i = 0; i < old_ac; i++)
         s_al[s_ac++] = old_al[i];
@@ -2509,8 +2510,9 @@ static Widget create(Widget p, /* parent widget */
       s_ac++;
       XtSetArg(s_al[s_ac], XtNancestorSensitive, TRUE);
       s_ac++;
-      b = XtMalloc(strlen(POPUP_PREFIX) + strlen(name) + 1);
-      sprintf(b, POPUP_PREFIX, name);
+      size = strlen(POPUP_PREFIX) + strlen(name) + 1;
+      b = XtMalloc(size);
+      snprintf(b, size, POPUP_PREFIX, name);
       pop = (XmMenuShellWidget)XtCreatePopupShell(b, xmMenuShellWidgetClass, pw, s_al, s_ac);
       /* Mark the shell as having been created by us */
       pop->menu_shell.private_shell = True;
@@ -2771,7 +2773,7 @@ static Boolean TraversalChildren(Widget wid, Widget **childList, Cardinal *numCh
     /*
      * add the TOC to the children list
      */
-    *childList = (WidgetList)XtMalloc(sizeof(Widget) * (rc->composite.num_children + 1));
+    *childList = (WidgetList)_XmMallocArray(rc->composite.num_children + 1, sizeof(Widget));
     (*childList)[0] = RC_TearOffControl(rc);
     for (i = 1; i <= rc->composite.num_children; i++) {
       (*childList)[i] = rc->composite.children[i - 1];
@@ -3131,8 +3133,7 @@ static void GetMenuAccelerator(Widget wid,
   String data;
   XmRowColumnWidget rc = (XmRowColumnWidget)wid;
   if (rc->row_column.menu_accelerator != NULL) {
-    data = (String)XtMalloc(strlen(RC_MenuAccelerator(rc)) + 1);
-    strcpy(data, RC_MenuAccelerator(rc));
+    data = XtNewString(RC_MenuAccelerator(rc));
     *value = (XtArgVal)data;
   }
   else

@@ -1127,6 +1127,7 @@ String get_root_dir_name()
 	struct passwd *pwd_value;
 	static char *ptr = NULL;
 	char *outptr;
+	size_t size;
 
 	if (ptr == NULL)
 	{
@@ -1152,9 +1153,9 @@ String get_root_dir_name()
 	    }
 	}
 
-	outptr = XtMalloc (strlen(ptr) + 2);
-	strcpy (outptr, ptr);
-	strcat (outptr, "/");
+	size = strlen(ptr) + 2;
+	outptr = XtMalloc (size);
+	snprintf (outptr, size, "%s/", ptr);
 	return outptr;
 }
 
@@ -1212,12 +1213,12 @@ String init_wmd_path(String filename)
     String old_path;
     String homedir;
     String wmd_path;
+    size_t size;
 
 
     if (filename[0] == '/')
 	{
-	wmd_path = XtMalloc(strlen(ABSOLUTE_PATH) + 1);
-	strcpy (wmd_path, ABSOLUTE_PATH);
+	wmd_path = XtNewString(ABSOLUTE_PATH);
 	}
     else
 	{
@@ -1228,18 +1229,18 @@ String init_wmd_path(String filename)
 	    old_path = (char *)getenv ("XAPPLRESDIR");
 	    if (old_path == NULL)
 		{
-		wmd_path = XtCalloc(1, 2*strlen(homedir) +
-				 strlen(libdir) + strlen(incdir) +
-				 strlen(WMDPATH_DEFAULT));
-		sprintf( wmd_path, WMDPATH_DEFAULT,
+		size = 2*strlen(homedir) + strlen(libdir) + strlen(incdir) +
+		       strlen(WMDPATH_DEFAULT);
+		wmd_path = XtCalloc(1, size);
+		snprintf( wmd_path, size, WMDPATH_DEFAULT,
 			 homedir, homedir, libdir, incdir);
 		}
 	    else
 		{
-		wmd_path = XtCalloc(1, 1*strlen(old_path) + 2*strlen(homedir) +
-				 strlen(libdir) + strlen(incdir) +
-				 strlen(XAPPLRES_DEFAULT));
-		sprintf(wmd_path, XAPPLRES_DEFAULT,
+		size = 1*strlen(old_path) + 2*strlen(homedir) +
+		       strlen(libdir) + strlen(incdir) + strlen(XAPPLRES_DEFAULT);
+		wmd_path = XtCalloc(1, size);
+		snprintf(wmd_path, size, XAPPLRES_DEFAULT,
 			old_path,
 			homedir, homedir, libdir, incdir);
 		}
@@ -1247,8 +1248,7 @@ String init_wmd_path(String filename)
 	    }
 	else
 	    {
-	    wmd_path = XtMalloc(strlen(path) + 1);
-	    strcpy (wmd_path, path);
+	    wmd_path = XtNewString(path);
 	    }
 	}
     return (wmd_path);

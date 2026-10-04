@@ -509,7 +509,7 @@ Boolean _XmTextConvert(Widget w,
       if (0 >= tmp_prop.nitems)
         *value = (XtPointer)XtMalloc(1);
       else
-        *value = (XtPointer)XtMalloc((unsigned)tmp_prop.nitems);
+        *value = (XtPointer)_XmMallocArray(tmp_prop.nitems, 1);
       memcpy((void *)*value, (void *)tmp_prop.value, (size_t)tmp_prop.nitems);
       if (tmp_prop.value != NULL)
         XFree((char *)tmp_prop.value);
@@ -541,7 +541,7 @@ Boolean _XmTextConvert(Widget w,
     XtFree(tmp_value);
     if (status == Success || status > 0) {
       /* NOTE: casting tmp_prop.nitems could result in a truncated long. */
-      *value = (XtPointer)XtMalloc((unsigned)tmp_prop.nitems);
+      *value = (XtPointer)_XmMallocArray(tmp_prop.nitems, 1);
       memcpy((void *)*value, (void *)tmp_prop.value, (size_t)tmp_prop.nitems);
       if (tmp_prop.value != NULL)
         XFree((char *)tmp_prop.value);
@@ -566,7 +566,7 @@ Boolean _XmTextConvert(Widget w,
     XtFree(tmp_value);
     if (status == Success || status > 0) {
       /* NOTE: casting tmp_prop.nitems could result in a truncated long. */
-      *value = (XtPointer)XtMalloc((unsigned)tmp_prop.nitems);
+      *value = (XtPointer)_XmMallocArray(tmp_prop.nitems, 1);
       memcpy((void *)*value, (void *)tmp_prop.value, (size_t)tmp_prop.nitems);
       if (tmp_prop.value != NULL)
         XFree((char *)tmp_prop.value);

@@ -1971,7 +1971,7 @@ static void CalcColumnInfo(Widget w, Boolean force)
   if (((XmI18List_column_widths(ilist) == NULL) || force) && (num_cols != 0)) {
     if (force)
       XtFree((XtPointer)XmI18List_column_widths(ilist));
-    XmI18List_column_widths(ilist) = (short *)XtMalloc(sizeof(short) * num_cols);
+    XmI18List_column_widths(ilist) = (short *)_XmMallocArray(num_cols, sizeof(short));
   }
   for (i = 0; i < num_cols; i++) {
     if (XmI18List_column_titles(ilist) != NULL) {
@@ -2646,7 +2646,7 @@ XmMultiListRowInfo **XmI18ListGetSelectedRows(Widget w)
       i++;
   }
   if (i != 0) {
-    ptr = ret_rows = (XmMultiListRowInfo **)XtMalloc(sizeof(XmMultiListRowInfo *) * (i + 1));
+    ptr = ret_rows = (XmMultiListRowInfo **)_XmMallocArray(i + 1, sizeof(XmMultiListRowInfo *));
     ret_rows[i] = NULL;
     row_data = XmI18List_row_data(ilist);
     for (j = 0; j < XmI18List_num_rows(ilist); j++, row_data++) {
@@ -2889,7 +2889,7 @@ static void CopyColumnTitles(XmI18ListWidget ilist)
     copy = (XmStringTable)NULL;
   }
   else {
-    copy = (XmStringTable)XtMalloc(sizeof(XmString) * XmI18List_num_columns(ilist));
+    copy = (XmStringTable)_XmMallocArray(XmI18List_num_columns(ilist), sizeof(XmString));
     for (i = 0; i < XmI18List_num_columns(ilist); ++i) {
       copy[i] = XmStringCopy(XmI18List_column_titles(ilist)[i]);
     }
@@ -2938,7 +2938,7 @@ static int *GetSelectedRows(XmI18ListWidget i18list, int *num_rows)
       (*num_rows)++;
   if (*num_rows > 0) {
     int j;
-    rows = (int *)XtMalloc(*num_rows * sizeof(int));
+    rows = (int *)_XmMallocArray(*num_rows, sizeof(int));
     for (i = 0, j = 0; i < XmI18List_num_rows(i18list); i++)
       if (row_info[i].selected)
         rows[j++] = i;
@@ -3313,7 +3313,7 @@ static void ProcessDrag(Widget wid,
       int rowcount;
       int *rows = GetSelectedRows(lw, &rowcount);
       ListDragConv->num_items = rowcount;
-      ListDragConv->strings = (XmString *)XtMalloc(sizeof(XmString) * ListDragConv->num_items);
+      ListDragConv->strings = (XmString *)_XmMallocArray(ListDragConv->num_items, sizeof(XmString));
       for (i = 0; i < rowcount; i++)
         ListDragConv->strings[i] = GetConcatenatedRow(wid, rows[i]);
       XtFree((XtPointer)rows);

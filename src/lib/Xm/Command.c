@@ -740,7 +740,7 @@ Widget XmCreateCommand(Widget parent, String name, ArgList al, Cardinal ac)
   /* big time bad stuff will happen if they use prompt type...  */
   /* (like, no list gets created, but used all through command) */
   /*  allocate arglist, copy args, add dialog type arg */
-  argsNew = (ArgList)XtMalloc(sizeof(Arg) * (ac + 1));
+  argsNew = (ArgList)_XmMallocArray(ac + 1, sizeof(Arg));
   memcpy(argsNew, al, sizeof(Arg) * ac);
   XtSetArg(argsNew[ac], XmNdialogType, XmDIALOG_COMMAND);
   ac++;

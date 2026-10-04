@@ -99,7 +99,7 @@ void _XmTextReplace(
     else {
       for (tmp_wc = (wchar_t *)value, num_chars = 0; *tmp_wc != (wchar_t)0L; num_chars++)
         tmp_wc++;
-      tmp_block = XtMalloc((unsigned)(num_chars + 1) * (int)tw->text.char_size);
+      tmp_block = _XmMallocArray(num_chars + 1, tw->text.char_size);
       block.ptr = tmp_block;
       need_free = True;
       tmp_wc = (wchar_t *)value;

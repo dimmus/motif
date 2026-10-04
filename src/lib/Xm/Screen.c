@@ -35,6 +35,7 @@ static char rcsid[] = "$TOG: Screen.c /main/16 1997/06/18 17:41:50 samborn $"
 #include "PixConvI.h"
 #include "RepTypeI.h"
 #include "ScreenI.h"
+#include "XmI.h"
 #include <X11/Xatom.h>
 #include <Xm/AtomMgr.h>
 #include <Xm/DisplayP.h>
@@ -630,8 +631,8 @@ static void InsertChild(Widget wid)
   if (cw->desktop.num_children == cw->desktop.num_slots) {
     /* Allocate more space */
     cw->desktop.num_slots += (cw->desktop.num_slots / 2) + 2;
-    cw->desktop.children = children = (WidgetList)XtRealloc(
-        (char *)children, (unsigned)(cw->desktop.num_slots) * sizeof(Widget));
+    cw->desktop.children = children =
+        (WidgetList)_XmReallocArray((char *)children, cw->desktop.num_slots, sizeof(Widget));
   }
   /* Ripple children up one space from "position" */
   for (i = cw->desktop.num_children; i > position; i--) {
@@ -1202,7 +1203,7 @@ Widget XmGetXmScreen(Screen *screen)
     if (scr == screen)
       break;
   }
-  sprintf(name, "screen%d", i);
+  snprintf(name, sizeof(name), "screen%d", i);
   i = 0;
   XtSetArg(args[i], XmNscreen, screen);
   i++;

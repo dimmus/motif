@@ -294,8 +294,9 @@ static void FillBindingsFromDB(Display *dpy,
       /* Append the new bindings to the end of the table. */
       if (new_num > 0) {
         int tmp;
-        *keys = (XmVKeyBinding)XtRealloc((char *)*keys,
-                                         (*num_keys + new_num) * sizeof(XmVKeyBindingRec));
+        *keys = (XmVKeyBinding)_XmReallocArray((char *)*keys,
+                                               *num_keys + new_num,
+                                               sizeof(XmVKeyBindingRec));
         for (tmp = 0; tmp < new_num; tmp++) {
           (*keys)[*num_keys + tmp].keysym = new_keys[tmp].keysym;
           (*keys)[*num_keys + tmp].modifiers = new_keys[tmp].modifiers;
@@ -312,33 +313,24 @@ static void FillBindingsFromDB(Display *dpy,
 static Boolean GetBindingsProperty(Display *display, String property, String *binding)
 {
   char *prop = NULL;
-  Atom actual_type;
-  int actual_format;
   unsigned long num_items;
-  unsigned long bytes_after;
   if (binding == NULL)
     return False;
-  XGetWindowProperty(display,
-                     RootWindow(display, 0),
-                     XInternAtom(display, property, FALSE),
-                     0,
-                     (long)1000000,
-                     FALSE,
-                     XA_STRING,
-                     &actual_type,
-                     &actual_format,
-                     &num_items,
-                     &bytes_after,
-                     (unsigned char **)&prop);
-  if ((actual_type != XA_STRING) || (actual_format != 8) || (num_items == 0)) {
-    if (prop != NULL)
-      XFree(prop);
+  if (!_XmGetWindowPropertyChecked(display,
+                                   RootWindow(display, 0),
+                                   XInternAtom(display, property, FALSE),
+                                   (long)1000000,
+                                   XA_STRING,
+                                   8,
+                                   1,
+                                   NULL,
+                                   NULL,
+                                   &num_items,
+                                   NULL,
+                                   (unsigned char **)&prop))
     return False;
-  }
-  else {
-    *binding = prop;
-    return True;
-  }
+  *binding = prop;
+  return True;
 }
 
 /*
@@ -626,7 +618,7 @@ int XmeVirtualToActualKeysyms(Display *dpy, KeySym virtKeysym, XmKeyBinding *act
       matches++;
   /* Allocate the return array. */
   if (matches > 0) {
-    *actualKeyData = (XmKeyBinding)XtMalloc(matches * sizeof(XmKeyBindingRec));
+    *actualKeyData = (XmKeyBinding)_XmMallocArray(matches, sizeof(XmKeyBindingRec));
     matches = 0;
     for (index = 0; index < xmDisplay->display.num_bindings; index++)
       if (keyBindings[index].virtkey == virtKeysym) {
@@ -691,11 +683,13 @@ static void LoadVendorBindings(Display *display, char *path, FILE *fp, String *b
   char *bindFile;
   char *vendor;
   char *vendorV;
+  size_t size;
   char *ptr;
   char *start;
   vendor = ServerVendor(display);
-  vendorV = XtMalloc(strlen(vendor) + 20); /* assume rel.# is < 19 digits */
-  sprintf(vendorV, "%s %d", vendor, VendorRelease(display));
+  size = strlen(vendor) + 20; /* assume rel.# is < 19 digits */
+  vendorV = XtMalloc(size);
+  snprintf(vendorV, size, "%s %d", vendor, VendorRelease(display));
   while (fgets(buffer, MAXLINE, fp) != NULL) {
     ptr = buffer;
     while (*ptr != '"' && *ptr != '!' && *ptr != '\0')
@@ -788,16 +782,14 @@ int _XmVirtKeysLoadFallbackBindings(Display *display, String *binding)
          i++, currDefault++)
     {
       if (strcmp(currDefault->vendorName, ServerVendor(display)) == 0) {
-        *binding = XtMalloc(strlen(currDefault->defaults) + 1);
-        strcpy(*binding, currDefault->defaults);
+        *binding = XtNewString(currDefault->defaults);
         break;
       }
     }
   }
   /* Use generic fallback bindings */
   if (*binding == NULL) {
-    *binding = XtMalloc(strlen(defaultFallbackBindings) + 1);
-    strcpy(*binding, defaultFallbackBindings);
+    *binding = XtNewString(defaultFallbackBindings);
   }
   /* Set the fallback property for future Xm applications */
   XChangeProperty(display,

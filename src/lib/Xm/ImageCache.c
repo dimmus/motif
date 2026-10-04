@@ -1939,8 +1939,9 @@ static void CacheColorPixel(Display *display, Colormap colormap, char *colorname
   int numEntries = colorCacheList.numEntries;
   if (numEntries == colorCacheList.maxEntries) {
     colorCacheList.maxEntries += 25;
-    colorCacheList.cache = (CachedColor *)XtRealloc(
-        (char *)colorCacheList.cache, colorCacheList.maxEntries * sizeof(CachedColor));
+    colorCacheList.cache = (CachedColor *)_XmReallocArray((char *)colorCacheList.cache,
+                                                          colorCacheList.maxEntries,
+                                                          sizeof(CachedColor));
   }
   colorCacheList.cache[numEntries].display = display;
   colorCacheList.cache[numEntries].colormap = colormap;

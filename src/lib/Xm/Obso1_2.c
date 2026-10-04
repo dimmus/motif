@@ -33,6 +33,7 @@
 #include "SelectioBI.h"
 #include "SyntheticI.h"
 #include "TraversalI.h"
+#include "XmI.h"
 #include "XmStringI.h" /* for _XmStringGetTextConcat() */
 #include <Xm/BaseClassP.h>
 #include <Xm/DesktopP.h>
@@ -198,12 +199,14 @@ void _XmDrawShadow(Display *display,
     size = height / 2;
   if (size <= 0)
     return;
+  /* rects is shared by every call */
+  _XmProcessLock();
   if (rect_count == 0) {
-    rects = (XRectangle *)XtMalloc(sizeof(XRectangle) * size * 4);
+    rects = (XRectangle *)_XmMallocArray(size, 4 * sizeof(XRectangle));
     rect_count = size;
   }
   if (rect_count < size) {
-    rects = (XRectangle *)XtRealloc((char *)rects, sizeof(XRectangle) * size * 4);
+    rects = (XRectangle *)_XmReallocArray((char *)rects, size, 4 * sizeof(XRectangle));
     rect_count = size;
   }
   size2 = size + size;
@@ -232,6 +235,7 @@ void _XmDrawShadow(Display *display,
   }
   XFillRectangles(display, d, top_GC, &rects[0], size2);
   XFillRectangles(display, d, bottom_GC, &rects[size2], size2);
+  _XmProcessUnlock();
 }
 
 /************************************************************************
@@ -310,9 +314,9 @@ void _XmGetArrowDrawRects(int highlight_thickness,
     xOffset = yOffset;
     yOffset = temp;
   }
-  *top = (XRectangle *)XtMalloc(sizeof(XRectangle) * (size / 2 + 6));
-  *cent = (XRectangle *)XtMalloc(sizeof(XRectangle) * (size / 2 + 6));
-  *bot = (XRectangle *)XtMalloc(sizeof(XRectangle) * (size / 2 + 6));
+  *top = (XRectangle *)_XmMallocArray(size / 2 + 6, sizeof(XRectangle));
+  *cent = (XRectangle *)_XmMallocArray(size / 2 + 6, sizeof(XRectangle));
+  *bot = (XRectangle *)_XmMallocArray(size / 2 + 6, sizeof(XRectangle));
   /*  Set up a loop to generate the segments.  */
   width = size;
   y = size + highlight_thickness + shadow_thickness - 1 + yOffset;
@@ -839,12 +843,14 @@ static void XmDrawEtchedShadow(Display *display,
   half_size = size / 2;
   size2 = size + size;
   size3 = size2 + size;
+  /* rects is shared by every call */
+  _XmProcessLock();
   if (rect_count == 0) {
-    rects = (XRectangle *)XtMalloc(sizeof(XRectangle) * size * 4);
+    rects = (XRectangle *)_XmMallocArray(size, 4 * sizeof(XRectangle));
     rect_count = size;
   }
   if (rect_count < size) {
-    rects = (XRectangle *)XtRealloc((char *)rects, sizeof(XRectangle) * size * 4);
+    rects = (XRectangle *)_XmReallocArray((char *)rects, size, 4 * sizeof(XRectangle));
     rect_count = size;
   }
   pos_top = 0;
@@ -859,6 +865,7 @@ static void XmDrawEtchedShadow(Display *display,
   get_rects(half_size, half_size, x, y, width, height, pos_top, pos_left, pos_bottom, pos_right);
   XFillRectangles(display, d, bottom_GC, &rects[size2], size2);
   XFillRectangles(display, d, top_GC, &rects[0], size2);
+  _XmProcessUnlock();
 }
 
 /*****************************************************************
@@ -1493,14 +1500,13 @@ char *_XmCharsetCanonicalize(String charset)
   int len;
   /* ASCII -> ISO8859-1 */
   if (!strcmp(charset, "ASCII")) {
-    len = strlen(XmSTRING_ISO8859_1);
-    new_s = XtMalloc(len + 1);
-    strcpy(new_s, XmSTRING_ISO8859_1);
+    new_s = XtNewString(XmSTRING_ISO8859_1);
   }
   else if (_isISO(charset)) {
     /* "ISO####-#" */
-    new_s = XtMalloc(3 + 4 + 1 + 1 + 1);
-    sprintf(new_s, "ISO%s", charset);
+    len = 3 + 4 + 1 + 1 + 1;
+    new_s = XtMalloc(len);
+    snprintf(new_s, len, "ISO%s", charset);
     new_s[7] = '-';
     new_s[8] = charset[4];
     new_s[9] = '\0';
@@ -1618,8 +1624,7 @@ void _XmRC_GetMenuAccelerator(XmRowColumnWidget rc,
 {
   String data;
   if (rc->row_column.menu_accelerator != NULL) {
-    data = (String)XtMalloc(strlen(RC_MenuAccelerator(rc)) + 1);
-    strcpy(data, RC_MenuAccelerator(rc));
+    data = XtNewString(RC_MenuAccelerator(rc));
     *value = (XtArgVal)data;
   }
   else

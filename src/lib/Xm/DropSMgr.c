@@ -3105,7 +3105,7 @@ Status XmDropSiteQueryStackingOrder(Widget widget,
         num_visible_children++;
     }
     if (num_visible_children) {
-      *children_rtn = (Widget *)XtMalloc(sizeof(Widget) * num_visible_children);
+      *children_rtn = (Widget *)_XmMallocArray(num_visible_children, sizeof(Widget));
       /* Remember to reverse the order */
       for (j = 0, i = (GetDSNumChildren(info) - 1); i >= 0; i--) {
         XmDSInfo child = (XmDSInfo)GetDSChild(info, i);

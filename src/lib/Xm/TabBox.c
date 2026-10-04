@@ -151,7 +151,7 @@ static void CalcTabGeometry _ARGS((XmTabBoxWidget));
 static int CalcGeometryMinor _ARGS((XmTabBoxWidget, int));
 static int CalcGeometryMajor _ARGS((XmTabBoxWidget, int));
 static void CallCallbacks _ARGS((XmTabBoxWidget, XEvent *, int, int));
-static void SetRightGC(XmTabBoxWidget tab, GC gc, GC_type);
+static void SetRightGC(XmTabBoxWidget tab, GC gc, GC_type, Pixel normal);
 static void DrawVerticalTab _ARGS((XmTabBoxWidget,
                                    XmTabAttributes,
                                    GC,
@@ -3933,8 +3933,8 @@ static void Layout(XmTabBoxWidget tab)
   }
   if (count > XmTabBox__num_actual(tab)) {
     XmTabBox__num_actual(tab) = count;
-    XmTabBox__actual(tab) = (XiTabRect *)XtRealloc((XtPointer)XmTabBox__actual(tab),
-                                                   sizeof(XiTabRect) * count);
+    XmTabBox__actual(tab) =
+        (XiTabRect *)_XmReallocArray((XtPointer)XmTabBox__actual(tab), count, sizeof(XiTabRect));
   }
   switch (XmTabBox_tab_mode(tab)) {
     case XmTABS_BASIC:
@@ -4335,8 +4335,8 @@ static void CalcTabGeometry(XmTabBoxWidget tab)
    */
   if (count > XmTabBox__num_wanted(tab)) {
     XmTabBox__num_wanted(tab) = count;
-    XmTabBox__wanted(tab) = (XRectangle *)XtRealloc((XtPointer)XmTabBox__wanted(tab),
-                                                    sizeof(XRectangle) * count);
+    XmTabBox__wanted(tab) =
+        (XRectangle *)_XmReallocArray((XtPointer)XmTabBox__wanted(tab), count, sizeof(XRectangle));
   }
   geom = XmTabBox__wanted(tab);
   /*
@@ -4613,39 +4613,30 @@ static void CallCallbacks(XmTabBoxWidget tab, XEvent *event, int from, int to)
   XtCallCallbackList((Widget)tab, XmTabBox_select_callback(tab), (XtPointer)&cbdata);
 }
 
-static void SetRightGC(XmTabBoxWidget tab, GC gc, GC_type gc_type)
+/*
+ * Set the foreground of gc for drawing a label: normal is the colour of a
+ * sensitive label.  This used to remember the "normal" colour in a static
+ * variable, shared by every TabBox and never actually read from the GC,
+ * so a sensitive label drawn after an insensitive one came out in pixel 0
+ * (invisible in the rotated labels' bitmaps).
+ */
+static void SetRightGC(XmTabBoxWidget tab, GC gc, GC_type gc_type, Pixel normal)
 {
   XGCValues values;
-  XtGCMask valueMask;
-  static Pixel p = 0;
-  static GC_type last = gc_normal;
-  valueMask = GCForeground;
-  values.foreground = 0;
   switch (gc_type) {
     case gc_normal:
-      if (last != gc_normal) {
-        values.foreground = p;
-        XChangeGC(XtDisplay(tab), gc, valueMask, &values);
-      }
-      last = gc_normal;
+      values.foreground = normal;
       break;
     case gc_insensitive:
-      if (last == gc_normal)
-        p = values.foreground;
       values.foreground = tab->manager.bottom_shadow_color;
-      XChangeGC(XtDisplay(tab), gc, valueMask, &values);
-      last = gc_insensitive;
       break;
     case gc_shadow:
-      if (last == gc_normal)
-        p = values.foreground;
       values.foreground = tab->manager.top_shadow_color;
-      XChangeGC(XtDisplay(tab), gc, valueMask, &values);
-      last = gc_shadow;
       break;
     default:
-      break;
+      return;
   }
+  XChangeGC(XtDisplay(tab), gc, GCForeground, &values);
 }
 
 /* ARGSUSED */
@@ -4863,7 +4854,7 @@ static void DrawLeftToRightTab(XmTabBoxWidget tab,
      */
     if (!sensitive) {
       /*Draw shadow for insensitive text*/
-      SetRightGC(tab, gc, gc_shadow);
+      SetRightGC(tab, gc, gc_shadow, 0);
       XmStringDraw(XtDisplay(tab),
                    XiCanvas(tab),
                    font_list,
@@ -4875,10 +4866,13 @@ static void DrawLeftToRightTab(XmTabBoxWidget tab,
                    info->label_alignment,
                    info->string_direction,
                    NULL);
-      SetRightGC(tab, gc, gc_insensitive);
+      SetRightGC(tab, gc, gc_insensitive, 0);
     }
     else {
-      SetRightGC(tab, gc, gc_normal);
+      SetRightGC(tab,
+                 gc,
+                 gc_normal,
+                 info->foreground == XmCOLOR_DYNAMIC ? tab->manager.foreground : info->foreground);
     }
     XmStringDraw(XtDisplay(tab),
                  XiCanvas(tab),
@@ -5194,7 +5188,7 @@ static void DrawRightToLeftTab(XmTabBoxWidget tab,
         XtDisplay(tab), bitmap, XmTabBox__zero_GC(tab), 0, 0, label_width, label_height);
     if (!sensitive) {
       /*Draw shadow for insensitive text*/
-      SetRightGC(tab, XmTabBox__one_GC(tab), gc_shadow);
+      SetRightGC(tab, XmTabBox__one_GC(tab), gc_shadow, 0);
       XmStringDraw(XtDisplay(tab),
                    bitmap,
                    font_list,
@@ -5206,10 +5200,10 @@ static void DrawRightToLeftTab(XmTabBoxWidget tab,
                    info->label_alignment,
                    info->string_direction,
                    NULL);
-      SetRightGC(tab, XmTabBox__one_GC(tab), gc_insensitive);
+      SetRightGC(tab, XmTabBox__one_GC(tab), gc_insensitive, 0);
     }
     else {
-      SetRightGC(tab, XmTabBox__one_GC(tab), gc_normal);
+      SetRightGC(tab, XmTabBox__one_GC(tab), gc_normal, 1);
     }
     XmStringDraw(XtDisplay(tab),
                  bitmap,
@@ -5779,7 +5773,7 @@ static void DrawVerticalTab(XmTabBoxWidget tab,
         x = -1;
         y = 1;
       }
-      SetRightGC(tab, XmTabBox__one_GC(tab), gc_shadow);
+      SetRightGC(tab, XmTabBox__one_GC(tab), gc_shadow, 0);
       XmStringDraw(XtDisplay(tab),
                    bitmap,
                    font_list,
@@ -5791,10 +5785,10 @@ static void DrawVerticalTab(XmTabBoxWidget tab,
                    info->label_alignment,
                    info->string_direction,
                    NULL);
-      SetRightGC(tab, XmTabBox__one_GC(tab), gc_insensitive);
+      SetRightGC(tab, XmTabBox__one_GC(tab), gc_insensitive, 0);
     }
     else {
-      SetRightGC(tab, XmTabBox__one_GC(tab), gc_normal);
+      SetRightGC(tab, XmTabBox__one_GC(tab), gc_normal, 1);
     }
     XmStringDraw(XtDisplay(tab),
                  bitmap,
@@ -7920,8 +7914,8 @@ static void ResetImageCache(XmTabBoxWidget tab)
    */
   if (cnt != XmTabBox__cache_size(tab)) {
     XmTabBox__cache_size(tab) = cnt;
-    XmTabBox__cache(tab) = (XiCache *)XtRealloc((XtPointer)XmTabBox__cache(tab),
-                                                sizeof(XiCache) * cnt);
+    XmTabBox__cache(tab) =
+        (XiCache *)_XmReallocArray((XtPointer)XmTabBox__cache(tab), cnt, sizeof(XiCache));
   }
   /*
    * Then lets zero the cache out.

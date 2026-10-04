@@ -1013,7 +1013,7 @@ UrmSetWidgetInstance (URMResourceContextPtr	context_id,
     {
       /* Need to add * for ScrolledText and ScrolledList */
       c_name_tmp = (String)ALLOCATE_LOCAL((strlen(c_name) + 2) * sizeof(char));
-      sprintf(c_name_tmp, "*%s", c_name);
+      snprintf(c_name_tmp, strlen(c_name) + 2, "*%s", c_name);
       *w_return = XtNameToWidget(parent, c_name_tmp);
 
       /* Deal with ScrollBars for ScrolledList and ScrolledText subclasses. */
@@ -2143,7 +2143,7 @@ Urm__CW_DisplayToString (char                       *val,
       return (return_val);
     }
 
-  strcat (&return_val[count], add_string);
+  snprintf (&return_val[count], add_string_size, "%s", add_string);
 
   return (return_val);
 
@@ -2202,6 +2202,7 @@ Urm__CW_ConvertValue (Widget			parent,
   Cardinal		result ;	/* function results */
   XFontStruct		*font = NULL ;		/* result of conversion to font */
   XFontSet		fontset = NULL ;	/* result of converstion to fontset */
+  XtPointer		regval ;	/* registered font or fontset */
   char			**missing_csets;  /* For XCreateFontSet */
   int			missing_cset_cnt; /* For XCreateFontSet */
   char			*def_string;	/* For XCreateFontSet */
@@ -2387,8 +2388,9 @@ Urm__CW_ConvertValue (Widget			parent,
       switch (reptype)
 	{
 	case MrmRtypeFont:
-	  result =
-	    Urm__WCI_LookupRegisteredName(dpyandfontstr, (XtPointer *)&font);
+	  result = Urm__WCI_LookupRegisteredName(dpyandfontstr, &regval);
+	  if ( result == MrmSUCCESS )
+	    font = (XFontStruct *)regval;
 
 	  if ( result != MrmSUCCESS )
 	    {
@@ -2399,7 +2401,8 @@ Urm__CW_ConvertValue (Widget			parent,
 		  return Urm__UT_Error ("Urm__CW_ConvertValue",
 					err_msg, NULL, NULL, MrmNOT_FOUND) ;
 		}
-	      Urm__WCI_RegisterNames (&dpyandfontstr, (XtPointer *)&font, 1);
+	      regval = (XtPointer)font;
+	      Urm__WCI_RegisterNames (&dpyandfontstr, &regval, 1);
 	      {
 		XmDisplay dd = (XmDisplay) XmGetXmDisplay(display);
 		if (dd)
@@ -2411,8 +2414,9 @@ Urm__CW_ConvertValue (Widget			parent,
 	  break;
 
 	case MrmRtypeFontSet:
-	  result = Urm__WCI_LookupRegisteredName(dpyandfontstr,
-						 (XtPointer *)&fontset);
+	  result = Urm__WCI_LookupRegisteredName(dpyandfontstr, &regval);
+	  if ( result == MrmSUCCESS )
+	    fontset = (XFontSet)regval;
 
 	  if ( result != MrmSUCCESS )
 	    {
@@ -2424,8 +2428,8 @@ Urm__CW_ConvertValue (Widget			parent,
 		  return Urm__UT_Error ("Urm__CW_ConvertValue",
 					err_msg, NULL, NULL, MrmNOT_FOUND) ;
 		}
-	      Urm__WCI_RegisterNames(&dpyandfontstr,
-				     (XtPointer *)&fontset, 1);
+	      regval = (XtPointer)fontset;
+	      Urm__WCI_RegisterNames (&dpyandfontstr, &regval, 1);
 	    }
 	  break;
 	}
@@ -2477,8 +2481,9 @@ Urm__CW_ConvertValue (Widget			parent,
 	  switch (fontlist->item[ndx].type)
 	    {
 	    case MrmRtypeFont:
-	      result = Urm__WCI_LookupRegisteredName(dpyandfontstr,
-						     (XtPointer *)&font);
+	      result = Urm__WCI_LookupRegisteredName(dpyandfontstr, &regval);
+	      if ( result == MrmSUCCESS )
+	        font = (XFontStruct *)regval;
 	      if ( result != MrmSUCCESS )
 		{
 		  font = XLoadQueryFont (display, fontstg);
@@ -2489,7 +2494,8 @@ Urm__CW_ConvertValue (Widget			parent,
 		      return Urm__UT_Error ("Urm__CW_ConvertValue",
 					    err_msg, NULL, NULL, MrmNOT_FOUND) ;
 		    }
-		  Urm__WCI_RegisterNames(&dpyandfontstr, (XtPointer *)&font, 1);
+		  regval = (XtPointer)font;
+		  Urm__WCI_RegisterNames (&dpyandfontstr, &regval, 1);
 		  {
 		    XmDisplay dd = (XmDisplay) XmGetXmDisplay(display);
 		    if (dd)
@@ -2501,8 +2507,9 @@ Urm__CW_ConvertValue (Widget			parent,
 	      break;
 
 	    case MrmRtypeFontSet:
-	      result = Urm__WCI_LookupRegisteredName(dpyandfontstr,
-						     (XtPointer *)&fontset);
+	      result = Urm__WCI_LookupRegisteredName(dpyandfontstr, &regval);
+	      if ( result == MrmSUCCESS )
+	        fontset = (XFontSet)regval;
 	      if ( result != MrmSUCCESS )
 		{
 		  fontset = XCreateFontSet(display, fontstg, &missing_csets,
@@ -2521,8 +2528,8 @@ Urm__CW_ConvertValue (Widget			parent,
 				fontstg);
 		      XFreeStringList(missing_csets);
 		    }
-		  Urm__WCI_RegisterNames(&dpyandfontstr,
-					 (XtPointer *)&fontset, 1);
+		  regval = (XtPointer)fontset;
+		  Urm__WCI_RegisterNames (&dpyandfontstr, &regval, 1);
 		}
 	      break;
 	    }
@@ -2745,11 +2752,10 @@ DisplayDestroyCallback ( Widget w,
 			 XtPointer call_data )	/* unused */
 {
   String dpyandfontstr = (String) client_data;
-  XFontStruct  *font ;
+  XtPointer	font ;
 
-  if (MrmSUCCESS == Urm__WCI_LookupRegisteredName(dpyandfontstr,
-						  (XtPointer *)&font))
-    XFreeFont(XtDisplay(w), font);
+  if (MrmSUCCESS == Urm__WCI_LookupRegisteredName(dpyandfontstr, &font))
+    XFreeFont(XtDisplay(w), (XFontStruct *)font);
   Urm__WCI_UnregisterName (dpyandfontstr);
   XtFree(dpyandfontstr);
 }
@@ -2883,8 +2889,7 @@ Urm__CW_SafeCopyValue (long				*val,
 
     case MrmRtypeChar8:
       char8_src = (String) *val ;
-      char8_dst = (String) XtMalloc (strlen(char8_src)+1) ;
-      strcpy (char8_dst, char8_src) ;
+      char8_dst = XtNewString (char8_src) ;
       *val = (long) char8_dst ;
       if (cblist != NULL)
 	{

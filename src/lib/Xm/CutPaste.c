@@ -240,13 +240,13 @@ static void ClipboardError(char *key, char *message);
 static void ClipboardEventHandler(Widget widget, XtPointer closure, XEvent *event, Boolean *cont);
 static int ClipboardFindItem(Display *display,
                              itemId itemid,
-                             XtPointer *outpointer,
+                             void *outpointer,
                              unsigned long *outlength,
                              Atom *outtype,
                              int *format);
 static int ClipboardFindRecord(Display *display,
                                itemId itemid,
-                               XtPointer *outpointer,
+                               void *outpointer,
                                unsigned long *outlength,
                                unsigned long min_len,
                                int rec_type);
@@ -262,7 +262,7 @@ static int ClipboardRetrieveItem(Display *display,
                                  itemId itemid,
                                  int add_length,
                                  int def_length,
-                                 XtPointer *outpointer,
+                                 void *outpointer,
                                  unsigned long *outlength,
                                  Atom *type,
                                  int *format,
@@ -319,7 +319,7 @@ static int ClipboardRequestorIsReady(
 static int ClipboardGetSelection(Display *display,
                                  Window window,
                                  Atom target,
-                                 XtPointer *value,
+                                 void *value,
                                  Atom *type,
                                  unsigned long *size,
                                  int *format);
@@ -530,7 +530,7 @@ static Boolean ClipboardConvertProc(Widget wid,
     }
     /* allocate storage for list of target atoms,
          plus the necessary */
-    ptr = (Atom *)XtMalloc((Cardinal)(sizeof(Atom) * (count + 2)));
+    ptr = (Atom *)_XmMallocArray(count + 2, sizeof(Atom));
     save_ptr = ptr;
     /* Put required ICCCM targets which are supported */
     *ptr = atoms[XmA_TARGETS];
@@ -726,7 +726,7 @@ static void ClipboardEventHandler(Widget widget, XtPointer closure, XEvent *even
   /* get the callback routine */
   ret_value = ClipboardFindRecord(display,
                                   formatitemid,
-                                  (XtPointer *)&formatitem,
+                                  &formatitem,
                                   &formatlength,
                                   sizeof(ClipboardFormatItemRec),
                                   XM_FORMAT_HEADER_TYPE);
@@ -758,7 +758,7 @@ static void ClipboardEventHandler(Widget widget, XtPointer closure, XEvent *even
     ClipboardHeader header;
     if (ClipboardFindRecord(display,
                             XM_HEADER_ID,
-                            (XtPointer *)&header,
+                            &header,
                             &hlength,
                             sizeof(ClipboardHeaderRec),
                             0) == ClipboardSuccess)
@@ -772,25 +772,39 @@ static void ClipboardEventHandler(Widget widget, XtPointer closure, XEvent *even
 }
 
 /*---------------------------------------------*/
+/* The record functions return their data through the address of a
+   pointer of the caller's type (a ClipboardHeader, a ClipboardDataItem,
+   ...).  Store it with memcpy: an assignment through an XtPointer lvalue
+   would violate strict aliasing, and the compiler could then use a stale
+   value of the caller's variable. */
+static void SetOutPointer(void *outpointer, XtPointer value)
+{
+  memcpy(outpointer, &value, sizeof(value));
+}
+
+/*---------------------------------------------*/
 /* Fetch the raw contents of a clipboard item (used as is for format
    data).  On failure *outpointer is NULL and *outlength is 0. */
 static int ClipboardFindItem(Display *display,
                              itemId itemid,
-                             XtPointer *outpointer,
+                             void *outpointer,
                              unsigned long *outlength,
                              Atom *outtype,
                              int *format)
 {
   Window rootwindow;
   Atom itematom;
-  int dummy;
+  int dummy, ret_value;
+  XtPointer pointer;
   if (format == NULL)
     format = &dummy;
   rootwindow = RootWindow(display, 0);
   /* convert the id into an atom */
   itematom = ClipboardGetAtomFromId(display, itemid);
-  return GetWindowProperty(
-      display, rootwindow, itematom, outpointer, outlength, outtype, format, FALSE);
+  ret_value = GetWindowProperty(
+      display, rootwindow, itematom, &pointer, outlength, outtype, format, FALSE);
+  SetOutPointer(outpointer, pointer);
+  return ret_value;
 }
 
 /*---------------------------------------------*/
@@ -803,7 +817,7 @@ static int ClipboardFindItem(Display *display,
    *outlength is 0. */
 static int ClipboardFindRecord(Display *display,
                                itemId itemid,
-                               XtPointer *outpointer,
+                               void *outpointer,
                                unsigned long *outlength,
                                unsigned long min_len,
                                int rec_type)
@@ -814,10 +828,10 @@ static int ClipboardFindRecord(Display *display,
   int format;
   Boolean valid;
   *outlength = 0;
-  if (ClipboardFindItem(display, itemid, outpointer, &length, &type, &format) !=
-      ClipboardSuccess)
+  if (ClipboardFindItem(display, itemid, &ptr, &length, &type, &format) != ClipboardSuccess) {
+    SetOutPointer(outpointer, NULL);
     return ClipboardFail;
-  ptr = (ClipboardPointer)*outpointer;
+  }
   /* Records are INTEGER, but old clipboards typed them with the item
      atom itself (what ClipboardReplaceItem() still does for None).
      GetWindowProperty() reports the _MOTIF_CLIP_ITEM_<n> atoms as None,
@@ -827,7 +841,7 @@ static int ClipboardFindRecord(Display *display,
             type == ClipboardGetAtomFromId(display, itemid)));
   if (valid && rec_type != 0 && ptr->header.recordType != rec_type) {
     XtFree((char *)ptr);
-    *outpointer = NULL;
+    SetOutPointer(outpointer, NULL);
     CleanupHeader(display);
     ClipboardError(CLIPBOARD_BAD_DATA_TYPE, BAD_DATA_TYPE);
     return ClipboardFail;
@@ -850,9 +864,10 @@ static int ClipboardFindRecord(Display *display,
   }
   if (!valid) {
     XtFree((char *)ptr);
-    *outpointer = NULL;
+    SetOutPointer(outpointer, NULL);
     return ClipboardFail;
   }
+  SetOutPointer(outpointer, ptr);
   *outlength = length;
   return ClipboardSuccess;
 }
@@ -972,7 +987,7 @@ static int ClipboardRetrieveItem(Display *display,
                                  itemId itemid,
                                  int add_length, /* allocate this add'l */
                                  int def_length, /* if item non-exist */
-                                 XtPointer *outpointer,
+                                 void *outpointer,
                                  unsigned long *outlength,
                                  Atom *outtype,
                                  int *format,
@@ -1019,12 +1034,12 @@ static int ClipboardRetrieveItem(Display *display,
     *outlength = loclength + add_length;
   }
   /* get local memory for the item */
-  clipboard_pointer = (ClipboardPointer)XtMalloc((Cardinal)*outlength);
+  clipboard_pointer = (ClipboardPointer)_XmMallocArray(*outlength, 1);
   if (ret_value == ClipboardSuccess) {
     /* copy the item into the local memory */
     memcpy(clipboard_pointer, pointer, (size_t)loclength);
   }
-  *outpointer = (char *)clipboard_pointer;
+  SetOutPointer(outpointer, clipboard_pointer);
   if (outtype != NULL)
     *outtype = loctype;
   /* free memory pointed to by pointer */
@@ -1104,7 +1119,7 @@ static Atom ClipboardGetAtomFromId(Display *display, itemId itemid)
       item = XmS_MOTIF_CLIP_NEXT_ID;
       break;
     default:
-      sprintf(atomname, "_MOTIF_CLIP_ITEM_%ld", itemid);
+      snprintf(atomname, sizeof(atomname), "_MOTIF_CLIP_ITEM_%ld", itemid);
       item = atomname;
       break;
   }
@@ -1116,9 +1131,11 @@ static Atom ClipboardGetAtomFromFormat(Display *display, char *format_name)
 {
   char *atomname_format = "_MOTIF_CLIP_FORMAT_%s";
   char *item;
+  size_t size;
   Atom ret_value;
-  item = XtMalloc(strlen(format_name) + strlen(atomname_format) + 1);
-  sprintf(item, atomname_format, format_name);
+  size = strlen(format_name) + strlen(atomname_format) + 1;
+  item = _XmMallocArray(size, 1);
+  snprintf(item, size, atomname_format, format_name);
   ret_value = XInternAtom(display, item, False);
   XtFree((char *)item);
   return ret_value;
@@ -1132,28 +1149,22 @@ static int ClipboardGetLenFromFormat(Display *display, char *format_name, int *f
   Window rootwindow;
   unsigned long outlength;
   unsigned char *outpointer;
-  Atom type;
-  int format;
-  unsigned long bytes_left;
-  outpointer = NULL;
   format_atom = ClipboardGetAtomFromFormat(display, format_name);
   rootwindow = RootWindow(display, 0);
-  /* get the format record */
-  ret_value = XGetWindowProperty(display,
-                                 rootwindow,
-                                 format_atom,
-                                 0,        /*offset*/
-                                 10000000, /*length*/
-                                 False,
-                                 AnyPropertyType,
-                                 &type,
-                                 &format,
-                                 &outlength,
-                                 &bytes_left,
-                                 &outpointer);
-  /* any client can write this property: it must hold one 32-bit item
-     with a valid format length */
-  if (outpointer == 0 || outlength == 0 || ret_value != 0 || format != 32 ||
+  /* get the format record: any client can write this property, it must
+     hold one 32-bit item with a valid format length */
+  if (!_XmGetWindowPropertyChecked(display,
+                                   rootwindow,
+                                   format_atom,
+                                   10000000,
+                                   AnyPropertyType,
+                                   32,
+                                   1,
+                                   NULL,
+                                   NULL,
+                                   &outlength,
+                                   NULL,
+                                   &outpointer) ||
       (*((long *)outpointer) != 8 && *((long *)outpointer) != 16 && *((long *)outpointer) != 32))
   {
     /* if not successful, return warning that format is not registered */
@@ -1184,7 +1195,7 @@ static ClipboardHeader ClipboardOpen(Display *display, int add_length)
     /* get the clipboard header */
     ret_value = ClipboardFindRecord(display,
                                     XM_HEADER_ID,
-                                    (XtPointer *)&root_clipboard_header,
+                                    &root_clipboard_header,
                                     &headerlength,
                                     sizeof(ClipboardHeaderRec),
                                     0);
@@ -1196,7 +1207,7 @@ static ClipboardHeader ClipboardOpen(Display *display, int add_length)
                                       XM_HEADER_ID,
                                       add_length,
                                       sizeof(ClipboardHeaderRec),
-                                      (XtPointer *)&root_clipboard_header,
+                                      &root_clipboard_header,
                                       &headerlength,
                                       NULL,
                                       0,
@@ -1298,7 +1309,7 @@ static ClipboardFormatItem ClipboardFindFormat(
   /* get the query item */
   if (ClipboardFindRecord(display,
                           queryitemid,
-                          (XtPointer *)&queryitem,
+                          &queryitem,
                           &reclength,
                           sizeof(ClipboardDataItemRec),
                           XM_DATA_ITEM_RECORD_TYPE) == ClipboardFail)
@@ -1324,7 +1335,7 @@ static ClipboardFormatItem ClipboardFindFormat(
     /* get the next format */
     ClipboardFindRecord(display,
                         currformatid,
-                        (XtPointer *)&currformat,
+                        &currformat,
                         &reclength,
                         sizeof(ClipboardFormatItemRec),
                         XM_FORMAT_HEADER_TYPE);
@@ -1374,7 +1385,7 @@ static void ClipboardDeleteFormat(Display *display, itemId formatitemid)
   /* first get the format item out of the root */
   ClipboardFindRecord(display,
                       formatitemid,
-                      (XtPointer *)&formatitem,
+                      &formatitem,
                       &formatlength,
                       sizeof(ClipboardFormatItemRec),
                       XM_FORMAT_HEADER_TYPE);
@@ -1392,7 +1403,7 @@ static void ClipboardDeleteFormat(Display *display, itemId formatitemid)
   /* now get the data item out of the root */
   ClipboardFindRecord(display,
                       dataitemid,
-                      (XtPointer *)&dataitem,
+                      &dataitem,
                       &length,
                       sizeof(ClipboardDataItemRec),
                       XM_DATA_ITEM_RECORD_TYPE);
@@ -1432,7 +1443,7 @@ static void ClipboardDeleteFormats(Display *display, Window window, itemId datai
   /* first get the data item out of the root */
   ClipboardFindRecord(display,
                       dataitemid,
-                      (XtPointer *)&datalist,
+                      &datalist,
                       &length,
                       sizeof(ClipboardDataItemRec),
                       XM_DATA_ITEM_RECORD_TYPE);
@@ -1446,7 +1457,7 @@ static void ClipboardDeleteFormats(Display *display, Window window, itemId datai
     /* first delete the format data */
     ClipboardFindRecord(display,
                         *deleteptr,
-                        (XtPointer *)&formatdata,
+                        &formatdata,
                         &length,
                         sizeof(ClipboardFormatItemRec),
                         XM_FORMAT_HEADER_TYPE);
@@ -1477,7 +1488,7 @@ static void ClipboardDeleteItemLabel(Display *display, Window window, itemId dat
   /* first get the data item out of the root */
   ClipboardFindRecord(display,
                       dataitemid,
-                      (XtPointer *)&datalist,
+                      &datalist,
                       &length,
                       sizeof(ClipboardDataItemRec),
                       XM_DATA_ITEM_RECORD_TYPE);
@@ -1506,7 +1517,7 @@ static unsigned long ClipboardIsMarkedForDelete(Display *display,
   /* get the next format */
   ClipboardFindRecord(display,
                       itemid,
-                      (XtPointer *)&curritem,
+                      &curritem,
                       &reclength,
                       sizeof(ClipboardDataItemRec),
                       XM_DATA_ITEM_RECORD_TYPE);
@@ -1651,7 +1662,7 @@ static void ClipboardMarkItem(Display *display,
   /* get a pointer to the item */
   ClipboardFindRecord(display,
                       dataitemid,
-                      (XtPointer *)&itemheader,
+                      &itemheader,
                       &itemlength,
                       sizeof(ClipboardDataItemRec),
                       XM_DATA_ITEM_RECORD_TYPE);
@@ -1710,7 +1721,7 @@ static int ClipboardSendMessage(Display *display,
       /* get the clipboard header */
       if (ClipboardFindRecord(display,
                               XM_HEADER_ID,
-                              (XtPointer *)&root_clipboard_header,
+                              &root_clipboard_header,
                               &headerlength,
                               sizeof(ClipboardHeaderRec),
                               0) == ClipboardSuccess)
@@ -1776,7 +1787,7 @@ static int ClipboardDataIsReady(Display *display, XEvent *event, char *private_i
   /* get the format item */
   ClipboardFindRecord(display,
                       cutbynameinfo->formatitemid,
-                      (XtPointer *)&formatitem,
+                      &formatitem,
                       &formatlength,
                       sizeof(ClipboardFormatItemRec),
                       XM_FORMAT_HEADER_TYPE);
@@ -1830,18 +1841,19 @@ ClipboardRequestorIsReady(
 static int ClipboardGetSelection(Display *display,
                                  Window window,
                                  Atom target,
-                                 XtPointer *value,
+                                 void *value,
                                  Atom *type,
                                  unsigned long *size,
                                  int *format)
 {
   ClipboardSelectionInfo info;
+  XtPointer data;
   Widget dest;
   XtAppContext app;
   Atom XmA_CLIPBOARD;
   XtIntervalId timer;
   Boolean timed_out = False;
-  *value = NULL;
+  SetOutPointer(value, NULL);
   *size = 0;
   *type = None;
   *format = 8;
@@ -1910,12 +1922,13 @@ static int ClipboardGetSelection(Display *display,
     info->abandoned = TRUE;
     return FALSE;
   }
-  *value = info->data;
+  SetOutPointer(value, info->data);
   *size = info->count;
   *type = info->type;
   *format = info->format;
+  data = info->data;
   XtFree((char *)info);
-  if (*value == NULL || *size == 0)
+  if (data == NULL || *size == 0)
     return FALSE;
   return TRUE;
 }
@@ -2096,7 +2109,7 @@ static int ClipboardLock(Display *display, Window window)
     return (ClipboardLocked);
   }
   ClipboardFindRecord(
-      display, XM_LOCK_ID, (XtPointer *)&lockptr, &length, sizeof(ClipboardLockRec), 0);
+      display, XM_LOCK_ID, &lockptr, &length, sizeof(ClipboardLockRec), 0);
   if (length == 0) /* create new lock property */ {
     lockptr = (ClipboardLockPtr)XtMalloc(sizeof(ClipboardLockRec));
     lockptr->lockLevel = 0;
@@ -2176,7 +2189,7 @@ static int ClipboardUnlock(Display *display, Window window, Boolean all_levels)
   if (lock_owner != window && lock_owner != None)
     return (ClipboardFail);
   ClipboardFindRecord(
-      display, XM_LOCK_ID, (XtPointer *)&lockptr, &length, sizeof(ClipboardLockRec), 0);
+      display, XM_LOCK_ID, &lockptr, &length, sizeof(ClipboardLockRec), 0);
   if (length == 0) /* There is no lock property */ {
     return (ClipboardFail);
   }
@@ -2244,10 +2257,6 @@ static int ClipboardWindowExists(Display *display, Window window)
   int exists;
   unsigned long outlength;
   unsigned char *outpointer;
-  Atom type;
-  int format;
-  unsigned long bytes_left;
-  outpointer = NULL;
   rootwindow = RootWindow(display, 0);
   exists = ClipboardSearchForWindow(display, rootwindow, window);
   if (exists == 1) {
@@ -2256,24 +2265,22 @@ static int ClipboardWindowExists(Display *display, Window window)
            and the lock is bogus due to a crash of the application
            with the original locking window */
     itematom = XInternAtom(display, XmS_MOTIF_CLIP_LOCK_ACCESS_VALID, False);
-    XGetWindowProperty(display,
-                       window,
-                       itematom,
-                       0,        /*offset*/
-                       10000000, /*length*/
-                       False,
-                       AnyPropertyType,
-                       &type,
-                       &format,
-                       &outlength,
-                       &bytes_left,
-                       &outpointer);
-    if (outpointer == 0 || outlength == 0) {
+    if (_XmGetWindowPropertyChecked(display,
+                                    window,
+                                    itematom,
+                                    10000000,
+                                    AnyPropertyType,
+                                    0,
+                                    1,
+                                    NULL,
+                                    NULL,
+                                    &outlength,
+                                    NULL,
+                                    &outpointer))
+      XFree((char *)outpointer);
+    else
       /* not the same window that locked the clipboard */
       exists = 0;
-    }
-    if (outpointer != NULL)
-      XFree((char *)outpointer);
   }
   return exists;
 }
@@ -2354,9 +2361,10 @@ int XmClipboardStartCopy(Display *display, /* display id for application passing
       int oldLimit = maxCbProcs;
       maxCbProcs += 20;
       /* Need to extend tables */
-      cbProcTable = (XmCutPasteProc *)XtRealloc((char *)cbProcTable,
-                                                sizeof(XmCutPasteProc) * maxCbProcs);
-      cbIdTable = (long *)XtRealloc((char *)cbIdTable, sizeof(long) * maxCbProcs);
+      cbProcTable = (XmCutPasteProc *)_XmReallocArray((char *)cbProcTable,
+                                                      maxCbProcs,
+                                                      sizeof(XmCutPasteProc));
+      cbIdTable = (long *)_XmReallocArray((char *)cbIdTable, maxCbProcs, sizeof(long));
       for (i = oldLimit; i < maxCbProcs; i++) {
         cbProcTable[i] = NULL;
         cbIdTable[i] = 0;
@@ -2472,7 +2480,7 @@ int XmClipboardCopy(Display *display, /* Display id of application passing data 
                                    (itemId)itemid,
                                    sizeof(itemId),
                                    0,
-                                   (XtPointer *)&itemheader,
+                                   &itemheader,
                                    &itemlength,
                                    NULL,
                                    0,
@@ -2548,7 +2556,7 @@ int XmClipboardCopy(Display *display, /* Display id of application passing data 
                           formatdataid,
                           (int)length, /* BAD NEWS: truncation here.*/
                           0,
-                          (XtPointer *)&formatdataptr,
+                          &formatdataptr,
                           &formatdatalength,
                           NULL,
                           &format_len,
@@ -2637,7 +2645,7 @@ int XmClipboardEndCopy(Display *display, Window window, long itemid)
   /* if there was a cut by name format, then set up event handling */
   ClipboardFindRecord(display,
                       itemid,
-                      (XtPointer *)&itemheader,
+                      &itemheader,
                       &itemlength,
                       sizeof(ClipboardDataItemRec),
                       XM_DATA_ITEM_RECORD_TYPE);
@@ -2746,7 +2754,7 @@ int XmClipboardCopyByName(Display *display, /* Display id of application passing
   /* get the clipboard header */
   ClipboardFindRecord(display,
                       XM_HEADER_ID,
-                      (XtPointer *)&root_clipboard_header,
+                      &root_clipboard_header,
                       &headerlength,
                       sizeof(ClipboardHeaderRec),
                       0);
@@ -2777,7 +2785,7 @@ int XmClipboardCopyByName(Display *display, /* Display id of application passing
   /* get a pointer to the format */
   if (ClipboardFindRecord(display,
                           data,
-                          (XtPointer *)&formatheader,
+                          &formatheader,
                           &formatlength,
                           sizeof(ClipboardFormatItemRec),
                           XM_FORMAT_HEADER_TYPE) == ClipboardSuccess)
@@ -2787,7 +2795,7 @@ int XmClipboardCopyByName(Display *display, /* Display id of application passing
                           formatheader->formatDataId,
                           (int)length, /* BAD NEWS: truncation here.*/
                           0,
-                          (XtPointer *)&formatdataptr,
+                          &formatdataptr,
                           &formatdatalength,
                           &formattype,
                           &format,
@@ -2873,7 +2881,7 @@ int XmClipboardUndoCopy(Display *display, Window window)
     /* get the item */
     ClipboardFindRecord(display,
                         itemid,
-                        (XtPointer *)&itemheader,
+                        &itemheader,
                         &itemlength,
                         sizeof(ClipboardDataItemRec),
                         XM_DATA_ITEM_RECORD_TYPE);
@@ -3051,7 +3059,7 @@ static int ClipboardRetrieve(Display *display,
           XtFree((char *)matchformat);
           ClipboardFindRecord(display,
                               matchid,
-                              (XtPointer *)&matchformat,
+                              &matchformat,
                               &matchformatlength,
                               sizeof(ClipboardFormatItemRec),
                               XM_FORMAT_HEADER_TYPE);
@@ -3065,7 +3073,7 @@ static int ClipboardRetrieve(Display *display,
       if (dataok) {
         ClipboardFindItem(display,
                           matchformat->formatDataId,
-                          (XtPointer *)&formatdata,
+                          &formatdata,
                           &formatdatalength,
                           outtype,
                           0);
@@ -3118,7 +3126,7 @@ static int ClipboardRetrieve(Display *display,
     if (ClipboardGetSelection(display,
                               window,
                               XInternAtom(display, format, False),
-                              (XtPointer *)&formatdata,
+                              &formatdata,
                               outtype,
                               &loc_outlength,
                               &outformatsize))
@@ -3216,7 +3224,7 @@ int XmClipboardInquireCount(Display *display,
     if (!ClipboardGetSelection(display,
                                window,
                                XInternAtom(display, XmSTARGETS, False),
-                               (XtPointer *)&alloc_to_free,
+                               &alloc_to_free,
                                &ignoretype,
                                &loc_count_len,
                                &ignoreformat))
@@ -3320,7 +3328,7 @@ int XmClipboardInquireFormat(Display *display, /* Display id of application inqu
     if (!ClipboardGetSelection(display,
                                window,
                                XInternAtom(display, XmSTARGETS, False),
-                               (XtPointer *)&alloc_to_free,
+                               &alloc_to_free,
                                &ignoretype,
                                &loc_matchlength,
                                &ignoreformat))
@@ -3421,7 +3429,7 @@ int XmClipboardInquireLength(
     if (!ClipboardGetSelection(display,
                                window,
                                XInternAtom(display, format, False),
-                               (XtPointer *)&alloc_to_free,
+                               &alloc_to_free,
                                &ignoretype,
                                &loc_length,
                                &ignoreformat))
@@ -3481,8 +3489,7 @@ int XmClipboardInquirePendingItems(Display *display, /* Display id of applicatio
   nitems = header->currItems;
   if (nitems > (Cardinal)~0 / sizeof(XmClipboardPendingRec))
     nitems = 0;
-  itemlist = (XmClipboardPendingList)XtMalloc(
-      (Cardinal)(nitems * sizeof(XmClipboardPendingRec)));
+  itemlist = (XmClipboardPendingList)_XmMallocArray(nitems, sizeof(XmClipboardPendingRec));
   nextlistptr = itemlist;
   /* run through all the items in the clipboard looking
        for matching formats */

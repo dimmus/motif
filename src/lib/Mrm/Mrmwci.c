@@ -216,7 +216,7 @@ MrmRegisterClassWithCleanup (
       return MrmFAILURE;
     }
   cldesc->creator_name = (String) cldesc + sizeof(WCIClassDesc);
-  strcpy (cldesc->creator_name, create_name);
+  memcpy (cldesc->creator_name, create_name, strlen(create_name) + 1);
   cldesc->validation = URMWCIClassDescValid;
   cldesc->next_desc = wci_cldesc_list;
   wci_cldesc_list = cldesc;

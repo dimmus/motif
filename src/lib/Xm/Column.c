@@ -950,16 +950,7 @@ static void ConstraintInitialize(Widget request, Widget new_w, ArgList arg_list,
     Widget label;
     XmFontList lfont;
     VerifyConstraints(request, NULL, new_w);
-    if (strlen(XtName(new_w)) > 240) {
-      strncpy(buf, XtName(new_w), 240);
-      buf[240] = '\0';
-      strcat(buf, "_label");
-    }
-    else {
-      strncpy(buf, XtName(new_w), 255);
-      buf[255] = '\0';
-      strcat(buf, "_label");
-    }
+    snprintf(buf, sizeof(buf), "%.240s_label", XtName(new_w));
     label_widget = True;
     lfont = XmColumnC_label_font_list(new_w);
     bbpart = BBPart(XtParent(new_w));

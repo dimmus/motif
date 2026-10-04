@@ -557,8 +557,9 @@ void XmeTransferAddDoneProc(XtPointer id, XmSelectionFinishedProc done_proc)
   if (tid->numDoneProcs == 1)
     tid->doneProcs = (XmSelectionFinishedProc *)XtMalloc(sizeof(XmSelectionFinishedProc *));
   else
-    tid->doneProcs = (XmSelectionFinishedProc *)XtRealloc(
-        (char *)tid->doneProcs, sizeof(XmSelectionFinishedProc *) * tid->numDoneProcs);
+    tid->doneProcs = (XmSelectionFinishedProc *)_XmReallocArray((char *)tid->doneProcs,
+                                                                tid->numDoneProcs,
+                                                                sizeof(XmSelectionFinishedProc *));
   tid->doneProcs[tid->numDoneProcs - 1] = done_proc;
   _XmProcessUnlock();
 }
@@ -665,7 +666,7 @@ static void SecondaryDone(Widget wid,
   /* Call the convertCallback with target DELETE if successful */
   if (success && cc->op == XmMOVE) {
     _XmConvertHandlerSetLocal();
-    _XmConvertHandler(wid, &convert_selection, &DELETE, type, (XtPointer *)&value, length, format);
+    _XmConvertHandler(wid, &convert_selection, &DELETE, type, &value, length, format);
     XtFree((char *)value);
   }
   XtDisownSelection(wid, convert_selection, XtLastTimestampProcessed(XtDisplay(wid)));
@@ -948,7 +949,7 @@ Widget XmeDragSource(
   XInternAtoms(XtDisplay(w), atom_names, XtNumber(atom_names), False, atoms);
   /* merge and copy arg list */
   arg_count = in_arg_count + 10;
-  args = (Arg *)XtMalloc(sizeof(Arg) * arg_count);
+  args = (Arg *)_XmMallocArray(arg_count, sizeof(Arg));
   for (arg_count = 0; arg_count < in_arg_count; arg_count++)
     args[arg_count] = in_args[arg_count];
   arg_count = in_arg_count;
@@ -1265,7 +1266,7 @@ void XmeDropSink(Widget w, ArgList in_args, Cardinal in_arg_count)
   _XmAppLock(app);
   /* merge and copy arg list */
   arg_count = in_arg_count + 2;
-  args = (Arg *)XtMalloc(sizeof(Arg) * arg_count);
+  args = (Arg *)_XmMallocArray(arg_count, sizeof(Arg));
   for (arg_count = 0; arg_count < in_arg_count; arg_count++)
     args[arg_count] = in_args[arg_count];
   arg_count = in_arg_count;
@@ -1829,7 +1830,7 @@ Atom *XmeStandardTargets(Widget w, int count, int *tcount)
   targets[i] = atoms[XmA_MOTIF_ENCODING_REGISTRY];
   i++;
   /* Realloc the full size now */
-  targets = (Atom *)XtRealloc((char *)targets, sizeof(Atom) * (count + i));
+  targets = (Atom *)_XmReallocArray((char *)targets, count + i, sizeof(Atom));
   *tcount = i; /* Return the builtin target count */
   _XmAppUnlock(app);
   return (targets);
@@ -1916,55 +1917,57 @@ void XmeStandardConvert(Widget w,
   }
   else if (atoms[XmACLASS] == cs->target) {
     Widget current;
-    unsigned long bytesAfter;
+    Atom type;
+    int format;
+    unsigned long length;
+    unsigned char *value;
     cs->value = NULL;
     cs->format = 32;
     cs->length = 0;
     cs->type = XA_INTEGER;
     for (current = w; current != (Widget)NULL; current = XtParent(current)) {
-      if (XtIsShell(current)) {
-        XGetWindowProperty(XtDisplay(current),
-                           XtWindow(current),
-                           XA_WM_CLASS,
-                           0L,
-                           100000L,
-                           False,
-                           (Atom)AnyPropertyType,
-                           &cs->type,
-                           &cs->format,
-                           &cs->length,
-                           &bytesAfter,
-                           (unsigned char **)&cs->value);
-        if (cs->value != NULL)
-          break;
+      if (XtIsShell(current) && _XmGetWindowPropertyChecked(XtDisplay(current),
+                                                            XtWindow(current),
+                                                            XA_WM_CLASS,
+                                                            100000L,
+                                                            (Atom)AnyPropertyType,
+                                                            0,
+                                                            0,
+                                                            &type,
+                                                            &format,
+                                                            &length,
+                                                            NULL,
+                                                            &value))
+      {
+        cs->value = (XtPointer)value;
+        cs->type = type;
+        cs->format = format;
+        cs->length = length;
+        break;
       }
     }
   }
   else if (atoms[XmANAME] == cs->target) {
     Widget current;
-    unsigned long bytesAfter;
     Atom type = None;
     int format = 8;
     unsigned char *value = NULL;
     char *total_value = NULL;
     unsigned long length = 0;
     for (current = w; current != (Widget)NULL; current = XtParent(current)) {
-      if (XtIsShell(current)) {
-        XGetWindowProperty(XtDisplay(current),
-                           XtWindow(current),
-                           XA_WM_NAME,
-                           0L,
-                           100000L,
-                           False,
-                           (Atom)AnyPropertyType,
-                           &type,
-                           &format,
-                           &length,
-                           &bytesAfter,
-                           &value);
-        if (value != NULL)
-          break;
-      }
+      if (XtIsShell(current) && _XmGetWindowPropertyChecked(XtDisplay(current),
+                                                            XtWindow(current),
+                                                            XA_WM_NAME,
+                                                            100000L,
+                                                            (Atom)AnyPropertyType,
+                                                            0,
+                                                            0,
+                                                            &type,
+                                                            &format,
+                                                            &length,
+                                                            NULL,
+                                                            &value))
+        break;
     }
     if (value != NULL) {
       total_value = _XmTextToLocaleText(w, (XtPointer)value, type, format, length, NULL);
@@ -2057,7 +2060,6 @@ char *_XmTextToLocaleText(
   char **values;
   int num_values = 0;
   char *total_value = NULL;
-  int malloc_size = 0;
   int i;
   if (type == XA_STRING || type == COMPOUND_TEXT
 #if XM_UTF8
@@ -2077,12 +2079,7 @@ char *_XmTextToLocaleText(
         *success = False;
     }
     if (num_values) {
-      for (i = 0; i < num_values; i++)
-        malloc_size += strlen(values[i]);
-      total_value = XtMalloc((unsigned)malloc_size + 1);
-      total_value[0] = '\0';
-      for (i = 0; i < num_values; i++)
-        strcat(total_value, values[i]);
+      total_value = _XmConcatStrings(values, num_values);
       XFreeStringList(values);
     }
   }

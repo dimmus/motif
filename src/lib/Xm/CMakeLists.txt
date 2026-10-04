@@ -562,6 +562,7 @@ add_library(Motif::Xm ALIAS Xm)
 
 # Export only the symbols of libXm.map (see doc/abi-policy.md)
 motif_version_script(Xm ${CMAKE_CURRENT_SOURCE_DIR}/libXm.map)
+motif_ban_unsafe_string_functions(Xm)
 
 # Ensure message catalog header and string files are generated before building this target
 add_dependencies(Xm xm_msgcat_header xm_strings)

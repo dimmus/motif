@@ -1815,7 +1815,7 @@ static void GetHorRects(Widget sw, XRectangle **hrect, Cardinal *num_hrect)
   Widget w;
   XmScrolledWindowWidget scw = (XmScrolledWindowWidget)sw;
   *num_hrect = 2;
-  *hrect = (XRectangle *)XtMalloc(sizeof(XRectangle) * (*num_hrect));
+  *hrect = (XRectangle *)_XmMallocArray(*num_hrect, sizeof(XRectangle));
   /* The hor rectangles are the ones that horizontally auto scroll,
        they are defined by areas on the left and right of the
        workarea, e.g. the margins, the spacing, the scrollbars
@@ -1854,7 +1854,7 @@ static void GetVertRects(Widget sw, XRectangle **vrect, Cardinal *num_vrect)
   Widget w;
   XmScrolledWindowWidget scw = (XmScrolledWindowWidget)sw;
   *num_vrect = 2;
-  *vrect = (XRectangle *)XtMalloc(sizeof(XRectangle) * (*num_vrect));
+  *vrect = (XRectangle *)_XmMallocArray(*num_vrect, sizeof(XRectangle));
   /* The vertical rectangles are the ones that vertically auto scroll,
        they are defined by areas on the top and bottom of the
        workarea, e.g. the margins, the spacing, the scrollbars

@@ -1728,7 +1728,7 @@ Widget XmCreateSelectionDialog(Widget ds_p, String name, ArgList sb_args, Cardin
   Widget w;
   /*  allocate arglist, copy args, add dialog type arg
    */
-  _sb_args = (ArgList)XtMalloc(sizeof(Arg) * (sb_n + 1));
+  _sb_args = (ArgList)_XmMallocArray(sb_n + 1, sizeof(Arg));
   memcpy(_sb_args, sb_args, sizeof(Arg) * sb_n);
   XtSetArg(_sb_args[sb_n], XmNdialogType, XmDIALOG_SELECTION);
   sb_n++;
@@ -1748,7 +1748,7 @@ Widget XmCreatePromptDialog(Widget ds_p, String name, ArgList sb_args, Cardinal 
   Widget w;
   /*  allocate arglist, copy args, add dialog type arg
    */
-  _sb_args = (ArgList)XtMalloc(sizeof(Arg) * (sb_n + 1));
+  _sb_args = (ArgList)_XmMallocArray(sb_n + 1, sizeof(Arg));
   memcpy(_sb_args, sb_args, sizeof(Arg) * sb_n);
   XtSetArg(_sb_args[sb_n], XmNdialogType, XmDIALOG_PROMPT);
   sb_n++;

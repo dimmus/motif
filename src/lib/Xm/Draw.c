@@ -77,7 +77,7 @@ static void DrawSimpleShadow(Display *display,
   size3 = size2 + shadow_thick;
   _XmProcessLock();
   if (segm_count < shadow_thick) {
-    segms = (XSegment *)XtRealloc((char *)segms, sizeof(XSegment) * (size2 << 1));
+    segms = (XSegment *)_XmReallocArray((char *)segms, size2 << 1, sizeof(XSegment));
     segm_count = shadow_thick;
   }
   for (i = 0; i < shadow_thick; i++) {

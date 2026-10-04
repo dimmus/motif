@@ -102,8 +102,8 @@ void _XmBuildResources(XmSyntheticResource **wc_resources_ptr,
    * may create to much space if there are overrides in the new
    * resource list.  Copy sc's resources into the space.
    */
-  new_resources = (XmSyntheticResource *)XtMalloc(sizeof(XmSyntheticResource) *
-                                                  (wc_num_resources + sc_num_resources));
+  new_resources = (XmSyntheticResource *)_XmMallocArray(wc_num_resources + sc_num_resources,
+                                                        sizeof(XmSyntheticResource));
   if (sc_num_resources)
     memcpy((char *)new_resources,
            (char *)sc_resources,

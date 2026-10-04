@@ -145,7 +145,7 @@ XmRegion _XmRegionCreateSize(long size)
     return (XmRegion)NULL;
   if (!(temp = (XmRegion)XtMalloc(sizeof(XmRegionRec))))
     return (XmRegion)NULL;
-  if (!(temp->rects = (XmRegionBox *)XtMalloc((Cardinal)(sizeof(XmRegionBox) * (size_t)size)))) {
+  if (!(temp->rects = (XmRegionBox *)_XmMallocArray(size, sizeof(XmRegionBox)))) {
     XtFree((char *)temp);
     return (XmRegion)NULL;
   }
@@ -335,7 +335,7 @@ void _XmRegionGetRectangles(XmRegion r, XRectangle **rects, long *nrects)
     *rects = NULL;
     return;
   }
-  pRect = *rects = (XRectangle *)XtMalloc((Cardinal)(sizeof(XRectangle) * count));
+  pRect = *rects = (XRectangle *)_XmMallocArray(count, sizeof(XRectangle));
   if (pRect) {
     for (; count; pBox++, pRect++, count--) {
       pRect->x = pBox->x1;
@@ -439,8 +439,8 @@ static void miRegionCopy(register XmRegion dstrgn, register XmRegion rgn)
   if (dstrgn != rgn) /*  don't want to copy to itself */ {
     if (dstrgn->size < rgn->numRects) {
       if (dstrgn->rects) {
-        if (!(dstrgn->rects = (XmRegionBox *)XtRealloc(
-                  (char *)dstrgn->rects, (Cardinal)rgn->numRects * (sizeof(XmRegionBox)))))
+        if (!(dstrgn->rects = (XmRegionBox *)
+                  _XmReallocArray((char *)dstrgn->rects, rgn->numRects, sizeof(XmRegionBox))))
           return;
       }
       dstrgn->size = rgn->numRects;
@@ -643,7 +643,7 @@ static void miRegionOp(register XmRegion newReg,
    */
   newReg->numRects = 0;
   newReg->size = MAX(reg1->numRects, reg2->numRects) * 2;
-  if (!(newReg->rects = (XmRegionBox *)XtMalloc((Cardinal)(sizeof(XmRegionBox) * newReg->size)))) {
+  if (!(newReg->rects = (XmRegionBox *)_XmMallocArray(newReg->size, sizeof(XmRegionBox)))) {
     newReg->size = 0;
     return;
   }
@@ -791,8 +791,8 @@ static void miRegionOp(register XmRegion newReg,
     if (newReg->numRects) {
       XmRegionBox *prev_rects = newReg->rects;
       newReg->size = newReg->numRects;
-      newReg->rects = (XmRegionBox *)XtRealloc((char *)newReg->rects,
-                                               (Cardinal)(sizeof(XmRegionBox) * newReg->size));
+      newReg->rects =
+          (XmRegionBox *)_XmReallocArray((char *)newReg->rects, newReg->size, sizeof(XmRegionBox));
       if (!newReg->rects)
         newReg->rects = prev_rects;
     }
@@ -1416,8 +1416,7 @@ static void CreateLeftShadow(
   Position start_y = here->y1 + 1;
   Position end_y = here->y2;
   if (*segmi >= *segmc) {
-    *segml = (XSegment *)XtRealloc((char *)(*segml),
-                                   (Cardinal)((sizeof(XSegment) << 1) * (*segmc)));
+    *segml = (XSegment *)_XmReallocArray((char *)(*segml), *segmc, sizeof(XSegment) << 1);
     if (*segml == NULL) {
       XmeWarning(NULL, MESSAGE1);
       *segmi = *segmc = 0;
@@ -1449,8 +1448,7 @@ static void CreateRightShadow(
   Position start_y = here->y1;
   Position end_y = here->y2;
   if (*segmi >= *segmc) {
-    *segml = (XSegment *)XtRealloc((char *)(*segml),
-                                   (Cardinal)((sizeof(XSegment) << 1) * (*segmc)));
+    *segml = (XSegment *)_XmReallocArray((char *)(*segml), *segmc, sizeof(XSegment) << 1);
     if (*segml == NULL) {
       XmeWarning(NULL, MESSAGE1);
       *segmi = *segmc = 0;
@@ -1487,8 +1485,7 @@ static void CreateTopShadow(Position start_x,
                             int *segmi)
 {
   if (*segmi >= *segmc) {
-    *segml = (XSegment *)XtRealloc((char *)(*segml),
-                                   (Cardinal)((sizeof(XSegment) << 1) * (*segmc)));
+    *segml = (XSegment *)_XmReallocArray((char *)(*segml), *segmc, sizeof(XSegment) << 1);
     if (*segml == NULL) {
       XmeWarning(NULL, MESSAGE1);
       *segmi = *segmc = 0;
@@ -1522,8 +1519,7 @@ static void CreateBottomShadow(Position start_x,
                                int *segmi)
 {
   if (*segmi >= *segmc) {
-    *segml = (XSegment *)XtRealloc((char *)(*segml),
-                                   (Cardinal)((sizeof(XSegment) << 1) * (*segmc)));
+    *segml = (XSegment *)_XmReallocArray((char *)(*segml), *segmc, sizeof(XSegment) << 1);
     if (*segml == NULL) {
       XmeWarning(NULL, MESSAGE1);
       *segmi = *segmc = 0;
@@ -1651,14 +1647,14 @@ void _XmRegionDrawShadow(Display *display,
     }
   }
   topSegmCount = botSegmCount = (int)(nrects * shadow_thick << 1);
-  if (!(topSegms = (XSegment *)XtMalloc(sizeof(XSegment) * topSegmCount))) {
+  if (!(topSegms = (XSegment *)_XmMallocArray(topSegmCount, sizeof(XSegment)))) {
     XmeWarning(NULL, MESSAGE1);
     _XmRegionDestroy(workReg);
     _XmRegionDestroy(scReg2);
     _XmRegionDestroy(scReg1);
     return;
   }
-  if (!(botSegms = (XSegment *)XtMalloc(sizeof(XSegment) * botSegmCount))) {
+  if (!(botSegms = (XSegment *)_XmMallocArray(botSegmCount, sizeof(XSegment)))) {
     XmeWarning(NULL, MESSAGE1);
     XtFree((char *)topSegms);
     _XmRegionDestroy(workReg);

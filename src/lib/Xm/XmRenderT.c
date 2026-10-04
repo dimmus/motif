@@ -57,7 +57,6 @@ static char rcsid[] = "$TOG: XmRenderT.c /main/14 1998/10/26 20:14:42 samborn $"
 #include <X11/Xresource.h>
 #include <Xm/Display.h>  /* For XmGetXmDisplay */
 #include <Xm/DisplayP.h> /* For direct access to callback fields */
-#include <Xm/XmosP.h>    /* For ALLOCATE/DEALLOCATE_LOCAL */
 #if USE_XFT
 #  include <X11/Xft/Xft.h>
 #endif
@@ -355,7 +354,7 @@ static XrmResourceList CompileResourceTable(XtResourceList resources, Cardinal n
   Cardinal count;
   XrmResourceList table, tPtr;
   XtResourceList rPtr;
-  tPtr = table = (XrmResourceList)XtMalloc(num_resources * sizeof(XrmResource));
+  tPtr = table = (XrmResourceList)_XmMallocArray(num_resources, sizeof(XrmResource));
   rPtr = resources;
   for (count = 0; count < num_resources; count++, tPtr++, rPtr++) {
     tPtr->xrm_name = XrmPermStringToQuark(rPtr->resource_name);
@@ -415,12 +414,12 @@ static Boolean GetResources(XmRendition rend,
 #endif
   /* Initialize quark cache */
   if (quarks == NULL) {
-    quarks = (XrmQuark *)XtMalloc(_XmNumRenditionResources * sizeof(XrmQuark));
+    quarks = (XrmQuark *)_XmMallocArray(_XmNumRenditionResources, sizeof(XrmQuark));
     num_quarks = _XmNumRenditionResources;
   }
   /* Initialize found */
   if (found == NULL)
-    found = (Boolean *)XtMalloc(_XmNumRenditionResources * sizeof(Boolean));
+    found = (Boolean *)_XmMallocArray(_XmNumRenditionResources, sizeof(Boolean));
   bzero(found, _XmNumRenditionResources * sizeof(Boolean));
   /* Compile names and classes. */
   if (wid != NULL)
@@ -437,7 +436,7 @@ static Boolean GetResources(XmRendition rend,
   classes[length] = NULLQUARK;
   /* Cache arglist */
   if (num_quarks < argcount) {
-    quarks = (XrmQuark *)XtRealloc((char *)quarks, argcount * sizeof(XrmQuark));
+    quarks = (XrmQuark *)_XmReallocArray((char *)quarks, argcount, sizeof(XrmQuark));
     num_quarks = argcount;
   }
   for (i = 0; i < argcount; i++)
@@ -470,8 +469,9 @@ static Boolean GetResources(XmRendition rend,
     while (!XrmQGetSearchList(db, names, classes, searchList, searchListSize)) {
       if (searchList == stackSearchList)
         searchList = NULL;
-      searchList = (XrmHashTable *)XtRealloc((char *)searchList,
-                                             sizeof(XrmHashTable) * (searchListSize *= 2));
+      searchList = (XrmHashTable *)_XmReallocArray((char *)searchList,
+                                                   searchListSize *= 2,
+                                                   sizeof(XrmHashTable));
     }
   }
   /* Loop over table */
@@ -1064,7 +1064,7 @@ XmRendition _XmRenditionCopy(XmRendition rend, Boolean shared)
     _XmRendGC(toRend) = _XmRendGC(rend);
     _XmRendTagCount(toRend) = _XmRendTagCount(rend);
     _XmRendHadEnds(toRend) = _XmRendHadEnds(rend);
-    _XmRendTags(toRend) = (XmStringTag *)XtMalloc(sizeof(XmStringTag) * _XmRendTagCount(rend));
+    _XmRendTags(toRend) = (XmStringTag *)_XmMallocArray(_XmRendTagCount(rend), sizeof(XmStringTag));
     for (i = 0; i < _XmRendTagCount(rend); i++)
       _XmRendTags(toRend)[i] = _XmRendTags(rend)[i];
   }
@@ -1116,7 +1116,7 @@ XmRenderTable XmRenderTableAddRenditions(XmRenderTable oldtable,
     }
   }
   else {
-    matches = (Boolean *)ALLOCATE_LOCAL(rendition_count * sizeof(Boolean));
+    matches = (Boolean *)_XmMallocArray(rendition_count, sizeof(Boolean));
     bzero(matches, rendition_count * sizeof(Boolean));
     /* May have to copy table if shared. */
     if (_XmRTRefcount(oldtable) > 1) {
@@ -1206,7 +1206,7 @@ XmRenderTable XmRenderTableAddRenditions(XmRenderTable oldtable,
       SetPtr(newtable, table);
       FreeHandle(oldtable);
     }
-    DEALLOCATE_LOCAL((char *)matches);
+    XtFree((char *)matches);
     oldtable = newtable;
   }
   if (tmptable != NULL)
@@ -1534,7 +1534,7 @@ int XmRenderTableGetTags(XmRenderTable table, XmStringTag **tag_list)
   app = XtDisplayToApplicationContext(_XmRTDisplay(table));
   (void)app; /* unused but required for _XmAppLock */
   _XmAppLock(app);
-  *tag_list = (XmStringTag *)XtMalloc(sizeof(XmStringTag) * _XmRTCount(table));
+  *tag_list = (XmStringTag *)_XmMallocArray(_XmRTCount(table), sizeof(XmStringTag));
   for (i = 0; i < _XmRTCount(table); i++)
     (*tag_list)[i] = XtNewString(_XmRendTag(_XmRTRenditions(table)[i]));
   ret_val = _XmRTCount(table);
@@ -1567,7 +1567,7 @@ XmRendition *XmRenderTableGetRenditions(XmRenderTable table, char **tags, Cardin
     _XmAppLock(app);
   }
 #endif
-  rends = (XmRendition *)XtMalloc(tag_count * sizeof(XmRendition));
+  rends = (XmRendition *)_XmMallocArray(tag_count, sizeof(XmRendition));
   count = 0;
   for (i = 0; i < tag_count; i++) {
     rend = _XmRenderTableFindRendition(table, tags[i], FALSE, FALSE, FALSE, NULL);
@@ -1577,7 +1577,7 @@ XmRendition *XmRenderTableGetRenditions(XmRenderTable table, char **tags, Cardin
     }
   }
   if (count < tag_count)
-    rends = (XmRendition *)XtRealloc((char *)rends, count * sizeof(XmRendition));
+    rends = (XmRendition *)_XmReallocArray((char *)rends, count, sizeof(XmRendition));
 #ifdef XTHREADS
   if (app) {
     _XmAppUnlock(app);
@@ -2146,13 +2146,15 @@ unsigned int XmRenderTableCvtToProp(Widget widget, /* unused */
   _XmProcessLock();
   if (CVTtvinited == 0) {
     CVTtvinited = 1;
-    strncpy(CVTtransfervector, "", 255);
+    size_t len = 0;
     CVTtransfervector[0] = '\0';
-    for (i = 0; CVTproperties[i] != NULL; i++) {
-      strcat(CVTtransfervector, CVTproperties[i]);
-      strcat(CVTtransfervector, ",");
-    }
-    strcat(CVTtransfervector, "\n");
+    for (i = 0; CVTproperties[i] != NULL && len < sizeof(CVTtransfervector); i++)
+      len += snprintf(CVTtransfervector + len,
+                      sizeof(CVTtransfervector) - len,
+                      "%s,",
+                      CVTproperties[i]);
+    if (len < sizeof(CVTtransfervector))
+      snprintf(CVTtransfervector + len, sizeof(CVTtransfervector) - len, "\n");
   }
   /* Copy the transfer vector into the output buffer. */
   strncpy(buffer, CVTtransfervector, allocated_size - 1);
@@ -2171,10 +2173,10 @@ unsigned int XmRenderTableCvtToProp(Widget widget, /* unused */
       CVTaddString(buffer, "-1, ", 4);
     }
     else {
-      sprintf(temp, "%u \"", _XmRendFontType(rendition));
+      snprintf(temp, sizeof(temp), "%u \"", _XmRendFontType(rendition));
       CVTaddString(buffer, temp, strlen(temp));
       CVTaddString(buffer, _XmRendFontName(rendition), strlen(_XmRendFontName(rendition)));
-      sprintf(temp, "\" %u,", _XmRendLoadModel(rendition));
+      snprintf(temp, sizeof(temp), "\" %u,", _XmRendLoadModel(rendition));
       CVTaddString(buffer, temp, strlen(temp));
     }
     if ((unsigned int)(unsigned long)_XmRendTabs(rendition) == XmAS_IS ||
@@ -2206,7 +2208,7 @@ unsigned int XmRenderTableCvtToProp(Widget widget, /* unused */
     if (_XmRendBG(rendition) == XmUNSPECIFIED_PIXEL)
       str = "-1, ";
     else {
-      sprintf(temp, "%lu, ", _XmRendBG(rendition));
+      snprintf(temp, sizeof(temp), "%lu, ", _XmRendBG(rendition));
       str = temp;
     }
     size = strlen(str);
@@ -2214,7 +2216,7 @@ unsigned int XmRenderTableCvtToProp(Widget widget, /* unused */
     if (_XmRendFG(rendition) == XmUNSPECIFIED_PIXEL)
       str = "-1, ";
     else {
-      sprintf(temp, "%lu, ", _XmRendFG(rendition));
+      snprintf(temp, sizeof(temp), "%lu, ", _XmRendFG(rendition));
       str = temp;
     }
     size = strlen(str);
@@ -2222,7 +2224,7 @@ unsigned int XmRenderTableCvtToProp(Widget widget, /* unused */
     if (_XmRendUnderlineType(rendition) == XmAS_IS)
       str = "-1, ";
     else {
-      sprintf(temp, "%d, ", _XmRendUnderlineType(rendition));
+      snprintf(temp, sizeof(temp), "%d, ", _XmRendUnderlineType(rendition));
       str = temp;
     }
     size = strlen(str);
@@ -2230,7 +2232,7 @@ unsigned int XmRenderTableCvtToProp(Widget widget, /* unused */
     if (_XmRendStrikethruType(rendition) == XmAS_IS)
       str = "-1, ";
     else {
-      sprintf(temp, "%d, ", _XmRendStrikethruType(rendition));
+      snprintf(temp, sizeof(temp), "%d, ", _XmRendStrikethruType(rendition));
       str = temp;
     }
     size = strlen(str);
@@ -2869,7 +2871,7 @@ XmRenderTable XmRenderTableCvtFromProp(Widget w, char *prop, unsigned int len) /
   scanpointer = 0;
   rarray_max = 10;
   rarray_count = 0;
-  rarray = (XmRendition *)XtMalloc(sizeof(XmRendition) * rarray_max);
+  rarray = (XmRendition *)_XmMallocArray(rarray_max, sizeof(XmRendition));
   name = "";
   tablist = NULL;
   count = 0;
@@ -2922,7 +2924,7 @@ XmRenderTable XmRenderTableCvtFromProp(Widget w, char *prop, unsigned int len) /
       if (rarray_count >= rarray_max) {
         /* Extend array if necessary */
         rarray_max += 10;
-        rarray = (XmRendition *)XtRealloc((char *)rarray, sizeof(XmRendition) * rarray_max);
+        rarray = (XmRendition *)_XmReallocArray((char *)rarray, rarray_max, sizeof(XmRendition));
       }
       rarray[rarray_count] = rendition;
       rarray_count++;

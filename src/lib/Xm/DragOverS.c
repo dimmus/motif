@@ -2797,7 +2797,7 @@ static void InstallColormap(XmDragOverShellWidget dw)
     }
     /* there was a property, add myself to the beginning */
     else {
-      Window *windows = (Window *)XtMalloc((sizeof(Window)) * (countReturn + 1));
+      Window *windows = (Window *)_XmMallocArray(countReturn + 1, sizeof(Window));
       register int i;
       windows[0] = XtWindow(dw);
       for (i = 0; i < countReturn; i++)

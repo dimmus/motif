@@ -278,7 +278,8 @@ void _XmTextFreeContextData(Widget w, /* unused */
   XmTextContextData ctx_data = (XmTextContextData)clientData;
   Display *display = DisplayOfScreen(ctx_data->screen);
   XtPointer data_ptr;
-  if (XFindContext(display, (Window)ctx_data->screen, ctx_data->context, (char **)&data_ptr)) {
+  /* XFindContext returns 0 when it finds the data */
+  if (!XFindContext(display, (Window)ctx_data->screen, ctx_data->context, (char **)&data_ptr)) {
     if (ctx_data->type != '\0') {
       if (data_ptr)
         XtFree((char *)data_ptr);
@@ -3617,7 +3618,7 @@ static void MakeIBeamStencil(XmTextWidget tw, int line_width)
   XGCValues values;
   unsigned long valueMask;
   OutputData data = tw->text.output->data;
-  sprintf(pixmap_name, "_XmText_%d_%d", data->cursorheight, line_width);
+  snprintf(pixmap_name, sizeof(pixmap_name), "_XmText_%d_%d", data->cursorheight, line_width);
   data->cursor = FindPixmap(screen, pixmap_name, 1, 0, 1);
   if (data->cursor == XmUNSPECIFIED_PIXMAP) {
     Display *dpy = XtDisplay(tw);
@@ -3698,7 +3699,11 @@ static void MakeAddModeCursor(XmTextWidget tw, int line_width)
   Screen *screen = XtScreen((Widget)tw);
   char pixmap_name[64];
   OutputData data = tw->text.output->data;
-  sprintf(pixmap_name, "_XmText_AddMode_%d_%d", data->cursorheight, line_width);
+  snprintf(pixmap_name,
+           sizeof(pixmap_name),
+           "_XmText_AddMode_%d_%d",
+           data->cursorheight,
+           line_width);
   data->add_mode_cursor = FindPixmap(screen, pixmap_name, 1, 0, 1);
   if (data->add_mode_cursor == XmUNSPECIFIED_PIXMAP) {
     XtGCMask valueMask;
@@ -5145,7 +5150,7 @@ Boolean _XmTextGetBaselines(Widget w, Dimension **baselines, int *line_count)
   Dimension *base_array;
   int i;
   *line_count = data->number_lines;
-  base_array = (Dimension *)XtMalloc((sizeof(Dimension) * (*line_count)));
+  base_array = (Dimension *)_XmMallocArray(*line_count, sizeof(Dimension));
   for (i = 0; i < *line_count; i++) {
     base_array[i] = data->topmargin + i * data->lineheight + data->font_ascent;
   }

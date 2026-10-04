@@ -173,7 +173,7 @@ static void LayoutVerticalLabels(XmScaleWidget sw,
                                  Widget instigator);
 static void LayoutVerticalScale(XmScaleWidget sw, XtWidgetGeometry *desired, Widget instigator);
 static void ChangeManaged(Widget wid);
-static void GetValueString(XmScaleWidget sw, int value, String buffer);
+static void GetValueString(XmScaleWidget sw, int value, char *buffer, size_t size);
 static void ShowValue(XmScaleWidget sw);
 static void SetScrollBarData(XmScaleWidget sw);
 static void ValueChanged(Widget wid, XtPointer closure, XtPointer call_data);
@@ -1387,9 +1387,9 @@ static Dimension ValueTroughHeight(XmScaleWidget sw)
 #  define GET_MAX(tmp, max_or_min_value) \
     { \
       if (sw->scale.decimal_points) \
-        sprintf(buff, "%d%c", max_or_min_value, nl_langinfo(RADIXCHAR)[0]); \
+        snprintf(buff, sizeof(buff), "%d%c", max_or_min_value, nl_langinfo(RADIXCHAR)[0]); \
       else \
-        sprintf(buff, "%d", max_or_min_value); \
+        snprintf(buff, sizeof(buff), "%d", max_or_min_value); \
 \
       XTextExtents(sw->scale.font_struct, \
                    buff, \
@@ -1429,9 +1429,9 @@ static Dimension ValueTroughAscent(XmScaleWidget sw)
 #  define GET_MAX(tmp, max_or_min_value) \
     { \
       if (sw->scale.decimal_points) \
-        sprintf(buff, "%d%c", max_or_min_value, nl_langinfo(RADIXCHAR)[0]); \
+        snprintf(buff, sizeof(buff), "%d%c", max_or_min_value, nl_langinfo(RADIXCHAR)[0]); \
       else \
-        sprintf(buff, "%d", max_or_min_value); \
+        snprintf(buff, sizeof(buff), "%d", max_or_min_value); \
 \
       XTextExtents(sw->scale.font_struct, \
                    buff, \
@@ -1471,9 +1471,9 @@ static Dimension ValueTroughDescent(XmScaleWidget sw)
 #  define GET_MAX(tmp, max_or_min_value) \
     { \
       if (sw->scale.decimal_points) \
-        sprintf(buff, "%d%c", max_or_min_value, nl_langinfo(RADIXCHAR)[0]); \
+        snprintf(buff, sizeof(buff), "%d%c", max_or_min_value, nl_langinfo(RADIXCHAR)[0]); \
       else \
-        sprintf(buff, "%d", max_or_min_value); \
+        snprintf(buff, sizeof(buff), "%d", max_or_min_value); \
 \
       XTextExtents(sw->scale.font_struct, \
                    buff, \
@@ -1512,9 +1512,9 @@ static Dimension ValueTroughWidth(XmScaleWidget sw)
     { \
       XmString tmp_str; \
       if (sw->scale.decimal_points) \
-        sprintf(buff, "%d%c", max_or_min_value, nl_langinfo(RADIXCHAR)[0]); \
+        snprintf(buff, sizeof(buff), "%d%c", max_or_min_value, nl_langinfo(RADIXCHAR)[0]); \
       else \
-        sprintf(buff, "%d", max_or_min_value); \
+        snprintf(buff, sizeof(buff), "%d", max_or_min_value); \
 \
       tmp = XmStringWidth(sw->scale.font_list, tmp_str = XmStringCreateLocalized(buff)); \
       XmStringFree(tmp_str); \
@@ -1523,9 +1523,9 @@ static Dimension ValueTroughWidth(XmScaleWidget sw)
 #  define GET_MAX(tmp, max_or_min_value) \
     { \
       if (sw->scale.decimal_points) \
-        sprintf(buff, "%d%c", max_or_min_value, nl_langinfo(RADIXCHAR)[0]); \
+        snprintf(buff, sizeof(buff), "%d%c", max_or_min_value, nl_langinfo(RADIXCHAR)[0]); \
       else \
-        sprintf(buff, "%d", max_or_min_value); \
+        snprintf(buff, sizeof(buff), "%d", max_or_min_value); \
 \
       XTextExtents(sw->scale.font_struct, \
                    buff, \
@@ -2194,25 +2194,31 @@ static void LayoutVerticalScale(XmScaleWidget sw, XtWidgetGeometry *desired, Wid
 }
 
 /************************************************************************/
-static void GetValueString(XmScaleWidget sw, int value, String buffer)
+static void GetValueString(XmScaleWidget sw, int value, char *buffer, size_t size)
 {
   register int i;
-  int diff, dec_point_size;
+  int len, diff, dec_point_size;
   struct lconv *loc_values;
   if (sw->scale.decimal_points > 0) {
-    /* Add one to decimal points to get leading zero, since
-         only US sometimes skips this zero, not other countries */
-    sprintf(buffer, "%.*d", sw->scale.decimal_points + 1, value);
-    diff = strlen(buffer) - sw->scale.decimal_points;
     loc_values = localeconv();
     dec_point_size = strlen(loc_values->decimal_point);
-    for (i = strlen(buffer); i >= diff; i--)
+    /* Add one to decimal points to get leading zero, since
+         only US sometimes skips this zero, not other countries */
+    len = snprintf(buffer, size, "%.*d", sw->scale.decimal_points + 1, value);
+    /* XmNdecimalPoints is not bounded: without room for the digits and
+       the decimal point, show the value without it */
+    if (len < 0 || (size_t)len + dec_point_size >= size) {
+      snprintf(buffer, size, "%d", value);
+      return;
+    }
+    diff = len - sw->scale.decimal_points;
+    for (i = len; i >= diff; i--)
       buffer[i + dec_point_size] = buffer[i];
     for (i = 0; i < dec_point_size; i++)
       buffer[diff + i] = loc_values->decimal_point[i];
   }
   else
-    sprintf(buffer, "%d", value);
+    snprintf(buffer, size, "%d", value);
 }
 
 /************************************************************************
@@ -2273,7 +2279,7 @@ static void ShowValue(XmScaleWidget sw)
     XmeRedisplayGadgets((Widget)sw, NULL, value_region);
   }
   /*  Get a string representation of the new value  */
-  GetValueString(sw, sw->scale.value, buffer);
+  GetValueString(sw, sw->scale.value, buffer, sizeof(buffer));
   /*  Calculate the x, y, width, and height of the string to display  */
 #if USE_XFT
   XmStringExtent(sw->scale.font_list, tmp_str = XmStringCreateLocalized(buffer), &width, &height);
@@ -2571,7 +2577,7 @@ static void DragConvertCallback(Widget w,
   XInternAtoms(XtDisplay(w), atom_names, XtNumber(atom_names), False, atoms);
   /* Begin fixing the bug OSF 4846 */
   /* get the value of the scale and convert it to compound text */
-  GetValueString(sw, sw->scale.value, tmpstring);
+  GetValueString(sw, sw->scale.value, tmpstring, sizeof(tmpstring));
   if (cs->target == atoms[XmATARGETS] || cs->target == atoms[XmA_MOTIF_EXPORT_TARGETS] ||
       cs->target == atoms[XmA_MOTIF_CLIPBOARD_TARGETS])
   {

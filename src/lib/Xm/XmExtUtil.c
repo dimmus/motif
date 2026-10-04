@@ -226,7 +226,7 @@ void _XmFilterArgs(ArgList args,
                    ArgList *filtered_args,
                    Cardinal *num_filtered_args)
 {
-  ArgList fargs = (ArgList)XtMalloc(sizeof(Arg) * num_args);
+  ArgList fargs = (ArgList)_XmMallocArray(num_args, sizeof(Arg));
   register int i;
   String *ptr;
   *filtered_args = fargs;
@@ -296,8 +296,9 @@ String _XmGetMBStringFromXmString(XmString xmstr)
 {
   String text;
   XmStringContext context;    /* context for conversion	*/
-  char *newText;              /* new text string        	*/
+  XtPointer newText;          /* new text string        	*/
   int length;                 /* length of string		*/
+  int used, n;                /* filled in so far, piece	*/
   unsigned int u_length;      /* length from XmStringGetNextTriple		*/
   XmStringComponentType type; /* type			*/
   Boolean done;               /* done with it	*/
@@ -316,11 +317,11 @@ String _XmGetMBStringFromXmString(XmString xmstr)
   }
   done = False;
   while (!done) {
-    type = XmStringGetNextTriple(context, &u_length, (XtPointer *)&newText);
+    type = XmStringGetNextTriple(context, &u_length, &newText);
     switch (type) {
       case XmSTRING_COMPONENT_TEXT:
       case XmSTRING_COMPONENT_LOCALE_TEXT:
-        length += strlen(newText);
+        length += strlen((char *)newText);
         break;
       case XmSTRING_COMPONENT_SEPARATOR:
         length += 1;
@@ -334,17 +335,17 @@ String _XmGetMBStringFromXmString(XmString xmstr)
       default:
         done = True;
     }
-    XtFree((XtPointer)newText);
+    XtFree((char *)newText);
   }
-  if (!length && (type = XmStringGetNextTriple(context, &u_length, (XtPointer *)&newText))) {
+  if (!length && (type = XmStringGetNextTriple(context, &u_length, &newText))) {
     text = XtMalloc(u_length + 2);
     text[0] = '\0';
-    strncat(text, newText, u_length);
+    strncat(text, (char *)newText, u_length);
     if (type == XmSTRING_COMPONENT_SEPARATOR) {
       text[u_length] = '\n';
       text[u_length + 1] = '\0';
     }
-    XtFree(newText);
+    XtFree((char *)newText);
     XmStringFreeContext(context);
     return text;
   }
@@ -355,21 +356,26 @@ String _XmGetMBStringFromXmString(XmString xmstr)
     return (NULL);
   XmStringFreeContext(context);
   text = XtMalloc(length + 1);
-  text[0] = '\0';
+  used = 0;
   /*
    * Fill in the string.
    */
   XmStringInitContext(&context, xmstr);
   done = False;
   while (!done) {
-    type = XmStringGetNextTriple(context, &u_length, (XtPointer *)&newText);
+    type = XmStringGetNextTriple(context, &u_length, &newText);
     switch (type) {
       case XmSTRING_COMPONENT_TEXT:
       case XmSTRING_COMPONENT_LOCALE_TEXT:
-        strcat(text, newText);
+        n = strlen((char *)newText);
+        if (n > length - used) /* the first pass counted less */
+          n = length - used;
+        memcpy(text + used, newText, n);
+        used += n;
         break;
       case XmSTRING_COMPONENT_SEPARATOR:
-        strcat(text, "\n");
+        if (used < length)
+          text[used++] = '\n';
         break;
       case XmSTRING_COMPONENT_USER_BEGIN:
       case XmSTRING_COMPONENT_USER_END:
@@ -380,8 +386,9 @@ String _XmGetMBStringFromXmString(XmString xmstr)
       default:
         done = True;
     }
-    XtFree((XtPointer)newText);
+    XtFree((char *)newText);
   }
+  text[used] = '\0';
   XmStringFreeContext(context);
   return (text);
 }
@@ -732,9 +739,9 @@ void _XiResolveAllPartOffsets(WidgetClass w_class,
    */
   for (c = w_class; c != NULL; c = c->core_class.superclass)
     classcount++;
-  *offset = (XmOffsetPtr)XtMalloc(classcount * sizeof(XmOffset));
+  *offset = (XmOffsetPtr)_XmMallocArray(classcount, sizeof(XmOffset));
   if (cc)
-    *constraint_offset = (XmOffsetPtr)XtMalloc(classcount * sizeof(XmOffset));
+    *constraint_offset = (XmOffsetPtr)_XmMallocArray(classcount, sizeof(XmOffset));
   else if (constraint_offset != NULL)
     *constraint_offset = NULL;
   /*

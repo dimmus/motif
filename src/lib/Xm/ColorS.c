@@ -822,18 +822,19 @@ static Boolean UpdateColorWindow(XmColorSelectorWidget csw, Boolean use_name)
   if (!use_name) /* Update color names */ {
     char *freeMe;
     freeMe = XmColorS_color_name(csw);
-    sprintf(buf,
-            "#%02x%02x%02x",
-            (unsigned int)XmColorS_slider_red(csw),
-            (unsigned int)XmColorS_slider_green(csw),
-            (unsigned int)XmColorS_slider_blue(csw));
+    snprintf(buf,
+             sizeof(buf),
+             "#%02x%02x%02x",
+             (unsigned int)XmColorS_slider_red(csw),
+             (unsigned int)XmColorS_slider_green(csw),
+             (unsigned int)XmColorS_slider_blue(csw));
     if (FindColor(csw, &index)) {
       XmColorS_color_name(csw) = XtNewString(XmColorS_colors(csw)[index].name);
-      sprintf(new_label, "%s (%s)", XmColorS_color_name(csw), buf);
+      snprintf(new_label, sizeof(new_label), "%s (%s)", XmColorS_color_name(csw), buf);
     }
     else {
       XmColorS_color_name(csw) = XtNewString(buf);
-      sprintf(new_label, "%s", buf);
+      snprintf(new_label, sizeof(new_label), "%s", buf);
     }
     XtFree((XtPointer)freeMe);
     color.red = XmColorS_slider_red(csw) * 256;
@@ -855,12 +856,13 @@ static Boolean UpdateColorWindow(XmColorSelectorWidget csw, Boolean use_name)
       XtFree(XmColorS_color_name(csw));
       XmColorS_color_name(csw) = XtNewString(XmColorS_colors(csw)[index].name);
     }
-    sprintf(buf,
-            "#%02x%02x%02x",
-            (unsigned int)color.red / 256,
-            (unsigned int)color.green / 256,
-            (unsigned int)color.blue / 256);
-    sprintf(new_label, "%s (%s)", XmColorS_color_name(csw), buf);
+    snprintf(buf,
+             sizeof(buf),
+             "#%02x%02x%02x",
+             (unsigned int)color.red / 256,
+             (unsigned int)color.green / 256,
+             (unsigned int)color.blue / 256);
+    snprintf(new_label, sizeof(new_label), "%s (%s)", XmColorS_color_name(csw), buf);
   }
   {
     long test = (long)color.red;
@@ -1085,7 +1087,7 @@ static void read_rgb_file(XmColorSelectorWidget csw,
         else {
           alloc += 20;
         }
-        color_info = (ColorInfo *)XtRealloc((XtPointer)color_info, sizeof(ColorInfo) * alloc);
+        color_info = (ColorInfo *)_XmReallocArray((XtPointer)color_info, alloc, sizeof(ColorInfo));
       }
       sscanf(buf,
              "%hu %hu %hu",
@@ -1163,7 +1165,7 @@ static void read_rgb_file(XmColorSelectorWidget csw,
         i++;
     }
     {
-      XmString *strs = (XmString *)XtMalloc(sizeof(XmString) * count);
+      XmString *strs = (XmString *)_XmMallocArray(count, sizeof(XmString));
       for (i = 0; i < count; i++)
         strs[i] = XmStringCreateLocalized(color_info[i].name);
       XtVaSetValues(XmColorS_list(csw), XmNitems, strs, XmNitemCount, count, NULL);

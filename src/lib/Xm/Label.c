@@ -1958,8 +1958,8 @@ static Boolean XmLabelGetBaselines(Widget wid, Dimension **baselines, int *line_
     _XmStringGetBaselines(lw->label.font, lw->label._label, &(lw->label.baselines), &count);
     assert(lw->label.baselines != NULL);
     /* Store the current offset in an extra location. */
-    lw->label.baselines = (Dimension *)XtRealloc((char *)lw->label.baselines,
-                                                 (count + 1) * sizeof(Dimension));
+    lw->label.baselines =
+        (Dimension *)_XmReallocArray((char *)lw->label.baselines, count + 1, sizeof(Dimension));
     lw->label.baselines[count] = 0;
   }
   else {
@@ -1974,7 +1974,7 @@ static Boolean XmLabelGetBaselines(Widget wid, Dimension **baselines, int *line_
   }
   /* Copy the cached data. */
   *line_count = count;
-  *baselines = (Dimension *)XtMalloc(*line_count * sizeof(Dimension));
+  *baselines = (Dimension *)_XmMallocArray(*line_count, sizeof(Dimension));
   memcpy((char *)*baselines, (char *)lw->label.baselines, *line_count * sizeof(Dimension));
   return True;
 }
@@ -2470,12 +2470,18 @@ static void LabelSetValue(Widget w, XtPointer value, int type)
       length = 0;
       while (str2[length] != 0)
         length++;
-      str = (char *)XtMalloc(MB_CUR_MAX * length);
-      wcstombs(str, str2, length * MB_CUR_MAX);
+      /* Room for the terminating NUL too, which wcstombs only writes
+         when it fits: without it an empty or full conversion is left
+         unterminated. */
+      str = _XmMallocArray(length + 1, MB_CUR_MAX);
+      if (wcstombs(str, str2, (length + 1) * MB_CUR_MAX) == (size_t)-1)
+        str[0] = '\0';
       XtFree((char *)value);
-      value = str;
+      temp = XmStringCreateLocalized(str);
+      XtFree(str);
     }
-    temp = XmStringCreateLocalized((char *)value);
+    else
+      temp = XmStringCreateLocalized((char *)value);
   }
   nargs = 0;
   XtSetArg(args[nargs], XmNlabelString, temp), nargs++;

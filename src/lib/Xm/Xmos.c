@@ -160,7 +160,8 @@ static unsigned char AddEntryToCache(char *entryName, unsigned entryNameLen)
   unsigned char result = 0;
   if (numCacheEntries == numCacheAlloc) {
     numCacheAlloc += FILE_LIST_BLOCK;
-    dirCache = (XmDirCache)XtRealloc((char *)dirCache, numCacheAlloc * sizeof(XmDirCacheRec *));
+    dirCache =
+        (XmDirCache)_XmReallocArray((char *)dirCache, numCacheAlloc, sizeof(XmDirCacheRec *));
   }
   dirCache[numCacheEntries] = (XmDirCacheRec *)XtMalloc(sizeof(XmDirCacheRec) + entryNameLen);
 #pragma GCC diagnostic push
@@ -392,8 +393,7 @@ void _XmOSQualifyFileSpec(String dirSpec,
   filterLen = strlen(filterSpec);
   /* Allocate extra for NULL character and for the appended '*' (as needed). */
   fSpec = XtMalloc(filterLen + 2);
-  strcpy(fSpec, filterSpec);
-  fSpec[filterLen] = '\0';
+  memcpy(fSpec, filterSpec, filterLen + 1);
   /* If fSpec ends with a '/' or is a null string, add '*' since this is
    *   the interpretation.
    */
@@ -676,7 +676,7 @@ void _XmOSGetDirEntries(String qualifiedDir,
         continue;
       if (*pNumEntries == *pNumAlloc) {
         *pNumAlloc += FILE_LIST_BLOCK;
-        *pEntries = (String *)XtRealloc((char *)*pEntries, (*pNumAlloc * sizeof(char *)));
+        *pEntries = (String *)_XmReallocArray((char *)*pEntries, *pNumAlloc, sizeof(char *));
       }
       entryPtr = XtMalloc(dirNameLen + dirLen + 1);
       strncpy(entryPtr, qualifiedDir, dirLen + 1);
@@ -836,8 +836,7 @@ String XmeGetHomeDirName(void)
         ptr = NULL;
     }
     if (ptr != NULL) {
-      homeDir = XtMalloc(strlen(ptr) + 1);
-      strcpy(homeDir, ptr);
+      homeDir = XtNewString(ptr);
     }
     else {
       homeDir = &empty;
@@ -980,7 +979,7 @@ static String GetCurrentDir(String buf)
     /* Use PWD environment variable; never hand out a truncated copy. */
     if (strlen(pwd) >= MAX_DIR_PATH_LEN)
       return pwd;
-    strcpy(buf, pwd);
+    memcpy(buf, pwd, strlen(pwd) + 1);
     return buf;
   }
   return getcwd(buf, MAX_DIR_PATH_LEN);
@@ -1055,6 +1054,7 @@ String _XmOSInitPath(String file_name, String env_pathname, Boolean *user_path)
   char stackString[MAX_DIR_PATH_LEN];
   String homedir = stackString;
   String local_path;
+  size_t size;
   *user_path = False;
   if (file_name && _XmOSAbsolutePathName(file_name, &file_name, homedir)) {
     path = XtNewString(ABSOLUTE_PATH);
@@ -1065,69 +1065,70 @@ String _XmOSInitPath(String file_name, String env_pathname, Boolean *user_path)
       homedir = XmeGetHomeDirName();
       old_path = (char *)getenv("XAPPLRESDIR");
       if (old_path == NULL) {
-        path = XtCalloc(1,
-                        (9 * strlen(homedir) + strlen(PATH_DEFAULT) + 8 * strlen(libdir) +
-                         strlen(incdir) + 2 * strlen(datadir) + 2 * strlen(PACKAGE_NAME) + 1));
-        sprintf(path,
-                PATH_DEFAULT,
-                datadir,
-                PACKAGE_NAME,
-                datadir,
-                PACKAGE_NAME,
-                homedir,
-                homedir,
-                homedir,
-                homedir,
-                homedir,
-                homedir,
-                homedir,
-                homedir,
-                homedir,
-                libdir,
-                libdir,
-                libdir,
-                libdir,
-                libdir,
-                libdir,
-                libdir,
-                libdir,
-                incdir);
+        size = 9 * strlen(homedir) + strlen(PATH_DEFAULT) + 8 * strlen(libdir) + strlen(incdir) +
+               2 * strlen(datadir) + 2 * strlen(PACKAGE_NAME) + 1;
+        path = _XmMallocArray(size, 1);
+        snprintf(path,
+                 size,
+                 PATH_DEFAULT,
+                 datadir,
+                 PACKAGE_NAME,
+                 datadir,
+                 PACKAGE_NAME,
+                 homedir,
+                 homedir,
+                 homedir,
+                 homedir,
+                 homedir,
+                 homedir,
+                 homedir,
+                 homedir,
+                 homedir,
+                 libdir,
+                 libdir,
+                 libdir,
+                 libdir,
+                 libdir,
+                 libdir,
+                 libdir,
+                 libdir,
+                 incdir);
       }
       else {
-        path = XtCalloc(1,
-                        (8 * strlen(old_path) + 2 * strlen(homedir) + strlen(XAPPLRES_DEFAULT) +
-                         8 * strlen(libdir) + strlen(incdir) + 2 * strlen(datadir) +
-                         2 * strlen(PACKAGE_NAME) + 1));
-        sprintf(path,
-                XAPPLRES_DEFAULT,
-                old_path,
-                old_path,
-                old_path,
-                old_path,
-                old_path,
-                old_path,
-                old_path,
-                old_path,
-                datadir,
-                PACKAGE_NAME,
-                datadir,
-                PACKAGE_NAME,
-                homedir,
-                homedir,
-                libdir,
-                libdir,
-                libdir,
-                libdir,
-                libdir,
-                libdir,
-                libdir,
-                libdir,
-                incdir);
+        size = 8 * strlen(old_path) + 2 * strlen(homedir) + strlen(XAPPLRES_DEFAULT) +
+               8 * strlen(libdir) + strlen(incdir) + 2 * strlen(datadir) +
+               2 * strlen(PACKAGE_NAME) + 1;
+        path = _XmMallocArray(size, 1);
+        snprintf(path,
+                 size,
+                 XAPPLRES_DEFAULT,
+                 old_path,
+                 old_path,
+                 old_path,
+                 old_path,
+                 old_path,
+                 old_path,
+                 old_path,
+                 old_path,
+                 datadir,
+                 PACKAGE_NAME,
+                 datadir,
+                 PACKAGE_NAME,
+                 homedir,
+                 homedir,
+                 libdir,
+                 libdir,
+                 libdir,
+                 libdir,
+                 libdir,
+                 libdir,
+                 libdir,
+                 libdir,
+                 incdir);
       }
     }
     else {
-      path = XtMalloc(strlen(local_path) + 1);
-      strcpy(path, local_path);
+      path = XtNewString(local_path);
       *user_path = True;
     }
   }
@@ -1183,15 +1184,13 @@ XmString XmeGetLocalizedString(char *reserved, /* unused */
 String _XmOSBuildFileName(String path, String file)
 {
   String fileName;
-  if (file[0] == '/') {
-    fileName = XtMalloc(strlen(file) + 1);
-    strcpy(fileName, file);
-  }
+  size_t size;
+  if (file[0] == '/')
+    fileName = XtNewString(file);
   else {
-    fileName = XtMalloc(strlen(path) + strlen(file) + 2);
-    strcpy(fileName, path);
-    strcat(fileName, "/");
-    strcat(fileName, file);
+    size = strlen(path) + strlen(file) + 2;
+    fileName = XtMalloc(size);
+    snprintf(fileName, size, "%s/%s", path, file);
   }
   return fileName;
 }

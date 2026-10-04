@@ -1236,7 +1236,7 @@ static void ClassInitialize(void)
    */
   wc_num_res = xmPushButtonGCacheObjClassRec.object_class.num_resources;
   sc_num_res = xmLabelGCacheObjClassRec.object_class.num_resources;
-  merged_list = (XtResource *)XtMalloc((sizeof(XtResource) * (wc_num_res + sc_num_res)));
+  merged_list = (XtResource *)_XmMallocArray(wc_num_res + sc_num_res, sizeof(XtResource));
   _XmTransformSubResources(
       xmLabelGCacheObjClassRec.object_class.resources, sc_num_res, &uncompiled, &num);
   for (i = 0; i < num; i++)

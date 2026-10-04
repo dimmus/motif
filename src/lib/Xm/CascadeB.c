@@ -1099,7 +1099,7 @@ void _XmCascadingPopup(Widget cb, XEvent *event, Boolean doCascade)
   XmExcludedParentPaneRec *excPP = &(((XmDisplayInfo *)(dd->display.displayInfo))->excParentPane);
   if (!excPP->pane) {
     excPP->pane_list_size = 4;
-    excPP->pane = (Widget *)XtMalloc(sizeof(Widget) * excPP->pane_list_size);
+    excPP->pane = (Widget *)_XmMallocArray(excPP->pane_list_size, sizeof(Widget));
   }
   if (XmIsCascadeButtonGadget(cb))
     *(excPP->pane) = CBG_Submenu(cb);

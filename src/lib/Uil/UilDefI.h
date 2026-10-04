@@ -324,7 +324,7 @@ extern void off_get  _ARGUMENTS(( unsigned short *off_type , unsigned short *off
 extern char *type_from_code  _ARGUMENTS(( MrmType type_code ));
 extern char *access_from_code  _ARGUMENTS(( MrmFlag access_code ));
 extern char *group_from_code  _ARGUMENTS(( MrmGroup group_code ));
-extern void format_arg_value  _ARGUMENTS(( RGMArgValuePtr argval_ptr , char *buffer ));
+extern void format_arg_value  _ARGUMENTS(( RGMArgValuePtr argval_ptr , char *buffer , size_t size ));
 extern char *class_name_from_code  _ARGUMENTS(( MrmCode mrm_class ));
 extern char *resource_name_from_code  _ARGUMENTS(( MrmCode resource ));
 

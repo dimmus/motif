@@ -577,6 +577,7 @@ static void ClassPartInitialize(WidgetClass wc)
   WidgetClass super;
   XmPrimitiveClassExt *wcePtr, *scePtr;
   char *event_bindings;
+  size_t size;
   _XmProcessLock();
   super = twc->core_class.superclass;
   wcePtr = _XmGetPrimitiveClassExtPtr(wc, NULLQUARK);
@@ -585,11 +586,15 @@ static void ClassPartInitialize(WidgetClass wc)
     (*wcePtr)->widget_baseline = (*scePtr)->widget_baseline;
   if ((*wcePtr)->widget_display_rect == XmInheritDisplayRectProc)
     (*wcePtr)->widget_display_rect = (*scePtr)->widget_display_rect;
-  event_bindings = (char *)XtMalloc(strlen(_XmTextEventBindings1) + strlen(_XmTextEventBindings2) +
-                                    strlen(_XmTextEventBindings3) + 1);
-  strcpy(event_bindings, _XmTextEventBindings1);
-  strcat(event_bindings, _XmTextEventBindings2);
-  strcat(event_bindings, _XmTextEventBindings3);
+  size = strlen(_XmTextEventBindings1) + strlen(_XmTextEventBindings2) +
+         strlen(_XmTextEventBindings3) + 1;
+  event_bindings = (char *)XtMalloc(size);
+  snprintf(event_bindings,
+           size,
+           "%s%s%s",
+           _XmTextEventBindings1,
+           _XmTextEventBindings2,
+           _XmTextEventBindings3);
   xmTextClassRec.core_class.tm_table = (String)XtParseTranslationTable(event_bindings);
   XtFree(event_bindings);
   _XmFastSubclassInit(wc, XmTEXT_BIT);
@@ -638,8 +643,8 @@ static void AddRedraw(XmTextWidget tw, XmTextPosition left, XmTextPosition right
     }
     if (tw->text.repaint.number >= tw->text.repaint.maximum) {
       tw->text.repaint.maximum = tw->text.repaint.number + 1;
-      tw->text.repaint.range = r = (RangeRec *)XtRealloc(
-          (char *)r, tw->text.repaint.maximum * sizeof(RangeRec));
+      tw->text.repaint.range = r =
+          (RangeRec *)_XmReallocArray((char *)r, tw->text.repaint.maximum, sizeof(RangeRec));
     }
     r[tw->text.repaint.number].from = left;
     r[tw->text.repaint.number].to = right;
@@ -826,7 +831,7 @@ static void RefigureLines(XmTextWidget tw)
   tw->text.needs_refigure_lines = FALSE;
   if (XtIsRealized((Widget)tw))
     EraseInsertionPoint(tw);
-  oldline = (Line)XtMalloc((oldNumLines + 2) * sizeof(LineRec));
+  oldline = (Line)_XmMallocArray(oldNumLines + 2, sizeof(LineRec));
   memcpy((void *)oldline, (void *)line, (size_t)(oldNumLines + 1) * sizeof(LineRec));
   if (tw->text.pending_scroll != 0) {
     tw->text.new_top = _XmTextFindScroll(tw, tw->text.new_top, tw->text.pending_scroll);
@@ -843,8 +848,8 @@ static void RefigureLines(XmTextWidget tw)
   for (i = 0; i == 0 || !line[i - 1].past_end; i++) {
     if (i + 2 > tw->text.maximum_lines) {
       tw->text.maximum_lines = i + 2;
-      line = tw->text.line = (Line)XtRealloc((char *)line,
-                                             tw->text.maximum_lines * sizeof(LineRec));
+      line = tw->text.line =
+          (Line)_XmReallocArray((char *)line, tw->text.maximum_lines, sizeof(LineRec));
     }
     while (j < oldNumLines && oldline[j].start < line[i].start)
       j++;
@@ -999,8 +1004,9 @@ static void RemoveLines(XmTextWidget tw, int num_lines, unsigned int cur_index)
       else
         tw->text.table_size += TABLE_INCREMENT;
     }
-    tw->text.line_table = (XmTextLineTable)XtRealloc(
-        (char *)tw->text.line_table, tw->text.table_size * sizeof(XmTextLineTableRec));
+    tw->text.line_table = (XmTextLineTable)_XmReallocArray((char *)tw->text.line_table,
+                                                           tw->text.table_size,
+                                                           sizeof(XmTextLineTableRec));
   }
 }
 
@@ -1023,8 +1029,9 @@ static void AddLines(XmTextWidget tw,
         tw->text.table_size *= 2;
       else
         tw->text.table_size += TABLE_INCREMENT;
-    tw->text.line_table = (XmTextLineTable)XtRealloc(
-        (char *)tw->text.line_table, tw->text.table_size * sizeof(XmTextLineTableRec));
+    tw->text.line_table = (XmTextLineTable)_XmReallocArray((char *)tw->text.line_table,
+                                                           tw->text.table_size,
+                                                           sizeof(XmTextLineTableRec));
   }
   /* move the existing lines at the end of the buffer */
   if (tw->text.total_lines > cur_index)
@@ -1080,8 +1087,9 @@ void _XmTextRealignLineTable(XmTextWidget tw,
         table_size *= 2;
       else
         table_size += TABLE_INCREMENT;
-      line_table = (XmTextLineTable)XtRealloc((char *)line_table,
-                                              table_size * sizeof(XmTextLineTableRec));
+      line_table = (XmTextLineTable)_XmReallocArray((char *)line_table,
+                                                    table_size,
+                                                    sizeof(XmTextLineTableRec));
     }
     line_table[cur_index].start_pos = (unsigned int)next_start;
     if (line_end == next_start) {
@@ -1109,7 +1117,7 @@ static void InitializeLineTable(XmTextWidget tw, register int size)
 {
   register unsigned int t_index;
   register XmTextLineTable line_table;
-  line_table = (XmTextLineTable)XtMalloc(size * sizeof(XmTextLineTableRec));
+  line_table = (XmTextLineTable)_XmMallocArray(size, sizeof(XmTextLineTableRec));
   for (t_index = 0; t_index < size; t_index++) {
     line_table[t_index].start_pos = 0;
     line_table[t_index].virt_line = 0;
@@ -1240,7 +1248,7 @@ void _XmTextUpdateLineTable(
         if (!temp_table_size)
           temp_table_size++;
         /* do initial allocation of the temp_table */
-        temp_table = (XmTextLineTable)XtMalloc(temp_table_size * sizeof(XmTextLineTableRec));
+        temp_table = (XmTextLineTable)_XmMallocArray(temp_table_size, sizeof(XmTextLineTableRec));
         /* Determine the lines that have changed. */
         _XmTextRealignLineTable(tw, &temp_table, &temp_table_size, 0, cur_start, cur_end + delta);
         /* Compute the difference in the number of lines that have changed */
@@ -1324,8 +1332,9 @@ void _XmTextUpdateLineTable(
             }
             else
               temp_table_size *= 2;
-            temp_table = (XmTextLineTable)XtRealloc((char *)temp_table,
-                                                    temp_table_size * sizeof(XmTextLineTableRec));
+            temp_table = (XmTextLineTable)_XmReallocArray((char *)temp_table,
+                                                          temp_table_size,
+                                                          sizeof(XmTextLineTableRec));
           }
           temp_table[temp_index].start_pos = (unsigned int)cur_start;
           temp_table[temp_index].virt_line = (unsigned int)0;
@@ -1363,8 +1372,9 @@ void _XmTextUpdateLineTable(
               }
               else
                 temp_table_size *= 2;
-              temp_table = (XmTextLineTable)XtRealloc(
-                  (char *)temp_table, temp_table_size * sizeof(XmTextLineTableRec));
+              temp_table = (XmTextLineTable)_XmReallocArray((char *)temp_table,
+                                                            temp_table_size,
+                                                            sizeof(XmTextLineTableRec));
             }
             temp_table[temp_index].start_pos = (unsigned int)cur_start;
             temp_table[temp_index].virt_line = (unsigned int)0;
@@ -1743,8 +1753,9 @@ static void InsertHighlight(XmTextWidget tw, XmTextPosition position, XmHighligh
     tw->text.highlight.number++;
     if (tw->text.highlight.number > tw->text.highlight.maximum) {
       tw->text.highlight.maximum = tw->text.highlight.number;
-      l = tw->text.highlight.list = (_XmHighlightRec *)XtRealloc(
-          (char *)l, tw->text.highlight.maximum * sizeof(_XmHighlightRec));
+      l = tw->text.highlight.list = (_XmHighlightRec *)_XmReallocArray((char *)l,
+                                                                       tw->text.highlight.maximum,
+                                                                       sizeof(_XmHighlightRec));
     }
     for (j = tw->text.highlight.number - 1; j > i; j--)
       l[j] = l[j - 1];
@@ -1849,7 +1860,7 @@ static void InitializeHook(Widget wid, ArgList args, Cardinal *num_args_ptr)
       int num_chars, n_bytes;
       for (num_chars = 0; tw->text.wc_value[num_chars] != 0L; num_chars++)
         /*EMPTY*/;
-      tmp_value = XtMalloc((unsigned)(num_chars + 1) * (int)tw->text.char_size);
+      tmp_value = _XmMallocArray(num_chars + 1, tw->text.char_size);
       n_bytes = wcstombs(tmp_value, tw->text.wc_value, (num_chars + 1) * (int)tw->text.char_size);
       if (n_bytes == -1)
         n_bytes = 0;
@@ -1909,8 +1920,7 @@ static void InitializeHook(Widget wid, ArgList args, Cardinal *num_args_ptr)
   /* Translation table overwrite */
   if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
     char *vevent_bindings;
-    vevent_bindings = (String)XtMalloc(strlen(_XmTextIn_XmTextVEventBindings) + 1);
-    strcpy(vevent_bindings, _XmTextIn_XmTextVEventBindings);
+    vevent_bindings = XtNewString(_XmTextIn_XmTextVEventBindings);
     tw->text.tm_table = (XtTranslations)XtParseTranslationTable(vevent_bindings);
     XtFree(vevent_bindings);
     XtOverrideTranslations(wid, tw->text.tm_table);
@@ -2200,7 +2210,7 @@ static Boolean SetValues(Widget oldw, Widget reqw, Widget new_w, ArgList args, C
     num_chars = n_bytes = 0;
     for (num_chars = 0, wc_value = newtw->text.wc_value; wc_value[num_chars] != 0L;)
       num_chars++;
-    tmp_value = XtMalloc((unsigned)(num_chars + 1) * (int)newtw->text.char_size);
+    tmp_value = _XmMallocArray(num_chars + 1, newtw->text.char_size);
     n_bytes = wcstombs(
         tmp_value, newtw->text.wc_value, (num_chars + 1) * (int)newtw->text.char_size);
     if (n_bytes == -1)
@@ -2542,9 +2552,10 @@ void _XmTextSetHighlight(Widget w, XmTextPosition left, XmTextPosition right, Xm
     tw->text.highlight_changed = TRUE;
     if (tw->text.old_highlight.maximum < tw->text.highlight.number) {
       tw->text.old_highlight.maximum = tw->text.highlight.number;
-      tw->text.old_highlight.list = (_XmHighlightRec *)XtRealloc(
-          (char *)tw->text.old_highlight.list,
-          tw->text.old_highlight.maximum * sizeof(_XmHighlightRec));
+      tw->text.old_highlight.list =
+          (_XmHighlightRec *)_XmReallocArray((char *)tw->text.old_highlight.list,
+                                             tw->text.old_highlight.maximum,
+                                             sizeof(_XmHighlightRec));
     }
     tw->text.old_highlight.number = tw->text.highlight.number;
     memcpy((void *)tw->text.old_highlight.list,
@@ -2608,7 +2619,7 @@ XmTextLineTable _XmTextGetLineTable(Widget widget, int *total_lines)
   XmTextWidget tw = (XmTextWidget)widget;
   XmTextLineTable line_table;
   *total_lines = tw->text.total_lines;
-  line_table = (XmTextLineTable)XtMalloc((unsigned)*total_lines * sizeof(XmTextLineTableRec));
+  line_table = (XmTextLineTable)_XmMallocArray(*total_lines, sizeof(XmTextLineTableRec));
   memcpy(
       (void *)line_table, (void *)tw->text.line_table, *total_lines * sizeof(XmTextLineTableRec));
   return line_table;
@@ -2783,7 +2794,7 @@ static void PreeditDone(XIC xic, XPointer client_data, XPointer call_data)
     if (PreOverMaxLen(tw) == PreOverLen(tw))
       mb = PreOverStr(tw);
     else {
-      mb = XtMalloc((PreOverMaxLen(tw) + 1) * tw->text.char_size);
+      mb = _XmMallocArray(PreOverMaxLen(tw) + 1, tw->text.char_size);
       for (size = PreOverMaxLen(tw); size > 0; size--)
         num_bytes += mblen(PreOverStr(tw) + num_bytes, tw->text.char_size);
       memmove(mb, PreOverStr(tw), num_bytes);
@@ -2955,11 +2966,11 @@ static void PreeditDraw(XIC xic, XPointer client_data, XIMPreeditDrawCallbackStr
   if (insert_length > 0) {
     if (o_data->use_fontset) {
       if (call_data->text->encoding_is_wchar) {
-        mb = XtMalloc((insert_length + 1) * tw->text.char_size);
+        mb = _XmMallocArray(insert_length + 1, tw->text.char_size);
         (void)wcstombs(mb, call_data->text->string.wide_char, insert_length);
       }
       else {
-        mb = XtMalloc((insert_length + 1) * tw->text.char_size);
+        mb = _XmMallocArray(insert_length + 1, tw->text.char_size);
         strncpy(mb, call_data->text->string.multi_byte, insert_length * tw->text.char_size);
         mb[insert_length * tw->text.char_size] = '\0';
       }
@@ -3010,8 +3021,9 @@ static void PreeditDraw(XIC xic, XPointer client_data, XIMPreeditDrawCallbackStr
           (XmTextPosition)(PreStartTW(tw) + call_data->chg_first + call_data->chg_length),
           PreEndTW(tw),
           False);
-      mb = XtRealloc(mb, strlen(mb) + strlen(over_mb) + 1);
-      strcat(mb, over_mb);
+      size_t len = mb ? strlen(mb) : 0, over_len = strlen(over_mb);
+      mb = XtRealloc(mb, len + over_len + 1);
+      memcpy(mb + len, over_mb, over_len + 1);
       XtFree(over_mb);
     }
     if (recover_len > 0) {
@@ -3168,7 +3180,7 @@ void _XmTextResetIC(Widget widget)
     }
     beginPos = nextPos = XmTextGetCursorPosition(widget);
     if (data->overstrike) {
-      tmp_mb = XtMalloc((n + 1) * tw->text.char_size);
+      tmp_mb = _XmMallocArray(n + 1, tw->text.char_size);
       size = _XmTextBytesToCharacters(tmp_mb, mb, n, False, tw->text.char_size);
       nextPos += size;
       XtFree(tmp_mb);
@@ -3278,7 +3290,7 @@ void XmTextSetStringWcs(Widget widget, wchar_t *wc_value)
   else {
     for (num_chars = 0; wc_value[num_chars] != (wchar_t)0L; num_chars++)
       /*EMPTY*/;
-    tmp = XtMalloc((unsigned)(num_chars + 1) * (int)tw->text.char_size);
+    tmp = _XmMallocArray(num_chars + 1, tw->text.char_size);
     result = wcstombs(tmp, wc_value, (num_chars + 1) * (int)tw->text.char_size);
     if (result == (size_t)-1) { /* if wcstombs fails, it returns (size_t) -1 */
       XtFree(tmp);              /* if invalid data, pass in the empty string */
@@ -3448,16 +3460,7 @@ Widget XmCreateScrolledText(Widget parent, char *name, ArgList arglist, Cardinal
   _XmAppLock(app);
   s_size = ((name) ? strlen(name) : 0) + 3;
   s = (char *)XmStackAlloc(s_size, s_cache); /* Name + NULL + "SW" */
-  if (name) {
-    strncpy(s, name, strlen(name));
-    s[strlen(name)] = '\0';
-    strcat(s, "SW");
-  }
-  else {
-    s[0] = 'S';
-    s[1] = 'W';
-    s[2] = '\0';
-  }
+  snprintf(s, s_size, "%sSW", name ? name : "");
   /*
    * merge the application arglist with the required preset arglist, for
    * creating the scrolled window portion of the scroll text.
