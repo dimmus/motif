@@ -16,7 +16,8 @@
  *              which other load on the machine disturbs less
  *   - mallocs  calls to malloc/calloc/realloc
  *   - requests X requests (XNextRequest delta)
- *   - rtrips   round trips (calls to _XReply, which XSync also uses)
+ *   - rtrips   round trips (waits for a reply in libxcb, which every Xlib
+ *              call with a reply makes, XSync included)
  *   - icvalues calls to XSetICValues
  * The counters come from libxmbench_preload.so, which xmbench preloads by
  * re-executing itself; set XMBENCH_NO_PRELOAD=1 to run without it.

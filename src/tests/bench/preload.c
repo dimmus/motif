@@ -6,15 +6,31 @@
  * LD_PRELOAD counters for xmbench.
  *
  * xmbench re-executes itself with this library preloaded.  It counts
- * calls to the allocator, to _XReply (every Xlib call that waits for a
- * reply from the server goes through it, XSync included, so this is the
- * number of round trips) and to XSetICValues (which can be synchronous
- * with an input method server).  xmbench finds the counters with
+ * calls to the allocator, waits for a reply from the server (round
+ * trips) and calls to XSetICValues (which can be synchronous with an
+ * input method server).  xmbench finds the counters with
  * dlsym(RTLD_DEFAULT, ...), so it still runs, without these numbers,
  * when the library is not loaded.
  *
- * With XMBENCH_REPLY_BACKTRACE set, every _XReply prints a backtrace to
- * stderr, to find where the round trips of a case come from.
+ * The round trips are counted in libxcb: every Xlib call that waits for
+ * a reply, XSync included, goes through xcb_wait_for_reply64 (or
+ * xcb_wait_for_reply), from _XReply, after it sent its requests with
+ * xcb_writev.  A wait counts as a round trip when requests were sent
+ * since the last one: the waits that _XReply makes for the replies of
+ * earlier requests with asynchronous handlers, which XInternAtoms or
+ * XGetWindowAttributes use to get several replies in one round trip, do
+ * not.  This is what counting the calls to _XReply gives, without having
+ * to interpose a function that libX11 calls internally, which does not
+ * work where it is linked with -Bsymbolic-functions (Debian, Ubuntu).
+ *
+ * With XMBENCH_REPLY_BACKTRACE set, every round trip prints a backtrace
+ * to stderr, to find where the round trips of a case come from
+ * (tools/dev/profile/rtrips.py summarises them).
+ *
+ * With XMBENCH_REPORT set, the counters are printed to stderr when the
+ * process exits, so that the library also counts for programs other
+ * than xmbench (tools/dev/profile preloads it into hello_motif and
+ * mwm).
  *
  * The allocator wrappers forward to the glibc __libc_* entry points
  * rather than to dlsym(RTLD_NEXT, ...), since dlsym itself allocates.
@@ -26,7 +42,9 @@
 #include <execinfo.h>
 #include <stdarg.h>
 #include <stddef.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <sys/uio.h>
 #include <unistd.h>
 
 #include <X11/Xlib.h>
@@ -68,18 +86,27 @@ void free(void *ptr)
 	__libc_free(ptr);
 }
 
-/* Status _XReply(Display *, xReply *, int, Bool), from Xlibint.h */
-typedef int (*xreply_fn)(Display *, void *, int, int);
+static void report(void) __attribute__((destructor));
 
-int _XReply(Display *dpy, void *rep, int extra, int discard);
-
-int _XReply(Display *dpy, void *rep, int extra, int discard)
+static void report(void)
 {
-	static xreply_fn real;
+	if (getenv("XMBENCH_REPORT"))
+		fprintf(stderr, "xmbench_preload: mallocs %lu frees %lu "
+			"rtrips %lu icvalues %lu\n", xmbench_mallocs,
+			xmbench_frees, xmbench_replies, xmbench_icvalues);
+}
+
+/* Requests were sent since the last round trip. */
+static int sent;
+
+static void count_reply(void)
+{
 	static int trace = -1;
 
-	if (!real)
-		real = (xreply_fn)dlsym(RTLD_NEXT, "_XReply");
+	if (!sent)
+		return;
+	sent = 0;
+
 	if (trace < 0)
 		trace = getenv("XMBENCH_REPLY_BACKTRACE") != NULL;
 	if (trace) {
@@ -90,7 +117,54 @@ int _XReply(Display *dpy, void *rep, int extra, int discard)
 			trace = 0;
 	}
 	xmbench_replies++;
-	return real(dpy, rep, extra, discard);
+}
+
+/*
+ * int xcb_writev(xcb_connection_t *, struct iovec *, int, uint64_t),
+ * void *xcb_wait_for_reply(xcb_connection_t *, unsigned int,
+ *                          xcb_generic_error_t **)
+ * and its version with a 64-bit sequence number, from <xcb/xcbext.h>
+ * and <xcb/xcb.h>.
+ */
+typedef int (*writev_fn)(void *, struct iovec *, int, unsigned long long);
+typedef void *(*wait_fn)(void *, unsigned int, void **);
+typedef void *(*wait64_fn)(void *, unsigned long long, void **);
+
+int xcb_writev(void *c, struct iovec *vector, int count,
+	       unsigned long long requests);
+void *xcb_wait_for_reply(void *c, unsigned int request, void **e);
+void *xcb_wait_for_reply64(void *c, unsigned long long request, void **e);
+
+int xcb_writev(void *c, struct iovec *vector, int count,
+	       unsigned long long requests)
+{
+	static writev_fn real;
+
+	if (!real)
+		real = (writev_fn)dlsym(RTLD_NEXT, "xcb_writev");
+	if (requests)
+		sent = 1;
+	return real(c, vector, count, requests);
+}
+
+void *xcb_wait_for_reply(void *c, unsigned int request, void **e)
+{
+	static wait_fn real;
+
+	if (!real)
+		real = (wait_fn)dlsym(RTLD_NEXT, "xcb_wait_for_reply");
+	count_reply();
+	return real(c, request, e);
+}
+
+void *xcb_wait_for_reply64(void *c, unsigned long long request, void **e)
+{
+	static wait64_fn real;
+
+	if (!real)
+		real = (wait64_fn)dlsym(RTLD_NEXT, "xcb_wait_for_reply64");
+	count_reply();
+	return real(c, request, e);
 }
 
 /*
