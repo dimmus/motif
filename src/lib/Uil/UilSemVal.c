@@ -3332,6 +3332,7 @@ sym_value_entry_type *sem_evaluate_value_expr(sym_value_entry_type *value_entry)
 		   diag_value_text( value_entry->b_type ) );
 		res_type = error_arg_type;
 	    }
+	    break;
 
 	  case sym_k_color_value:
 	  case sym_k_xbitmapfile_value:
@@ -4656,6 +4657,7 @@ void	sar_cat_value_entry(sym_value_entry_type **target_entry, sym_value_entry_ty
 	  (value1_entry, FALSE,
 	   value2_entry, FALSE);
 	target_type  = sym_k_localized_string_value;
+	break;
 
     default:   /* some form of error */
 	target_type = sym_k_error_value;
