@@ -35,14 +35,6 @@
 /************************************************************
  *	TYPEDEFS AND DEFINES
  *************************************************************/
-typedef struct _PixmapCache {
-  Screen *screen;
-  Pixmap pixmap;
-  Pixel foreground, background;
-  unsigned int depth;
-  int ref_count;
-  struct _PixmapCache *next;
-} CacheEntry;
 
 /************************************************************
  *	MACROS
@@ -106,7 +98,6 @@ String xm_std_constraint_filter[] = {XmNx,
 /************************************************************
  *	STATIC DECLARATIONS
  *************************************************************/
-static CacheEntry *pixmapCache = NULL;
 
 /************************************************************
  *	GLOBAL CODE
@@ -508,71 +499,6 @@ void XmCopyISOLatin1Lowered(char *dst, char *src)
       *dest = *source;
   }
   *dest = '\0';
-}
-
-/*
- *	Creates a stippled pixmap of specified depth
- *	caches these so that multiple requests share the pixmap
- */
-#define pixmap_width 2
-#define pixmap_height 2
-
-static Pixmap XiCreateStippledPixmap(Screen *screen, Pixel fore, Pixel back, unsigned int depth)
-{
-  Display *display = DisplayOfScreen(screen);
-  CacheEntry *cachePtr;
-  Pixmap stippled_pixmap;
-  static unsigned char pixmap_bits[] = {
-      0x02,
-      0x01,
-  };
-  /* see if we already have a pixmap suitable for this screen */
-  for (cachePtr = pixmapCache; cachePtr; cachePtr = cachePtr->next) {
-    if (cachePtr->screen == screen && cachePtr->foreground == fore &&
-        cachePtr->background == back && cachePtr->depth == depth)
-      return (cachePtr->ref_count++, cachePtr->pixmap);
-  }
-  stippled_pixmap = XCreatePixmapFromBitmapData(display,
-                                                RootWindowOfScreen(screen),
-                                                (char *)pixmap_bits,
-                                                pixmap_width,
-                                                pixmap_height,
-                                                fore,
-                                                back,
-                                                depth);
-  /* and insert it at the head of the cache */
-  cachePtr = XtNew(CacheEntry);
-  cachePtr->screen = screen;
-  cachePtr->foreground = fore;
-  cachePtr->background = back;
-  cachePtr->depth = depth;
-  cachePtr->pixmap = stippled_pixmap;
-  cachePtr->ref_count = 1;
-  _XmProcessLock();
-  cachePtr->next = pixmapCache;
-  pixmapCache = cachePtr;
-  _XmProcessUnlock();
-  return (stippled_pixmap);
-}
-
-static void XiReleaseStippledPixmap(Screen *screen, Pixmap pixmap)
-{
-  Display *display = DisplayOfScreen(screen);
-  CacheEntry *cachePtr, **prevP;
-  _XmProcessLock();
-  for (prevP = &pixmapCache, cachePtr = pixmapCache; cachePtr;) {
-    if (cachePtr->screen == screen && cachePtr->pixmap == pixmap) {
-      if (--cachePtr->ref_count == 0) {
-        XFreePixmap(display, pixmap);
-        *prevP = cachePtr->next;
-        XtFree((char *)cachePtr);
-        break;
-      }
-    }
-    prevP = &cachePtr->next;
-    cachePtr = *prevP;
-  }
-  _XmProcessUnlock();
 }
 
 /*
