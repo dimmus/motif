@@ -6765,6 +6765,45 @@ static void TextFieldMarginsProc(Widget w, XmBaselineMargins *margins_rec)
 }
 
 /*
+ * Keep the highlight records at the characters they belong to when
+ * [prev, next) is replaced by text delta characters longer: records in
+ * the replaced range move to prev, the ones after it by delta.  The
+ * preedit renditions are highlights, and a record left past the end of
+ * the text made RedisplayText measure a negative length.
+ */
+static void ShiftHighlights(XmTextFieldWidget tf,
+                            XmTextPosition prev,
+                            XmTextPosition next,
+                            int delta)
+{
+  _XmHighlightRec *l = tf->text.highlight.list;
+  Cardinal i, n = 1;
+  for (i = 1; i < tf->text.highlight.number; i++) {
+    XmTextPosition position = l[i].position;
+    XmHighlightMode mode = l[i].mode;
+    if (position >= next)
+      position += delta;
+    else if (position > prev)
+      position = prev;
+    /* A record at the position of the one before replaces it, */
+    if (position == l[n - 1].position) {
+      if (n == 1) {
+        l[0].mode = mode;
+        continue;
+      }
+      n--;
+    }
+    /* and is not needed if it does not change the mode */
+    if (mode == l[n - 1].mode)
+      continue;
+    l[n].position = position;
+    l[n].mode = mode;
+    n++;
+  }
+  tf->text.highlight.number = n;
+}
+
+/*
  * This procedure and _XmTextFieldReplaceText are almost same.
  * The difference is that this function doesn't call user's callbacks,
  * like XmNmodifyVerifyCallback.
@@ -6888,6 +6927,7 @@ static Boolean _XmTextFieldReplaceTextForPreedit(XmTextFieldWidget tf,
     }
   }
   tf->text.string_length += insert_length - replace_length;
+  ShiftHighlights(tf, replace_prev, replace_next, insert_length - replace_length);
   if (move_cursor) {
     if (TextF_CursorPosition(tf) != newInsert) {
       if (newInsert > tf->text.string_length) {
