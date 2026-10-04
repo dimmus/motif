@@ -111,7 +111,9 @@ static char rcsid[] = "$TOG: List.c /main/47 1999/10/12 16:58:17 mgreess $"
  *   geometrically.  A size is valid only while the array is the one it
  *   was recorded for; otherwise the array has itemCount entries;
  * - histograms of the item widths and heights, so that MaxWidth and
- *   MaxItemHeight are found without a pass over the items.
+ *   MaxItemHeight are found without a pass over the items;
+ * - an index of the items by content (see FindItem) and a set of the
+ *   selected items or positions (see OnSelectedList), built on demand.
  *
  * The record is shared with the copies of the widget that Xt passes to
  * SetValues, which may work on the old one; the arrays it describes are
@@ -130,9 +132,37 @@ typedef struct {
   int elements_size;
   ExtentHistogram widths;
   ExtentHistogram heights;
+  /* The content index: hash[i] is ItemHash(items[i]) while hashed.  The
+   * positions of a bucket are chained in increasing order from head to
+   * tail through next, while chained. */
+  unsigned int *hash;
+  int hash_size;
+  int *next;
+  int next_size;
+  int *head;
+  int *tail;
+  unsigned int mask; /* buckets - 1 */
+  Boolean hashed;
+  Boolean chained;
+  int scanned; /* hashes scanned by lookups since !chained */
+  /* The selection set: open addressing over the entries of sel_list,
+   * selectedItems or selectedPositions (sel_by_pos), with sel_count
+   * entries.  A slot holds an index + 1, or 0. */
+  int *sel_slot;
+  unsigned int sel_mask;
+  XtPointer sel_list;
+  int sel_count;
+  Boolean sel_by_pos;
+  Boolean sel_valid;
 } XmListPrivRec, *XmListPriv;
 _Static_assert(sizeof(Pixmap) >= sizeof(XmListPriv), "list.DashTile holds a pointer");
 #define ListPriv(lw) ((XmListPriv)(uintptr_t)(lw)->list.DashTile)
+/* Below these sizes a linear search is as fast as building an index. */
+#define INDEX_MIN_ITEMS 64
+#define SELSET_MIN_ITEMS 8
+/* Chaining the buckets costs about as much as scanning the hashes this
+ * many times; lookups scan until they have done so. */
+#define INDEX_SCANS 4
 /****************
  *
  * List Error Messages
@@ -199,6 +229,18 @@ static void HistogramRemove(ExtentHistogram *h, Dimension v);
 static void HistogramFree(ExtentHistogram *h);
 static void SetElementExtent(XmListWidget lw, ElementPtr el, XmString item, Boolean old);
 static void FreeElement(XmListWidget lw, ElementPtr el);
+static unsigned int ItemHash(XmString item);
+static void IndexFree(XmListPriv p);
+static void IndexChain(XmListWidget lw);
+static void IndexLink(XmListPriv p, int pos);
+static void IndexUnlink(XmListPriv p, int pos);
+static void IndexInsert(XmListWidget lw, int pos, int n);
+static void IndexDelete(XmListWidget lw, int pos, int n);
+static void IndexReplace(XmListWidget lw, int pos);
+static Boolean StartFind(XmListWidget lw, XmString item, unsigned int *hash);
+static int FindItem(XmListWidget lw, XmString item, Boolean hashed, unsigned int hash, int after);
+static void SelectionListsChanged(XmListWidget lw);
+static Boolean InSelectionSet(XmListWidget lw, XmString item, int pos, Boolean by_pos);
 static void FixStartEnd(XmListWidget lw, int pos, int count, int *start, int *end);
 static int AddInternalElements(
     XmListWidget lw, XmString *items, int nitems, int position, Boolean selectable);
@@ -1584,8 +1626,10 @@ static void Destroy(Widget wid)
   XmImUnregister(wid);
   {
     XmListPriv p = ListPriv(lw);
+    IndexFree(p);
     HistogramFree(&p->widths);
     HistogramFree(&p->heights);
+    XtFree((char *)p->sel_slot);
     XtFree((char *)p);
     lw->list.DashTile = None;
   }
@@ -2735,6 +2779,300 @@ static void FreeElement(XmListWidget lw, ElementPtr el)
   XtFree((char *)el);
 }
 
+/*
+ * ItemHash - a hash of what XmStringCompare compares: the lines, their
+ *	segments and the text of each up to its byte count or its first
+ *	NUL (the text is compared with strncmp).  Tags and directions,
+ *	which compare equal when unset, are left out, so that items which
+ *	XmStringCompare finds equal have the same hash.  An optimized
+ *	string compares as a single line of one segment.  Call with the
+ *	process lock held.
+ */
+#define HASH_WORD(h, v) (((h) ^ (unsigned int)(v)) * 16777619u)
+static unsigned int HashText(unsigned int h, const char *text, unsigned int len)
+{
+  unsigned int i;
+  h = HASH_WORD(h, len);
+  for (i = 0; (i < len) && text[i]; i++)
+    h = HASH_WORD(h, (unsigned char)text[i]);
+  return h;
+}
+
+static unsigned int ItemHash(XmString item)
+{
+  unsigned int h = 2166136261u;
+  _XmStringEntry *lines;
+  int i, j, nlines, nsegs;
+  if (item == NULL)
+    return 0;
+  if (_XmStrOptimized(item)) {
+    h = HASH_WORD(HASH_WORD(h, 1), 1);
+    return HashText(h, _XmStrText(item), _XmStrByteCount(item));
+  }
+  nlines = _XmStrEntryCountGet(item);
+  lines = _XmStrEntry(item);
+  h = HASH_WORD(h, nlines);
+  for (i = 0; i < nlines; i++) {
+    nsegs = _XmEntrySegmentCountGet(lines[i]);
+    h = HASH_WORD(h, nsegs);
+    for (j = 0; j < nsegs; j++) {
+      _XmStringEntry seg = (_XmEntryMultiple(lines[i]) ? (_XmStringEntry)_XmEntrySegment(lines[i])[j] :
+                                                         lines[i]);
+      h = HashText(h, (char *)_XmEntryTextGet(seg), _XmEntryByteCountGet(seg));
+    }
+  }
+  return h;
+}
+
+static void IndexFree(XmListPriv p)
+{
+  XtFree((char *)p->hash);
+  XtFree((char *)p->next);
+  XtFree((char *)p->head);
+  XtFree((char *)p->tail);
+  p->hash = NULL;
+  p->next = p->head = p->tail = NULL;
+  p->hash_size = p->next_size = 0;
+  p->mask = 0;
+  p->hashed = p->chained = FALSE;
+  p->scanned = 0;
+}
+
+/* IndexChain - chain the positions of each bucket. */
+static void IndexChain(XmListWidget lw)
+{
+  XmListPriv p = ListPriv(lw);
+  int count = lw->list.itemCount;
+  unsigned int buckets = 64, b;
+  int i;
+  while (buckets < (unsigned int)count)
+    buckets *= 2;
+  if (buckets != p->mask + 1) {
+    p->head = (int *)_XmReallocArray((char *)p->head, buckets, sizeof(int));
+    p->tail = (int *)_XmReallocArray((char *)p->tail, buckets, sizeof(int));
+    p->mask = buckets - 1;
+  }
+  memset(p->head, 0xff, buckets * sizeof(int));
+  memset(p->tail, 0xff, buckets * sizeof(int));
+  if (count > p->next_size)
+    p->next = (int *)ResizeArray((char *)p->next, &p->next_size, count, sizeof(int));
+  for (i = 0; i < count; i++) {
+    b = p->hash[i] & p->mask;
+    p->next[i] = -1;
+    if (p->head[b] < 0)
+      p->head[b] = i;
+    else
+      p->next[p->tail[b]] = i;
+    p->tail[b] = i;
+  }
+  p->chained = TRUE;
+  p->scanned = 0;
+}
+
+/* IndexLink - add position pos to the chain of its bucket. */
+static void IndexLink(XmListPriv p, int pos)
+{
+  unsigned int b = p->hash[pos] & p->mask;
+  int prev = -1, i;
+  if ((p->tail[b] >= 0) && (p->tail[b] < pos))
+    prev = p->tail[b], i = -1;
+  else
+    for (i = p->head[b]; (i >= 0) && (i < pos); i = p->next[i])
+      prev = i;
+  p->next[pos] = i;
+  if (prev < 0)
+    p->head[b] = pos;
+  else
+    p->next[prev] = pos;
+  if (i < 0)
+    p->tail[b] = pos;
+}
+
+/* IndexUnlink - remove position pos from the chain of its bucket. */
+static void IndexUnlink(XmListPriv p, int pos)
+{
+  unsigned int b = p->hash[pos] & p->mask;
+  int prev = -1, i;
+  for (i = p->head[b]; i != pos; i = p->next[i])
+    prev = i;
+  if (prev < 0)
+    p->head[b] = p->next[pos];
+  else
+    p->next[prev] = p->next[pos];
+  if (p->tail[b] == pos)
+    p->tail[b] = prev;
+}
+
+/*
+ * IndexInsert - the items at pos .. pos + n - 1 were inserted.  Items
+ *	added at the end are chained; anywhere else they move the items
+ *	after them, and the chains are rebuilt when needed again.
+ */
+static void IndexInsert(XmListWidget lw, int pos, int n)
+{
+  XmListPriv p = ListPriv(lw);
+  int count = lw->list.itemCount;
+  int i;
+  if (!p->hashed)
+    return;
+  if (count > p->hash_size)
+    p->hash = (unsigned int *)ResizeArray(
+        (char *)p->hash, &p->hash_size, count, sizeof(unsigned int));
+  memmove(p->hash + pos + n, p->hash + pos, (count - n - pos) * sizeof(unsigned int));
+  _XmProcessLock();
+  for (i = pos; i < pos + n; i++)
+    p->hash[i] = ItemHash(lw->list.items[i]);
+  _XmProcessUnlock();
+  if (!p->chained)
+    return;
+  if ((pos + n == count) && (count <= 2 * (int)(p->mask + 1))) {
+    if (count > p->next_size)
+      p->next = (int *)ResizeArray((char *)p->next, &p->next_size, count, sizeof(int));
+    for (i = pos; i < count; i++)
+      IndexLink(p, i);
+  }
+  else {
+    p->chained = FALSE;
+    /* Rechain at once if that is only to have more buckets. */
+    p->scanned = ((pos + n == count) ? INDEX_SCANS * count : 0);
+  }
+}
+
+/* IndexDelete - the items at pos .. pos + n - 1 were deleted. */
+static void IndexDelete(XmListWidget lw, int pos, int n)
+{
+  XmListPriv p = ListPriv(lw);
+  if (!p->hashed)
+    return;
+  memmove(p->hash + pos, p->hash + pos + n, (lw->list.itemCount - pos) * sizeof(unsigned int));
+  p->chained = FALSE;
+  p->scanned = 0;
+}
+
+/* IndexReplace - the item at pos was replaced. */
+static void IndexReplace(XmListWidget lw, int pos)
+{
+  XmListPriv p = ListPriv(lw);
+  if (!p->hashed)
+    return;
+  if (p->chained)
+    IndexUnlink(p, pos);
+  _XmProcessLock();
+  p->hash[pos] = ItemHash(lw->list.items[pos]);
+  _XmProcessUnlock();
+  if (p->chained)
+    IndexLink(p, pos);
+}
+
+/*
+ * StartFind - begin a search of the items for item with FindItem: hash
+ *	the items if they are not, and chain them if they are not, unless
+ *	the searches since they changed have scanned less of the hashes
+ *	than that would.  Returns whether the search uses the hashes, and
+ *	the hash of item in *hash.  Call with the process lock held.
+ */
+static Boolean StartFind(XmListWidget lw, XmString item, unsigned int *hash)
+{
+  XmListPriv p = ListPriv(lw);
+  int i;
+  if (!p->hashed) {
+    if (lw->list.itemCount < INDEX_MIN_ITEMS)
+      return FALSE;
+    p->hash = (unsigned int *)ResizeArray(
+        (char *)p->hash, &p->hash_size, lw->list.itemCount, sizeof(unsigned int));
+    for (i = 0; i < lw->list.itemCount; i++)
+      p->hash[i] = ItemHash(lw->list.items[i]);
+    p->hashed = TRUE;
+    p->chained = FALSE;
+    p->scanned = INDEX_SCANS * lw->list.itemCount;
+  }
+  if (!p->chained && (p->scanned >= INDEX_SCANS * lw->list.itemCount))
+    IndexChain(lw);
+  *hash = ItemHash(item);
+  return TRUE;
+}
+
+/*
+ * FindItem - the first position after after (-1 to start) whose item
+ *	matches item, or -1, as begun by StartFind.  The items must not
+ *	change during a search.  Call with the process lock held.
+ */
+static int FindItem(XmListWidget lw, XmString item, Boolean hashed, unsigned int hash, int after)
+{
+  XmListPriv p = ListPriv(lw);
+  int i;
+  if (!hashed) {
+    for (i = after + 1; i < lw->list.itemCount; i++)
+      if (ItemsMatch(lw->list.items[i], item))
+        return i;
+  }
+  else if (p->chained) {
+    for (i = ((after < 0) ? p->head[hash & p->mask] : p->next[after]); i >= 0; i = p->next[i])
+      if ((p->hash[i] == hash) && ItemsMatch(lw->list.items[i], item))
+        return i;
+  }
+  else {
+    for (i = after + 1; i < lw->list.itemCount; i++)
+      if ((p->hash[i] == hash) && ItemsMatch(lw->list.items[i], item))
+        break;
+    p->scanned += i - after;
+    if (i < lw->list.itemCount)
+      return i;
+  }
+  return -1;
+}
+
+/* SelectionListsChanged - the selection set is stale. */
+static void SelectionListsChanged(XmListWidget lw)
+{
+  ListPriv(lw)->sel_valid = FALSE;
+}
+
+/*
+ * InSelectionSet - whether item (or position pos, by_pos) is in the
+ *	selected items (or positions), through a set built when needed.
+ *	Call with the process lock held for items.
+ */
+static Boolean InSelectionSet(XmListWidget lw, XmString item, int pos, Boolean by_pos)
+{
+  XmListPriv p = ListPriv(lw);
+  XtPointer list = (by_pos ? (XtPointer)lw->list.selectedPositions : (XtPointer)lw->list.selectedItems);
+  int count = (by_pos ? lw->list.selectedPositionCount : lw->list.selectedItemCount);
+  unsigned int h, s;
+  int i, k;
+  if (!p->sel_valid || (p->sel_by_pos != by_pos) || (p->sel_list != list) || (p->sel_count != count))
+  {
+    unsigned int slots = 16;
+    while (slots < 2 * (unsigned int)count)
+      slots *= 2;
+    if (slots != p->sel_mask + 1) {
+      p->sel_slot = (int *)_XmReallocArray((char *)p->sel_slot, 2 * slots, sizeof(int));
+      p->sel_mask = slots - 1;
+    }
+    memset(p->sel_slot, 0, 2 * slots * sizeof(int));
+    for (i = 0; i < count; i++) {
+      h = (by_pos ? (unsigned int)lw->list.selectedPositions[i] :
+                    ItemHash(lw->list.selectedItems[i]));
+      for (s = h & p->sel_mask; p->sel_slot[2 * s]; s = (s + 1) & p->sel_mask)
+        ;
+      p->sel_slot[2 * s] = i + 1;
+      p->sel_slot[2 * s + 1] = (int)h;
+    }
+    p->sel_list = list;
+    p->sel_count = count;
+    p->sel_by_pos = by_pos;
+    p->sel_valid = TRUE;
+  }
+  h = (by_pos ? (unsigned int)(pos + 1) : ItemHash(item));
+  for (s = h & p->sel_mask; (k = p->sel_slot[2 * s]) != 0; s = (s + 1) & p->sel_mask) {
+    if ((unsigned int)p->sel_slot[2 * s + 1] != h)
+      continue;
+    if (by_pos || ItemsMatch(lw->list.selectedItems[k - 1], item))
+      return TRUE;
+  }
+  return FALSE;
+}
+
 /************************************************************************
  *									*
  * Item/Element Manupulation routines					*
@@ -3028,6 +3366,7 @@ static void AddItems(XmListWidget lw, XmString *items, int nitems, int pos)
   for (i = 0; i < nitems; i++)
     lw->list.items[pos + i] = XmStringCopy(items[i]);
   lw->list.itemCount = TotalItems;
+  IndexInsert(lw, pos, nitems);
 }
 
 /************************************************************************
@@ -3057,6 +3396,7 @@ static void DeleteItems(XmListWidget lw, int nitems, int pos)
   /* This nulls out the list pointer if we have deleted the last item. */
   ResizeItems(lw, TotalItems);
   lw->list.itemCount = TotalItems;
+  IndexDelete(lw, pos, nitems);
 }
 
 /************************************************************************
@@ -3075,6 +3415,7 @@ static void DeleteItemPositions(XmListWidget lw,
   int jx;
   int first;
   XmString item;
+  XmListPriv p = ListPriv(lw);
   if (lw->list.itemCount < 1)
     return;
   /* Prepare ourselves to do a series of deletes.   Scan the position_list
@@ -3114,8 +3455,14 @@ static void DeleteItemPositions(XmListWidget lw,
   for (ix = first; ix < lw->list.itemCount; ix++) {
     if (lw->list.items[ix] != NULL) {
       lw->list.items[jx] = lw->list.items[ix];
+      if (p->hashed)
+        p->hash[jx] = p->hash[ix];
       jx++;
     }
+  }
+  if (first < lw->list.itemCount) {
+    p->chained = FALSE;
+    p->scanned = 0;
   }
   /* This nulls out the list pointer if we have deleted the last item. */
   ResizeItems(lw, TotalItems);
@@ -3133,6 +3480,7 @@ static void ReplaceItem(XmListWidget lw, XmString item, int pos)
   pos--;
   XmStringFree(lw->list.items[pos]);
   lw->list.items[pos] = XmStringCopy(item);
+  IndexReplace(lw, pos);
   /*Selected items should be replaced also*/
   UpdateSelectedPositions(lw, lw->list.selectedItemCount);
   for (i = 0; (i < lw->list.selectedItemCount) && (i < lw->list.selectedPositionCount); i++) {
@@ -3141,6 +3489,7 @@ static void ReplaceItem(XmListWidget lw, XmString item, int pos)
       lw->list.selectedItems[i] = XmStringCopy(item);
     }
   }
+  SelectionListsChanged(lw);
 }
 
 /***************************************************************************
@@ -3168,14 +3517,12 @@ static Boolean ItemsMatch(XmString a, XmString b)
  ***************************************************************************/
 static int ItemNumber(XmListWidget lw, XmString item)
 {
-  int i;
-  int pos = 0;
+  unsigned int hash = 0;
+  Boolean hashed;
+  int pos;
   _XmProcessLock();
-  for (i = 0; i < lw->list.itemCount; i++)
-    if (ItemsMatch(lw->list.items[i], item)) {
-      pos = i + 1;
-      break;
-    }
+  hashed = StartFind(lw, item, &hash);
+  pos = FindItem(lw, item, hashed, hash, -1) + 1;
   _XmProcessUnlock();
   return pos;
 }
@@ -3205,15 +3552,20 @@ static Boolean OnSelectedList(XmListWidget lw, XmString item, int intern_pos)
   /* Use selectedItems if applicable, else use selectedPositions */
   if (lw->list.selectedItems && (lw->list.selectedItemCount > 0)) {
     _XmProcessLock();
-    for (i = 0; i < lw->list.selectedItemCount; i++)
-      if (ItemsMatch(lw->list.selectedItems[i], item)) {
-        found = TRUE;
-        break;
-      }
+    if (lw->list.selectedItemCount >= SELSET_MIN_ITEMS)
+      found = InSelectionSet(lw, item, intern_pos, FALSE);
+    else
+      for (i = 0; i < lw->list.selectedItemCount; i++)
+        if (ItemsMatch(lw->list.selectedItems[i], item)) {
+          found = TRUE;
+          break;
+        }
     _XmProcessUnlock();
     return found;
   }
   else if ((lw->list.selectedPositions != NULL) && (lw->list.selectedPositionCount > 0)) {
+    if (lw->list.selectedPositionCount >= SELSET_MIN_ITEMS)
+      return InSelectionSet(lw, NULL, intern_pos, TRUE);
     for (i = 0; i < lw->list.selectedPositionCount; i++)
       if (lw->list.selectedPositions[i] == (intern_pos + 1))
         return TRUE;
@@ -3238,6 +3590,7 @@ static void CopyItems(XmListWidget lw)
     ListPriv(lw)->items = il;
     ListPriv(lw)->items_size = lw->list.itemCount;
   }
+  IndexFree(ListPriv(lw));
 }
 
 /************************************************************************
@@ -3255,6 +3608,7 @@ static void CopySelectedItems(XmListWidget lw)
       sl[i] = XmStringCopy(lw->list.selectedItems[i]);
     lw->list.selectedItems = sl;
   }
+  SelectionListsChanged(lw);
 }
 
 /************************************************************************
@@ -3270,6 +3624,7 @@ static void CopySelectedPositions(XmListWidget lw)
     memcpy((char *)sl, (char *)lw->list.selectedPositions, size);
     lw->list.selectedPositions = sl;
   }
+  SelectionListsChanged(lw);
 }
 
 /************************************************************************
@@ -3292,6 +3647,7 @@ static void ClearItemList(XmListWidget lw)
     p->items = NULL;
     p->items_size = 0;
   }
+  IndexFree(p);
   lw->list.itemCount = 0;
   lw->list.items = NULL;
   lw->list.LastItem = 0;
@@ -3316,6 +3672,7 @@ static void ClearSelectedPositions(XmListWidget lw)
 {
   if (!(lw->list.selectedPositions && lw->list.selectedPositionCount))
     return;
+  SelectionListsChanged(lw);
   XtFree((char *)lw->list.selectedPositions);
   lw->list.selectedPositionCount = 0;
   lw->list.selectedPositions = NULL;
@@ -3332,6 +3689,7 @@ static void ClearSelectedList(XmListWidget lw)
   int i;
   if (!(lw->list.selectedItems && lw->list.selectedItemCount))
     return;
+  SelectionListsChanged(lw);
   for (i = 0; i < lw->list.selectedItemCount; i++)
     XmStringFree(lw->list.selectedItems[i]);
   XtFree((char *)lw->list.selectedItems);
@@ -3352,6 +3710,7 @@ static void BuildSelectedList(XmListWidget lw, Boolean commit)
 {
   int i, j, count;
   Boolean sel;
+  SelectionListsChanged(lw);
   count = lw->list.itemCount;
   for (i = 0, j = 0; i < count; i++) {
     sel = lw->list.InternalList[i]->selected;
@@ -3388,6 +3747,7 @@ static void BuildSelectedPositions(XmListWidget lw, int count)
   int pos;
   int nsel = count;
   int nitems = lw->list.itemCount;
+  SelectionListsChanged(lw);
   /* Callers that count changes to the selection can come out below zero
    * when the count they started from was stale: count afresh then. */
   if (nsel < 0) {
@@ -3514,6 +3874,7 @@ static void UpdateSelection(XmListWidget lw)
     lw->list.selectedPositions = NULL;
     XtFree((char *)positions);
   }
+  ListPriv(lw)->sel_valid = FALSE;
 }
 
 /***************************************************************************
@@ -6803,21 +7164,32 @@ static void APIReplaceItems(
   Boolean reset_height = FALSE;
   Boolean replaced_first = FALSE;
   int nsel = lw->list.selectedPositionCount;
+  int *matches, nmatches, k;
+  unsigned int hash = 0;
+  Boolean hashed;
   if ((old_items == NULL) || (new_items == NULL) || (lw->list.items == NULL) || (item_count == 0))
     return;
+  matches = (int *)_XmMallocArray(lw->list.itemCount, sizeof(int));
   for (i = 0; i < item_count; i++) {
-    for (j = 1; j <= lw->list.itemCount; j++) {
-      if (XmStringCompare(lw->list.items[j - 1], old_items[i])) {
-        if (j <= (lw->list.top_position + lw->list.visibleItemCount))
-          redraw = TRUE;
-        replaced_first |= (j == 1);
-        reset_width |= (lw->list.InternalList[j - 1]->width == old_max_width);
-        reset_height |= (lw->list.InternalList[j - 1]->height == old_max_height);
-        ReplaceItem(lw, new_items[i], j);
-        nsel += ReplaceInternalElement(lw, j, select);
-      }
+    /* Find the matches first: replacing them changes the index. */
+    nmatches = 0;
+    _XmProcessLock();
+    hashed = StartFind(lw, old_items[i], &hash);
+    for (k = -1; (k = FindItem(lw, old_items[i], hashed, hash, k)) >= 0;)
+      matches[nmatches++] = k + 1;
+    _XmProcessUnlock();
+    for (k = 0; k < nmatches; k++) {
+      j = matches[k];
+      if (j <= (lw->list.top_position + lw->list.visibleItemCount))
+        redraw = TRUE;
+      replaced_first |= (j == 1);
+      reset_width |= (lw->list.InternalList[j - 1]->width == old_max_width);
+      reset_height |= (lw->list.InternalList[j - 1]->height == old_max_height);
+      ReplaceItem(lw, new_items[i], j);
+      nsel += ReplaceInternalElement(lw, j, select);
     }
   }
+  XtFree((char *)matches);
   if (select || (nsel != lw->list.selectedPositionCount))
     UpdateSelectedPositions(lw, nsel);
   reset_width &= (old_max_width == lw->list.MaxWidth);
@@ -7535,6 +7907,8 @@ Boolean XmListGetMatchPos(Widget w, XmString item, int **pos_list, int *pos_coun
   XmListWidget lw = (XmListWidget)w;
   int i, *pos;
   int j;
+  unsigned int hash = 0;
+  Boolean hashed;
   _XmWidgetToAppContext(w);
   /* CR 7648: Be friendly and initialize the out parameters. */
   *pos_list = NULL;
@@ -7547,10 +7921,9 @@ Boolean XmListGetMatchPos(Widget w, XmString item, int **pos_list, int *pos_coun
   pos = (int *)_XmMallocArray(lw->list.itemCount, sizeof(int));
   j = 0;
   _XmProcessLock();
-  for (i = 0; i < lw->list.itemCount; i++) {
-    if (ItemsMatch(lw->list.items[i], item))
-      pos[j++] = (i + 1);
-  }
+  hashed = StartFind(lw, item, &hash);
+  for (i = -1; (i = FindItem(lw, item, hashed, hash, i)) >= 0;)
+    pos[j++] = (i + 1);
   _XmProcessUnlock();
   if (j == 0) {
     XtFree((char *)pos);
