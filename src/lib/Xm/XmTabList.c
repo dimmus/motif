@@ -56,11 +56,11 @@ static char rcsid[] = "$TOG: XmTabList.c /main/9 1999/04/27 17:49:59 samborn $"
 static XmTab GetNthTab(XmTabList tl, int pos, XmTab cur_tab, int cur_pos)
 {
   XmTab prev_tab;
-  unsigned int count;
+  int count;
   int i;
   if (pos == 0)
     return (_XmTabLStart(tl));
-  count = _XmTabLCount(tl);
+  count = (int)_XmTabLCount(tl);
   if (abs(pos) >= count) {
     if (pos > 0)
       return (_XmTabPrev(_XmTabLStart(tl)));
