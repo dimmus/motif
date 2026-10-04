@@ -230,5 +230,7 @@ if(WITH_COMPILER_CODE_COVERAGE)
         COMMENT "Running the tests and reporting libXm coverage")
 endif()
 
-# Benchmarks: built and run only by the "bench" target, never by CTest.
+# Benchmarks and the layout A/B harness: built only by the "bench" and
+# "ab" targets, never by CTest.
 add_subdirectory(bench)
+add_subdirectory(ab)
