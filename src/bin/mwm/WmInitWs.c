@@ -387,7 +387,7 @@ MappingEventHandler(
 
 /******************************<->*************************************
  *
- *  InitWmGlobal (argc, argv, environ)
+ *  InitWmGlobal (argc, argv, envp)
  *
  *
  *  Description:
@@ -401,7 +401,7 @@ MappingEventHandler(
  *
  *  argv = window manager command line arguments
  *
- *  environ = window manager environment
+ *  envp = window manager environment
  *
  *
  *  Outputs:
@@ -410,7 +410,7 @@ MappingEventHandler(
  *
  *************************************<->***********************************/
 
-void InitWmGlobal (int argc, char *argv [], char *environ [])
+void InitWmGlobal (int argc, char *argv [], char *envp [])
 {
     XSetWindowAttributes sAttributes;
     int scr;
@@ -454,7 +454,7 @@ void InitWmGlobal (int argc, char *argv [], char *environ [])
     savedArgc = argc;
     CopyArgv (argc, argv);
 
-    wmGD.environ = environ;
+    wmGD.environ = envp;
 
 #ifdef WSM
     wmGD.pWmPB = _DtWmParseNewBuf();

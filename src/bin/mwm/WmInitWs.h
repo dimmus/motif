@@ -24,7 +24,7 @@
  * Motif Release 1.2.2
 */
 
-extern void InitWmGlobal (int argc, char *argv [], char *environ []);
+extern void InitWmGlobal (int argc, char *argv [], char *envp []);
 extern void InitWmScreen (WmScreenData *pSD, int sNum);
 extern void InitWmWorkspace (WmWorkspaceData *pWS, WmScreenData *pSD);
 extern void ProcessMotifWmInfo (Window rootWindowOfScreen);
