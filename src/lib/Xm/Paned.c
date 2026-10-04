@@ -42,6 +42,10 @@ typedef enum {
 #define BLOCK 10
 #define LARGE_INC ("LargeIncr")
 #define XmNisAPane "isAPane"
+/* The end of the managed panes; the array is NULL until there are any. */
+#define PanesEnd(pw) \
+  (XmPaned_num_panes(pw) != 0 ? XmPaned_managed_children(pw) + XmPaned_num_panes(pw) \
+                              : XmPaned_managed_children(pw))
 /************************************************************
  *       GLOBAL DECLARATIONS
  ************************************************************/
@@ -858,7 +862,7 @@ static void GetPrefSizes(XmPanedWidget pw, Dimension *on_size, Dimension *off_si
     else
       sash_size = XmPaned_sash_width(pw);
     for (childP = XmPaned_managed_children(pw);
-         childP < (XmPaned_managed_children(pw) + XmPaned_num_panes(pw));
+         childP < PanesEnd(pw);
          childP++)
     {
       Pane pane = PaneInfo(*childP);
@@ -885,7 +889,7 @@ static void GetPrefSizes(XmPanedWidget pw, Dimension *on_size, Dimension *off_si
   if (off_size != NULL) {
     sizeused = 1;
     for (childP = XmPaned_managed_children(pw);
-         childP < XmPaned_managed_children(pw) + XmPaned_num_panes(pw);
+         childP < PanesEnd(pw);
          childP++)
     {
       Pane pane = PaneInfo(*childP);
@@ -966,7 +970,7 @@ static Boolean RefigureLocations(XmPanedWidget pw, int paneindex, Direction dir)
   else
     sash_size = XmPaned_sash_width(pw);
   for (childP = XmPaned_managed_children(pw);
-       childP < XmPaned_managed_children(pw) + XmPaned_num_panes(pw);
+       childP < PanesEnd(pw);
        childP++)
   {
     if (LayoutIsRtoLM(pw) && !(IsVert(pw))) {
@@ -1011,7 +1015,7 @@ static void CommitNewLocations(XmPanedWidget pw, Widget no_resize_child)
     sash_size = XmPaned_sash_width(pw);
   }
   for (childP = XmPaned_managed_children(pw);
-       childP < XmPaned_managed_children(pw) + XmPaned_num_panes(pw);
+       childP < PanesEnd(pw);
        childP++)
   {
     Pane pane = PaneInfo(*childP);
@@ -1190,7 +1194,7 @@ static void _DrawTrackLines(XmPanedWidget pw, Boolean erase)
   else
     sash_size = XmPaned_sash_width(pw);
   for (childP = XmPaned_managed_children(pw);
-       childP < XmPaned_managed_children(pw) + XmPaned_num_panes(pw);
+       childP < PanesEnd(pw);
        childP++)
   {
     pane = PaneInfo(*childP);
@@ -1269,7 +1273,7 @@ static void StartSashAdjustment(XmPanedWidget pw, Widget sash)
   Widget *childP;
   XmPaned_repane_status(pw) = BEGAN_ADJUST;
   for (childP = XmPaned_managed_children(pw);
-       childP < XmPaned_managed_children(pw) + XmPaned_num_panes(pw);
+       childP < PanesEnd(pw);
        childP++)
   {
     PaneInfo(*childP)->olddelta = NO_DELTA;
@@ -1358,7 +1362,7 @@ static void ProcessKeyEvent(XtPointer client_data, XtIntervalId *id)
    */
   childP = XmPaned_managed_children(pw) + PaneIndex(sash);
   for (childP = XmPaned_managed_children(pw);
-       childP < XmPaned_managed_children(pw) + XmPaned_num_panes(pw);
+       childP < PanesEnd(pw);
        childP++)
   {
     PaneInfo(*childP)->olddelta = NO_DELTA;
@@ -1665,7 +1669,7 @@ static void SetChildrenPrefSizes(XmPanedWidget pw,
   Boolean vert = IsVert(pw);
   XtWidgetGeometry request, reply;
   for (childP = XmPaned_managed_children(pw);
-       childP < XmPaned_managed_children(pw) + XmPaned_num_panes(pw);
+       childP < PanesEnd(pw);
        childP++)
   {
     Pane pane = PaneInfo(*childP);
@@ -2007,7 +2011,7 @@ static void Realize(Widget w, Mask *valueMask, XSetWindowAttributes *attributes)
    * their sashs.
    */
   for (childP = XmPaned_managed_children(pw);
-       childP < XmPaned_managed_children(pw) + XmPaned_num_panes(pw);
+       childP < PanesEnd(pw);
        childP++)
   {
     XtRealizeWidget(*childP);
@@ -2279,7 +2283,7 @@ static Boolean SetValues(Widget old, Widget request, Widget set, ArgList args, C
       /* This should be more than enough space */
       sep_children = (WidgetList)_XmMallocArray(num_panes, sizeof(Widget));
       for (childP = XmPaned_managed_children(set_pw);
-           childP < XmPaned_managed_children(set_pw) + XmPaned_num_panes(set_pw);
+           childP < PanesEnd(set_pw);
            childP++)
       {
         CreateSeparator(*childP);
@@ -2292,7 +2296,7 @@ static Boolean SetValues(Widget old, Widget request, Widget set, ArgList args, C
     }
     else {
       for (childP = XmPaned_managed_children(set_pw);
-           childP < XmPaned_managed_children(set_pw) + XmPaned_num_panes(set_pw);
+           childP < PanesEnd(set_pw);
            childP++)
       {
         Pane pane = PaneInfo(*childP);
@@ -2345,7 +2349,7 @@ static Boolean SetValues(Widget old, Widget request, Widget set, ArgList args, C
   }
   if (num_sargs != 0) {
     for (childP = XmPaned_managed_children(set_pw);
-         childP < XmPaned_managed_children(set_pw) + XmPaned_num_panes(set_pw);
+         childP < PanesEnd(set_pw);
          childP++)
       if (HasSash(*childP))
         XtSetValues(PaneInfo(*childP)->sash, sargs, num_sargs);
