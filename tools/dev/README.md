@@ -47,16 +47,19 @@ supported OS.
 - `libXp`, for printing support (`WITH_PRINTING`); missing on newer
   distributions, which the script handles
 - `Xvfb` and `xvfb-run`, to run the X11 test suites without a display
+- `xfonts`, the core X fonts those suites draw with (`xfonts-base` on
+  Debian and Ubuntu, `xorg-x11-fonts-misc` on Fedora, `xorg-fonts-misc`
+  on Arch Linux, `font-misc-misc` on Alpine and Void,
+  `xorg-fonts-miscbitmaps` on FreeBSD)
 - `Xephyr`, a nested X server, used by the mwm test and to watch or
   debug the tests in a window
 - `xdotool`, which the Text and mwm tests use to drive real input
 - `abidiff` (libabigail), for `tools/dev/env/ci/abi-check.sh`
 
-Optional dependencies that are not packaged for an OS are skipped.  The
-script does not install the core X fonts that the X11 test suites use
-(`xfonts-base` on Debian and Ubuntu, `xorg-x11-fonts-misc` on Fedora,
-`xorg-fonts-misc` on Arch Linux, `font-misc-misc` on Alpine);
-`tools/dev/env/ci/deps.sh` installs the complete set CI uses.
+Optional dependencies that are not packaged for an OS are skipped; the
+core X fonts have no mapping for OpenIndiana and OmniOS yet.
+`tools/dev/env/ci/deps.sh` installs the complete set CI uses, including
+both compilers and the LLVM tools.
 
 ### Usage
 

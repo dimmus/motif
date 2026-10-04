@@ -233,10 +233,11 @@ install_packages() {
 # Required: needed to build Motif.
 REQUIRED_DEPS="cmake ninja pkg-config gcc make flex bison libX11 libXt libXmu libXext libXpm libXft libjpeg libpng check"
 # Optional: libXp for printing support; Xvfb and xvfb-run to run the X test
-# suites without a display; Xephyr (a nested X server) to watch or debug them
-# in a window; xdotool to drive widgets and mwm from tests; abidiff
-# (libabigail) for ABI compatibility checks.
-OPTIONAL_DEPS="libXp Xvfb xvfb-run Xephyr xdotool abidiff"
+# suites without a display, and xfonts, the core X fonts those suites draw
+# with; Xephyr (a nested X server) to watch or debug them in a window;
+# xdotool to drive widgets and mwm from tests; abidiff (libabigail) for ABI
+# compatibility checks.
+OPTIONAL_DEPS="libXp Xvfb xvfb-run xfonts Xephyr xdotool abidiff"
 
 # Function to get package names for current OS.
 # Prints nothing when the dependency is not packaged for this OS.
@@ -265,6 +266,7 @@ get_package_names() {
                 check) echo "check" ;;
                 Xvfb) echo "xvfb" ;;
                 xvfb-run) echo "xvfb" ;;
+                xfonts) echo "xfonts-base" ;;
                 abidiff) echo "abigail-tools" ;;
                 Xephyr) echo "xserver-xephyr" ;;
                 xdotool) echo "xdotool" ;;
@@ -292,6 +294,7 @@ get_package_names() {
                 check) echo "check" ;;
                 Xvfb) echo "xorg-server-xvfb" ;;
                 xvfb-run) echo "xorg-server-xvfb" ;;
+                xfonts) echo "xorg-fonts-misc" ;;
                 abidiff) echo "libabigail" ;;
                 Xephyr) echo "xorg-server-xephyr" ;;
                 xdotool) echo "xdotool" ;;
@@ -319,6 +322,7 @@ get_package_names() {
                 check) echo "check-devel" ;;
                 Xvfb) echo "xorg-x11-server-Xvfb" ;;
                 xvfb-run) echo "xorg-x11-server-Xvfb" ;;
+                xfonts) echo "xorg-x11-fonts-misc" ;;
                 abidiff) echo "libabigail" ;;
                 Xephyr) echo "xorg-x11-server-Xephyr" ;;
                 xdotool) echo "xdotool" ;;
@@ -346,6 +350,7 @@ get_package_names() {
                 check) echo "developer/check" ;;
                 Xvfb) echo "x11/server/xvfb" ;;
                 xvfb-run) echo "" ;;
+                xfonts) echo "" ;;
                 abidiff) echo "" ;;
                 Xephyr) echo "x11/server/xephyr" ;;
                 xdotool) echo "" ;;
@@ -373,6 +378,7 @@ get_package_names() {
                 check) echo "check-dev" ;;
                 Xvfb) echo "xvfb" ;;
                 xvfb-run) echo "xvfb-run" ;;
+                xfonts) echo "font-misc-misc" ;;
                 abidiff) echo "libabigail-tools" ;;
                 Xephyr) echo "xorg-server-xephyr" ;;
                 xdotool) echo "xdotool" ;;
@@ -400,6 +406,7 @@ get_package_names() {
                 check) echo "check-devel" ;;
                 Xvfb) echo "xorg-server-xvfb" ;;
                 xvfb-run) echo "" ;;
+                xfonts) echo "font-misc-misc" ;;
                 abidiff) echo "libabigail-tools" ;;
                 Xephyr) echo "xorg-server-xephyr" ;;
                 xdotool) echo "xdotool" ;;
@@ -427,6 +434,7 @@ get_package_names() {
                 check) echo "check" ;;
                 Xvfb) echo "xorg-vfbserver" ;;
                 xvfb-run) echo "" ;;
+                xfonts) echo "xorg-fonts-miscbitmaps" ;;
                 abidiff) echo "libabigail" ;;
                 Xephyr) echo "xephyr" ;;
                 xdotool) echo "xdotool" ;;
