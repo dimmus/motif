@@ -8,6 +8,9 @@
 # -DMOTIF_WIDGET_CLASSES_OUT=... and -DMOTIF_WIDGET_CLASSES_EXCLUDE=...
 # (header names to leave out, separated by commas).
 
+# A script run with -P starts without policies; if(IN_LIST) needs CMP0057.
+cmake_minimum_required(VERSION 3.16)
+
 file(GLOB _headers ${MOTIF_XM_SOURCE_DIR}/*.h)
 list(SORT _headers)
 string(REPLACE "," ";" MOTIF_WIDGET_CLASSES_EXCLUDE "${MOTIF_WIDGET_CLASSES_EXCLUDE}")
