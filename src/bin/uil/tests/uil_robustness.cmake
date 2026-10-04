@@ -149,6 +149,15 @@ file(WRITE "${WORK_DIR}/undeclared.uil"
 uil_case(undeclared_operand 1 "value nosuch2 was never defined"
          FORBID "circularly defined" ARGS -o a.uid undeclared.uil)
 
+# "^" used to compile as "|".
+file(WRITE "${WORK_DIR}/xor.uil" "module m\nvalue a : exported 6 ^ 3;\nend module;\n")
+uil_case(xor_operator 0 "" ARGS -o a.uid -m -v xor.lis xor.uil)
+file(READ "${WORK_DIR}/xor.lis" lis)
+if(NOT lis MATCHES "\n +5\n" OR lis MATCHES "\n +7\n")
+  message(STATUS "FAIL xor_operator: 6 ^ 3 is not 5 in the listing\n${lis}")
+  math(EXPR failures "${failures} + 1")
+endif()
+
 # Environment and database names.
 uil_case(lang_codeset 1 "unknown character set"
          ENV LANG=en_US.${x400} ARGS -o a.uid inc_ok.uil)
