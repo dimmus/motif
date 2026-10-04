@@ -447,6 +447,7 @@ Urm__SwapRGMWidgetRecord(RGMWidgetRecordPtr	widget_rec)
 	    case MrmRtypeSingleFloat:
 	      swapbytes( arg->arg_val.datum.ival );
 	      _MrmOSIEEEFloatToHost((float *) &(arg->arg_val.datum.ival));
+	      break;
 	    default:
 	      swapbytes( arg->arg_val.datum.offset );
 	      break;
