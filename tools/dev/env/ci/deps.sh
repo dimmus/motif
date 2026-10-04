@@ -30,8 +30,15 @@ case "$os:$id" in
   Linux:debian|Linux:ubuntu)
     export DEBIAN_FRONTEND=noninteractive
     $SUDO apt-get update -qq
+    # clang's sanitizer runtimes are a separate package, not built for
+    # every architecture (s390x has none).
+    rt=
+    case $(apt-cache policy libclang-rt-dev | sed -n 's/^ *Candidate: //p') in
+      ''|'(none)') ;;
+      *) rt=libclang-rt-dev ;;
+    esac
     $SUDO apt-get install -y -qq --no-install-recommends \
-      build-essential gcc g++ clang libclang-rt-dev lld llvm cmake ninja-build pkg-config ccache \
+      build-essential gcc g++ clang $rt lld llvm cmake ninja-build pkg-config ccache \
       flex libfl-dev bison file ca-certificates \
       libx11-dev libxt-dev libxmu-dev libxext-dev libxft-dev libxpm-dev \
       libxrender-dev libfontconfig-dev libfreetype-dev libpng-dev libjpeg-dev \
