@@ -394,13 +394,6 @@ ManageWindow (WmScreenData *pSD, Window clientWindow, long manageFlags)
      *  Handle case of transients that derive from embedded clients.
      *  !!!!
      */
-#if 0
-    if (pCD->transientLeader && pCD->transientLeader->pAccessPanel)
-    {
-        pCD->transientLeader =
-	    pCD->transientLeader->pAccessPanel->pCD_accessPanel;
-    }
-#endif
 #endif /* PANELIST */
 #ifdef WSM
     if (pCD->inputMode == MWM_INPUT_SYSTEM_MODAL)

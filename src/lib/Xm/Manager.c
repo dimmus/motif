@@ -1052,20 +1052,8 @@ static void ManagerLeave(Widget wid,
 static void AddMotionHandlers(XmManagerWidget mw)
 {
   mw->manager.event_handler_added = True;
-#if 1
   /* for tool tips */
   XtAddEventHandler((Widget)mw, PointerMotionMask, False, ManagerMotion, NULL);
-#else
-  /* The first version in this #ifdef is superior because it
-      involves lower network traffic,  but causes problems in
-      VTS and automation (CR 8943).  We can reexamine this later */
-  if (_XmGetFocusPolicy((Widget)mw) != XmEXPLICIT) {
-    XtAddEventHandler((Widget)mw, PointerMotionMask, False, ManagerMotion, NULL);
-  }
-  else {
-    XtAddEventHandler((Widget)mw, ButtonMotionMask, False, ManagerMotion, NULL);
-  }
-#endif
   XtAddEventHandler((Widget)mw, EnterWindowMask, False, ManagerEnter, NULL);
   XtAddEventHandler((Widget)mw, LeaveWindowMask, False, ManagerLeave, NULL);
 }

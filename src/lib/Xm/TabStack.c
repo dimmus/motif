@@ -1677,59 +1677,7 @@ static XtGeometryResult QueryGeometry(Widget widget,
   }
   return (XtGeometryNo);
 }
-#if 0
-#  define XiReturn(i, r) \
-    printf("%d: RESULT: XtGeometry", i); \
-    switch (r) { \
-      case XtGeometryYes: \
-      default: \
-        printf("Yes"); \
-        break; \
-      case XtGeometryNo: \
-        printf("No"); \
-        break; \
-      case XtGeometryAlmost: \
-        printf("Almost"); \
-        break; \
-      case XtGeometryDone: \
-        printf("Done"); \
-        break; \
-    } \
-    if (request->request_mode & XtCWQueryOnly) \
-      printf("(QUERY)\n"); \
-    else \
-      printf("\n"); \
-    printf("  WIDGET: %s\n", XtName(widget)); \
-    printf("  X      : "); \
-    if (allowed->request_mode & CWX) \
-      printf("%d\n", allowed->x); \
-    else \
-      printf("N/A\n"); \
-    printf("  Y      : "); \
-    if (allowed->request_mode & CWY) \
-      printf("%d\n", allowed->y); \
-    else \
-      printf("N/A\n"); \
-    printf("  WIDTH  : "); \
-    if (allowed->request_mode & CWWidth) \
-      printf("%d\n", allowed->width); \
-    else \
-      printf("N/A\n"); \
-    printf("  HEIGHT : "); \
-    if (allowed->request_mode & CWHeight) \
-      printf("%d\n", allowed->height); \
-    else \
-      printf("N/A\n"); \
-    printf("  BORDER : "); \
-    if (allowed->request_mode & CWBorderWidth) \
-      printf("%d\n", allowed->border_width); \
-    else \
-      printf("N/A\n"); \
-    printf("\n"); \
-    return (r);
-#else
 #  define XiReturn(i, r) return (r)
-#endif
 static XtGeometryResult GeometryNo(XmTabStackWidget tab,
                                    Widget widget,
                                    XtWidgetGeometry *request,
@@ -1790,29 +1738,6 @@ static XtGeometryResult GeometryManager(Widget widget,
   Dimension child_save_width, child_save_height;
   XtWidgetGeometry want, got;
   XRectangle box, kids;
-#if 0
-    printf("REQUEST: ");
-    if( request->request_mode & XtCWQueryOnly ) printf("QUERY");
-    printf("\n");
-    printf("  WIDGET: %s\n", XtName(widget));
-    printf("  X      : ");
-    if( request->request_mode & CWX ) printf("%d\n", request->x);
-    else printf("N/A\n");
-    printf("  Y      : ");
-    if( request->request_mode & CWY ) printf("%d\n", request->y);
-    else printf("N/A\n");
-    printf("  WIDTH  : ");
-    if( request->request_mode & CWWidth ) printf("%d\n", request->width);
-    else printf("N/A\n");
-    printf("  HEIGHT : ");
-    if( request->request_mode & CWHeight ) printf("%d\n", request->height);
-    else printf("N/A\n");
-    printf("  BORDER : ");
-    if( request->request_mode & CWBorderWidth )
-	printf("%d\n", request->border_width);
-    else printf("N/A\n");
-    printf("\n");
-#endif
   if (XmTabStack__set_tab_list(tab) && (request->request_mode & CWBorderWidth)) {
     XmTabStack__set_tab_list(tab) = False;
     XtVaSetValues(XmTabStack_tab_box(tab), XmNtabList, XmTabStack__tab_list(tab), NULL);

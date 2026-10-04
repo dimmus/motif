@@ -784,15 +784,6 @@ static void ConstraintInitialize(Widget req,
         for (valLoop = 0; valLoop < reqC->num_values; valLoop++)
           newC->values[valLoop] = XmStringCopy(reqC->values[valLoop]);
     }
-#if 0
-    /*
-     * This is ifdef'ed out to be BC with DtSpinBox warning messages.
-     */
-    if (newC->values == NULL || newC->num_values == 0)
-      if (ChildIsTraversable(new_w))
-	if (XmeTraitGet((XtPointer)XtClass(new_w), XmQTaccessTextual) != NULL)
-          XmeWarning(new_w, BAD_SPIN_VALUES);
-#endif
   }
   if (newC->position_type != XmPOSITION_VALUE && newC->position_type != XmPOSITION_INDEX) {
     newC->position_type = XmPOSITION_VALUE;
@@ -892,11 +883,6 @@ static Boolean ConstraintSetValues(Widget old,
     error = ValidatePositionValue(newC, &newC->position);
     if (error)
       XmeWarning(new_w, error);
-#if 0
-      if (newC->values == NULL || newC->num_values == 0)
-	if (XmeTraitGet((XtPointer)XtClass(new_w), XmQTaccessTextual) != NULL)
-	  XmeWarning(new_w, BAD_SPIN_VALUES);
-#endif
     if ((newC->position != oldC->position) || (newC->values != oldC->values) ||
         (newC->num_values < oldC->num_values && newC->position > newC->num_values))
       redisplayText = True;

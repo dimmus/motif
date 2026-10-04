@@ -715,11 +715,6 @@ static Boolean SetValues(Widget ow,
       old_blank = old->selection_box.list_items[new_count - 2];
       if (XmStringCompare(new_error, old_error) && XmStringCompare(new_blank, old_blank)) {
         new_w->command.error = FALSE;
-#if 0
-                XmListDeletePos(SB_List(old), 0);   /* Delete error message.*/
-                XmListDeletePos(SB_List(old), 0) ;   /* Delete blank line.*/
-                old->command.error = FALSE ;
-#endif
       }
     }
     else

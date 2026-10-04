@@ -911,12 +911,6 @@ static xmTargetsTable CreateDefaultTargetsTable(Display *display)
  * happens, and there is no easy way to fix it, change entries[0].targets to
  * nullTargets, but leave entries[0].numTargets to 0.
  */
-#if 0
-    targetsTable->entries[0].numTargets = XtNumber(nullTargets);
-    size = sizeof(Atom) * targetsTable->entries[0].numTargets;
-    targetsTable->entries[0].targets = (Atom*) XtMalloc(size);
-    memcpy(targetsTable->entries[0].targets, nullTargets, size);
-#endif
   targetsTable->entries[0].numTargets = _XmDefaultNumImportTargets;
   targetsTable->entries[0].targets = (Atom *)_XmDefaultImportTargets;
   targetsTable->entries[1].numTargets = XtNumber(stringTargets);

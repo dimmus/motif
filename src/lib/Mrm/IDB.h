@@ -61,9 +61,6 @@ typedef union {
 /*
  * A data pointer as a passed-by-value reference
  */
-#if 0
-typedef unsigned		IDBDataHandle ;
-#endif
 
 typedef struct {
   IDBRecordNumber	rec_no ;		  /* record number */

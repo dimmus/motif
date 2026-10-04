@@ -4110,20 +4110,6 @@ ProcessMwmHints (ClientData *pCD)
 		/* client indicating applicable functions */
 		pCD->clientFunctions &= pHints->functions;
 	    }
-#if 0
-	    if (!(pCD->clientFlags & GOT_DT_WM_HINTS) &&
-		!pHints->functions)
-	    {
-		/*
-		 * !!! Backward compatibility heurisitic !!!
-		 *
-		 * If client doesn't want any functions and
-		 * no DT_WM_HINTS specified, then remove
-		 * workspace functions.
-		 */
-		pCD->dtwmFunctions &= ~DtWM_FUNCTION_OCCUPY_WS;
-	    }
-#endif
 	    /* !!! check for some minimal level of functionality? !!! */
 	}
 

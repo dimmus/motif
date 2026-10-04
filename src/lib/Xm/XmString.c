@@ -4767,7 +4767,6 @@ _XmStringEntry _XmStringEntryCopy(_XmStringEntry entry)
 /** Begin macros converted to functions. **/
 XmStringTag _XmEntryTag(_XmStringEntry entry)
 {
-#if 1
   XmStringTag rettag;
   if (_XmEntryOptimized(entry)) {
     if (_XmEntryTagIndex(entry) != TAG_INDEX_UNSET)
@@ -4778,12 +4777,6 @@ XmStringTag _XmEntryTag(_XmStringEntry entry)
   else
     rettag = _XmUnoptSegTag(entry);
   return rettag;
-#else
-  return (_XmEntryOptimized(entry) ? (_XmEntryTagIndex(entry) != TAG_INDEX_UNSET ?
-                                          _XmStringIndexGetTag(_XmEntryTagIndex(entry)) :
-                                          NULL) :
-                                     _XmUnoptSegTag(entry));
-#endif
 }
 
 void _XmEntryTagSet(_XmStringEntry entry, XmStringTag tag)

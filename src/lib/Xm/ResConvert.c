@@ -1430,12 +1430,6 @@ XmFontList XmeGetDefaultRenderTable(Widget w, unsigned char fontListType)
   if (fontlist) {
     return (fontlist);
   }
-#if 0
-    else if (sFontList) {
-	printf("Reusing sFontList\n");
-	return(sFontList);
-    }
-#endif
   _XmProcessLock();
   fontlist = DefaultSystemFontList(XtDisplay(origw), (XmFontList)NULL);
   if (!fontlist) {

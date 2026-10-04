@@ -3240,11 +3240,7 @@ AdjustTearOffControl (Widget cascade,
 
 	/* Add a callback that will clear menuActive when this cascade
 	   is unmapped. */
-#if 0
-	XtAddCallback (submenu, XmNunmapCallback,
-#else
 	XtAddCallback (XtParent(submenu), XmNpopdownCallback,
-#endif
 		       UnmapPulldownCallback,
 		       (XtPointer) NULL);
     }
