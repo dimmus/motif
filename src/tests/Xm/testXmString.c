@@ -1442,3 +1442,112 @@ void xmstring_ct_suite(SRunner *runner)
 
 	srunner_add_suite(runner, s);
 }
+
+/*
+ * Extents, which need fonts and so a display.
+ */
+static Widget ext_shell;
+
+static void _init_xt_extent(void)
+{
+	ext_shell = init_xt("check_XmStringExtent");
+}
+
+static void _uninit_xt_extent(void)
+{
+	ext_shell = NULL;
+	uninit_xt();
+}
+
+/* A render table of one rendition, with no font if font is NULL */
+static XmRenderTable make_rt(const char *tag, const char *font,
+			     XmFontType type)
+{
+	XmRendition rend;
+	XmRenderTable rt;
+	Arg args[2];
+
+	XtSetArg(args[0], XmNfontName, font);
+	XtSetArg(args[1], XmNfontType, type);
+	rend = XmRenditionCreate(ext_shell, (XmStringTag)tag, args,
+				 font ? 2 : 0);
+	rt = XmRenderTableAddRenditions(NULL, &rend, 1, XmMERGE_NEW);
+	XmRenditionFree(rend);
+	return rt;
+}
+
+static void quiet_warning(String msg)
+{
+	(void)msg;
+}
+
+/* Leave garbage where the next call's locals will be */
+static void __attribute__((noinline)) dirty_stack(void)
+{
+	volatile unsigned char junk[8192];
+	size_t i;
+
+	for (i = 0; i < sizeof junk; i++)
+		junk[i] = 0x5a;
+}
+
+/*
+ * With no font for an optimized string, XmStringBaseline returned the
+ * ascent OptLineMetrics never set: whatever was on the stack.
+ */
+START_TEST(baseline_without_font)
+{
+	XmRenderTable rt;
+	XmString s = XmStringCreateLocalized("abc");
+	Dimension w = 1, h = 1;
+	int i;
+
+	ck_assert(_XmStrOptimized(s));
+	XtAppSetWarningHandler(app, quiet_warning);
+	rt = make_rt(XmFONTLIST_DEFAULT_TAG, NULL, XmFONT_IS_FONT);
+	for (i = 0; i < 3; i++) {
+		dirty_stack();
+		ck_assert_uint_eq(XmStringBaseline(rt, s), 0);
+		XmStringExtent(rt, s, &w, &h);
+		ck_assert_uint_eq(w, 0);
+		ck_assert_uint_eq(h, 0);
+	}
+	XmRenderTableFree(rt);
+	XmStringFree(s);
+}
+END_TEST
+
+#ifdef HAVE_LSAN
+/*
+ * XmStringBaseline of a multi-segment string did not free the rendition
+ * tags that measuring its first line collected.
+ */
+START_TEST(baseline_rendition_leak)
+{
+	XmRenderTable rt = make_rt("r1", "fixed", XmFONT_IS_FONT);
+	XmString s = XmStringGenerate("abc\ndef", NULL, XmCHARSET_TEXT, "r1");
+
+	ck_assert(!_XmStrOptimized(s));
+	ck_assert_uint_gt(XmStringBaseline(rt, s), 0);
+	XmStringFree(s);
+	XmRenderTableFree(rt);
+	ck_assert_msg(!leaks_found(), "XmStringBaseline leaked");
+}
+END_TEST
+#endif
+
+void xmstring_extent_suite(SRunner *runner)
+{
+	TCase *t;
+	Suite *s = suite_create("XmStringExtent");
+
+	t = tcase_create("Extents");
+	tcase_add_test(t, baseline_without_font);
+#ifdef HAVE_LSAN
+	tcase_add_test(t, baseline_rendition_leak);
+#endif
+	tcase_add_checked_fixture(t, _init_xt_extent, _uninit_xt_extent);
+	suite_add_tcase(s, t);
+
+	srunner_add_suite(runner, s);
+}

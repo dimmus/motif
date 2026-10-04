@@ -1855,7 +1855,8 @@ static Boolean _is_asn1(unsigned char *string)
  */
 static Dimension OptLineAscender(XmRenderTable f, _XmStringOpt opt)
 {
-  Dimension width, height, ascent, descent;
+  /* OptLineMetrics leaves them alone when there is no font */
+  Dimension width = 0, height = 0, ascent = 0, descent = 0;
   OptLineMetrics(f, (_XmString)opt, NULL, NULL, &width, &height, &ascent, &descent);
   return (ascent);
 }
@@ -5854,23 +5855,18 @@ Dimension XmStringBaseline(XmRenderTable rendertable, XmString string)
       line = (_XmStringEntry)&array_seg;
     }
     LineMetrics(line, rendertable, &rend, NULL, XmLEFT_TO_RIGHT, &width, &height, &asc, &desc);
-    if (app) {
-      _XmAppUnlock(app);
-    }
-    else {
-      _XmProcessUnlock();
-    }
-    return (asc);
+    if (_XmRendTags(rend) != NULL)
+      XtFree((char *)_XmRendTags(rend));
+  }
+  else
+    asc = OptLineAscender(rendertable, (_XmStringOpt)string);
+  if (app) {
+    _XmAppUnlock(app);
   }
   else {
-    if (app) {
-      _XmAppUnlock(app);
-    }
-    else {
-      _XmProcessUnlock();
-    }
-    return (OptLineAscender(rendertable, (_XmStringOpt)string));
+    _XmProcessUnlock();
   }
+  return (asc);
 }
 
 void _XmStringGetBaselines(XmRenderTable rendertable,

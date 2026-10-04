@@ -36,6 +36,7 @@ static const struct suite_entry {
 	{ "LogConfig",     log_config_suite,      0 },
 	{ "XmString",      xmstring_suite,        0 },
 	{ "XmStringCT",    xmstring_ct_suite,     1 },
+	{ "XmStringExtent", xmstring_extent_suite, 1 },
 	{ "Widgets",       widgets_suite,         1 },
 	{ "Text",          text_suite,            1 },
 	{ "I18n",          i18n_suite,            0 },

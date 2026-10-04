@@ -38,7 +38,7 @@ set(MOTIF_TEST_SRCS
 )
 
 # Suites that open a display, and suites that do not.
-set(MOTIF_TEST_X_SUITES FontListEntry FontList XmStringCT Widgets Text Layout)
+set(MOTIF_TEST_X_SUITES FontListEntry FontList XmStringCT XmStringExtent Widgets Text Layout)
 set(MOTIF_TEST_SUITES Svg Log LogConfig XmString I18n)
 set(MOTIF_TEST_DEFS "")
 
