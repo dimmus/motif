@@ -2959,27 +2959,24 @@ static void PreeditDraw(XIC xic, XPointer client_data, XIMPreeditDrawCallbackStr
     }
   /* convert text data to char - it may be wchar or char */
   if (insert_length > 0) {
+    mb = _XmMallocArray(insert_length + 1, tw->text.char_size);
+    if (call_data->text->encoding_is_wchar) {
+      size_t n = wcstombs(mb, call_data->text->string.wide_char,
+                          (size_t)insert_length * tw->text.char_size);
+      mb[n == (size_t)-1 ? 0 : n] = '\0';
+    }
+    else {
+      strncpy(mb, call_data->text->string.multi_byte, insert_length * tw->text.char_size);
+      mb[insert_length * tw->text.char_size] = '\0';
+    }
+    /* set TextExtents for preedit data, if unable, punt */
     if (o_data->use_fontset) {
-      if (call_data->text->encoding_is_wchar) {
-        mb = _XmMallocArray(insert_length + 1, tw->text.char_size);
-        (void)wcstombs(mb, call_data->text->string.wide_char, insert_length);
-      }
-      else {
-        mb = _XmMallocArray(insert_length + 1, tw->text.char_size);
-        strncpy(mb, call_data->text->string.multi_byte, insert_length * tw->text.char_size);
-        mb[insert_length * tw->text.char_size] = '\0';
-      }
-      /* set TextExtents for preedit data, if unable, punt */
       escapement = XmbTextExtents((XFontSet)font, mb, strlen(mb), &overall_ink, NULL);
       if (escapement == 0 && overall_ink.width == 0 && strchr(mb, '\t') == 0) {
         XtFree(mb);
         (*tw->text.output->DrawInsertionPoint)(tw, tw->text.cursor_position, on);
         return;
       }
-    }
-    else {
-      (*tw->text.output->DrawInsertionPoint)(tw, tw->text.cursor_position, on);
-      return;
     }
   }
   else {
@@ -3085,6 +3082,8 @@ static void PreeditCaret(XIC xic, XPointer client_data, XIMPreeditCaretCallbackS
   XmTextPosition new_position, start = 0;
   Widget p = (Widget)tw;
   Boolean need_verify;
+  if (!PreUnder(tw))
+    return;
   (*tw->text.output->DrawInsertionPoint)(tw, tw->text.cursor_position, off);
   while (!XtIsShell(p))
     p = XtParent(p);
@@ -3167,11 +3166,6 @@ void _XmTextResetIC(Widget widget)
         ResetUnder(tw);
         return;
       }
-    }
-    else {
-      (*tw->text.output->DrawInsertionPoint)(tw, tw->text.cursor_position, on);
-      ResetUnder(tw);
-      return;
     }
     beginPos = nextPos = XmTextGetCursorPosition(widget);
     if (data->overstrike) {
