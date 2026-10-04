@@ -87,11 +87,11 @@ MessageData _WSMPackReply(
 Display *, int, WSMReply *, unsigned long *
 );
 
-void _WSMUnpackRequest(
+Boolean _WSMUnpackRequest(
 Display *, int, MessageData, unsigned long, WSMRequestType, WSMRequest *
 );
 
-void _WSMUnpackReply(
+Boolean _WSMUnpackReply(
 Display *, int, MessageData, unsigned long, WSMRequestType, WSMReply *
 );
 
