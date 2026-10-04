@@ -459,17 +459,12 @@ String _XmGetDefaultBackgroundColorSpec(Screen *screen)
 }
 
 /*ARGSUSED*/
-void _XmSetDefaultBackgroundColorSpec(Screen *screen, /* unused */
-                                      String new_color_spec)
+void _XmSetDefaultBackgroundColorSpec(Screen *screen,        /* unused */
+                                      String new_color_spec) /* unused */
 {
-  static Boolean app_defined = FALSE;
-  String default_background_color_spec = NULL;
-  if (app_defined) {
-    XtFree(default_background_color_spec);
-  }
-  /* this needs to be set per screen */
-  default_background_color_spec = XtNewString(new_color_spec);
-  app_defined = TRUE;
+  /* Obsolete, and it has no effect: _XmGetDefaultBackgroundColorSpec reads
+     the resource database.  It used to store a copy of new_color_spec in a
+     local variable, which only leaked it. */
 }
 
 /*
