@@ -2879,6 +2879,38 @@ static int operand_is_value(sym_value_entry_type *expr_entry,
 }
 
 /*
+ * Load an operand whose type already is the result type into *data.
+ * The operand is not read in place through a data_value_type pointer:
+ * integer_value is an int and l_integer a long, so on a 64-bit
+ * big-endian machine integer_value overlays the high half of the long
+ * and every integer and boolean operand read as 0.  The operators only
+ * read the numeric members; other operands are left where they are.
+ */
+static data_value_type *load_operand(sym_value_entry_type *entry, int type,
+				     data_value_type *data)
+{
+    switch (type)
+    {
+      case boolean_arg_type:
+      case integer_arg_type:
+      case horizontal_integer_arg_type:
+      case vertical_integer_arg_type:
+	data->integer_value = (int) entry->value.l_integer;
+	return data;
+      case single_float_arg_type:
+	data->single_float_value = entry->value.single_float;
+	return data;
+      case float_arg_type:
+      case horizontal_float_arg_type:
+      case vertical_float_arg_type:
+	data->real_value = entry->value.d_real;
+	return data;
+      default:
+	return (data_value_type *) &entry->value;
+    }
+}
+
+/*
 **++
 **  FUNCTIONAL DESCRIPTION:
 **
@@ -3046,7 +3078,7 @@ sym_value_entry_type *sem_evaluate_value_expr(sym_value_entry_type *value_entry)
 	}
 	else
 	{
-	    op1_ptr = (data_value_type *) &(op1_entry->value);
+	    op1_ptr = load_operand (op1_entry, res_type, &op1_data);
 	}
 
 
@@ -3070,7 +3102,7 @@ sym_value_entry_type *sem_evaluate_value_expr(sym_value_entry_type *value_entry)
 	}
 	else
 	{
-	    op2_ptr = (data_value_type *) &(op2_entry->value);
+	    op2_ptr = load_operand (op2_entry, res_type, &op2_data);
 	}
     }
 

@@ -144,6 +144,10 @@ files fixed a large number of memory-safety bugs.  See
   checked.  `XmTextFieldReplaceWcs` still freed a string literal when its
   argument did not convert to the locale's encoding; that had been fixed
   only in DataField's copy.
+- UIL compiler: on 64-bit big-endian machines (s390x, ppc64) every
+  binary expression on integers or booleans, such as `2 + 3` or
+  `6 ^ 3`, compiled to 0.  The operands were read as an `int` overlaying
+  the high half of a `long`.
 
 ### Tests and CI
 
