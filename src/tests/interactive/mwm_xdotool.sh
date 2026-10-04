@@ -133,22 +133,22 @@ start_client || fail "mwm did not reparent the client"
 echo "managed: client reparented by mwm"
 
 focus_client
-key F2
+key m		# f.minimize
 grep -q '^unmap' "$work/client.log" || fail "f.minimize did not unmap the client"
 echo "f.minimize: ok"
 
-key F3		# f.normalize from the icon
+key n		# f.normalize from the icon
 grep -q 'map$' "$work/client.log" || fail "f.normalize did not remap the client"
 echo "f.normalize: ok"
 
 focus_client
-key F4		# f.maximize
+key x		# f.maximize
 case $(last_client) in
 configure\ 4*|configure\ 3*) echo "f.maximize: ok ($(last_client))" ;;
 *) fail "f.maximize did not resize the client (got '$(last_client)')" ;;
 esac
 
-key F5		# f.normalize back
+key r		# f.normalize back
 case $(last_client) in
 configure\ 120x80*) echo "f.restore: ok" ;;
 *) fail "f.normalize did not restore the client (got '$(last_client)')" ;;
@@ -166,8 +166,8 @@ else
 fi
 # Drive a few functions and a refresh; mwm must not crash.
 [ -n "${cid:-}" ] && focus_client
-key F2
-key F8		# f.refresh, always valid
+key m
+key f		# f.refresh, always valid
 check_mwm_alive "after the hostile client"
 echo "hostile: mwm survived"
 stop "$client_pid" "$mwm_pid"

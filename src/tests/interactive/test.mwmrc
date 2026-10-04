@@ -25,15 +25,19 @@ Menu DefaultWindowMenu
 	"Close"		_C	Alt<Key>F4	f.kill
 }
 
+!! The functions the test drives are on letter keys.  With
+!! xkeyboard-config 2.47 the function keys' CTRL+ALT type lists
+!! map[Alt]= Level1, and xdotool 3.20211022 (Fedora) then types F2 as
+!! Alt+F2; letters have no such entry.
 Keys DefaultKeyBindings
 {
 	<Key>F1		root|icon|window	f.menu DefaultRootMenu
-	<Key>F2		window			f.minimize
-	<Key>F3		icon			f.normalize
-	<Key>F4		window			f.maximize
-	<Key>F5		window			f.normalize
+	<Key>m		window			f.minimize
+	<Key>n		icon			f.normalize
+	<Key>x		window			f.maximize
+	<Key>r		window			f.normalize
 	<Key>F6		window|icon		f.post_wmenu
-	<Key>F8		root|icon|window	f.refresh
+	<Key>f		root|icon|window	f.refresh
 	Shift<Key>F12	root|icon|window	f.quit_mwm
 }
 
