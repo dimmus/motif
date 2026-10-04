@@ -908,7 +908,7 @@ static Boolean SetValues(Widget cw,
  **************************************************************************/
 static void Resize(Widget w)
 {
-  register XmPushButtonWidget tb = (XmPushButtonWidget)w;
+  XmPushButtonWidget tb = (XmPushButtonWidget)w;
   if (Lab_IsPixmap(w) || Lab_IsPixmapAndText(w))
     SetPushButtonSize((XmPushButtonWidget)tb);
   else {
@@ -2382,7 +2382,7 @@ Widget XmCreatePushButton(Widget parent, char *name, ArgList arglist, Cardinal a
 
 Widget XmVaCreatePushButton(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

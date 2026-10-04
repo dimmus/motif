@@ -544,7 +544,7 @@ static void InitializePosthook(Widget req, /* unused */
  ************************************************************************/
 static void ClassPartInitialize(WidgetClass c)
 {
-  register XmLabelWidgetClass wc = (XmLabelWidgetClass)c;
+  XmLabelWidgetClass wc = (XmLabelWidgetClass)c;
   XmLabelWidgetClass super = (XmLabelWidgetClass)wc->core_class.superclass;
   if (wc->label_class.setOverrideCallback == XmInheritSetOverrideCallback)
     wc->label_class.setOverrideCallback = super->label_class.setOverrideCallback;
@@ -1847,7 +1847,7 @@ Widget XmCreateLabel(Widget parent, char *name, Arg *arglist, Cardinal argCount)
 
 Widget XmVaCreateLabel(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

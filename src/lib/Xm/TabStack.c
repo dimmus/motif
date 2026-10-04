@@ -2763,7 +2763,7 @@ Widget XmCreateTabStack(Widget parent, String name, ArgList arg_list, Cardinal a
 
 Widget XmVaCreateTabStack(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

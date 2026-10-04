@@ -91,7 +91,7 @@ int _XmGrabPointer(Widget widget,
                    Cursor cursor,
                    Time time)
 {
-  register int status = 0, retry;
+  int status = 0, retry;
   for (retry = 0; retry < 5; retry++) {
     if ((status = XtGrabPointer(widget,
                                 owner_events,
@@ -115,7 +115,7 @@ int _XmGrabPointer(Widget widget,
 int _XmGrabKeyboard(
     Widget widget, Bool owner_events, int pointer_mode, int keyboard_mode, Time time)
 {
-  register int status = 0, retry;
+  int status = 0, retry;
   for (retry = 0; retry < 5; retry++) {
     if ((status = XtGrabKeyboard(widget, owner_events, pointer_mode, keyboard_mode, time)) ==
         GrabSuccess)
@@ -542,7 +542,7 @@ static void MoveRightInMenuBar(XmRowColumnWidget rc, Widget pw)
  */
 static void FindNextMenuBarItem(XmRowColumnWidget menubar)
 {
-  register int i, j;
+  int i, j;
   int upper_limit;
   Widget active_child;
   /*
@@ -572,7 +572,7 @@ static void FindNextMenuBarItem(XmRowColumnWidget menubar)
  */
 static void FindPrevMenuBarItem(XmRowColumnWidget menubar)
 {
-  register int i, j;
+  int i, j;
   int upper_limit;
   Widget active_child;
   /* We're not in the PM menubar mode if we don't have an active child */
@@ -624,7 +624,7 @@ static Boolean ValidateMenuBarItem(Widget oldActiveChild, Widget newActiveChild)
 static Boolean FindNextMenuBarCascade(XmRowColumnWidget menubar)
 {
   Widget active_child = NULL;
-  register int i, j;
+  int i, j;
   int upper_limit;
   ShellWidget shell;
   XmMenuState mst = _XmGetMenuState((Widget)menubar);
@@ -658,7 +658,7 @@ static Boolean FindNextMenuBarCascade(XmRowColumnWidget menubar)
 static Boolean FindPrevMenuBarCascade(XmRowColumnWidget menubar)
 {
   Widget active_child = NULL;
-  register int i, j;
+  int i, j;
   int upper_limit;
   ShellWidget shell;
   XmMenuState mst = _XmGetMenuState((Widget)menubar);
@@ -733,7 +733,7 @@ static Boolean ValidateMenuBarCascade(Widget oldActiveChild, /* unused */
  */
 int _XmMenuGrabKeyboardAndPointer(Widget widget, Time time)
 {
-  register int status = (_XmGrabKeyboard(widget, True, GrabModeSync, GrabModeAsync, time) !=
+  int status = (_XmGrabKeyboard(widget, True, GrabModeSync, GrabModeAsync, time) !=
                          GrabSuccess);
   if (status)
     return (status);

@@ -480,7 +480,7 @@ static void ChangeManaged(Widget w)
  *      Returns:       none.
  */
 /* ARGSUSED */
-static void InsertChild(register Widget child)
+static void InsertChild(Widget child)
 {
   XmButtonBoxWidget bb = (XmButtonBoxWidget)XtParent(child);
   /*
@@ -930,7 +930,7 @@ Widget XmCreateButtonBox(Widget parent, String name, ArgList args, Cardinal num_
 
 Widget XmVaCreateButtonBox(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

@@ -73,7 +73,7 @@ static char rcsid[] = "$TOG: MenuShell.c /main/24 1999/07/08 16:49:59 vipin $"
 #define default_translations _XmMenuShell_translations
     /********    Static Function Declarations    ********/
     static void
-    _XmFastExpose(register XmManagerWidget rowcol);
+    _XmFastExpose(XmManagerWidget rowcol);
 static void _XmFastPopdown(XmMenuShellWidget shell);
 static void PostMenuShell(XmMenuShellWidget menuShell,
                           XtGrabKind grab_kind,
@@ -89,9 +89,9 @@ static Boolean SetValues(Widget cw, Widget rw, Widget nw, ArgList args, Cardinal
 static void Resize(Widget wid);
 static void DeleteChild(Widget widget);
 static void InsertChild(Widget widget);
-static void ForceMenuPaneOnScreen(register XmRowColumnWidget rowcol,
-                                  register Position *x,
-                                  register Position *y);
+static void ForceMenuPaneOnScreen(XmRowColumnWidget rowcol,
+                                  Position *x,
+                                  Position *y);
 static void PopupSharedMenuShell(Widget cbwid, Widget smwid, XEvent *event);
 static XtGeometryResult GeometryManager(Widget wid,
                                         XtWidgetGeometry *request,
@@ -281,10 +281,10 @@ static int check_set_offset2 = 0;
  * redraw all of the items now, and ignore the exposure events we receive
  * later.
  */
-static void _XmFastExpose(register XmManagerWidget rowcol)
+static void _XmFastExpose(XmManagerWidget rowcol)
 {
-  register int i;
-  register Widget child;
+  int i;
+  Widget child;
   /* Process the menupane */
   RC_SetExpose(rowcol, True);
   (*(XtClass(rowcol)->core_class.expose))((Widget)rowcol, NULL, NULL);
@@ -326,7 +326,7 @@ static void slideFinish(Widget slide, Widget w)
 
 static void _XmPopupI(Widget widget, XtGrabKind grab_kind, Boolean spring_loaded)
 {
-  register ShellWidget shell_widget = (ShellWidget)widget;
+  ShellWidget shell_widget = (ShellWidget)widget;
   if (!XtIsShell(widget)) {
     XtAppErrorMsg(XtWidgetToApplicationContext(widget),
                   "invalidClass",
@@ -677,9 +677,9 @@ static void InsertChild(Widget widget)
     XmeWarning(widget, ChildMsg);
 }
 
-static void ForceMenuPaneOnScreen(register XmRowColumnWidget rowcol,
-                                  register Position *x,
-                                  register Position *y)
+static void ForceMenuPaneOnScreen(XmRowColumnWidget rowcol,
+                                  Position *x,
+                                  Position *y)
 {
   Position rightEdgeOfMenu, bottomEdgeOfMenu;
   Dimension dispWidth, dispHeight;
@@ -769,12 +769,12 @@ static void PopupSharedMenuShell(Widget cbwid, Widget smwid, XEvent *event)
 {
   XmCascadeButtonWidget cascadebtn = (XmCascadeButtonWidget)cbwid;
   XmRowColumnWidget submenu = (XmRowColumnWidget)smwid;
-  register XmMenuShellWidget popup = (XmMenuShellWidget)XtParent(submenu);
+  XmMenuShellWidget popup = (XmMenuShellWidget)XtParent(submenu);
   XmRowColumnWidget parent_menu;
   Position x, y;
   Dimension height, width;
   int _index = 0;
-  register int i;
+  int i;
   Boolean popped_up = popup->shell.popped_up;
   XmRowColumnWidget old_rowcol = NULL;
   XmCascadeButtonWidget old_cascadebtn = NULL;
@@ -1028,13 +1028,13 @@ static XtGeometryResult GeometryManager(Widget wid,
  */
 static void ChangeManaged(Widget w)
 {
-  register XmMenuShellWidget popup = (XmMenuShellWidget)w;
+  XmMenuShellWidget popup = (XmMenuShellWidget)w;
   XmRowColumnWidget parent_menu;
   Position x, y;
   Dimension height, width;
   XmCascadeButtonWidget cascadebtn;
-  register Widget child;
-  register XmRowColumnWidget rowcol = (XmRowColumnWidget)popup->composite.children[0];
+  Widget child;
+  XmRowColumnWidget rowcol = (XmRowColumnWidget)popup->composite.children[0];
   int i;
   XmMenuState mst = _XmGetMenuState((Widget)w);
   XmMenuSystemTrait menuSTrait;
@@ -1226,7 +1226,7 @@ static void ChangeManaged(Widget w)
 
 void _XmPopdown(Widget widget)
 {
-  register ShellWidget shell_widget = (ShellWidget)widget;
+  ShellWidget shell_widget = (ShellWidget)widget;
   if (!XtIsShell(widget)) {
     XtAppErrorMsg(XtWidgetToApplicationContext(widget),
                   "invalidClass",
@@ -1707,9 +1707,9 @@ static void Destroy(Widget wid)
 
 static Widget _XmFindPopup(Widget widget, String name)
 {
-  register Cardinal i;
-  register XrmQuark q;
-  register Widget w;
+  Cardinal i;
+  XrmQuark q;
+  Widget w;
   q = XrmStringToQuark(name);
   for (w = widget; w != NULL; w = w->core.parent)
     for (i = 0; i < w->core.num_popups; i++)
@@ -1721,7 +1721,7 @@ static Widget _XmFindPopup(Widget widget, String name)
 static void _XmMenuPopupAction(Widget widget, XEvent *event, String *params, Cardinal *num_params)
 {
   Boolean spring_loaded;
-  register Widget popup_shell;
+  Widget popup_shell;
   if (*num_params != 1) {
     XtAppWarningMsg(XtWidgetToApplicationContext(widget),
                     "invalidParameters",

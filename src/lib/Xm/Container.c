@@ -7910,7 +7910,7 @@ Widget XmCreateContainer(Widget parent, String name, ArgList arglist, Cardinal a
 
 Widget XmVaCreateContainer(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

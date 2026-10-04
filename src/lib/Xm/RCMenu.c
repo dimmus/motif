@@ -105,7 +105,7 @@ static void GetLastSelectToplevel(XmRowColumnWidget submenu);
 static Boolean ShouldDispatchFocusOut(Widget widget);
 static int MenuStatus(Widget wid);
 static int MenuType(Widget);
-static void PositionMenu(register XmRowColumnWidget m, XButtonPressedEvent *event);
+static void PositionMenu(XmRowColumnWidget m, XButtonPressedEvent *event);
 static void ButtonMenuPopDown(Widget w, XEvent *event, Boolean *popped_up);
 static void MenuArm(Widget w);
 static void MenuDisarm(Widget w);
@@ -146,7 +146,7 @@ static void RadioBehaviorAndMenuHistory(XmRowColumnWidget m, Widget w);
 static void ChildsActivateCallback(XmRowColumnWidget rowcol, Widget child, XtPointer call_value);
 static void EntryFired(Widget w, XtPointer client_data, XmAnyCallbackStruct *callback);
 static int NoTogglesOn(XmRowColumnWidget m);
-static int IsInWidgetList(register XmRowColumnWidget m, RectObj w);
+static int IsInWidgetList(XmRowColumnWidget m, RectObj w);
 static void AllOffExcept(XmRowColumnWidget m, Widget w);
 static void MenuShellPopdown(Widget w, XEvent *e);
 static Boolean MenuSystemPopdown(Widget w, XEvent *e);
@@ -2166,7 +2166,7 @@ static int MenuType(Widget wid)
  * position the row column widget where it wants to be; normally, this
  * is used only for popup or pulldown menupanes.
  */
-static void PositionMenu(register XmRowColumnWidget m, XButtonPressedEvent *event)
+static void PositionMenu(XmRowColumnWidget m, XButtonPressedEvent *event)
 {
   XmRowColumnWidget root;
   XmCascadeButtonWidget p;
@@ -2283,8 +2283,8 @@ static Boolean SearchMenu(XmRowColumnWidget search_m,
                           Widget *w,
                           Boolean setHistory)
 {
-  register Widget *q;
-  register int i;
+  Widget *q;
+  int i;
   if (!InMenu(search_m, parent_m, child, w)) {
     for (i = 0, q = search_m->composite.children; (Cardinal)i < search_m->composite.num_children; i++, q++) {
       if (XtIsManaged(*q)) {
@@ -2332,8 +2332,8 @@ static void LotaMagic(XmRowColumnWidget m, RectObj child, XmRowColumnWidget *par
 
 static int NoTogglesOn(XmRowColumnWidget m)
 {
-  register Widget *q;
-  register int i;
+  Widget *q;
+  int i;
   ForManagedChildren(m, i, q)
   {
     if (XmIsToggleButtonGadget(*q)) {
@@ -2348,10 +2348,10 @@ static int NoTogglesOn(XmRowColumnWidget m)
   return (TRUE);
 }
 
-static int IsInWidgetList(register XmRowColumnWidget m, RectObj w)
+static int IsInWidgetList(XmRowColumnWidget m, RectObj w)
 {
-  register Widget *q;
-  register int i;
+  Widget *q;
+  int i;
   if ((m == NULL) || (w == NULL))
     return (FALSE);
   for (i = 0, q = m->composite.children; (Cardinal)i < m->composite.num_children; i++, q++)
@@ -2362,8 +2362,8 @@ static int IsInWidgetList(register XmRowColumnWidget m, RectObj w)
 
 static void AllOffExcept(XmRowColumnWidget m, Widget w)
 {
-  register Widget *q;
-  register int i;
+  Widget *q;
+  int i;
   if (w) /* then all widgets except this one go off */ {
     ForManagedChildren(m, i, q)
     {

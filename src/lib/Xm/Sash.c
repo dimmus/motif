@@ -49,7 +49,7 @@ static XmNavigability WidgetNavigable(Widget wid);
 static void SashFocusIn(Widget w, XEvent *event, char **params, Cardinal *num_params);
 static void SashFocusOut(Widget w, XEvent *event, char **params, Cardinal *num_params);
 static void SashAction(Widget widget, XEvent *event, String *params, Cardinal *num_params);
-static void Realize(register Widget w, XtValueMask *p_valueMask, XSetWindowAttributes *attributes);
+static void Realize(Widget w, XtValueMask *p_valueMask, XSetWindowAttributes *attributes);
 static void Redisplay(Widget w, XEvent *event, Region region);
 static void SashDisplayDestroyCallback(Widget w, XtPointer client_data, XtPointer call_data);
 /********    End Static Function Declarations    ********/
@@ -242,7 +242,7 @@ static XmNavigability WidgetNavigable(Widget wid)
 /* ARGSUSED */
 static void SashFocusIn(Widget w, XEvent *event, char **params, Cardinal *num_params)
 {
-  register XmSashWidget sash = (XmSashWidget)w;
+  XmSashWidget sash = (XmSashWidget)w;
   if (event->xany.type != FocusIn || !event->xfocus.send_event)
     return;
   if (_XmGetFocusPolicy((Widget)sash) == XmEXPLICIT)
@@ -263,7 +263,7 @@ static void SashFocusIn(Widget w, XEvent *event, char **params, Cardinal *num_pa
 /* ARGSUSED */
 static void SashFocusOut(Widget w, XEvent *event, char **params, Cardinal *num_params)
 {
-  register XmSashWidget sash = (XmSashWidget)w;
+  XmSashWidget sash = (XmSashWidget)w;
   if (event->xany.type != FocusOut || !event->xfocus.send_event)
     return;
   if (_XmGetFocusPolicy((Widget)sash) == XmEXPLICIT)
@@ -283,7 +283,7 @@ static void SashFocusOut(Widget w, XEvent *event, char **params, Cardinal *num_p
 
 static void SashAction(Widget widget, XEvent *event, String *params, Cardinal *num_params)
 {
-  register XmSashWidget sash = (XmSashWidget)widget;
+  XmSashWidget sash = (XmSashWidget)widget;
   SashCallDataRec call_data;
   call_data.event = event;
   call_data.params = params;
@@ -291,7 +291,7 @@ static void SashAction(Widget widget, XEvent *event, String *params, Cardinal *n
   XtCallCallbackList(widget, sash->sash.sash_action, (XtPointer)&call_data);
 }
 
-static void Realize(register Widget w, XtValueMask *p_valueMask, XSetWindowAttributes *attributes)
+static void Realize(Widget w, XtValueMask *p_valueMask, XSetWindowAttributes *attributes)
 {
   XmDisplay dd = (XmDisplay)XmGetXmDisplay(XtDisplay(w));
   Cursor SashCursor = ((XmDisplayInfo *)(dd->display.displayInfo))->SashCursor;
@@ -352,7 +352,7 @@ static void SashDisplayDestroyCallback(Widget w,
 /* ARGSUSED */
 static void Redisplay(Widget w, XEvent *event, Region region)
 {
-  register XmSashWidget sash = (XmSashWidget)w;
+  XmSashWidget sash = (XmSashWidget)w;
   XmeDrawShadows(XtDisplay(w),
                  XtWindow(w),
                  sash->primitive.top_shadow_GC,

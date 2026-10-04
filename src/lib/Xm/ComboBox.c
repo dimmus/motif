@@ -2684,7 +2684,7 @@ Widget XmCreateDropDownList(Widget parent, char *name, ArgList args, Cardinal nu
 
 Widget XmVaCreateComboBox(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

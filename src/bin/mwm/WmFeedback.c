@@ -738,7 +738,7 @@ static void CancelCB(Widget w, XtPointer client_data, XtPointer call_data)
 void ConfirmAction (WmScreenData *pSD, int nbr)
 {
     Arg           args[8];
-    register int  n;
+    int  n;
     int           x, y;
     Dimension     width, height;
     Widget        dialogShellW = NULL;

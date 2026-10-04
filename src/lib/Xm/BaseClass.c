@@ -1152,7 +1152,7 @@ Cardinal _XmSecondaryResourceData(XmBaseClassExt bcePtr,
  */
 static XtResourceList *CreateIndirectionTable(XtResourceList resources, Cardinal num_resources)
 {
-  register int i;
+  int i;
   XtResourceList *table;
   table = (XtResourceList *)_XmMallocArray(num_resources, sizeof(XtResourceList));
   for (i = 0; (Cardinal)i < num_resources; i++)

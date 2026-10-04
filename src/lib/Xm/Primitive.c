@@ -64,7 +64,7 @@ static void ClassInitialize(void);
 static void BuildPrimitiveResources(WidgetClass c);
 static void ClassPartInitialize(WidgetClass w);
 static void Initialize(Widget rw, Widget nw, ArgList args, Cardinal *num_args);
-static void Realize(register Widget w, XtValueMask *p_valueMask, XSetWindowAttributes *attributes);
+static void Realize(Widget w, XtValueMask *p_valueMask, XSetWindowAttributes *attributes);
 static void Destroy(Widget w);
 static void Redisplay(Widget w, XEvent *event, Region region);
 static Boolean SetValues(
@@ -663,7 +663,7 @@ static void Initialize(Widget rw, Widget nw, ArgList args, Cardinal *num_args)
  *	gravity default to Forget.
  *
  ************************************************************************/
-static void Realize(register Widget w, XtValueMask *p_valueMask, XSetWindowAttributes *attributes)
+static void Realize(Widget w, XtValueMask *p_valueMask, XSetWindowAttributes *attributes)
 {
   Mask valueMask = *p_valueMask;
   valueMask |= CWDontPropagate;

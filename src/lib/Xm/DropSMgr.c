@@ -116,11 +116,11 @@ static void Destroy(Widget w);
 static Boolean SetValues(Widget cw, Widget rw, Widget nw, ArgList args, Cardinal *num_args);
 static void CreateTable(XmDropSiteManagerObject dsm);
 static void DestroyTable(XmDropSiteManagerObject dsm);
-static void RegisterInfo(register XmDropSiteManagerObject dsm,
-                         register Widget widget,
-                         register XtPointer info);
-static void UnregisterInfo(register XmDropSiteManagerObject dsm, register XtPointer info);
-static XtPointer WidgetToInfo(register XmDropSiteManagerObject dsm, register Widget widget);
+static void RegisterInfo(XmDropSiteManagerObject dsm,
+                         Widget widget,
+                         XtPointer info);
+static void UnregisterInfo(XmDropSiteManagerObject dsm, XtPointer info);
+static XtPointer WidgetToInfo(XmDropSiteManagerObject dsm, Widget widget);
 static Boolean Coincident(XmDropSiteManagerObject dsm, Widget w, XmDSClipRect *r);
 static Boolean IsDescendent(Widget parentW, Widget childW);
 static void DetectAncestorClippers(XmDropSiteManagerObject dsm,
@@ -385,11 +385,11 @@ static void DestroyTable(XmDropSiteManagerObject dsm)
 
 #define DSTABLE(dsm) ((XmHashTable)(dsm->dropManager.dsTable))
 
-static void RegisterInfo(register XmDropSiteManagerObject dsm,
-                         register Widget widget,
-                         register XtPointer info)
+static void RegisterInfo(XmDropSiteManagerObject dsm,
+                         Widget widget,
+                         XtPointer info)
 {
-  register XmHashTable tab;
+  XmHashTable tab;
   if (GetDSRegistered(info))
     return;
   DPRINT(("(RegI) Widget %p (%s) info %p (internal %d widget %p)\n",
@@ -408,7 +408,7 @@ static void RegisterInfo(register XmDropSiteManagerObject dsm,
   SetDSRegistered(info, True);
 }
 
-static void UnregisterInfo(register XmDropSiteManagerObject dsm, register XtPointer info)
+static void UnregisterInfo(XmDropSiteManagerObject dsm, XtPointer info)
 {
   XmHashTable tab;
   XtPointer iterator;
@@ -435,7 +435,7 @@ static void UnregisterInfo(register XmDropSiteManagerObject dsm, register XtPoin
   SetDSRegistered(info, False);
 }
 
-static XtPointer WidgetToInfo(register XmDropSiteManagerObject dsm, register Widget widget)
+static XtPointer WidgetToInfo(XmDropSiteManagerObject dsm, Widget widget)
 {
   XmHashTable tab;
   XmDSInfo info;

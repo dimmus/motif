@@ -206,7 +206,7 @@ void _XmICCCallbackToICCEvent(Display *display,
        * this message goes to receiver
        */
       {
-        register XmTopLevelEnterCallback cb = (XmTopLevelEnterCallback)callback;
+        XmTopLevelEnterCallback cb = (XmTopLevelEnterCallback)callback;
         xmessage->topLevelEnter.flags = 0;
         xmessage->topLevelEnter.time = cb->timeStamp;
         xmessage->topLevelEnter.src_window = cb->window;
@@ -219,7 +219,7 @@ void _XmICCCallbackToICCEvent(Display *display,
        * this message goes to receiver
        */
       {
-        register XmTopLevelLeaveCallback cb = (XmTopLevelLeaveCallback)callback;
+        XmTopLevelLeaveCallback cb = (XmTopLevelLeaveCallback)callback;
         xmessage->topLevelLeave.flags = 0;
         xmessage->topLevelLeave.time = cb->timeStamp;
         xmessage->topLevelLeave.src_window = cb->window;
@@ -230,7 +230,7 @@ void _XmICCCallbackToICCEvent(Display *display,
        * this message goes both ways
        */
       {
-        register XmDragMotionCallback cb = (XmDragMotionCallback)callback;
+        XmDragMotionCallback cb = (XmDragMotionCallback)callback;
         xmessage->dragMotion.flags = 0;
         xmessage->dragMotion.flags |= PUT_SITE_STATUS(cb->dropSiteStatus);
         xmessage->dragMotion.flags |= PUT_OPERATION(cb->operation);
@@ -245,7 +245,7 @@ void _XmICCCallbackToICCEvent(Display *display,
        * this message goes both ways
        */
       {
-        register XmOperationChangedCallback cb = (XmOperationChangedCallback)callback;
+        XmOperationChangedCallback cb = (XmOperationChangedCallback)callback;
         xmessage->operationChanged.flags = 0;
         xmessage->operationChanged.flags |= PUT_OPERATION(cb->operation);
         xmessage->operationChanged.flags |= PUT_SITE_STATUS(cb->dropSiteStatus);
@@ -258,7 +258,7 @@ void _XmICCCallbackToICCEvent(Display *display,
        * this message goes to initiator
        */
       {
-        register XmDropSiteEnterCallback cb = (XmDropSiteEnterCallback)callback;
+        XmDropSiteEnterCallback cb = (XmDropSiteEnterCallback)callback;
         /* invalid flags stuff ||| */
         xmessage->dropSiteEnter.flags = 0;
         xmessage->dropSiteEnter.flags |= PUT_OPERATION(cb->operation);
@@ -274,7 +274,7 @@ void _XmICCCallbackToICCEvent(Display *display,
        * this message goes to initiator
        */
       {
-        register XmDropSiteLeaveCallback cb = (XmDropSiteLeaveCallback)callback;
+        XmDropSiteLeaveCallback cb = (XmDropSiteLeaveCallback)callback;
         /* invalid flags stuff ||| */
         xmessage->dropSiteLeave.flags = 0;
         xmessage->dropSiteLeave.time = cb->timeStamp;
@@ -285,7 +285,7 @@ void _XmICCCallbackToICCEvent(Display *display,
        * this message goes to receiver
        */
       {
-        register XmDropStartCallback cb = (XmDropStartCallback)callback;
+        XmDropStartCallback cb = (XmDropStartCallback)callback;
         xmessage->drop.flags = 0;
         xmessage->drop.flags |= PUT_SITE_STATUS(cb->dropSiteStatus);
         xmessage->drop.flags |= PUT_COMPLETION(cb->dropAction);
@@ -594,7 +594,7 @@ static XmICCEventType GetMessageData(Display *display,
   callback->any.timeStamp = (Time)xmessage->any.time;
   switch (message_type) {
     case XmTOP_LEVEL_ENTER: {
-      register XmTopLevelEnterCallback cb = (XmTopLevelEnterCallback)callback;
+      XmTopLevelEnterCallback cb = (XmTopLevelEnterCallback)callback;
       cb->window = (Window)xmessage->topLevelEnter.src_window;
       cb->iccHandle = (Atom)xmessage->topLevelEnter.icc_handle;
       /*
@@ -605,11 +605,11 @@ static XmICCEventType GetMessageData(Display *display,
       cb->n_targets = 0;
     } break;
     case XmTOP_LEVEL_LEAVE: {
-      register XmTopLevelLeaveCallback cb = (XmTopLevelLeaveCallback)callback;
+      XmTopLevelLeaveCallback cb = (XmTopLevelLeaveCallback)callback;
       cb->window = (Window)xmessage->topLevelLeave.src_window;
     } break;
     case XmDRAG_MOTION: {
-      register XmDragMotionCallback cb = (XmDragMotionCallback)callback;
+      XmDragMotionCallback cb = (XmDragMotionCallback)callback;
       cb->x = (Position)cvtINT16toShort(xmessage->dragMotion.x);
       cb->y = (Position)cvtINT16toShort(xmessage->dragMotion.y);
       cb->operation = (unsigned char)GET_OPERATION(xmessage->dragMotion.flags);
@@ -617,7 +617,7 @@ static XmICCEventType GetMessageData(Display *display,
       cb->dropSiteStatus = (unsigned char)GET_SITE_STATUS(xmessage->dragMotion.flags);
     } break;
     case XmOPERATION_CHANGED: {
-      register XmOperationChangedCallback cb = (XmOperationChangedCallback)callback;
+      XmOperationChangedCallback cb = (XmOperationChangedCallback)callback;
       cb->operation = (unsigned char)GET_OPERATION(xmessage->dragMotion.flags);
       cb->operations = (unsigned char)GET_MULTIOPS(xmessage->dragMotion.flags);
       cb->dropSiteStatus = (unsigned char)GET_SITE_STATUS(xmessage->dragMotion.flags);
@@ -627,7 +627,7 @@ static XmICCEventType GetMessageData(Display *display,
        * this message goes to initiator
        */
       {
-        register XmDropSiteEnterCallback cb = (XmDropSiteEnterCallback)callback;
+        XmDropSiteEnterCallback cb = (XmDropSiteEnterCallback)callback;
         cb->x = (Position)cvtINT16toShort(xmessage->dropSiteEnter.x);
         cb->y = (Position)cvtINT16toShort(xmessage->dropSiteEnter.y);
         cb->operation = (unsigned char)GET_OPERATION(xmessage->dropSiteEnter.flags);
@@ -645,7 +645,7 @@ static XmICCEventType GetMessageData(Display *display,
        * this message goes to receiver
        */
       {
-        register XmDropStartCallback cb = (XmDropStartCallback)callback;
+        XmDropStartCallback cb = (XmDropStartCallback)callback;
         cb->operation = (unsigned char)GET_OPERATION(xmessage->drop.flags);
         cb->operations = (unsigned char)GET_MULTIOPS(xmessage->drop.flags);
         cb->dropAction = (unsigned char)GET_COMPLETION(xmessage->drop.flags);

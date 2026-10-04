@@ -115,7 +115,7 @@ static void LayoutColumn(XmRowColumnWidget m, Dimension *m_width, Dimension *m_h
 static void LayoutVerticalTight(XmRowColumnWidget m, Dimension *m_width, Dimension *m_height);
 static void LayoutHorizontaltight(XmRowColumnWidget m, Dimension *m_width, Dimension *m_height);
 static void LayoutNone(XmRowColumnWidget m, Dimension *m_width, Dimension *m_height);
-static void LayoutOptionAndSize(register XmRowColumnWidget menu,
+static void LayoutOptionAndSize(XmRowColumnWidget menu,
                                 Dimension *width,
                                 Dimension *height,
                                 Widget instigator,
@@ -161,7 +161,7 @@ static void CalcHelp(XmRowColumnWidget m,
                      Dimension w,
                      Dimension h)
 {
-  register Dimension subtrahend;
+  Dimension subtrahend;
   if (IsVertical(m)) /* glue to bottom edge of ... */ {
     if (Asking(*m_height)) {
       if (RC_NCol(m) == 1) /* just use max_y */
@@ -256,7 +256,7 @@ static void AdjustLast(XmRowColumnWidget m, int start_i, Dimension w, Dimension 
 {
   XmRCKidGeometry kg = RC_Boxes(m);
   XtWidgetGeometry *b;
-  register Dimension subtrahend;
+  Dimension subtrahend;
   for (; kg[start_i].kid != NULL; start_i++) {
     b = &(kg[start_i].box);
     if (IsVertical(m)) {
@@ -1010,7 +1010,7 @@ static void LayoutNone(XmRowColumnWidget m, Dimension *m_width, Dimension *m_hei
  * If the instigator is the label or the cascabebuttongadget, then the
  * dimensions are honored if they are large enough.
  */
-static void LayoutOptionAndSize(register XmRowColumnWidget menu,
+static void LayoutOptionAndSize(XmRowColumnWidget menu,
                                 Dimension *width,
                                 Dimension *height,
                                 Widget instigator,
@@ -1020,7 +1020,7 @@ static void LayoutOptionAndSize(register XmRowColumnWidget menu,
   XtWidgetGeometry *label_box = NULL, *button_box = NULL;
   Dimension c_width;
   Dimension c_height;
-  register XmRowColumnWidget p = (XmRowColumnWidget)RC_OptionSubMenu(menu);
+  XmRowColumnWidget p = (XmRowColumnWidget)RC_OptionSubMenu(menu);
   XmCascadeButtonGadget cb = (XmCascadeButtonGadget)XmOptionButtonGadget((Widget)menu);
   /*
    * if this is being destroyed, don't get new dimensions.  This routine
@@ -1142,7 +1142,7 @@ static void LayoutOptionAndSize(register XmRowColumnWidget menu,
   }
 }
 
-void _XmRCThinkAboutSize(register XmRowColumnWidget m,
+void _XmRCThinkAboutSize(XmRowColumnWidget m,
                          Dimension *w,
                          Dimension *h,
                          Widget instigator,
@@ -1576,7 +1576,7 @@ static void GetMenuKidMargins(XmRowColumnWidget m,
                               Dimension *top,
                               Dimension *bottom)
 {
-  register int i;
+  int i;
   Widget *q;
   *width = *height = *left = *right = *top = *bottom = 0;
   ForManagedChildren(m, i, q)
@@ -1617,8 +1617,8 @@ static void GetMenuKidMargins(XmRowColumnWidget m,
  */
 void _XmRCDoMarginAdjustment(XmRowColumnWidget m)
 {
-  register Widget *p;
-  register int i;
+  Widget *p;
+  int i;
   Dimension m_w, m_h, m_l, m_r, m_t, m_b;
   Dimension w, h;
   if ((!RC_DoMarginAdjust(m)) || (IsOption(m))) {

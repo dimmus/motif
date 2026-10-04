@@ -1103,8 +1103,8 @@ static void ConstraintInitialize(Widget request, /* unused */
  ************************************************************************/
 static void CheckRemoveMotionHandlers(XmManagerWidget mw)
 {
-  register int i;
-  register Widget child;
+  int i;
+  Widget child;
   /*  If there are any gadgets which need motion events, return.  */
   if (!mw->core.being_destroyed) {
     for (i = 0; (Cardinal)i < mw->composite.num_children; i++) {
@@ -1206,8 +1206,8 @@ static Boolean ManagerParentProcess(Widget widget, XmParentProcessData data)
 static Widget ObjectAtPoint(Widget wid, Position x, Position y)
 {
   CompositeWidget cw = (CompositeWidget)wid;
-  register int i;
-  register Widget widget;
+  int i;
+  Widget widget;
   /* For the case of overlapping gadgets, the last one in the
    * composite list will be the visible gadget (see order of
    * redisplay in XmeRedisplayGadgets).  So, search the child

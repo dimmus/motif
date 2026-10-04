@@ -574,7 +574,7 @@ static Boolean SetValues(
 {
   XmI18ListWidget i_old = (XmI18ListWidget)current;
   XmI18ListWidget i_set = (XmI18ListWidget)set;
-  register int i;
+  int i;
   Boolean redisplay = False;
   Boolean recalculate = False;
   Boolean resort = False;
@@ -969,7 +969,7 @@ static void SingleClick(XmI18ListWidget ilist)
     UnselectRows((Widget)ilist, XmI18List_working_row(ilist));
   }
   else {
-    register short i, last;
+    short i, last;
     XmMultiListRowInfo *ptr;
     last = XmI18List_num_rows(ilist);
     if (!(XmI18List_state(ilist) & EXTEND)) {
@@ -1045,9 +1045,9 @@ static void MoveListTimeout(XtPointer w_ptr, XtIntervalId *id)
   if (v_inc < 0)
     row = XmI18List_first_row(ilist);
   else {
-    register int i;
-    register int row_height = XmI18List_row_height(ilist);
-    register Dimension h, height = w->core.height;
+    int i;
+    int row_height = XmI18List_row_height(ilist);
+    Dimension h, height = w->core.height;
     i = XmI18List_first_row(ilist);
     h = (XmI18List_sep_y(ilist) + VERTICAL_SPACE / 2);
     if (XmI18List_new_visual_style(ilist))
@@ -1145,7 +1145,7 @@ static void Notify(Widget w, Boolean dclick)
 static short GetListWidth(Widget w)
 {
   XmI18ListWidget ilist = (XmI18ListWidget)w;
-  register int i, width;
+  int i, width;
   /*
    * Get maximum width of data to display
    */
@@ -1163,7 +1163,7 @@ static short GetListWidth(Widget w)
 static void AdjustFirstCol(Widget w)
 {
   XmI18ListWidget ilist = (XmI18ListWidget)w;
-  register int i, extra, width;
+  int i, extra, width;
   /*
    * Determine if the first pixel position is negative or positive
    */
@@ -1192,7 +1192,7 @@ static void AdjustFirstCol(Widget w)
 static void ExtendedSelect(Widget w, short row)
 {
   XmI18ListWidget ilist = (XmI18ListWidget)w;
-  register short i, first, last, end, anchor, out_first, out_last;
+  short i, first, last, end, anchor, out_first, out_last;
   Boolean state;
   XmMultiListRowInfo *ptr;
   if (row >= XmI18List_num_rows(ilist))
@@ -1237,7 +1237,7 @@ static void ExtendedSelect(Widget w, short row)
    * Handle the case of a jump from one side of the anchor to the other.
    */
   if (((end > anchor) && (row < anchor)) || ((end < anchor) && (row > anchor))) {
-    register short t_first, t_last;
+    short t_first, t_last;
     if ((end > anchor) && (row < anchor)) {
       t_first = anchor + 1;
       t_last = end;
@@ -1334,7 +1334,7 @@ static void HSlideLeftArrowCallback(Widget w, XtPointer client_data, XtPointer j
    * Don't bother if we're already as far left as we can go
    */
   if (XmI18List_left_loc(ilist) <= 0) {
-    register int i, begin, end, before = 0;
+    int i, begin, end, before = 0;
     for (i = 0; i < XmI18List_num_columns(ilist); i++) {
       if (i == 0)
         begin = before = XmI18List_left_loc(ilist);
@@ -1386,7 +1386,7 @@ static void HSlideLeftArrowCallback(Widget w, XtPointer client_data, XtPointer j
 static void HSlideRightArrowCallback(Widget w, XtPointer client_data, XtPointer junk)
 {
   XmI18ListWidget ilist = (XmI18ListWidget)client_data;
-  register int i, width;
+  int i, width;
   /*
    * We are either going to left adjust the last visible column
    * so that the user is able to see the column beginning with the
@@ -1403,7 +1403,7 @@ static void HSlideRightArrowCallback(Widget w, XtPointer client_data, XtPointer 
    */
   width = GetListWidth((Widget)ilist);
   if ((int)width > (int)(i + ilist->core.width)) {
-    register int begin, end, before = 0;
+    int begin, end, before = 0;
     for (i = 0; i < XmI18List_num_columns(ilist); i++) {
       if (i == 0)
         begin = before = XmI18List_left_loc(ilist);
@@ -1470,15 +1470,15 @@ static void CalcLocations(Widget w)
 static void DisplayList(Widget w, short start_row, short num_rows, Boolean redraw_headers)
 {
   XmI18ListWidget ilist = (XmI18ListWidget)w;
-  register int i, j, row_height, title_row_height, y_loc, x_loc;
-  register Position cur_x = 0, cur_y, start_y;
-  register short *col_widths, tot_width;
+  int i, j, row_height, title_row_height, y_loc, x_loc;
+  Position cur_x = 0, cur_y, start_y;
+  short *col_widths, tot_width;
   XmString ptr;
   GC gc;
   Dimension width_unused, text_height;
   Dimension height = ilist->core.height;
   Dimension width = ilist->core.width;
-  register short end_row = start_row + num_rows - 1;
+  short end_row = start_row + num_rows - 1;
   /*
    * The start position is always first_col, which
    * should have been set to the correct value before
@@ -1889,7 +1889,7 @@ static void DestroyGCs(Widget w)
 static void GetPixmapInfo(Widget w)
 {
   XmI18ListWidget ilist = (XmI18ListWidget)w;
-  register int i, num_rows = XmI18List_num_rows(ilist);
+  int i, num_rows = XmI18List_num_rows(ilist);
   for (i = 0; i < num_rows; i++) {
     int x, y;
     unsigned int width, height, bw, depth;
@@ -1961,12 +1961,12 @@ static void SetVisibleSize(Widget w, Boolean set_width)
 static void CalcColumnInfo(Widget w, Boolean force)
 {
   XmI18ListWidget ilist = (XmI18ListWidget)w;
-  register int i, j;
+  int i, j;
   int max_width = 0, max_title_height = 0, max_height = 0;
   Dimension width, height;
   XmString ptr;
-  register int num_cols = XmI18List_num_columns(ilist);
-  register int num_rows = XmI18List_num_rows(ilist);
+  int num_cols = XmI18List_num_columns(ilist);
+  int num_rows = XmI18List_num_rows(ilist);
   if (XmI18List_first_col_pixmaps(ilist))
     GetPixmapInfo(w);
   if (((XmI18List_column_widths(ilist) == NULL) || force) && (num_cols != 0)) {
@@ -2023,8 +2023,8 @@ static void ResizeSliders(Widget w)
   XmI18ListWidget ilist = (XmI18ListWidget)w;
   Arg args[5];
   Cardinal num_args = 0;
-  register int i, height, max_width, rows_per_screen;
-  register int slide_pos, slide_size, col_width = 0, min = 0;
+  int i, height, max_width, rows_per_screen;
+  int slide_pos, slide_size, col_width = 0, min = 0;
   /*
    * Get maximum width of data to display
    */
@@ -2157,7 +2157,7 @@ static void VScroll(Widget w, short amount)
 static short CvtColNumToPixelVal(Widget w, short col)
 {
   XmI18ListWidget ilist = (XmI18ListWidget)w;
-  register int i;
+  int i;
   short value = 0;
   /*
    * Sum up the widest pixel values in each column
@@ -2180,7 +2180,7 @@ static short CvtColNumToPixelVal(Widget w, short col)
 static short CvtPixelValToColNum(Widget w, short x)
 {
   XmI18ListWidget ilist = (XmI18ListWidget)w;
-  register int i = 0;
+  int i = 0;
   short cur_col;
   /*
    * Sum up the widest pixel values in each column
@@ -2326,7 +2326,7 @@ static void ToggleRow(Widget w, short row)
 static void UnselectRows(Widget w, short sel_row)
 {
   XmI18ListWidget ilist = (XmI18ListWidget)w;
-  register short row;
+  short row;
   XmMultiListRowInfo *ptr = XmI18List_row_data(ilist);
   XmI18List_end(ilist) = XmI18List_anchor(ilist) = sel_row;
   for (row = 0; row < XmI18List_num_rows(ilist); row++, ptr++) {
@@ -2526,7 +2526,7 @@ static void AdjustFirstRowAndCol(XmI18ListWidget ilist)
 {
   Dimension total_width, height;
   int rows_per_screen, new_left_loc;
-  register int j;
+  int j;
   int title_extra;
   if (XmI18List_new_visual_style(ilist))
     title_extra = ilist->primitive.shadow_thickness;
@@ -2637,8 +2637,8 @@ static Boolean MakePositionVisible(Widget w, short row, short start, short last,
  */
 XmMultiListRowInfo **XmI18ListGetSelectedRows(Widget w)
 {
-  register int i, j;
-  register XmMultiListRowInfo *row_data, **ptr;
+  int i, j;
+  XmMultiListRowInfo *row_data, **ptr;
   XmMultiListRowInfo **ret_rows = NULL;
   XmI18ListWidget ilist = (XmI18ListWidget)w;
   row_data = XmI18List_row_data(ilist);
@@ -2824,7 +2824,7 @@ static void MakeCellVisible(Widget w, int row, int col)
  */
 void Xm18IListUnselectAllItems(Widget w)
 {
-  register int row;
+  int row;
   XmI18ListWidget ilist = (XmI18ListWidget)w;
   XmMultiListRowInfo *ptr = XmI18List_row_data(ilist);
   _XmWidgetToAppContext(w);
@@ -2844,7 +2844,7 @@ void Xm18IListUnselectAllItems(Widget w)
  */
 void Xm18IListUnselectItem(Widget w, XmMultiListRowInfo *row_info)
 {
-  register int row = 0;
+  int row = 0;
   XmI18ListWidget ilist = (XmI18ListWidget)w;
   XmMultiListRowInfo *ptr = XmI18List_row_data(ilist);
   Boolean done = False;
@@ -3285,7 +3285,7 @@ static void ProcessDrag(Widget wid,
                         Cardinal *num_params) /* unused */
 {
   XmI18ListWidget lw = (XmI18ListWidget)wid;
-  register int i;
+  int i;
   short row, col;
   Widget drag_icon, dc;
   Arg args[10];

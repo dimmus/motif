@@ -224,8 +224,8 @@ XmString XmStringPutRendition(XmString string, XmStringTag rendition)
 
 void XmParseMappingGetValues(XmParseMapping mapping, ArgList arg_list, Cardinal arg_count)
 {
-  register Cardinal i;
-  register String arg_name;
+  Cardinal i;
+  String arg_name;
   _XmProcessLock();
   /* Do a little error checking. */
   if (mapping == NULL) {

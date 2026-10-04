@@ -33,7 +33,7 @@ extern "C" {
 #endif
 /********    Private Function Declarations    ********/
 extern void _XmRCDoMarginAdjustment(XmRowColumnWidget m);
-extern void _XmRCThinkAboutSize(register XmRowColumnWidget m,
+extern void _XmRCThinkAboutSize(XmRowColumnWidget m,
                                 Dimension *w,
                                 Dimension *h,
                                 Widget instigator,

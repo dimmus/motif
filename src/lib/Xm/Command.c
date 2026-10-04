@@ -747,7 +747,7 @@ Widget XmCreateCommand(Widget parent, String name, ArgList al, Cardinal ac)
 
 Widget XmVaCreateCommand(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

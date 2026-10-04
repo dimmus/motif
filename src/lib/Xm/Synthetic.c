@@ -148,7 +148,7 @@ void _XmBuildResources(XmSyntheticResource **wc_resources_ptr,
  **********************************************************************/
 void _XmInitializeSyntheticResources(XmSyntheticResource *resources, int num_resources)
 {
-  register int i;
+  int i;
   union string_quark q;
   for (i = 0, q.str = NULL; i < num_resources; i++, q.str = NULL) {
     q.quark = XrmPermStringToQuark(resources[i].resource_name);

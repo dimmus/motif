@@ -748,7 +748,7 @@ void _XmLabelGCloneMenuSavvy(WidgetClass wc, XmMenuSavvyTrait mst)
  ************************************************************************/
 static void ClassPartInitialize(WidgetClass cl)
 {
-  register XmLabelGadgetClass wc = (XmLabelGadgetClass)cl;
+  XmLabelGadgetClass wc = (XmLabelGadgetClass)cl;
   XmLabelGadgetClass super = (XmLabelGadgetClass)wc->rect_class.superclass;
   XmGadgetClassExt *wcePtr, *scePtr;
   if (wc->label_class.setOverrideCallback == XmInheritSetOverrideCallback)
@@ -2752,7 +2752,7 @@ Widget XmCreateLabelGadget(Widget parent, char *name, Arg *arglist, Cardinal arg
 
 Widget XmVaCreateLabelGadget(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

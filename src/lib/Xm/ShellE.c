@@ -144,7 +144,7 @@ static void StructureNotifyHandler(Widget wid,
                                    XEvent *event,
                                    Boolean *continue_to_dispatch)
 {
-  register ShellWidget w = (ShellWidget)wid;
+  ShellWidget w = (ShellWidget)wid;
   WMShellWidget wmshell = (WMShellWidget)w;
   Boolean sizechanged = FALSE;
   Position tmpx, tmpy;
@@ -231,7 +231,7 @@ static void StructureNotifyHandler(Widget wid,
           w->shell.client_specified &= ~_XtShellPositionValid;
         if (XtIsWMShell(wid) && !wmshell->wm.wait_for_wm) {
           /* Consider trusting the wm again */
-          register WMShellPart *wmp = &(wmshell->wm);
+          WMShellPart *wmp = &(wmshell->wm);
 #define EQ(x) (wmp->size_hints.x == w->core.x)
           if (EQ(x) && EQ(y) && EQ(width) && EQ(height)) {
             wmshell->wm.wait_for_wm = TRUE;

@@ -66,7 +66,7 @@ static void DrawSimpleShadow(Display *display,
 {
   static XSegment *segms = NULL;
   static int segm_count = 0;
-  register int i, size2, size3;
+  int i, size2, size3;
   if (!d)
     return;
   ASSIGN_MIN(shadow_thick, (width >> 1));

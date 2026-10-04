@@ -749,7 +749,7 @@ static void GetMaxCellSize(Widget w, Widget ignore, Dimension *max_w, Dimension 
   Widget *childp;
   XmIconBoxWidget ibw = (XmIconBoxWidget)w;
   XtWidgetGeometry preferred;
-  register Dimension temp;
+  Dimension temp;
   *max_w = XmIconBox_min_cell_width(ibw);
   *max_h = XmIconBox_min_cell_height(ibw);
   ForAllChildren(ibw, childp)
@@ -783,8 +783,8 @@ static void GetMaxCellSize(Widget w, Widget ignore, Dimension *max_w, Dimension 
 static Boolean SetToEmptyCell(Widget child)
 {
   XmIconBoxWidget ibw = (XmIconBoxWidget)XtParent(child);
-  register Position x, y, cur_x, cur_y;
-  register unsigned long square, cur_square;
+  Position x, y, cur_x, cur_y;
+  unsigned long square, cur_square;
   Cardinal max_x, max_y;
   GetMinCells((Widget)ibw, &max_x, &max_y);
   cur_x = cur_y = XmIconBoxAnyCell;

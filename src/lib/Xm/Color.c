@@ -147,7 +147,7 @@ static XmColorData *GetDefaultColors(Screen *screen, Colormap color_map)
   static XmColorData *default_set = NULL;
   static int default_set_count = 0;
   static int default_set_size = 0;
-  register int i;
+  int i;
   XColor *color_def;
   static Pixel background;
   XrmValue fromVal;
@@ -232,7 +232,7 @@ static XmColorData *GetDefaultColors(Screen *screen, Colormap color_map)
 
 Boolean _XmSearchColorCache(unsigned int which, XmColorData *values, XmColorData **ret)
 {
-  register int i;
+  int i;
   /*
    * Look through  a set of screen, color_map, background triplets
    * to see if these colors have already been generated.

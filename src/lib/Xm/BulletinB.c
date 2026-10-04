@@ -433,7 +433,7 @@ static void Initialize(Widget wid_req,
   XmBulletinBoardWidget request = (XmBulletinBoardWidget)wid_req;
   XmBulletinBoardWidget new_w = (XmBulletinBoardWidget)wid_new;
   Arg al[5];
-  register Cardinal ac;
+  Cardinal ac;
   int mwm_functions;
   char *text_value;
   XmFontList defaultFL;
@@ -678,7 +678,7 @@ static Boolean SetValues(Widget cw,
   XmBulletinBoardWidget request = (XmBulletinBoardWidget)rw;
   XmBulletinBoardWidget new_w = (XmBulletinBoardWidget)nw;
   Arg al[10];
-  register Cardinal ac;
+  Cardinal ac;
   int mwm_functions;
   int mwmStyle;
   unsigned int numChildren;
@@ -1819,7 +1819,7 @@ Widget XmCreateBulletinBoardDialog(Widget ds_p, String name, ArgList bb_args, Ca
 
 Widget XmVaCreateBulletinBoard(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

@@ -404,7 +404,7 @@ static String GetFixedMatchPattern(String pattern)
  * '/' is used as a delimiter for the pattern.
  ****************/
 {
-  register char *bufPtr;
+  char *bufPtr;
   char *outputBuf;
   char lastchar = '\0';
   int len;

@@ -123,7 +123,7 @@ extern Boolean _XmIsSlowSubclass(WidgetClass wc, unsigned int bit);
 extern Boolean _XmIsStandardMotifWidgetClass(WidgetClass wc);
 extern void _XmManagerHighlightPixmapDefault(Widget widget, int offset, XrmValue *value);
 extern void _XmManagerTopShadowPixmapDefault(Widget widget, int offset, XrmValue *value);
-extern Boolean _XmMapKeyEvent(register String str, int *eventType, unsigned int *keysym,
+extern Boolean _XmMapKeyEvent(String str, int *eventType, unsigned int *keysym,
                               unsigned int *modifiers);
 extern int _XmOSPutenv(char *string);
 extern void _XmPrimitiveHighlightPixmapDefault(Widget widget, int offset, XrmValue *value);
@@ -290,7 +290,7 @@ char *_XmGetRealXlations(Display *dpy, _XmBuildVirtualKeyStruct *keys, int num_k
   char *buf;
   size_t len = 0, size = 256, need;
   char *keystring;
-  register int i;
+  int i;
   int num_vkeys;
   XmKeyBinding vkeys;
   KeySym keysym;
@@ -885,7 +885,7 @@ XmColorData *_XmGetDefaultColors(Screen *screen, Colormap color_map)
   static XmColorData **default_set = NULL;
   static int default_set_count = 0;
   static int default_set_size = 0;
-  register int i;
+  int i;
   XColor color_def;
   static Pixel background;
   XrmValue fromVal;
@@ -1068,7 +1068,7 @@ Pixel _XmAccessColorData(XmColorData *cd, unsigned char which)
 }
 
 /* OBSOLETE: Replaced by _XmMapKeyEvents. */
-Boolean _XmMapKeyEvent(register String str,
+Boolean _XmMapKeyEvent(String str,
                        int *eventType,
                        unsigned int *keysym,
                        unsigned int *modifiers)

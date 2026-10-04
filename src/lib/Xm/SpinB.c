@@ -2231,7 +2231,7 @@ Widget XmCreateSpinBox(Widget parent, String name, ArgList arglist, Cardinal arg
 
 Widget XmVaCreateSpinBox(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

@@ -846,7 +846,7 @@ XmStringTag _XmStringIndexGetTag(int index)
 int _XmStringIndexCacheTag(XmStringTag tag, int length)
 {
   char *a;
-  register int i;
+  int i;
   /* Initialize cache with XmFONTLIST_DEFAULT_TAG, _MOTIF_DEFAULT_LOCALE, and
      locale.tag if necessary, to keep indices low. */
   _XmProcessLock();
@@ -7827,8 +7827,8 @@ XmParseMapping XmParseMappingCreate(ArgList arg_list, Cardinal arg_count)
 
 void XmParseMappingSetValues(XmParseMapping mapping, ArgList arg_list, Cardinal arg_count)
 {
-  register Cardinal i;
-  register String arg_name;
+  Cardinal i;
+  String arg_name;
   Cardinal unknown = 0;
   _XmProcessLock();
   /* Do a little error checking. */

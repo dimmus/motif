@@ -207,7 +207,7 @@ static Atom *
 WSMGetTargetList(Widget w, Boolean include_defaults, unsigned long *len_ret)
 {
     WSMDispInfo *disp_info = _WSMGetDispInfo(XtDisplay(w));
-    register int i;
+    int i;
     Atom *list;
 
     *len_ret = NUM_WSM_TARGETS;

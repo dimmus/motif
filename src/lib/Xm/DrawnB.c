@@ -1165,7 +1165,7 @@ Widget XmCreateDrawnButton(Widget parent, char *name, ArgList arglist, Cardinal 
 
 Widget XmVaCreateDrawnButton(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

@@ -396,7 +396,7 @@ static void ChangeManaged(Widget w)
 static void GetValuesHook(Widget w, ArgList args, Cardinal *num_args)
 {
   XmMultiListWidget elist = (XmMultiListWidget)w;
-  register Cardinal i, num = 0, j = *num_args;
+  Cardinal i, num = 0, j = *num_args;
   Arg i_args[15];
   /*
    * Get the correct args to pass to the I18List widget
@@ -943,7 +943,7 @@ Widget XmCreateMultiList(Widget parent, String name, ArgList args, Cardinal num_
 
 Widget XmVaCreateMultiList(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

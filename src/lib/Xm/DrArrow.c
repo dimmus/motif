@@ -53,7 +53,7 @@ void XmeDrawArrow(Display *display,
   static XRectangle *bot = NULL;
   XRectangle *rect_tmp;
   int size, xOffset = 0, yOffset = 0, wwidth, start;
-  register int temp, yy, i, h, w;
+  int temp, yy, i, h, w;
   short t = 0, b = 0, c = 0;
   XtAppContext app;
   if (!d)

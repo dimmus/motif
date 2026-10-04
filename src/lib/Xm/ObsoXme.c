@@ -72,18 +72,18 @@ extern XmFontList _XmGetDefaultFontList(Widget w, unsigned char fontListType);
 extern void _XmGetMaxCursorSize(Widget w, Dimension *width, Dimension *height);
 extern Cursor _XmGetNullCursor(Widget w);
 extern Widget _XmGetTextualDragIcon(Widget w);
-extern XmGadget _XmInputInGadget(Widget wid, register int x, register int y);
+extern XmGadget _XmInputInGadget(Widget wid, int x, int y);
 extern int _XmMicroSleep(long usecs);
 extern void _XmMoveObject(Widget wid, Position x, Position y);
 extern void _XmNavigChangeManaged(Widget wid);
 extern String _XmOSGetHomeDirName(void);
 extern XmString _XmOSGetLocalizedString(char *reserved, Widget widget, char *resource,
                                         String string);
-extern void _XmRedisplayGadgets(Widget w, register XEvent *event, Region region);
+extern void _XmRedisplayGadgets(Widget w, XEvent *event, Region region);
 extern void _XmResizeObject(Widget wid, Dimension width, Dimension height, Dimension border_width);
 extern Boolean _XmStringIsXmString(XmString string);
 extern void _XmStringUpdateWMShellTitle(XmString xmstr, Widget shell);
-extern Boolean _XmStringsAreEqual(register char *in_str, register char *test_str);
+extern Boolean _XmStringsAreEqual(char *in_str, char *test_str);
 extern XmImportOperator _XmToHorizontalPixels(Widget widget, int offset, XtArgVal *value);
 extern XmImportOperator _XmToVerticalPixels(Widget widget, int offset, XtArgVal *value);
 extern void _XmVirtualToActualKeysym(Display *dpy, KeySym virtKeysym, KeySym *actualKeysymRtn,
@@ -224,7 +224,7 @@ void _XmNavigChangeManaged(Widget wid)
 }
 
 /********************************************************************/
-void _XmRedisplayGadgets(Widget w, register XEvent *event, Region region)
+void _XmRedisplayGadgets(Widget w, XEvent *event, Region region)
 {
   XmeRedisplayGadgets(w, event, region);
 }
@@ -288,7 +288,7 @@ XtGeometryResult _XmGMReplyToQueryGeometry(Widget widget,
 }
 
 /********************************************************************/
-Boolean _XmStringsAreEqual(register char *in_str, register char *test_str)
+Boolean _XmStringsAreEqual(char *in_str, char *test_str)
 {
   return XmeNamesAreEqual(in_str, test_str);
 }
@@ -306,7 +306,7 @@ Boolean _XmStringIsXmString(XmString string)
 }
 
 /********************************************************************/
-XmGadget _XmInputInGadget(Widget wid, register int x, register int y)
+XmGadget _XmInputInGadget(Widget wid, int x, int y)
 {
   return (XmGadget)XmObjectAtPoint(wid, x, y);
 }

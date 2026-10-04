@@ -578,7 +578,7 @@ Widget XmCreateArrowButton(Widget parent, char *name, ArgList arglist, Cardinal 
 
 Widget XmVaCreateArrowButton(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

@@ -3421,7 +3421,7 @@ static void df_InsertString(Widget w, XEvent *event, char **params, Cardinal *nu
   int num_chars;
   Boolean replace_res;
   Boolean pending_delete = False;
-  register int i;
+  int i;
   if (!XmTextF_editable(tf)) {
     if (XmTextF_verify_bell(tf))
       XBell(XtDisplay((Widget)tf), 0);
@@ -8656,7 +8656,7 @@ Widget XmCreateDataField(Widget parent, char *name, ArgList arglist, Cardinal ar
 
 Widget XmVaCreateDataField(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

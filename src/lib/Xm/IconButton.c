@@ -636,7 +636,7 @@ static Boolean SetValues(
   Boolean resetGCs, recalc, redisplay, reinit_l, reinit_ls;
   XmIconButtonWidget old_iw = (XmIconButtonWidget)current;
   XmIconButtonWidget set_iw = (XmIconButtonWidget)set;
-  register int i;
+  int i;
   Boolean pixmapChanged = False;
   Boolean pixmapGeoChanged = False;
   Boolean resetPixmapValues = False;
@@ -1068,7 +1068,7 @@ static void ButtonUp(Widget w, XEvent *event, String *params, Cardinal *num_para
  */
 static XmListElem *GetCacheElem(Display *disp, Pixmap pix)
 {
-  register XmListElem *elem;
+  XmListElem *elem;
   if (pix_cache_list == NULL)
     return (NULL);
   for (elem = XmListFirst(pix_cache_list); elem != NULL; elem = XmListElemNext(elem)) {

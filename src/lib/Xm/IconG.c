@@ -2982,7 +2982,7 @@ Widget XmCreateIconGadget(Widget parent, char *name, ArgList arglist, Cardinal a
 
 Widget XmVaCreateIconGadget(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

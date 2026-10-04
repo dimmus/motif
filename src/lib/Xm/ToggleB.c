@@ -2020,7 +2020,7 @@ static void ComputeSpace(XmToggleButtonWidget tb)
 /*ARGUSED*/
 static void Redisplay(Widget w, XEvent *event, Region region)
 {
-  register XmToggleButtonWidget tb = (XmToggleButtonWidget)w;
+  XmToggleButtonWidget tb = (XmToggleButtonWidget)w;
   if (!XtIsRealized(w))
     return; /* Fix CR #4884, D. Rand 6/4/92 */
   ComputeSpace(tb);
@@ -2067,7 +2067,7 @@ static void Redisplay(Widget w, XEvent *event, Region region)
  **************************************************************************/
 static void Resize(Widget w)
 {
-  register XmToggleButtonWidget tb = (XmToggleButtonWidget)w;
+  XmToggleButtonWidget tb = (XmToggleButtonWidget)w;
   /* BEGIN OSF Fix pir 1778 */
   if (Lab_IsPixmap(w))
     SetToggleSize(tb);
@@ -2605,7 +2605,7 @@ Widget XmCreateToggleButton(Widget parent, char *name, Arg *arglist, Cardinal ar
 
 Widget XmVaCreateToggleButton(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

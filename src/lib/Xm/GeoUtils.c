@@ -662,7 +662,7 @@ Boolean _XmGeoSetupKid(XmKidGeometry geo, /* Must be non-NULL.*/
  ****************/
 void _XmGeoMatrixGet(XmGeoMatrix geoSpec, int geoType) /* XmGET_PREFERRED_SIZE or */
 {
-  register XmKidGeometry boxPtr;
+  XmKidGeometry boxPtr;
   XmKidGeometry rowPtr;
   XmGeoMajorLayout layoutPtr;
   XtWidgetGeometry *request;
@@ -704,8 +704,8 @@ void _XmGeoMatrixGet(XmGeoMatrix geoSpec, int geoType) /* XmGET_PREFERRED_SIZE o
  ****************/
 void _XmGeoMatrixSet(XmGeoMatrix geoSpec)
 {
-  register XmKidGeometry rowPtr;
-  register XmGeoRowLayout layoutPtr;
+  XmKidGeometry rowPtr;
+  XmGeoRowLayout layoutPtr;
   Boolean fixUps = FALSE;
 /****************/
 #ifdef DEBUG_GEOUTILS
@@ -765,8 +765,8 @@ void _XmGeoMatrixSet(XmGeoMatrix geoSpec)
  ****************/
 void _XmGeoAdjustBoxes(XmGeoMatrix geoSpec)
 {
-  register XmKidGeometry rowPtr;
-  register XmKidGeometry boxPtr;
+  XmKidGeometry rowPtr;
+  XmKidGeometry boxPtr;
   XmGeoRowLayout layoutPtr;
   Dimension globalSetBorder;
   Dimension globalBorder;
@@ -810,8 +810,8 @@ void _XmGeoAdjustBoxes(XmGeoMatrix geoSpec)
  ****************/
 void _XmGeoGetDimensions(XmGeoMatrix geoSpec)
 {
-  register XmKidGeometry rowPtr;
-  register XmKidGeometry boxPtr;
+  XmKidGeometry rowPtr;
+  XmKidGeometry boxPtr;
   XmGeoRowLayout layoutPtr;
   Dimension boxH;
   Dimension rowH;
@@ -936,8 +936,8 @@ void _XmGeoGetDimensions(XmGeoMatrix geoSpec)
  ****************/
 static Dimension _XmGeoStretchVertical(XmGeoMatrix geoSpec, Dimension actualH, Dimension desiredH)
 {
-  register XmGeoRowLayout layoutPtr;
-  register XmKidGeometry rowPtr;
+  XmGeoRowLayout layoutPtr;
+  XmKidGeometry rowPtr;
   int fillOffset;
   int stretchableSpace;
   int deltaY;
@@ -1026,8 +1026,8 @@ static Dimension _XmGeoStretchVertical(XmGeoMatrix geoSpec, Dimension actualH, D
  ****************/
 static Dimension _XmGeoFillVertical(XmGeoMatrix geoSpec, Dimension actualH, Dimension desiredH)
 {
-  register XmGeoRowLayout layoutPtr;
-  register XmKidGeometry rowPtr;
+  XmGeoRowLayout layoutPtr;
+  XmKidGeometry rowPtr;
   unsigned long fillAmount;
   unsigned long totalSpecSpace;
   Dimension marginH;
@@ -1489,7 +1489,7 @@ static Position _XmGeoLayoutWrap(XmKidGeometry rowPtr,
   Dimension boxH;
   int deltaW;
   XmKidGeometry rowBegin;
-  register XmKidGeometry boxPtr;
+  XmKidGeometry boxPtr;
   Position endX;
   /****************/
   rowX = x + endSpace;
@@ -1689,8 +1689,8 @@ static Position _XmGeoArrangeList(XmKidGeometry rowBoxes,
  ****************/
 Dimension _XmGeoBoxesSameWidth(XmKidGeometry rowPtr, Dimension width)
 {
-  register XmKidGeometry boxPtr;
-  register Dimension useW;
+  XmKidGeometry boxPtr;
+  Dimension useW;
   /****************/
   useW = width; /* Setup default width of each box in row, as specified.*/
   if (width <= 1) {
@@ -1725,8 +1725,8 @@ Dimension _XmGeoBoxesSameWidth(XmKidGeometry rowPtr, Dimension width)
  ****************/
 Dimension _XmGeoBoxesSameHeight(XmKidGeometry rowPtr, Dimension height)
 {
-  register XmKidGeometry boxPtr;
-  register Dimension useH;
+  XmKidGeometry boxPtr;
+  Dimension useH;
   /****************/
   useH = height; /* Setup default height of each box in row, as specified.*/
   if (height <= 1) {
@@ -1761,8 +1761,8 @@ void _XmSeparatorFix(XmGeoMatrix geoSpec,
                      XmGeoMajorLayout layoutPtr, /* unused */
                      XmKidGeometry rowPtr)
 {
-  register Dimension marginW;
-  register Dimension twoMarginW;
+  Dimension marginW;
+  Dimension twoMarginW;
   /****************/
   marginW = geoSpec->margin_w;
   twoMarginW = (marginW << 1);
@@ -1802,9 +1802,9 @@ void _XmMenuBarFix(XmGeoMatrix geoSpec,
                    XmGeoMajorLayout layoutPtr, /* unused */
                    XmKidGeometry rowPtr)
 {
-  register Dimension marginW;
-  register Dimension marginH;
-  register Dimension twoMarginW;
+  Dimension marginW;
+  Dimension marginH;
+  Dimension twoMarginW;
   /****************/
   marginW = geoSpec->margin_w;
   twoMarginW = (marginW << 1);
@@ -1877,9 +1877,9 @@ void _XmGeoLoadValues(Widget wid,
  * Get a count of the managed kids of a parent, it is assumed that all
  *   gadgets are always managed
  ****************/
-int _XmGeoCount_kids(register CompositeWidget c)
+int _XmGeoCount_kids(CompositeWidget c)
 {
-  register int i, n = 0;
+  int i, n = 0;
   /****************/
   for (i = 0; (Cardinal)i < c->composite.num_children; i++) {
     if (c->composite.children[i]->core.managed) {

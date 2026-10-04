@@ -142,9 +142,9 @@ void _XmDrawShadow(Display *display,
 {
   static XRectangle *rects = NULL;
   static int rect_count = 0;
-  register int i;
-  register int size2;
-  register int size3;
+  int i;
+  int size2;
+  int size3;
   if (size <= 0)
     return;
   if (size > width / 2)
@@ -202,7 +202,7 @@ void SetMwmStuff(XmVendorShellExtObject ove, /* unused */
 
 static Boolean _isISO(String charset)
 {
-  register int i;
+  int i;
   if (strlen(charset) == 5) {
     for (i = 0; i < 5; i++) {
       if (!isdigit((unsigned char)charset[i]))

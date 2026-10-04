@@ -293,8 +293,8 @@ static void Resize(Widget wid)
 static Widget ObjectAtPoint(Widget wid, Position x, Position y)
 {
   CompositeWidget cw = (CompositeWidget)wid;
-  register int i;
-  register Widget widget;
+  int i;
+  Widget widget;
   i = cw->composite.num_children;
   while (i--) {
     widget = cw->composite.children[i];
@@ -491,7 +491,7 @@ Widget XmCreateDrawingArea(Widget p, String name, ArgList args, Cardinal n)
 
 Widget XmVaCreateDrawingArea(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

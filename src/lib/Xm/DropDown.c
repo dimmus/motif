@@ -2021,7 +2021,7 @@ static Boolean SetTextFromList(Widget w)
   XmStringTable items;
   int count;
   unsigned char policy;
-  register int i, text_loc;
+  int i, text_loc;
   XmDropDownClassPartExtension *addition;
   addition = CheckExtensions((XmDropDownWidgetClass)XtClass(cbw));
   if (addition && addition->setTextFromList) {
@@ -2041,7 +2041,7 @@ static Boolean SetTextFromList(Widget w)
   text_loc = 0;
   i = 0;
   while (i < count) {
-    register int len;
+    int len;
     String ptr;
     wchar_t temp[BUFSIZ];
     ptr = XmStringUnparse(items[i], NULL, XmCHARSET_TEXT, XmMULTIBYTE_TEXT, NULL, 0, XmOUTPUT_ALL);
@@ -2101,7 +2101,7 @@ Widget XmCreateDropDown(Widget parent, String name, ArgList args, Cardinal num_a
 
 Widget XmVaCreateDropDown(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

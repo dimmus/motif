@@ -2355,7 +2355,7 @@ static Boolean ConstraintSetValues(Widget old,
                                    Cardinal *num_args) /* unused */
 {
   XmRowColumnWidget rc = (XmRowColumnWidget)XtParent(new_w);
-  register Widget tmp;
+  Widget tmp;
   int i;
   XtWidgetGeometry current;
   Boolean margins_changed;
@@ -2544,7 +2544,7 @@ Widget XmCreateRowColumn(Widget p, char *name, ArgList al, Cardinal ac)
 
 Widget XmVaCreateRowColumn(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);
@@ -2840,9 +2840,9 @@ void _XmCallRowColumnUnmapCallback(Widget wid, XEvent *event)
  */
 static Widget FindFirstManagedChild(CompositeWidget m, Boolean first_button)
 {
-  register Widget *kid;
-  register int i = 0;
-  register int n;
+  Widget *kid;
+  int i = 0;
+  int n;
   if (!m)
     return (NULL);
   kid = m->composite.children;

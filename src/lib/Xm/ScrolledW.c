@@ -2862,7 +2862,7 @@ Widget XmCreateScrolledWindow(Widget parent, char *name, ArgList args, Cardinal 
 
 Widget XmVaCreateScrolledWindow(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

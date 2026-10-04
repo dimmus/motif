@@ -51,8 +51,8 @@ static char *RCS_Id = "Id: xpm.shar,v 3.71 1998/03/19 19:47:14 lehors Exp $";
 static int ParseComment(xpmData *data)
 {
   if (data->type == XPMBUFFER) {
-    register char c;
-    register unsigned int n = 0;
+    char c;
+    unsigned int n = 0;
     unsigned int notend;
     char *s;
     const char *s2;
@@ -118,8 +118,8 @@ static int ParseComment(xpmData *data)
   }
   else {
     FILE *file = data->stream.file;
-    register int c;
-    register unsigned int n = 0, a;
+    int c;
+    unsigned int n = 0, a;
     unsigned int notend;
     char *s;
     const char *s2;
@@ -194,7 +194,7 @@ int xpmNextString(xpmData *data)
   if (!data->type)
     data->cptr = (data->stream.data)[++data->line];
   else if (data->type == XPMBUFFER) {
-    register char c;
+    char c;
     /*
      * Never move past the terminating NUL of the buffer: leave cptr
      * pointing at it and report the premature end instead.
@@ -229,7 +229,7 @@ int xpmNextString(xpmData *data)
     }
   }
   else {
-    register int c;
+    int c;
     FILE *file = data->stream.file;
     /* get to the end of the current string */
     if (data->Eos) {
@@ -264,7 +264,7 @@ int xpmNextString(xpmData *data)
  */
 unsigned int xpmNextWord(xpmData *data, char *buf, unsigned int buflen)
 {
-  register unsigned int n = 0;
+  unsigned int n = 0;
   int c;
   if (!data->type || data->type == XPMBUFFER) {
     while (isspace(c = *data->cptr) && c != data->Eos)

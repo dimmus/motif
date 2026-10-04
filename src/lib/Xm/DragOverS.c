@@ -394,7 +394,7 @@ static Boolean CacheMixedIcon(XmDragOverShellWidget dos,
                               Position opY,
                               XmDragIconObject mixedIcon)
 {
-  register MixedIconCache *cache_ptr;
+  MixedIconCache *cache_ptr;
   if (mixedIcon == NULL)
     return False;
   cache_ptr = XtNew(MixedIconCache);
@@ -447,7 +447,7 @@ static XmDragIconObject GetMixedIcon(XmDragOverShellWidget dos,
                                      Position opX,
                                      Position opY)
 {
-  register MixedIconCache *cache_ptr;
+  MixedIconCache *cache_ptr;
   for (cache_ptr = mixed_cache; cache_ptr; cache_ptr = cache_ptr->next) {
     if (cache_ptr->depth == depth && cache_ptr->width == width && cache_ptr->height == height &&
         cache_ptr->cursorForeground == dos->drag.cursorForeground &&
@@ -1527,7 +1527,7 @@ static Cursor GetDragIconCursor(XmDragOverShellWidget dos,
   Screen *screen = XtScreen(dos);
   Display *display = XtDisplay(dos);
   XmDragCursorCache *cursorCachePtr = NULL;
-  register XmDragCursorCache cursorCache = NULL;
+  XmDragCursorCache cursorCache = NULL;
   XColor colors[2];
   Boolean useCache = True;
   Cursor cursor;
@@ -2802,7 +2802,7 @@ static void InstallColormap(XmDragOverShellWidget dw)
     /* there was a property, add myself to the beginning */
     else {
       Window *windows = (Window *)_XmMallocArray(countReturn + 1, sizeof(Window));
-      register int i;
+      int i;
       windows[0] = XtWindow(dw);
       for (i = 0; i < countReturn; i++)
         windows[i + 1] = windowsReturn[i];
@@ -2837,7 +2837,7 @@ static void UninstallColormap(XmDragOverShellWidget dos)
   Status status;
   Window *windowsReturn;
   int countReturn;
-  register int i;
+  int i;
   if (!dos->drag.colormapShell)
     FindColormapShell(dos);
   if (dos->drag.colormapShell) {
