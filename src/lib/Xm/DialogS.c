@@ -674,7 +674,8 @@ Widget XmeCreateClassDialog(
   ds_name = _XmMallocArray(size, sizeof(char));
   snprintf(ds_name, size, "%s%s", name, XmDIALOG_SUFFIX);
   ds_args = (ArgList)_XmMallocArray(bb_n + 1, sizeof(Arg));
-  memcpy(ds_args, bb_args, (sizeof(Arg) * bb_n));
+  if (bb_n > 0)
+    memcpy(ds_args, bb_args, (sizeof(Arg) * bb_n));
   XtSetArg(ds_args[bb_n], XmNallowShellResize, True);
   ds = XmCreateDialogShell(ds_p, ds_name, ds_args, bb_n + 1);
   XtFree((char *)ds_args);

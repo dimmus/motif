@@ -1729,7 +1729,8 @@ Widget XmCreateSelectionDialog(Widget ds_p, String name, ArgList sb_args, Cardin
   /*  allocate arglist, copy args, add dialog type arg
    */
   _sb_args = (ArgList)_XmMallocArray(sb_n + 1, sizeof(Arg));
-  memcpy(_sb_args, sb_args, sizeof(Arg) * sb_n);
+  if (sb_n > 0)
+    memcpy(_sb_args, sb_args, sizeof(Arg) * sb_n);
   XtSetArg(_sb_args[sb_n], XmNdialogType, XmDIALOG_SELECTION);
   sb_n++;
   /*  create SelectionBoxDialog, free args, return */
@@ -1749,7 +1750,8 @@ Widget XmCreatePromptDialog(Widget ds_p, String name, ArgList sb_args, Cardinal 
   /*  allocate arglist, copy args, add dialog type arg
    */
   _sb_args = (ArgList)_XmMallocArray(sb_n + 1, sizeof(Arg));
-  memcpy(_sb_args, sb_args, sizeof(Arg) * sb_n);
+  if (sb_n > 0)
+    memcpy(_sb_args, sb_args, sizeof(Arg) * sb_n);
   XtSetArg(_sb_args[sb_n], XmNdialogType, XmDIALOG_PROMPT);
   sb_n++;
   /*  create SelectionBoxDialog, free args, return */

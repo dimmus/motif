@@ -736,7 +736,8 @@ Widget XmCreateCommand(Widget parent, String name, ArgList al, Cardinal ac)
   /* (like, no list gets created, but used all through command) */
   /*  allocate arglist, copy args, add dialog type arg */
   argsNew = (ArgList)_XmMallocArray(ac + 1, sizeof(Arg));
-  memcpy(argsNew, al, sizeof(Arg) * ac);
+  if (ac > 0)
+    memcpy(argsNew, al, sizeof(Arg) * ac);
   XtSetArg(argsNew[ac], XmNdialogType, XmDIALOG_COMMAND);
   ac++;
   /*  create Command, free argsNew, return */

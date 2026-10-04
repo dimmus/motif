@@ -22,12 +22,15 @@
 #include <Xm/Xm.h>
 #include <Xm/AccTextT.h>
 #include <Xm/BulletinB.h>
+#include <Xm/Command.h>
 #include <Xm/Container.h>
 #include <Xm/FontS.h>
 #include <Xm/IconG.h>
 #include <Xm/Label.h>
+#include <Xm/MessageB.h>
 #include <Xm/RepType.h>
 #include <Xm/Scale.h>
+#include <Xm/SelectioB.h>
 #include <Xm/SlideC.h>
 #include <Xm/SpinB.h>
 #include <Xm/TextF.h>
@@ -635,6 +638,34 @@ START_TEST(label_set_wide_value)
 }
 END_TEST
 
+/*
+ * The dialog convenience functions copied the caller's argument list
+ * with memcpy() even when it was NULL with a count of 0, which is
+ * undefined behaviour (UBSan: "null pointer passed as argument 2").
+ */
+START_TEST(dialogs_without_args)
+{
+	Widget top, w;
+
+	current_class = "dialogs";
+	top = init_xt("WidgetRegress");
+	XtAppSetWarningMsgHandler(app, xt_warning_handler);
+	w = XmCreateMessageDialog(top, "message", NULL, 0);
+	XtManageChild(w);
+	w = XmCreatePromptDialog(top, "prompt", NULL, 0);
+	XtManageChild(w);
+	w = XmCreateSelectionDialog(top, "selection", NULL, 0);
+	XtManageChild(w);
+	w = XmCreateCommandDialog(top, "command", NULL, 0);
+	XtManageChild(w);
+	w = XmCreateBulletinBoardDialog(top, "bulletin", NULL, 0);
+	XtManageChild(w);
+	XtRealizeWidget(top);
+	pump(top);
+	uninit_xt();
+}
+END_TEST
+
 /* The generated table must have found the headers */
 START_TEST(class_table)
 {
@@ -682,6 +713,7 @@ void widgets_suite(SRunner *runner)
 		tcase_add_test(t, spin_box_int_min);
 		tcase_add_test(t, icon_gadget_detail_order);
 		tcase_add_test(t, label_set_wide_value);
+		tcase_add_test(t, dialogs_without_args);
 		suite_add_tcase(s, t);
 	}
 

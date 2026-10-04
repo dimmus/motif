@@ -1032,7 +1032,8 @@ static Widget CreateDialog(Widget parent,
   /* add dialogType to arglist and force to type passed in... */
   /*  allocate arglist, copy args, add dialog type arg */
   argsNew = (ArgList)_XmMallocArray(ac + 1, sizeof(Arg));
-  memcpy(argsNew, al, sizeof(Arg) * ac);
+  if (ac > 0)
+    memcpy(argsNew, al, sizeof(Arg) * ac);
   XtSetArg(argsNew[ac], XmNdialogType, type);
   ac++;
   /*  create MessageBoxDialog free argsNew, return */
