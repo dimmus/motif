@@ -23,9 +23,11 @@
 #include <Xm/TextF.h>
 #include <Xm/TraitP.h>
 #include <Xm/TransferT.h>
+#include <Xm/TextP.h>
 #include <check.h>
 
 #include "suites.h"
+#include "TextI.h"
 
 static Widget top, bb;
 
@@ -348,6 +350,146 @@ START_TEST(large_document)
 }
 END_TEST
 
+/*
+ * The line table lookup as it was before it bisected: a walk from
+ * table_index, forward or backward.
+ */
+static unsigned int walk_table_index(XmTextWidget tw, XmTextPosition pos)
+{
+	XmTextLineTable line_table = tw->text.line_table;
+	unsigned int cur_index = tw->text.table_index;
+	unsigned int max_index = tw->text.total_lines - 1;
+	unsigned int position = (unsigned int)pos;
+
+	if (line_table[cur_index].start_pos < position) {
+		while (cur_index < max_index &&
+		       line_table[cur_index].start_pos < position)
+			cur_index++;
+		if (position < line_table[cur_index].start_pos)
+			cur_index--;
+	} else {
+		while (cur_index && line_table[cur_index].start_pos > position)
+			cur_index--;
+	}
+	return cur_index;
+}
+
+static unsigned long lcg(unsigned long *state)
+{
+	*state = *state * 6364136223846793005UL + 1442695040888963407UL;
+	return *state >> 33;
+}
+
+/* Check _XmTextGetTableIndex against the walk, from several cursors. */
+static void check_line_table(Widget w, unsigned long *rnd)
+{
+	XmTextWidget tw = (XmTextWidget)w;
+	XmTextLineTable lt = tw->text.line_table;
+	unsigned int total = tw->text.total_lines, saved = tw->text.table_index;
+	XmTextPosition last = XmTextGetLastPosition(w);
+	unsigned int cursors[4], i, c, k;
+
+	ck_assert_uint_ge(total, 1);
+	/* The bisection relies on this. */
+	for (i = 1; i < total; i++)
+		ck_assert_uint_le(lt[i - 1].start_pos, lt[i].start_pos);
+
+	cursors[0] = 0;
+	cursors[1] = total / 2;
+	cursors[2] = total - 1;
+	cursors[3] = lcg(rnd) % total;
+	for (c = 0; c < 4; c++) {
+		tw->text.table_index = cursors[c];
+		for (k = 0; k < 64; k++) {
+			XmTextPosition pos;
+
+			if (k < 2)
+				pos = k ? last : 0;
+			else if (k < 32)
+				pos = lcg(rnd) % (last + 1);
+			else
+				pos = lt[lcg(rnd) % total].start_pos +
+				      (XmTextPosition)(k % 3) - 1;
+			if (pos < 0)
+				pos = 0;
+			ck_assert_uint_eq(_XmTextGetTableIndex(tw, pos),
+					  walk_table_index(tw, pos));
+		}
+	}
+	tw->text.table_index = saved;
+}
+
+/*
+ * The line table: lookups find the line the old walk found, while the
+ * text is edited, with and without word wrap (whose continuation lines
+ * are in the table too).
+ */
+START_TEST(text_line_table_lookup)
+{
+	static const char words[] = "lorem ipsum dolor sit amet consectetur "
+				    "adipiscing elit sed do eiusmod tempor ";
+	unsigned long rnd = 12345;
+	Arg args[4];
+	char *doc, ins[64];
+	int wrap, i, j, len;
+	Widget t;
+
+	for (wrap = 0; wrap < 2; wrap++) {
+		XtSetArg(args[0], XmNeditMode, XmMULTI_LINE_EDIT);
+		XtSetArg(args[1], XmNwordWrap, wrap);
+		XtSetArg(args[2], XmNscrollHorizontal, False);
+		XtSetArg(args[3], XmNcolumns, 20);
+		t = XmCreateScrolledText(bb, "text", args, 4);
+		XtManageChild(t);
+		XtRealizeWidget(top);
+
+		/* 400 lines of 0 to 79 characters. */
+		doc = malloc(400 * 81 + 1);
+		ck_assert_ptr_nonnull(doc);
+		for (i = len = 0; i < 400; i++) {
+			int n = lcg(&rnd) % 80;
+
+			for (j = 0; j < n; j++)
+				doc[len++] = words[(i * 7 + j) % (sizeof words - 1)];
+			doc[len++] = '\n';
+		}
+		doc[len] = '\0';
+		XmTextSetString(t, doc);
+		free(doc);
+		pump();
+		/* Word wrap adds continuation lines to the 400 lines. */
+		if (wrap)
+			ck_assert_int_gt(((XmTextWidget)t)->text.total_lines, 600);
+		else
+			ck_assert_int_eq(((XmTextWidget)t)->text.total_lines, 401);
+		check_line_table(t, &rnd);
+
+		for (i = 0; i < 200; i++) {
+			XmTextPosition last = XmTextGetLastPosition(t);
+			XmTextPosition pos = lcg(&rnd) % (last + 1);
+
+			if (lcg(&rnd) % 3) {
+				int n = 1 + lcg(&rnd) % 40;
+
+				for (j = 0; j < n; j++)
+					ins[j] = (lcg(&rnd) % 8) ? words[lcg(&rnd) % (sizeof words - 1)]
+								 : '\n';
+				ins[n] = '\0';
+				XmTextInsert(t, pos, ins);
+			} else {
+				XmTextPosition end = pos + lcg(&rnd) % 100;
+
+				XmTextReplace(t, pos, end > last ? last : end, "");
+			}
+			if (i % 10 == 0)
+				XmTextShowPosition(t, lcg(&rnd) % (XmTextGetLastPosition(t) + 1));
+			check_line_table(t, &rnd);
+		}
+		XtDestroyWidget(XtParent(t));
+	}
+}
+END_TEST
+
 /* The left and right edges of the text area of a text field */
 static void text_edges(Widget w, Position *left, Position *right)
 {
@@ -593,6 +735,7 @@ void text_suite(SRunner *runner)
 	tcase_add_test(t, text_substring_bad_size);
 	tcase_add_test(t, text_selection_and_clipboard);
 	tcase_add_test(t, copy_text_to_textfield);
+	tcase_add_test(t, text_line_table_lookup);
 	tcase_set_timeout(t, 60);
 	suite_add_tcase(s, t);
 
