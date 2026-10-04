@@ -1130,7 +1130,6 @@ XmVisibility XmGetVisibility(Widget wid)
   Window rootwindow, parent_window, p_window, *children;
   unsigned int numchildren;
   int i;
-  Window *windowptr;
   _XmWidgetToAppContext(wid);
   _XmAppLock(app);
   if (!wid || !_XmComputeVisibilityRect(wid, &rect, FALSE, TRUE)) {
@@ -1152,16 +1151,13 @@ XmVisibility XmGetVisibility(Widget wid)
     _XmAppUnlock(app);
     return (XmVISIBILITY_UNOBSCURED);
   }
-  windowptr = children;
   /* walk through those which are under the window of interest */
   for (i = 0; (unsigned int)i < numchildren; i++) {
-    if (*windowptr == XtWindow(wid)) {
+    if (children[i] == XtWindow(wid)) {
       break;
     }
-    windowptr++;
   }
   i++;
-  windowptr++;
   /* process windows above the window of interest */
   if ((unsigned int)i < numchildren) {
     XRectangle parent_rect, srcRectB, intersect_rect;
@@ -1172,7 +1168,7 @@ XmVisibility XmGetVisibility(Widget wid)
     XUnionRectWithRegion(&rect, region, region);
     _XmSetRect(&parent_rect, XtParent(wid));
     while ((unsigned int)i < numchildren) {
-      if (SiblingGeometry(XtParent(wid), *windowptr, &srcRectB)) {
+      if (SiblingGeometry(XtParent(wid), children[i], &srcRectB)) {
         srcRectB.x += parent_rect.x;
         srcRectB.y += parent_rect.y;
         /* accumulate all the region covered by siblings */
@@ -1181,7 +1177,6 @@ XmVisibility XmGetVisibility(Widget wid)
         }
       }
       i++;
-      windowptr++;
     }
     XSubtractRegion(region, tmp_region, left_region);
     if (XEqualRegion(region, left_region)) {
