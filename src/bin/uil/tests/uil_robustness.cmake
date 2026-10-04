@@ -163,7 +163,9 @@ uil_case(widget_operand 1 "context requires a value - widget was specified"
 file(WRITE "${WORK_DIR}/xor.uil" "module m\nvalue a : exported 6 ^ 3;\nend module;\n")
 uil_case(xor_operator 0 "" ARGS -o a.uid -m -v xor.lis xor.uil)
 file(READ "${WORK_DIR}/xor.lis" lis)
-if(NOT lis MATCHES "\n +5\n" OR lis MATCHES "\n +7\n")
+# The machine listing shows a 4-byte integer as "value: 5" and an 8-byte
+# one (64-bit long) on a line of its own.
+if(NOT lis MATCHES "(\n +|value: )5 *\n" OR lis MATCHES "(\n +|value: )7 *\n")
   message(STATUS "FAIL xor_operator: 6 ^ 3 is not 5 in the listing\n${lis}")
   math(EXPR failures "${failures} + 1")
 endif()
