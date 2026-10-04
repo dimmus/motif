@@ -15,9 +15,12 @@
 # The ABI dumps and reports are left in $WORK_DIR (default: _abi) for
 # upload as CI artifacts.
 #
-# The exit status is the bitwise OR of the abidiff statuses: 0 when
-# nothing changed, 4 for compatible changes, 12 for incompatible ones, and
-# 1 or 2 for errors.
+# Each comparison prints its abidiff status: 0 when nothing changed, 4
+# for compatible changes, 12 for incompatible ones, and 1 or 2 for errors.
+# The script fails (status 1) on an incompatible change or an error; a
+# compatible change, such as a new member in the tail padding of a
+# structure, is reported but does not fail it.  Under GitHub Actions the
+# results are also posted as annotations.
 
 set -eu
 
@@ -33,6 +36,13 @@ fi
 
 mkdir -p "$work"
 work=$(cd "$work" && pwd)
+
+# annotate LEVEL MESSAGE: a GitHub Actions annotation (error, warning).
+annotate() {
+  if [ -n "${GITHUB_ACTIONS:-}" ]; then
+    echo "::$1 title=ABI check::$2"
+  fi
+}
 
 # build_tree SRCDIR NAME: build SRCDIR and install it into $work/NAME/root.
 build_tree() {
@@ -89,6 +99,7 @@ for ref in "$@"; do
   # An old revision that no longer builds here is reported, not fatal.
   if ! build_tree "$work/src-$name" "$name" || ! dump_abi "$name"; then
     echo "=== $ref: could not be built or dumped, skipped"
+    annotate error "$ref could not be built or dumped for the ABI comparison"
     status=$((status | 1))
     continue
   fi
@@ -99,7 +110,15 @@ for ref in "$@"; do
       >"$report" 2>&1 || rc=$?
     echo "=== lib$lib: $ref -> working tree: abidiff status $rc"
     cat "$report"
+    if [ "$rc" -ne 0 ]; then
+      if [ $((rc & 8)) -ne 0 ]; then level=error; what="incompatible ABI changes"
+      elif [ "$rc" -eq 4 ]; then level=warning; what="compatible ABI changes"
+      else level=error; what="abidiff failed (status $rc)"
+      fi
+      annotate "$level" "lib$lib: $what compared with $ref; see the job log or the abi artifact"
+    fi
     status=$((status | rc))
   done
 done
-exit "$status"
+# Only errors (1, 2) and incompatible changes (8) fail the check.
+[ $((status & 11)) -eq 0 ]
