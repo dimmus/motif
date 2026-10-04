@@ -330,6 +330,156 @@ START_TEST(concat_long_text)
 }
 END_TEST
 
+/* The direction of the last segment of s whose direction is set */
+static XmStringDirection scan_last_dir(XmString s)
+{
+	int i, j;
+
+	for (i = _XmStrEntryCount(s); i > 0; i--) {
+		_XmStringEntry line = _XmStrEntry(s)[i - 1];
+
+		for (j = _XmEntrySegmentCountGet(line); j > 0; j--) {
+			_XmStringEntry seg =
+				(_XmStringEntry)_XmEntrySegmentGet(line)[j - 1];
+
+			/* _XmEntryDirectionGet is not exported */
+			unsigned int dir = _XmEntryOptimized(seg) ?
+						   seg->single.str_dir :
+						   seg->unopt_single.str_dir;
+
+			if (dir != XmSTRING_DIRECTION_UNSET)
+				return dir;
+		}
+	}
+	return XmSTRING_DIRECTION_UNSET;
+}
+
+/*
+ * XmStringConcatAndFree keeps the last direction set in the header of
+ * the string it builds, rather than search the whole string for it
+ * when a line is empty.  Whatever the pieces, it must be what that
+ * search finds.
+ */
+START_TEST(concat_last_direction)
+{
+	static const XmStringDirection dirs[] = {
+		XmSTRING_DIRECTION_L_TO_R, XmSTRING_DIRECTION_R_TO_L,
+		XmSTRING_DIRECTION_UNSET
+	};
+	unsigned int rng = 12345;
+	int round, i;
+
+	for (round = 0; round < 200; round++) {
+		XmString s = NULL, piece;
+
+		for (i = 0; i < 40; i++) {
+			rng = rng * 1103515245 + 12345;
+			switch ((rng >> 16) % 7) {
+			case 0:
+				piece = XmStringDirectionCreate(
+					dirs[(rng >> 8) % 3]);
+				break;
+			case 1:
+			case 2:
+				piece = sep();
+				break;
+			case 3:
+				piece = XmStringCreate("x", "tagA");
+				break;
+			case 4:
+				piece = cat(sep(), XmStringCreate("y", "tagB"),
+					    sep(), NULL);
+				break;
+			case 5:
+				piece = tab();
+				break;
+			default:
+				piece = XmStringCreateLocalized("z");
+				break;
+			}
+			if ((rng >> 24) % 5 == 0)
+				s = XmStringConcatAndFree(piece, s);
+			else
+				s = XmStringConcatAndFree(s, piece);
+			if (_XmStrMultiple(s) && _XmStrLastDirKnown(s))
+				ck_assert_uint_eq(_XmStrLastDir(s),
+						  scan_last_dir(s));
+		}
+		XmStringFree(s);
+	}
+}
+END_TEST
+
+/* The text of s with its separators as newlines */
+static char *unparse_lines(XmString s)
+{
+	XmString nl = sep();
+	XmParseMapping map;
+	Arg args[3];
+	char *text;
+
+	XtSetArg(args[0], XmNpattern, "\n");
+	XtSetArg(args[1], XmNsubstitute, nl);
+	XtSetArg(args[2], XmNincludeStatus, XmINSERT);
+	map = XmParseMappingCreate(args, 3);
+	text = (char *)XmStringUnparse(s, NULL, XmCHARSET_TEXT, XmCHARSET_TEXT,
+				       &map, 1, XmOUTPUT_ALL);
+	XmParseMappingFree(map);
+	XmStringFree(nl);
+	return text;
+}
+
+/*
+ * Strings built from many pieces: the arrays and the text grow
+ * geometrically.  Whichever way a string is built, it must come out
+ * the same.
+ */
+START_TEST(build_many_pieces)
+{
+	enum { LINES = 20000 };
+	char *text = XtMalloc(LINES * 8 + 1), *p = text, *got;
+	XmString parsed, built = NULL, line;
+	int i;
+
+	for (i = 0; i < LINES; i++)
+		p += sprintf(p, "l%05d%s", i, i + 1 < LINES ? "\n" : "");
+	parsed = XmStringGenerate(text, NULL, XmCHARSET_TEXT, NULL);
+	ck_assert_int_eq(XmStringLineCount(parsed), LINES);
+	for (i = 0; i < LINES; i++) {
+		char buf[8];
+
+		snprintf(buf, sizeof buf, "l%05d", i);
+		line = XmStringGenerate(buf, NULL, XmCHARSET_TEXT, NULL);
+		built = XmStringConcatAndFree(built, line);
+		if (i + 1 < LINES)
+			built = XmStringConcatAndFree(built, sep());
+	}
+	ck_assert(XmStringCompare(parsed, built));
+	got = unparse_lines(parsed);
+	ck_assert_str_eq(got, text);
+	XtFree(got);
+	got = unparse_lines(built);
+	ck_assert_str_eq(got, text);
+	XtFree(got);
+	XmStringFree(parsed);
+	XmStringFree(built);
+
+	/* One segment that text is appended to, 64 KiB of it */
+	built = NULL;
+	for (i = 0; i < 8192; i++)
+		built = XmStringConcatAndFree(built,
+			XmStringCreate("abcdefgh", "tagA"));
+	ck_assert_int_eq(count_comps(built, XmSTRING_COMPONENT_TEXT), 1);
+	got = text_of(built);
+	ck_assert_uint_eq(strlen(got), 8192 * 8);
+	for (i = 0; i < 8192; i++)
+		ck_assert(!memcmp(got + i * 8, "abcdefgh", 8));
+	XtFree(got);
+	XmStringFree(built);
+	XtFree(text);
+}
+END_TEST
+
 /*
  * XmStringCopy shares the string.  The reference counts were 6 bits
  * (optimized strings) and 8 bits wide, so every 64th or 256th copy was
@@ -1188,6 +1338,8 @@ void xmstring_suite(SRunner *runner)
 	tcase_add_test(t, concat_text);
 	tcase_add_test(t, concat_long_text);
 	tcase_add_test(t, copy_shares);
+	tcase_add_test(t, concat_last_direction);
+	tcase_add_test(t, build_many_pieces);
 	tcase_add_test(t, line_count);
 	tcase_add_test(t, concat_keeps_tab_after_text);
 	tcase_add_test(t, empty_text_component);

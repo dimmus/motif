@@ -998,6 +998,61 @@ static void MergeBegins(_XmStringEntry a, _XmStringEntry b)
 /*
  * general external TCS utilties
  */
+/*
+ * Arrays that grow a piece at a time (the entries of a string, the
+ * segments of a line, the text of a segment that XmStringConcatAndFree
+ * appends to) are sized by _XmStringGrowArray with room for their count
+ * rounded up to a power of two, so that building a string from n
+ * pieces copies O(n) data however realloc behaves.  The structure that
+ * holds such an array records it in its grown bit; code that sizes the
+ * array otherwise leaves the bit clear, and the next growth starts from
+ * an exact size again.
+ */
+unsigned int _XmStringArrayRoom(unsigned int count)
+{
+  unsigned int room;
+  if (count == 0 || count > UINT_MAX / 2)
+    return count;
+  for (room = 1; room < count; room <<= 1)
+    ;
+  return room;
+}
+
+/* Return array, which holds count elements of size bytes and was sized
+ * by _XmStringGrowArray if grown is set, resized to hold need. */
+XtPointer _XmStringGrowArray(
+    XtPointer array, Boolean grown, unsigned int count, unsigned int need, Cardinal size)
+{
+  if (grown && need <= _XmStringArrayRoom(count))
+    return array;
+  return (XtPointer)_XmReallocArray((char *)array, _XmStringArrayRoom(need), size);
+}
+
+/*
+ * The direction of the last segment with a direction set among the
+ * first `lines` entries of str, or XmSTRING_DIRECTION_UNSET.  At most
+ * limit lines and segments are looked at, from the end.
+ */
+static XmStringDirection LastDirection(_XmString str, int lines, unsigned int limit)
+{
+  _XmStringEntry line;
+  _XmStringNREntry seg;
+  int i, j;
+  for (i = lines; i > 0; i--) {
+    if (limit-- == 0)
+      break;
+    line = _XmStrEntry(str)[i - 1];
+    for (j = _XmEntrySegmentCountGet(line); j > 0; j--) {
+      if (limit-- == 0)
+        return XmSTRING_DIRECTION_UNSET;
+      seg = _XmEntrySegmentGet(line)[j - 1];
+      if (_XmEntryDirectionGet((_XmStringEntry)seg) != XmSTRING_DIRECTION_UNSET)
+        return (XmStringDirection)_XmEntryDirectionGet((_XmStringEntry)seg);
+    }
+  }
+  return XmSTRING_DIRECTION_UNSET;
+}
+
 static Boolean IsUnopt(_XmString str, int lines)
 {
   _XmStringEntry line;
@@ -1081,6 +1136,10 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
   int i, j;
   int merged = 0;
   XmStringDirection last = XmSTRING_DIRECTION_UNSET;
+  XmStringDirection a_dir;
+  unsigned int b_lines, b_segs;
+  Boolean a_dir_known;
+  Boolean segs_grown = False;
   Boolean modify_a, modify_b, free_b;
   Boolean a_needs_unopt = False, b_needs_unopt = False;
   _XmStringArraySegRec array_seg;
@@ -1163,25 +1222,18 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
       lc = a_lc + b_lc;
   }
   modify_a = !_XmStrOptimized(a) && (_XmStrRefCountGet(a) == 1);
-  if (modify_a) {
-    a_str = a;
+  if (modify_a || _XmStrOptimized(a)) {
+    a_str = modify_a ? a : _XmStringOptToNonOpt((_XmStringOpt)a);
     if (a_lc > 1 && !_XmStrAddNewline(a) && _XmStrAddNewline(b)) {
+      /* a's entries become the segments of its first line, below */
       segs = _XmStrEntry(a_str);
+      segs_grown = _XmStrGrown(a_str);
       _XmStrEntry(a_str) = NULL;
+      _XmStrGrown(a_str) = False;
     }
-    _XmStrEntry(a_str) =
-        (_XmStringEntry *)_XmReallocArray((char *)_XmStrEntry(a_str), lc, sizeof(_XmStringEntry));
-    for (i = (segs ? 0 : a_lc); (unsigned int)i < lc; i++)
-      _XmStrEntry(a_str)[i] = NULL;
-  }
-  else if (_XmStrOptimized(a)) {
-    a_str = _XmStringOptToNonOpt((_XmStringOpt)a);
-    if (a_lc > 1 && !_XmStrAddNewline(a) && _XmStrAddNewline(b)) {
-      segs = _XmStrEntry(a_str);
-      _XmStrEntry(a_str) = NULL;
-    }
-    _XmStrEntry(a_str) =
-        (_XmStringEntry *)_XmReallocArray((char *)_XmStrEntry(a_str), lc, sizeof(_XmStringEntry));
+    _XmStrEntry(a_str) = (_XmStringEntry *)_XmStringGrowArray(
+        (XtPointer)_XmStrEntry(a_str), _XmStrGrown(a_str), a_lc, lc, sizeof(_XmStringEntry));
+    _XmStrGrown(a_str) = True;
     for (i = (segs ? 0 : a_lc); (unsigned int)i < lc; i++)
       _XmStrEntry(a_str)[i] = NULL;
   }
@@ -1208,6 +1260,7 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
     _XmEntryCreate(line, XmSTRING_ENTRY_ARRAY);
     _XmEntrySegmentCount(line) = a_lc;
     _XmEntrySegment(line) = (_XmStringNREntry *)segs;
+    _XmEntryGrownSet(line, segs_grown);
     _XmStrEntry(a_str)[0] = line;
     _XmStrImplicitLine(a_str) = True;
     a_lc = 1;
@@ -1270,6 +1323,13 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
   else
     b_str = b;
   assert((a != b) || (!modify_a && !modify_b));
+  /* How much b adds, which bounds the search for the last direction */
+  b_lines = _XmStrEntryCount(b_str);
+  b_segs = 0;
+  for (i = 0; (unsigned int)i < b_lines; i++)
+    b_segs += _XmEntrySegmentCountGet(_XmStrEntry(b_str)[i]);
+  a_dir_known = _XmStrLastDirKnown(a_str);
+  a_dir = _XmStrLastDir(a_str);
   /* convert a to unopt segs if necessary */
   a_needs_unopt = IsUnopt(a_str, a_lc);
   if (!a_needs_unopt) {
@@ -1344,6 +1404,16 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
             _XmEntrySegment(a_line)[a_sc - 1] = a_last = (_XmStringNREntry)XtRealloc(
                 (char *)a_last, size);
         }
+        else if (_XmEntryUnoptimized(a_last)) {
+          /* Text appended to piece by piece: grow it geometrically */
+          _XmEntryTextSet((_XmStringEntry)a_last,
+                          _XmStringGrowArray(_XmEntryTextGet((_XmStringEntry)a_last),
+                                             _XmEntryGrown(a_last),
+                                             a_len,
+                                             a_len + b_len,
+                                             1));
+          _XmEntryGrownSet(a_last, True);
+        }
         else {
           _XmEntryTextSet(
               (_XmStringEntry)a_last,
@@ -1414,36 +1484,29 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
       merged = 1;
     }
   }
-  else /* Need to figure out last direction set. */ {
-    for (i = a_lc; i > 0; i--) {
-      tmp_line = _XmStrEntry(a_str)[i - 1];
-      for (j = _XmEntrySegmentCountGet(tmp_line); j > 0; j--) {
-        tmp_seg = _XmEntrySegmentGet(tmp_line)[j - 1];
-        if (_XmEntryDirectionGet((_XmStringEntry)tmp_seg) != XmSTRING_DIRECTION_UNSET) {
-          last = _XmEntryDirectionGet((_XmStringEntry)tmp_seg);
-          break;
-        }
-      }
-      if (last != XmSTRING_DIRECTION_UNSET)
-        break;
-    }
-  }
+  else /* Need to figure out last direction set. */
+    last = a_dir_known ? a_dir : LastDirection(a_str, a_lc, UINT_MAX);
   if (merged && !_XmStrImplicitLine(a_str))
     _XmStrEntryCount(a_str)--;
   if (b_sc - merged > 0 && _XmStrImplicitLine(a_str)) {
     Boolean free_b_line = (modify_b && _XmEntryMultiple(b_line) &&
                            ((_XmStringEntry)b_seg != b_line));
     if (_XmEntryMultiple(a_line)) {
-      _XmEntrySegment(a_line) = (_XmStringNREntry *)_XmReallocArray((char *)_XmEntrySegment(a_line),
-                                                                    a_sc + b_sc - merged,
-                                                                    sizeof(_XmStringNREntry));
+      _XmEntrySegment(a_line) = (_XmStringNREntry *)_XmStringGrowArray(
+          (XtPointer)_XmEntrySegment(a_line),
+          _XmEntryGrown(a_line),
+          a_sc,
+          a_sc + b_sc - merged,
+          sizeof(_XmStringNREntry));
+      _XmEntryGrownSet(a_line, True);
       _XmEntrySegmentCount(a_line) = a_sc + b_sc - merged;
     }
     else {
       _XmEntryCreate(a_line, XmSTRING_ENTRY_ARRAY);
       _XmEntrySegmentCount(a_line) = a_sc + b_sc - merged;
-      _XmEntrySegment(a_line) =
-          (_XmStringNREntry *)_XmMallocArray(a_sc + b_sc - merged, sizeof(_XmStringNREntry));
+      _XmEntrySegment(a_line) = (_XmStringNREntry *)_XmStringGrowArray(
+          NULL, False, 0, a_sc + b_sc - merged, sizeof(_XmStringNREntry));
+      _XmEntryGrownSet(a_line, True);
       _XmEntrySegment(a_line)[0] = (_XmStringNREntry)_XmStrEntry(a_str)[a_lc - 1];
       _XmStrEntry(a_str)[a_lc - 1] = a_line;
       _XmStrImplicitLine(a_str) = True;
@@ -1519,6 +1582,17 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
     XtFree((char *)_XmStrEntry(b_str));
     _XmStrFree((char *)b_str);
   }
+  /*
+   * Remember the last direction set, for the next concatenation: it is
+   * in what b added or in a's last segment, which a search of
+   * b_lines + b_segs + 2 lines and segments from the end covers, or
+   * else it is a's.
+   */
+  last = LastDirection(a_str, _XmStrEntryCount(a_str), b_lines + b_segs + 2);
+  if (last == XmSTRING_DIRECTION_UNSET)
+    last = a_dir_known ? a_dir : LastDirection(a_str, _XmStrEntryCount(a_str), UINT_MAX);
+  _XmStrLastDir(a_str) = last;
+  _XmStrLastDirKnown(a_str) = True;
   /* Set layout cache dirty */
   if (a_str && _XmStrEntryCount(a_str) > 0) {
     tmp_line = _XmStrEntry(a_str)[0];
@@ -4272,10 +4346,11 @@ void _XmStringSegmentNew(_XmString string, int line_index, _XmStringEntry value,
   _XmStringEntry seg;
   int sc;
   int lc = _XmStrEntryCount(string);
+  _XmStrLastDirKnown(string) = False;
   if (lc == 0 || lc - 1 < line_index) {
-    _XmStrEntry(string) = (_XmStringEntry *)_XmReallocArray((char *)_XmStrEntry(string),
-                                                            lc + 1,
-                                                            sizeof(_XmStringEntry));
+    _XmStrEntry(string) = (_XmStringEntry *)_XmStringGrowArray(
+        (XtPointer)_XmStrEntry(string), _XmStrGrown(string), lc, lc + 1, sizeof(_XmStringEntry));
+    _XmStrGrown(string) = True;
     _XmStrEntryCount(string)++;
     if (line_index > lc)
       line_index = lc;
@@ -4295,16 +4370,18 @@ void _XmStringSegmentNew(_XmString string, int line_index, _XmStringEntry value,
       _XmEntryCreate(line, XmSTRING_ENTRY_ARRAY);
       _XmEntrySegmentCount(line) = sc;
       _XmEntrySoftNewlineSet(line, _XmEntrySoftNewlineGet(seg));
-      _XmEntrySegment(line) = (_XmStringNREntry *)XtMalloc(sizeof(_XmStringEntry) * 2);
+      _XmEntrySegment(line) = (_XmStringNREntry *)_XmStringGrowArray(
+          NULL, False, 0, 2, sizeof(_XmStringEntry));
+      _XmEntryGrownSet(line, True);
       _XmEntrySegment(line)[0] = (_XmStringNREntry)seg;
       _XmStrEntry(string)[line_index] = line;
       _XmStrImplicitLine(string) = True;
     }
     else {
       sc = _XmEntrySegmentCount(line);
-      _XmEntrySegment(line) = (_XmStringNREntry *)_XmReallocArray((char *)_XmEntrySegment(line),
-                                                                  sc + 1,
-                                                                  sizeof(_XmStringEntry));
+      _XmEntrySegment(line) = (_XmStringNREntry *)_XmStringGrowArray(
+          (XtPointer)_XmEntrySegment(line), _XmEntryGrown(line), sc, sc + 1, sizeof(_XmStringEntry));
+      _XmEntryGrownSet(line, True);
     }
     seg = (copy ? _XmStringEntryCopy(value) : value);
     _XmEntrySegment(line)[sc] = (_XmStringNREntry)seg;
@@ -4546,12 +4623,12 @@ static _XmString _XmStringNonOptCreate(unsigned char *c, unsigned char *end, Boo
         if (!_XmStrImplicitLine(string) && _XmStrEntryCount(string) > 1) {
           /* need to move segments down one level */
           _XmStringEntry line;
-          line = (_XmStringEntry)XtMalloc(sizeof(_XmStringArraySegRec));
-          _XmEntryType(line) = XmSTRING_ENTRY_ARRAY;
-          _XmEntrySoftNewlineSet(line, False);
+          _XmEntryCreate(line, XmSTRING_ENTRY_ARRAY);
           _XmEntrySegmentCount(line) = _XmStrEntryCount(string);
           _XmEntrySegment(line) = (_XmStringNREntry *)_XmStrEntry(string);
+          _XmEntryGrownSet(line, _XmStrGrown(string));
           _XmStrEntry(string) = (_XmStringEntry *)XtMalloc(sizeof(_XmStringEntry));
+          _XmStrGrown(string) = False;
           _XmStrEntry(string)[0] = line;
           _XmStrEntryCount(string) = 1;
         }
@@ -4743,6 +4820,7 @@ _XmStringEntry _XmStringEntryCopy(_XmStringEntry entry)
       _XmStringNREntry *arr;
       new_entry = (_XmStringEntry)XtMalloc(sizeof(_XmStringArraySegRec));
       memcpy((char *)new_entry, (char *)entry, sizeof(_XmStringArraySegRec));
+      _XmEntryGrownSet(new_entry, False); /* the copy is exactly sized */
       if (_XmEntrySegmentCount(entry) > 0) {
         arr = (_XmStringNREntry *)_XmMallocArray(_XmEntrySegmentCount(entry),
                                                  sizeof(_XmStringNREntry));
@@ -4756,6 +4834,7 @@ _XmStringEntry _XmStringEntryCopy(_XmStringEntry entry)
     case XmSTRING_ENTRY_UNOPTIMIZED: {
       new_entry = (_XmStringEntry)XtMalloc(sizeof(_XmStringUnoptSegRec));
       memcpy((char *)new_entry, (char *)entry, sizeof(_XmStringUnoptSegRec));
+      _XmEntryGrownSet(new_entry, False); /* the copy is exactly sized */
       if (_XmEntryPermGet(entry)) {
         _XmEntryTextSet(new_entry, _XmEntryTextGet(entry));
       }
@@ -5644,6 +5723,8 @@ static XmString Clone(XmString string, int lines)
     _XmString n_string;
     _XmStrCreate(n_string, XmSTRING_MULTIPLE_ENTRY, 0);
     _XmStrImplicitLine(n_string) = _XmStrImplicitLine(string);
+    _XmStrLastDirKnown(n_string) = _XmStrLastDirKnown(string);
+    _XmStrLastDir(n_string) = _XmStrLastDir(string);
     _XmStrEntryCount(n_string) = _XmStrEntryCount(string);
     _XmStrEntry(n_string) = (_XmStringEntry *)_XmMallocArray(lines, sizeof(_XmStringEntry));
     for (i = 0; i < _XmStrEntryCount(string); i++)
