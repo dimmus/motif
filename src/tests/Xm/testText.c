@@ -236,6 +236,27 @@ START_TEST(text_editing_and_search)
 }
 END_TEST
 
+/*
+ * XmTextGetSubstring compared the bytes it would copy with buf_size as
+ * unsigned, so a negative buf_size let it copy without bound.
+ */
+START_TEST(text_substring_bad_size)
+{
+	Widget t = XmCreateText(bb, "text", NULL, 0);
+	char buf[16];
+
+	XtManageChild(t);
+	XtRealizeWidget(top);
+	XmTextSetString(t, "hello");
+	ck_assert_int_eq(XmTextGetSubstring(t, 0, 5, sizeof buf, buf),
+			 XmCOPY_SUCCEEDED);
+	ck_assert_str_eq(buf, "hello");
+	ck_assert_int_eq(XmTextGetSubstring(t, 0, 5, 5, buf), XmCOPY_FAILED);
+	ck_assert_int_eq(XmTextGetSubstring(t, 0, 5, -1, buf), XmCOPY_FAILED);
+	pump();
+}
+END_TEST
+
 START_TEST(text_selection_and_clipboard)
 {
 	Widget t = XmCreateText(bb, "text", NULL, 0);
@@ -334,6 +355,7 @@ void text_suite(SRunner *runner)
 	t = tcase_create("Text");
 	tcase_add_checked_fixture(t, setup, teardown);
 	tcase_add_test(t, text_editing_and_search);
+	tcase_add_test(t, text_substring_bad_size);
 	tcase_add_test(t, text_selection_and_clipboard);
 	tcase_add_test(t, copy_text_to_textfield);
 	tcase_set_timeout(t, 60);
