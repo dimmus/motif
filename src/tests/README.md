@@ -15,7 +15,8 @@ relative path, so CTest runs them from a copy of those directories in the
 build tree (`<build>/src/tests/fixtures`).
 
 Suites labelled `X11` (`FontList`, `FontListEntry`, `XmStringCT`,
-`Widgets`, `Text`, `Layout`) need an X server, as do the `Uil.load*`
+`Widgets`, `Text`, `Layout`, `I18nLocale`) need
+an X server, as do the `Uil.load*`
 tests, those in `interactive/` and `visual/` and some in `fuzz/`.  When
 `xvfb-run` is found at configure time, CTest starts each of them under
 its own Xvfb (with `-noreset`, see `XVFB_RUN_ARGS`); configure with
@@ -26,6 +27,21 @@ Test cases tagged `xfail` document known library bugs.  They are left out
 of normal runs and checked by `Xm.<suite>.xfail` (`motif_tests --xfail
 <suite>`), which passes only while all of them still fail.  When a fix
 makes one pass, remove its tag.
+
+The i18n suites:
+
+- `I18nLocale` runs XmString, XmTextField, XmText, XmList and XmLabel
+  with text of the locale's language in its codeset.  Besides
+  `Xm.I18nLocale` (the default locale), CTest runs it as
+  `Xm.I18nLocale.<locale>` in `ja_JP.UTF-8`, `ja_JP.EUC-JP`,
+  `de_DE.UTF-8`, `de_DE.ISO-8859-1` and `he_IL.UTF-8`.  These locales are
+  compiled at build time with glibc's `localedef` into
+  `<build>/src/tests/locale` (no root needed) and the tests run with
+  `LOCPATH` pointing there and `MOTIF_TEST_LOCALE` naming the locale
+  (see `i18n.cmake`).  Without `localedef` and the glibc locale sources
+  (`/usr/share/i18n`, the `locales` package on Debian and Ubuntu,
+  `glibc-locale-source` on Fedora) only the default-locale tests are
+  registered.
 
 The other directories:
 

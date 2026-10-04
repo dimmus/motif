@@ -39,6 +39,7 @@ static const struct suite_entry {
 	{ "Widgets",       widgets_suite,         1 },
 	{ "Text",          text_suite,            1 },
 	{ "I18n",          i18n_suite,            0 },
+	{ "I18nLocale",    i18n_locale_suite,     1 },
 	{ "Layout",        layout_suite,          1 },
 };
 
