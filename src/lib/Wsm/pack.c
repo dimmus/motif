@@ -1015,6 +1015,7 @@ PackWinData(Display *dpy, int screen_num, MessageData data,
 		    data = PackCARD32(data, (CARD32) this_data->data.value);
 		    break;
 		}
+		break;
 	    case WSM_NONE:
 		break;
 	    }
