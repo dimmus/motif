@@ -2769,9 +2769,13 @@ DisplayDestroyCallback ( Widget w,
   String dpyandfontstr = (String) client_data;
   XtPointer	font ;
 
+  /* Called when the display goes, outside the Mrm calls that hold the
+     process lock: the registered names are shared by all threads */
+  _MrmProcessLock();
   if (MrmSUCCESS == Urm__WCI_LookupRegisteredName(dpyandfontstr, &font))
     XFreeFont(XtDisplay(w), (XFontStruct *)font);
   Urm__WCI_UnregisterName (dpyandfontstr);
+  _MrmProcessUnlock();
   XtFree(dpyandfontstr);
 }
 

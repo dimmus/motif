@@ -1235,6 +1235,9 @@ void _XmTransformSubResources(XtResourceList comp_resources,
     *num_resources = num_comp_resources;
   }
   else {
+    /* The shadow class is shared: XmGetSecondaryResourceData gets here
+       at any time, from any thread */
+    _XmProcessLock();
     if (!shadowObjectClassRec.core_class.class_inited)
       XtInitializeWidgetClass((WidgetClass)&shadowObjectClassRec);
     /* This next statement is marked for change */
@@ -1246,6 +1249,7 @@ void _XmTransformSubResources(XtResourceList comp_resources,
       XtFree((char *)shadowObjectClassRec.constraint_class.resources);
     shadowObjectClassRec.constraint_class.resources = NULL;
     shadowObjectClassRec.constraint_class.num_resources = 0;
+    _XmProcessUnlock();
   }
 }
 
