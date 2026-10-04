@@ -88,7 +88,7 @@ target_include_directories(motif_tests PRIVATE
     ${CMAKE_SOURCE_DIR}/src/lib/Xm
     ${CMAKE_BINARY_DIR}/include
 )
-target_link_libraries(motif_tests PRIVATE Xm PkgConfig::CHECK)
+target_link_libraries(motif_tests PRIVATE Xm PkgConfig::CHECK Threads::Threads)
 
 # The suites open their fixtures by relative path and some write log files
 # into the current directory, so run them from a build-tree copy of the
