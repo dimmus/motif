@@ -43,9 +43,23 @@ static XmThread _main_thread = 0;
 #define CHECK_MAIN() assert(IS_MAIN(SELF()))
 #define SHUTDOWN() (_threads_inited = XM_FALSE)
 
-// Lock macros
-#define LOG_LOCK() (void)0
-#define LOG_UNLOCK() (void)0
+// Lock macros: one recursive lock for the domains, the level and the
+// output, as any thread may log; recursive, as a print callback may log.
+static pthread_mutex_t _log_mutex;
+static pthread_once_t _log_mutex_once = PTHREAD_ONCE_INIT;
+
+static void XmLogMutexInit(void)
+{
+  pthread_mutexattr_t attr;
+  pthread_mutexattr_init(&attr);
+  pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
+  pthread_mutex_init(&_log_mutex, &attr);
+  pthread_mutexattr_destroy(&attr);
+}
+
+#define LOG_LOCK() \
+  ((void)pthread_once(&_log_mutex_once, XmLogMutexInit), (void)pthread_mutex_lock(&_log_mutex))
+#define LOG_UNLOCK() ((void)pthread_mutex_unlock(&_log_mutex))
 
 // Level names
 static const char *_level_names[] = {"CRI", "ERR", "WRN", "INF", "DBG"};
@@ -263,20 +277,22 @@ int XmLogDomainLevelGet(const char *domain_name)
 
 void XmLogDomainRegisteredLevelSet(int domain, int level)
 {
-  if (domain < 0 || (unsigned int)domain >= _log_domains_count)
-    return;
-
   LOG_LOCK();
-  _log_domains[domain].level = level;
+  if (domain >= 0 && (unsigned int)domain < _log_domains_count)
+    _log_domains[domain].level = level;
   LOG_UNLOCK();
 }
 
 int XmLogDomainRegisteredLevelGet(int domain)
 {
-  if (domain < 0 || (unsigned int)domain >= _log_domains_count)
-    return XM_LOG_LEVEL_UNKNOWN;
+  int level = XM_LOG_LEVEL_UNKNOWN;
 
-  return _log_domains[domain].level;
+  LOG_LOCK();
+  if (domain >= 0 && (unsigned int)domain < _log_domains_count)
+    level = _log_domains[domain].level;
+  LOG_UNLOCK();
+
+  return level;
 }
 
 void XmLogPrintCbSet(XmLogPrintCb cb, void *data)
@@ -292,46 +308,66 @@ void XmLogPrintCbSet(XmLogPrintCb cb, void *data)
 
 void XmLogLevelSet(int level)
 {
+  LOG_LOCK();
   _log_level = level;
   if (XM_LOG_DOMAIN_GLOBAL >= 0 && (unsigned int)XM_LOG_DOMAIN_GLOBAL < _log_domains_count) {
     _log_domains[XM_LOG_DOMAIN_GLOBAL].level = level;
   }
+  LOG_UNLOCK();
 }
 
 int XmLogLevelGet(void)
 {
-  return _log_level;
+  int level;
+
+  LOG_LOCK();
+  level = _log_level;
+  LOG_UNLOCK();
+
+  return level;
 }
 
 XmBool XmLogThreadsMainCheck(void)
 {
-  return ((!_threads_enabled) || IS_MAIN(SELF()));
+  XmBool ok;
+
+  LOG_LOCK();
+  ok = (!_threads_enabled) || IS_MAIN(SELF());
+  LOG_UNLOCK();
+
+  return ok;
 }
 
 void XmLogThreadsInit(void)
 {
-  if (_threads_inited)
-    return;
-  _main_thread = SELF();
-  INIT();
+  LOG_LOCK();
+  if (!_threads_inited) {
+    _main_thread = SELF();
+    INIT();
+  }
+  LOG_UNLOCK();
 }
 
 void XmLogThreadsShutdown(void)
 {
-  if (!_threads_inited)
-    return;
-  CHECK_MAIN();
-  SHUTDOWN();
-  _threads_enabled = XM_FALSE;
+  LOG_LOCK();
+  if (_threads_inited) {
+    CHECK_MAIN();
+    SHUTDOWN();
+    _threads_enabled = XM_FALSE;
+  }
+  LOG_UNLOCK();
 }
 
 void XmLogThreadsEnable(void)
 {
-  if (_threads_enabled)
-    return;
-  if (!_threads_inited)
-    XmLogThreadsInit();
-  _threads_enabled = XM_TRUE;
+  LOG_LOCK();
+  if (!_threads_enabled) {
+    if (!_threads_inited)
+      XmLogThreadsInit();
+    _threads_enabled = XM_TRUE;
+  }
+  LOG_UNLOCK();
 }
 
 void XmLogColorDisableSet(XmBool disabled)
@@ -502,12 +538,17 @@ void XmLogPrint(int domain,
 {
   va_list args;
   va_start(args, fmt);
+  LOG_LOCK();
   XmLogPrintUnlocked(domain, level, file, fnc, line, fmt, args);
+  LOG_UNLOCK();
   va_end(args);
 }
 
 XmBool XmLogInit(void)
 {
+  XmBool ok = XM_TRUE;
+
+  LOG_LOCK();
   // Set default print callback based on configuration
 #ifdef XM_DEFAULT_LOG_OUTPUT
   if (strcmp(XM_DEFAULT_LOG_OUTPUT, "stdout") == 0) {
@@ -534,10 +575,11 @@ XmBool XmLogInit(void)
   XM_LOG_DOMAIN_GLOBAL = XmLogDomainRegister("XM", LOG_COLOR_RED);
   if (XM_LOG_DOMAIN_GLOBAL < 0) {
     fprintf(stderr, "Failed to create global logging domain.\n");
-    return XM_FALSE;
+    ok = XM_FALSE;
   }
+  LOG_UNLOCK();
 
-  return XM_TRUE;
+  return ok;
 }
 
 /**
@@ -553,9 +595,12 @@ XmBool XmLogInit(void)
  */
 XmBool XmLogSetOutput(const char *output, const char *filename)
 {
+  XmBool ok = XM_TRUE;
+
   if (!output)
     return XM_FALSE;
 
+  LOG_LOCK();
   if (strcmp(output, "stdout") == 0) {
     _print_cb = XmLogPrintCbStdOut;
     _print_cb_data = NULL;
@@ -569,16 +614,18 @@ XmBool XmLogSetOutput(const char *output, const char *filename)
     _print_cb_data = (void *)(filename ? filename : "motif.log");
   }
   else {
-    return XM_FALSE;  // Invalid output type
+    ok = XM_FALSE;  // Invalid output type
   }
+  LOG_UNLOCK();
 
-  return XM_TRUE;
+  return ok;
 }
 
 // Shutdown logging system
 XmBool XmLogShutdown(void)
 {
   // Clean up domains
+  LOG_LOCK();
   for (unsigned int i = 0; i < _log_domains_count; i++)
     if (!_log_domains[i].deleted)
       XmLogDomainFree(&_log_domains[i]);
@@ -588,6 +635,7 @@ XmBool XmLogShutdown(void)
   _log_domains = NULL;
   _log_domains_count = 0;
   _log_domains_allocated = 0;
+  LOG_UNLOCK();
 
   return XM_TRUE;
 }
