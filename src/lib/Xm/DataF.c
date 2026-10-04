@@ -131,7 +131,7 @@ externaldef(xmdatafieldclassrec) XmDataFieldClassRec xmDataFieldClassRec = {
         (XtAcceptFocusProc)NULL,  /* accept_focus       */
         XtVersion,                /* version            */
         NULL,                     /* callback_private   */
-        NULL,                     /* tm_table           */
+        XtInheritTranslations,    /* tm_table           */
         XtInheritQueryGeometry,   /* query_geometry     */
         (XtStringProc)NULL,       /* display accel      */
         NULL,                     /* extension          */
@@ -165,7 +165,8 @@ static void ClassPartInitialize(WidgetClass w_class)
   XmeTraitSet((XtPointer)w_class,
               XmQTaccessTextual,
               XmeTraitGet((XtPointer)xmTextFieldWidgetClass, XmQTaccessTextual));
-  /* XmTextField's translations, with Tab bound to ValidateAndMove. */
+  /* XmTextField's translations, with Tab bound to ValidateAndMove.  The
+   * table this replaces is XmTextField's own (XtInheritTranslations). */
   size = strlen(_XmDataF_EventBindings4) + strlen("\n") + strlen(_XmTextF_EventBindings1) +
          strlen(_XmTextF_EventBindings2) + strlen(_XmTextF_EventBindings3) + 1;
   event_bindings = XtMalloc(size);
@@ -304,10 +305,12 @@ static void PictureVerifyCallback(Widget w, XtPointer client_d, XtPointer call_d
   /*
    * Now the hard part:  we may have been auto-filled, so we have to
    * massage the callback struct to reflect what's happened.  XmTextField
-   * frees the text that the callbacks leave in cbs->text.
+   * frees the text that the callbacks leave in cbs->text, so the text
+   * replaced here is freed here.
    */
   cbs->startPos = 0;
   /* CR03686 cbs->endPos = strlen(newptr); */
+  XtFree(cbs->text->ptr);
   cbs->text->ptr = XtNewString(changed);
   cbs->text->length = strlen(changed);
   XmPictureDeleteState(ps);

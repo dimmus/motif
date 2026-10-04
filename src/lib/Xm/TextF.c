@@ -2333,6 +2333,7 @@ Boolean _XmTextFieldReplaceText(XmTextFieldWidget tf,
         XBell(XtDisplay(tf), 0);
       if (free_insert)
         XtFree(insert);
+      XtFree(insert_orig);
       if (FUnderVerifyPreedit(tf)) {
         FVerifyCommitNeeded(tf) = True;
         PreEnd(tf) -= insert_length_orig;
@@ -5196,6 +5197,10 @@ static void ClassPartInitialize(WidgetClass w_class)
   char *event_bindings;
   size_t size;
   _XmFastSubclassInit(w_class, XmTEXT_FIELD_BIT);
+  /* A subclass that inherits the translations (XtInheritTranslations)
+   * or has its own already has a table; replacing it would leak it. */
+  if (w_class->core_class.tm_table != NULL)
+    return;
   size = strlen(EventBindings1) + strlen(EventBindings2) + strlen(EventBindings3) + 1;
   event_bindings = (char *)XtMalloc(size);
   snprintf(event_bindings, size, "%s%s%s", EventBindings1, EventBindings2, EventBindings3);
