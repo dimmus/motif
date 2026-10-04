@@ -66,6 +66,7 @@ static char rcsid[] = "$TOG: List.c /main/47 1999/10/12 16:58:17 mgreess $"
 #include <Xm/XmP.h>
 #include <Xm/XmosP.h>
 #include <stdio.h>
+#include <stdint.h>
 #include <string.h>
 #define BUTTONDOWN 1
 #define SHIFTDOWN 2
@@ -100,6 +101,38 @@ static char rcsid[] = "$TOG: List.c /main/47 1999/10/12 16:58:17 mgreess $"
 #define DrawnVizCount(lw) ((lw)->list.FontHeight)
 #define DrawnItemHeight(lw) ((lw)->list.CharWidth)
 #define RowsChanged(lw) (ListGen(lw) = (int)((unsigned int)ListGen(lw) + 1)) /* may wrap */
+/*
+ * State for which the instance record has no room: ListP.h is installed,
+ * so its layout is fixed.  The record hangs off list.DashTile, a Pixmap
+ * that the List has not used since Motif 1.2 (an unsigned long, which
+ * holds a pointer).  It keeps
+ *
+ * - the allocated sizes of list.items and list.InternalList, which grow
+ *   geometrically.  A size is valid only while the array is the one it
+ *   was recorded for; otherwise the array has itemCount entries;
+ * - histograms of the item widths and heights, so that MaxWidth and
+ *   MaxItemHeight are found without a pass over the items.
+ *
+ * The record is shared with the copies of the widget that Xt passes to
+ * SetValues, which may work on the old one; the arrays it describes are
+ * checked against those of the widget it is used for.
+ */
+typedef struct {
+  unsigned int *count; /* count[v] items have the extent v */
+  int size;            /* entries in count */
+  int max;             /* the largest v with count[v] != 0, or 0 */
+} ExtentHistogram;
+
+typedef struct {
+  XmString *items; /* the list.items that items_size is for */
+  int items_size;
+  ElementPtr *elements; /* the list.InternalList that elements_size is for */
+  int elements_size;
+  ExtentHistogram widths;
+  ExtentHistogram heights;
+} XmListPrivRec, *XmListPriv;
+_Static_assert(sizeof(Pixmap) >= sizeof(XmListPriv), "list.DashTile holds a pointer");
+#define ListPriv(lw) ((XmListPriv)(uintptr_t)(lw)->list.DashTile)
 /****************
  *
  * List Error Messages
@@ -157,7 +190,15 @@ static void SetNewSize(XmListWidget lw,
                        Boolean reset_max_height,
                        Dimension old_max_height);
 static void ResetExtents(XmListWidget lw, Boolean recache_extents);
-static Boolean ExtentsAreMax(XmListWidget lw, int start);
+static Boolean ExtentsAreMax(XmListWidget lw);
+static char *ResizeArray(char *array, int *size, int count, size_t elsize);
+static void ResizeItems(XmListWidget lw, int count);
+static void ResizeElements(XmListWidget lw, int count);
+static void HistogramAdd(ExtentHistogram *h, Dimension v);
+static void HistogramRemove(ExtentHistogram *h, Dimension v);
+static void HistogramFree(ExtentHistogram *h);
+static void SetElementExtent(XmListWidget lw, ElementPtr el, XmString item, Boolean old);
+static void FreeElement(XmListWidget lw, ElementPtr el);
 static void FixStartEnd(XmListWidget lw, int pos, int count, int *start, int *end);
 static int AddInternalElements(
     XmListWidget lw, XmString *items, int nitems, int position, Boolean selectable);
@@ -788,6 +829,7 @@ static void Initialize(Widget request,
   int i, j;
   XmScrollFrameTrait scrollFrameTrait;
   XrmValue val;
+  lw->list.DashTile = (Pixmap)(uintptr_t)XtCalloc(1, sizeof(XmListPrivRec));
   lw->list.LastItem = 0;
   lw->list.Event = 0;
   lw->list.LastHLItem = 0;
@@ -1540,6 +1582,13 @@ static void Destroy(Widget wid)
   ClearSelectedPositions(lw);
   XmFontListFree(lw->list.font);
   XmImUnregister(wid);
+  {
+    XmListPriv p = ListPriv(lw);
+    HistogramFree(&p->widths);
+    HistogramFree(&p->heights);
+    XtFree((char *)p);
+    lw->list.DashTile = None;
+  }
 }
 
 /************************************************************************
@@ -2245,7 +2294,7 @@ static void SetDefaultSize(XmListWidget lw,
       lw->list.MaxItemHeight = 1;
 #endif
   }
-  else if ((reset_max_width || reset_max_height) && !ExtentsAreMax(lw, 0)) {
+  else if ((reset_max_width || reset_max_height) && !ExtentsAreMax(lw)) {
     ResetExtents(lw, False);
   }
   if (viz > 0)
@@ -2550,21 +2599,19 @@ static void SetNewSize(XmListWidget lw,
  ************************************************************************/
 static void ResetExtents(XmListWidget lw, Boolean recache_extents)
 {
+  XmListPriv p = ListPriv(lw);
   int i;
-  Dimension maxheight = 0;
-  Dimension maxwidth = 0;
   RowsChanged(lw);
   if (!lw->list.InternalList || !lw->list.itemCount)
     return;
-  for (i = 0; i < lw->list.itemCount; i++) {
-    ElementPtr item = lw->list.InternalList[i];
-    if (recache_extents)
-      XmStringExtent(lw->list.font, lw->list.items[i], &item->width, &item->height);
-    ASSIGN_MAX(maxheight, item->height);
-    ASSIGN_MAX(maxwidth, item->width);
+  if (recache_extents) {
+    HistogramFree(&p->widths);
+    HistogramFree(&p->heights);
+    for (i = 0; i < lw->list.itemCount; i++)
+      SetElementExtent(lw, lw->list.InternalList[i], lw->list.items[i], FALSE);
   }
-  lw->list.MaxItemHeight = maxheight;
-  lw->list.MaxWidth = maxwidth;
+  lw->list.MaxItemHeight = (Dimension)p->heights.max;
+  lw->list.MaxWidth = (Dimension)p->widths.max;
 }
 
 /************************************************************************
@@ -2572,28 +2619,120 @@ static void ResetExtents(XmListWidget lw, Boolean recache_extents)
  * ExtentsAreMax - whether ResetExtents(lw, False) would leave		*
  *	MaxWidth and MaxItemHeight as they are: no item is wider or	*
  *	taller than those, so it does when some items reach them.	*
- *	The search starts at item start, where they are likely to be	*
- *	found after a deletion.						*
  *									*
  ************************************************************************/
-static Boolean ExtentsAreMax(XmListWidget lw, int start)
+static Boolean ExtentsAreMax(XmListWidget lw)
 {
-  int count = lw->list.itemCount;
-  Boolean width_found = FALSE, height_found = FALSE;
-  ElementPtr item;
-  int i, n;
-  if ((count <= 0) || !lw->list.InternalList)
+  XmListPriv p = ListPriv(lw);
+  if ((lw->list.itemCount <= 0) || !lw->list.InternalList)
     return FALSE;
-  if ((start < 0) || (start >= count))
-    start = 0;
-  for (n = 0, i = start; n < count; n++, i = ((i + 1 < count) ? i + 1 : 0)) {
-    item = lw->list.InternalList[i];
-    width_found |= (item->width >= lw->list.MaxWidth);
-    height_found |= (item->height >= lw->list.MaxItemHeight);
-    if (width_found && height_found)
-      return TRUE;
+  return ((p->widths.max >= (int)lw->list.MaxWidth) &&
+          (p->heights.max >= (int)lw->list.MaxItemHeight));
+}
+
+/************************************************************************
+ *									*
+ * Private state (see XmListPrivRec)					*
+ *									*
+ ************************************************************************/
+/*
+ * ResizeArray - make room for count entries in array, which has size
+ *	entries: grow it by half again when it is full, and give memory
+ *	back when it is less than a quarter full.  With no entries the
+ *	array is freed.
+ */
+static char *ResizeArray(char *array, int *size, int count, size_t elsize)
+{
+  int new_size;
+  if (count <= 0) {
+    XtFree(array);
+    *size = 0;
+    return NULL;
   }
-  return FALSE;
+  if (count > *size)
+    new_size = MAX(MAX(count, *size + *size / 2), 8);
+  else if (count < *size / 4)
+    new_size = count + count / 2;
+  else
+    return array;
+  array = _XmReallocArray(array, new_size, elsize);
+  *size = new_size;
+  return array;
+}
+
+/* ResizeItems - make list.items hold count entries. */
+static void ResizeItems(XmListWidget lw, int count)
+{
+  XmListPriv p = ListPriv(lw);
+  if (p->items != lw->list.items)
+    p->items_size = lw->list.itemCount;
+  lw->list.items =
+      (XmString *)ResizeArray((char *)lw->list.items, &p->items_size, count, sizeof(XmString));
+  p->items = lw->list.items;
+}
+
+/* ResizeElements - make list.InternalList hold count entries. */
+static void ResizeElements(XmListWidget lw, int count)
+{
+  XmListPriv p = ListPriv(lw);
+  if (p->elements != lw->list.InternalList)
+    p->elements_size = lw->list.LastItem;
+  lw->list.InternalList = (ElementPtr *)ResizeArray(
+      (char *)lw->list.InternalList, &p->elements_size, count, sizeof(ElementPtr));
+  p->elements = lw->list.InternalList;
+}
+
+static void HistogramAdd(ExtentHistogram *h, Dimension v)
+{
+  if ((int)v >= h->size) {
+    int size = MAX(MAX((int)v + 1, 2 * h->size), 64);
+    h->count = (unsigned int *)_XmReallocArray((char *)h->count, size, sizeof(unsigned int));
+    memset(h->count + h->size, 0, (size - h->size) * sizeof(unsigned int));
+    h->size = size;
+  }
+  h->count[v]++;
+  ASSIGN_MAX(h->max, (int)v);
+}
+
+static void HistogramRemove(ExtentHistogram *h, Dimension v)
+{
+  if (((int)v >= h->size) || (h->count[v] == 0))
+    return; /* not counted: cannot happen */
+  if ((--h->count[v] == 0) && ((int)v == h->max)) {
+    while ((h->max > 0) && (h->count[h->max] == 0))
+      h->max--;
+  }
+}
+
+static void HistogramFree(ExtentHistogram *h)
+{
+  XtFree((char *)h->count);
+  h->count = NULL;
+  h->size = h->max = 0;
+}
+
+/*
+ * SetElementExtent - measure the item of an element and count it in
+ *	the histograms, as replacing what it was counted as with old.
+ */
+static void SetElementExtent(XmListWidget lw, ElementPtr el, XmString item, Boolean old)
+{
+  XmListPriv p = ListPriv(lw);
+  if (old) {
+    HistogramRemove(&p->widths, el->width);
+    HistogramRemove(&p->heights, el->height);
+  }
+  XmStringExtent(lw->list.font, item, &el->width, &el->height);
+  HistogramAdd(&p->widths, el->width);
+  HistogramAdd(&p->heights, el->height);
+}
+
+static void FreeElement(XmListWidget lw, ElementPtr el)
+{
+  XmListPriv p = ListPriv(lw);
+  HistogramRemove(&p->widths, el->width);
+  HistogramRemove(&p->heights, el->height);
+  XtFree((char *)el);
 }
 
 /************************************************************************
@@ -2670,9 +2809,7 @@ static int AddInternalElements(
     pos = position - 1;
   else
     pos = lw->list.LastItem;
-  lw->list.InternalList = (ElementPtr *)_XmReallocArray((char *)lw->list.InternalList,
-                                                        lw->list.itemCount,
-                                                        sizeof(Element *));
+  ResizeElements(lw, lw->list.itemCount);
   /* Make room in the InternalList for the new items. */
   if (pos < lw->list.LastItem)
     memmove((char *)(lw->list.InternalList + pos + nitems),
@@ -2683,7 +2820,7 @@ static int AddInternalElements(
     /* Store an alias for string in the internal table. */
     assert(items[i] == lw->list.items[pos]);
     new_el->length = UNKNOWN_LENGTH;
-    XmStringExtent(lw->list.font, items[i], &new_el->width, &new_el->height);
+    SetElementExtent(lw, new_el, items[i], FALSE);
     ASSIGN_MAX(lw->list.MaxWidth, new_el->width);
     ASSIGN_MAX(lw->list.MaxItemHeight, new_el->height);
     new_el->selected = (selectable && OnSelectedList(lw, items[i], pos));
@@ -2732,7 +2869,7 @@ static int DeleteInternalElements(XmListWidget lw, XmString string, int position
     item = lw->list.InternalList[curpos + i];
     if (item->selected)
       dsel--;
-    XtFree((char *)item);
+    FreeElement(lw, item);
   }
   /* If we didn't delete the end of the list repack it. */
   if (curpos < lw->list.itemCount)
@@ -2745,15 +2882,7 @@ static int DeleteInternalElements(XmListWidget lw, XmString string, int position
   FixStartEnd(lw, curpos, count, &lw->list.StartItem, &lw->list.EndItem);
   FixStartEnd(lw, curpos, count, &lw->list.OldStartItem, &lw->list.OldEndItem);
   /* END OSF Fix CR 4656 */
-  if (lw->list.itemCount) {
-    lw->list.InternalList = (ElementPtr *)_XmReallocArray((char *)lw->list.InternalList,
-                                                          lw->list.itemCount,
-                                                          sizeof(Element *));
-  }
-  else {
-    XtFree((char *)lw->list.InternalList);
-    lw->list.InternalList = NULL;
-  }
+  ResizeElements(lw, lw->list.itemCount);
   return dsel;
 }
 
@@ -2799,7 +2928,7 @@ static int DeleteInternalElementPositions(XmListWidget lw,
         reset_height |= (ptr->height >= lw->list.MaxItemHeight);
         if (ptr->selected)
           nsel--;
-        XtFree((char *)ptr);
+        FreeElement(lw, ptr);
         lw->list.InternalList[item_pos] = NULL;
         lw->list.LastItem--;
         ASSIGN_MIN(first, item_pos);
@@ -2836,22 +2965,14 @@ static int DeleteInternalElementPositions(XmListWidget lw,
       jx++;
     }
   }
-  if (lw->list.itemCount) {
-    lw->list.InternalList = (ElementPtr *)_XmReallocArray((char *)lw->list.InternalList,
-                                                          lw->list.itemCount,
-                                                          sizeof(ElementPtr));
-  }
-  else {
-    XtFree((char *)lw->list.InternalList);
-    lw->list.InternalList = NULL;
-  }
+  ResizeElements(lw, lw->list.itemCount);
   /* The actual maximum width and height may not have changed. */
   if (reset_width && lw->list.itemCount && (lw->list.InternalList[0]->width >= lw->list.MaxWidth))
     reset_width = FALSE;
   if (reset_height && lw->list.itemCount &&
       (lw->list.InternalList[0]->height >= lw->list.MaxItemHeight))
     reset_height = FALSE;
-  if ((reset_width || reset_height) && !ExtentsAreMax(lw, first))
+  if ((reset_width || reset_height) && !ExtentsAreMax(lw))
     ResetExtents(lw, False);
   return nsel;
 }
@@ -2878,7 +2999,7 @@ static int ReplaceInternalElement(XmListWidget lw, int position, Boolean selecta
   /* The old name is an alias for an entry in the items list. */
   item->first_char = 0;
   item->length = UNKNOWN_LENGTH;
-  XmStringExtent(lw->list.font, name, &item->width, &item->height);
+  SetElementExtent(lw, item, name, TRUE);
   item->selected = (selectable && OnSelectedList(lw, name, curpos));
   item->last_selected = item->selected;
   item->LastTimeDrawn = !item->selected;
@@ -2897,8 +3018,7 @@ static void AddItems(XmListWidget lw, XmString *items, int nitems, int pos)
 {
   int i;
   int TotalItems = lw->list.itemCount + nitems;
-  lw->list.items =
-      (XmString *)_XmReallocArray((char *)lw->list.items, TotalItems, sizeof(XmString));
+  ResizeItems(lw, TotalItems);
   /* Make a gap in the array for the new items. */
   if (pos < lw->list.itemCount)
     memmove((char *)(lw->list.items + pos + nitems),
@@ -2934,15 +3054,8 @@ static void DeleteItems(XmListWidget lw, int nitems, int pos)
     memmove((char *)(lw->list.items + pos),
             (char *)(lw->list.items + pos + nitems),
             (TotalItems - pos) * sizeof(XmString));
-  if (TotalItems) {
-    lw->list.items =
-        (XmString *)_XmReallocArray((char *)lw->list.items, TotalItems, sizeof(XmString));
-  }
-  else {
-    /* Null out the list pointer, if we have deleted the last item. */
-    XtFree((char *)lw->list.items);
-    lw->list.items = NULL;
-  }
+  /* This nulls out the list pointer if we have deleted the last item. */
+  ResizeItems(lw, TotalItems);
   lw->list.itemCount = TotalItems;
 }
 
@@ -2960,6 +3073,7 @@ static void DeleteItemPositions(XmListWidget lw,
   int item_pos;
   int ix;
   int jx;
+  int first;
   XmString item;
   if (lw->list.itemCount < 1)
     return;
@@ -2973,6 +3087,7 @@ static void DeleteItemPositions(XmListWidget lw,
    * Re-pack "items" in place ignoring the previously freed positions.
    */
   TotalItems = lw->list.itemCount;
+  first = lw->list.itemCount;
   for (ix = 0; ix < position_count; ix++) {
     item_pos = position_list[ix] - 1;
     if (item_pos >= 0 && item_pos < lw->list.itemCount) {
@@ -2981,6 +3096,7 @@ static void DeleteItemPositions(XmListWidget lw,
         XmStringFree(item);
         lw->list.items[item_pos] = NULL;
         TotalItems--;
+        ASSIGN_MIN(first, item_pos);
         /* CR 9630:  XmListDeletePos and XmListDeletePositions */
         /*	track the keyboard location cursor differently. */
         if (track_kbd && (item_pos <= lw->list.CurrentKbdItem)) {
@@ -2993,23 +3109,16 @@ static void DeleteItemPositions(XmListWidget lw,
       }
     }
   }
-  jx = 0;
-  for (ix = 0; ix < lw->list.itemCount; ix++) {
+  /* Re-pack items in place; there is no hole before first. */
+  jx = first;
+  for (ix = first; ix < lw->list.itemCount; ix++) {
     if (lw->list.items[ix] != NULL) {
-      if (jx != ix)
-        lw->list.items[jx] = lw->list.items[ix];
+      lw->list.items[jx] = lw->list.items[ix];
       jx++;
     }
   }
-  if (TotalItems) {
-    lw->list.items =
-        (XmString *)_XmReallocArray((char *)lw->list.items, TotalItems, sizeof(XmString));
-  }
-  else {
-    /* Null out the list pointer, if we have deleted the last item. */
-    XtFree((char *)lw->list.items);
-    lw->list.items = NULL;
-  }
+  /* This nulls out the list pointer if we have deleted the last item. */
+  ResizeItems(lw, TotalItems);
   lw->list.itemCount = TotalItems;
 }
 
@@ -3126,6 +3235,8 @@ static void CopyItems(XmListWidget lw)
     for (i = 0; i < lw->list.itemCount; i++)
       il[i] = XmStringCopy(lw->list.items[i]);
     lw->list.items = il;
+    ListPriv(lw)->items = il;
+    ListPriv(lw)->items_size = lw->list.itemCount;
   }
 }
 
@@ -3170,12 +3281,17 @@ static void CopySelectedPositions(XmListWidget lw)
 static void ClearItemList(XmListWidget lw)
 {
   int i;
+  XmListPriv p = ListPriv(lw);
   RowsChanged(lw);
   if (!(lw->list.items && lw->list.itemCount))
     return;
   for (i = 0; i < lw->list.itemCount; i++)
     XmStringFree(lw->list.items[i]);
   XtFree((char *)lw->list.items);
+  if (p->items == lw->list.items) {
+    p->items = NULL;
+    p->items_size = 0;
+  }
   lw->list.itemCount = 0;
   lw->list.items = NULL;
   lw->list.LastItem = 0;

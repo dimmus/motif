@@ -352,6 +352,28 @@ static void listops_bench(int n)
   for (i = 0; i < 1000; i++)
     XmListDeselectItem(list, t[rnd(n / 10)]);
   lap("1000 deselect by value");
+  {
+    /* 300 ever wider items, deleted from the widest: each time the
+     * list shrinks to the next one. */
+    char wide[400];
+    XmString s;
+    for (i = 0; i < 300; i++) {
+      memset(wide, '#', 40 + i);
+      wide[40 + i] = '\0';
+      s = XmStringCreateLocalized(wide);
+      XmListAddItemUnselected(list, s, 1 + rnd(1000));
+      XmStringFree(s);
+    }
+    start();
+    for (i = 299; i >= 0; i--) {
+      memset(wide, '#', 40 + i);
+      wide[40 + i] = '\0';
+      s = XmStringCreateLocalized(wide);
+      XmListDeleteItem(list, s);
+      XmStringFree(s);
+    }
+    lap("300 deletes of the widest by value");
+  }
 }
 
 int main(int argc, char **argv)
