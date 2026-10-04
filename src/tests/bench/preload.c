@@ -71,6 +71,8 @@ void free(void *ptr)
 /* Status _XReply(Display *, xReply *, int, Bool), from Xlibint.h */
 typedef int (*xreply_fn)(Display *, void *, int, int);
 
+int _XReply(Display *dpy, void *rep, int extra, int discard);
+
 int _XReply(Display *dpy, void *rep, int extra, int discard)
 {
 	static xreply_fn real;

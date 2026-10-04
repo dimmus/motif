@@ -15,6 +15,7 @@
 #include <X11/Xatom.h>
 #include <Xm/Xm.h>
 #include <Xm/BulletinB.h>
+#include <Xm/DataF.h>
 #include <Xm/Text.h>
 #include <Xm/TextF.h>
 #include <check.h>
@@ -122,6 +123,37 @@ START_TEST(textfield_editing)
 }
 END_TEST
 
+/*
+ * A wide string that does not convert to the locale's multibyte encoding
+ * (the tests run in the C locale) sets an empty string.  The Wcs
+ * functions used to replace their conversion buffer with "" on failure
+ * and then XtFree() it.
+ */
+START_TEST(textfield_unconvertible_wcs)
+{
+	static wchar_t bad[] = { L'a', 0x263a, L'b', 0 };
+	Widget tf = XmCreateTextField(bb, "tf", NULL, 0);
+	Widget df = XmCreateDataField(bb, "df", NULL, 0);
+
+	XtManageChild(tf);
+	XtManageChild(df);
+	XtRealizeWidget(top);
+	XmTextFieldSetString(tf, "keep");
+	XmTextFieldSetStringWcs(tf, bad);
+	assert_tf(tf, "");
+
+	XmDataFieldSetString(df, "keep");
+	XmDataFieldReplaceWcs(df, 0, 4, bad);
+	{
+		char *s = XmDataFieldGetString(df);
+
+		ck_assert_str_eq(s, "");
+		XtFree(s);
+	}
+	pump();
+}
+END_TEST
+
 START_TEST(textfield_selection_and_clipboard)
 {
 	Widget tf = XmCreateTextField(bb, "tf", NULL, 0);
@@ -201,6 +233,27 @@ START_TEST(text_editing_and_search)
 	XmTextSetTopCharacter(t, 9);
 	pump();
 	ck_assert_int_eq(XmTextGetTopCharacter(t), 9);
+}
+END_TEST
+
+/*
+ * XmTextGetSubstring compared the bytes it would copy with buf_size as
+ * unsigned, so a negative buf_size let it copy without bound.
+ */
+START_TEST(text_substring_bad_size)
+{
+	Widget t = XmCreateText(bb, "text", NULL, 0);
+	char buf[16];
+
+	XtManageChild(t);
+	XtRealizeWidget(top);
+	XmTextSetString(t, "hello");
+	ck_assert_int_eq(XmTextGetSubstring(t, 0, 5, sizeof buf, buf),
+			 XmCOPY_SUCCEEDED);
+	ck_assert_str_eq(buf, "hello");
+	ck_assert_int_eq(XmTextGetSubstring(t, 0, 5, 5, buf), XmCOPY_FAILED);
+	ck_assert_int_eq(XmTextGetSubstring(t, 0, 5, -1, buf), XmCOPY_FAILED);
+	pump();
 }
 END_TEST
 
@@ -295,12 +348,14 @@ void text_suite(SRunner *runner)
 	tcase_add_checked_fixture(t, setup, teardown);
 	tcase_add_test(t, textfield_editing);
 	tcase_add_test(t, textfield_selection_and_clipboard);
+	tcase_add_test(t, textfield_unconvertible_wcs);
 	tcase_set_timeout(t, 60);
 	suite_add_tcase(s, t);
 
 	t = tcase_create("Text");
 	tcase_add_checked_fixture(t, setup, teardown);
 	tcase_add_test(t, text_editing_and_search);
+	tcase_add_test(t, text_substring_bad_size);
 	tcase_add_test(t, text_selection_and_clipboard);
 	tcase_add_test(t, copy_text_to_textfield);
 	tcase_set_timeout(t, 60);

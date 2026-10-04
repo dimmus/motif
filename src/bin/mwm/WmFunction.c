@@ -100,13 +100,13 @@ static char rcsid[] = "$TOG: WmFunction.c /main/19 1998/04/20 13:00:48 mgreess $
 #include "WmCmd.h"
 
 #include <Xm/RowColumnP.h> /* for MS_LastManagedMenuTime */
-extern XmMenuState _XmGetMenuState();
+extern XmMenuState _XmGetMenuState(Widget);
 
 static unsigned int GetEventInverseMask(XEvent *event);
 
 #ifdef WSM
 
-#if (defined(USL) || defined(__uxp__) || defined(linux)) && !defined(_NFILE)
+#ifndef _NFILE
 #define _NFILE FOPEN_MAX
 #endif
 #define CLOSE_FILES_ON_EXEC() \
@@ -240,7 +240,7 @@ Boolean F_Beep (String args, ClientData *pCD, XEvent *event)
  * is to restack the dirty transient relative to the second to the
  * top transient.  This function is used to support freeFamily stacking.
  */
-ClientData * FindSecondToTopTransient (ClientData *pcd)
+static ClientData * FindSecondToTopTransient (ClientData *pcd)
 
 {
     ClientData *pcdNext;
@@ -270,12 +270,8 @@ ClientData * FindSecondToTopTransient (ClientData *pcd)
 
 
 
-Boolean ForceLowerWindow (ClientData *pcd)
+static Boolean ForceLowerWindow (ClientData *pcd)
 {
-#if 0
-    Window stackWindow;
-    WmScreenData *pSD = (ACTIVE_WS)->pSD;
-#endif
     XWindowChanges changes;
     Boolean restack = False;
 #ifdef WSM
@@ -321,16 +317,6 @@ Boolean ForceLowerWindow (ClientData *pcd)
 	}
     }
 #endif /* WSM */
-#if 0
-    if (pSD->lastClient->type == MINIMIZED_STATE)
-    {
-	stackWindow = ICON_FRAME_WIN(pSD->lastClient->pCD);
-    }
-    else
-    {
-	stackWindow = pSD->lastClient->pCD->clientFrameWin;
-    }
-#endif
 
     changes.stack_mode = Below;
 #ifdef WSM
@@ -1046,14 +1032,7 @@ Boolean F_Exec (String args, ClientData *pCD, XEvent *event)
     {
 
 #ifndef NO_SETPGRP
-#if defined(__OSF1__) || defined(__osf__) || defined(_POSIX_JOB_CONTROL)
 	setsid();
-#else
-	int tpid;
-
-	tpid = getpid();
-	setpgrp(tpid, tpid);
-#endif
 #endif /* NO_SETPGRP */
 #ifdef WSM
 	/*
@@ -3765,7 +3744,7 @@ F_Version (String args, ClientData *pCD, XEvent *event)
 
 Boolean F_Send_Msg (String args, ClientData *pCD, XEvent *event)
 {
-    register int i;
+    int i;
 
 
     if (pCD && pCD->mwmMessagesCount)
@@ -3811,25 +3790,10 @@ Boolean F_Separator (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Separator */
 
 
-Boolean ForceRaiseWindow (ClientData *pcd)
+static Boolean ForceRaiseWindow (ClientData *pcd)
 {
-#if 0
-    Window stackWindow;
-    WmScreenData *pSD = (ACTIVE_WS)->pSD;
-#endif
     XWindowChanges changes;
     Boolean restack = False;
-
-#if 0
-    if (pSD->clientList->type == MINIMIZED_STATE)
-    {
-	stackWindow = ICON_FRAME_WIN(pSD->clientList->pCD);
-    }
-    else
-    {
-	stackWindow = pSD->clientList->pCD->clientFrameWin;
-    }
-#endif
 
     /*
      * Windows did not raise on regular f.raise because the raise was

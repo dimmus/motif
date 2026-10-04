@@ -119,7 +119,7 @@ static	void 	(*fpe_handler)(int);
 **--
 **/
 
-void    diag_store_handlers
+static void    diag_store_handlers
             ( void )
 {
 /*
@@ -449,7 +449,7 @@ void	diag_issue_diagnostic
 **--
 **/
 
-void	diag_issue_summary()
+void	diag_issue_summary(void)
 
 {
 
@@ -819,7 +819,7 @@ void	diag_initialize_diagnostics(void)
 **--
 **/
 
-void	diag_reset_overflow_handler()
+void	diag_reset_overflow_handler(void)
 
 {
 
@@ -1020,7 +1020,7 @@ void	write_msg_to_standard_error
     **  If message callback was supplied, call it with the description of the
     **  error instead of writing it to standard output.
     */
-    if (Uil_cmd_z_command.message_cb != (Uil_continue_type(*)())NULL)
+    if (Uil_cmd_z_command.message_cb != NULL)
     {
 	Uil_status_type return_status;
 /*
@@ -1028,7 +1028,7 @@ void	write_msg_to_standard_error
  *                and restore the Uil signal handlers immediately afterwards
  */
         diag_restore_diagnostics();
-	return_status = ((Uil_continue_type (*)(char *, int, int, char *, char *, char *, char *, int *))Uil_cmd_z_command.message_cb)(
+	return_status = (*Uil_cmd_z_command.message_cb)(
 			    Uil_cmd_z_command.message_data,
 			    message_number,
 			    diag_rz_msg_table[ message_number ].l_severity,
@@ -1177,7 +1177,7 @@ void	diag_report_status(void)
     /*
     **  If no status callback was supplied, just return.
     */
-    if (Uil_cmd_z_command.status_cb == (Uil_continue_type(*)())NULL) return;
+    if (Uil_cmd_z_command.status_cb == NULL) return;
 
     /*
     **	If delay is used up (less than or equal to zero) then invoke the
@@ -1192,7 +1192,7 @@ void	diag_report_status(void)
  *                   immediately after.
  */
         diag_restore_diagnostics();
-	return_status = ((Uil_continue_type (*)(char *, int, int, char *, int *))Uil_cmd_z_command.status_cb)(
+	return_status = (*Uil_cmd_z_command.status_cb)(
 			    Uil_cmd_z_command.status_data,
 			    Uil_percent_complete,
 			    Uil_lines_processed,

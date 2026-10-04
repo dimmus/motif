@@ -858,7 +858,7 @@ typedef struct _XmPartResource {
   String default_type;      /* representation type of specified default */
   XtPointer default_addr;   /* Address of default resource		    */
 } XmPartResource;
-#  if (defined(__STDC__) && !defined(UNIXCPP)) || defined(__cplusplus) || defined(ANSICPP)
+#  if defined(__STDC__) || defined(__cplusplus)
 #    define XmPartOffset(part, variable) \
       ((part##Index) << XmOFFSETBITS) + XtOffsetOf(part##Part, variable)
 #    define XmConstraintPartOffset(part, variable) \

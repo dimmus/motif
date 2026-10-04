@@ -106,6 +106,8 @@ motif_option(WITH_PNG "Enable PNG support" ON)
 motif_option(WITH_XFT "Enable Xft support" ON)
 motif_option(WITH_LTO "Enable link-time optimization (and -fno-semantic-interposition)" OFF)
 motif_option(WITH_CPU_NATIVE "Optimize for the build machine's CPU (-march=native, binaries are not portable)" OFF)
+motif_option(WITH_WERROR
+  "Treat compiler warnings as errors in the libraries, programs, build tools and tests (not the examples); needs CMake 3.24" OFF)
 set(WITH_PGO OFF CACHE STRING
   "Profile-guided optimization: OFF, GENERATE (instrumented build for the pgo-train target) or USE (build with the profiles in MOTIF_PGO_DIR)")
 set_property(CACHE WITH_PGO PROPERTY STRINGS OFF GENERATE USE)
@@ -284,8 +286,7 @@ set(MOTIF_CONFIG_DEFINITIONS)
 
 set(CMAKE_REQUIRED_INCLUDES ${MOTIF_XT_INCLUDE_DIRS})
 foreach(_header
-    alloca.h iconv.h wctype.h fcntl.h sys/poll.h sys/time.h stdint.h
-    inttypes.h X11/Xos_r.h X11/Xpoll.h)
+    alloca.h iconv.h wctype.h fcntl.h sys/poll.h stdint.h inttypes.h)
   string(MAKE_C_IDENTIFIER "HAVE_${_header}" _var)
   string(TOUPPER "${_var}" _var)
   check_include_file("${_header}" ${_var})
@@ -295,18 +296,13 @@ foreach(_header
 endforeach()
 
 foreach(_func
-    getcwd getwd iconv nanosleep putenv regcomp strcasecmp strdup strlcat
-    getpwnam getpwuid re_comp re_exec)
+    iconv putenv strcasecmp strdup strlcat getpwnam getpwuid)
   string(TOUPPER "HAVE_${_func}" _var)
   check_function_exists(${_func} ${_var})
   if(${_var})
     list(APPEND MOTIF_CONFIG_DEFINITIONS ${_var})
   endif()
 endforeach()
-check_function_exists(regexec HAVE_REGEX)
-if(HAVE_REGEX)
-  list(APPEND MOTIF_CONFIG_DEFINITIONS HAVE_REGEX)
-endif()
 
 # Always defined, to 0 or 1, as the sources test it with #if
 check_symbol_exists(XICProc "X11/Xlib.h" HAVE_XICPROC)
@@ -317,29 +313,10 @@ else()
 endif()
 unset(CMAKE_REQUIRED_INCLUDES)
 
-# XtAppLock() and XtAppUnlock() indicate a thread-aware libXt
-set(CMAKE_REQUIRED_INCLUDES ${MOTIF_XT_INCLUDE_DIRS})
-set(CMAKE_REQUIRED_LIBRARIES ${MOTIF_XT_LINK_LIBRARIES})
-check_c_source_compiles("
-#include <X11/Intrinsic.h>
-int main(void) {
-    XtAppContext app_context = 0;
-    XtAppLock(app_context);
-    XtAppUnlock(app_context);
-    return 0;
-}" HAVE_XTHREADS)
-unset(CMAKE_REQUIRED_INCLUDES)
-unset(CMAKE_REQUIRED_LIBRARIES)
-if(HAVE_XTHREADS)
-  list(APPEND MOTIF_CONFIG_DEFINITIONS XTHREADS=1)
-endif()
-
 # Configuration of the libraries
 list(APPEND MOTIF_CONFIG_DEFINITIONS
   HAVE_LIBXMU
   NO_OL_COMPAT=1
-  _Xos_processLock=XtProcessLock
-  _Xos_processUnlock=XtProcessUnlock
 )
 if(WITH_PWC_DEBUG)
   list(APPEND MOTIF_CONFIG_DEFINITIONS PWC_DEBUG=1)
@@ -400,14 +377,10 @@ list(APPEND MOTIF_CONFIG_DEFINITIONS
 # -----------------------------------------------------------------------------
 # Warnings
 #
-# One curated list.  These are not enabled yet because the code still
-# triggers them; fix and enable them in this order:
-#   -Wimplicit-fallthrough, -Wstrict-prototypes, -Wmissing-prototypes,
-#   -Wdiscarded-qualifiers, -Wstringop-overflow, -Wsign-compare.
-# The compiler enables -Wdiscarded-qualifiers and -Wstringop-overflow by
-# default, so they are switched off explicitly until then.  Warnings are not
-# errors (set CMAKE_COMPILE_WARNING_AS_ERROR to make them so), apart from the
-# few -Werror= below that always indicate a bug.
+# One curated list, which the library code (Xm, Mrm, Uil, mwm, wml) and
+# the tests build without warnings with GCC and Clang.  Warnings are not
+# errors (WITH_WERROR=ON makes them so outside the examples, as CI does),
+# apart from the few -Werror= below that always indicate a bug.
 
 set(MOTIF_C_WARNINGS)
 if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
@@ -422,13 +395,14 @@ if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
     -Wrestrict
     -Wabsolute-value
     -Wshadow
+    -Wimplicit-fallthrough
+    -Wstrict-prototypes
+    -Wold-style-definition
+    -Wmissing-prototypes
+    -Wsign-compare
     -Werror=implicit-function-declaration
     -Werror=return-type
     -Werror=vla
-    # To be fixed, see above
-    -Wno-discarded-qualifiers
-    -Wno-incompatible-pointer-types-discards-qualifiers
-    -Wno-stringop-overflow
     # Legacy code patterns that are not worth the churn
     -Wno-char-subscripts
     -Wno-unknown-pragmas
@@ -804,6 +778,17 @@ set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS ON)
 
+# WITH_WERROR: CMAKE_COMPILE_WARNING_AS_ERROR initializes the
+# COMPILE_WARNING_AS_ERROR property of the targets created after it is set,
+# so it is on for everything below except the examples, which are older code
+# that is not kept free of the curated warnings.
+if(WITH_WERROR)
+  if(CMAKE_VERSION VERSION_LESS 3.24)
+    message(FATAL_ERROR "WITH_WERROR needs CMake 3.24 or later")
+  endif()
+  set(CMAKE_COMPILE_WARNING_AS_ERROR ON)
+endif()
+
 # Add subdirectories
 add_subdirectory(include)
 add_subdirectory(src/lib)
@@ -815,7 +800,13 @@ if(WITH_MESSAGE_CATALOG)
 endif()
 
 if(WITH_DEMOS)
+    if(WITH_WERROR)
+        set(CMAKE_COMPILE_WARNING_AS_ERROR OFF)
+    endif()
     add_subdirectory(src/examples)
+    if(WITH_WERROR)
+        set(CMAKE_COMPILE_WARNING_AS_ERROR ON)
+    endif()
 endif()
 
 if(WITH_TESTS)

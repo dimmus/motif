@@ -49,9 +49,7 @@ static char rcsid[] = "$XConsortium: wmlsynbld.c /main/9 1995/08/29 11:11:12 drk
 #include "wml.h"
 #include "wmlparse.h"
 
-#if defined(__STDC__)
 #include <stdlib.h>
-#endif
 #include <stdio.h>
 
 

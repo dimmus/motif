@@ -383,13 +383,13 @@ Idb__DB_PutDataEntry (IDBFile			file_id,
   IDBRecordBufferPtr	curbuf;		/* current record buffer pointer */
   IDBRecordBufferPtr	nxtbuf;		/* next record buffer pointer */
   IDBDataHdrPtr		dataheader;	/* data record header */
-  MrmCount		entsiz ;	/* Number of bytes for new entry */
+  int			entsiz ;	/* Number of bytes for new entry */
   MrmOffset		entoffs ;	/* Entry offset in buffer */
   Cardinal		num_recs;	/* # records to save overflow */
   Cardinal		cur_rec;	/* the current record */
   char			*dataptr ;	/* pointer to data in context */
-  MrmCount		datarem ;	/* # bytes left to copy in data */
-  MrmCount		cursiz ;	/* # bytse of data in cur. segment */
+  int			datarem ;	/* # bytes left to copy in data */
+  int			cursiz ;	/* # bytse of data in cur. segment */
 
   /*
    * Consistency check
@@ -428,7 +428,7 @@ Idb__DB_PutDataEntry (IDBFile			file_id,
    */
   entsiz = IDBSimpleDataHdrSize + UrmRCSize(context_id) ;
   entsiz = _FULLWORD (entsiz) ;
-  if ( entsiz <= IDBDataFreeMax )
+  if ( entsiz <= (int)IDBDataFreeMax )
     ent_typ = IDBdrSimple ;
   else ent_typ = IDBdrOverflow ;
 
@@ -527,7 +527,7 @@ Idb__DB_PutDataEntry (IDBFile			file_id,
 	   * Set up the header of this segment, and copy in the appropriate part
 	   * of the data buffer in the context
 	   */
-	  cursiz = MIN(datarem, IDBDataOverflowMax) ;
+	  cursiz = MIN(datarem, (int)IDBDataOverflowMax) ;
 	  entsiz = cursiz + IDBOverflowDataHdrSize ;
 	  entsiz = _FULLWORD (entsiz) ;
 	  overflowdata->header.validation	= IDBDataEntryValid;

@@ -894,7 +894,7 @@ static Boolean PosToXY(XmTextWidget tw, XmTextPosition position, Position *x, Po
     }
     _XmProcessUnlock();
     line = _XmTextPosToLine(tw, position);
-    if (line == NOLINE || line >= data->number_lines)
+    if (line == NOLINE || line >= (LineNum)data->number_lines)
       return False;
     local_y = data->topmargin;
     local_x = tw->text.inner_widget->core.width -
@@ -916,7 +916,7 @@ static Boolean PosToXY(XmTextWidget tw, XmTextPosition position, Position *x, Po
     }
     _XmProcessUnlock();
     line = _XmTextPosToLine(tw, position);
-    if (line == NOLINE || line >= data->number_lines)
+    if (line == NOLINE || line >= (LineNum)data->number_lines)
       return False;
     local_y = data->topmargin + line * data->lineheight + data->font_ascent;
     local_x = data->leftmargin;
@@ -1286,9 +1286,9 @@ void _XmRedisplayVBar(XmTextWidget tw)
 
 static int CountLines(XmTextWidget tw, XmTextPosition start, XmTextPosition end)
 {
-  register XmTextLineTable line_table;
-  register unsigned int t_index;
-  register unsigned int max_index = 0;
+  XmTextLineTable line_table;
+  unsigned int t_index;
+  unsigned int max_index = 0;
   int numlines = 0;
   line_table = tw->text.line_table;
   t_index = tw->text.table_index;
@@ -1326,12 +1326,12 @@ void _XmChangeVSB(XmTextWidget tw)
     tw->text.top_line = _XmTextGetTableIndex(tw, tw->text.top_character);
   if (tw->text.top_line > tw->text.total_lines)
     tw->text.top_line = tw->text.total_lines;
-  if (tw->text.top_line + tw->text.number_lines > tw->text.total_lines)
+  if (tw->text.top_line + tw->text.number_lines > (Cardinal)tw->text.total_lines)
     local_total = tw->text.top_line + tw->text.number_lines;
   else
     local_total = tw->text.total_lines;
   if (data->vbar) {
-    if (local_total >= tw->text.number_lines)
+    if ((Cardinal)local_total >= tw->text.number_lines)
       new_size = tw->text.number_lines;
     else
       new_size = local_total;
@@ -1369,12 +1369,12 @@ void _XmChangeHSB(XmTextWidget tw)
     tw->text.top_line = _XmTextGetTableIndex(tw, tw->text.top_character);
   if (tw->text.top_line > tw->text.total_lines)
     tw->text.top_line = tw->text.total_lines;
-  if (tw->text.top_line + tw->text.number_lines > tw->text.total_lines)
+  if (tw->text.top_line + tw->text.number_lines > (Cardinal)tw->text.total_lines)
     local_total = tw->text.top_line + tw->text.number_lines;
   else
     local_total = tw->text.total_lines;
   if (data->hbar) {
-    if (local_total >= tw->text.number_lines)
+    if ((Cardinal)local_total >= tw->text.number_lines)
       new_size = tw->text.number_lines;
     else
       new_size = local_total;
@@ -1448,7 +1448,7 @@ static void TextFindNewWidth(XmTextWidget tw, Dimension *widthRtn)
     else {
       LineNum l;
       LineTableExtra extra;
-      for (l = 0; l < data->number_lines; l++) {
+      for (l = 0; l < (LineNum)data->number_lines; l++) {
         _XmTextLineInfo(tw, l, &start, &extra);
         if (extra && newwidth < extra->width)
           newwidth = extra->width;
@@ -1496,7 +1496,7 @@ static void TextFindNewHeight(XmTextWidget tw,
         newheight = text_height;
     }
     else {
-      for (l = 0; l < data->number_lines; l++) {
+      for (l = 0; l < (LineNum)data->number_lines; l++) {
         _XmTextLineInfo(tw, l, &start, &extra);
         if (extra && newheight < extra->width)
           newheight = extra->width;
@@ -1709,7 +1709,7 @@ static Boolean MeasureLine(XmTextWidget tw,
   _XmProcessUnlock();
   if (extra)
     *extra = NULL;
-  if (line >= data->number_lines) {
+  if (line >= (LineNum)data->number_lines) {
     if (data->resizewidth || data->resizeheight ||
         ((data->scrollvertical || data->scrollhorizontal) && XmIsScrolledWindow(XtParent(tw))))
     {
@@ -3180,7 +3180,7 @@ static void MakePositionVisible(XmTextWidget tw, XmTextPosition position)
         else {
           line_num = _XmTextGetTableIndex(tw, position);
           if (position == tw->text.bottom_position ||
-              (line_num < tw->text.total_lines &&
+              (line_num < (LineNum)tw->text.total_lines &&
                position == tw->text.line_table[line_num + 1].start_pos - 1))
             position = MAX(position - (int)data->rows / 2,
                            line_num ? (int)(tw->text.line_table[line_num].start_pos) : 0);
@@ -3209,7 +3209,7 @@ static void MakePositionVisible(XmTextWidget tw, XmTextPosition position)
         else {
           line_num = _XmTextGetTableIndex(tw, position);
           if (position == tw->text.bottom_position ||
-              (line_num < tw->text.total_lines &&
+              (line_num < (LineNum)tw->text.total_lines &&
                position == tw->text.line_table[line_num + 1].start_pos - 1))
             position = MAX(position - data->columns / 2,
                            line_num ? (int)(tw->text.line_table[line_num].start_pos) : 0);
@@ -3341,7 +3341,7 @@ static void SizeFromRowsCols(XmTextWidget tw, Dimension *width, Dimension *heigh
       LineTableExtra extra = NULL;
       Boolean past_end = False;
       int i;
-      for (i = 0; i < tw->text.number_lines && !past_end; i++) {
+      for (i = 0; (Cardinal)i < tw->text.number_lines && !past_end; i++) {
         past_end = !MeasureLine(tw, i, tw->text.line[i].start, &nextpos, &extra);
         if (extra) {
           if (extra->width > *height)
@@ -3359,7 +3359,7 @@ static void SizeFromRowsCols(XmTextWidget tw, Dimension *width, Dimension *heigh
       LineTableExtra extra = NULL;
       Boolean past_end = False;
       int i;
-      for (i = 0; i < tw->text.number_lines && !past_end; i++) {
+      for (i = 0; (Cardinal)i < tw->text.number_lines && !past_end; i++) {
         past_end = !MeasureLine(tw, i, tw->text.line[i].start, &nextpos, &extra);
         if (extra) {
           if (extra->width > *width)
@@ -3819,7 +3819,7 @@ static void OutputGetValues(Widget w, ArgList args, Cardinal num_args)
 
 static Boolean CKCols(ArgList args, Cardinal num_args)
 {
-  register ArgList arg;
+  ArgList arg;
   for (arg = args; num_args != 0; num_args--, arg++) {
     if (strcmp(arg->name, XmNcolumns) == 0)
       return (True);
@@ -3829,7 +3829,7 @@ static Boolean CKCols(ArgList args, Cardinal num_args)
 
 static Boolean CKRows(ArgList args, Cardinal num_args)
 {
-  register ArgList arg;
+  ArgList arg;
   for (arg = args; num_args != 0; num_args--, arg++) {
     if (strcmp(arg->name, XmNrows) == 0)
       return (True);
@@ -4244,11 +4244,11 @@ static void NotifyResized(Widget w, Boolean o_create)
     }
     else {
       data->ignorevbar = True;
-      if (tw->text.top_line + tw->text.number_lines > tw->text.total_lines)
+      if (tw->text.top_line + tw->text.number_lines > (Cardinal)tw->text.total_lines)
         local_total = tw->text.top_line + tw->text.number_lines;
       else
         local_total = tw->text.total_lines;
-      if (local_total >= tw->text.number_lines)
+      if ((Cardinal)local_total >= tw->text.number_lines)
         new_size = tw->text.number_lines;
       else
         new_size = local_total;
@@ -4272,11 +4272,11 @@ static void NotifyResized(Widget w, Boolean o_create)
     int new_hoffset = 0;
     if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
       data->ignorehbar = True;
-      if (tw->text.top_line + tw->text.number_lines > tw->text.total_lines)
+      if (tw->text.top_line + tw->text.number_lines > (Cardinal)tw->text.total_lines)
         local_total = tw->text.top_line + tw->text.number_lines;
       else
         local_total = tw->text.total_lines;
-      if (local_total >= tw->text.number_lines)
+      if ((Cardinal)local_total >= tw->text.number_lines)
         new_size = tw->text.number_lines;
       else
         new_size = local_total;
@@ -4646,11 +4646,11 @@ static void OutputExpose(Widget w, XEvent *event, Region region)
       int local_total, new_size;
       XmNavigatorDataRec nav_data;
       data->ignorehbar = True;
-      if (tw->text.top_line + tw->text.number_lines > tw->text.total_lines)
+      if (tw->text.top_line + tw->text.number_lines > (Cardinal)tw->text.total_lines)
         local_total = tw->text.top_line + tw->text.number_lines;
       else
         local_total = tw->text.total_lines;
-      if (local_total >= tw->text.number_lines)
+      if ((Cardinal)local_total >= tw->text.number_lines)
         new_size = tw->text.number_lines;
       else
         new_size = local_total;
@@ -4678,11 +4678,11 @@ static void OutputExpose(Widget w, XEvent *event, Region region)
       int local_total, new_size;
       XmNavigatorDataRec nav_data;
       data->ignorevbar = True;
-      if (tw->text.top_line + tw->text.number_lines > tw->text.total_lines)
+      if (tw->text.top_line + tw->text.number_lines > (Cardinal)tw->text.total_lines)
         local_total = tw->text.top_line + tw->text.number_lines;
       else
         local_total = tw->text.total_lines;
-      if (local_total >= tw->text.number_lines)
+      if ((Cardinal)local_total >= tw->text.number_lines)
         new_size = tw->text.number_lines;
       else
         new_size = local_total;
@@ -4814,7 +4814,7 @@ static void SliderMove(Widget w, XtPointer closure, XtPointer cd)
     if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
       data->suspend_voffset = True;
       tw->text.hsbar_scrolling = True;
-      if (tw->text.top_line + tw->text.number_lines > tw->text.total_lines)
+      if (tw->text.top_line + tw->text.number_lines > (Cardinal)tw->text.total_lines)
         local_total = tw->text.top_line + tw->text.number_lines;
       else
         local_total = tw->text.total_lines;
@@ -5217,7 +5217,7 @@ void _XmTextChangeHOffset(XmTextWidget tw, int length)
   /* subtract margins from the offset: Fixes CR 3187 */
   length += (length < 0 ? (2 * margin_width) : -(2 * margin_width));
   new_offset += length;
-  for (i = 0; i < tw->text.number_lines; i++) {
+  for (i = 0; (Cardinal)i < tw->text.number_lines; i++) {
     last_position = (*tw->text.source->Scan)(
         tw->text.source, tw->text.line[i].start, XmSELECT_LINE, XmsdRight, 1, False);
     nextpos = (*tw->text.source->Scan)(
@@ -5259,7 +5259,7 @@ void _XmTextChangeVOffset(XmTextWidget tw, int length)
   /* subtract margins from the offset: Fixes CR 3187 */
   length += (length < 0 ? (2 * margin_height) : -(2 * margin_height));
   new_offset += length;
-  for (i = 0; i < tw->text.number_lines; i++) {
+  for (i = 0; (Cardinal)i < tw->text.number_lines; i++) {
     last_position = (*tw->text.source->Scan)(
         tw->text.source, tw->text.line[i].start, XmSELECT_LINE, XmsdRight, 1, False);
     nextpos = (*tw->text.source->Scan)(

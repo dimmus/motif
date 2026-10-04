@@ -98,7 +98,7 @@ static void UilWrapup _ARGUMENTS((Uil_compile_desc_type *compile_desc));
 externaldef(uilmsg) nl_catd uil_catd = NULL;
 #endif
 
-extern  int yyparse();
+extern  int yyparse(void);
 
 /*
 **
@@ -145,7 +145,7 @@ static unsigned	   doing_exit = 0;
 **--
 **/
 
-static void	common_main()
+static void	common_main(void)
 {
 #if XM_MSGCAT
   if (uil_catd == NULL)
@@ -366,7 +366,7 @@ int	main(int l_argc, char *rac_argv[])
 **--
 **/
 
-static void	common_cleanup()
+static void	common_cleanup(void)
 {
 
     /* cleanup the source file information */
@@ -433,9 +433,10 @@ Uil_status_type Uil
 
 (Uil_command_type        *command_desc,
 Uil_compile_desc_type   *compile_desc,
-Uil_continue_type       (*message_cb)(),
+Uil_continue_type       (*message_cb)(char *, int, int, char *, char *,
+				     char *, char *, int *),
 char            *message_data,
-Uil_continue_type       (*status_cb)(),
+Uil_continue_type       (*status_cb)(char *, int, int, char *, int *),
 char            *status_data)
 
 

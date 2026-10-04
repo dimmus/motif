@@ -48,7 +48,7 @@ static Widget _XmInputInWidget(Widget w, Position x, Position y)
   /* loop over the child list to find if there is one at x,y */
   /* well, overlapping won't really work, since I have no standard way to
       check visibility */
-  for (i = 0; i < cw->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < cw->composite.num_children; i++) {
     child = cw->composite.children[i];
     if (XtIsManaged(child)) {
       if (x >= child->core.x && y >= child->core.y && x < child->core.x + child->core.width &&

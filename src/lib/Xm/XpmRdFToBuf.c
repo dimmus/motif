@@ -78,7 +78,7 @@ int XpmReadFileToBuffer(const char *filename, char **buffer_return)
     return XpmOpenFailed;
   }
   len = stats.st_size;
-  if (len < 0 || len >= SIZE_MAX) {
+  if (len < 0 || (unsigned long long)len >= SIZE_MAX) {
     close(fd);
     return XpmOpenFailed;
   }

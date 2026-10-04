@@ -104,13 +104,13 @@ enum { _UP, _DOWN, _RIGHT, _LEFT, _FIRST, _LAST };
 
 /********    Static Function Declarations    ********/
 static void ReManageChildren(XmPanedWindowWidget pw);
-static int NeedsAdjusting(register XmPanedWindowWidget pw);
+static int NeedsAdjusting(XmPanedWindowWidget pw);
 static XtGeometryResult AdjustPanedWindowMajor(XmPanedWindowWidget pw,
                                                Dimension newdim,
                                                Dimension *reply_dim);
 static void ResetDMajors(XmPanedWindowWidget pw);
 static void RefigureLocations(
-    register XmPanedWindowWidget pw, int c_index, Direction dir, Boolean rflag, Boolean sflag);
+    XmPanedWindowWidget pw, int c_index, Direction dir, Boolean rflag, Boolean sflag);
 static void CommitNewLocations(XmPanedWindowWidget pw, Widget instigator);
 static void RefigureLocationsAndCommit(XmPanedWindowWidget pw,
                                        int c_index,
@@ -130,7 +130,7 @@ static void ConstraintInit(Widget request, Widget new_w, ArgList args, Cardinal 
 static void Realize(Widget w, XtValueMask *p_valueMask, XSetWindowAttributes *attributes);
 static void Destroy(Widget w);
 static Cardinal InsertOrder(Widget w);
-static void InsertChild(register Widget w);
+static void InsertChild(Widget w);
 static void ChangeManaged(Widget w);
 static void Resize(Widget wid);
 static Boolean SetValues(Widget cw, Widget rw, Widget nw, ArgList args, Cardinal *num_args);
@@ -488,7 +488,7 @@ static void Initialize(Widget request, Widget new_w, ArgList args, Cardinal *num
  *************************************<->***********************************/
 static void Realize(Widget w, XtValueMask *p_valueMask, XSetWindowAttributes *attributes)
 {
-  register XmPanedWindowWidget pw = (XmPanedWindowWidget)w;
+  XmPanedWindowWidget pw = (XmPanedWindowWidget)w;
   WidgetList children = pw->paned_window.managed_children;
   int num_children = pw->paned_window.num_managed_children;
   Widget *childP;
@@ -582,7 +582,7 @@ static void ConstraintDestroy(Widget w)
       XmPanedWindowWidget pw = (XmPanedWindowWidget)w->core.parent;
       if (!(pw->core.being_destroyed)) {
         int i;
-        for (i = 0; (i < pw->composite.num_children) && IsPane(pw->composite.children[i]); i++)
+        for (i = 0; ((Cardinal)i < pw->composite.num_children) && IsPane(pw->composite.children[i]); i++)
           PanePosIndex(pw->composite.children[i]) = i;
       }
     }
@@ -603,13 +603,13 @@ static void ConstraintDestroy(Widget w)
 static void AdjustGC(XmPanedWindowWidget pw)
 {
   XRectangle clip_rect;
-  register int i;
+  int i;
   Region sash_region, clip_region;
   if (pw->composite.num_children > 0) {
     sash_region = XCreateRegion();
     clip_region = XCreateRegion();
     /* find all the managed sashes and add their area to the sash region */
-    for (i = 0; i < pw->composite.num_children; i++) {
+    for (i = 0; (Cardinal)i < pw->composite.num_children; i++) {
       if (XmIsSash(pw->composite.children[i]) && XtIsManaged(pw->composite.children[i])) {
         clip_rect.width = pw->composite.children[i]->core.width;
         clip_rect.height = pw->composite.children[i]->core.height;
@@ -669,7 +669,7 @@ static void ReManageChildren(XmPanedWindowWidget pw)
 {
   int i;
   pw->paned_window.num_managed_children = 0;
-  for (i = 0; i < pw->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < pw->composite.num_children; i++) {
     if (XtIsManaged(pw->composite.children[i])) {
       if ((pw->paned_window.num_managed_children + 1) > pw->paned_window.num_slots) {
         pw->paned_window.num_slots += XmBLOCK;
@@ -693,7 +693,7 @@ static void ReManageChildren(XmPanedWindowWidget pw)
  *     Calculate the major size needed to fully display this paned window.
  *
  *************************************<->***********************************/
-static int NeedsAdjusting(register XmPanedWindowWidget pw)
+static int NeedsAdjusting(XmPanedWindowWidget pw)
 {
   int needed, i;
   needed = 0;
@@ -784,14 +784,14 @@ static void ResetDMajors(XmPanedWindowWidget pw)
  *
  *************************************<->***********************************/
 static void RefigureLocations(
-    register XmPanedWindowWidget pw, int c_index, Direction dir, Boolean rflag, Boolean sflag)
+    XmPanedWindowWidget pw, int c_index, Direction dir, Boolean rflag, Boolean sflag)
 {
   WidgetList children = pw->paned_window.managed_children;
   int num_panes = pw->paned_window.pane_count;
   int _dir = (dir == FirstPane) ? 1 : -1;
   int spacing;
   XmPanedWindowConstraintPart *pane;
-  register Widget *childP;
+  Widget *childP;
   Position pos;
   int sizeused;
   int cdir, i;
@@ -902,16 +902,16 @@ static void CommitNewLocations(XmPanedWindowWidget pw, Widget instigator)
 {
   WidgetList children = pw->paned_window.managed_children;
   int num_panes = pw->paned_window.pane_count;
-  register Widget *childP;
+  Widget *childP;
   XWindowChanges changes;
   int i, offset, sepPos;
   int minor_dim, major_dim;
   changes.stack_mode = Above;
   offset = MinorMargin(pw);
   for (childP = children, i = 0; i < num_panes; childP++, i++) {
-    register XmPanedWindowConstraintPart *pane = &(PaneInfo(*childP)->panedw);
-    register Widget sash = pane->sash;
-    register Widget separator = pane->separator;
+    XmPanedWindowConstraintPart *pane = &(PaneInfo(*childP)->panedw);
+    Widget sash = pane->sash;
+    Widget separator = pane->separator;
     if (sash) /* IF THIS IS NOT NULL */ {
       int tmp = MinorSize(pw) - 2 * ((*childP)->core.border_width + MinorMargin(pw));
       if (tmp <= 0)
@@ -1085,8 +1085,8 @@ static void EraseTrackLines(XmPanedWindowWidget pw)
 static void ProcessKeyEvent(XtPointer client_data, XtIntervalId *id)
 {
   Widget w = (Widget)client_data;
-  register XmPanedWindowWidget pw = (XmPanedWindowWidget)w->core.parent;
-  register WidgetList children = pw->paned_window.managed_children;
+  XmPanedWindowWidget pw = (XmPanedWindowWidget)w->core.parent;
+  WidgetList children = pw->paned_window.managed_children;
   int num_panes = pw->paned_window.pane_count;
   Widget *childP;
   XmPanedWindowConstraintPart *pane;
@@ -1163,8 +1163,8 @@ static void ProcessKeyEvent(XtPointer client_data, XtIntervalId *id)
 static void HandleSash(Widget w, XtPointer closure, XtPointer callData)
 {
   SashCallData call_data = (SashCallData)callData;
-  register XmPanedWindowWidget pw = (XmPanedWindowWidget)w->core.parent;
-  register WidgetList children = pw->paned_window.managed_children;
+  XmPanedWindowWidget pw = (XmPanedWindowWidget)w->core.parent;
+  WidgetList children = pw->paned_window.managed_children;
   int num_panes = pw->paned_window.pane_count;
   short increment = 1;
   short c_index;
@@ -1323,16 +1323,16 @@ static XtGeometryResult GeometryManager(Widget w,
   XtWidgetGeometry allowed, geo_desired, geo_reply;
   XmPanedWindowConstraintPart *pane = &(PaneInfo(w)->panedw);
   Boolean is_almost = FALSE;
-  register Widget *children;
+  Widget *children;
   int i;
   Dimension childMinor, childBorderWidth, new_major, old_dmajor, tmp;
   int num_panes = 0;
-  register Widget *childP;
+  Widget *childP;
   /* First treat the special case resulting from a change in positionIndex */
   if (PanePosIndex(w) == XmLAST_POSITION) {
     /* as set in ConstraintSetValues */
     /* first reset the value of positionIndex to its real value */
-    for (i = 0; i < pw->composite.num_children; i++)
+    for (i = 0; (Cardinal)i < pw->composite.num_children; i++)
       if (pw->composite.children[i] == w) {
         PanePosIndex(w) = i;
         break;
@@ -1619,7 +1619,7 @@ static Cardinal InsertOrder(Widget w)
       for sash and separator, since we tracked that in constraint init -
       and if it's a correct value, use it */
   if (PanePosIndex(w) != XmLAST_POSITION) {
-    if ((PanePosIndex(w) >= 0) && (PanePosIndex(w) < i)) {
+    if ((PanePosIndex(w) >= 0) && ((Cardinal)PanePosIndex(w) < i)) {
       return PanePosIndex(w);
     }
   } /* all PanePosIndex will be res-et in InsertChild proc */
@@ -1631,7 +1631,7 @@ static Cardinal InsertOrder(Widget w)
  *  InsertChild()
  *
  *************************************<->***********************************/
-static void InsertChild(register Widget w)
+static void InsertChild(Widget w)
 {
   XmPanedWindowWidget pw = (XmPanedWindowWidget)w->core.parent;
   XmPanedWindowConstraintPart *pane = &(PaneInfo(w)->panedw);
@@ -1714,8 +1714,8 @@ static void InsertChild(register Widget w)
   /* re-set the correct positionIndex values for everybody if
    * the new kid has been inserted in the list instead of put at the end
    */
-  if (PanePosIndex(w) != pw->composite.num_children)
-    for (i = 0, p = pw->composite.children; i < pw->composite.num_children; i++, p++) {
+  if (PanePosIndex(w) != (int)pw->composite.num_children)
+    for (i = 0, p = pw->composite.children; (Cardinal)i < pw->composite.num_children; i++, p++) {
       PanePosIndex(*p) = i;
     }
 } /* InsertChild */
@@ -1727,9 +1727,9 @@ static void InsertChild(register Widget w)
  *************************************<->***********************************/
 static void ChangeManaged(Widget w)
 {
-  register XmPanedWindowWidget pw = (XmPanedWindowWidget)w;
-  register Widget *childP;
-  register int i;
+  XmPanedWindowWidget pw = (XmPanedWindowWidget)w;
+  Widget *childP;
+  int i;
   Widget *children;
   int num_children = pw->composite.num_children;
   Widget sash, separator;
@@ -1896,7 +1896,7 @@ static Boolean SetValues(Widget cw,
   XmPanedWindowWidget newpw = (XmPanedWindowWidget)nw;
   Boolean returnFlag = False;
   WidgetList children = newpw->composite.children;
-  register Widget *childP;
+  Widget *childP;
   int num_children = newpw->composite.num_children;
   Arg sashargs[3];
   int i, minor_dim, major_dim;
@@ -1963,8 +1963,8 @@ static Boolean SetValues(Widget cw,
   {
     for (childP = children, i = 0; i < num_children; childP++, i++) {
       if (IsPane(*childP)) {
-        register XmPanedWindowConstraintPart *pane = &(PaneInfo(*childP)->panedw);
-        register Widget sash = pane->sash;
+        XmPanedWindowConstraintPart *pane = &(PaneInfo(*childP)->panedw);
+        Widget sash = pane->sash;
         if (sash) /* IF THIS IS NOT NULL */ {
           /* Send Down Changes to Sash */
           assert(n <= XtNumber(sashargs));
@@ -2027,7 +2027,7 @@ static Boolean PaneSetValues(
   int i, count;
   XmPanedWindowConstraintPart *old_pane = &(PaneInfo(old)->panedw);
   XmPanedWindowConstraintPart *new_pane = &(PaneInfo(new_w)->panedw);
-  register Widget tmp;
+  Widget tmp;
   XtWidgetGeometry current;
   if (!XtIsRectObj(new_w))
     return (FALSE);
@@ -2035,7 +2035,7 @@ static Boolean PaneSetValues(
     /* first check for a valid value */
     /* count the number of pane children : not sash and separator */
     i = 0;
-    while ((i < pw->composite.num_children) && IsPane(pw->composite.children[i]))
+    while (((Cardinal)i < pw->composite.num_children) && IsPane(pw->composite.children[i]))
       i++;
     /* special public value */
     if (PanePosIndex(new_w) == XmLAST_POSITION)
@@ -2181,7 +2181,7 @@ Widget XmCreatePanedWindow(Widget parent, char *name, ArgList args, Cardinal arg
 
 Widget XmVaCreatePanedWindow(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

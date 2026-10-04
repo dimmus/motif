@@ -112,7 +112,7 @@ static char rcsid[] = "$XConsortium: WmGraphics.c /main/4 1995/11/01 11:38:53 rs
 void BevelRectangle (RList *prTop, RList *prBot, int x, int y, unsigned int width, unsigned int height, unsigned int top_wid, unsigned int right_wid, unsigned int bot_wid, unsigned int left_wid)
 {
     XRectangle *prect;		/* pointer to "current" rectangle */
-    register int count;		/* counter used for beveling operation */
+    int count;		/* counter used for beveling operation */
     int join1, join2;		/* used to compute "good" bevel joints */
     int x1, y1, len;		/* used to compute bevel parameters */
     int *piTop, *piBot;
@@ -122,7 +122,7 @@ void BevelRectangle (RList *prTop, RList *prBot, int x, int y, unsigned int widt
 
     /* top side */
 
-    if (((prTop->used + (top_wid + left_wid)) > prTop->allocated) &&
+    if (((prTop->used + (int)(top_wid + left_wid)) > prTop->allocated) &&
 	(!ExtendRList (prTop, MAX (top_wid+left_wid, RLIST_EXTENSION_SIZE))))
     {
 	return;		/* not enough memory */
@@ -168,7 +168,7 @@ void BevelRectangle (RList *prTop, RList *prBot, int x, int y, unsigned int widt
 
     /* bottom side */
 
-    if (((prBot->used + (bot_wid + right_wid)) > prBot->allocated) &&
+    if (((prBot->used + (int)(bot_wid + right_wid)) > prBot->allocated) &&
 	(!ExtendRList(prBot, MAX (bot_wid+right_wid, RLIST_EXTENSION_SIZE))))
     {
 	return;
@@ -266,7 +266,7 @@ void BevelRectangle (RList *prTop, RList *prBot, int x, int y, unsigned int widt
 void BevelDepressedRectangle (RList *prTop, RList *prBot, int x, int y, unsigned int width, unsigned int height, unsigned int top_wid, unsigned int right_wid, unsigned int bot_wid, unsigned int left_wid, unsigned int in_wid)
 {
     XRectangle *prect;		/* pointer to "current" rectangle */
-    register int count;		/* counter used for beveling operation */
+    int count;		/* counter used for beveling operation */
     int join1, join2;		/* used to compute "good" bevel joints */
     int x1, y1, len;		/* used to compute bevel parameters */
     int *piTop, *piBot;
@@ -278,13 +278,13 @@ void BevelDepressedRectangle (RList *prTop, RList *prBot, int x, int y, unsigned
      */
 
 
-    if (((prTop->used + (top_wid + left_wid)) > prTop->allocated) &&
+    if (((prTop->used + (int)(top_wid + left_wid)) > prTop->allocated) &&
 	(!ExtendRList (prTop, MAX (top_wid+left_wid, RLIST_EXTENSION_SIZE))))
     {
 	return;		/* not enough memory */
     }
 
-    if (((prBot->used + (bot_wid + right_wid)) > prBot->allocated) &&
+    if (((prBot->used + (int)(bot_wid + right_wid)) > prBot->allocated) &&
 	(!ExtendRList(prBot, MAX (bot_wid+right_wid, RLIST_EXTENSION_SIZE))))
     {
 	return;		/* not enought memory */

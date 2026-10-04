@@ -930,7 +930,6 @@ Boolean HandleCButtonPress (ClientData *pCD, XButtonEvent *buttonEvent)
               (buttonEvent->time == baseWinTime)))
 	{
 
-#ifndef MOTIF_ONE_DOT_ONE
 	    /*
 	     * Motif 1.2, ignore replayed events UNPOST_AND_REPLAY events
 	     * generated from the menu system (time stamps are exactly
@@ -945,9 +944,6 @@ Boolean HandleCButtonPress (ClientData *pCD, XButtonEvent *buttonEvent)
 	    {
 		ProcessClickBPress (buttonEvent, pCD, context, subContext);
 	    }
-#else
-	    ProcessClickBPress (buttonEvent, pCD, context, subContext);
-#endif
 
 	    if (CheckForButtonAction (buttonEvent, context, subContext, pCD)
 		&& pCD)
@@ -1611,7 +1607,7 @@ Boolean HandleCKeyPress (ClientData *pCD, XKeyEvent *keyEvent)
 	    int n;
 
 	    for (n = 0; ((keyEvent->keycode != 0) &&
-			 (n < ACTIVE_PSD->acceleratorMenuCount)); n++)
+			 ((unsigned int)n < ACTIVE_PSD->acceleratorMenuCount)); n++)
 	    {
 		if (!HandleKeyPress (keyEvent,
 		           ACTIVE_PSD->acceleratorMenuSpecs[n]->accelKeySpecs,

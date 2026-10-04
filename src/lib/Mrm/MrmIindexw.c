@@ -278,7 +278,7 @@ Idb__INX_EnterLeafIndex (IDBFile		file_id,
   ndxsiz = _FULLWORD(ndxsiz);
   entsiz = IDBIndexLeafEntrySize + ndxsiz ;
   nfree = hdrptr->free_bytes ;
-  if ( entsiz > nfree )
+  if ( (int)entsiz > nfree )
     {
       result = Idb__INX_SplitLeafRecord (file_id, buffer) ;
       if ( result != MrmSUCCESS ) return result ;
@@ -412,7 +412,7 @@ Idb__INX_EnterNodeIndex (IDBFile		file_id,
   ndxsiz = _FULLWORD(ndxsiz);
   entsiz = IDBIndexNodeEntrySize + ndxsiz ;
   nfree = hdrptr->free_bytes ;
-  if ( entsiz > nfree )
+  if ( (int)entsiz > nfree )
     {
       result = Idb__INX_SplitNodeRecord (file_id, buffer) ;
       if ( result != MrmSUCCESS ) return result ;
@@ -1415,7 +1415,7 @@ Idb__INX_ConfirmNodeSpace (IDBFile		file_id,
    * Check the size. If there is enough, OK. Else split this record and
    * return a retry.
    */
-  if ( hdrptr->free_bytes >= IDBIndexNodeEntryMax ) return MrmSUCCESS ;
+  if ( hdrptr->free_bytes >= (int)IDBIndexNodeEntryMax ) return MrmSUCCESS ;
 
   result = Idb__INX_SplitNodeRecord (file_id, buffer) ;
   if ( result == MrmSUCCESS ) result = MrmINDEX_RETRY ;

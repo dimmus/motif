@@ -525,7 +525,7 @@ static void WriteAtomsTable(Display *display, xmAtomsTable atomsTable)
   propertyRecPtr->info.num_atoms = atomsTable->numEntries;
   propertyRecPtr->info.heap_offset = dataSize;
   /* write each entry's atom and time */
-  for (i = 0; i < atomsTable->numEntries; i++) {
+  for (i = 0; (Cardinal)i < atomsTable->numEntries; i++) {
     propertyRecPtr->entry[i].atom = atomsTable->entries[i].atom;
     propertyRecPtr->entry[i].time = atomsTable->entries[i].time;
   }
@@ -683,7 +683,7 @@ static void WriteTargetsTable(Display *display, xmTargetsTable targetsTable)
   }
   /* Calculate the total size of the property. */
   dataSize = sizeof(xmMotifTargetsPropertyRec);
-  for (i = 0; i < targetsTable->numEntries; i++) {
+  for (i = 0; (Cardinal)i < targetsTable->numEntries; i++) {
     dataSize += targetsTable->entries[i].numTargets * 4 + 2;
   }
   /* If size needed is bigger than the pre-allocated space, allocate a
@@ -701,14 +701,14 @@ static void WriteTargetsTable(Display *display, xmTargetsTable targetsTable)
   propertyRecPtr->info.heap_offset = dataSize;
   /* write each target list's count and atoms */
   fill = (BYTE *)propertyRecPtr + sizeof(xmMotifTargetsPropertyRec);
-  for (i = 0; i < targetsTable->numEntries; i++) {
+  for (i = 0; (Cardinal)i < targetsTable->numEntries; i++) {
     shortItem.value = targetsTable->entries[i].numTargets;
     memcpy(fill, &shortItem, 2);
     fill += 2;
     /*
      *  Write each Atom out one at a time as a CARD32.
      */
-    for (j = 0; j < targetsTable->entries[i].numTargets; j++) {
+    for (j = 0; (Cardinal)j < targetsTable->entries[i].numTargets; j++) {
       longItem.value = targetsTable->entries[i].targets[j];
       memcpy(fill, &longItem, 4);
       fill += 4;
@@ -838,7 +838,7 @@ static Boolean ReadTargetsTable(Display *display, xmTargetsTable targetsTable)
        */
       bufptr = (char *)propertyRecPtr + sizeof(xmMotifTargetsPropertyRec);
       bufend = (char *)propertyRecPtr + lengthRtn;
-      for (i = 0; i < targetsTable->numEntries; i++) {
+      for (i = 0; (Cardinal)i < targetsTable->numEntries; i++) {
         if (!ReadTargetsCount(&bufptr, bufend, propertyRecPtr->info.byte_order, &num_targets))
           break;
         bufptr += 4 * num_targets;
@@ -846,7 +846,7 @@ static Boolean ReadTargetsTable(Display *display, xmTargetsTable targetsTable)
           XmeWarning((Widget)XmGetXmDisplay(display), MESSAGE6);
         }
       }
-      if (i == targetsTable->numEntries) {
+      if ((Cardinal)i == targetsTable->numEntries) {
         for (; i < (int)propertyRecPtr->info.num_target_lists; i++) {
           if (!ReadTargetsCount(&bufptr, bufend, propertyRecPtr->info.byte_order, &num_targets))
             break;
@@ -911,12 +911,6 @@ static xmTargetsTable CreateDefaultTargetsTable(Display *display)
  * happens, and there is no easy way to fix it, change entries[0].targets to
  * nullTargets, but leave entries[0].numTargets to 0.
  */
-#if 0
-    targetsTable->entries[0].numTargets = XtNumber(nullTargets);
-    size = sizeof(Atom) * targetsTable->entries[0].numTargets;
-    targetsTable->entries[0].targets = (Atom*) XtMalloc(size);
-    memcpy(targetsTable->entries[0].targets, nullTargets, size);
-#endif
   targetsTable->entries[0].numTargets = _XmDefaultNumImportTargets;
   targetsTable->entries[0].targets = (Atom *)_XmDefaultImportTargets;
   targetsTable->entries[1].numTargets = XtNumber(stringTargets);
@@ -1197,7 +1191,7 @@ Atom _XmAllocMotifAtom(Widget shell, Time time)
  *  Get the atom from the atoms table with nonzero timestamp less than but
  *  closest to the specified value.
  ***************************************************************************/
-Atom _XmGetMotifAtom(Widget shell, Time time)
+static Atom _XmGetMotifAtom(Widget shell, Time time)
 {
   Display *display = XtDisplay(shell);
   xmAtomsTable atomsTable;

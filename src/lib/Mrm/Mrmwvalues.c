@@ -166,8 +166,8 @@ UrmFetchSetValues (MrmHierarchy		hierarchy_id ,
    * Find the longest literal index, and allocate a resource descriptor
    * which can hold it. Set the fixed fields of the descriptor.
    */
-  for ( ndx=0 ; ndx<num_args ; ndx++ )
-    indexlen = MAX (indexlen, strlen((char*)args[ndx].value)) ;
+  for ( ndx=0 ; (Cardinal)ndx<num_args ; ndx++ )
+    indexlen = MAX (indexlen, (int)strlen((char*)args[ndx].value)) ;
 
   /*
    * Create a resource descriptor which can be reused to fetch each literal
@@ -183,7 +183,7 @@ UrmFetchSetValues (MrmHierarchy		hierarchy_id ,
    * the local arglist. Create a new context to hold the literal, then
    * try to read it from the hierarchy.
    */
-  for ( ndx=0 ; ndx<num_args ; ndx++ )
+  for ( ndx=0 ; (Cardinal)ndx<num_args ; ndx++ )
     {
       locargs[num_used].name = args[ndx].name ;
       strncpy (resptr->key.index, (char*)args[ndx].value, indexlen) ;
@@ -295,7 +295,7 @@ UrmFetchSetValues (MrmHierarchy		hierarchy_id ,
   if ( pixargs_cnt > 0 )
     {
       Urm__CW_GetPixmapParms (w, &screen, &display, &fgint, &bgint) ;
-      for ( ndx=0,savepix=pixargs ; ndx<pixargs_cnt ; ndx++,savepix++ )
+      for ( ndx=0,savepix=pixargs ; (Cardinal)ndx<pixargs_cnt ; ndx++,savepix++ )
         {
 	  result = UrmCreatePixmap (savepix->icon, screen, display,
 				    (Pixel)fgint, (Pixel)bgint, &pixmap, w) ;

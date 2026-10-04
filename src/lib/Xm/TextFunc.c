@@ -667,12 +667,12 @@ static int _XmTextGetSubstring(Widget widget,
       return XmCOPY_TRUNCATED;
     }
     if (!want_wchar) {
-      if (((destpos + block.length) * sizeof(char)) >= buf_size)
+      if (destpos + block.length >= buf_size)
         return XmCOPY_FAILED;
     }
     else { /* Need number of characters for buffer comparison */
       num_chars = _XmTextCountCharacters(block.ptr, block.length);
-      if (((destpos + num_chars) * sizeof(char)) >= buf_size)
+      if (destpos + num_chars >= buf_size)
         return XmCOPY_FAILED;
     }
     if (!want_wchar) {

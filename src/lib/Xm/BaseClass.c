@@ -535,20 +535,6 @@ static void RealizeWrapper(Widget w, Mask *vmask, XSetWindowAttributes *attr, Ca
     _XmProcessUnlock();
     if (realize)
       (*realize)(w, vmask, attr);
-#if 0
-      /* DRK 6/20/94 -- This change breaks our test environment; when
-       *	present the normal shell isn't added to the grab list
-       *	because VendorExtRealize is never called.  It used to
-       *	be called for the ApplicationShell class.
-       */
-      /*
-       * CR 9266: Only call the RealizeCallback if we're doing the
-       * VendorShell class level. Do not call multiple times for
-       * VendorShell subclasses.
-       */
-      if ((extData = _XmGetWidgetExtData(w, XmSHELL_EXTENSION)) &&
-	  (extData->widget) && wc == vendorShellWidgetClass)
-#else
     /*
      * CR 3353 - Avoid calling the RealizeCallback twice for DialogShells
      *	by checking the WidgetClass name.  If it is XmDialogShell,
@@ -557,7 +543,6 @@ static void RealizeWrapper(Widget w, Mask *vmask, XSetWindowAttributes *attr, Ca
      */
     if ((extData = _XmGetWidgetExtData(w, XmSHELL_EXTENSION)) && (extData->widget) &&
         strcmp(wc->core_class.class_name, "XmDialogShell"))
-#endif
     {
       _XmCallCallbackList(extData->widget,
                           ((XmVendorShellExtObject)(extData->widget))->vendor.realize_callback,
@@ -1167,10 +1152,10 @@ Cardinal _XmSecondaryResourceData(XmBaseClassExt bcePtr,
  */
 static XtResourceList *CreateIndirectionTable(XtResourceList resources, Cardinal num_resources)
 {
-  register int i;
+  int i;
   XtResourceList *table;
   table = (XtResourceList *)_XmMallocArray(num_resources, sizeof(XtResourceList));
-  for (i = 0; i < num_resources; i++)
+  for (i = 0; (Cardinal)i < num_resources; i++)
     table[i] = (XtResourceList)(&(resources[i]));
   return table;
 }
@@ -1885,10 +1870,8 @@ static int GetDepth(WidgetClass wc)
 }
 
 /*
- * These symbols must always be present so applications compiling with
- * -DXTHREADS can still link against libraries built without it.  How
- * those applications recognize non MT-safe libraries is a different
- * issue.
+ * These are exported: the XmIs* macros in the installed headers expand
+ * to calls to them.
  */
 inline void _XmFastSubclassInit(WidgetClass wc, unsigned int bit)
 {

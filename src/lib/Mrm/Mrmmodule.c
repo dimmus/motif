@@ -253,7 +253,7 @@ UrmIFMSetTopmost (URMResourceContextPtr		context_id ,
     return Urm__UT_Error ("UrmIFMSetTopmost", _MrmMMsg_0025,
 			  NULL, context_id, MrmBAD_IF_MODULE) ;
 
-  if ( topmost_ndx >= ifmodptr->count )
+  if ( ifmodptr->count < 0 || topmost_ndx >= (Cardinal)ifmodptr->count )
     return Urm__UT_Error ("UrmIFMSetTopmost", _MrmMMsg_0045,
 			  NULL, context_id, MrmOUT_OF_BOUNDS) ;
 

@@ -35,7 +35,7 @@ static char rcsid[] = "$XConsortium: Desktop.c /main/12 1995/07/14 10:17:30 drk 
 #include <Xm/ScreenP.h>
     /********    Static Function Declarations    ********/
     static void
-    ClassPartInitialize(WidgetClass widgetClass);
+    ClassPartInitialize(WidgetClass wc);
 static void ResParentDestroyed(Widget resParent, XtPointer closure, XtPointer callData);
 static void Destroy(Widget wid);
 static void InsertChild(Widget wid);
@@ -116,15 +116,15 @@ externaldef(xmdesktopclassrec) XmDesktopClassRec xmDesktopClassRec = {
 };
 externaldef(xmdesktopclass) WidgetClass xmDesktopClass = (WidgetClass)&xmDesktopClassRec;
 
-static void ClassPartInitialize(WidgetClass widgetClass)
+static void ClassPartInitialize(WidgetClass wc)
 {
-  register XmDesktopClassPartPtr wcPtr;
-  register XmDesktopClassPartPtr superPtr;
-  wcPtr = (XmDesktopClassPartPtr) & (((XmDesktopObjectClass)widgetClass)->desktop_class);
-  if (widgetClass != xmDesktopClass)
+  XmDesktopClassPartPtr wcPtr;
+  XmDesktopClassPartPtr superPtr;
+  wcPtr = (XmDesktopClassPartPtr) & (((XmDesktopObjectClass)wc)->desktop_class);
+  if (wc != xmDesktopClass)
     /* don't compute possible bogus pointer */
     superPtr = (XmDesktopClassPartPtr) &
-               (((XmDesktopObjectClass)widgetClass->core_class.superclass)->desktop_class);
+               (((XmDesktopObjectClass)wc->core_class.superclass)->desktop_class);
   else
     superPtr = NULL;
   /* We don't need to check for null super since we'll get to xmDesktop
@@ -177,10 +177,10 @@ static void Destroy(Widget wid)
 static void InsertChild(Widget wid)
 {
   XmDesktopObject w = (XmDesktopObject)wid;
-  register Cardinal position;
-  register Cardinal i;
-  register XmDesktopObject cw;
-  register WidgetList children;
+  Cardinal position;
+  Cardinal i;
+  XmDesktopObject cw;
+  WidgetList children;
   cw = (XmDesktopObject)w->desktop.parent;
   children = cw->desktop.children;
   position = cw->desktop.num_children;
@@ -201,9 +201,9 @@ static void InsertChild(Widget wid)
 static void DeleteChild(Widget wid)
 {
   XmDesktopObject w = (XmDesktopObject)wid;
-  register Cardinal position;
-  register Cardinal i;
-  register XmDesktopObject cw;
+  Cardinal position;
+  Cardinal i;
+  XmDesktopObject cw;
   cw = (XmDesktopObject)w->desktop.parent;
   for (position = 0; position < cw->desktop.num_children; position++) {
     if (cw->desktop.children[position] == (Widget)w) {

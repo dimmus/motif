@@ -136,8 +136,8 @@ void	cmd_decode_command_line(int l_arg_count, char *rac_arg_value[])
     Uil_cmd_z_command.v_parse_tree = FALSE;
     Uil_cmd_z_command.v_use_setlocale = FALSE;
     Uil_cmd_z_command.status_update_delay = 0;
-    Uil_cmd_z_command.message_cb = (Uil_continue_type(*)())NULL;
-    Uil_cmd_z_command.status_cb = (Uil_continue_type(*)())NULL;
+    Uil_cmd_z_command.message_cb = NULL;
+    Uil_cmd_z_command.status_cb = NULL;
     Uil_cmd_z_command.ac_database = NULL;
     Uil_cmd_z_command.v_database = FALSE;
 

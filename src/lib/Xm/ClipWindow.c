@@ -233,7 +233,7 @@ static String GetRealTranslations(Display *dpy,
   Modifiers mods;
   buf = XtMalloc(size);
   *buf = '\0';
-  for (i = 0; i < num_keys; i++) {
+  for (i = 0; (int)i < num_keys; i++) {
     keysym = XStringToKeysym(keys[i].key);
     if (keysym == NoSymbol)
       break;

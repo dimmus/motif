@@ -161,7 +161,7 @@ XmStringTable XmStringTableParseStringArray(XtPointer *strings,
     return (NULL);
   }
   strs = (XmStringTable)_XmMallocArray(count, sizeof(XmString));
-  for (i = 0; i < count; i++) {
+  for (i = 0; (Cardinal)i < count; i++) {
     strs[i] = XmStringParseText(strings[i], NULL, tag, type, parse, parse_count, call_data);
   }
   _XmProcessUnlock();
@@ -185,7 +185,7 @@ XtPointer *XmStringTableUnparse(XmStringTable table,
     return (NULL);
   }
   strs = (XtPointer *)_XmMallocArray(count, sizeof(XtPointer));
-  for (i = 0; i < count; i++)
+  for (i = 0; (Cardinal)i < count; i++)
     strs[i] = XmStringUnparse(
         table[i], tag, tag_type, output_type, parse, parse_count, parse_model);
   _XmProcessUnlock();
@@ -199,7 +199,7 @@ XmString XmStringTableToXmString(XmStringTable table, Cardinal count, XmString b
   XmString str = NULL, tmp1, tmp2;
   _XmProcessLock();
   tmp1 = NULL;
-  for (i = 0; i < count; i++) {
+  for (i = 0; (Cardinal)i < count; i++) {
     /* The break goes between elements, not after the last one. */
     tmp2 = (i > 0) ? XmStringConcatAndFree(tmp1, XmStringCopy(break_comp)) : tmp1;
     str = XmStringConcatAndFree(tmp2, XmStringCopy(table[i]));
@@ -224,8 +224,8 @@ XmString XmStringPutRendition(XmString string, XmStringTag rendition)
 
 void XmParseMappingGetValues(XmParseMapping mapping, ArgList arg_list, Cardinal arg_count)
 {
-  register Cardinal i;
-  register String arg_name;
+  Cardinal i;
+  String arg_name;
   _XmProcessLock();
   /* Do a little error checking. */
   if (mapping == NULL) {
@@ -707,7 +707,7 @@ XmTabList XmStringTableProposeTablist(XmStringTable strings,
   tab = XmTabCreate(0.0, units, offset_model, XmALIGNMENT_BEGINNING, ".");
   tl = XmTabListInsertTabs(NULL, &tab, 1, 0);
   XmTabFree(tab);
-  for (i = 0; i < num_strings; i++) {
+  for (i = 0; (Cardinal)i < num_strings; i++) {
     if (!strings[i]) {
       /* Clean up */
       XmTabListFree(tl);
@@ -728,7 +728,7 @@ XmTabList XmStringTableProposeTablist(XmStringTable strings,
         continue;
       }
       val = width + pad_value;
-      if (j >= _XmTabLCount(tl))
+      if ((unsigned int)j >= _XmTabLCount(tl))
       /* Need to add a tab */
       {
         tab = XmTabCreate(0.0, units, offset_model, XmALIGNMENT_BEGINNING, ".");

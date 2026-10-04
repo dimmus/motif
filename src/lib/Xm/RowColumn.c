@@ -852,7 +852,7 @@ static Cardinal InsertPosition(Widget w)
    * use it as the new position for this child
    */
   if (RCIndex(w) != XmLAST_POSITION) {
-    if ((RCIndex(w) >= 0) && (RCIndex(w) <= rc->composite.num_children)) {
+    if ((RCIndex(w) >= 0) && ((Cardinal)RCIndex(w) <= rc->composite.num_children)) {
       return RCIndex(w);
     }
   }
@@ -935,10 +935,10 @@ static void InsertChild(Widget w)
   if (RCIndex(w) == XmLAST_POSITION) {
     RCIndex(w) = m->composite.num_children - 1;
   }
-  if (RCIndex(w) != (m->composite.num_children - 1)) {
+  if (RCIndex(w) != (int)m->composite.num_children - 1) {
     i = RCIndex(w);
     p = m->composite.children + i;
-    while (++i < m->composite.num_children) {
+    while ((Cardinal)++i < m->composite.num_children) {
       ++p;
       RCIndex(*p) = i;
     }
@@ -1032,7 +1032,7 @@ static void DeleteChild(Widget child)
    * the new kid was not deleted from the end of the list.
    * Composite class delete_child has already decremented num_chidren!
    */
-  if (RCIndex(child) != m->composite.num_children)
+  if (RCIndex(child) != (int)m->composite.num_children)
     ForAllChildren(m, i, p)
     {
       RCIndex(*p) = i;
@@ -1716,7 +1716,7 @@ static XtGeometryResult GeometryManager(Widget instigator,
     /* set in ConstraintSetValues */
     int i;
     /* first reset the value of positionIndex to its real value */
-    for (i = 0; i < m->composite.num_children; i++)
+    for (i = 0; (Cardinal)i < m->composite.num_children; i++)
       if (m->composite.children[i] == instigator) {
         RCIndex(instigator) = i;
         break;
@@ -2355,7 +2355,7 @@ static Boolean ConstraintSetValues(Widget old,
                                    Cardinal *num_args) /* unused */
 {
   XmRowColumnWidget rc = (XmRowColumnWidget)XtParent(new_w);
-  register Widget tmp;
+  Widget tmp;
   int i;
   XtWidgetGeometry current;
   Boolean margins_changed;
@@ -2385,7 +2385,7 @@ static Boolean ConstraintSetValues(Widget old,
     /* special public value */
     if (RCIndex(new_w) == XmLAST_POSITION)
       RCIndex(new_w) = rc->composite.num_children - 1;
-    if ((RCIndex(new_w) < 0) || (RCIndex(new_w) >= rc->composite.num_children)) {
+    if ((RCIndex(new_w) < 0) || ((Cardinal)RCIndex(new_w) >= rc->composite.num_children)) {
       RCIndex(new_w) = RCIndex(old);
     }
     else {
@@ -2454,7 +2454,7 @@ static Widget create(Widget p, /* parent widget */
     XtSetArg(al[ac], XmNentryClass, xmToggleButtonGadgetClass);
     ac++;
   }
-  for (i = 0; i < old_ac; i++)
+  for (i = 0; (Cardinal)i < old_ac; i++)
     al[ac++] = old_al[i]; /* copy into our list */
   if (type != UNDEFINED_TYPE) {
     XtSetArg(al[ac], XmNrowColumnType, type);
@@ -2483,7 +2483,7 @@ static Widget create(Widget p, /* parent widget */
      * already present; if so, then we'll use it.
      */
     if (XmIsRowColumn(p) && (IsBar(p) || IsPopup(p) || IsPulldown(p))) {
-      for (i = 0; i < pw->core.num_popups; i++) {
+      for (i = 0; (Cardinal)i < pw->core.num_popups; i++) {
         if ((XmIsMenuShell(pw->core.popup_list[i])) &&
             (((XmMenuShellWidget)pw->core.popup_list[i])->menu_shell.private_shell) &&
             (!(pw->core.popup_list[i])->core.being_destroyed))
@@ -2498,7 +2498,7 @@ static Widget create(Widget p, /* parent widget */
       char *b;
       size_t size;
       /* should pass in the old al */
-      for (i = 0; i < old_ac; i++)
+      for (i = 0; (Cardinal)i < old_ac; i++)
         s_al[s_ac++] = old_al[i];
       XtSetArg(s_al[s_ac], XmNwidth, 5);
       s_ac++;
@@ -2544,7 +2544,7 @@ Widget XmCreateRowColumn(Widget p, char *name, ArgList al, Cardinal ac)
 
 Widget XmVaCreateRowColumn(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);
@@ -2612,7 +2612,7 @@ Widget XmOptionLabelGadget(Widget m)
       _XmAppUnlock(app);
       return NULL;
     }
-    for (i = 0; i < rowcol->composite.num_children; i++) {
+    for (i = 0; (Cardinal)i < rowcol->composite.num_children; i++) {
       child = rowcol->composite.children[i];
       if (XtClass(child) == xmLabelGadgetClass) {
         _XmAppUnlock(app);
@@ -2637,7 +2637,7 @@ Widget XmOptionButtonGadget(Widget m)
       _XmAppUnlock(app);
       return NULL;
     }
-    for (i = 0; i < rowcol->composite.num_children; i++) {
+    for (i = 0; (Cardinal)i < rowcol->composite.num_children; i++) {
       child = rowcol->composite.children[i];
       if (XmIsCascadeButtonGadget(child)) {
         _XmAppUnlock(app);
@@ -2775,7 +2775,7 @@ static Boolean TraversalChildren(Widget wid, Widget **childList, Cardinal *numCh
      */
     *childList = (WidgetList)_XmMallocArray(rc->composite.num_children + 1, sizeof(Widget));
     (*childList)[0] = RC_TearOffControl(rc);
-    for (i = 1; i <= rc->composite.num_children; i++) {
+    for (i = 1; (Cardinal)i <= rc->composite.num_children; i++) {
       (*childList)[i] = rc->composite.children[i - 1];
     }
     *numChildren = rc->composite.num_children + 1;
@@ -2840,9 +2840,9 @@ void _XmCallRowColumnUnmapCallback(Widget wid, XEvent *event)
  */
 static Widget FindFirstManagedChild(CompositeWidget m, Boolean first_button)
 {
-  register Widget *kid;
-  register int i = 0;
-  register int n;
+  Widget *kid;
+  int i = 0;
+  int n;
   if (!m)
     return (NULL);
   kid = m->composite.children;

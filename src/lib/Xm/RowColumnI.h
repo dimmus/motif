@@ -90,9 +90,9 @@ extern "C" {
       } \
     }
 #  define ForAllChildren(m, i, q) \
-    for (i = 0, q = m->composite.children; i < m->composite.num_children; i++, q++)
+    for (i = 0, q = m->composite.children; (Cardinal)(i) < m->composite.num_children; i++, q++)
 #  define ForManagedChildren(m, i, q) \
-    for (i = 0, q = m->composite.children; i < m->composite.num_children; i++, q++) \
+    for (i = 0, q = m->composite.children; (Cardinal)(i) < m->composite.num_children; i++, q++) \
 \
       if (XtIsManaged(*q))
 #  define AlignmentBaselineTop(m) \

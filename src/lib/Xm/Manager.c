@@ -674,7 +674,7 @@ static void Initialize(Widget request, Widget new_w, ArgList args, Cardinal *num
     /* This indicates that layoutDirection was set in the arglist, but
          stringDirection defaulting overwrote the value */
     int i;
-    for (i = 0; i < *num_args; i++)
+    for (i = 0; (Cardinal)i < *num_args; i++)
       if (strcmp(args[i].name, XmNlayoutDirection) == 0)
         mw->manager.string_direction = (XmDirection)args[i].value;
   }
@@ -1052,20 +1052,8 @@ static void ManagerLeave(Widget wid,
 static void AddMotionHandlers(XmManagerWidget mw)
 {
   mw->manager.event_handler_added = True;
-#if 1
   /* for tool tips */
   XtAddEventHandler((Widget)mw, PointerMotionMask, False, ManagerMotion, NULL);
-#else
-  /* The first version in this #ifdef is superior because it
-      involves lower network traffic,  but causes problems in
-      VTS and automation (CR 8943).  We can reexamine this later */
-  if (_XmGetFocusPolicy((Widget)mw) != XmEXPLICIT) {
-    XtAddEventHandler((Widget)mw, PointerMotionMask, False, ManagerMotion, NULL);
-  }
-  else {
-    XtAddEventHandler((Widget)mw, ButtonMotionMask, False, ManagerMotion, NULL);
-  }
-#endif
   XtAddEventHandler((Widget)mw, EnterWindowMask, False, ManagerEnter, NULL);
   XtAddEventHandler((Widget)mw, LeaveWindowMask, False, ManagerLeave, NULL);
 }
@@ -1115,11 +1103,11 @@ static void ConstraintInitialize(Widget request, /* unused */
  ************************************************************************/
 static void CheckRemoveMotionHandlers(XmManagerWidget mw)
 {
-  register int i;
-  register Widget child;
+  int i;
+  Widget child;
   /*  If there are any gadgets which need motion events, return.  */
   if (!mw->core.being_destroyed) {
-    for (i = 0; i < mw->composite.num_children; i++) {
+    for (i = 0; (Cardinal)i < mw->composite.num_children; i++) {
       child = mw->composite.children[i];
       if (XmIsGadget(child)) {
         if (((XmGadget)child)->gadget.event_mask &
@@ -1218,8 +1206,8 @@ static Boolean ManagerParentProcess(Widget widget, XmParentProcessData data)
 static Widget ObjectAtPoint(Widget wid, Position x, Position y)
 {
   CompositeWidget cw = (CompositeWidget)wid;
-  register int i;
-  register Widget widget;
+  int i;
+  Widget widget;
   /* For the case of overlapping gadgets, the last one in the
    * composite list will be the visible gadget (see order of
    * redisplay in XmeRedisplayGadgets).  So, search the child

@@ -92,15 +92,15 @@ void XmeConfigureObject(
  *	are intersected by the region.
  *
  ************************************************************************/
-void XmeRedisplayGadgets(Widget w, register XEvent *event, Region region)
+void XmeRedisplayGadgets(Widget w, XEvent *event, Region region)
 {
   CompositeWidget mw = (CompositeWidget)w;
-  register int i;
-  register Widget child;
+  int i;
+  Widget child;
   XtExposeProc expose;
   _XmWidgetToAppContext(w);
   _XmAppLock(app);
-  for (i = 0; i < mw->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < mw->composite.num_children; i++) {
     child = mw->composite.children[i];
     if (XmIsGadget(child) && XtIsManaged(child)) {
       if (region == NULL) {

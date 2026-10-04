@@ -138,12 +138,12 @@ extern Boolean _XmComputeVisibilityRect(Widget w,
                                         Boolean include_initial_border,
                                         Boolean allow_scrolling);
 extern Boolean _XmGetPointVisibility(Widget w, int root_x, int root_y);
-extern void _XmSetRect(register XRectangle *rect, Widget w);
-extern int _XmIntersectRect(register XRectangle *srcRectA,
-                            register Widget widget,
-                            register XRectangle *dstRect);
-extern int _XmEmptyRect(register XRectangle *r);
-extern void _XmClearRect(register XRectangle *r);
+extern void _XmSetRect(XRectangle *rect, Widget w);
+extern int _XmIntersectRect(XRectangle *srcRectA,
+                            Widget widget,
+                            XRectangle *dstRect);
+extern int _XmEmptyRect(XRectangle *r);
+extern void _XmClearRect(XRectangle *r);
 extern Boolean _XmIsNavigable(Widget wid);
 extern void _XmWidgetFocusChange(Widget wid, XmFocusChange change);
 extern Widget _XmNavigate(Widget wid, XmTraversalDirection direction);
@@ -159,9 +159,9 @@ extern Widget _XmIsScrollableClipWidget(Widget work_window,
                                         Boolean scrollable,
                                         XRectangle *visRect);
 extern Boolean _XmGetEffectiveView(Widget wid, XRectangle *visRect);
-extern Boolean _XmIntersectionOf(register XRectangle *srcRectA,
-                                 register XRectangle *srcRectB,
-                                 register XRectangle *destRect);
+extern Boolean _XmIntersectionOf(XRectangle *srcRectA,
+                                 XRectangle *srcRectB,
+                                 XRectangle *destRect);
 extern XmNavigationType _XmGetNavigationType(Widget widget);
 extern Widget _XmGetActiveTabGroup(Widget wid);
 extern Widget _XmTraverseAway(XmTravGraph list, Widget wid, Boolean wid_is_control);

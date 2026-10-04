@@ -174,7 +174,7 @@ Widget SquareCreate(Widget parent, char *name, ArgList arglist, Cardinal nargs)
 int SquareMrmInitialize()
 {
     return(MrmRegisterClass (MrmwcUnknown, "Square", "SquareCreate",
-			     (Widget (*)(void))SquareCreate, (WidgetClass)&squareClassRec));
+			     SquareCreate, (WidgetClass)&squareClassRec));
 }
 
 /**********************************************************************

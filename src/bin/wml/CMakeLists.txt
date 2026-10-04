@@ -81,6 +81,14 @@ target_link_libraries(wml PRIVATE libwml motif_build_flags)
 add_executable(wmluiltok ${CMAKE_CURRENT_BINARY_DIR}/wmluiltok.c)
 target_link_libraries(wmluiltok PRIVATE ${MOTIF_LEX_LIBRARY} motif_build_flags)
 
+# The flex skeleton marks its fall-throughs with comments, which Clang
+# does not take as annotations.  wmlparse.c includes wmllex.c.
+set_source_files_properties(
+    ${CMAKE_CURRENT_BINARY_DIR}/wmlparse.c
+    ${CMAKE_CURRENT_BINARY_DIR}/wmluiltok.c
+    PROPERTIES COMPILE_OPTIONS $<$<C_COMPILER_ID:Clang>:-Wno-implicit-fallthrough>
+)
+
 endif()
 
 # Generate the UIL tables.  wmluiltok extracts the token list (tokens.dat)

@@ -1654,7 +1654,7 @@ static void Redisplay(Widget wid,
     else {
       XSetClipMask(XtDisplay(wid), IG_NormalGC(wid), None);
     }
-    if (depth == XtParent(wid)->core.depth)
+    if (depth == (int)XtParent(wid)->core.depth)
       XCopyArea(XtDisplay(wid),
                 IG_LargeIconPixmap(wid),
                 XtWindow(wid),
@@ -1711,7 +1711,7 @@ static void Redisplay(Widget wid,
     else {
       XSetClipMask(XtDisplay(wid), IG_NormalGC(wid), None);
     }
-    if (depth == XtParent(wid)->core.depth)
+    if (depth == (int)XtParent(wid)->core.depth)
       XCopyArea(XtDisplay(wid),
                 IG_SmallIconPixmap(wid),
                 XtWindow(wid),
@@ -2982,7 +2982,7 @@ Widget XmCreateIconGadget(Widget parent, char *name, ArgList arglist, Cardinal a
 
 Widget XmVaCreateIconGadget(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

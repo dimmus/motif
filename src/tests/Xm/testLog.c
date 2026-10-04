@@ -12,7 +12,7 @@
 #include "suites.h"
 
 // Test function to demonstrate logging
-void test_function(void) {
+static void test_function(void) {
    XM_LOG_DBG("This is a debug message from test_function");
    XM_LOG_INFO("This is an info message from test_function");
    XM_LOG_WARN("This is a warning message from test_function");
@@ -20,7 +20,7 @@ void test_function(void) {
 }
 
 // Thread function for testing multi-threaded logging
-void *test_thread(void *arg) {
+static void *test_thread(void *arg) {
    int thread_id = *(int*)arg;
    
    for (int i = 0; i < 5; i++) {
@@ -360,13 +360,13 @@ START_TEST(test_build_time_config)
 END_TEST
 
 // Setup function for Log tests
-void log_setup(void)
+static void log_setup(void)
 {
    XmLogInit();
 }
 
 // Teardown function for Log tests
-void log_teardown(void)
+static void log_teardown(void)
 {
    XmLogShutdown();
 }

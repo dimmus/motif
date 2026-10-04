@@ -55,6 +55,7 @@ static char rcsid[] = "$TOG: UilLstLst.c /main/20 1999/07/21 09:03:16 vipin $"
 #include <Xm/Xm.h>
 
 #include <stdarg.h>
+#include <string.h>
 
 #include "UilDefI.h"
 
@@ -117,10 +118,10 @@ static	     boolean		lst_v_listing_open = FALSE;
 **--
 **/
 
-void	lst_open_listing()
+void	lst_open_listing(void)
 {
     status  open_status;
-    _Xctimeparams	ctime_buf;
+    char	ctime_buf[26];
 
 
     /* allocate fcb */
@@ -149,7 +150,7 @@ void	lst_open_listing()
     snprintf(lst_c_title1, sizeof(lst_c_title1),
 	    "%s %s \t%s\t\t Page ",
 	    _host_compiler, _compiler_version,
-	    current_time(&ctime_buf));
+	    current_time(ctime_buf));
 
     /*
     **	Haven't parsed the module yet.
@@ -191,7 +192,7 @@ void	lst_open_listing()
 **--
 **/
 
-void	Uil_lst_cleanup_listing()
+void	Uil_lst_cleanup_listing(void)
 {
     /*
     **	Check that there is a listing file requested and that
@@ -315,7 +316,7 @@ void	lst_output_line(char *ac_line, boolean v_new_page)
     **	our progress.
     */
     Uil_current_file = lst_az_fcb->expanded_name;
-    if (Uil_cmd_z_command.status_cb != (Uil_continue_type(*)())NULL)
+    if (Uil_cmd_z_command.status_cb != NULL)
 	diag_report_status();
 
 
@@ -374,18 +375,19 @@ void	lst_output_line(char *ac_line, boolean v_new_page)
 **--
 **/
 
-char	*current_time(_Xctimeparams *ctime_buf)
+char	*current_time(char *ctime_buf)
 {
     time_t	time_location;
-    char	*ascii_time;
+    char	*nl;
 
     time_location = time( 0 );
 
-    ascii_time = ctime( &time_location );
+    if (ctime_r( &time_location, ctime_buf ) == NULL)
+	ctime_buf[0] = 0;
+    else if ((nl = strchr( ctime_buf, '\n' )) != NULL)
+	*nl = 0;
 
-    ascii_time[24] = 0;
-
-    return ascii_time;
+    return ctime_buf;
 }
 
 
@@ -410,7 +412,7 @@ char	*current_time(_Xctimeparams *ctime_buf)
 **--
 **/
 
-void	lst_output_listing()
+void	lst_output_listing(void)
 
 {
     src_source_record_type  *az_src_rec;
@@ -998,7 +1000,7 @@ void	lst_debug_output
 	{
 	    _assert( ptr <= &(buffer[132]), "Overflowed debug listing buffer" );
 	    count = strcspn( ptr, "\n" );
-	    if (count == strlen( ptr ))
+	    if ((size_t)count == strlen( ptr ))
 	    {
 		cur_pos = ptr - buffer + count;
 		return;

@@ -61,7 +61,7 @@ static unsigned long cmdKillListIndex;
 /*----------------------------------------------------------------------*
  |                              NewCommand                              |
  *----------------------------------------------------------------------*/
-CmdTree *
+static CmdTree *
 NewCommand (
      CARD32  commandID,
      CARD32  notifyWindow,
@@ -90,7 +90,7 @@ NewCommand (
 /*---------------------------------------------------------------------------*
  |                                  FindCmd                                  |
  *---------------------------------------------------------------------------*/
-CmdTree *
+static CmdTree *
 FindCmd(
      CARD32    commandID,
      CmdTree  *menuTree)
@@ -124,7 +124,7 @@ FindCmd(
  | can be found. If no match is found, 0 is returned.  This should NEVER be  |
  | the value of a command defined by a client.                               |
  *---------------------------------------------------------------------------*/
-CARD32
+static CARD32
 FindDuplicateName(
      CmdTree  *menuTree,
      char     *name)
@@ -152,7 +152,7 @@ FindDuplicateName(
  | Note that toplevel commands have 0 as their commandSet.  This will   |
  | always match the top entry in the command tree since it is 0.        |
  *----------------------------------------------------------------------*/
-Boolean
+static Boolean
 AddCommand (
      int      scr,
      CARD32   commandSet,
@@ -210,7 +210,7 @@ AddCommand (
  |                          RemoveCommandBranch                              |
  | This routine all commands at the specified node in the command tree.      |
  *---------------------------------------------------------------------------*/
-void
+static void
 RemoveCommandBranch (CmdTree *menuTree)
 {
   CmdTree *tmp = menuTree;
@@ -385,7 +385,7 @@ IncludeCommand (
   count     = UnpackCARD32(&data);
 
   if (count > 0) windowIDs = (Window *) XtMalloc(sizeof(Window)*count);
-  for (win=0; win<count; win++)
+  for (win=0; (CARD32)win<count; win++)
   {
       windowIDs[win] = UnpackCARD32(&data);
       PRINT("Got window ID %d.\n", windowIDs[win]);
@@ -447,7 +447,7 @@ IncludeCommand (
 	{
 	  ShowWaitState (TRUE);
 
-	  for (i=0; i<count; i++)
+	  for (i=0; (CARD32)i<count; i++)
 	    {
 	      ClientData *pCD;
 
@@ -510,7 +510,7 @@ EnableCommand (
   count     = UnpackCARD32(&data);
 
   if (count > 0) windowIDs = (Window *) XtMalloc(sizeof(Window)*count);
-  for (win=0; win<count; win++)
+  for (win=0; (CARD32)win<count; win++)
     {
       windowIDs[win] = UnpackCARD32(&data);
       PRINT("Got window ID %d.\n", windowIDs[win]);
@@ -524,7 +524,7 @@ EnableCommand (
       tPtr = FindCmd (commandID, CCI_TREE(w));
       if (tPtr != NULL)
 	{
-	  for (i=0; i<count; i++)
+	  for (i=0; (CARD32)i<count; i++)
 	  {
 	      activeContext = F_CONTEXT_ROOT;
 	      pNext = tPtr->next;
@@ -570,7 +570,7 @@ EnableCommand (
       tPtr = FindCmd (commandID, CCI_TREE(w));
       if (tPtr != NULL)
 	{
-	  for (i=0; i<count; i++)
+	  for (i=0; (CARD32)i<count; i++)
 	    {
 	      ClientData *pCD;
 
@@ -632,7 +632,7 @@ DisableCommand (
   count     = UnpackCARD32(&data);
 
   if (count > 0) windowIDs = (Window *) XtMalloc(sizeof(Window)*count);
-  for (win=0; win<count; win++)
+  for (win=0; (CARD32)win<count; win++)
     {
       windowIDs[win] = UnpackCARD32(&data);
       PRINT("Got window ID %d.\n", windowIDs[win]);
@@ -646,7 +646,7 @@ DisableCommand (
       tPtr = FindCmd (commandID, CCI_TREE(w));
       if (tPtr != NULL)
 	{
-	  for (i=0; i<count; i++)
+	  for (i=0; (CARD32)i<count; i++)
 	  {
 	      activeContext = F_CONTEXT_ROOT;
 	      pNext = tPtr->next;
@@ -692,7 +692,7 @@ DisableCommand (
       tPtr = FindCmd (commandID, CCI_TREE(w));
       if (tPtr != NULL)
 	{
-	  for (i=0; i<count; i++)
+	  for (i=0; (CARD32)i<count; i++)
 	    {
 	      ClientData *pCD;
 
@@ -756,7 +756,7 @@ RenameCommand (
   count     = UnpackCARD32(&data);
 
   if (count > 0) windowIDs = (Window *) XtMalloc(sizeof(Window)*count);
-  for (win=0; win<count; win++)
+  for (win=0; (CARD32)win<count; win++)
     {
       windowIDs[win] = UnpackCARD32(&data);
       PRINT("Got window ID %d.\n", windowIDs[win]);
@@ -770,7 +770,7 @@ RenameCommand (
       tPtr = FindCmd (commandID, CCI_TREE(w));
       if (tPtr != NULL)
 	{
-	  for (i=0; i<count; i++)
+	  for (i=0; (CARD32)i<count; i++)
 	  {
 	      activeContext = F_CONTEXT_ROOT;
 	      pNext = tPtr->next;
@@ -816,7 +816,7 @@ RenameCommand (
       tPtr = FindCmd (commandID, CCI_TREE(w));
       if (tPtr != NULL)
 	{
-	  for (i=0; i<count; i++)
+	  for (i=0; (CARD32)i<count; i++)
 	    {
 	      ClientData *pCD;
 
@@ -878,7 +878,7 @@ RemoveCommand (
   count     = UnpackCARD32(&data);
 
   if (count > 0) windowIDs = (Window *) XtMalloc(sizeof(Window)*count);
-  for (win=0; win<count; win++)
+  for (win=0; (CARD32)win<count; win++)
     {
       windowIDs[win] = UnpackCARD32(&data);
       PRINT("Got window ID %d.\n", windowIDs[win]);
@@ -892,7 +892,7 @@ RemoveCommand (
       tPtr = FindCmd (commandID, CCI_TREE(w));
       if (tPtr != NULL)
 	{
-	  for (i=0; i<count; i++)
+	  for (i=0; (CARD32)i<count; i++)
 	  {
 	      activeContext = F_CONTEXT_ROOT;
 	      pNext = tPtr->next;
@@ -938,7 +938,7 @@ RemoveCommand (
       tPtr = FindCmd (commandID, CCI_TREE(w));
       if (tPtr != NULL)
 	{
-	  for (i=0; i<count; i++)
+	  for (i=0; (CARD32)i<count; i++)
 	  {
 	      ClientData *pCD;
 
@@ -975,7 +975,7 @@ RemoveCommand (
  | command tree.                                                             |
  *---------------------------------------------------------------------------*/
 /*ARGSUSED*/
-void
+static void
 RemoveMatchingCommands (
      int    scr,
      Window clientWindow,
@@ -1002,7 +1002,7 @@ RemoveMatchingCommands (
  |                           RemoveCommandsForClient                         |
  | This function will remove any command that was inserted by this client.   |
  *---------------------------------------------------------------------------*/
-void
+static void
 RemoveCommandsForClient (
      int    scr,
      Window clientWindow)
@@ -1017,7 +1017,7 @@ RemoveCommandsForClient (
   /*
    * Remove any matching commands on the root menu.
    */
-  for (i = 0;  i < cmdKillListIndex;  i++)
+  for (i = 0;  (long unsigned int)i < cmdKillListIndex;  i++)
     {
       CmdTree *tPtr, *pNext;
       MenuSpec *pMS;
@@ -1054,7 +1054,7 @@ RemoveCommandsForClient (
  |                            InvokeMessageReply                             |
  *---------------------------------------------------------------------------*/
 /*ARGSUSED*/
-void
+static void
 InvokeMessageReply (Widget w, XtPointer clientData, XtPointer callData)
 {
   PRINT("Invoke message reply received.\n");
@@ -1146,7 +1146,7 @@ GetMinimizeInfo(ClientData *pcd, XtPointer reply)
    frameWin = pcd->clientFrameWin;
 
 
-   for (i=0; i < filledCount; i++)
+   for (i=0; (CARD32)i < filledCount; i++)
  	if (pcd->pTitleGadgets[i].id == FRAME_MINIMIZE)
 	   {
 	        CopyMwmGadget (&(pcd->pTitleGadgets[i]), &minimize_button);
@@ -1193,7 +1193,7 @@ GetMaximizeInfo(ClientData *pcd, XtPointer reply)
       frameWin = pcd->clientFrameWin;
 
 
-      for (i=0; i < filledCount; i++)
+      for (i=0; (CARD32)i < filledCount; i++)
 	{
 
         if (pcd->pTitleGadgets[i].id == FRAME_MAXIMIZE)
@@ -1408,7 +1408,7 @@ GetMoveInfo(ClientData *pcd, XtPointer reply)
       windowY = pcd->clientY;
       frameWin = pcd->clientFrameWin;
 
-      for (i=0; i < filledCount; i++)
+      for (i=0; (CARD32)i < filledCount; i++)
 	{
 	  if (pcd->pTitleGadgets[i].id == FRAME_TITLE)
 	    {
@@ -1569,7 +1569,7 @@ GetFocusInfo(ClientData *pcd, XtPointer reply)
       filledCount = pcd->cTitleGadgets;
       frameWin = pcd->clientFrameWin;
 
-      for (i=0; i < filledCount; i++)
+      for (i=0; (CARD32)i < filledCount; i++)
         {
           if (pcd->pTitleGadgets[i].id == FRAME_TITLE)
             {
@@ -1616,7 +1616,7 @@ GetWindowMenuPostInfo(ClientData *pcd, XtPointer reply)
       filledCount = pcd->cTitleGadgets;
       frameWin = pcd->clientFrameWin;
 
-      for (i=0; i < filledCount; i++)
+      for (i=0; (CARD32)i < filledCount; i++)
         {
           if (pcd->pTitleGadgets[i].id == FRAME_TITLE)
             {
@@ -1716,7 +1716,7 @@ GetIconMenuItemSelectInfo(ClientData *pcd, XtPointer reply, Boolean use_icon_box
       sensitiveCount = 0;
 
       for (n = 0, NewMenuButton = menuSpec->menuButtons;
-	   n < menuSpec->menuButtonCount;
+	   (unsigned int)n < menuSpec->menuButtonCount;
 	   n++, NewMenuButton++)
 	{
 	  if (NewMenuButton->managed == FALSE)
@@ -1901,7 +1901,7 @@ GetWindowItemSelectInfo(ClientData *pcd, XtPointer reply)
 
   menuItemCount = menuSpec->menuButtonCount;
 
-  for (n = 0; n < menuItemCount && n < MAX_MENU_ITEMS; n++)
+  for (n = 0; (CARD32)n < menuItemCount && n < MAX_MENU_ITEMS; n++)
     {
       itemName[n][0] = '\0';
       sensitive[n] = FALSE;
@@ -1913,7 +1913,7 @@ GetWindowItemSelectInfo(ClientData *pcd, XtPointer reply)
    sensitiveCount = 0;
 
       for (n = 0, NewMenuButton = menuSpec->menuButtons;
-	   n < menuSpec->menuButtonCount;
+	   (unsigned int)n < menuSpec->menuButtonCount;
 	   n++, NewMenuButton++)
 	{
 	  if (NewMenuButton->managed == FALSE)
@@ -1933,7 +1933,7 @@ GetWindowItemSelectInfo(ClientData *pcd, XtPointer reply)
       reply = PackCARD32 (reply, (CARD32)sensitiveCount);
       reply = PackCARD32 (reply, (CARD32)menuWin);
       reply = PackCARD32 (reply, (CARD32)frameWin);
-      for (n=0; n < menuItemCount && n < MAX_MENU_ITEMS; n++)
+      for (n=0; (CARD32)n < menuItemCount && n < MAX_MENU_ITEMS; n++)
 	{
 	  reply = PackCARD32 (reply, (CARD32)sensitive[n]);
 	  reply = PackCARD32 (reply, (CARD32)itemY[n]);
@@ -1977,7 +1977,7 @@ GetItemCheckInfo(ClientData *pcd, XtPointer reply)
   menuWin = XtWindow (menuSpec->menuWidget);
 
       for (i = 0, NewMenuButton = menuSpec->menuButtons;
-	   i < menuSpec->menuButtonCount;
+	   (unsigned int)i < menuSpec->menuButtonCount;
 	   i++, NewMenuButton++)
 	{
 	  if (NewMenuButton->managed == FALSE)

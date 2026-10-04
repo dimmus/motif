@@ -1688,9 +1688,6 @@ static Boolean ReverseConvertRepType(Display *disp,
     }
   }
   _XmProcessUnlock();
-#if 0
-    if (OutValue)  _XM_CONVERTER_DONE (to, String, *OutValue, ;)
-#else
   if (OutValue) {
     if (to->addr) {
       if (to->size < sizeof(String)) {
@@ -1707,7 +1704,6 @@ static Boolean ReverseConvertRepType(Display *disp,
     to->size = sizeof(String);
     return (True);
   }
-#endif
   /** generate a message and display it */
   size = strlen(reverse_message) + 10;
   in_str = (char *)XtMalloc(size);
@@ -1816,7 +1812,7 @@ Boolean _XmConvertActionParamToRepTypeId(
   return (False);
 }
 #ifdef DEBUG
-void _XmCheckStandardNumRecs()
+void _XmCheckStandardNumRecs(void)
 {
   Cardinal Index;
   XmRepTypeEntry Record, PrevRecord = NULL;

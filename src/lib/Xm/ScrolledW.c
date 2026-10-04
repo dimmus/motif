@@ -1380,12 +1380,12 @@ static void ConstantLayout(XmScrolledWindowWidget sw)
   VSBExists = ExistManaged((Widget)sw->swindow.vScrollBar);
   /* If there's no kid to clip, keep the scrollbars invisible
        by moving them out of the frame */
-  for (i = 0; i < clip->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < clip->composite.num_children; i++) {
     if (XtIsManaged(clip->composite.children[i]))
       break;
   }
   /* ran thru the entire list: no managed child in the clipwindow */
-  if (i == clip->composite.num_children) {
+  if ((Cardinal)i == clip->composite.num_children) {
     if (VSBExists) {
       XmeConfigureObject((Widget)sw->swindow.vScrollBar,
                          sw->core.width,
@@ -1423,7 +1423,7 @@ static void ConstantLayout(XmScrolledWindowWidget sw)
   newy = MAXPOS;
   sw->swindow.hmax = 0;
   sw->swindow.vmax = 0;
-  for (i = 0; i < clip->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < clip->composite.num_children; i++) {
     child = clip->composite.children[i];
     if (ExistManaged(child)) {
       swc = GetSWConstraint(child);
@@ -2862,7 +2862,7 @@ Widget XmCreateScrolledWindow(Widget parent, char *name, ArgList args, Cardinal 
 
 Widget XmVaCreateScrolledWindow(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

@@ -225,7 +225,7 @@ static int WriteColors(char **dataptr,
       if ((s2 = *defaults)) {
         s += snprintf(s, sizeof(buf) - (s - buf), "\t%s %s", xpmColorKeys[key - 1], s2);
         /* now let's check if s points out-of-bounds */
-        if ((s - buf) > sizeof(buf))
+        if ((size_t)(s - buf) > sizeof(buf))
           return (XpmNoMemory);
       }
     }

@@ -545,7 +545,7 @@ static void Initialize(Widget request, /* unused */
   /* Ignore XmNheight resource value for descedants */
   num_child_args = 0;
   child_args = (ArgList)_XmMallocArray(*num_args, sizeof(Arg));
-  for (i = 0; i < *num_args; i++)
+  for (i = 0; (Cardinal)i < *num_args; i++)
     if (strcmp(args[i].name, "height")) {
       child_args[num_child_args] = args[i];
       num_child_args++;
@@ -2684,7 +2684,7 @@ Widget XmCreateDropDownList(Widget parent, char *name, ArgList args, Cardinal nu
 
 Widget XmVaCreateComboBox(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

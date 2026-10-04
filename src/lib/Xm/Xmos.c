@@ -29,75 +29,20 @@ static char rcsid[] = "$TOG: Xmos.c /main/33 1998/01/21 11:07:25 csn $"
 #  endif
 #endif
 #include <stdio.h>
-#ifdef __cplusplus
-    extern "C"
-{ /* some 'locale.h' do not have prototypes (sun) */
-#endif
 #include <X11/Xlocale.h>
-#ifdef __cplusplus
-} /* Close scope of 'extern "C"' declaration */
-#endif /* __cplusplus */
-#if HAVE_X11_XPOLL_H
-#  include <X11/Xpoll.h>
-#else
-#  include <Xm/Xmpoll.h>
-#endif
-#if HAVE_NANOSLEEP
-#  include <time.h>
-#elif HAVE_SYS_TIME_H
-#  include <sys/time.h>
-#endif
+#include <time.h>
 #include <ctype.h> /* for isspace() */
 #include <stdlib.h>
 #include <string.h> /* for strdup, strlcat */
 #include <unistd.h>
 #include <pwd.h> /* for getpwnam, getpwuid */
-
-/* Ensure nanosleep is properly declared */
-#if HAVE_NANOSLEEP
-extern int nanosleep(const struct timespec *req, struct timespec *rem);
-#endif
-#if HAVE_REGEX && !HAVE_REGCOMP
-#  if defined(SVR4)
-#    include <libgen.h>
-#  elif defined(SYSV)
-extern char *regcmp();
-extern int regex();
-#  endif
-#endif /* HAVE_REGEX && !HAVE_REGCOMP */
-#if HAVE_REGCOMP
-#  include <regex.h>
-#endif
+#include <regex.h>
 #include <sys/stat.h>
-/* X_INCLUDE_PWD_H is now configured by build system */
-#define X_INCLUDE_DIRENT_H
-/* Include necessary headers manually */
 #include <dirent.h>
 #include <sys/types.h>
-/* XOS_USE_XT_LOCKING is now configured by build system */
-/* Force use of local Xmos_r.h to avoid deprecated readdir_r in system headers */
-#include <Xm/Xmos_r.h>
-/* Override any system readdir_r definitions with our safe version */
-#ifdef _XReaddir
-#  undef _XReaddir
-#endif
-#define _XReaddir(d, p) \
-  ((_Xos_processLock), \
-   (((p).result = readdir((d))) ? (memcpy(&((p).dir_entry), (p).result, (p).result->d_reclen), \
-                                   ((p).result = &(p).dir_entry), \
-                                   0) : \
-                                  0), \
-   (_Xos_processUnlock), \
-   (p).result)
 #include "XmI.h"
 #include "XmosI.h"
-#if !HAVE_GETCWD && HAVE_GETWD
-#  include <sys/param.h>
-#  define MAX_DIR_PATH_LEN MAXPATHLEN
-#  define getcwd(buf, len) ((char *)getwd(buf))
-#else
-#  define MAX_DIR_PATH_LEN 1024
-#endif
+#define MAX_DIR_PATH_LEN 1024
 #define MAX_USER_NAME_LEN 256
 #ifndef S_ISDIR
 #  define S_ISDIR(m) ((m & S_IFMT) == S_IFDIR)
@@ -164,11 +109,8 @@ static unsigned char AddEntryToCache(char *entryName, unsigned entryNameLen)
         (XmDirCache)_XmReallocArray((char *)dirCache, numCacheAlloc, sizeof(XmDirCacheRec *));
   }
   dirCache[numCacheEntries] = (XmDirCacheRec *)XtMalloc(sizeof(XmDirCacheRec) + entryNameLen);
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wstringop-truncation"
-  strncpy(dirCache[numCacheEntries]->file_name, entryName, entryNameLen);
-#pragma GCC diagnostic pop
-  dirCache[numCacheEntries]->file_name[entryNameLen] = '\0'; /* manually null-terminate */
+  memcpy(dirCache[numCacheEntries]->file_name, entryName, entryNameLen);
+  dirCache[numCacheEntries]->file_name[entryNameLen] = '\0';
   /* Use dirCacheName character array as temporary buffer for full file name.*/
   strncpy(&dirCacheName[dirCacheNameLen], entryName, MAX_USER_NAME_LEN);
   dirCacheName[dirCacheNameLen + MAX_USER_NAME_LEN] = '\0';
@@ -462,7 +404,7 @@ static String GetFixedMatchPattern(String pattern)
  * '/' is used as a delimiter for the pattern.
  ****************/
 {
-  register char *bufPtr;
+  char *bufPtr;
   char *outputBuf;
   char lastchar = '\0';
   int len;
@@ -531,7 +473,7 @@ void _XmOSGetDirEntries(String qualifiedDir,
 /***********UNIX:
  * Fully qualified directory means begins with '/', does not have
  * embedded "." or "..", but does not need trailing '/'.
- * Regular expression parsing is regcmp or re_comp.
+ * Regular expression parsing is regcomp.
  * Directory entries are also Unix dependent.
  ****************/
 {
@@ -545,12 +487,8 @@ void _XmOSGetDirEntries(String qualifiedDir,
   Boolean loadCache = FALSE;
   unsigned readCacheIndex = 0;
   unsigned char dirFileType = 0;
-#if HAVE_REGCOMP
   regex_t preg;
-  int comp_status = 0;
-#elif HAVE_REGEX
-  char *compiledRE = NULL;
-#endif
+  Boolean have_preg = FALSE;
   /****************/
   _XmProcessLock();
   if (!*pEntries) {
@@ -565,16 +503,9 @@ void _XmOSGetDirEntries(String qualifiedDir,
       fixedMatchPattern = NULL;
     }
     else {
-#if HAVE_REGCOMP
-      comp_status = regcomp(&preg, fixedMatchPattern, REG_NOSUB);
-      if (comp_status)
-#elif HAVE_REGEX
-      compiledRE = (char *)regcmp(fixedMatchPattern, (char *)NULL);
-      if (!compiledRE)
-#else /* Obsolete BSD re_comp */
-      if (re_comp(fixedMatchPattern))
-#endif
-      {
+      if (regcomp(&preg, fixedMatchPattern, REG_NOSUB) == 0)
+        have_preg = TRUE;
+      else {
         XtFree(fixedMatchPattern);
         fixedMatchPattern = NULL;
       }
@@ -600,7 +531,6 @@ void _XmOSGetDirEntries(String qualifiedDir,
   }
   if (dirStream || useCache) {
     unsigned loopCount = 0;
-    _Xreaddirparams dirEntryBuf;
     if (loadCache)
       ResetCache(qualifiedDir);
     /* The POSIX specification for the "readdir" routine makes
@@ -643,7 +573,7 @@ void _XmOSGetDirEntries(String qualifiedDir,
             }
           }
           else {
-            if ((dirEntry = _XReaddir(dirStream, dirEntryBuf)) == NULL) {
+            if ((dirEntry = readdir(dirStream)) == NULL) {
               dirName = NULL;
               break;
             }
@@ -663,13 +593,7 @@ void _XmOSGetDirEntries(String qualifiedDir,
           break; /* Exit from outer loop. */
       }
       if (fixedMatchPattern) {
-#if HAVE_REGCOMP
         if (regexec(&preg, dirName, 0, NULL, 0))
-#elif HAVE_REGEX
-        if (!regex(compiledRE, dirName))
-#else /* obsolete BSD re_exec */
-        if (!re_exec(dirName))
-#endif
           continue;
       }
       if (matchDotsLiterally && (dirName[0] == '.') && (*matchPattern != '.'))
@@ -725,15 +649,8 @@ void _XmOSGetDirEntries(String qualifiedDir,
     if (!useCache)
       closedir(dirStream);
   }
-#if HAVE_REGCOMP
-  if (!comp_status)
+  if (have_preg)
     regfree(&preg);
-#elif !HAVE_REGEX
-  if (compiledRE) {
-    /* Use free instead of XtFree since malloc is inside of regex(). */
-    free(compiledRE);
-  }
-#endif
   XtFree(fixedMatchPattern);
   if (!loadCache)
     FreeDirCache();
@@ -1137,20 +1054,10 @@ String _XmOSInitPath(String file_name, String env_pathname, Boolean *user_path)
 
 int XmeMicroSleep(long usecs)
 {
-#if HAVE_NANOSLEEP
   struct timespec ts;
   ts.tv_sec = usecs / 1000000;
   ts.tv_nsec = (usecs % 1000000) * 1000;
   return nanosleep(&ts, NULL);
-#elif defined(USE_POLL)
-  return poll(NULL, 0, usecs / 1000);
-#else
-  struct timeval timeoutVal;
-  /* split the micro seconds in seconds and remainder */
-  timeoutVal.tv_sec = usecs / 1000000;
-  timeoutVal.tv_usec = usecs - timeoutVal.tv_sec * 1000000;
-  return Select(0, NULL, NULL, NULL, &timeoutVal);
-#endif
 }
 
 /************************************************************************
@@ -1388,39 +1295,3 @@ int _XmOSKeySymToCharacter(KeySym keysym, char *locale, char *buffer)
   *buffer = (keysym & 0xFF);
   return 1;
 }
-
-/* ****************************************************** **
-** Threading stuff. Stuck here to allow easier debugging.
-** ****************************************************** */
-/*
-static unsigned int _lockCounter = 0;
-static unsigned int _unlockCounter = 0;
-static int _outstandingLockCounter = 0;
-int _debugProcessLocking = 0;
-void _XmProcessLock()
-{
-    _lockCounter++;
-    _outstandingLockCounter++;
-#if defined(XTHREADS) && defined(XUSE_MTSAFE_API)
-    XtProcessLock();
-#endif
-    if(_debugProcessLocking)
-    {
-        fprintf(stderr, "File: %s, line: %d - _XmProcessLock() - _lockCounter = %d,
-_outstandingLockCounter = %d\n", __FILE__, __LINE__, _lockCounter, _outstandingLockCounter);
-    }
-}
-void _XmProcessUnlock()
-{
-    _unlockCounter++;
-    _outstandingLockCounter--;
-#if defined(XTHREADS) && defined(XUSE_MTSAFE_API)
-    XtProcessUnlock();
-#endif
-    if(_debugProcessLocking)
-    {
-        fprintf(stderr, "File: %s, line: %d - _XmProcessUnlock() - _unlockCounter = %d,
-_outstandingLockCounter = %d\n", __FILE__, __LINE__, _unlockCounter, _outstandingLockCounter);
-    }
-}
-*/

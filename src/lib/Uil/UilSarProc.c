@@ -210,6 +210,7 @@ sar_create_procedure(XmConst yystype *id_frame,
     case sym_m_exported:
 	sym_make_external_def( name_entry );
 
+	break;
     case sym_m_private:
     case sym_m_imported:
 	break;

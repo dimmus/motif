@@ -149,7 +149,7 @@ static UidCompressionTable      *extern_class_compr;
 **--
 **/
 
-void	sem_output_uid_file()
+void	sem_output_uid_file(void)
 
 {
     sym_external_def_entry_type	*ext_entry;
@@ -238,7 +238,7 @@ void	sem_output_uid_file()
     **	the Status callback routine to report our progress.
     */
     Uil_current_file =  uid_fcb.result_file;
-    if (Uil_cmd_z_command.status_cb != (Uil_continue_type(*)())NULL)
+    if (Uil_cmd_z_command.status_cb != NULL)
 	diag_report_status();
 
 
@@ -320,7 +320,7 @@ void	sem_output_uid_file()
       Uil_percent_complete=CEIL(
 	    80+	(.20 *((float)topmost_index/(float)(topmost_widget_count+.5)))*100, 80);
 
-	if (Uil_cmd_z_command.status_cb != (Uil_continue_type(*)())NULL)
+	if (Uil_cmd_z_command.status_cb != NULL)
 	    diag_report_status();
 
 	symbol_entry = ext_entry->az_name->az_object;
@@ -406,7 +406,7 @@ void	sem_output_uid_file()
 	/*
 	**  Call the Status callback routine to report our progress.
 	*/
-	if (Uil_cmd_z_command.status_cb != (Uil_continue_type(*)())NULL)
+	if (Uil_cmd_z_command.status_cb != NULL)
 	    diag_report_status();
 
 	switch (symbol_entry->header.b_tag)
@@ -506,7 +506,7 @@ void	push(sym_entry_type *sym_entry)
     **	We reuse source buffers for the output queues.
     */
 
-    if (out_l_next_offset > out_k_last_offset)
+    if (out_l_next_offset > (int)out_k_last_offset)
     {
 	if (src_az_avail_source_buffer == NULL)
 	{
@@ -3689,7 +3689,7 @@ int	compression_code = 2;
 **--
 **/
 
-void create_ext_compression_codes ()
+void create_ext_compression_codes (void)
 {
 
 /*

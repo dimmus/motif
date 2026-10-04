@@ -76,7 +76,7 @@
 
 
 
-#define _src_null_access_key( _key ) (_key.l_key == EOF)
+#define _src_null_access_key( _key ) (_key.l_key == (unsigned long)EOF)
 #define src_k_key_length 4
 
 typedef struct

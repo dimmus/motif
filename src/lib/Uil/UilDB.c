@@ -58,15 +58,6 @@ static char rcsid[] = "$XConsortium: UilDB.c /main/11 1996/11/21 20:03:11 drk $"
 #include <pwd.h>  /* for getpwnam, getpwuid */
 #include "UilDefI.h"
 
-/* X_INCLUDE_PWD_H is now configured by build system */
-/* XOS_USE_XT_LOCKING is now configured by build system */
-
-#ifdef HAVE_X11_XOS_R_H
-#include <X11/Xos_r.h>
-#else
-#include <Xm/Xmos_r.h>
-#endif
-
 #include <stdio.h>
 #include <stdint.h>
 #include <limits.h>
@@ -232,7 +223,7 @@ db_table_required_entries (_db_globals *globals, int table_id)
 static FILE *dbfile;
 static int  num_bits;
 
-void db_incorporate()
+void db_incorporate(void)
 
 /*
  *++
@@ -324,11 +315,11 @@ void db_incorporate()
 	_check_read (return_num_items);
 	
 	/* Validate header values to prevent exploitation of tainted data */
-	if (header.table_size <= 0 || header.table_size > SIZE_MAX / 4) {
+	if (header.table_size <= 0 || (size_t)header.table_size > SIZE_MAX / 4) {
 	    diag_issue_diagnostic( d_bad_database, diag_k_no_source, diag_k_no_column );
 	    continue;
 	}
-	if (header.num_items < 0 || header.num_items > SIZE_MAX / 4) {
+	if (header.num_items < 0 || (size_t)header.num_items > SIZE_MAX / 4) {
 	    diag_issue_diagnostic( d_bad_database, diag_k_no_source, diag_k_no_column );
 	    continue;
 	}
@@ -414,11 +405,6 @@ void db_incorporate()
 		break;
 	    case Charset_Lang_Codes_Table:
 		charset_lang_codes_table = (unsigned short int *) XtMalloc (header.table_size);
-		/* Validate table_size to prevent overflow */
-		if (header.table_size > SIZE_MAX) {
-		    diag_issue_diagnostic( d_bad_database, diag_k_no_source, diag_k_no_column );
-		    break;
-		}
 		return_num_items = fread (charset_lang_codes_table,
 					     header.table_size,
 					     1, dbfile);
@@ -426,11 +412,6 @@ void db_incorporate()
 		break;
 	    case Argument_Enum_Set_Table:
 		argument_enumset_table = (unsigned short int *) XtMalloc (header.table_size);
-		/* Validate table_size to prevent overflow */
-		if (header.table_size > SIZE_MAX) {
-		    diag_issue_diagnostic( d_bad_database, diag_k_no_source, diag_k_no_column );
-		    break;
-		}
 		return_num_items = fread (argument_enumset_table,
 					     header.table_size,
 					     1, dbfile);
@@ -438,11 +419,6 @@ void db_incorporate()
 		break;
 	    case Related_Argument_Table:
 		related_argument_table = (unsigned short int *) XtMalloc (header.table_size);
-		/* Validate table_size to prevent overflow */
-		if (header.table_size > SIZE_MAX) {
-		    diag_issue_diagnostic( d_bad_database, diag_k_no_source, diag_k_no_column );
-		    break;
-		}
 		return_num_items = fread (related_argument_table,
 					     header.table_size,
 					     1, dbfile);
@@ -450,11 +426,6 @@ void db_incorporate()
 		break;
 	    case Uil_Gadget_Funcs:
 		uil_gadget_variants = (unsigned short int *) XtMalloc (header.table_size);
-		/* Validate table_size to prevent overflow */
-		if (header.table_size > SIZE_MAX) {
-		    diag_issue_diagnostic( d_bad_database, diag_k_no_source, diag_k_no_column );
-		    break;
-		}
 		return_num_items = fread (uil_gadget_variants,
 					     header.table_size,
 					     1, dbfile);
@@ -462,11 +433,6 @@ void db_incorporate()
 		break;
 	    case Uil_Urm_Nondialog_Class:
 		uil_urm_nondialog_class = (unsigned short int *) XtMalloc (header.table_size);
-		/* Validate table_size to prevent overflow */
-		if (header.table_size > SIZE_MAX) {
-		    diag_issue_diagnostic( d_bad_database, diag_k_no_source, diag_k_no_column );
-		    break;
-		}
 		return_num_items = fread (uil_urm_nondialog_class,
 					     header.table_size,
 					     1, dbfile);
@@ -474,11 +440,6 @@ void db_incorporate()
 		break;
 	    case Uil_Urm_Subtree_Resource:
 		uil_urm_subtree_resource = (unsigned short int *) XtMalloc (header.table_size);
-		/* Validate table_size to prevent overflow */
-		if (header.table_size > SIZE_MAX) {
-		    diag_issue_diagnostic( d_bad_database, diag_k_no_source, diag_k_no_column );
-		    break;
-		}
 		return_num_items = fread (uil_urm_subtree_resource,
 					     header.table_size,
 					     1, dbfile);
@@ -489,11 +450,6 @@ void db_incorporate()
 		break;
 	    case Enumval_Values_Table:
 		enumval_values_table = (int *) XtMalloc (header.table_size);
-		/* Validate table_size to prevent overflow */
-		if (header.table_size > SIZE_MAX) {
-		    diag_issue_diagnostic( d_bad_database, diag_k_no_source, diag_k_no_column );
-		    break;
-		}
 		return_num_items = fread (enumval_values_table,
 					     header.table_size,
 					     1, dbfile);
@@ -1001,7 +957,7 @@ void db_read_int_and_shorts(_db_header_ptr header)
 
 
 
-void db_open_file ()
+void db_open_file (void)
 
 /*
  *++
@@ -1121,7 +1077,7 @@ void db_open_file ()
 
 
 
-String get_root_dir_name()
+String get_root_dir_name(void)
 {
 	int uid;
 	struct passwd *pwd_value;

@@ -142,13 +142,13 @@ void XmeResolvePartOffsets(WidgetClass w_class,
   /*
    *  Update the resource list(s) offsets in place
    */
-  for (i = 0; i < w_class->core_class.num_resources; i++) {
+  for (i = 0; (Cardinal)i < w_class->core_class.num_resources; i++) {
     pr = (XmPartResource *)&w_class->core_class.resources[i];
     /* The next line updates this in place--be careful */
     w_class->core_class.resources[i].resource_offset = XmGetPartOffset(pr, offset);
   }
   if (cc && constraint_offset)
-    for (i = 0; i < cc->constraint_class.num_resources; i++) {
+    for (i = 0; (Cardinal)i < cc->constraint_class.num_resources; i++) {
       pr = (XmPartResource *)&cc->constraint_class.resources[i];
       /* The next line updates this in place--be careful */
       cc->constraint_class.resources[i].resource_offset = XmGetPartOffset(pr, constraint_offset);

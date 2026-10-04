@@ -25,17 +25,11 @@
  * HISTORY
  */
 
-#if defined(__STDC__)
 #include <string.h>
 #include <stdlib.h>
-#endif
 
 #ifndef XmConst
-#if defined(__STDC__) || !defined( NO_CONST )
 #define XmConst const
-#else
-#define XmConst
-#endif /* __STDC__ */
 #endif /* XmConst */
 
 	/*
@@ -100,7 +94,7 @@ TokenRec token[1000];
 TokenRec temp;
 
 void add_token (Token t);
-int yywrap ();
+int yywrap (void);
 
 int phase		= 0;
 int keyword_count;

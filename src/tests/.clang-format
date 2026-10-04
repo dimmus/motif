@@ -1,0 +1,5 @@
+# The sources below this directory keep their original style, which is not
+# the one of src/lib/Xm described in the top-level .clang-format.  Follow
+# the surrounding code by hand.
+DisableFormat: true
+SortIncludes: Never

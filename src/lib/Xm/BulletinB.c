@@ -433,7 +433,7 @@ static void Initialize(Widget wid_req,
   XmBulletinBoardWidget request = (XmBulletinBoardWidget)wid_req;
   XmBulletinBoardWidget new_w = (XmBulletinBoardWidget)wid_new;
   Arg al[5];
-  register Cardinal ac;
+  Cardinal ac;
   int mwm_functions;
   char *text_value;
   XmFontList defaultFL;
@@ -678,7 +678,7 @@ static Boolean SetValues(Widget cw,
   XmBulletinBoardWidget request = (XmBulletinBoardWidget)rw;
   XmBulletinBoardWidget new_w = (XmBulletinBoardWidget)nw;
   Arg al[10];
-  register Cardinal ac;
+  Cardinal ac;
   int mwm_functions;
   int mwmStyle;
   unsigned int numChildren;
@@ -886,7 +886,7 @@ static Boolean SetValuesHook(Widget wid, ArgList args, Cardinal *num_args)
   /* look the comments on MAGIC in DialogSavvyT.h */
   if (!shell)
     return (False);
-  for (i = 0; i < *num_args; i++) {
+  for (i = 0; (Cardinal)i < *num_args; i++) {
     if (strcmp(args[i].name, XmNx) == 0) {
       if ((args[i].value == 0) && (XtX(bb) == 0)) {
         XtX(bb) = XmDIALOG_SAVVY_FORCE_ORIGIN;
@@ -1819,7 +1819,7 @@ Widget XmCreateBulletinBoardDialog(Widget ds_p, String name, ArgList bb_args, Ca
 
 Widget XmVaCreateBulletinBoard(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

@@ -52,9 +52,9 @@ char *xpmstrdup(char *s1)
   return s2;
 }
 #endif
-unsigned int xpmatoui(register char *p, unsigned int l, unsigned int *ui_return)
+unsigned int xpmatoui(char *p, unsigned int l, unsigned int *ui_return)
 {
-  register unsigned int n, i;
+  unsigned int n, i;
   n = 0;
   for (i = 0; i < l; i++)
     if (*p >= '0' && *p <= '9')

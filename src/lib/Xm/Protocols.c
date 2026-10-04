@@ -354,6 +354,7 @@ static void RealizeHandler(Widget w, XtPointer closure, XEvent *event, Boolean *
   switch (event->type) {
     case MapNotify:
       InstallProtocols(w, ap_mgr);
+      break;
     default:
       break;
   }

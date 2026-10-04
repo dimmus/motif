@@ -937,7 +937,7 @@ static void Initialize(Widget rw,
   if (ncw->container.detail_order_count && ncw->container.detail_order) {
     ncw->container.detail_order =
         (Cardinal *)_XmMallocArray(ncw->container.detail_order_count, sizeof(Cardinal));
-    for (i = 0; i < ncw->container.detail_order_count; i++)
+    for (i = 0; (Cardinal)i < ncw->container.detail_order_count; i++)
       ncw->container.detail_order[i] = rcw->container.detail_order[i];
   }
   /*
@@ -1406,7 +1406,7 @@ static Boolean SetValues(Widget cw,
    * Hide all non-level-0 children if we've switched to SPATIAL layout.
    */
   if (CtrLayoutIsSPATIAL(ncw) && !CtrLayoutIsSPATIAL(ccw)) {
-    for (i = 0; i < ncw->composite.num_children; i++) {
+    for (i = 0; (Cardinal)i < ncw->composite.num_children; i++) {
       cwid = ncw->composite.children[i];
       c = GetContainerConstraint(cwid);
       if (!CtrICON(cwid) || (c->entry_parent))
@@ -1478,7 +1478,7 @@ static Boolean SetValues(Widget cw,
       Cardinal *detail_order;
       detail_order =
           (Cardinal *)_XmMallocArray(ncw->container.detail_order_count, sizeof(Cardinal));
-      for (i = 0; i < ncw->container.detail_order_count; i++)
+      for (i = 0; (Cardinal)i < ncw->container.detail_order_count; i++)
         detail_order[i] = ncw->container.detail_order[i];
       ncw->container.detail_order = detail_order;
     }
@@ -2099,7 +2099,7 @@ static void ChangeManaged(Widget wid)
    */
   if (cw->container.self)
     return;
-  for (i = 0; i < cw->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < cw->composite.num_children; i++) {
     cwid = cw->composite.children[i];
     c = GetContainerConstraint(cwid);
     if (CtrICON(cwid))
@@ -2685,8 +2685,10 @@ static Boolean RemoveItem(Widget wid, Widget cwid)
       XUnionRectWithRegion(&cwid_rect, cwid_region, cwid_region);
       XSubtractRegion(cw->container.cells_region, cwid_region, cw->container.cells_region);
       XDestroyRegion(cwid_region);
+      XM_FALLTHROUGH;
     case XmGRID:
       cw->container.cells[c->cell_idx]--;
+      XM_FALLTHROUGH;
     case XmNONE:
       c->cell_idx = NO_CELL;
   }
@@ -4519,12 +4521,12 @@ static XmTabList GetDumbTabList(int tab_size, Cardinal asked_num_tab)
   XmTabList Tab_list = NULL;
   Cardinal i, prev_num_tab = Num_tab;
   _XmProcessLock();
-  if (Num_tab < asked_num_tab) {
+  if ((Cardinal)Num_tab < asked_num_tab) {
     Num_tab = MAX(asked_num_tab, 100); /* HACKKKK */
     Tab_pool = (XmTab *)_XmReallocArray((char *)Tab_pool, Num_tab, sizeof(XmTab));
   }
   /* create more tabs */
-  for (i = prev_num_tab; i < Num_tab; i++)
+  for (i = prev_num_tab; i < (Cardinal)Num_tab; i++)
     Tab_pool[i] = XmTabCreate(0.0, XmPIXELS, XmABSOLUTE, XmALIGNMENT_BEGINNING, XmS);
   /* update the values */
   for (i = 0; i < asked_num_tab; i++)
@@ -5969,7 +5971,7 @@ static Boolean SetupDrag(Widget wid,
   multi_click_time = XtGetMultiClickTime(XtDisplay(wid));
   click_time = event->xbutton.time;
   if ((cw->container.anchor_cwid == current_cwid) &&
-      ((click_time - cw->container.last_click_time) < multi_click_time))
+      ((click_time - cw->container.last_click_time) < (Time)multi_click_time))
   {
     cw->container.last_click_time = click_time;
     if (cw->container.anchor_cwid)
@@ -6407,6 +6409,7 @@ static void RecalcMarquee(Widget wid, Widget cwid, Position x, Position y)
         x = cw->container.anchor_point.x;
         y = cw->container.anchor_point.y;
       }
+      XM_FALLTHROUGH;
     case XmMARQUEE_EXTEND_START:
       if CtrTechIsMARQUEE_ES (cw) {
         if (cw->container.started_in_anchor)
@@ -6442,6 +6445,7 @@ static void RecalcMarquee(Widget wid, Widget cwid, Position x, Position y)
         }
         break;
       }
+      XM_FALLTHROUGH;
     case XmMARQUEE:
     case XmTOUCH_OVER:
       cw->container.marquee_start.x = MIN(x, cw->container.anchor_point.x);
@@ -6918,7 +6922,7 @@ static void ChangeOutlineButtons(Widget wid)
   Pixmap pm;
   Arg wargs[2];
   int n;
-  for (i = 0; i < cw->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < cw->composite.num_children; i++) {
     cwid = cw->composite.children[i];
     if (CtrOUTLINE_BUTTON(cwid)) {
       c = GetContainerConstraint(cwid);
@@ -7047,6 +7051,7 @@ static void CallSelectCB(Widget wid, XEvent *event, unsigned char auto_selection
   switch (cw->container.selection_policy) {
     case XmSINGLE_SELECT:
       cbs.reason = XmCR_SINGLE_SELECT;
+      XM_FALLTHROUGH;
     case XmBROWSE_SELECT:
       if (CtrPolicyIsBROWSE(cw))
         cbs.reason = XmCR_BROWSE_SELECT;
@@ -7058,6 +7063,7 @@ static void CallSelectCB(Widget wid, XEvent *event, unsigned char auto_selection
       break;
     case XmMULTIPLE_SELECT:
       cbs.reason = XmCR_MULTIPLE_SELECT;
+      XM_FALLTHROUGH;
     case XmEXTENDED_SELECT:
       if (CtrPolicyIsEXTENDED(cw))
         cbs.reason = XmCR_EXTENDED_SELECT;
@@ -7904,7 +7910,7 @@ Widget XmCreateContainer(Widget parent, String name, ArgList arglist, Cardinal a
 
 Widget XmVaCreateContainer(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

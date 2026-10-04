@@ -24,6 +24,7 @@
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
 #endif
+#include "DataFI.h"
 #include "ImageCachI.h"
 #include "TextFI.h"
 #include "TextFSelI.h"
@@ -98,10 +99,6 @@ extern unsigned char _XmGetFocusPolicy(Widget);
 extern void _XmPrimitiveFocusIn(Widget, XEvent *, String *, Cardinal *);
 extern void _XmPrimitiveEnter(Widget, XEvent *, String *, Cardinal *);
 extern void _XmPrimitiveLeave(Widget, XEvent *, String *, Cardinal *);
-extern Boolean _XmGetIconControlInfo(Screen *screen,
-                                     Boolean *useMaskRtn,
-                                     Boolean *useMultiColorIconsRtn,
-                                     Boolean *useIconFileCacheRtn);
 extern unsigned char _XmGetAudibleWarning(Widget);
 extern void _XmSetDestination(Display *, Widget);
 /*
@@ -845,7 +842,7 @@ static void PictureVerifyCallback(Widget w, XtPointer client_d, XtPointer call_d
    * Run it through the picture, and bail if it isn't accepted
    */
   ps = XmGetNewPictureState(XmDataField_picture(w));
-  for (i = 0; i < strlen(newptr); i++) {
+  for (i = 0; (size_t)i < strlen(newptr); i++) {
     changed = XmPictureProcessCharacter(ps, newptr[i], &done);
     if (changed == NULL || done)
       break;
@@ -1037,7 +1034,7 @@ static TextFGCData df_GetTextFGCData(Widget w)
   return gc_data;
 }
 
-void _XmDataFToggleCursorGC(Widget widget)
+static void _XmDataFToggleCursorGC(Widget widget)
 {
   XmDataFieldWidget tf = (XmDataFieldWidget)widget;
   XGCValues values;
@@ -1164,12 +1161,12 @@ static void DataFieldSetHighlight(XmDataFieldWidget tf,
   df_InsertHighlight(tf, right, endmode);
   l = XmTextF_highlight(tf).list;
   i = 1;
-  while (i < XmTextF_highlight(tf).number) {
+  while ((Cardinal)i < XmTextF_highlight(tf).number) {
     if (l[i].position >= left && l[i].position < right)
       l[i].mode = mode;
     if (l[i].mode == l[i - 1].mode) {
       XmTextF_highlight(tf).number--;
-      for (j = i; j < XmTextF_highlight(tf).number; j++)
+      for (j = i; (Cardinal)j < XmTextF_highlight(tf).number; j++)
         l[j] = l[j + 1];
     }
     else
@@ -1842,7 +1839,7 @@ static void df_RedisplayText(XmDataFieldWidget tf, XmTextPosition start, XmTextP
   if (!XtIsSensitive((Widget)tf))
     stipple = True;
   /* search through the highlight array and draw the text */
-  for (i = 0; i + 1 < XmTextF_highlight(tf).number; i++) {
+  for (i = 0; (Cardinal)i + 1 < XmTextF_highlight(tf).number; i++) {
 #if PWC_DEBUG
     printf("XmTextF_value(\"%s\")::Highlight #%d = pos(%d), start(%d), end(%d)\n",
            (char *)XmTextF_value(tf),
@@ -2626,9 +2623,9 @@ Boolean _XmDataFieldReplaceText(XmDataFieldWidget tf,
   }
   else {
     if ((XmTextF_string_length(tf) + insert_length - replace_length) * sizeof(wchar_t) >=
-        XmTextF_size_allocd(tf))
+        (size_t)XmTextF_size_allocd(tf))
     {
-      XmTextF_size_allocd(tf) += MAX((insert_length + TEXT_INCREMENT) * sizeof(wchar_t),
+      XmTextF_size_allocd(tf) += MAX((int)((insert_length + TEXT_INCREMENT) * sizeof(wchar_t)),
                                      (XmTextF_size_allocd(tf) * 2));
       XmTextF_wc_value(tf) = (wchar_t *)XtRealloc((char *)XmTextF_wc_value(tf),
                                                   (unsigned)XmTextF_size_allocd(tf));
@@ -3311,7 +3308,7 @@ static Boolean PrintableString(XmDataFieldWidget tf,
         tmp += ret_val;
         buf_size -= ret_val;
         tmp_str++;
-      } while ((ret_val > 0) && (buf_size >= MB_CUR_MAX) && (count < n));
+      } while ((ret_val > 0) && (buf_size >= (int)MB_CUR_MAX) && (count < n));
       if (ret_val == -1) /* bad character */
         return (False);
       is_printable = XTextWidth(TextF_Font(tf), cache_ptr, tmp - cache_ptr);
@@ -3424,12 +3421,12 @@ static void df_InsertString(Widget w, XEvent *event, char **params, Cardinal *nu
   int num_chars;
   Boolean replace_res;
   Boolean pending_delete = False;
-  register int i;
+  int i;
   if (!XmTextF_editable(tf)) {
     if (XmTextF_verify_bell(tf))
       XBell(XtDisplay((Widget)tf), 0);
   }
-  for (i = 0; i < *num_params; i++) {
+  for (i = 0; (Cardinal)i < *num_params; i++) {
     strncpy(insert_string, params[i], TEXT_MAX_INSERT_SIZE - 1);
     insert_string[TEXT_MAX_INSERT_SIZE - 1] = '\0';
     insert_length = strlen(insert_string);
@@ -4212,7 +4209,7 @@ static void df_SetScanIndex(XmDataFieldWidget tf, XEvent *event)
   else
     sel_time = event->xkey.time;
   if (sel_time > XmTextF_last_time(tf) &&
-      sel_time - XmTextF_last_time(tf) < XtGetMultiClickTime(XtDisplay(tf)))
+      sel_time - XmTextF_last_time(tf) < (Time)XtGetMultiClickTime(XtDisplay(tf)))
   {
     /*
      * Fix for HaL DTS 9841 - Increment the sarray_index first, then check to
@@ -7195,7 +7192,7 @@ static Boolean df_SetValues(
   }
   else {
     int ix;
-    for (ix = 0; ix < *num_args; ix++)
+    for (ix = 0; (Cardinal)ix < *num_args; ix++)
       if (strcmp(args[ix].name, XmNcursorPosition) == 0) {
         cursor_pos_set = True;
         new_position = XmTextF_cursor_position(new_tf);
@@ -7871,8 +7868,8 @@ static void XmDataFieldSetStringWcs(Widget w, wchar_t *wc_value)
     tmp_wc++; /* count number of wchar_t's */
   tmp = _XmMallocArray(num_chars + 1, XmTextF_max_char_size(tf));
   result = wcstombs(tmp, wc_value, (num_chars + 1) * XmTextF_max_char_size(tf));
-  if (result == (size_t)-1) /* if wcstombs fails, it returns (size_t) -1 */
-    tmp = "";               /* if invalid data, pass in the empty string */
+  if (result == -1) /* invalid data: set the empty string */
+    tmp[0] = '\0';
   XmDataFieldSetString(w, tmp);
   XtFree(tmp);
   _XmAppUnlock(app);
@@ -7997,9 +7994,8 @@ void XmDataFieldReplaceWcs(Widget w,
     else {
       tmp = _XmMallocArray(wc_length + 1, XmTextF_max_char_size(tf));
       wc_length = wcstombs(tmp, wc_value, (wc_length + 1) * XmTextF_max_char_size(tf));
-      if (wc_length == (size_t)-1) { /* if wcstombs fails, it returns -1 */
-        tmp = "";                    /* if invalid data, pass in the empty
-                                      * string */
+      if (wc_length == -1) { /* invalid data: insert the empty string */
+        tmp[0] = '\0';
         wc_length = 0;
       }
       rep_result = _XmDataFieldReplaceText(tf, NULL, from_pos, to_pos, tmp, wc_length, False);
@@ -8660,7 +8656,7 @@ Widget XmCreateDataField(Widget parent, char *name, ArgList arglist, Cardinal ar
 
 Widget XmVaCreateDataField(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

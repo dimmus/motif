@@ -35,7 +35,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
-#if defined(__cplusplus) || defined(c_plusplus)
+#if defined(__cplusplus)
 #  define OBJ_CLASS(w) (((ApplicationShellWidget)(w))->application.c_class)
 #else
 #  define OBJ_CLASS(w) (((ApplicationShellWidget)(w))->application.class)
@@ -486,7 +486,7 @@ static void Initialize(Widget rq, /* unused */
         }
       }
     }
-    if (savetimeout != -1) /* Restore the timeout if we had changed it */
+    if (savetimeout != (unsigned long)-1) /* Restore the timeout if we had changed it */
       XtAppSetSelectionTimeout(XtWidgetToApplicationContext(nw), savetimeout);
   }
   if (new_obj->color_obj.useMultiColorIcons == UNSPECIFIED_USE_MULTI_COLOR_ICONS) {

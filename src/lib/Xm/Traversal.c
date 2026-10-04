@@ -869,7 +869,7 @@ Boolean _XmGetPointVisibility(Widget w, int root_x, int root_y)
   return False;
 }
 
-void _XmSetRect(register XRectangle *rect, Widget w)
+void _XmSetRect(XRectangle *rect, Widget w)
 {
   /* Initialize the rectangle structure to the specified values.
    * The widget must be realized.
@@ -884,9 +884,9 @@ void _XmSetRect(register XRectangle *rect, Widget w)
   rect->height = w->core.height;
 }
 
-int _XmIntersectRect(register XRectangle *srcRectA,
-                     register Widget widget,
-                     register XRectangle *dstRect)
+int _XmIntersectRect(XRectangle *srcRectA,
+                     Widget widget,
+                     XRectangle *dstRect)
 {
   /* Intersects the specified rectangle with the rectangle describing the
    * passed-in widget.  Returns True if they intersect, or False if they
@@ -897,14 +897,14 @@ int _XmIntersectRect(register XRectangle *srcRectA,
   return ((int)_XmIntersectionOf(srcRectA, &srcRectB, dstRect));
 }
 
-int _XmEmptyRect(register XRectangle *r)
+int _XmEmptyRect(XRectangle *r)
 {
   if (r->width <= 0 || r->height <= 0)
     return (TRUE);
   return (FALSE);
 }
 
-void _XmClearRect(register XRectangle *r)
+void _XmClearRect(XRectangle *r)
 {
   r->x = 0;
   r->y = 0;
@@ -1154,7 +1154,7 @@ XmVisibility XmGetVisibility(Widget wid)
   }
   windowptr = children;
   /* walk through those which are under the window of interest */
-  for (i = 0; i < numchildren; i++) {
+  for (i = 0; (unsigned int)i < numchildren; i++) {
     if (*windowptr == XtWindow(wid)) {
       break;
     }
@@ -1163,7 +1163,7 @@ XmVisibility XmGetVisibility(Widget wid)
   i++;
   windowptr++;
   /* process windows above the window of interest */
-  if (i < numchildren) {
+  if ((unsigned int)i < numchildren) {
     XRectangle parent_rect, srcRectB, intersect_rect;
     Region region = XCreateRegion();
     Region tmp_region = XCreateRegion();
@@ -1171,7 +1171,7 @@ XmVisibility XmGetVisibility(Widget wid)
     XmVisibility value;
     XUnionRectWithRegion(&rect, region, region);
     _XmSetRect(&parent_rect, XtParent(wid));
-    while (i < numchildren) {
+    while ((unsigned int)i < numchildren) {
       if (SiblingGeometry(XtParent(wid), *windowptr, &srcRectB)) {
         srcRectB.x += parent_rect.x;
         srcRectB.y += parent_rect.y;

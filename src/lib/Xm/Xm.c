@@ -95,7 +95,7 @@ void _XmInitModifiers(void)
   if (modmap && keymap) {
     for (i = 3 * modmap->max_keypermod; i < 8 * modmap->max_keypermod; i++) {
       keycode = modmap->modifiermap[i];
-      if ((keycode >= min_keycode) && (keycode <= max_keycode)) {
+      if (((int)keycode >= min_keycode) && ((int)keycode <= max_keycode)) {
         int j;
         KeySym *syms = keymap + (keycode - min_keycode) * keysyms_per_keycode;
         for (j = 0; j < keysyms_per_keycode; j++)
@@ -277,7 +277,7 @@ void _XmWarningMsg(Widget w, char *type, char *message, char **params, Cardinal 
   int i;
   if (num_new_params > 11)
     num_new_params = 11;
-  for (i = 0; i < num_new_params - 1; i++)
+  for (i = 0; (Cardinal)i < num_new_params - 1; i++)
     new_params[i] = params[i];
   new_params[num_new_params - 1] = XME_WARNING;
   if (w != NULL) {

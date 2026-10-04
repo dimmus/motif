@@ -311,7 +311,7 @@ void ProcessWmProtocols (ClientData *pCD)
 
     	    pCD->clientProtocolCount = nitems;
 
-    	    for (i = 0; i < nitems; i++)
+    	    for (i = 0; (unsigned long)i < nitems; i++)
     	    {
 		pCD->clientProtocols[i] = property[i];
 		if (property[i] == wmGD.xa_WM_SAVE_YOURSELF)
@@ -426,9 +426,9 @@ void ProcessMwmMessages (ClientData *pCD)
 
     	    pCD->mwmMessagesCount = nitems;
 
-    	    for (i = 0; i < nitems; i++)
+    	    for (i = 0; (unsigned long)i < nitems; i++)
     	    {
-		if ((pCD->mwmMessages[i] = property[i]) == wmGD.xa_MWM_OFFSET)
+		if ((Atom)(pCD->mwmMessages[i] = property[i]) == wmGD.xa_MWM_OFFSET)
 		{
 		    pCD->protocolFlags |= PROTOCOL_MWM_OFFSET;
 		}
@@ -894,7 +894,7 @@ void ProcessWmColormapWindows (ClientData *pCD)
 	     * If it is not then add it to the head of the list.
 	     */
 
-    	    for (i = 0; i < nitems; i++)
+    	    for (i = 0; (unsigned long)i < nitems; i++)
 	    {
 		if (property[i] == pCD->client)
 		{
@@ -903,7 +903,7 @@ void ProcessWmColormapWindows (ClientData *pCD)
 	    }
 
 	    colormapCount = 0;
-	    if (i == nitems)
+	    if ((unsigned long)i == nitems)
 	    {
 		/* add the client window to the colormap window list */
 		pWindows[0] = pCD->client;
@@ -912,7 +912,7 @@ void ProcessWmColormapWindows (ClientData *pCD)
 	    }
 
 	    sAttributes.event_mask = (ColormapChangeMask);
-    	    for (i = 0; i < nitems; i++)
+    	    for (i = 0; (unsigned long)i < nitems; i++)
     	    {
 		if ((pColormaps[colormapCount] =
 		     FindColormap (pCD, property[i])) != None)

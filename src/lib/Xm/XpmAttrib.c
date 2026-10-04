@@ -103,7 +103,7 @@ void XpmFreeExtensions(XpmExtension *extensions, int nextensions)
   XpmExtension *ext;
   char **sptr;
   if (extensions && nextensions > 0) {
-    for (i = 0, ext = extensions; i < nextensions; i++, ext++) {
+    for (i = 0, ext = extensions; i < (unsigned int)nextensions; i++, ext++) {
       if (ext->name)
         XpmFree(ext->name);
       nlines = ext->nlines;

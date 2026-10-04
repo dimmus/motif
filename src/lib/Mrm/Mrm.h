@@ -397,11 +397,12 @@ typedef struct _WCIClassDesc {
 	String		creator_name ;	/* create routine name. This is also
 					   the accessor key for non-toolkit
 					   widget classes. */
-	Widget		(*creator) () ;	/* low-level create routine. This is
+	Widget		(*creator) (Widget, String, ArgList, Cardinal) ;
+					/* low-level create routine. This is
 					   also the class identifier (name)
 					   used to match user classes. */
 	WidgetClass	class_record ;	/* Pointer to toolkit class record */
-	void		(*cleanup) () ;
+	void		(*cleanup) (Widget) ;
 					/* low-level destructor routine.
 					   Used to clean up after creation
 					   routines that leave dangling
@@ -1718,6 +1719,10 @@ extern Cardinal UrmCreateWidgetInstance
 					   URMResourceContextPtr wref_id ,
 					   Widget *w_return,
 					   char **w_name));
+extern Cardinal UrmCreateWidgetInstanceCleanup
+                               _ARGUMENTS((URMResourceContextPtr context_id ,
+					   Widget child ,
+					   IDBFile file_id ));
 extern Cardinal UrmCreateOrSetWidgetInstance
                                _ARGUMENTS((URMResourceContextPtr context_id ,
 					   Widget parent ,
@@ -2033,8 +2038,20 @@ extern Cardinal Urm__SwapRGMWidgetRecord _ARGUMENTS(( RGMWidgetRecordPtr widget_
 
 #endif /* UNALIGNED */
 
-/********    Conditionally defined macros for thread_safe DtTerm ******/
-#ifdef XTHREADS
+/*
+ * Marks a deliberate fall-through to the next case label, for
+ * -Wimplicit-fallthrough (Clang does not accept comments for it).
+ */
+#if defined(__has_attribute)
+#if __has_attribute(fallthrough)
+#define XM_FALLTHROUGH __attribute__((fallthrough))
+#endif
+#endif
+#ifndef XM_FALLTHROUGH
+#define XM_FALLTHROUGH do {} while (0)
+#endif
+
+/********    Macros for thread-safe Mrm    ********/
 #define _MrmWidgetToAppContext(w) \
         XtAppContext app = XtWidgetToApplicationContext(w)
 #define _MrmDisplayToAppContext(d) \
@@ -2043,14 +2060,6 @@ extern Cardinal Urm__SwapRGMWidgetRecord _ARGUMENTS(( RGMWidgetRecordPtr widget_
 #define _MrmAppUnlock(app) XtAppUnlock(app)
 #define _MrmProcessLock() XtProcessLock()
 #define _MrmProcessUnlock() XtProcessUnlock()
-#else /* XTHREADS */
-#define _MrmWidgetToAppContext(w)
-#define _MrmDisplayToAppContext(d)
-#define _MrmAppLock(app)
-#define _MrmAppUnlock(app)
-#define _MrmProcessLock()
-#define _MrmProcessUnlock()
-#endif /* XTHREADS */
 
 #endif /* Mrm_H */
 /* DON'T ADD STUFF AFTER THIS #endif */

@@ -297,7 +297,7 @@ static void FillBindingsFromDB(Display *dpy,
         *keys = (XmVKeyBinding)_XmReallocArray((char *)*keys,
                                                *num_keys + new_num,
                                                sizeof(XmVKeyBindingRec));
-        for (tmp = 0; tmp < new_num; tmp++) {
+        for (tmp = 0; (Cardinal)tmp < new_num; tmp++) {
           (*keys)[*num_keys + tmp].keysym = new_keys[tmp].keysym;
           (*keys)[*num_keys + tmp].modifiers = new_keys[tmp].modifiers;
           (*keys)[*num_keys + tmp].virtkey = virtualKeysyms[vk_num].keysym;
@@ -540,6 +540,7 @@ static Modifiers EffectiveStdModMask(Display *dpy, KeySym *kc_map, int ks_per_kc
          */
         break;
       }
+      XM_FALLTHROUGH;
     case 3:
       if (kc_map[2] == NoSymbol) {
         /* Both Group 2 keysyms are NoSymbol, so the group
@@ -560,6 +561,7 @@ static Modifiers EffectiveStdModMask(Display *dpy, KeySym *kc_map, int ks_per_kc
       /* At this fall-through, the group modifier bits have been
        * decided, while the case is still out on Shift/Lock.
        */
+      XM_FALLTHROUGH;
     case 2:
       if (kc_map[1] != NoSymbol) {
         /* Shift/Lock modifier selects keysym from Group 1,
@@ -568,6 +570,7 @@ static Modifiers EffectiveStdModMask(Display *dpy, KeySym *kc_map, int ks_per_kc
          */
         break;
       }
+      XM_FALLTHROUGH;
     case 1:
       if (kc_map[0] != NoSymbol) {
         XtConvertCase(dpy, kc_map[0], &lc, &uc);
@@ -582,6 +585,7 @@ static Modifiers EffectiveStdModMask(Display *dpy, KeySym *kc_map, int ks_per_kc
        * the Shift modifier is not effective; mask it out.
        */
       esm_mask &= ~ShiftMask;
+      break;
     case 0:
       break;
   }
@@ -778,7 +782,7 @@ int _XmVirtKeysLoadFallbackBindings(Display *display, String *binding)
   }
   /* Check hardcoded fallbacks (for 1.1 bc) */
   if (*binding == NULL) {
-    for (i = 0, currDefault = fallbackBindingStrings; i < XtNumber(fallbackBindingStrings);
+    for (i = 0, currDefault = fallbackBindingStrings; (unsigned int)i < XtNumber(fallbackBindingStrings);
          i++, currDefault++)
     {
       if (strcmp(currDefault->vendorName, ServerVendor(display)) == 0) {

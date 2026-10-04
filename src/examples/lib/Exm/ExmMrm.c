@@ -40,52 +40,6 @@
 
 /**********************************************************************
  *
- * Wrapper functions for MrmRegisterClass compatibility
- *
- *********************************************************************/
-
-static Widget ExmCreateSimpleWrapper()
-{
-    return ExmCreateSimple(NULL, NULL, NULL, 0);
-}
-
-static Widget ExmCreateStringWrapper()
-{
-    return ExmCreateString(NULL, NULL, NULL, 0);
-}
-
-static Widget ExmCreateStringTransferWrapper()
-{
-    return ExmCreateStringTransfer(NULL, NULL, NULL, 0);
-}
-
-static Widget ExmCreateGridWrapper()
-{
-    return ExmCreateGrid(NULL, NULL, NULL, 0);
-}
-
-static Widget ExmCreateCommandButtonWrapper()
-{
-    return ExmCreateCommandButton(NULL, NULL, NULL, 0);
-}
-
-static Widget ExmCreateMenuButtonWrapper()
-{
-    return ExmCreateMenuButton(NULL, NULL, NULL, 0);
-}
-
-static Widget ExmCreateTabButtonWrapper()
-{
-    return ExmCreateTabButton(NULL, NULL, NULL, 0);
-}
-
-static Widget ExmCreatePannerWrapper()
-{
-    return ExmCreatePanner(NULL, NULL, NULL, 0);
-}
-
-/**********************************************************************
- *
  * ExmMrmInitialize - register Exm widget classes with Mrm
  *
  *********************************************************************/
@@ -93,28 +47,28 @@ static Widget ExmCreatePannerWrapper()
 int ExmMrmInitialize()
 {
     MrmRegisterClass (MrmwcUnknown, "ExmSimple",
-			"ExmCreateSimple", ExmCreateSimpleWrapper,
+			"ExmCreateSimple", ExmCreateSimple,
 			exmSimpleWidgetClass);
     MrmRegisterClass (MrmwcUnknown, "ExmString",
-			"ExmCreateString", ExmCreateStringWrapper,
+			"ExmCreateString", ExmCreateString,
 			exmStringWidgetClass);
     MrmRegisterClass (MrmwcUnknown, "ExmStringTransfer",
-			"ExmCreateStringTransfer", ExmCreateStringTransferWrapper,
+			"ExmCreateStringTransfer", ExmCreateStringTransfer,
 			exmStringTransferWidgetClass);
     MrmRegisterClass (MrmwcUnknown, "ExmGrid",
-			"ExmCreateGrid", ExmCreateGridWrapper,
+			"ExmCreateGrid", ExmCreateGrid,
 			exmGridWidgetClass);
     MrmRegisterClass (MrmwcUnknown, "ExmCommandButton",
-			"ExmCreateCommandButton", ExmCreateCommandButtonWrapper,
+			"ExmCreateCommandButton", ExmCreateCommandButton,
 			exmCommandButtonWidgetClass);
     MrmRegisterClass (MrmwcUnknown, "ExmMenuButton",
-			"ExmCreateMenuButton", ExmCreateMenuButtonWrapper,
+			"ExmCreateMenuButton", ExmCreateMenuButton,
 			exmMenuButtonWidgetClass);
     MrmRegisterClass (MrmwcUnknown, "ExmTabButton",
-			"ExmCreateTabButton", ExmCreateTabButtonWrapper,
+			"ExmCreateTabButton", ExmCreateTabButton,
 			exmTabButtonWidgetClass);
     MrmRegisterClass (MrmwcUnknown, "ExmPanner",
-			"ExmCreatePanner", ExmCreatePannerWrapper,
+			"ExmCreatePanner", ExmCreatePanner,
 			exmPannerWidgetClass);
     return (0);
 }

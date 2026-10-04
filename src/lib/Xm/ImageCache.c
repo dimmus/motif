@@ -201,7 +201,7 @@ static XmHashValue HashString(XmHashKey key)
  ************************************************************************/
 static void InitializeImageSet(void)
 {
-  register int i;
+  int i;
   /* Allocate the hash table. */
   assert(image_set == NULL);
   _XmProcessLock();
@@ -533,7 +533,7 @@ static XtEnum GetXpmImage(Screen *screen,
   int num_override_colors;
   XImage *mask_image = NULL;
   int hot_x = 0, hot_y = 0;
-  register Display *display = DisplayOfScreen(screen);
+  Display *display = DisplayOfScreen(screen);
   /* init so that we can call safely XpmFreeAttributes. */
   attrib.valuemask = 0;
   /* Init the Xpm attributes to be passed to the reader */
@@ -1135,8 +1135,8 @@ Pixmap _XmGetScaledPixmap(Screen *screen,
         /* Assume black == fg in the image. */
         if ((BlackPixelOfScreen(screen) == 0) || (WhitePixelOfScreen(screen) == 1)) {
           /* Flip the bits so fg == 1 in the image. */
-          register int nbytes = image->height * image->bytes_per_line;
-          register int byte;
+          int nbytes = image->height * image->bytes_per_line;
+          int byte;
           /* Image data may be constant, so we must copy it. */
           old_image_data = image->data;
           image->data = XtMalloc(nbytes);

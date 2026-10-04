@@ -59,6 +59,7 @@ static char rcsid[] = "$XConsortium: WmCPlace.c /main/5 1996/08/09 15:18:04 rswi
  * include extern functions
  */
 #include "WmCDInfo.h"
+#include "WmCPlace.h"
 #include "WmCDecor.h"
 #include "WmFeedback.h"
 #include "WmWinConf.h"

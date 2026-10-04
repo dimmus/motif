@@ -819,7 +819,7 @@ static void ChangeManaged(Widget wid)
   XtWidgetGeometry desired;
   CompositeWidget cw = (CompositeWidget)mw->swindow.ClipWindow;
   Widget w;
-  register int i;
+  int i;
   XtWidgetProc resize;
   if (mw->mwindow.ManagingSep || mw->swindow.FromResize)
     return;
@@ -834,7 +834,7 @@ static void ChangeManaged(Widget wid)
       (mw->swindow.WorkWindow != NULL))
   {
     /* loop over the clip window child list and treat the bogus */
-    for (i = 0; i < cw->composite.num_children; i++) {
+    for (i = 0; (Cardinal)i < cw->composite.num_children; i++) {
       XmScrolledWindowConstraint swc;
       int j;
       w = cw->composite.children[i];
@@ -857,7 +857,7 @@ static void ChangeManaged(Widget wid)
         /* remove it from the clipwindow child list by
                    moving all the siblings that comes after it
                    one slot down */
-        for (j = i + 1; j < cw->composite.num_children; j++) {
+        for (j = i + 1; (Cardinal)j < cw->composite.num_children; j++) {
           cw->composite.children[i - 1] = cw->composite.children[i];
         }
         cw->composite.num_children--;
@@ -1141,7 +1141,7 @@ Widget XmCreateMainWindow(Widget parent, char *name, ArgList args, Cardinal argC
 
 Widget XmVaCreateMainWindow(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

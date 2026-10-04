@@ -50,13 +50,7 @@
 #include <X11/Intrinsic.h>
 #endif
 
-#define X_INCLUDE_TIME_H
-/* XOS_USE_XT_LOCKING is now configured by build system */
-#ifdef HAVE_X11_XOS_R_H
-#include <X11/Xos_r.h>
-#else
-#include <Xm/Xmos_r.h>
-#endif
+#include <time.h>
 
 #ifndef NO_MRM_HEADERS
 #include <Mrm/MrmAppl.h>
@@ -105,12 +99,21 @@ typedef int boolean;
 */
 
 #ifndef XmConst
-#if defined(__STDC__) || !defined( NO_CONST )
 #define XmConst const
-#else
-#define XmConst
-#endif /* __STDC__ */
 #endif /* XmConst */
+
+/*
+ * Marks a deliberate fall-through to the next case label, for
+ * -Wimplicit-fallthrough (Clang does not accept comments for it).
+ */
+#if defined(__has_attribute)
+#if __has_attribute(fallthrough)
+#define XM_FALLTHROUGH __attribute__((fallthrough))
+#endif
+#endif
+#ifndef XM_FALLTHROUGH
+#define XM_FALLTHROUGH do {} while (0)
+#endif
 
 /* Uil will automatically strip this prefix when saving name of automatically
  * created child.  This is used to prevent name conflicts in existing uil
@@ -251,7 +254,7 @@ typedef int boolean;
 
 /* uilcmd.c */
 
-#if defined(__cplusplus) || defined(c_plusplus)
+#if defined(__cplusplus)
 extern "C" {
 #endif
 
@@ -308,7 +311,7 @@ extern void lst_open_listing  _ARGUMENTS(( void ));
 extern void Uil_lst_cleanup_listing  _ARGUMENTS(( void ));
 extern status create_listing_file  _ARGUMENTS(( uil_fcb_type *az_fcb ));
 extern void lst_output_line  _ARGUMENTS(( char *ac_line , boolean v_new_page ));
-extern char *current_time  _ARGUMENTS(( _Xctimeparams *ctime_buf ));
+extern char *current_time  _ARGUMENTS(( char *ctime_buf ));	/* at least 26 bytes */
 extern void lst_output_listing  _ARGUMENTS(( void ));
 extern void lst_output_messages  _ARGUMENTS(( src_message_item_type *az_message_item ));
 extern void lst_output_machine_code  _ARGUMENTS(( src_source_record_type *az_src_rec ));
@@ -332,8 +335,9 @@ extern char *resource_name_from_code  _ARGUMENTS(( MrmCode resource ));
 extern void uil_exit  _ARGUMENTS(( int severity ));
 extern Uil_status_type Uil _ARGUMENTS((Uil_command_type
 *comand_desc,Uil_compile_desc_type *compile_desc,Uil_continue_type
-(*message_cb)(), char *message_data, Uil_continue_type (*status_cb)(),
-char *status_data));
+(*message_cb)(char *, int, int, char *, char *, char *, char *, int *),
+char *message_data, Uil_continue_type (*status_cb)(char *, int, int,
+char *, int *), char *status_data));
 
 
 /* uilp2out.c */
@@ -565,7 +569,7 @@ extern void sym_dump_root_entry  _ARGUMENTS(( sym_root_entry_type *az_symbol_ent
 extern char *sym_section_text  _ARGUMENTS(( int b_type ));
 extern void dump_free_list  _ARGUMENTS(( void ));
 extern int sar_get_units_type (yystype *parse_frame);
-#if defined(__cplusplus) || defined(c_plusplus)
+#if defined(__cplusplus)
 }
 #endif
 

@@ -18,12 +18,6 @@
 /* Define to 1 if you have the <fcntl.h> header file. */
 #undef HAVE_FCNTL_H
 
-/* Define to 1 if you have the `getcwd' function. */
-#undef HAVE_GETCWD
-
-/* Define to 1 if you have the `getwd' function. */
-#undef HAVE_GETWD
-
 /* Define to 1 if you have the `iconv' function. */
 #undef HAVE_ICONV
 
@@ -36,17 +30,8 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
-/* Define to 1 if you have the `nanosleep' function. */
-#undef HAVE_NANOSLEEP
-
 /* Define to 1 if you have the `putenv' function. */
 #undef HAVE_PUTENV
-
-/* Define to 1 if you have the `regcomp' function. */
-#undef HAVE_REGCOMP
-
-/* Define to 1 if you have the `regex' function. */
-#undef HAVE_REGEX
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H
@@ -78,9 +63,6 @@
 /* Define to 1 if you have the <sys/stat.h> header file. */
 #undef HAVE_SYS_STAT_H
 
-/* Define to 1 if you have the <sys/time.h> header file. */
-#undef HAVE_SYS_TIME_H
-
 /* Define to 1 if you have the <sys/types.h> header file. */
 #undef HAVE_SYS_TYPES_H
 
@@ -92,12 +74,6 @@
 
 /* Define to 1 if you have the <wctype.h> header file. */
 #undef HAVE_WCTYPE_H
-
-/* Define to 1 if you have the <X11/Xos_r.h> header file. */
-#undef HAVE_X11_XOS_R_H
-
-/* Define to 1 if you have the <X11/Xpoll.h> header file. */
-#undef HAVE_X11_XPOLL_H
 
 /* Use local string case comparison functions */
 #undef LOCAL_STRCASECMP
@@ -173,41 +149,8 @@
 /* 1 if Motif was built with PNG support */
 #undef XM_WITH_PNG
 
-/* Define if multi-thread safe API is not available */
-#undef XNO_MTSAFE_API
-
-/* Define if multi-thread safe password API is not available */
-#undef XNO_MTSAFE_PWDAPI
-
-/* Disable XOS locking for single-threaded builds */
-#undef XOS_USE_NO_LOCKING
-
-/* Use Xlib-only locking */
-#undef XOS_USE_XLIB_LOCKING
-
-/* Use Xt-based locking (auto-detected) */
-#undef XOS_USE_XT_LOCKING
-
-/* Define if libXt was compiled with thread support */
-#undef XTHREADS
-
-/* Enable XTHREADS file/line debugging */
-#undef XTHREADS_FILE_LINE
-
-/* Enable XTHREADS warnings */
-#undef XTHREADS_WARN
-
-/* Define to use multi-thread safe API */
-#undef XUSE_MTSAFE_API
-
-/* Define to use multi-thread safe password API */
-#undef XUSE_MTSAFE_PWDAPI
-
 /* Define to 1 if the X Window System is missing or not being used. */
 #undef X_DISPLAY_MISSING
-
-/* Force use of multi-thread safe API */
-#undef X_FORCE_USE_MTSAFE_API
 
 /* Define if pwd.h should be included */
 #undef X_INCLUDE_PWD_H

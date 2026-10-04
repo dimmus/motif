@@ -225,7 +225,7 @@ UrmResizeResourceContext (URMResourceContextPtr	context_id,
    * violations.  Ideally Urm__CW_EvaluateValOrOffset and the code that
    * calls it should be rewritten, but we don't have time for that now.
    */
-  if (size < sizeof(long)) size = sizeof(long);
+  if (size < (int)sizeof(long)) size = sizeof(long);
 
   /*
    * Resize unless buffer is bigger than requested size.

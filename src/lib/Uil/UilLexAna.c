@@ -55,7 +55,7 @@ static char rcsid[] = "$TOG: UilLexAna.c /main/14 1997/03/12 15:10:52 dbl $"
 #include <Xm/Xm.h>
 /* I think this one should be public too, it's not the case right now,
    and I don't want to include XmP.h here - dd */
-extern char *_XmStringGetCurrentCharset ();
+extern char *_XmStringGetCurrentCharset (void);
 #include <Xm/XmosP.h>	/* Need this for MB_CUR_MAX */
 
 #include <Mrm/MrmosI.h> /* Need this for _MrmOSSetLocale. */
@@ -999,7 +999,7 @@ static int	punc2_token[2] =
 **
 **--
 **/
-int	yylex()
+int	yylex(void)
 {
     unsigned char c_char;	    /* current character */
     int		l_class;	    /* current character's class */
@@ -1031,7 +1031,7 @@ int	yylex()
     if (Uil_file_size > 0)
       Uil_percent_complete =
 	CEIL((int)( .5 * ((float)Uil_characters_read/(float)Uil_file_size))*100, 50);
-    if (Uil_cmd_z_command.status_cb != (Uil_continue_type(*)())NULL)
+    if (Uil_cmd_z_command.status_cb != NULL)
 	diag_report_status();
 
 
@@ -1479,7 +1479,7 @@ found_token:
 	    {
 	      /* check that the length of the name is in range */
 
-	      if (l_lex_pos > key_k_keyword_max_length)
+	      if ((unsigned long)l_lex_pos > key_k_keyword_max_length)
 		{
 		  l_lex_pos = key_k_keyword_max_length;
 		  az_current_lex_buffer->c_text[ l_lex_pos ] = 0;
@@ -1706,6 +1706,7 @@ found_primitive_string:
 		  src_az_current_source_buffer->w_current_position - 1,
 		  "character string",
 		  "before end of line" );
+	XM_FALLTHROUGH;
 
     case token_gstr:
 
@@ -2006,7 +2007,7 @@ found_error:
 
 #define UNSCHAR_MINUS_ONE (unsigned char) 255;
 
-void  lex_initialize_analyzer( )
+void  lex_initialize_analyzer(void)
 
 {
 String language;
@@ -2100,7 +2101,7 @@ prev_yylval.az_source_record = src_az_current_source_record;
 **--
 **/
 
-void  Uil_lex_cleanup_analyzer( )
+void  Uil_lex_cleanup_analyzer(void)
 
 {
     /*	pointer to next buffer to free	*/

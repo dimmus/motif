@@ -32,11 +32,7 @@ static char rcsid[] = "$TOG: Transltns.c /main/24 1999/08/09 18:34:51 mgreess $"
  * declarations will be in agreement with the definitions.
  */
 #ifndef _XmConst
-#  if defined(__STDC__) || !defined(NO_CONST)
-#    define _XmConst const
-#  else
-#    define _XmConst
-#  endif /* __STDC__ */
+#  define _XmConst const
 #endif   /* _XmConst */
 #include <Xm/TransltnsP.h>
 #include <Xm/XmP.h>

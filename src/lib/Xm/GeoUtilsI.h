@@ -71,7 +71,7 @@ extern void _XmGeoLoadValues(Widget wid,
                              Widget instigator,
                              XtWidgetGeometry *request,
                              XtWidgetGeometry *geoResult);
-extern int _XmGeoCount_kids(register CompositeWidget c);
+extern int _XmGeoCount_kids(CompositeWidget c);
 extern XmKidGeometry _XmGetKidGeo(Widget wid,
                                   Widget instigator,
                                   XtWidgetGeometry *request,

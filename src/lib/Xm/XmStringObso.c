@@ -136,7 +136,7 @@ XmString XmStringNCopy(XmString str, int n)
   XmString ret_val;
   _XmProcessLock();
   len = XmCvtXmStringToByteStream(str, &tmp);
-  if (n >= len) /* No need to truncate */ {
+  if ((unsigned int)n >= len) /* No need to truncate */ {
     ret_val = XmStringCopy(str);
   }
   else /* Truncate and convert */ {
@@ -382,7 +382,7 @@ Boolean _XmStringGetSegment(_XmStringContext context,
             if (copy_data) {
               int tmp;
               *rendition_tags = (XmStringTag *)_XmMallocArray(*tag_count, sizeof(XmStringTag));
-              for (tmp = 0; tmp < *tag_count; tmp++)
+              for (tmp = 0; (unsigned int)tmp < *tag_count; tmp++)
                 (*rendition_tags)[tmp] = XtNewString(_XmStrContRendTags(local_context)[tmp]);
             }
             else {
@@ -436,7 +436,7 @@ Boolean _XmStringGetSegment(_XmStringContext context,
             if (copy_data) {
               int tmp;
               *rendition_tags = (XmStringTag *)_XmMallocArray(*tag_count, sizeof(XmStringTag));
-              for (tmp = 0; tmp < *tag_count; tmp++)
+              for (tmp = 0; (unsigned int)tmp < *tag_count; tmp++)
                 (*rendition_tags)[tmp] = XtNewString(_XmStrContRendTags(local_context)[tmp]);
             }
             else {
@@ -537,7 +537,7 @@ Boolean _XmStringGetNextSegment(_XmStringContext context,
       len = ((*char_count) * MB_CUR_MAX) / sizeof(wchar_t);
       *text = (char *)XtMalloc(len + 1);
       *char_count = wcstombs(*text, wtext, len);
-      if ((*char_count) == (size_t)-1) {
+      if ((*char_count) == -1) {
         result = False;
         XtFree(*text);
         *text = NULL;

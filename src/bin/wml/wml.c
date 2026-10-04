@@ -151,7 +151,7 @@ static void wmlInit(void);
  * External variables
  */
 extern int yyleng;
-extern  int yyparse();
+extern  int yyparse(void);
 
 
 

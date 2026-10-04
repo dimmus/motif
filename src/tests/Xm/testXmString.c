@@ -1056,6 +1056,48 @@ START_TEST(utf8_round_trip)
 END_TEST
 #endif
 
+static float tab_value(XmTabList tl, int position)
+{
+	unsigned char units, alignment;
+	XmOffsetModel model;
+	char *decimal;
+	XmTab tab = XmTabListGetTab(tl, (Cardinal)position);
+	float value = XmTabGetValues(tab, &units, &model, &alignment, &decimal);
+
+	XmTabFree(tab);
+	return value;
+}
+
+/*
+ * Negative positions count from the end of a tab list.  After one, the
+ * next position in the same call was resolved relative to a wrongly
+ * computed (unsigned) remainder, so {-1, 1} removed the first tab instead
+ * of the second.
+ */
+START_TEST(tab_list_negative_positions)
+{
+	XmTab tabs[3];
+	Cardinal positions[2];
+	XmTabList tl;
+	int i;
+
+	for (i = 0; i < 3; i++)
+		tabs[i] = XmTabCreate((float)(i + 1), XmCENTIMETERS, XmABSOLUTE,
+				      XmALIGNMENT_BEGINNING, ".");
+	tl = XmTabListInsertTabs(NULL, tabs, 3, 0);
+	for (i = 0; i < 3; i++)
+		XmTabFree(tabs[i]);
+	ck_assert_uint_eq(XmTabListTabCount(tl), 3);
+
+	positions[0] = (Cardinal)-1;
+	positions[1] = 1;
+	tl = XmTabListRemoveTabs(tl, positions, 2);
+	ck_assert_uint_eq(XmTabListTabCount(tl), 1);
+	ck_assert(tab_value(tl, 0) == 1.0f);
+	XmTabListFree(tl);
+}
+END_TEST
+
 void xmstring_suite(SRunner *runner)
 {
 	TCase *t;
@@ -1092,6 +1134,10 @@ void xmstring_suite(SRunner *runner)
 
 	t = tcase_create("Parse tables");
 	tcase_add_test(t, parse_table_round_trip);
+	suite_add_tcase(s, t);
+
+	t = tcase_create("Tab lists");
+	tcase_add_test(t, tab_list_negative_positions);
 	suite_add_tcase(s, t);
 
 #if XM_UTF8

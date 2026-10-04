@@ -1166,6 +1166,7 @@ static void BorderUnhighlight(Widget wid)
           break;
         }
         /* else fall through to XmEXTERNAL_HIGHLIGHT. */
+        XM_FALLTHROUGH;
       case XmEXTERNAL_HIGHLIGHT:
         (*(xmGadgetClassRec.gadget_class.border_unhighlight))(wid);
         break;
@@ -1239,10 +1240,10 @@ static void ClassInitialize(void)
   merged_list = (XtResource *)_XmMallocArray(wc_num_res + sc_num_res, sizeof(XtResource));
   _XmTransformSubResources(
       xmLabelGCacheObjClassRec.object_class.resources, sc_num_res, &uncompiled, &num);
-  for (i = 0; i < num; i++)
+  for (i = 0; (Cardinal)i < num; i++)
     merged_list[i] = uncompiled[i];
   XtFree((char *)uncompiled);
-  for (i = 0, j = num; i < wc_num_res; i++, j++)
+  for (i = 0, j = num; (Cardinal)i < wc_num_res; i++, j++)
     merged_list[j] = xmPushButtonGCacheObjClassRec.object_class.resources[i];
   xmPushButtonGCacheObjClassRec.object_class.resources = merged_list;
   xmPushButtonGCacheObjClassRec.object_class.num_resources = wc_num_res + sc_num_res;
@@ -1778,9 +1779,6 @@ static Boolean SetValues(Widget cw,
       new_w->rectangle.height += (increase << 1);
       flag = TRUE;
     }
-#ifndef XTHREADS
-    _XmReCacheLabG((Widget)new_w);
-#endif
   }
   if ((PBG_ArmPixmap(new_w) != PBG_ArmPixmap(current)) && (LabG_LabelType(new_w) == XmPIXMAP) &&
       (PBG_Armed(new_w)))
@@ -1902,7 +1900,7 @@ static void Destroy(Widget wid)
  **************************************************************************/
 static void Resize(Widget w)
 {
-  register XmPushButtonGadget pb = (XmPushButtonGadget)w;
+  XmPushButtonGadget pb = (XmPushButtonGadget)w;
   if (LabG_IsPixmap(w))
     SetPushButtonSize(pb);
   else {

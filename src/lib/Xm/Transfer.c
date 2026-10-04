@@ -397,23 +397,14 @@ static void SecondaryConvertHandler(Widget w,
                           XtAppGetSelectionTimeout(app) * SECONDARY_WAIT_FACTOR,
                           SecondaryTimeout,
                           (XtPointer)&timed_out);
-#ifdef XTHREADS
   while (XtAppGetExitFlag(app) == False) {
-#else
-  for (;;) {
-#endif
-#ifdef XTHREADS
     XEvent event;
     XtInputMask mask;
-#endif
     _XmProcessLock();
     done = (secondary_event != event_copy);
     _XmProcessUnlock();
     if (done || timed_out)
       break;
-#ifndef XTHREADS
-    XtAppProcessEvent(app, XtIMAll);
-#else
     while (!(mask = XtAppPending(app)))
       ;                      /* Busy waiting - so that we don't lose our lock */
     if (mask & XtIMXEvent) { /* We have an XEvent */
@@ -426,7 +417,6 @@ static void SecondaryConvertHandler(Widget w,
     }
     else                            /* not an XEvent, process it */
       XtAppProcessEvent(app, mask); /* non blocking */
-#endif
   }
   if (!timed_out)
     XtRemoveTimeOut(timer);
@@ -950,7 +940,7 @@ Widget XmeDragSource(
   /* merge and copy arg list */
   arg_count = in_arg_count + 10;
   args = (Arg *)_XmMallocArray(arg_count, sizeof(Arg));
-  for (arg_count = 0; arg_count < in_arg_count; arg_count++)
+  for (arg_count = 0; (Cardinal)arg_count < in_arg_count; arg_count++)
     args[arg_count] = in_args[arg_count];
   arg_count = in_arg_count;
   ClearContextBlock(XtDisplay(w), atoms[XmA_MOTIF_DROP]);

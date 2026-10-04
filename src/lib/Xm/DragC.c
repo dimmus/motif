@@ -1456,7 +1456,7 @@ static void NewScreen(XmDragContext dc, Window newRoot)
   Arg args[8];
   Widget old = (Widget)(dc->drag.curDragOver);
   /* Find the new screen number */
-  for (i = 0; i < XScreenCount(XtDisplayOfObject((Widget)dc)); i++)
+  for (i = 0; (int)i < XScreenCount(XtDisplayOfObject((Widget)dc)); i++)
     if (RootWindow(XtDisplayOfObject((Widget)dc), i) == newRoot)
       break;
   dc->drag.currScreen = ScreenOfDisplay(XtDisplayOfObject((Widget)dc), i);
@@ -1558,6 +1558,7 @@ static void LocalNotifyHandler(Widget w, XtPointer client, XtPointer call)
       dc->drag.dragDropCompletionStatus = cb->completionStatus;
       dc->drag.dropFinishTime = XtLastTimestampProcessed(XtDisplay(dc));
       DragDropFinish(dc);
+      break;
     default:
       break;
   }
@@ -1898,10 +1899,12 @@ static void DragStart(XmDragContext dc, Widget src, XEvent *event)
   switch (dc->drag.activeProtocolStyle) {
     case XmDRAG_PREREGISTER:
       dc->drag.activeProtocolStyle = XmDRAG_DYNAMIC;
+      break;
     case XmDRAG_DYNAMIC:
       break;
     case XmDRAG_DROP_ONLY:
       dc->drag.activeProtocolStyle = XmDRAG_NONE;
+      break;
     case XmDRAG_NONE:
       break;
   }
@@ -2574,12 +2577,10 @@ static void InitiatorMainLoop(XtPointer clientData, XtIntervalId *id)
   XtAddCallback(shell, XmNdestroyCallback, noMoreShell, (XtPointer)&contAction);
   while ((*activeDC) && (XtAppGetExitFlag(appContext) == False)) {
     XmDragContext dc = *activeDC;
-#ifdef XTHREADS
     XtInputMask mask;
     while (!(mask = XtAppPending(appContext)))
       ; /* busy wait */
     if (mask & XtIMXEvent) {
-#endif
       XtAppNextEvent(appContext, &event);
       /*
        * make sure evil Focus outs don't confuse Xt and cause the
@@ -2616,11 +2617,9 @@ static void InitiatorMainLoop(XtPointer clientData, XtIntervalId *id)
         DragMotion((Widget)dc, &event, NULL, 0);
       else
         XtDispatchEvent(&event);
-#ifdef XTHREADS
     }
     else
       XtAppProcessEvent(appContext, mask);
-#endif
   }
   /* guard against the possibility that shell was destroyed in the last event
    * loop while the drag operation was going on (e.g. by a timer)

@@ -172,11 +172,12 @@ jobs:
           if-no-files-found: ignore
 
   werror:
-    # Informational until the warning list is curated (TODO.md 2.3).
-    name: Warnings as errors (${{ matrix.cc }}, non-blocking)
+    # The libraries, programs, build tools and tests are kept free of the
+    # curated warnings (CMakeLists.txt, "Warnings"); WITH_WERROR makes any
+    # new one an error there.  The examples are built but not held to it.
+    name: Warnings as errors (${{ matrix.cc }})
     runs-on: ubuntu-24.04
     timeout-minutes: 60
-    continue-on-error: true
     strategy:
       fail-fast: false
       matrix:
@@ -195,7 +196,7 @@ jobs:
           CC: ${{ matrix.cc }}
           MOTIF_CI_PROFILE: debug
           MOTIF_CI_TESTS: "0"
-          CMAKE_ARGS: -DCMAKE_COMPILE_WARNING_AS_ERROR=ON
+          CMAKE_ARGS: -DWITH_WERROR=ON
         run: tools/dev/env/ci/build.sh
 
   package:

@@ -279,7 +279,7 @@ MrmFetchLiteral (MrmHierarchy		hierarchy_id,
 	case MrmRtypeXBitmapFile:
 	  if ( ctxlist != NULL )
 	    {
-	      for ( ndx=0 ; ndx<UrmPlistNum(ctxlist) ; ndx++ )
+	      for ( ndx=0 ; (int)ndx<UrmPlistNum(ctxlist) ; ndx++ )
 		UrmFreeResourceContext
 		  ((URMResourceContextPtr) UrmPlistPtrN(ctxlist,ndx)) ;
 	      UrmPlistFree (ctxlist) ;
@@ -374,7 +374,7 @@ MrmFetchLiteral (MrmHierarchy		hierarchy_id,
     {
       if ( ctxlist != NULL )
 	{
-	  for ( ndx=0 ; ndx<UrmPlistNum(ctxlist) ; ndx++ )
+	  for ( ndx=0 ; (int)ndx<UrmPlistNum(ctxlist) ; ndx++ )
 	    UrmFreeResourceContext
 	      ((URMResourceContextPtr) UrmPlistPtrN(ctxlist,ndx)) ;
 	  UrmPlistFree (ctxlist) ;
@@ -452,7 +452,7 @@ MrmFetchIconLiteral (MrmHierarchy                hierarchy_id,
     {
       if ( ctxlist != NULL )
 	{
-	  for ( ndx=0 ; ndx<UrmPlistNum(ctxlist) ; ndx++ )
+	  for ( ndx=0 ; (int)ndx<UrmPlistNum(ctxlist) ; ndx++ )
 	    UrmFreeResourceContext
 	      ((URMResourceContextPtr)UrmPlistPtrN(ctxlist,ndx)) ;
 	  UrmPlistFree (ctxlist) ;
@@ -482,7 +482,7 @@ MrmFetchIconLiteral (MrmHierarchy                hierarchy_id,
 
   if ( ctxlist != NULL )
     {
-      for ( ndx=0 ; ndx<UrmPlistNum(ctxlist) ; ndx++ )
+      for ( ndx=0 ; (int)ndx<UrmPlistNum(ctxlist) ; ndx++ )
 	UrmFreeResourceContext
 	  ((URMResourceContextPtr)UrmPlistPtrN(ctxlist,ndx)) ;
       UrmPlistFree (ctxlist) ;
@@ -558,7 +558,7 @@ MrmFetchBitmapLiteral (MrmHierarchy                hierarchy_id,
     {
       if ( ctxlist != NULL )
 	{
-	  for ( ndx=0 ; ndx<UrmPlistNum(ctxlist) ; ndx++ )
+	  for ( ndx=0 ; (int)ndx<UrmPlistNum(ctxlist) ; ndx++ )
 	    UrmFreeResourceContext
 	      ((URMResourceContextPtr)UrmPlistPtrN(ctxlist,ndx)) ;
 	  UrmPlistFree (ctxlist) ;
@@ -594,7 +594,7 @@ MrmFetchBitmapLiteral (MrmHierarchy                hierarchy_id,
 
   if ( ctxlist != NULL )
     {
-      for ( ndx=0 ; ndx<UrmPlistNum(ctxlist) ; ndx++ )
+      for ( ndx=0 ; (int)ndx<UrmPlistNum(ctxlist) ; ndx++ )
 	UrmFreeResourceContext
 	  ((URMResourceContextPtr)UrmPlistPtrN(ctxlist,ndx)) ;
       UrmPlistFree (ctxlist) ;
@@ -668,7 +668,7 @@ MrmFetchColorLiteral (MrmHierarchy                hierarchy_id,
     {
       if ( ctxlist != NULL )
 	{
-	  for ( ndx=0 ; ndx<UrmPlistNum(ctxlist) ; ndx++ )
+	  for ( ndx=0 ; (int)ndx<UrmPlistNum(ctxlist) ; ndx++ )
 	    UrmFreeResourceContext
 	      ((URMResourceContextPtr)UrmPlistPtrN(ctxlist,ndx)) ;
 	  UrmPlistFree (ctxlist) ;

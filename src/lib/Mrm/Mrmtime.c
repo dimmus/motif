@@ -52,15 +52,7 @@ static char rcsid[] = "$XConsortium: Mrmtime.c /main/19 1996/11/21 20:03:40 drk 
  *
  */
 
-#define X_INCLUDE_TIME_H
-/* XOS_USE_XT_LOCKING is now configured by build system */
-
-#if HAVE_X11_XOS_R_H
-#include <X11/Xos_r.h> /* Must precede Mrm/MrmAppl.h and Mrm/Mrm.h to avoid
-			  possible redefinitions of MIN() and MAX(). */
-#else
- #include <Xm/Xmos_r.h>
-#endif
+#include <time.h>
 
 #include <Mrm/MrmAppl.h>
 #include <Mrm/Mrm.h>
@@ -102,16 +94,12 @@ static char rcsid[] = "$XConsortium: Mrmtime.c /main/19 1996/11/21 20:03:40 drk 
 void
 Urm__UT_Time (char		*time_stg)
 {
-#if defined(__STDC__)
   time_t	timeval;
-#else
-  long		timeval;
-#endif /* __STDC__ */
-
+  char buf[26];
   char *result;
 
   time (&timeval);
-  result = ctime(&timeval);
+  result = ctime_r(&timeval, buf);
   if (result != NULL) {
     strncpy(time_stg, result, URMhsDate);
     time_stg[URMhsDate] = '\0';

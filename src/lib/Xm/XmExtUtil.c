@@ -227,11 +227,11 @@ void _XmFilterArgs(ArgList args,
                    Cardinal *num_filtered_args)
 {
   ArgList fargs = (ArgList)_XmMallocArray(num_args, sizeof(Arg));
-  register int i;
+  int i;
   String *ptr;
   *filtered_args = fargs;
   *num_filtered_args = 0;
-  for (i = 0; i < num_args; i++) {
+  for (i = 0; (Cardinal)i < num_args; i++) {
     Boolean match = False;
     for (ptr = filter; *ptr != NULL; ptr++) {
       if (streq(*ptr, args[i].name)) {
@@ -470,9 +470,9 @@ void _XmConfigureWidget(
  */
 int XmCompareISOLatin1(char *first, char *second)
 {
-  register unsigned char *ap, *bp;
+  unsigned char *ap, *bp;
   for (ap = (unsigned char *)first, bp = (unsigned char *)second; *ap && *bp; ap++, bp++) {
-    register unsigned char a, b;
+    unsigned char a, b;
     if ((a = *ap) != (b = *bp)) {
       /* try lowercasing and try again */
       if ((a >= XK_A) && (a <= XK_Z))
@@ -496,7 +496,7 @@ int XmCompareISOLatin1(char *first, char *second)
 
 void XmCopyISOLatin1Lowered(char *dst, char *src)
 {
-  register unsigned char *dest, *source;
+  unsigned char *dest, *source;
   for (dest = (unsigned char *)dst, source = (unsigned char *)src; *source; source++, dest++) {
     if ((*source >= XK_A) && (*source <= XK_Z))
       *dest = *source + (XK_a - XK_A);
@@ -517,9 +517,9 @@ void XmCopyISOLatin1Lowered(char *dst, char *src)
 #define pixmap_width 2
 #define pixmap_height 2
 
-Pixmap XiCreateStippledPixmap(Screen *screen, Pixel fore, Pixel back, unsigned int depth)
+static Pixmap XiCreateStippledPixmap(Screen *screen, Pixel fore, Pixel back, unsigned int depth)
 {
-  register Display *display = DisplayOfScreen(screen);
+  Display *display = DisplayOfScreen(screen);
   CacheEntry *cachePtr;
   Pixmap stippled_pixmap;
   static unsigned char pixmap_bits[] = {
@@ -555,9 +555,9 @@ Pixmap XiCreateStippledPixmap(Screen *screen, Pixel fore, Pixel back, unsigned i
   return (stippled_pixmap);
 }
 
-void XiReleaseStippledPixmap(Screen *screen, Pixmap pixmap)
+static void XiReleaseStippledPixmap(Screen *screen, Pixmap pixmap)
 {
-  register Display *display = DisplayOfScreen(screen);
+  Display *display = DisplayOfScreen(screen);
   CacheEntry *cachePtr, **prevP;
   _XmProcessLock();
   for (prevP = &pixmapCache, cachePtr = pixmapCache; cachePtr;) {
@@ -679,10 +679,10 @@ static Boolean IsSubclassOf(WidgetClass wc, WidgetClass sc)
 /*
  *  end FIX for 5178.
  */
-void _XiResolveAllPartOffsets(WidgetClass w_class,
-                              XmOffsetPtr *offset,
-                              XmOffsetPtr *constraint_offset,
-                              Boolean align64)
+static void _XiResolveAllPartOffsets(WidgetClass w_class,
+                                     XmOffsetPtr *offset,
+                                     XmOffsetPtr *constraint_offset,
+                                     Boolean align64)
 {
   WidgetClass c, super = w_class->core_class.superclass;
   ConstraintWidgetClass cc = NULL, scc = NULL;
@@ -777,13 +777,13 @@ void _XiResolveAllPartOffsets(WidgetClass w_class,
   /*
    *  Update the resource list(s) offsets in place
    */
-  for (i = 0; i < w_class->core_class.num_resources; i++) {
+  for (i = 0; (Cardinal)i < w_class->core_class.num_resources; i++) {
     pr = (XmPartResource *)&w_class->core_class.resources[i];
     /* The next line updates this in place--be careful */
     w_class->core_class.resources[i].resource_offset = XmGetPartOffset(pr, offset);
   }
   if (cc)
-    for (i = 0; i < cc->constraint_class.num_resources; i++) {
+    for (i = 0; (Cardinal)i < cc->constraint_class.num_resources; i++) {
       pr = (XmPartResource *)&cc->constraint_class.resources[i];
       /* The next line updates this in place--be careful */
       cc->constraint_class.resources[i].resource_offset = XmGetPartOffset(pr, constraint_offset);
@@ -791,9 +791,9 @@ void _XiResolveAllPartOffsets(WidgetClass w_class,
   _XmProcessUnlock();
 }
 
-void XiResolveAllPartOffsets(WidgetClass w_class,
-                             XmOffsetPtr *offset,
-                             XmOffsetPtr *constraint_offset)
+static void XiResolveAllPartOffsets(WidgetClass w_class,
+                                    XmOffsetPtr *offset,
+                                    XmOffsetPtr *constraint_offset)
 {
   _XiResolveAllPartOffsets(w_class, offset, constraint_offset, False);
 }

@@ -64,7 +64,7 @@ static void ClassInitialize(void);
 static void BuildPrimitiveResources(WidgetClass c);
 static void ClassPartInitialize(WidgetClass w);
 static void Initialize(Widget rw, Widget nw, ArgList args, Cardinal *num_args);
-static void Realize(register Widget w, XtValueMask *p_valueMask, XSetWindowAttributes *attributes);
+static void Realize(Widget w, XtValueMask *p_valueMask, XSetWindowAttributes *attributes);
 static void Destroy(Widget w);
 static void Redisplay(Widget w, XEvent *event, Region region);
 static Boolean SetValues(
@@ -663,7 +663,7 @@ static void Initialize(Widget rw, Widget nw, ArgList args, Cardinal *num_args)
  *	gravity default to Forget.
  *
  ************************************************************************/
-static void Realize(register Widget w, XtValueMask *p_valueMask, XSetWindowAttributes *attributes)
+static void Realize(Widget w, XtValueMask *p_valueMask, XSetWindowAttributes *attributes)
 {
   Mask valueMask = *p_valueMask;
   valueMask |= CWDontPropagate;
@@ -907,6 +907,7 @@ static void FocusChange(Widget wid, XmFocusChange change)
         break;
       }
       /* Drop through. */
+      XM_FALLTHROUGH;
     case XmFOCUS_IN:
       if (change == XmFOCUS_IN) /* Because of drop-though. */ {
         ((XmPrimitiveWidget)wid)->primitive.have_traversal = TRUE;
@@ -920,6 +921,7 @@ static void FocusChange(Widget wid, XmFocusChange change)
         break;
       }
       /* Drop through. */
+      XM_FALLTHROUGH;
     case XmFOCUS_OUT:
       if (change == XmFOCUS_OUT) /* Because of drop-though. */ {
         ((XmPrimitiveWidget)wid)->primitive.have_traversal = FALSE;

@@ -1017,7 +1017,7 @@ int IdentifyFramePart (ClientData *pCD, int x, int y)
     if (rval == FRAME_NONE)
     {
 	if ((x >= 0) && (y >= 0) &&
-	    (x < FrameWidth (pCD)) && (y < FrameHeight (pCD)))
+	    (x < (int)FrameWidth (pCD)) && (y < (int)FrameHeight (pCD)))
 	{
 	    rval = FRAME_NBORDER;
 	}
@@ -1061,7 +1061,7 @@ int GadgetID (int x, int y, GadgetRectangle *pgadget, unsigned int count)
 {
     int ix;
 
-    for (ix = 0; ix < count; ix++, pgadget++) {
+    for (ix = 0; (unsigned int)ix < count; ix++, pgadget++) {
 	if ( (x >= pgadget->rect.x) &&
 	     (x <  (int)pgadget->rect.x + (int)pgadget->rect.width) &&
 	     (y >= pgadget->rect.y) &&
@@ -1236,7 +1236,7 @@ Boolean GetDepressInfo (ClientData *pcd, int part, int *pX, int *pY, unsigned in
 		    exBevel = EXTERNAL_BEVEL(pcd);
 
 		    sBevel = (pcd->matteWidth > 0) ? insideBevel :
-						      EXTERNAL_BEVEL(pcd);
+						      (unsigned int)EXTERNAL_BEVEL(pcd);
 
 		    eBevel = (decoration & (MWM_DECOR_MINIMIZE |
 						 MWM_DECOR_MAXIMIZE))?

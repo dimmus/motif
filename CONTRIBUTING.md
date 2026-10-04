@@ -15,6 +15,10 @@ cmake --build _build
 ctest --test-dir _build --output-on-failure
 ```
 
+The libraries, mwm, the build tools and the tests build without
+warnings with GCC and Clang under the warning list in `CMakeLists.txt`;
+keep it that way by building with `-DWITH_WERROR=ON`, as CI does.
+
 The tests need libcheck, and `xvfb-run` for the suites that open a
 display (see [src/tests/README.md](src/tests/README.md)).  Tests that
 need an X server must exit with status 77 when `DISPLAY` is not set, so
@@ -44,8 +48,13 @@ in the same change (`UPDATE_BASELINE=1 tools/dev/env/ci/static-analysis.sh
 - Keep each commit to one logical change, and keep unrelated reformatting
   out of it.
 - Follow the style of the surrounding code: C17, two-space indentation in
-  the libraries.  `tools/dev/.clang-format` describes the style; use it on
-  the lines you change, not on whole files.
+  libXm.  The top-level `.clang-format` describes that style; use it on
+  the lines you change, not on whole files (`git clang-format` does
+  that).  Mrm, Uil, mwm, wml and the tests keep their own older style,
+  and their `.clang-format` turns formatting off.  `.editorconfig` sets
+  the basics for editors, and `.pre-commit-config.yaml` has hooks for
+  [pre-commit](https://pre-commit.com) that format the changed lines and
+  reject whitespace errors and build output.
 - In libXm, allocate arrays with `_XmMallocArray`/`_XmReallocArray`
   (`XmI.h`) rather than multiplying sizes for `XtMalloc`, and read window
   properties with `_XmGetWindowPropertyChecked`: any client can write

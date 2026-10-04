@@ -149,7 +149,8 @@ MrmRegisterClass (
 #endif
 		  String		class_name, /* unused */
 		  String		create_name,
-		  Widget		(* creator) (),
+		  Widget		(* creator) (Widget, String,
+					     ArgList, Cardinal),
 		  WidgetClass		class_record)
 {
   Cardinal	status = MrmRegisterClassWithCleanup(
@@ -169,9 +170,10 @@ MrmRegisterClassWithCleanup (
 #endif
 		  String		class_name, /* unused */
 		  String		create_name,
-		  Widget		(* creator) (),
+		  Widget		(* creator) (Widget, String,
+					     ArgList, Cardinal),
 		  WidgetClass		class_record,
-		  void			(* cleanup) ())
+		  void			(* cleanup) (Widget))
 {
   /*
    *  Local variables
@@ -872,7 +874,7 @@ hash_function(int	l_length,
 
   /* BEGIN OSF Fix CR 5232 */
   /* Don't go past array bounds - leave room for null terminator */
-  if (l_length >= (sizeof(int) * 20)) l_length = (sizeof(int) * 20) - 1;
+  if (l_length >= (int)(sizeof(int) * 20)) l_length = (sizeof(int) * 20) - 1;
   /* END OSF Fix CR 5232 */
 
   l_limit = (l_length-1) >> _shift;	/* divide by wordsize */

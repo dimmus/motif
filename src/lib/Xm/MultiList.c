@@ -1,6 +1,7 @@
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
 #endif
+#include "I18ListI.h"
 #include "MessagesI.h"
 #include "XmI.h"
 #include <Xm/Ext18List.h>
@@ -21,14 +22,6 @@
 #define H_MARGIN 5
 #define V_MARGIN 5
 #define FIND_STRING _XmMMsgResource_0013
-extern XmMultiListRowInfo *XmI18ListFindRow(Widget, String, int *, Boolean, Boolean);
-extern int *XmI18ListGetSelectedRowArray(XmI18ListWidget, int *);
-extern void XmI18ListMakeRowVisible(XmI18ListWidget, int);
-extern void XmI18ListDeselectRow(XmI18ListWidget, int);
-extern void XmI18ListSelectRow(XmI18ListWidget, int, Boolean);
-extern void XmI18ListSelectAllItems(XmI18ListWidget, Boolean);
-extern void XmI18ListDeselectItems(XmI18ListWidget, XmString, int);
-extern void XmI18ListSelectItems(XmI18ListWidget, XmString, int, Boolean);
 static Widget CreateTitle(Widget, XmString, ArgList, Cardinal);
 static Widget CreateScrollbar(Widget, Boolean, ArgList, Cardinal);
 static Widget CreateFindButton(Widget, ArgList, Cardinal);
@@ -37,7 +30,7 @@ static Widget CreateFrame(Widget, ArgList, Cardinal);
 static void ActivateTextSearch(Widget, XtPointer, XtPointer);
 static void LayoutChildren(Widget), ChangeManaged(Widget);
 static void PositionFindAndFindText(Widget);
-static void ClassInitialize();
+static void ClassInitialize(void);
 static void Initialize(Widget, Widget, ArgList, Cardinal *);
 static void ClassPartInitialize(WidgetClass w_class);
 static void Resize(Widget), Destroy(Widget w);
@@ -268,7 +261,7 @@ WidgetClass xmMultiListWidgetClass = (WidgetClass)&xmMultiListClassRec;
  *      Arguments:     none
  *      Returns:       nothing
  */
-static void ClassInitialize()
+static void ClassInitialize(void)
 {
   /* do nothing */
 }
@@ -403,7 +396,7 @@ static void ChangeManaged(Widget w)
 static void GetValuesHook(Widget w, ArgList args, Cardinal *num_args)
 {
   XmMultiListWidget elist = (XmMultiListWidget)w;
-  register Cardinal i, num = 0, j = *num_args;
+  Cardinal i, num = 0, j = *num_args;
   Arg i_args[15];
   /*
    * Get the correct args to pass to the I18List widget
@@ -950,7 +943,7 @@ Widget XmCreateMultiList(Widget parent, String name, ArgList args, Cardinal num_
 
 Widget XmVaCreateMultiList(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

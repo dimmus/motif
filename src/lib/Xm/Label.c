@@ -511,12 +511,12 @@ void _XmLabelCloneMenuSavvy(WidgetClass wc, XmMenuSavvyTrait mst)
   XmeTraitSet((XtPointer)wc, XmQTmenuSavvy, (XtPointer)mst);
 }
 
-char *_XmCBNameActivate()
+char *_XmCBNameActivate(void)
 {
   return XmNactivateCallback;
 }
 
-char *_XmCBNameValueChanged()
+char *_XmCBNameValueChanged(void)
 {
   return XmNvalueChangedCallback;
 }
@@ -544,7 +544,7 @@ static void InitializePosthook(Widget req, /* unused */
  ************************************************************************/
 static void ClassPartInitialize(WidgetClass c)
 {
-  register XmLabelWidgetClass wc = (XmLabelWidgetClass)c;
+  XmLabelWidgetClass wc = (XmLabelWidgetClass)c;
   XmLabelWidgetClass super = (XmLabelWidgetClass)wc->core_class.superclass;
   if (wc->label_class.setOverrideCallback == XmInheritSetOverrideCallback)
     wc->label_class.setOverrideCallback = super->label_class.setOverrideCallback;
@@ -1185,7 +1185,7 @@ static void Redisplay(Widget wid, XEvent *event, Region region)
       if (Pix(lw) != XmUNSPECIFIED_PIXMAP) {
         gc = lp->normal_GC;
         XmeGetPixmapData(XtScreen(lw), Pix(lw), NULL, &depth, NULL, NULL, NULL, NULL, NULL, NULL);
-        if (depth == lw->core.depth)
+        if (depth == (int)lw->core.depth)
           XCopyArea(XtDisplay(lw),
                     Pix(lw),
                     XtWindow(lw),
@@ -1217,7 +1217,7 @@ static void Redisplay(Widget wid, XEvent *event, Region region)
       if (pix_use != XmUNSPECIFIED_PIXMAP) {
         gc = lp->insensitive_GC;
         XmeGetPixmapData(XtScreen(lw), pix_use, NULL, &depth, NULL, NULL, NULL, NULL, NULL, NULL);
-        if (depth == lw->core.depth)
+        if (depth == (int)lw->core.depth)
           XCopyArea(XtDisplay(lw),
                     pix_use,
                     XtWindow(lw),
@@ -1847,7 +1847,7 @@ Widget XmCreateLabel(Widget parent, char *name, Arg *arglist, Cardinal argCount)
 
 Widget XmVaCreateLabel(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);
@@ -1969,7 +1969,7 @@ static Boolean XmLabelGetBaselines(Widget wid, Dimension **baselines, int *line_
   delta = Lab_TextRect_y(lw) - lw->label.baselines[count];
   if (delta) {
     int tmp;
-    for (tmp = 0; tmp <= count; tmp++)
+    for (tmp = 0; (Cardinal)tmp <= count; tmp++)
       lw->label.baselines[tmp] += delta;
   }
   /* Copy the cached data. */

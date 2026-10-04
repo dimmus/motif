@@ -621,10 +621,10 @@ static void Destroy(Widget widget)
 static void InsertChild(Widget wid)
 {
   XmDesktopObject w = (XmDesktopObject)wid;
-  register Cardinal position;
-  register Cardinal i;
-  register XmScreen cw;
-  register WidgetList children;
+  Cardinal position;
+  Cardinal i;
+  XmScreen cw;
+  WidgetList children;
   cw = (XmScreen)w->desktop.parent;
   children = cw->desktop.children;
   position = cw->desktop.num_children;
@@ -645,9 +645,9 @@ static void InsertChild(Widget wid)
 static void DeleteChild(Widget wid)
 {
   XmDesktopObject w = (XmDesktopObject)wid;
-  register Cardinal position;
-  register Cardinal i;
-  register XmScreen cw;
+  Cardinal position;
+  Cardinal i;
+  XmScreen cw;
   cw = (XmScreen)w->desktop.parent;
   for (position = 0; position < cw->desktop.num_children; position++) {
     if (cw->desktop.children[position] == (Widget)w) {

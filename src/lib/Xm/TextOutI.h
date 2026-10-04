@@ -33,6 +33,10 @@ extern void _XmTextResetClipOrigin(XmTextWidget tw,
                                    XmTextPosition position,
                                    Boolean clip_mask_reset);
 extern void _XmTextAdjustGC(XmTextWidget tw);
+extern void _XmRedisplayHBar(XmTextWidget widget);
+extern void _XmRedisplayVBar(XmTextWidget widget);
+extern void _XmChangeVSB(XmTextWidget widget);
+extern void _XmChangeHSB(XmTextWidget widget);
 extern Boolean _XmTextShouldWordWrap(XmTextWidget widget);
 extern Boolean _XmTextScrollable(XmTextWidget widget);
 extern XmTextPosition _XmTextFindLineEnd(XmTextWidget widget,

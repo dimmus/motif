@@ -40,7 +40,7 @@
  *	Arguments: none
  *	Returns: the stack
  */
-XmStack _XmStackInit()
+XmStack _XmStackInit(void)
 {
   return ((XmStack)XtCalloc(sizeof(XmStackRec), (Cardinal)1));
 }
@@ -110,7 +110,7 @@ XtPointer _XmStackPop(XmStack stack)
  *	Arguments: none
  *	Returns: the queue
  */
-XmQueue _XmQueueInit()
+XmQueue _XmQueueInit(void)
 {
   return ((XmQueue)XtCalloc(sizeof(XmQueueRec), (Cardinal)1));
 }
@@ -193,8 +193,8 @@ XtPointer _XmQueuePop(XmQueue queue)
  */
 int _XmQueueCount(XmQueue queue)
 {
-  register int i;
-  register _XmQElem *elem = queue->first;
+  int i;
+  _XmQElem *elem = queue->first;
   for (i = 0; elem != NULL; i++)
     elem = elem->next;
   return (i);
@@ -290,7 +290,7 @@ _XmQElem *_Xm_GetNewElement(XmQueue queue)
 {
   _XmQElem *elem;
   if ((elem = _Xm_RemQueue(&queue->free_elems)) == NULL) {
-    register int i;
+    int i;
     /*
      * We are out of free elements, alloc some more.
      */
@@ -325,7 +325,7 @@ _XmQElem *_Xm_GetNewElement(XmQueue queue)
  *	Arguments: none
  *	Returns: the queue
  */
-XmList _XmListInit()
+XmList _XmListInit(void)
 {
   return ((XmList)_XmQueueInit());
 }

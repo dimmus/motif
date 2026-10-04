@@ -105,7 +105,7 @@ static void ProcessXlfdFontData(XmFontSelectorWidget, FontInfo *, FontData *, in
 static void SortOtherFontData(FontInfo *, String *, int);
 static void AddToOtherList(char *, String **, int *, int *);
 static void SetNonStringData(FontData *), SetFlag(Flag *, Flag, Boolean);
-static void StoreString(register String, register String, register int);
+static void StoreString(String, String, int);
 static void SetLongFlag(LongFlag *, LongFlag, Boolean);
 static void UpdateExistingFamily(FamilyInfo *, FontData *);
 static void FillNewFamily(FamilyInfo *, FontData *);
@@ -128,9 +128,9 @@ static FontInfo *LoadFontInfo(XmFontSelectorWidget);
 static int FindResolution(Widget), CmpStrings(const void *, const void *);
 static Boolean CheckFlag(Flag, Flag), CheckLongFlag(LongFlag, LongFlag);
 static Boolean FillData(XmFontSelectorWidget, FontData *, char *);
-static Boolean IsXlfdFont(register char *);
+static Boolean IsXlfdFont(char *);
 static Boolean CheckEncoding(XmFontSelectorWidget, FamilyInfo *);
-static FamilyInfo *FindFamily(register XrmQuark, FamilyInfo *, int);
+static FamilyInfo *FindFamily(XrmQuark, FamilyInfo *, int);
 static String BuildFontString(XmFontSelectorWidget, FontData *, String, int);
 static LongFlag SizeMapping(short);
 /************************************************************
@@ -161,7 +161,7 @@ static void GetValuesHook(Widget, ArgList, Cardinal *);
 static void Destroy(Widget);
 static void Initialize(Widget, Widget, ArgList, Cardinal *);
 static void ClassPartInitialize(WidgetClass w_class);
-static void ClassInitialize();
+static void ClassInitialize(void);
 /*  Resource definitions for Subclasses of Primitive */
 #define SAMPLE \
   ("abcdefghijklmonpqrstuvwxyz\n\
@@ -553,7 +553,7 @@ static void ProcessXlfdFontData(XmFontSelectorWidget fsw,
    * Set up the "Any" family.
    */
   for (i = 0; i < num_data; i++, data++) {
-    register FamilyInfo *cur_family = FindFamily(data->familyq, fam, num);
+    FamilyInfo *cur_family = FindFamily(data->familyq, fam, num);
     if (cur_family == NULL) {
       if (num >= alloc) {
         alloc += FAMILY_INC;
@@ -599,15 +599,15 @@ static void ProcessXlfdFontData(XmFontSelectorWidget fsw,
  */
 static void SortOtherFontData(FontInfo *font_info, String *list, int num)
 {
-  register int i = 0;
+  int i = 0;
   qsort((void *)list, num, sizeof(String), CmpStrings);
   /*
    * Remove duplicates.
    */
   while (i < (num - 1)) {
     if (streq(list[i], list[i + 1])) {
-      register int j;
-      register String *ptr;
+      int j;
+      String *ptr;
       XtFree((char *)list[i]);
       ptr = list + i;
       j = i;
@@ -644,7 +644,7 @@ static int CmpStrings(const void *p1, const void *p2)
 static int FindResolution(Widget w)
 {
   Screen *screen = XtScreen(w);
-  register int i, xres, yres, min, pref;
+  int i, xres, yres, min, pref;
   /*
    * there are 2.54 centimeters to an inch; so there are 25.4 millimeters.
    *
@@ -670,7 +670,7 @@ static int FindResolution(Widget w)
    */
   min = 32000;
   pref = resolutions[0]; /* We have to have some default. */
-  for (i = 0; i < XtNumber(resolutions); i++) {
+  for (i = 0; (unsigned int)i < XtNumber(resolutions); i++) {
     int diffx = (xres - resolutions[i] * resolutions[i]);
     int diffy = (yres - resolutions[i] * resolutions[i]);
     int tdiff; /* the total difference. */
@@ -691,10 +691,10 @@ static int FindResolution(Widget w)
  *	Arguments: str - the font name to check.
  *	Returns: none.
  */
-static Boolean IsXlfdFont(register char *str)
+static Boolean IsXlfdFont(char *str)
 {
-  register int num_dashes = 0;
-  register char c;
+  int num_dashes = 0;
+  char c;
   for (; (c = *str) != '\0'; str++) {
     if (c == '-')
       num_dashes++;
@@ -876,10 +876,10 @@ static void SetNonStringData(FontData *current)
  *                 max_len - maximum length of the value.
  *	Returns: none.
  */
-static void StoreString(register String str, register String store, register int max_len)
+static void StoreString(String str, String store, int max_len)
 {
-  register int i;
-  register int c;
+  int i;
+  int c;
   for (i = 0; i < max_len; i++, str++, store++) {
     if (((c = *str) == '-') || (c == '\0'))
       break;
@@ -948,9 +948,9 @@ static void SetLongFlag(LongFlag *state, LongFlag flag, Boolean value)
  *	Returns: a pointer to the family this font is in or NULL.
  *
  */
-static FamilyInfo *FindFamily(register XrmQuark nameq, FamilyInfo *list, int num)
+static FamilyInfo *FindFamily(XrmQuark nameq, FamilyInfo *list, int num)
 {
-  register int i;
+  int i;
   for (i = 0; i < num; i++, list++) {
     if (list->nameq == nameq)
       return (list);
@@ -1057,9 +1057,9 @@ static void FillNewFamily(FamilyInfo *fam, FontData *font)
  */
 static LongFlag SizeMapping(short size)
 {
-  register int count;
+  int count;
   size /= POINT_DIVIDE;
-  for (count = 0; count < XtNumber(GValidSizes); count++) {
+  for (count = 0; (unsigned int)count < XtNumber(GValidSizes); count++) {
     if (GValidSizes[count] == size)
       return (((LongFlag)1) << count);
   }
@@ -1101,7 +1101,7 @@ static void DisplayCurrentFont(XmFontSelectorWidget fsw, String font)
       if (IsXlfdFont(font)) {
         char *ptr, *fbuf;
         size_t fbuf_len;
-        register int i, count;
+        int i, count;
         /*
          * This is a poorly formatted Sun Scaled font,
          *
@@ -1362,8 +1362,8 @@ static void UpdateFamilies(XmFontSelectorWidget fsw)
 {
   Arg largs[10];
   Cardinal num_largs;
-  register int count;
-  register int i, num;
+  int count;
+  int i, num;
   XmString *strs;
   LongFlag size_flag;
   FamilyInfo *fam = XmFontS_font_info(fsw)->family_info;
@@ -1451,8 +1451,8 @@ static void UpdateSizes(XmFontSelectorWidget fsw)
   FontData *cf = XmFontS_font_info(fsw)->current_font;
   Arg largs[10];
   Cardinal num_largs = 0;
-  register int count = 0;
-  register int i, size;
+  int count = 0;
+  int i, size;
   XmString *strs;
   LongFlag size_flag;
   FamilyInfo *family;
@@ -1492,7 +1492,7 @@ static void UpdateSizes(XmFontSelectorWidget fsw)
     strs[count++] = XmStringCreateLocalized(" ");
   else
     strs[count++] = XmStringCopy(ANY_STRING(fsw));
-  for (i = 0; i < XtNumber(GValidSizes); i++) {
+  for (i = 0; (unsigned int)i < XtNumber(GValidSizes); i++) {
     char buf[10];
     LongFlag flag = ((LongFlag)1) << i;
     if (!CheckLongFlag(size_flag, flag) && !IsScaled(fsw, family))
@@ -1774,8 +1774,8 @@ static void ChangeMode(XmFontSelectorWidget fsw, Boolean xlfd_mode, Boolean forc
 {
   Arg largs[10];
   Cardinal num_largs;
-  register WidgetList widgets;
-  register int i, num;
+  WidgetList widgets;
+  int i, num;
   XmString family_label;
   XmFontS_xlfd_mode(fsw) = xlfd_mode; /* remember our current mode. */
   num = (int)XmFontS_num_xlfd_sensitive(fsw);
@@ -1837,11 +1837,11 @@ static void SetOtherList(XmFontSelectorWidget fsw, Boolean force)
 {
   Arg largs[10];
   Cardinal num_largs = 0;
-  register int count;
+  int count;
   XmString *strs;
   String *others = XmFontS_font_info(fsw)->others;
   FontData *cf = XmFontS_font_info(fsw)->current_font;
-  register int i, num = XmFontS_font_info(fsw)->num_others;
+  int i, num = XmFontS_font_info(fsw)->num_others;
   String curFont = XmFontS_current_font(fsw);
   /*
    * Set the current font to the first one on the list.
@@ -2998,7 +2998,7 @@ static void RemoveUserError(Widget w, XtPointer fsw_ptr, XtPointer data)
  *      Arguments:     none
  *      Returns:       nothing
  */
-static void ClassInitialize()
+static void ClassInitialize(void)
 {
   /* do nothing */
 }
@@ -3090,8 +3090,8 @@ static void Initialize(Widget request, Widget set, ArgList args, Cardinal *num_a
  */
 static void Destroy(Widget w)
 {
-  register int i, num;
-  register String *ptr;
+  int i, num;
+  String *ptr;
   XmFontSelectorWidget fsw = (XmFontSelectorWidget)w;
   if (XmFontS_old_fontdata(fsw) != NULL) {
     XFreeFont(XtDisplay(w), XmFontS_old_fontdata(fsw));
@@ -3322,8 +3322,8 @@ static void GetValuesHook(Widget w, ArgList args, Cardinal *num_args)
   XmFontSelectorWidget fsw = (XmFontSelectorWidget)w;
   FontData *cf;
   String *str_ptr;
-  register int i;
-  for (i = 0; i < *num_args; i++) {
+  int i;
+  for (i = 0; (Cardinal)i < *num_args; i++) {
     if (streq(args[i].name, XmNcurrentFont)) {
       cf = XmFontS_font_info(fsw)->current_font;
       str_ptr = (String *)args[i].value;

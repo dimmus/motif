@@ -762,7 +762,7 @@ static void FSBCreateDirListLabel(XmFileSelectionBoxWidget fsb)
 static void FSBCreateDirList(XmFileSelectionBoxWidget fsb)
 {
   Arg al[20];
-  register int ac = 0;
+  int ac = 0;
   XtCallbackProc callbackProc;
   /****************/
   FS_DirListSelectedItemPosition(fsb) = 0;
@@ -892,8 +892,8 @@ static XmGeoMatrix FileSBGeoMatrixCreate(Widget wid, Widget instigator, XtWidget
 {
   XmFileSelectionBoxWidget fsb = (XmFileSelectionBoxWidget)wid;
   XmGeoMatrix geoSpec;
-  register XmGeoRowLayout layoutPtr;
-  register XmKidGeometry boxPtr;
+  XmGeoRowLayout layoutPtr;
+  XmKidGeometry boxPtr;
   XmKidGeometry firstButtonBox;
   Boolean dirListLabelBox;
   Boolean listLabelBox;
@@ -921,7 +921,7 @@ static XmGeoMatrix FileSBGeoMatrixCreate(Widget wid, Widget instigator, XtWidget
   layoutPtr = &(geoSpec->layouts->row);
   boxPtr = geoSpec->boxes;
   /* menu bar */
-  for (i = 0; i < fsb->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < fsb->composite.num_children; i++) {
     Widget w = fsb->composite.children[i];
     if (XmIsRowColumn(w) && ((XmRowColumnWidget)w)->row_column.type == XmMENU_BAR &&
         w != SB_WorkArea(fsb) && _XmGeoSetupKid(boxPtr, w))
@@ -1096,7 +1096,7 @@ static XmGeoMatrix FileSBGeoMatrixCreate(Widget wid, Widget instigator, XtWidget
     if (_XmGeoSetupKid(boxPtr, SB_ApplyButton(fsb))) {
       ++boxPtr;
     }
-    for (i = 0; i < fsb->composite.num_children; i++) {
+    for (i = 0; (Cardinal)i < fsb->composite.num_children; i++) {
       Widget w = fsb->composite.children[fsb->composite.num_children - i - 1];
       if (IsButton(w) && !IsAutoButton(fsb, w) && w != SB_WorkArea(fsb)) {
         if (_XmGeoSetupKid(boxPtr, w)) {
@@ -1112,7 +1112,7 @@ static XmGeoMatrix FileSBGeoMatrixCreate(Widget wid, Widget instigator, XtWidget
     if (_XmGeoSetupKid(boxPtr, SB_OkButton(fsb))) {
       ++boxPtr;
     }
-    for (i = 0; i < fsb->composite.num_children; i++) {
+    for (i = 0; (Cardinal)i < fsb->composite.num_children; i++) {
       Widget w = fsb->composite.children[i];
       if (IsButton(w) && !IsAutoButton(fsb, w) && w != SB_WorkArea(fsb)) {
         if (_XmGeoSetupKid(boxPtr, w)) {
@@ -1271,6 +1271,7 @@ static void ListFix(XmGeoMatrix geoSpec,
         break;
       }
     }
+      XM_FALLTHROUGH;
     case XmGET_ACTUAL_SIZE: {
       if (FS_PathMode(geoSpec->composite) == XmPATH_MODE_FULL) {
         extension->prefer_width = fileListGeo->box.width;
@@ -1435,7 +1436,7 @@ static void FileSearchProc(Widget w, XtPointer sd)
     XmStringFileList = (XmString *)_XmMallocArray(numFiles, sizeof(XmString));
     Index = 0;
     dirLen = strlen(dir);
-    while (Index < numFiles) {
+    while ((unsigned int)Index < numFiles) {
       if (showDotFiles || ((fileList[Index])[dirLen] != '.')) {
         if (FS_PathMode(fs) == XmPATH_MODE_FULL)
           XmStringFileList[numItems++] = XmStringGenerate(
@@ -1799,7 +1800,7 @@ static void DirSearchProc(Widget w, XtPointer sd)
     XmStringDirList = (XmString *)_XmMallocArray(numDirs, sizeof(XmString));
     Index = 0;
     dirLen = strlen(qualifiedDir);
-    while (Index < numDirs) {
+    while ((unsigned int)Index < numDirs) {
       /* Assume first entry is "." and second is "..".
        */
       if (showDotFiles || (Index == 1) || ((dirList[Index])[dirLen] != '.')) {
@@ -2747,7 +2748,7 @@ Widget XmCreateFileSelectionBox(Widget p, String name, ArgList args, Cardinal n)
 
 Widget XmVaCreateFileSelectionBox(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

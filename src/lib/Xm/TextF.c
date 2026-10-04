@@ -75,65 +75,7 @@ static char rcsid[] = "$TOG: TextF.c /main/65 1999/09/01 17:28:48 mgreess $"
 #  include <X11/Xft/Xft.h>
 #endif
 #include <Xm/XmP.h>
-#if (defined(__FreeBSD__) && (__FreeBSD__ < 4)) || \
-    (defined(__APPLE__) || defined(__NetBSD__) || defined(__OpenBSD__))
-/*
- * Modification by Integrated Computer Solutions, Inc.  May 2000
- *
- * FreeBSD (pre-4.0), DARWIN, NetBSD, and OpenBSD do not include the necessary
- * wide character string functions.  Use the internal _Xwc... routines and add
- * the other missing functions as _Xmwc... routines.  The new functions are
- * added static to this file.
- */
-#  define wcslen(c) _Xwcslen(c)
-#  define wcscpy(d, s) _Xwcscpy(d, s)
-#  define wcsncpy(d, s, l) _Xwcsncpy(d, s, l)
-                      static wchar_t *
-                      _Xmwcschr(const wchar_t *ws, wchar_t wc)
-{
-  for (;; ++ws) {
-    if (*ws == wc)
-      return ((wchar_t *)ws);
-    if (!*ws)
-      return ((wchar_t *)NULL);
-  }
-  /* NOTREACHED */
-}
-#  define wcschr(w, c) _Xmwcschr(w, c)
-
-static wchar_t *_Xmwcscat(wchar_t *ws1, const wchar_t *ws2)
-{
-  wchar_t *save = ws1;
-  for (; *ws1; ++ws1)
-    ;
-  while (*ws1++ = *ws2++)
-    ;
-  return save;
-}
-
-#  define wcscat(w1, w2) _Xmwcscat(w1, w2)
-
-static wchar_t *_Xmwcsncat(wchar_t *ws1, const wchar_t *ws2, size_t n)
-{
-  if (n != 0) {
-    register wchar_t *d = ws1;
-    register const wchar_t *s = ws2;
-    while (*d != 0)
-      d++;
-    do {
-      if ((*d = *s++) == 0)
-        break;
-      d++;
-    } while (--n != 0);
-    *d = 0;
-  }
-  return ws1;
-}
-
-#  define wcsncat(w1, w2, l) _Xmwcsncat(w1, w2, l)
-#else /* !__FreeBSD__ */
-#  include <wchar.h>
-#endif /* __FreeBSD__ */
+#include <wchar.h>
 #define MSG1 _XmMMsgTextF_0000
 #define MSG2 _XmMMsgTextF_0001
 #define MSG3 _XmMMsgTextF_0002
@@ -1033,12 +975,12 @@ static void TextFieldSetHighlight(XmTextFieldWidget tf,
   InsertHighlight(tf, right, endmode);
   l = tf->text.highlight.list;
   i = 1;
-  while (i < tf->text.highlight.number) {
+  while ((Cardinal)i < tf->text.highlight.number) {
     if (l[i].position >= left && l[i].position < right)
       l[i].mode = mode;
     if (l[i].mode == l[i - 1].mode) {
       tf->text.highlight.number--;
-      for (j = i; j < tf->text.highlight.number; j++)
+      for (j = i; (Cardinal)j < tf->text.highlight.number; j++)
         l[j] = l[j + 1];
     }
     else
@@ -1629,7 +1571,7 @@ static void RedisplayText(XmTextFieldWidget tf, XmTextPosition start, XmTextPosi
   if (!XtIsSensitive((Widget)tf))
     stipple = True;
   /* search through the highlight array and draw the text */
-  for (i = 0; i + 1 < tf->text.highlight.number; i++) {
+  for (i = 0; (Cardinal)i + 1 < tf->text.highlight.number; i++) {
     /* make sure start is within current highlight */
     if (l[i].position <= start && start < l[i + 1].position && l[i].position < end) {
       if (end > l[i + 1].position) {
@@ -2363,9 +2305,9 @@ Boolean _XmTextFieldReplaceText(XmTextFieldWidget tf,
   }
   else {
     if ((tf->text.string_length + insert_length - replace_length) * sizeof(wchar_t) >=
-        tf->text.size_allocd)
+        (size_t)tf->text.size_allocd)
     {
-      tf->text.size_allocd += MAX((insert_length + TEXT_INCREMENT) * sizeof(wchar_t),
+      tf->text.size_allocd += MAX((int)((insert_length + TEXT_INCREMENT) * sizeof(wchar_t)),
                                   (tf->text.size_allocd * 2));
       tf->text.wc_value = (wchar_t *)XtRealloc((char *)TextF_WcValue(tf),
                                                (unsigned)tf->text.size_allocd);
@@ -2938,7 +2880,7 @@ static Boolean PrintableString(XmTextFieldWidget tf,
         tmp += ret_val;
         buf_size -= ret_val;
         tmp_str++;
-      } while ((ret_val > 0) && (buf_size >= MB_CUR_MAX) && (count < n));
+      } while ((ret_val > 0) && (buf_size >= (int)MB_CUR_MAX) && (count < n));
       if (ret_val == -1) { /* bad character */
         XmStackFree(cache_ptr, cache);
         return (False);
@@ -3810,7 +3752,7 @@ static void SetScanIndex(XmTextFieldWidget tf, XEvent *event)
   else
     sel_time = event->xkey.time;
   if (sel_time > tf->text.last_time &&
-      sel_time - tf->text.last_time < XtGetMultiClickTime(XtDisplay(tf)))
+      sel_time - tf->text.last_time < (Time)XtGetMultiClickTime(XtDisplay(tf)))
   {
     /*
      * Fix for HaL DTS 9841 - Increment the sarray_index first, then check to
@@ -4441,7 +4383,7 @@ static void ProcessBSelect(Widget w, XEvent *event, char **params, Cardinal *num
       case ButtonPress:
         if (!InSelection(w, event) ||
             (event_time > tf->text.last_time &&
-             event_time - tf->text.last_time < XtGetMultiClickTime(XtDisplay(w))))
+             event_time - tf->text.last_time < (Time)XtGetMultiClickTime(XtDisplay(w))))
         {
           if (*num_params > 0)
             XtCallActionProc(w, params[0], event, NULL, 0);
@@ -6268,7 +6210,7 @@ static Boolean SetValues(
   }
   else {
     int ix;
-    for (ix = 0; ix < *num_args; ix++)
+    for (ix = 0; (Cardinal)ix < *num_args; ix++)
       if (strcmp(args[ix].name, XmNcursorPosition) == 0) {
         cursor_pos_set = True;
         new_position = TextF_CursorPosition(new_tf);
@@ -6786,7 +6728,7 @@ static Boolean _XmTextFieldReplaceTextForPreedit(XmTextFieldWidget tf,
   }
   else {
     if ((tf->text.string_length + insert_length - replace_length) * sizeof(wchar_t) >=
-        tf->text.size_allocd)
+        (size_t)tf->text.size_allocd)
     {
       tf->text.size_allocd += MAX(insert_length + TEXT_INCREMENT, (tf->text.size_allocd * 2));
       tf->text.wc_value = (wchar_t *)_XmReallocArray((char *)TextF_WcValue(tf),
@@ -7812,8 +7754,8 @@ void XmTextFieldSetStringWcs(Widget w, wchar_t *wc_value)
     tmp_wc++; /* count number of wchar_t's */
   tmp = _XmMallocArray(num_chars + 1, tf->text.max_char_size);
   result = wcstombs(tmp, wc_value, (num_chars + 1) * tf->text.max_char_size);
-  if (result == (size_t)-1) /* if wcstombs fails, it returns (size_t) -1 */
-    tmp = "";               /* if invalid data, pass in the empty string */
+  if (result == -1) /* invalid data: set the empty string */
+    tmp[0] = '\0';
   XmTextFieldSetString(w, tmp);
   XtFree(tmp);
   _XmAppUnlock(app);
@@ -8328,7 +8270,7 @@ static Boolean TrimHighlights(XmTextFieldWidget tf, int *low, int *high)
   Boolean justChanged = False;
   _XmHighlightRec *l = tf->text.highlight.list;
   int i;
-  for (i = 0; i < tf->text.highlight.number; i++) {
+  for (i = 0; (Cardinal)i < tf->text.highlight.number; i++) {
     /* iterate through list, resetting spurious back to normal;
      ** unfortunately, we can have has_primary even when there is
      ** no primary selection anymore, so check pending-deleteness
@@ -8353,10 +8295,10 @@ static Boolean TrimHighlights(XmTextFieldWidget tf, int *low, int *high)
     int j;
     /* coalescing blocks; reduce number only */
     i = 1;
-    while (i < tf->text.highlight.number) {
+    while ((Cardinal)i < tf->text.highlight.number) {
       if (l[i].mode == l[i - 1].mode) {
         tf->text.highlight.number--;
-        for (j = i; j < tf->text.highlight.number; j++)
+        for (j = i; (Cardinal)j < tf->text.highlight.number; j++)
           l[j] = l[j + 1];
       }
       else
@@ -8415,7 +8357,7 @@ Widget XmCreateTextField(Widget parent, char *name, ArgList arglist, Cardinal ar
 
 Widget XmVaCreateTextField(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

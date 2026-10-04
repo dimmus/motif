@@ -741,7 +741,7 @@ static void InsertString(Widget w, XEvent *event, String *params, Cardinal *num_
     nextPos = right;
     pending_delete = True;
   }
-  for (i = 0; i < *num_params; i++) {
+  for (i = 0; (Cardinal)i < *num_params; i++) {
     str = params[i];
     block.ptr = str;
     block.length = strlen(str);
@@ -912,7 +912,7 @@ static XmTextPosition SelectOutLine(XmTextWidget tw,
   }
   if ((int)line < 0)
     line = 0;
-  if (line < tw->text.total_lines)
+  if (line < (unsigned int)tw->text.total_lines)
     return tw->text.line_table[line].start_pos;
   else {
     XmTextSource source = GetSrc(tw);
@@ -2459,7 +2459,7 @@ static void SetScanType(Widget w, InputData data, XEvent *event)
   int multi_click_time;
   Time event_time = event ? event->xbutton.time : XtLastTimestampProcessed(XtDisplay(w));
   multi_click_time = XtGetMultiClickTime(XtDisplay(w));
-  if (event_time > data->lasttime && event_time - data->lasttime < multi_click_time) {
+  if (event_time > data->lasttime && event_time - data->lasttime < (Time)multi_click_time) {
     i = 0;
     while (i < data->sarraycount && data->sarray[i] != data->stype)
       i++;
@@ -2633,7 +2633,7 @@ static void ProcessBSelect(Widget w, XEvent *event, char **params, Cardinal *num
       case ButtonPress:
         if (!InSelection(w, event) ||
             (event_time > data->lasttime &&
-             event_time - data->lasttime < XtGetMultiClickTime(XtDisplay(w))))
+             event_time - data->lasttime < (Time)XtGetMultiClickTime(XtDisplay(w))))
         {
           if (*num_params > 0)
             XtCallActionProc(w, params[0], event, NULL, 0);

@@ -165,7 +165,7 @@ UrmCreateWidgetInstanceCleanup (URMResourceContextPtr	context_id,
 				     &cldesc) ;
       if ( result != MrmSUCCESS ) return result ;
 
-      if (NULL != cldesc->cleanup) (*(void (*)(Widget))cldesc->cleanup) (child) ;
+      if (NULL != cldesc->cleanup) (*cldesc->cleanup) (child) ;
     }
   else if (widgetrec->variety != UilMrmAutoChildVariety)
     return Urm__UT_Error("UrmCreateWidgetInstanceCleanup", _MrmMMsg_0055,
@@ -775,7 +775,7 @@ UrmCreateWidgetInstance (URMResourceContextPtr	context_id,
   /*
    * Copy in any override args
    */
-  for ( ndx=0 ; ndx<ov_num_args ; ndx++ )
+  for ( ndx=0 ; (Cardinal)ndx<ov_num_args ; ndx++ )
     {
       args[ndx+num_used].name = ov_args[ndx].name ;
       args[ndx+num_used].value = ov_args[ndx].value ;
@@ -786,7 +786,7 @@ UrmCreateWidgetInstance (URMResourceContextPtr	context_id,
    * Create the widget
    */
   *w_name = (ov_name != NULL) ? ov_name : (char*)widgetrec+widgetrec->name_offs;
-  *w_return = (*(Widget (*)(Widget, String, ArgList, Cardinal))cldesc->creator) (parent, *w_name, args, num_used) ;
+  *w_return = (*cldesc->creator) (parent, *w_name, args, num_used) ;
 
   Urm__CW_AddWRef (wref_id, *w_name, *w_return) ;
   if ( *svlist != NULL )
@@ -1067,7 +1067,7 @@ UrmSetWidgetInstance (URMResourceContextPtr	context_id,
   /*
    * Copy in any override args
    */
-  for ( ndx=0 ; ndx<ov_num_args ; ndx++ )
+  for ( ndx=0 ; (Cardinal)ndx<ov_num_args ; ndx++ )
     {
       args[ndx+num_used].name = ov_args[ndx].name ;
       args[ndx+num_used].value = ov_args[ndx].value ;
@@ -1291,7 +1291,7 @@ Urm__CW_CreateArglist (Widget			parent,
    * most one pixmap.
    */
   max_used = *num_used + argdesc->count + argdesc->extra ;
-  if ( argdesc->count > XtNumber (pixargs_buf) )
+  if ( argdesc->count > (int)XtNumber (pixargs_buf) )
     pixargs = (_SavePixmapItemPtr)
       XtMalloc (argdesc->count * sizeof (_SavePixmapItem)) ;
 
@@ -1365,7 +1365,7 @@ Urm__CW_CreateArglist (Widget			parent,
 	      Urm__CW_AppendCBSVWidgetRef
 		(file_id, svlist, cbptr, argptr->tag_code,
 		 (String) ((char *)widgetrec+argptr->stg_or_relcode.tag_offs));
-	      /* No break */
+	      continue;
 	    default:
 	      continue;
 	    }
@@ -1503,7 +1503,7 @@ Urm__CW_CreateArglist (Widget			parent,
 		     (XtPointer)((char *)widgetrec+widgetrec->class_offs),
 		     &class_desc) ;
 		  if ((uncmp_res == MrmSUCCESS) &&
-		      (class_desc->creator == (Widget (*)())_XmCreateRendition))
+		      (class_desc->creator == _XmCreateRendition))
 		  {
 		    display = _XmRenderTableDisplay((XmRenderTable)parent);
 		    cmap = XDefaultColormap(display, XDefaultScreen(display));
@@ -1559,7 +1559,7 @@ Urm__CW_CreateArglist (Widget			parent,
 		     (XtPointer)((char *)widgetrec+widgetrec->class_offs),
 		     &class_desc) ;
 		  if ((uncmp_res == MrmSUCCESS) &&
-		      (class_desc->creator == (Widget (*)())_XmCreateRendition))
+		      (class_desc->creator == _XmCreateRendition))
 		    display = _XmRenderTableDisplay((XmRenderTable)parent);
 		  else
 		    display = XtDisplay(parent);
@@ -1655,10 +1655,10 @@ Urm__CW_CreateArglist (Widget			parent,
 	     (XtPointer)((char *)widgetrec+widgetrec->class_offs),
 	     &class_desc);
 	  if ((uncmp_res == MrmSUCCESS) &&
-	      (class_desc->creator == (Widget (*)())_XmCreateRendition))
+	      (class_desc->creator == _XmCreateRendition))
 	    display = _XmRenderTableDisplay((XmRenderTable)parent);
 	  else if ((uncmp_res == MrmSUCCESS) &&
-		   (class_desc->creator == (Widget (*)())_XmCreateTab))
+		   (class_desc->creator == _XmCreateTab))
 	    display = NULL;
 	  else display = XtDisplay(parent);
 	  result = Urm__CW_ConvertValue
@@ -1764,7 +1764,7 @@ Urm__CW_CreateArglist (Widget			parent,
     {
       Urm__CW_GetPixmapParms (parent, &screen, &display, &fgint, &bgint) ;
       for ( ndx=0,savepix=pixargs ;
-	    ndx<pixargs_cnt && *num_used<max_used ;
+	    (Cardinal)ndx<pixargs_cnt && *num_used<max_used ;
 	    ndx++,savepix++ )
         {
 	  if ( savepix->pixtype == MrmRtypeXBitmapFile ) {
@@ -2125,7 +2125,7 @@ Urm__CW_DisplayToString (char                       *val,
       return (return_val);
     }
 
-  for (ndx=0 ; ndx<dpysize ; ndx++)
+  for (ndx=0 ; (unsigned int)ndx<dpysize ; ndx++)
     {
       /* SUPPRESS 112 */
       if (val[ndx] != '\0')
@@ -2673,6 +2673,7 @@ Urm__CW_ConvertValue (Widget			parent,
     case MrmRtypeHorizontalInteger:
       orientation = XmHORIZONTAL;
       /* fall through */
+      XM_FALLTHROUGH;
     case MrmRtypeVerticalInteger:
       if (orientation == XmNO_ORIENTATION)
 	{
@@ -2696,6 +2697,7 @@ Urm__CW_ConvertValue (Widget			parent,
     case MrmRtypeHorizontalFloat:
       orientation = XmHORIZONTAL;
       /* fall through */
+      XM_FALLTHROUGH;
     case MrmRtypeVerticalFloat:
       {
 	float float_val, int_value;
@@ -3328,7 +3330,7 @@ Urm__CW_LoadIconImage (RGMIconImagePtr		iconptr ,
         }
     }
 
-  for ( ndx=URMColorTableUserMin ; ndx<ctable->count ; ndx++ )
+  for ( ndx=URMColorTableUserMin ; (int)ndx<ctable->count ; ndx++ )
     {
       citem = &ctable->item[ndx] ;
       if ( swap_needed )
@@ -3763,12 +3765,12 @@ Urm__CW_GetPixmapParms (Widget			w ,
    * widget. Fallback to Black/WhitePixelOfScreen if the widget
    * doesn't have these values.
    */
-  if ( *fgint == -1 )
+  if ( *fgint == (Pixel)-1 )
     {
       XtSetArg (pixarg[pcnt], XmNforeground, fgint) ;
       pcnt += 1 ;
     }
-  if ( *bgint == -1 )
+  if ( *bgint == (Pixel)-1 )
     {
       XtSetArg (pixarg[pcnt], XmNbackground, bgint) ;
       pcnt += 1 ;
@@ -3779,9 +3781,9 @@ Urm__CW_GetPixmapParms (Widget			w ,
   /*
    * Fall back on ...PixelOfScreen
    */
-  if ( *fgint == -1 )
+  if ( *fgint == (Pixel)-1 )
     *fgint = BlackPixelOfScreen (*screen) ;
-  if ( *bgint == -1 )
+  if ( *bgint == (Pixel)-1 )
     *bgint = WhitePixelOfScreen (*screen) ;
 
   /*

@@ -1147,7 +1147,7 @@ Widget XmCreateFrame(Widget parent, char *name, ArgList arglist, Cardinal argcou
 
 Widget XmVaCreateFrame(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

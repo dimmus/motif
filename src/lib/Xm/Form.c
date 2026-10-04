@@ -155,15 +155,15 @@ static void ChangeIfNeeded(XmFormWidget fw, Widget w, XtWidgetGeometry *desired)
 static void DeleteChild(Widget child);
 static Boolean SetValues(Widget cw, Widget rw, Widget nw, ArgList args, Cardinal *num_args);
 static void SetValuesAlmost(Widget cw, Widget nw, XtWidgetGeometry *req, XtWidgetGeometry *rep);
-static Boolean ConstraintSetValues(register Widget old,
-                                   register Widget ref,
-                                   register Widget new_w,
+static Boolean ConstraintSetValues(Widget old,
+                                   Widget ref,
+                                   Widget new_w,
                                    ArgList args,
                                    Cardinal *num_args);
 static void Initialize(Widget rw, Widget nw, ArgList args, Cardinal *num_args);
 static void ConstraintInitialize(Widget req, Widget new_w, ArgList args, Cardinal *num_args);
 static void CheckConstraints(Widget w);
-static void SortChildren(register XmFormWidget fw);
+static void SortChildren(XmFormWidget fw);
 static void CalcEdgeValues(Widget w,
                            Boolean really,
                            Widget instigator,
@@ -1356,7 +1356,7 @@ static XtGeometryResult QueryGeometry(Widget widget,
       int i;
       Widget child;
       XmFormConstraint c;
-      for (i = 0; i < fw->composite.num_children; i++) {
+      for (i = 0; (Cardinal)i < fw->composite.num_children; i++) {
         child = fw->composite.children[i];
         c = GetFormConstraint(child);
         c->preferred_width = XtWidth(child);
@@ -1468,7 +1468,7 @@ static void UpdateAttachments(XmFormWidget fw,
                               Widget instigator,
                               XtWidgetGeometry *inst_geometry)
 {
-  register XmFormConstraint c;
+  XmFormConstraint c;
   c = GetFormConstraint(wid);
   if (IS_ATTACHED_WIDGET(c, LEFT))
     PlaceChild(fw, ATTACHED_WIDGET(c, LEFT), instigator, inst_geometry);
@@ -1485,7 +1485,7 @@ static void PlaceChild(XmFormWidget fw,
                        Widget instigator,
                        XtWidgetGeometry *inst_geometry)
 {
-  register XmFormConstraint c;
+  XmFormConstraint c;
   int height, width;
   Dimension border_width;
   int near_edge;
@@ -1589,15 +1589,15 @@ static void ChangeManaged(Widget wid)
   XmFormWidget fw = (XmFormWidget)wid;
   XtWidgetGeometry g;
   int i, j, k;
-  register XmFormConstraint c;
-  register Widget w, child;
+  XmFormConstraint c;
+  Widget w, child;
   /*
    * The following code works around a bug in the intrinsics
    * destroy processing.  The child is unmanaged before anything
    * else (destroy callbacks) so we have to handle the destroy
    * inside of changemanaged instead of in a destroy callback
    */
-  for (k = 0; k < fw->composite.num_children; k++) {
+  for (k = 0; (Cardinal)k < fw->composite.num_children; k++) {
     child = fw->composite.children[k];
     if (child->core.being_destroyed)
       DetachFrom(fw, child);
@@ -1608,7 +1608,7 @@ static void ChangeManaged(Widget wid)
        kid, everything goes to the ground.
        Here we initialize a field if it hasn't been done already,
        the XmINVALID_DIMENSION has been set in ConstraintInitialize */
-  for (i = 0; i < fw->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < fw->composite.num_children; i++) {
     child = fw->composite.children[i];
     c = GetFormConstraint(child);
     if (c->preferred_width == XmINVALID_DIMENSION)
@@ -1807,15 +1807,15 @@ static void SetValuesAlmost(Widget cw, /* unused */
  *	If any values change, what we do is place everything again.
  *
  ************************************************************************/
-static Boolean ConstraintSetValues(register Widget old,
-                                   register Widget ref, /* unused */
-                                   register Widget new_w,
+static Boolean ConstraintSetValues(Widget old,
+                                   Widget ref, /* unused */
+                                   Widget new_w,
                                    ArgList args,       /* unused */
                                    Cardinal *num_args) /* unused */
 {
   XmFormWidget fw = (XmFormWidget)XtParent(new_w);
-  register XmFormConstraint oldc, newc;
-  register int i;
+  XmFormConstraint oldc, newc;
+  int i;
   if (!XtIsRectObj(new_w))
     return (FALSE);
   oldc = GetFormConstraint(old), newc = GetFormConstraint(new_w);
@@ -1912,7 +1912,7 @@ static void ConstraintInitialize(Widget req, /* unused */
                                  Cardinal *num_args) /* unused */
 {
   XmFormConstraint nc;
-  register int i;
+  int i;
   if (!XtIsRectObj(new_w))
     return;
   nc = GetFormConstraint(new_w);
@@ -2072,7 +2072,7 @@ static Boolean SortedListValid(XmFormWidget fw, Cardinal num_rect)
  *	date or the list does not match the children any more.
  *
  ************************************************************************/
-static void SortChildren(register XmFormWidget fw)
+static void SortChildren(XmFormWidget fw)
 {
   Cardinal num = fw->composite.num_children;
   WidgetList children = fw->composite.children;
@@ -2347,6 +2347,7 @@ static float CheckBottomBase(Widget sibling, Boolean opposite, FormLayout *layou
             break;
           case XmATTACH_OPPOSITE_WIDGET:
             flag = TRUE;
+            XM_FALLTHROUGH;
           case XmATTACH_WIDGET:
             if (SIBLINGS(c->att[BOTTOM].w, sibling))
               return_val = CheckBase(layout, BASE_BOTTOM, CheckBottomBase, c->att[BOTTOM].w, flag);
@@ -2383,6 +2384,7 @@ static float CheckBottomBase(Widget sibling, Boolean opposite, FormLayout *layou
         break;
       case XmATTACH_OPPOSITE_WIDGET:
         flag = TRUE;
+        XM_FALLTHROUGH;
       case XmATTACH_WIDGET:
         if (SIBLINGS(c->att[BOTTOM].w, sibling))
           return_val = CheckBase(layout, BASE_BOTTOM, CheckBottomBase, c->att[BOTTOM].w, flag);
@@ -2430,6 +2432,7 @@ static float CheckRightBase(Widget sibling, Boolean opposite, FormLayout *layout
             break;
           case XmATTACH_OPPOSITE_WIDGET:
             flag = TRUE;
+            XM_FALLTHROUGH;
           case XmATTACH_WIDGET:
             if (SIBLINGS(c->att[RIGHT].w, sibling))
               return_val = CheckBase(layout, BASE_RIGHT, CheckRightBase, c->att[RIGHT].w, flag);
@@ -2466,6 +2469,7 @@ static float CheckRightBase(Widget sibling, Boolean opposite, FormLayout *layout
         break;
       case XmATTACH_OPPOSITE_WIDGET:
         flag = TRUE;
+        XM_FALLTHROUGH;
       case XmATTACH_WIDGET:
         if (SIBLINGS(c->att[RIGHT].w, sibling))
           return_val = CheckBase(layout, BASE_RIGHT, CheckRightBase, c->att[RIGHT].w, flag);
@@ -2513,6 +2517,7 @@ static float CheckLeftBase(Widget sibling, Boolean opposite, FormLayout *layout)
             break;
           case XmATTACH_OPPOSITE_WIDGET:
             flag = TRUE;
+            XM_FALLTHROUGH;
           case XmATTACH_WIDGET:
             if (SIBLINGS(c->att[LEFT].w, sibling))
               return_val = CheckBase(layout, BASE_LEFT, CheckLeftBase, c->att[LEFT].w, flag);
@@ -2549,6 +2554,7 @@ static float CheckLeftBase(Widget sibling, Boolean opposite, FormLayout *layout)
         break;
       case XmATTACH_OPPOSITE_WIDGET:
         flag = TRUE;
+        XM_FALLTHROUGH;
       case XmATTACH_WIDGET:
         if (SIBLINGS(c->att[LEFT].w, sibling))
           return_val = CheckBase(layout, BASE_LEFT, CheckLeftBase, c->att[LEFT].w, flag);
@@ -3202,7 +3208,7 @@ Widget XmCreateForm(Widget parent, char *name, ArgList arglist, Cardinal argcoun
 
 Widget XmVaCreateForm(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

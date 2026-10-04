@@ -36,15 +36,7 @@ static char rcsid[] = "$TOG: XmRenderT.c /main/14 1998/10/26 20:14:42 samborn $"
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
-#ifdef __cplusplus
-    extern "C"
-{
-  /* some 'locale.h' do not have prototypes (sun) */
-#endif
 #include <X11/Xlocale.h>
-#ifdef __cplusplus
-} /* Close scope of 'extern "C"' declaration */
-#endif /* __cplusplus */
 #include "HashI.h"
 #include "MessagesI.h"
 #include "XmI.h"
@@ -401,7 +393,6 @@ static Boolean GetResources(XmRendition rend,
   XrmQuark rawType;
   XrmValue convValue;
   Boolean have_value, copied;
-#ifdef XTHREADS
   XtAppContext app = NULL;
   if (wid)
     app = XtWidgetToApplicationContext(wid);
@@ -411,7 +402,6 @@ static Boolean GetResources(XmRendition rend,
     _XmAppLock(app);
   }
   _XmProcessLock();
-#endif
   /* Initialize quark cache */
   if (quarks == NULL) {
     quarks = (XrmQuark *)_XmMallocArray(_XmNumRenditionResources, sizeof(XrmQuark));
@@ -439,7 +429,7 @@ static Boolean GetResources(XmRendition rend,
     quarks = (XrmQuark *)_XmReallocArray((char *)quarks, argcount, sizeof(XrmQuark));
     num_quarks = argcount;
   }
-  for (i = 0; i < argcount; i++)
+  for (i = 0; (Cardinal)i < argcount; i++)
     quarks[i] = XrmStringToQuark(arglist[i].name);
   /* Compile resource description into XrmResourceList if not already done. */
   if (table == NULL) {
@@ -448,9 +438,9 @@ static Boolean GetResources(XmRendition rend,
     Qfont = XrmPermStringToQuark(XmNfont);
   }
   /* Set resources from arglist. */
-  for (arg = arglist, i = 0; i < argcount; arg++, i++) {
+  for (arg = arglist, i = 0; (Cardinal)i < argcount; arg++, i++) {
     argName = quarks[i];
-    for (j = 0, res = table; j < _XmNumRenditionResources; j++, res++) {
+    for (j = 0, res = table; (Cardinal)j < _XmNumRenditionResources; j++, res++) {
       if (res->xrm_name == argName) {
         CopyFromArg((arg->value), ((char *)GetPtr(rend) + res->xrm_offset), res->xrm_size);
         found[j] = TRUE;
@@ -475,7 +465,7 @@ static Boolean GetResources(XmRendition rend,
     }
   }
   /* Loop over table */
-  for (j = 0, res = table; j < _XmNumRenditionResources; j++, res++) {
+  for (j = 0, res = table; (Cardinal)j < _XmNumRenditionResources; j++, res++) {
     if (!found[j]) {
       copied = False;
       have_value = False;
@@ -537,12 +527,10 @@ static Boolean GetResources(XmRendition rend,
   }
   if (searchList != stackSearchList)
     XtFree((char *)searchList);
-#ifdef XTHREADS
   _XmProcessUnlock();
   if (app) {
     _XmAppUnlock(app);
   }
-#endif
   return (got_one);
 }
 
@@ -579,8 +567,9 @@ static void SetDefault(XmRendition rend)
   _XmRendBGState(rend) = DEFAULT_backgroundState;
   _XmRendFGState(rend) = DEFAULT_foregroundState;
 #if USE_XFT
-  _XmRendXftFG(rend).color.alpha = 0xFFFF; /*TODO: it is really needed? (yura)*/
-  _XmRendXftBG(rend).color.alpha = 0xFFFF; /*TODO: it is really needed? (yura)*/
+  /* Opaque: Xft draws with the alpha, and text drawn with 0 is invisible. */
+  _XmRendXftFG(rend).color.alpha = 0xFFFF;
+  _XmRendXftBG(rend).color.alpha = 0xFFFF;
   _XmRendXftFont(rend) = DEFAULT_xftFont;
   _XmRendPattern(rend) = NULL;
   _XmRendFontStyle(rend) = DEFAULT_fontStyle;
@@ -1065,7 +1054,7 @@ XmRendition _XmRenditionCopy(XmRendition rend, Boolean shared)
     _XmRendTagCount(toRend) = _XmRendTagCount(rend);
     _XmRendHadEnds(toRend) = _XmRendHadEnds(rend);
     _XmRendTags(toRend) = (XmStringTag *)_XmMallocArray(_XmRendTagCount(rend), sizeof(XmStringTag));
-    for (i = 0; i < _XmRendTagCount(rend); i++)
+    for (i = 0; (unsigned int)i < _XmRendTagCount(rend); i++)
       _XmRendTags(toRend)[i] = _XmRendTags(rend)[i];
   }
   return (toRend);
@@ -1088,7 +1077,6 @@ XmRenderTable XmRenderTableAddRenditions(XmRenderTable oldtable,
   XtAppContext app = NULL;
   if ((renditions == NULL) || (rendition_count == 0))
     return (oldtable);
-#ifdef XTHREADS
   if (_XmRendDisplay(renditions[0]))
     app = XtDisplayToApplicationContext(_XmRendDisplay(renditions[0]));
   if (app) {
@@ -1097,7 +1085,6 @@ XmRenderTable XmRenderTableAddRenditions(XmRenderTable oldtable,
   else {
     _XmProcessLock();
   }
-#endif
   if (oldtable == NULL) {
     /* Malloc new table */
     table = (_XmRenderTable)XtMalloc(
@@ -1109,7 +1096,7 @@ XmRenderTable XmRenderTableAddRenditions(XmRenderTable oldtable,
     _XmRTDisplay(oldtable) = NULL;
     _XmRTRefcount(oldtable) = 1;
     /* Copy renditions */
-    for (i = 0; i < rendition_count; i++) {
+    for (i = 0; (Cardinal)i < rendition_count; i++) {
       _XmRTRenditions(oldtable)[i] = CopyRendition(renditions[i]);
       if (_XmRTDisplay(oldtable) == NULL)
         _XmRTDisplay(oldtable) = _XmRendDisplay(renditions[i]);
@@ -1138,7 +1125,7 @@ XmRenderTable XmRenderTableAddRenditions(XmRenderTable oldtable,
       oldtable = newtable;
     }
     /* Merge matching renditions */
-    for (i = 0; i < rendition_count; i++) {
+    for (i = 0; (Cardinal)i < rendition_count; i++) {
       rend = renditions[i];
       match = _XmRenderTableFindRendition(oldtable, _XmRendTag(rend), TRUE, FALSE, FALSE, &idx);
       if ((match != NULL) && (merge_mode != XmDUPLICATE)) {
@@ -1186,7 +1173,7 @@ XmRenderTable XmRenderTableAddRenditions(XmRenderTable oldtable,
         _XmRTRenditions(newtable)[i] = _XmRTRenditions(oldtable)[i];
       /* Copy new renditions. */
       next = _XmRTCount(oldtable);
-      for (i = 0; i < rendition_count; i++) {
+      for (i = 0; (Cardinal)i < rendition_count; i++) {
         if (!matches[i]) {
           _XmRTRenditions(newtable)[next] = CopyRendition(renditions[i]);
           if (_XmRTDisplay(newtable) == NULL)
@@ -1211,14 +1198,12 @@ XmRenderTable XmRenderTableAddRenditions(XmRenderTable oldtable,
   }
   if (tmptable != NULL)
     FreeHandle(tmptable);
-#ifdef XTHREADS
   if (app) {
     _XmAppUnlock(app);
   }
   else {
     _XmProcessUnlock();
   }
-#endif
   return (oldtable);
 }
 
@@ -1229,7 +1214,6 @@ XmRenderTable XmRenderTableRemoveRenditions(XmRenderTable oldtable,
                                             int tag_count)
 {
   XmRenderTable ret_val;
-#ifdef XTHREADS
   XtAppContext app = NULL;
   if (_XmRTDisplay(oldtable))
     app = XtDisplayToApplicationContext(_XmRTDisplay(oldtable));
@@ -1239,16 +1223,13 @@ XmRenderTable XmRenderTableRemoveRenditions(XmRenderTable oldtable,
   else {
     _XmProcessLock();
   }
-#endif
   ret_val = _XmRenderTableRemoveRenditions(oldtable, tags, tag_count, FALSE, XmFONT_IS_FONT, NULL);
-#ifdef XTHREADS
   if (app) {
     _XmAppUnlock(app);
   }
   else {
     _XmProcessUnlock();
   }
-#endif
   return ret_val;
 }
 
@@ -1419,7 +1400,6 @@ XmRenderTable XmRenderTableCopy(XmRenderTable table, XmStringTag *tags, int tag_
   XtAppContext app = NULL;
   if (table == NULL)
     return ((XmRenderTable)NULL);
-#ifdef XTHREADS
   if (_XmRTDisplay(table))
     app = XtDisplayToApplicationContext(_XmRTDisplay(table));
   if (app) {
@@ -1428,7 +1408,6 @@ XmRenderTable XmRenderTableCopy(XmRenderTable table, XmStringTag *tags, int tag_
   else {
     _XmProcessLock();
   }
-#endif
   count = 0;
   if ((_XmRTRefcountInc(table) == 0) || (tags != NULL)) {
     /* Malloc new table */
@@ -1496,14 +1475,12 @@ XmRenderTable XmRenderTableCopy(XmRenderTable table, XmStringTag *tags, int tag_
     _XmRTCount(rt) = count;
   }
   _XmRTDisplay(rt) = _XmRTDisplay(table);
-#ifdef XTHREADS
   if (app) {
     _XmAppUnlock(app);
   }
   else {
     _XmProcessUnlock();
   }
-#endif
   return (rt);
 }
 
@@ -1561,28 +1538,24 @@ XmRendition *XmRenderTableGetRenditions(XmRenderTable table, char **tags, Cardin
   XtAppContext app = NULL;
   if ((table == NULL) || (tags == NULL) || (tag_count == 0))
     return (NULL);
-#ifdef XTHREADS
   if (_XmRTDisplay(table)) {
     app = XtDisplayToApplicationContext(_XmRTDisplay(table));
     _XmAppLock(app);
   }
-#endif
   rends = (XmRendition *)_XmMallocArray(tag_count, sizeof(XmRendition));
   count = 0;
-  for (i = 0; i < tag_count; i++) {
+  for (i = 0; (Cardinal)i < tag_count; i++) {
     rend = _XmRenderTableFindRendition(table, tags[i], FALSE, FALSE, FALSE, NULL);
     if (rend != NULL) {
       rends[count] = CopyRendition(rend);
       count++;
     }
   }
-  if (count < tag_count)
+  if ((Cardinal)count < tag_count)
     rends = (XmRendition *)_XmReallocArray((char *)rends, count, sizeof(XmRendition));
-#ifdef XTHREADS
   if (app) {
     _XmAppUnlock(app);
   }
-#endif
   return (rends);
 }
 
@@ -1946,9 +1919,9 @@ void XmRenditionRetrieve(XmRendition rendition, ArgList arglist, Cardinal argcou
     return;
   _XmProcessLock();
   /* Get resources */
-  for (i = 0; i < argcount; i++) {
+  for (i = 0; (Cardinal)i < argcount; i++) {
     arg = &(arglist[i]);
-    for (j = 0; j < _XmNumRenditionResources; j++) {
+    for (j = 0; (Cardinal)j < _XmNumRenditionResources; j++) {
       res = &(_XmRenditionResources[j]);
       if (strcmp(res->resource_name, arg->name) == 0) {
         /* CR 7890: Font hook - if there's a fontName but the
@@ -2011,14 +1984,12 @@ void XmRenditionUpdate(XmRendition rendition, ArgList arglist, Cardinal argcount
   XtAppContext app = NULL;
   if (rendition == NULL)
     return;
-#ifdef XTHREADS
   if (_XmRendDisplay(rendition)) {
     app = XtDisplayToApplicationContext(_XmRendDisplay(rendition));
     _XmAppLock(app);
   }
   if (_XmRendDisplay(rendition) && (_XmRendDisplay(rendition) != display))
     display = _XmRendDisplay(rendition);
-#endif
   /* Save old values to check for dependencies and free memory. */
   oldtag = _XmRendTag(rendition);
   oldname = _XmRendFontName(rendition);
@@ -2031,9 +2002,9 @@ void XmRenditionUpdate(XmRendition rendition, ArgList arglist, Cardinal argcount
     RenewRendition(rendition);
     can_free = FALSE;
   }
-  for (i = 0; i < argcount; i++) {
+  for (i = 0; (Cardinal)i < argcount; i++) {
     arg = &(arglist[i]);
-    for (j = 0; j < _XmNumRenditionResources; j++) {
+    for (j = 0; (Cardinal)j < _XmNumRenditionResources; j++) {
       res = &(_XmRenditionResources[j]);
       if (strcmp(res->resource_name, arg->name) == 0) {
         CopyFromArg(
@@ -2067,11 +2038,9 @@ void XmRenditionUpdate(XmRendition rendition, ArgList arglist, Cardinal argcount
     XmTabListFree(oldtabs);
   ValidateTag(rendition, oldtag);
   ValidateAndLoadFont(rendition, display);
-#ifdef XTHREADS
   if (app) {
     _XmAppUnlock(app);
   }
-#endif
 }
 
 /*****************************************************************************/
@@ -2119,8 +2088,8 @@ static int CVTtvinited = 0;
    room for it and the terminating NUL. */
 #define CVTaddString(dest, src, srcsize) \
   { \
-    if ((chars_used + (srcsize)) >= allocated_size) { \
-      while ((chars_used + (srcsize)) >= allocated_size) \
+    if ((size_t)(chars_used + (srcsize)) >= (size_t)allocated_size) { \
+      while ((size_t)(chars_used + (srcsize)) >= (size_t)allocated_size) \
         allocated_size *= 2; \
       dest = XtRealloc(dest, allocated_size); \
     } \
@@ -3081,7 +3050,6 @@ void XmRenderTableGetDefaultFontExtents(XmRenderTable rendertable,
   Boolean success;
   short indx;
   int h, a, d;
-#ifdef XTHREADS
   XtAppContext app = NULL;
   if (_XmRTDisplay(rendertable))
     app = XtDisplayToApplicationContext(_XmRTDisplay(rendertable));
@@ -3089,7 +3057,6 @@ void XmRenderTableGetDefaultFontExtents(XmRenderTable rendertable,
     _XmAppLock(app);
   else
     _XmProcessLock();
-#endif
   a = d = h = 0;
   /* Get default rendition */
   success = _XmRenderTableFindFallback(rendertable, tag, FALSE, &indx, &rend);
@@ -3129,12 +3096,10 @@ void XmRenderTableGetDefaultFontExtents(XmRenderTable rendertable,
 #endif
     }
   }
-#ifdef XTHREADS
   if (app)
     _XmAppUnlock(app);
   else
     _XmProcessUnlock();
-#endif
   if (ascent)
     *ascent = a;
   if (descent)

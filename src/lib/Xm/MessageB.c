@@ -764,8 +764,8 @@ XmGeoMatrix _XmMessageBoxGeoMatrixCreate(Widget wid, Widget instigator, XtWidget
 {
   XmMessageBoxWidget mb = (XmMessageBoxWidget)wid;
   XmGeoMatrix geoSpec;
-  register XmGeoRowLayout layoutPtr;
-  register XmKidGeometry boxPtr;
+  XmGeoRowLayout layoutPtr;
+  XmKidGeometry boxPtr;
   XmKidGeometry firstBoxInRow;
   Widget menubar = NULL;
   Widget workarea = NULL;
@@ -783,7 +783,7 @@ XmGeoMatrix _XmMessageBoxGeoMatrixCreate(Widget wid, Widget instigator, XtWidget
    */
   /* identify menu bar and work area children. */
   for (i = 0; i < nchildren; i++) {
-    register Widget w = mb->composite.children[i];
+    Widget w = mb->composite.children[i];
     if (menubar == NULL && XmIsRowColumn(w) &&
         ((XmRowColumnWidget)w)->row_column.type == XmMENU_BAR)
     {
@@ -902,7 +902,7 @@ XmGeoMatrix _XmMessageBoxGeoMatrixCreate(Widget wid, Widget instigator, XtWidget
       ++boxPtr;
     }
     for (i = 0; i < nchildren; i++) {
-      register Widget w = mb->composite.children[nchildren - i - 1];
+      Widget w = mb->composite.children[nchildren - i - 1];
       if (!IsAutoChild(mb, w) && IsButton(w) && _XmGeoSetupKid(boxPtr, w)) {
         ++boxPtr;
       }
@@ -916,7 +916,7 @@ XmGeoMatrix _XmMessageBoxGeoMatrixCreate(Widget wid, Widget instigator, XtWidget
       ++boxPtr;
     }
     for (i = 0; i < nchildren; i++) {
-      register Widget w = mb->composite.children[i];
+      Widget w = mb->composite.children[i];
       if (!IsAutoChild(mb, w) && IsButton(w) && _XmGeoSetupKid(boxPtr, w)) {
         ++boxPtr;
       }
@@ -1049,7 +1049,7 @@ Widget XmCreateMessageBox(Widget parent, char *name, ArgList al, Cardinal ac)
 
 Widget XmVaCreateMessageBox(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

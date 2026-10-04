@@ -24,6 +24,7 @@
 /************************************************************
  *	INCLUDE FILES
  *************************************************************/
+#include "ColorI.h"
 #include "PrimitiveI.h"
 #include "RepTypeI.h"
 #include "Xm/XmStrDefsI.h"
@@ -67,7 +68,6 @@ typedef struct _PixCacheEntry {
 /************************************************************
  *	GLOBAL DECLARATIONS
  *************************************************************/
-extern void _XmSelectColorDefault();
 static XmList pix_cache_list = NULL;
 /************************************************************
  *	STATIC FUNCTION DECLARATIONS
@@ -398,7 +398,7 @@ static XmConst XmActivatableTraitRec iconButtonAT = {
  *	Returns:       none.
  */
 /*ARGSUSED*/
-static void ClassInit()
+static void ClassInit(void)
 {
   XtSetTypeConverter(XmRString,
                      XmRXmIconPlacement,
@@ -636,12 +636,12 @@ static Boolean SetValues(
   Boolean resetGCs, recalc, redisplay, reinit_l, reinit_ls;
   XmIconButtonWidget old_iw = (XmIconButtonWidget)current;
   XmIconButtonWidget set_iw = (XmIconButtonWidget)set;
-  register int i;
+  int i;
   Boolean pixmapChanged = False;
   Boolean pixmapGeoChanged = False;
   Boolean resetPixmapValues = False;
   reinit_l = reinit_ls = resetGCs = recalc = redisplay = False;
-  for (i = 0; i < *num_args; i++) {
+  for (i = 0; (Cardinal)i < *num_args; i++) {
     String name = args[i].name;
     if (streq(XmNlabel, name))
       reinit_l = resetGCs = recalc = redisplay = TRUE;
@@ -991,7 +991,7 @@ static void Notify(Widget w, XEvent *event, String *params, Cardinal *num_params
   XmIconButtonCallbackInfo info;
   Boolean dclick;
   if ((event->type == ButtonPress) || (event->type == ButtonRelease))
-    dclick = ((event->xbutton.time - XmIconButton_time(iw)) <= XtGetMultiClickTime(XtDisplay(w)));
+    dclick = ((event->xbutton.time - XmIconButton_time(iw)) <= (Time)XtGetMultiClickTime(XtDisplay(w)));
   else
     dclick = False;
   info.state = XmIconButton_set(iw);
@@ -1068,7 +1068,7 @@ static void ButtonUp(Widget w, XEvent *event, String *params, Cardinal *num_para
  */
 static XmListElem *GetCacheElem(Display *disp, Pixmap pix)
 {
-  register XmListElem *elem;
+  XmListElem *elem;
   if (pix_cache_list == NULL)
     return (NULL);
   for (elem = XmListFirst(pix_cache_list); elem != NULL; elem = XmListElemNext(elem)) {

@@ -140,10 +140,11 @@ typedef unsigned int	Uil_continue_type;
 #define _ARGUMENTS(arglist) arglist
 #endif
 
-#if defined(__cplusplus) || defined(c_plusplus)
+#if defined(__cplusplus)
 extern "C" {
 #endif
 
+#if defined(__cplusplus)
 extern Uil_status_type Uil
 		    _ARGUMENTS((
 			Uil_command_type *command_desc ,
@@ -152,9 +153,30 @@ extern Uil_status_type Uil
 			char *message_data ,
 			Uil_continue_type (*status_cb )(),
 			char *status_data ));
+#else
+extern Uil_status_type Uil
+		    _ARGUMENTS((
+			Uil_command_type *command_desc ,
+			Uil_compile_desc_type *compile_desc ,
+			Uil_continue_type (*message_cb )(char *message_data,
+							 int message_number,
+							 int severity,
+							 char *msg_buffer,
+							 char *src_buffer,
+							 char *ptr_buffer,
+							 char *loc_buffer,
+							 int *message_count),
+			char *message_data ,
+			Uil_continue_type (*status_cb )(char *status_data,
+							int percent_complete,
+							int lines_processed,
+							char *current_file,
+							int *message_count),
+			char *status_data ));
+#endif
 
 
-#if defined(__cplusplus) || defined(c_plusplus)
+#if defined(__cplusplus)
 }
 #endif
 

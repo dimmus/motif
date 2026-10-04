@@ -34,14 +34,7 @@ static char rcsid[] = "$TOG: XmString.c /main/34 1998/04/16 14:35:32 mgreess $"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#ifdef __cplusplus
-    extern "C"
-{ /* some 'locale.h' do not have prototypes (sun) */
-#endif
 #include <X11/Xlocale.h>
-#ifdef __cplusplus
-} /* Close scope of 'extern "C"' declaration */
-#endif /* __cplusplus */
 #include "MessagesI.h"
 #include "ResIndI.h"
 #include "XmI.h"
@@ -649,7 +642,7 @@ XmString _XmStringNCreate(char *text, XmStringTag tag, int len)
     return ((XmString)NULL);
   if (!tag)
     return ((XmString)NULL);
-  t_length = ((len >= 0) ? len : strlen(text));
+  t_length = ((len >= 0) ? len : (int)strlen(text));
   if ((tag == XmFONTLIST_DEFAULT_TAG) || (strcmp(tag, XmFONTLIST_DEFAULT_TAG) == 0)) {
     curtag = tag;
     type = XmMULTIBYTE_TEXT;
@@ -705,19 +698,19 @@ XmString XmStringDirectionCreate(XmStringDirection direction)
   _XmProcessLock();
   /* Find the static cache index and string for this direction. */
   assert(XtNumber(dir_index) == XtNumber(cache_str));
-  for (index = 0; index < XtNumber(dir_index); index++)
+  for (index = 0; (unsigned int)index < XtNumber(dir_index); index++)
     if (dir_index[index] == direction) {
       opt_str = cache_str[index];
       break;
     }
   /* Create the return string if necessary and this is a known direction. */
-  if (!opt_str && (index < XtNumber(dir_index))) {
+  if (!opt_str && ((unsigned int)index < XtNumber(dir_index))) {
     _XmStrCreate(opt_str, XmSTRING_OPTIMIZED, 0);
     _XmStrDirection(opt_str) = direction;
     cache_str[index] = opt_str;
   }
   /* Try to copy a cached string by incrementing its reference count. */
-  if ((index < XtNumber(dir_index)) && (_XmStrRefCountInc(opt_str) == 0)) {
+  if (((unsigned int)index < XtNumber(dir_index)) && (_XmStrRefCountInc(opt_str) == 0)) {
     _XmStrRefCountDec(opt_str); /* Undo previous increment. */
     XmStringFree(opt_str);      /* Release our cached copy. */
     cache_str[index] = NULL;
@@ -853,7 +846,7 @@ XmStringTag _XmStringIndexGetTag(int index)
 int _XmStringIndexCacheTag(XmStringTag tag, int length)
 {
   char *a;
-  register int i;
+  int i;
   /* Initialize cache with XmFONTLIST_DEFAULT_TAG, _MOTIF_DEFAULT_LOCALE, and
      locale.tag if necessary, to keep indices low. */
   _XmProcessLock();
@@ -1178,7 +1171,7 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
     }
     _XmStrEntry(a_str) =
         (_XmStringEntry *)_XmReallocArray((char *)_XmStrEntry(a_str), lc, sizeof(_XmStringEntry));
-    for (i = (segs ? 0 : a_lc); i < lc; i++)
+    for (i = (segs ? 0 : a_lc); (unsigned int)i < lc; i++)
       _XmStrEntry(a_str)[i] = NULL;
   }
   else if (_XmStrOptimized(a)) {
@@ -1189,7 +1182,7 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
     }
     _XmStrEntry(a_str) =
         (_XmStringEntry *)_XmReallocArray((char *)_XmStrEntry(a_str), lc, sizeof(_XmStringEntry));
-    for (i = (segs ? 0 : a_lc); i < lc; i++)
+    for (i = (segs ? 0 : a_lc); (unsigned int)i < lc; i++)
       _XmStrEntry(a_str)[i] = NULL;
   }
   else {
@@ -1204,7 +1197,7 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
       _XmStrEntryCount(a) = a_lc;
       if (segs) {
         segs = (_XmStringEntry *)_XmMallocArray(a_lc, sizeof(_XmStringEntry));
-        for (i = 0; i < a_lc; i++)
+        for (i = 0; (unsigned int)i < a_lc; i++)
           segs[i] = _XmStringEntryCopy(_XmStrEntry(a)[i]);
       }
     }
@@ -1277,7 +1270,7 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
   if (!a_needs_unopt) {
     b_needs_unopt = IsUnopt(b_str, _XmStrEntryCount(b_str));
     if (b_needs_unopt)
-      for (i = 0; i < a_lc; i++)
+      for (i = 0; (unsigned int)i < a_lc; i++)
         _XmStrEntry(a_str)[i] = Unoptimize(_XmStrEntry(a_str)[i], True);
   }
   _XmStrEntryCount(a_str) = lc;
@@ -1437,7 +1430,7 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
       _XmStrEntry(a_str)[a_lc - 1] = a_line;
       _XmStrImplicitLine(a_str) = True;
     }
-    for (i = 0; i < (b_sc - merged); i++) {
+    for (i = 0; (unsigned int)i < (b_sc - merged); i++) {
       b_seg = _XmEntrySegmentGet(b_line)[i + merged];
       if (a_needs_unopt && !b_needs_unopt)
         b_seg = (_XmStringNREntry)Unoptimize((_XmStringEntry)b_seg, modify_b);
@@ -1458,7 +1451,7 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
     }
   }
   else if (b_sc - merged > 0 && !_XmStrImplicitLine(a_str)) {
-    for (i = 0; i < (b_sc - merged); i++) {
+    for (i = 0; (unsigned int)i < (b_sc - merged); i++) {
       /* Check if b_str is a singleton (b_tmp) or a real array */
       if (b_str == (XmString)&b_tmp) {
         /* b_str is singleton, only one entry at index 0 */
@@ -1480,7 +1473,7 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
     }
   }
   /* Add rest of b's lines to a */
-  for (i = 0; i < (b_lc - 1); i++) {
+  for (i = 0; (unsigned int)i < (b_lc - 1); i++) {
     /* Check if b_str is a singleton (b_tmp) or a real array */
     if (b_str == (XmString)&b_tmp) {
       /* b_str is singleton, skip this loop as there's only one entry */
@@ -1494,7 +1487,7 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
     else if (!modify_b)
       b_line = _XmStringEntryCopy(b_line);
     b_sc = _XmEntrySegmentCountGet(b_line);
-    for (j = 0; j < b_sc; j++) {
+    for (j = 0; (unsigned int)j < b_sc; j++) {
       b_seg = _XmEntrySegmentGet(b_line)[j];
       if (_XmEntryDirectionGet((_XmStringEntry)b_seg) == XmSTRING_DIRECTION_UNSET)
         _XmEntryDirectionSet((_XmStringEntry)b_seg, last);
@@ -2494,7 +2487,6 @@ void XmStringExtent(XmRenderTable rendertable,
   *width = 0, *height = 0;
   if ((rendertable == NULL) || (string == NULL))
     return;
-#ifdef XTHREADS
   if (_XmRTDisplay(rendertable))
     app = XtDisplayToApplicationContext(_XmRTDisplay(rendertable));
   if (app) {
@@ -2503,7 +2495,6 @@ void XmStringExtent(XmRenderTable rendertable,
   else {
     _XmProcessLock();
   }
-#endif
   if (_XmStrOptimized(string))
     OptLineMetrics(rendertable, string, NULL, NULL, width, height, NULL, NULL);
   else {
@@ -2542,14 +2533,12 @@ void XmStringExtent(XmRenderTable rendertable,
     if (_XmRendTags(rend) != NULL)
       XtFree((char *)_XmRendTags(rend));
   }
-#ifdef XTHREADS
   if (app) {
     _XmAppUnlock(app);
   }
   else {
     _XmProcessUnlock();
   }
-#endif
 }
 
 Boolean XmStringEmpty(XmString string)
@@ -2812,7 +2801,7 @@ static void SubStringPosition(Boolean one_byte,
       for (i = 0; i <= max; i++) {
         fail = FALSE;
         begin = i;
-        for (j = 0; j < under_seg_len; j++) {
+        for (j = 0; (unsigned int)j < under_seg_len; j++) {
           if (a[i + j] != b[j]) {
             fail = TRUE;
             break;
@@ -2863,7 +2852,7 @@ static void SubStringPosition(Boolean one_byte,
       for (i = 0; i <= max; i += 2) {
         fail = FALSE;
         begin = i;
-        for (j = 0; j < under_seg_len; j += 2) {
+        for (j = 0; (unsigned int)j < under_seg_len; j += 2) {
           if ((a[i + j] != b[j]) || (a[i + j + 1] != b[j + 1])) {
             fail = TRUE;
             break;
@@ -2914,7 +2903,7 @@ static void SubStringPosition(Boolean one_byte,
       begin = i;
       if (type == XmWIDECHAR_TEXT) {
         len_a = sizeof(wchar_t);
-        for (j = 0; j < under_seg_len; j += sizeof(wchar_t))
+        for (j = 0; (unsigned int)j < under_seg_len; j += sizeof(wchar_t))
           if (((wchar_t *)a)[(i + j) / len_a] != ((wchar_t *)b)[j / len_a]) {
             fail = TRUE;
             break;
@@ -2925,7 +2914,7 @@ static void SubStringPosition(Boolean one_byte,
         if (len_a < 1)
           return;
         len_a1 = len_a;
-        for (j = 0; j < under_seg_len; j += len_b) {
+        for (j = 0; (unsigned int)j < under_seg_len; j += len_b) {
           len_b = mblen(&b[j], MB_CUR_MAX);
           if (len_b < 1)
             return;
@@ -3207,7 +3196,7 @@ extern void _XmStringDrawSegment(Display *d,
         int len;
         q = ltor_text;
         p += seg_len;
-        for (i = 0; i < seg_len; i += len) {
+        for (i = 0; (unsigned int)i < seg_len; i += len) {
           len = mblen(q, MB_CUR_MAX);
           if (len < 1) { /* Something went wrong, just return for now. */
             XtFree(flip_char_extra);
@@ -3222,7 +3211,7 @@ extern void _XmStringDrawSegment(Display *d,
       }
       else if (!text16) {
         q = (ltor_text + seg_len - 1);
-        for (i = 0; i < seg_len; i++)
+        for (i = 0; (unsigned int)i < seg_len; i++)
           *p++ = *q--;
       }
       else
@@ -3230,7 +3219,7 @@ extern void _XmStringDrawSegment(Display *d,
       {
         char tmp;
         q = (ltor_text + seg_len - 1);
-        for (i = 0; i < Half(seg_len); i++) {
+        for (i = 0; (unsigned int)i < Half(seg_len); i++) {
           tmp = *q--;
           *p++ = *q--;
           *p++ = tmp;
@@ -3310,7 +3299,7 @@ extern void _XmStringDrawSegment(Display *d,
     if (_XmRendFontType(rend) == XmFONT_IS_XFT) {
       _XmXftDrawString(d, w, rend, 1, x, y, draw_text, seg_len, image);
     }
-    else /* TODO: fix indentation */
+    else
 #endif
     {
       if (image) {
@@ -4480,6 +4469,7 @@ static _XmString _XmStringNonOptCreate(unsigned char *c, unsigned char *end, Boo
         _XmEntryTextTypeSet(&seg, XmWIDECHAR_TEXT);
         prev_type = XmWIDECHAR_TEXT;
         /* Fall through */
+        XM_FALLTHROUGH;
       case XmSTRING_COMPONENT_LOCALE_TEXT:
         if (txt_seen) {
           finish_segment(string, &seg, &lc, &sc, &needs_unopt, dir);
@@ -4493,6 +4483,7 @@ static _XmString _XmStringNonOptCreate(unsigned char *c, unsigned char *end, Boo
         _XmUnoptSegTag(&seg) = _XmStringCacheTag((char *)XmFONTLIST_DEFAULT_TAG,
                                                  XmSTRING_TAG_STRLEN);
         /* Fall through to regular text. */
+        XM_FALLTHROUGH;
       case XmSTRING_COMPONENT_TEXT:
         if (txt_seen) {
           push_seen = txt_seen = pop_seen = False;
@@ -4656,6 +4647,7 @@ XmString XmCvtByteStreamToXmString(unsigned char *property)
           break;
         }
         /* Else fall through to text case. */
+        XM_FALLTHROUGH;
       case XmSTRING_COMPONENT_TEXT:
         if (txt_seen ||
             (((c_opt + length + header) < end) || (length >= (1 << BYTE_COUNT_BITS))))
@@ -4778,7 +4770,6 @@ _XmStringEntry _XmStringEntryCopy(_XmStringEntry entry)
 /** Begin macros converted to functions. **/
 XmStringTag _XmEntryTag(_XmStringEntry entry)
 {
-#if 1
   XmStringTag rettag;
   if (_XmEntryOptimized(entry)) {
     if (_XmEntryTagIndex(entry) != TAG_INDEX_UNSET)
@@ -4789,12 +4780,6 @@ XmStringTag _XmEntryTag(_XmStringEntry entry)
   else
     rettag = _XmUnoptSegTag(entry);
   return rettag;
-#else
-  return (_XmEntryOptimized(entry) ? (_XmEntryTagIndex(entry) != TAG_INDEX_UNSET ?
-                                          _XmStringIndexGetTag(_XmEntryTagIndex(entry)) :
-                                          NULL) :
-                                     _XmUnoptSegTag(entry));
-#endif
 }
 
 void _XmEntryTagSet(_XmStringEntry entry, XmStringTag tag)
@@ -5157,10 +5142,10 @@ static void ComputeMetrics(XmRendition rend,
     case XmFONT_IS_XFT:
       asc = _XmRendXftFont(rend)->ascent;
       desc = _XmRendXftFont(rend)->descent;
-      /* FIXME
-       * Following Keith Packard comments it should be
-       *  hi = _XmRendXftFont(rend)->height;
-       * but is looking ascent + descent better. Is it a bug?
+      /*
+       * Not _XmRendXftFont(rend)->height, which includes the font's line
+       * gap: ascent + descent is what the core font case above uses, so
+       * Xft text gets the same line spacing.
        */
       hi = asc + desc;
       {
@@ -5215,6 +5200,7 @@ static Dimension ComputeWidth(unsigned char which, XCharStruct char_ret)
       if (char_ret.lbearing < 0)
         wid = -(char_ret.lbearing);
       /* Fall through */
+      XM_FALLTHROUGH;
     case XmSTRING_MIDDLE_SEG:
       wid += char_ret.width;
       break;
@@ -5486,7 +5472,7 @@ static Boolean SpecifiedSegmentExtents(_XmStringEntry entry,
             break;
           }
       j = depth;
-      for (i = (depth + 1); i < tag_count; i++)
+      for (i = (depth + 1); (unsigned int)i < tag_count; i++)
         if (tags[i] != NULL) {
           tags[j] = tags[i];
           j++;
@@ -5741,7 +5727,6 @@ Dimension XmStringBaseline(XmRenderTable rendertable, XmString string)
   XtAppContext app = NULL;
   if ((rendertable == NULL) || (string == NULL))
     return (0);
-#ifdef XTHREADS
   if (_XmRTDisplay(rendertable))
     app = XtDisplayToApplicationContext(_XmRTDisplay(rendertable));
   if (app) {
@@ -5750,7 +5735,6 @@ Dimension XmStringBaseline(XmRenderTable rendertable, XmString string)
   else {
     _XmProcessLock();
   }
-#endif
   bzero((char *)&scratch, sizeof(_XmRenditionRec));
   tmp = &scratch;
   rend = &tmp;
@@ -6377,7 +6361,7 @@ static Boolean match_pattern(XtPointer text,
     (void)tmp; /* suppress unused variable warning */
     return !strncmp((char *)text, mb_pattern, char_len);
   }
-  else if (strlen((char *)pattern->pattern) == char_len) {
+  else if (strlen((char *)pattern->pattern) == (size_t)char_len) {
     /* The normal case: mbs text and pattern. */
     return !strncmp((char *)text, (char *)pattern->pattern, char_len);
   }
@@ -6460,6 +6444,7 @@ static Boolean parse_pattern(XmString *result,
     case XmTERMINATE:
       *terminate = True;
       /* Fall through. */
+      XM_FALLTHROUGH;
     case XmINSERT:
       if (insertion != NULL)
         *result = XmStringConcatAndFree(*result, insertion);
@@ -6517,6 +6502,7 @@ XmString XmStringParseText(XtPointer text,
     case XmWIDECHAR_TEXT:
       wide_char = True;
       /* Fall through */
+      XM_FALLTHROUGH;
     case XmMULTIBYTE_TEXT:
       /* Non-NULL values (except _MOTIF_DEFAULT_LOCALE)
      are not accepted in Motif 2.0. */
@@ -6556,7 +6542,7 @@ XmString XmStringParseText(XtPointer text,
   init_char_proc = (XmInitialDirectionProc)method;
   halt = (end_ptr && (ptr >= (char *)end_ptr));
   while (!halt && (wide_char ? *((wchar_t *)ptr) : *ptr)) {
-    int len = (wide_char ? sizeof(wchar_t) : mblen(ptr, MB_CUR_MAX));
+    int len = (wide_char ? (int)sizeof(wchar_t) : mblen(ptr, MB_CUR_MAX));
     advanced = False;
     /* If we have an invalid character, treat it as a single byte. */
     if (len < 0)
@@ -6776,7 +6762,7 @@ static void unparse_components(char **result,
   int n_pat;
   int n_comp;
   /* Compare each pattern component. */
-  for (n_pat = 0; !match && (n_pat < parse_count); n_pat++) {
+  for (n_pat = 0; !match && ((Cardinal)n_pat < parse_count); n_pat++) {
     pat = parse_table[n_pat];
     if (unparse_is_plausible(pat)) {
       _XmStringContextRec m_context, p_context;
@@ -6897,6 +6883,7 @@ XtPointer XmStringUnparse(XmString string,
       case XmSTRING_COMPONENT_END:
         done = True;
         /* We're done after processing this component. */
+        XM_FALLTHROUGH;
       default:
         /* Non-text components are under the control of parse_model. */
         if (non_text_match)
@@ -7308,6 +7295,7 @@ XmStringComponentType XmeStringGetComponent(_XmStringContext context,
         return XmSTRING_COMPONENT_LAYOUT_PUSH;
       }
       /* Fall through if no push components exist. */
+      XM_FALLTHROUGH;
     case BEGIN_REND_STATE:
       tmp_index = ((_XmStrContState(context) == BEGIN_REND_STATE) ? _XmStrContRendIndex(context) :
                                                                     0);
@@ -7328,6 +7316,7 @@ XmStringComponentType XmeStringGetComponent(_XmStringContext context,
         return XmSTRING_COMPONENT_RENDITION_BEGIN;
       }
       /* Fall through if there are no more rendition starts. */
+      XM_FALLTHROUGH;
     case TAG_STATE:
       /* Don't output implicit leading charset component. */
       tag = (optimized ? _XmStrTagGet(opt) : _XmEntryTag(seg));
@@ -7366,6 +7355,7 @@ XmStringComponentType XmeStringGetComponent(_XmStringContext context,
         }
       }
       /* Fall through if no tag set. */
+      XM_FALLTHROUGH;
     case TAB_STATE:
       tmp_index = ((_XmStrContState(context) == TAB_STATE) ? _XmStrContTabCount(context) : 0);
       tabs = (optimized ? _XmStrTabs(opt) : _XmEntryTabsGet(seg));
@@ -7379,6 +7369,7 @@ XmStringComponentType XmeStringGetComponent(_XmStringContext context,
         return XmSTRING_COMPONENT_TAB;
       }
       /* Fall through if there are no tabs. */
+      XM_FALLTHROUGH;
     case DIR_STATE:
       dir = (optimized ? _XmStrDirection(opt) : _XmEntryDirectionGet(seg));
       if (dir != _XmStrContDir(context)) {
@@ -7419,6 +7410,7 @@ XmStringComponentType XmeStringGetComponent(_XmStringContext context,
         }
       }
       /* Fall through if no direction set. */
+      XM_FALLTHROUGH;
     case TEXT_STATE:
       switch (text_type) {
         case XmCHARSET_TEXT:
@@ -7455,6 +7447,7 @@ XmStringComponentType XmeStringGetComponent(_XmStringContext context,
             case XmNO_TEXT:
               assert(FALSE);
           }
+          break;
         case XmNO_TEXT:
           break;
         default:
@@ -7466,6 +7459,7 @@ XmStringComponentType XmeStringGetComponent(_XmStringContext context,
           return XmSTRING_COMPONENT_END;
       }
       /* Fall through if there is no text. */
+      XM_FALLTHROUGH;
     case END_REND_STATE:
       tmp_index = ((_XmStrContState(context) == END_REND_STATE) ? _XmStrContRendIndex(context) :
                                                                   0);
@@ -7486,6 +7480,7 @@ XmStringComponentType XmeStringGetComponent(_XmStringContext context,
         return XmSTRING_COMPONENT_RENDITION_END;
       }
       /* Fall through if there are no more rendition ends. */
+      XM_FALLTHROUGH;
     case POP_STATE:
       pop_dir = (optimized ? 0 : _XmEntryPopGet(seg));
       if (pop_dir) {
@@ -7496,6 +7491,7 @@ XmStringComponentType XmeStringGetComponent(_XmStringContext context,
         return XmSTRING_COMPONENT_LAYOUT_POP;
       }
       /* Fall through if there is no pop layout direction. */
+      XM_FALLTHROUGH;
     case SEP_STATE:
       /* This is the last possible component for a segment. */
       if (last_seg && last_line) {
@@ -7831,8 +7827,8 @@ XmParseMapping XmParseMappingCreate(ArgList arg_list, Cardinal arg_count)
 
 void XmParseMappingSetValues(XmParseMapping mapping, ArgList arg_list, Cardinal arg_count)
 {
-  register Cardinal i;
-  register String arg_name;
+  Cardinal i;
+  String arg_name;
   Cardinal unknown = 0;
   _XmProcessLock();
   /* Do a little error checking. */

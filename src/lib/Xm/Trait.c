@@ -105,7 +105,7 @@ externaldef(traits) XrmQuark XmQTtoolTip = NULLQUARK;
  * This routine sets up all quarks used by the traits in
  * Motif
  */
-void _XmInitializeTraits()
+void _XmInitializeTraits(void)
 {
   static Boolean initialized = False;
   /* avoid initializing more than once */

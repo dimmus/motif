@@ -148,7 +148,7 @@ void _XmBuildResources(XmSyntheticResource **wc_resources_ptr,
  **********************************************************************/
 void _XmInitializeSyntheticResources(XmSyntheticResource *resources, int num_resources)
 {
-  register int i;
+  int i;
   union string_quark q;
   for (i = 0, q.str = NULL; i < num_resources; i++, q.str = NULL) {
     q.quark = XrmPermStringToQuark(resources[i].resource_name);
@@ -186,7 +186,7 @@ static void GetValuesHook(Widget w,
   union string_quark q;
   /*  Loop through each argument, quarkifing the name.  Then loop  */
   /*  through each synthetic resource to see if there is a match.  */
-  for (i = 0; i < num_args; i++) {
+  for (i = 0; (Cardinal)i < num_args; i++) {
     quark = XrmStringToQuark(args[i].name);
     for (j = 0; j < num_resources; j++) {
       q.str = resources[j].resource_name;
@@ -428,7 +428,7 @@ static void ImportArgs(Widget w,
   union string_quark q;
   /*  Loop through each argument, quarkifing the name.  Then loop  */
   /*  through each synthetic resource to see if there is a match.  */
-  for (i = 0; i < num_args; i++) {
+  for (i = 0; (Cardinal)i < num_args; i++) {
     quark = XrmStringToQuark(args[i].name);
     for (j = 0; j < num_resources; j++) {
       q.str = resources[j].resource_name;

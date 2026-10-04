@@ -321,8 +321,8 @@ static char *_XmStringSourceGetChar(XmSourceData data,
                                     XmTextPosition position) /* starting position */
 {
   /* gap_size is the number of character in the gap, not number of bytes */
-  register int gap_size;
-  register XmTextPosition char_pos;
+  int gap_size;
+  XmTextPosition char_pos;
   XmTextWidget tw = (XmTextWidget)data->widgets[0];
   int char_size;
   if (tw->text.char_size > 1) {
@@ -362,12 +362,12 @@ static int CountLines(XmTextSource source, XmTextPosition start, unsigned long l
   BITS16 *bits16_ptr, *bits16_gap_start, *bits16_gap_end;
   wchar_t *wchar_t_ptr, *wchar_t_gap_start, *wchar_t_gap_end;
   /* verify that the 'start' and 'length' parameters are reasonable */
-  if (start + length > data->length)
+  if (start + length > (unsigned long)data->length)
     length = data->length - start;
   if (length == 0)
     return num_lines;
   seg_length = (data->gap_start - data->ptr) /
-               (tw->text.char_size < 3 ? (int)tw->text.char_size : sizeof(wchar_t));
+               (tw->text.char_size < 3 ? (int)tw->text.char_size : (int)sizeof(wchar_t));
   /* make sure the segment length is not greater than the length desired */
   if (length < seg_length)
     seg_length = length;
@@ -505,7 +505,7 @@ void _XmStringSourceSetGappedBuffer(XmSourceData data,
                                     XmTextPosition position) /* starting position */
 {
   XmTextWidget tw = (XmTextWidget)data->widgets[0];
-  int count, char_size = (tw->text.char_size < 3 ? (int)tw->text.char_size : sizeof(wchar_t));
+  int count, char_size = (tw->text.char_size < 3 ? (int)tw->text.char_size : (int)sizeof(wchar_t));
   /* if no change in gap placement, return */
   if (data->ptr + (position * char_size) == data->gap_start)
     return;
@@ -532,7 +532,7 @@ static void _XmStringSourceReadString(XmTextSource source, int start, XmTextBloc
   XmSourceData data = source->data;
   XmTextWidget tw = (XmTextWidget)data->widgets[0];
   int gap_size = data->gap_end - data->gap_start;
-  int byte_start = start * (tw->text.char_size < 3 ? (int)tw->text.char_size : sizeof(wchar_t));
+  int byte_start = start * (tw->text.char_size < 3 ? (int)tw->text.char_size : (int)sizeof(wchar_t));
   if (data->ptr + byte_start + block->length <= data->gap_start)
     block->ptr = data->ptr + byte_start;
   else if (data->ptr + byte_start + gap_size >= data->gap_end)
@@ -557,7 +557,7 @@ static XmTextPosition ReadSource(XmTextSource source,
   int num_bytes;
   XmSourceData data = source->data;
   XmTextWidget tw = (XmTextWidget)data->widgets[0];
-  int char_size = (tw->text.char_size < 3 ? (int)tw->text.char_size : sizeof(wchar_t));
+  int char_size = (tw->text.char_size < 3 ? (int)tw->text.char_size : (int)sizeof(wchar_t));
   if (last_position > data->length)
     last_position = data->length;
   /* NOTE: the length calculation could result in a truncated long */
@@ -620,9 +620,9 @@ Boolean _XmTextModifyVerify(XmTextWidget initiator,
                             XmTextBlock newblock, /* RETURN */
                             Boolean *freeBlock)
 {
-  register XmSourceData data = initiator->text.source->data;
-  register long delta;
-  register int block_num_chars; /* number of characters in the block */
+  XmSourceData data = initiator->text.source->data;
+  long delta;
+  int block_num_chars; /* number of characters in the block */
   XmTextPosition newInsert = initiator->text.cursor_position;
   XmTextVerifyCallbackStruct tvcb;
   XmTextVerifyCallbackStructWcs wcs_tvcb;
@@ -828,14 +828,14 @@ static XmTextStatus Replace(XmTextWidget initiator,
                             XmTextBlock block,
                             Boolean call_callbacks) /* unused */
 {
-  register XmSourceData data = initiator->text.source->data;
-  register int i;
-  register long delta;
-  register int block_num_chars; /* number of characters in the block */
+  XmSourceData data = initiator->text.source->data;
+  int i;
+  long delta;
+  int block_num_chars; /* number of characters in the block */
   int gap_size;
   int old_maxlength, new_maxlength;
   int char_size = (initiator->text.char_size < 3 ? (int)initiator->text.char_size :
-                                                   sizeof(wchar_t));
+                                                   (int)sizeof(wchar_t));
   if (*start == *end && block->length == 0)
     return EditReject;
   _XmTextValidate(start, end, data->length);
@@ -1026,9 +1026,9 @@ static XmTextPosition Scan(XmTextSource source,
                            int count,
                            Boolean include)
 {
-  register long whiteSpace = -1;
-  register XmTextPosition position = pos;
-  register int i;
+  long whiteSpace = -1;
+  XmTextPosition position = pos;
+  int i;
   XmTextPosition temp;
   XmSourceData data = source->data;
   XmTextWidget tw = (XmTextWidget)data->widgets[0];

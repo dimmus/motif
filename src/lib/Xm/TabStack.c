@@ -30,6 +30,7 @@
  * positioned on the side to simulate a folder tab.
  *
  */
+#include "TabBoxI.h"
 #include "XmI.h"
 #include <Xm/BulletinBP.h>
 #include <Xm/DialogS.h>
@@ -54,17 +55,6 @@
 #  undef _ARGS
 #endif
 #define _ARGS(a) a
-extern int _XiGetTabIndex _ARGS((Widget, int, int));
-extern int _GetTabWidth _ARGS((Widget, int));
-extern int _XmTabBoxGetTabHeight _ARGS((Widget, int));
-extern Widget _XmTabBoxCanvas _ARGS((Widget));
-extern void _XmTabBoxGetNumRowColumns _ARGS((Widget, int, int *, int *));
-extern int _XmTabBoxGetMaxTabWidth _ARGS((Widget));
-extern int _XmTabBoxGetMaxTabHeight _ARGS((Widget));
-extern void _XmTabBoxSelectTab _ARGS((Widget, int));
-extern void _XmTabBoxGetNumRowsColumns _ARGS((Widget, int, int *, int *));
-extern void _XmTabBoxStackedGeometry _ARGS((XmTabBoxWidget, Dimension, XRectangle *));
-extern int _XmTabbedStackListCount _ARGS((XmTabbedStackList));
 static void ClassInitialize(void);
 #ifdef TEAR_OFF_TABS
 static void ClassPartInitialize _ARGS((WidgetClass));
@@ -1677,59 +1667,7 @@ static XtGeometryResult QueryGeometry(Widget widget,
   }
   return (XtGeometryNo);
 }
-#if 0
-#  define XiReturn(i, r) \
-    printf("%d: RESULT: XtGeometry", i); \
-    switch (r) { \
-      case XtGeometryYes: \
-      default: \
-        printf("Yes"); \
-        break; \
-      case XtGeometryNo: \
-        printf("No"); \
-        break; \
-      case XtGeometryAlmost: \
-        printf("Almost"); \
-        break; \
-      case XtGeometryDone: \
-        printf("Done"); \
-        break; \
-    } \
-    if (request->request_mode & XtCWQueryOnly) \
-      printf("(QUERY)\n"); \
-    else \
-      printf("\n"); \
-    printf("  WIDGET: %s\n", XtName(widget)); \
-    printf("  X      : "); \
-    if (allowed->request_mode & CWX) \
-      printf("%d\n", allowed->x); \
-    else \
-      printf("N/A\n"); \
-    printf("  Y      : "); \
-    if (allowed->request_mode & CWY) \
-      printf("%d\n", allowed->y); \
-    else \
-      printf("N/A\n"); \
-    printf("  WIDTH  : "); \
-    if (allowed->request_mode & CWWidth) \
-      printf("%d\n", allowed->width); \
-    else \
-      printf("N/A\n"); \
-    printf("  HEIGHT : "); \
-    if (allowed->request_mode & CWHeight) \
-      printf("%d\n", allowed->height); \
-    else \
-      printf("N/A\n"); \
-    printf("  BORDER : "); \
-    if (allowed->request_mode & CWBorderWidth) \
-      printf("%d\n", allowed->border_width); \
-    else \
-      printf("N/A\n"); \
-    printf("\n"); \
-    return (r);
-#else
 #  define XiReturn(i, r) return (r)
-#endif
 static XtGeometryResult GeometryNo(XmTabStackWidget tab,
                                    Widget widget,
                                    XtWidgetGeometry *request,
@@ -1790,29 +1728,6 @@ static XtGeometryResult GeometryManager(Widget widget,
   Dimension child_save_width, child_save_height;
   XtWidgetGeometry want, got;
   XRectangle box, kids;
-#if 0
-    printf("REQUEST: ");
-    if( request->request_mode & XtCWQueryOnly ) printf("QUERY");
-    printf("\n");
-    printf("  WIDGET: %s\n", XtName(widget));
-    printf("  X      : ");
-    if( request->request_mode & CWX ) printf("%d\n", request->x);
-    else printf("N/A\n");
-    printf("  Y      : ");
-    if( request->request_mode & CWY ) printf("%d\n", request->y);
-    else printf("N/A\n");
-    printf("  WIDTH  : ");
-    if( request->request_mode & CWWidth ) printf("%d\n", request->width);
-    else printf("N/A\n");
-    printf("  HEIGHT : ");
-    if( request->request_mode & CWHeight ) printf("%d\n", request->height);
-    else printf("N/A\n");
-    printf("  BORDER : ");
-    if( request->request_mode & CWBorderWidth )
-	printf("%d\n", request->border_width);
-    else printf("N/A\n");
-    printf("\n");
-#endif
   if (XmTabStack__set_tab_list(tab) && (request->request_mode & CWBorderWidth)) {
     XmTabStack__set_tab_list(tab) = False;
     XtVaSetValues(XmTabStack_tab_box(tab), XmNtabList, XmTabStack__tab_list(tab), NULL);
@@ -2131,6 +2046,7 @@ static void ChangeManaged(Widget widget)
       switch (XtMakeResizeRequest((Widget)tab, geom.width, geom.height, &width, &height)) {
         case XtGeometryYes:
           changed_size = True;
+          break;
         case XtGeometryNo:
         default:
           break;
@@ -2659,7 +2575,7 @@ static void Layout(XmTabStackWidget tab)
   /*
    * ... And now place the kiddies.
    */
-  for (i = 0, kid = tab->composite.children; i < tab->composite.num_children; ++i, ++kid) {
+  for (i = 0, kid = tab->composite.children; (Cardinal)i < tab->composite.num_children; ++i, ++kid) {
     if (*kid == XmTabStack_tab_box(tab) || !XtIsManaged(*kid))
       continue;
     if (XmTabStack__active_child(tab) == *kid) {
@@ -2706,7 +2622,7 @@ static void TabSelectedCallback(Widget widget, XtPointer client, XtPointer cbdat
   for (i = 0; i < tab->composite.num_children; ++i, ++kid) {
     if (!XtIsManaged(*kid) || IsTabBox(tab, *kid))
       continue;
-    if (idx == info->tab_index) {
+    if ((int)idx == info->tab_index) {
       active = *kid;
       break;
     }
@@ -2847,7 +2763,7 @@ Widget XmCreateTabStack(Widget parent, String name, ArgList arg_list, Cardinal a
 
 Widget XmVaCreateTabStack(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);
@@ -3523,7 +3439,7 @@ Widget XmTabStackIndexToWidget(Widget widget, int idx)
   {
     if (IsTabBox(tab, *kid) || !XtIsManaged(*kid))
       continue;
-    if (cnt++ == idx) {
+    if ((int)cnt++ == idx) {
       _XmAppUnlock(app);
       return (*kid);
     }

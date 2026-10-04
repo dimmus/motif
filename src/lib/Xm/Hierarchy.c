@@ -85,7 +85,7 @@ typedef enum { YES, NO, DONT_CARE } SuccessType;
 /************************************************************
  *	STATIC FUNCTION DECLARATIONS
  *************************************************************/
-static void ClassInit(), ClassPartInitialize(WidgetClass), InsertChild(Widget);
+static void ClassInit(void), ClassPartInitialize(WidgetClass), InsertChild(Widget);
 static void Destroy(Widget), ConstraintDestroy(Widget);
 static void Realize(Widget, Mask *, XSetWindowAttributes *);
 static void Initialize(Widget, Widget, ArgList, Cardinal *);
@@ -341,7 +341,7 @@ WidgetClass xmHierarchyWidgetClass = (WidgetClass)&xmHierarchyClassRec;
  *	Returns:       none.
  */
 /*ARGSUSED*/
-static void ClassInit()
+static void ClassInit(void)
 {
   XtSetTypeConverter(XmRString,
                      XmRXmHierarchyNodeState,
@@ -659,7 +659,7 @@ static Boolean ConstraintSetValues(
   HierarchyConstraints old_node = GetNodeInfo(current);
   Boolean insert_change = False;
   int i;
-  for (i = 0; i < *num_args; i++)
+  for (i = 0; (Cardinal)i < *num_args; i++)
     if (streq(args[i].name, XmNinsertBefore)) {
       insert_change = True;
       break;
@@ -716,7 +716,7 @@ static Boolean ConstraintSetValues(
 /*ARGSUSED*/
 static void ChangeNodeState(HierarchyConstraints node)
 {
-  register int i, num;
+  int i, num;
   HierarchyConstraints *childp;
   XmHierarchyWidget hw = (XmHierarchyWidget)XtParent(XmHierarchyC_widget(node));
   XmHierarchyWidgetClass hc = (XmHierarchyWidgetClass)XtClass(hw);
@@ -770,10 +770,10 @@ static Boolean AncestorClosed(HierarchyConstraints node)
  */
 static void UnmapAllExtraNodes(Widget w, HierarchyConstraints node)
 {
-  register int i;
+  int i;
   XmHierarchyWidgetClass hc = (XmHierarchyWidgetClass)(XtClass(w));
-  register int num;
-  register HierarchyConstraints *ptr;
+  int num;
+  HierarchyConstraints *ptr;
   void (*unmap_extra)(Widget, HierarchyConstraints);
   XmHierarchyNodeProc unmap_node;
   _XmProcessLock();
@@ -832,7 +832,7 @@ static void UnmapNode(HierarchyConstraints node)
 static void _BuildNodeTable(Widget w, HierarchyConstraints node, Cardinal *current_index)
 {
   XmHierarchyWidget hw = (XmHierarchyWidget)w;
-  register int i;
+  int i;
   if ((node == NULL) ||
       ((XmHierarchyC_widget(node) != NULL) && !XtIsManaged(XmHierarchyC_widget(node))))
   {
@@ -845,7 +845,7 @@ static void _BuildNodeTable(Widget w, HierarchyConstraints node, Cardinal *curre
   }
   if (XmHierarchyC_state(node) == XmClosed)
     return;
-  for (i = 0; i < XmHierarchyC_num_children(node); i++)
+  for (i = 0; (Cardinal)i < XmHierarchyC_num_children(node); i++)
     _BuildNodeTable(w, XmHierarchyC_children(node)[i], current_index);
 }
 
@@ -1111,8 +1111,8 @@ static void DestroyFolderImages(Widget w)
  */
 static void RemoveChildren(HierarchyConstraints *list, Cardinal num)
 {
-  register int i;
-  for (i = 0; i < num; i++, list++) {
+  int i;
+  for (i = 0; (Cardinal)i < num; i++, list++) {
     /*
      * Our parent is already gone.
      */
@@ -1151,7 +1151,7 @@ static void AddChildToList(HierarchyConstraints **list,
                            Cardinal *alloc,
                            HierarchyConstraints child)
 {
-  register int i, j;
+  int i, j;
   HierarchyConstraints *l_child;
   SuccessType success = DONT_CARE;
   Widget insert_before = XmHierarchyC_insert_before(child);
@@ -1209,7 +1209,7 @@ static HierarchyConstraints GetNodeInfo(Widget w)
  */
 static void RemoveNodeFromParent(HierarchyConstraints node)
 {
-  register int i;
+  int i;
   HierarchyConstraints pnode;
   if (XmHierarchyC_status(node) & PARENT_GONE)
     return;
@@ -1220,7 +1220,7 @@ static void RemoveNodeFromParent(HierarchyConstraints node)
   }
   else
     pnode = GetNodeInfo(XmHierarchyC_parent(node));
-  for (i = 0; i < XmHierarchyC_num_children(pnode); i++) {
+  for (i = 0; (Cardinal)i < XmHierarchyC_num_children(pnode); i++) {
     if (XmHierarchyC_children(pnode)[i] == node) {
       BumpChildren(XmHierarchyC_children(pnode), i, (int)XmHierarchyC_num_children(pnode));
       XmHierarchyC_num_children(pnode)--;
@@ -1294,7 +1294,7 @@ WidgetList XmHierarchyGetChildNodes(Widget nw)
     return retval;
   }
   retval = (WidgetList)_XmMallocArray(XmHierarchyC_num_children(node) + 1, sizeof(Widget));
-  for (i = 0; i < XmHierarchyC_num_children(node); i++)
+  for (i = 0; (Cardinal)i < XmHierarchyC_num_children(node); i++)
     retval[i] = XmHierarchyC_widget(XmHierarchyC_children(node)[i]);
   retval[i] = (Widget)NULL;
   _XmAppUnlock(app);

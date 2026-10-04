@@ -555,6 +555,7 @@ static void ChangeManaged(Widget wid)
     case XtGeometryAlmost:
       XtMakeGeometryRequest((Widget)shell, &replygeom, NULL);
       /* fall through. */
+      XM_FALLTHROUGH;
     case XtGeometryYes:
       DoLayout(wid);
       break;
@@ -581,14 +582,14 @@ static void Resize(Widget w)
  */
 static void _XmFastExpose(Widget widg)
 {
-  register int i;
-  register Widget child;
+  int i;
+  Widget child;
   XmGrabShellWidget gs = (XmGrabShellWidget)widg;
   _XmProcessLock();
   (*(XtClass(widg)->core_class.expose))(widg, NULL, NULL);
   _XmProcessUnlock();
   /* Process each windowed child */
-  for (i = 0; i < gs->composite.num_children; i++) {
+  for (i = 0; (Cardinal)i < gs->composite.num_children; i++) {
     child = gs->composite.children[i];
     if (XtIsWidget(child) && XtIsManaged(child)) {
       _XmProcessLock();

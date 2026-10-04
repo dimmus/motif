@@ -310,12 +310,6 @@ static int ClipboardSendMessage(Display *display,
                                 ClipboardFormatItem formatptr,
                                 int messagetype);
 static int ClipboardDataIsReady(Display *display, XEvent *event, char *private_info);
-#if 0
-static int ClipboardRequestorIsReady(
-                        Display *display,
-                        XEvent *event,
-                        char *private_info) ;
-#endif
 static int ClipboardGetSelection(Display *display,
                                  Window window,
                                  Atom target,
@@ -744,9 +738,9 @@ static void ClipboardEventHandler(Widget widget, XtPointer closure, XEvent *even
   if (callbackroutine == NULL)
     return;
   reason = 0;
-  if (event_rcvd->data.l[0] == atoms[XmA_MOTIF_CLIP_DATA_REQUEST])
+  if ((Atom)event_rcvd->data.l[0] == atoms[XmA_MOTIF_CLIP_DATA_REQUEST])
     reason = XmCR_CLIPBOARD_DATA_REQUEST;
-  if (event_rcvd->data.l[0] == atoms[XmA_MOTIF_CLIP_DATA_DELETE])
+  if ((Atom)event_rcvd->data.l[0] == atoms[XmA_MOTIF_CLIP_DATA_DELETE])
     reason = XmCR_CLIPBOARD_DATA_DELETE;
   if (reason == 0)
     return;
@@ -1552,7 +1546,7 @@ static void ClipboardDeleteItem(Display *display,
   if (!header->currItems) {
     return;
   }
-  while (i < header->currItems) {
+  while ((unsigned long)i < header->currItems) {
     i++;
     if (*nextid == deleteid) {
       nextid++;
@@ -1591,7 +1585,7 @@ static void ClipboardDeleteItem(Display *display,
     if (nextpasteid == 0) {
       /* restore this value */
       nextpasteindex = i;
-      while (nextpasteindex < header->currItems) {
+      while ((unsigned long)nextpasteindex < header->currItems) {
         thisid = listptr + nextpasteindex;
         if (!ClipboardIsMarkedForDelete(display, header, *thisid)) {
           nextpasteid = *thisid;
@@ -1801,42 +1795,6 @@ static int ClipboardDataIsReady(Display *display, XEvent *event, char *private_i
   XtFree((char *)formatitem);
   return okay;
 }
-#if 0
-/* This function is currently unused. */
-/*---------------------------------------------*/
-static int
-ClipboardRequestorIsReady(
-        Display *display,
-        XEvent *event,
-        char *private_info )
-{
-    XPropertyEvent *property_event;
-    XDestroyWindowEvent *destroy_event;
-    ClipboardDestroyInfo info;
-    info = ( ClipboardDestroyInfo )private_info;
-    if ( (event->type & 127) == DestroyNotify )
-    {
-        destroy_event = (XDestroyWindowEvent*)event;
-        if ( destroy_event->window == info->window )
-        {
-            info->window = 0;
-            return 1;
-        }
-    }
-    if ( (event->type & 127) == PropertyNotify )
-    {
-        property_event = (XPropertyEvent*)event;
-        /* make sure we have right property and are ready */
-        if ( property_event->atom == info->property
-                            &&
-             property_event->state == PropertyDelete )
-        {
-            return 1;
-        }
-    }
-    return 0;
- }
-#endif
 /*---------------------------------------------*/
 static int ClipboardGetSelection(Display *display,
                                  Window window,
@@ -1887,20 +1845,11 @@ static int ClipboardGetSelection(Display *display,
                           XtAppGetSelectionTimeout(app) * CLIPBOARD_WAIT_FACTOR,
                           ClipboardTimeout,
                           (XtPointer)&timed_out);
-#ifdef XTHREADS
   while (XtAppGetExitFlag(app) == False) {
-#else
-  for (;;) {
-#endif
-#ifdef XTHREADS
     XEvent event;
     XtInputMask mask;
-#endif
     if (info->received || timed_out)
       break;
-#ifndef XTHREADS
-    XtAppProcessEvent(app, XtIMAll);
-#else
     while (!(mask = XtAppPending(app)))
       ;                      /* Busy waiting - so that we don't lose our lock */
     if (mask & XtIMXEvent) { /* We have an XEvent */
@@ -1913,7 +1862,6 @@ static int ClipboardGetSelection(Display *display,
     }
     else                            /* not an XEvent, process it */
       XtAppProcessEvent(app, mask); /* non blocking */
-#endif
   }
   if (!timed_out)
     XtRemoveTimeOut(timer);
@@ -2011,16 +1959,7 @@ static int ClipboardRequestDataAndWait(Display *display,
   }
   timer_expired = False;
   timerid = XtAppAddTimeOut(app_context, maxtime, ClipboardTimeout, &timer_expired);
-#ifdef XTHREADS
   while (!dataisready && !timer_expired && (XtAppGetExitFlag(app_context) == False)) {
-#else
-  while (!dataisready && !timer_expired) {
-#endif
-#ifndef XTHREADS
-    XtAppNextEvent(app_context, &event_return);
-    dataisready = ClipboardDataIsReady(display, &event_return, (char *)&cutbynameinfo);
-    XtDispatchEvent(&event_return);
-#else
     XtInputMask mask;
     while (!(mask = XtAppPending(app_context)))
       ; /* busy waiting - don't lose lock */
@@ -2031,7 +1970,6 @@ static int ClipboardRequestDataAndWait(Display *display,
     }
     else
       XtAppProcessEvent(app_context, mask);
-#endif
   }
   if (!timer_expired)
     XtRemoveTimeOut(timerid);
@@ -2234,7 +2172,7 @@ static int ClipboardSearchForWindow(Display *display, Window parentwindow, Windo
   found = 0;
   windowptr = children;
   /* now search through the list for the window */
-  for (i = 0; i < numchildren; i++) {
+  for (i = 0; (unsigned int)i < numchildren; i++) {
     if (*windowptr == window) {
       found = 1;
     }
@@ -3254,7 +3192,7 @@ int XmClipboardInquireCount(Display *display,
           if (str != NULL) {
             temp = strlen(str);
             XFree(str);
-            if (temp > loc_maxlength) {
+            if ((unsigned long)temp > loc_maxlength) {
               loc_maxlength = temp;
             }
           }

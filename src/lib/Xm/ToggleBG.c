@@ -512,10 +512,10 @@ static void ClassInitialize(void)
   merged_list = (XtResource *)_XmMallocArray(wc_num_res + sc_num_res, sizeof(XtResource));
   _XmTransformSubResources(
       xmLabelGCacheObjClassRec.object_class.resources, sc_num_res, &uncompiled, &num);
-  for (i = 0; i < num; i++)
+  for (i = 0; (Cardinal)i < num; i++)
     merged_list[i] = uncompiled[i];
   XtFree((char *)uncompiled);
-  for (i = 0, j = num; i < wc_num_res; i++, j++)
+  for (i = 0, j = num; (Cardinal)i < wc_num_res; i++, j++)
     merged_list[j] = xmToggleButtonGCacheObjClassRec.object_class.resources[i];
   xmToggleButtonGCacheObjClassRec.object_class.resources = merged_list;
   xmToggleButtonGCacheObjClassRec.object_class.num_resources = wc_num_res + sc_num_res;
@@ -2062,6 +2062,7 @@ static void DrawToggle(XmToggleButtonGadget w)
       case XmONE_OF_MANY:
         /* This value should have been normalized away! */
         assert(FALSE);
+        XM_FALLTHROUGH;
       case XmONE_OF_MANY_DIAMOND:
         XmeDrawDiamond(dpy,
                        drawable,
@@ -2286,7 +2287,7 @@ static void ComputeSpace(XmToggleButtonGadget tb)
  *************************************<->***********************************/
 static void Redisplay(Widget w, XEvent *event, Region region)
 {
-  register XmToggleButtonGadget tb = (XmToggleButtonGadget)w;
+  XmToggleButtonGadget tb = (XmToggleButtonGadget)w;
   /* Fix CR #4884, D. Rand 6/4/92 */
   if (!XtIsRealized(w))
     return;
@@ -2340,7 +2341,7 @@ static void Redisplay(Widget w, XEvent *event, Region region)
  **************************************************************************/
 static void Resize(Widget w)
 {
-  register XmToggleButtonGadget tb = (XmToggleButtonGadget)w;
+  XmToggleButtonGadget tb = (XmToggleButtonGadget)w;
   if (LabG_IsPixmap(w))
     SetToggleSize(tb);
   else {
@@ -3024,7 +3025,7 @@ Widget XmCreateToggleButtonGadget(Widget parent, char *name, Arg *arglist, Cardi
 
 Widget XmVaCreateToggleButtonGadget(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);

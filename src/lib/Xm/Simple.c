@@ -183,6 +183,7 @@ static void EvaluateConvenienceStructure(Widget wid, XmSimpleMenu sm)
           XtSetArg(args[n], XmNseparatorType, XmDOUBLE_LINE);
           n++;
         }
+        XM_FALLTHROUGH;
       case XmSEPARATOR:
         snprintf(name_buf, sizeof(name_buf), "separator_%d", separator_count++);
         child = XtCreateManagedWidget(name_buf, xmSeparatorGadgetClass, (Widget)rc, args, n);
@@ -202,6 +203,7 @@ static void EvaluateConvenienceStructure(Widget wid, XmSimpleMenu sm)
           XtSetArg(args[n], XmNindicatorType, XmONE_OF_MANY);
           n++;
         }
+        XM_FALLTHROUGH;
       case XmCHECKBUTTON:
         snprintf(name_buf, sizeof(name_buf), "button_%d", button_count++);
         if (n < 7) {
@@ -305,12 +307,12 @@ Widget XmCreateSimplePulldownMenu(Widget parent, String name, ArgList args, Card
       return (rc);
     }
     else {
-      for (i = 0; i < num_buttons; i++) {
+      for (i = 0; (Cardinal)i < num_buttons; i++) {
         if (((XmIsCascadeButtonGadget(buttons[i])) || (XmIsCascadeButton(buttons[i]))) &&
             (i == mr.post_from_button))
           break;
       }
-      if (i < num_buttons) {
+      if ((Cardinal)i < num_buttons) {
         n = 0;
         XtSetArg(local_args[n], XmNsubMenuId, rc);
         n++;
@@ -369,14 +371,14 @@ Widget XmCreateSimpleOptionMenu(Widget parent, String name, ArgList args, Cardin
     }
     else {
       button_count = 0;
-      for (i = 0; i < num_buttons; i++) { /* count only PushB */
+      for (i = 0; (Cardinal)i < num_buttons; i++) { /* count only PushB */
         if ((XmIsPushButtonGadget(buttons[i])) || (XmIsPushButton(buttons[i]))) {
           if (button_count == mr.button_set)
             break;
           button_count++;
         }
       }
-      if (i < num_buttons) {
+      if ((Cardinal)i < num_buttons) {
         n = 0;
         XtSetArg(local_args[n], XmNmenuHistory, buttons[i]);
         n++;

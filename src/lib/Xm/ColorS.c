@@ -721,7 +721,7 @@ static void SelectColor(XmColorSelectorWidget csw)
  */
 static int EndsInDigits(char *str)
 {
-  register char *c = str;
+  char *c = str;
   while (*c != '\0')
     c++; /* advance to end of string marker */
   c--;   /* back to the last character */
@@ -742,8 +742,8 @@ static int EndsInDigits(char *str)
  */
 static Boolean FindColor(XmColorSelectorWidget csw, int *color_num)
 {
-  register ColorInfo *ptr;
-  register int i, red, green, blue;
+  ColorInfo *ptr;
+  int i, red, green, blue;
   /*
    * Obtain the color settings from the ColorSelector
    * data structure
@@ -1031,7 +1031,7 @@ static void read_rgb_file(XmColorSelectorWidget csw,
   char string_buffer[BUFSIZ + (BUFSIZ >> 1)];
   char *color_name;
   ColorInfo *color_info = NULL;
-  register int i;
+  int i;
   Arg *margs, args[20];
   /*
    * Create new list if needed, or delete any old list items.
@@ -1071,8 +1071,8 @@ static void read_rgb_file(XmColorSelectorWidget csw,
    * Read in all the colornames.
    */
   if ((file = fopen(XmColorS_rgb_file(csw), "r")) != NULL) {
-    register int alloc, count, len;
-    register char *name;
+    int alloc, count, len;
+    char *name;
     alloc = count = 0;
     while (fgets(buf, BUFSIZ, file)) {
       /*
@@ -1106,7 +1106,7 @@ static void read_rgb_file(XmColorSelectorWidget csw,
       }
       name = color_info[count].no_space_lower_name;
       for (i = 0; i < len; i++) {
-        register char c = color_name[i];
+        char c = color_name[i];
         /*
          * Copy in all characters that are ascii and non-spaces.
          */
@@ -1120,7 +1120,7 @@ static void read_rgb_file(XmColorSelectorWidget csw,
       name = color_info[count].name;
       color_name[0] = toupper(color_name[0]);
       for (i = 0; i < len; i++) {
-        register char c = color_name[i];
+        char c = color_name[i];
         /*
          * Capitalize all characters after a space.
          */
@@ -1143,8 +1143,8 @@ static void read_rgb_file(XmColorSelectorWidget csw,
     i = 0;
     while (i < (count - 1)) {
       if (streq(color_info[i].no_space_lower_name, color_info[i + 1].no_space_lower_name)) {
-        register int j;
-        register ColorInfo *ptr;
+        int j;
+        ColorInfo *ptr;
         ptr = color_info + i;
         j = i;
         /*
@@ -1219,7 +1219,7 @@ static int CmpColors(const void *ptr_1, const void *ptr_2)
  */
 static char *find_name(char *buffer)
 {
-  register char *curr, *temp; /* current pointer */
+  char *curr, *temp; /* current pointer */
   for (curr = buffer; curr != NULL && *curr != '\0'; curr++) {
     /*
      * Look for first non number, non space or tab.
@@ -1245,7 +1245,7 @@ static char *find_name(char *buffer)
  */
 static void CreateColorSliders(XmColorSelectorWidget csw, ArgList cargs, Cardinal cnum_args)
 {
-  register int i;
+  int i;
   Cardinal num_args, title;
   Arg *margs, args[10];
   num_args = 0;
@@ -1538,7 +1538,7 @@ Widget XmCreateColorSelector(Widget parent, String name, ArgList args, Cardinal 
 
 Widget XmVaCreateColorSelector(Widget parent, char *name, ...)
 {
-  register Widget w;
+  Widget w;
   va_list var;
   int count;
   Va_start(var, name);
