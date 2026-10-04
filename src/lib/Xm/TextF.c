@@ -7147,7 +7147,8 @@ static void PreeditDone(XIC xic, XPointer client_data, XPointer call_data)
   XmTextFieldWidget tf = (XmTextFieldWidget)client_data;
   Widget p = (Widget)tf;
   Boolean need_verify, end_preedit = False;
-  if (!TextF_Editable(tf))
+  /* Not after TextFieldResetIC, which has committed the preedit */
+  if (!TextF_Editable(tf) || !tf->text.onthespot->under_preedit)
     return;
   while (!XtIsShell(p))
     p = XtParent(p);
@@ -7211,7 +7212,7 @@ static void PreeditDraw(XIC xic, XPointer client_data, XIMPreeditDrawCallbackStr
   char *ptr = NULL;
   Widget p = w;
   Boolean need_verify, end_preedit = False;
-  if (!TextF_Editable(tf))
+  if (!TextF_Editable(tf) || !tf->text.onthespot->under_preedit)
     return;
   if (call_data->text && (insert_length = call_data->text->length) > TEXT_MAX_INSERT_SIZE)
     return;
@@ -7462,7 +7463,7 @@ static void PreeditCaret(XIC xic, XPointer client_data, XIMPreeditCaretCallbackS
   XmTextFieldWidget tf = (XmTextFieldWidget)client_data;
   Widget p = (Widget)tf;
   Boolean need_verify;
-  if (!TextF_Editable(tf))
+  if (!TextF_Editable(tf) || !tf->text.onthespot->under_preedit)
     return;
   while (!XtIsShell(p))
     p = XtParent(p);
@@ -7574,6 +7575,12 @@ static void TextFieldResetIC(Widget w)
   if (tf->text.overstrike) {
     if (nextPos != tf->text.string_length)
       nextPos++;
+  }
+  else if (PreStart(tf) < PreEnd(tf)) {
+    /* The preedit is in the text: the committed string replaces it */
+    cursorPos = PreStart(tf);
+    nextPos = PreEnd(tf);
+    doSetHighlight(w, cursorPos, nextPos, XmHIGHLIGHT_NORMAL);
   }
   if (tf->text.max_char_size == 1) {
     replace_res = _XmTextFieldReplaceText(tf, NULL, cursorPos, nextPos, mb, insert_length, True);
