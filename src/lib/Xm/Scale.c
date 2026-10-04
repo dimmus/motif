@@ -794,13 +794,11 @@ static void Initialize(Widget rw,
   if (new_w->scale.font_list) {
     if (!XmeRenderTableGetDefaultFont(new_w->scale.font_list, &new_w->scale.font_struct))
       new_w->scale.font_struct = NULL;
-#if !USE_XFT
   }
   else {
     new_w->scale.font_struct = XLoadQueryFont(XtDisplay(new_w), XmDEFAULT_FONT);
     if (new_w->scale.font_struct == NULL)
       new_w->scale.font_struct = XLoadQueryFont(XtDisplay(new_w), "*");
-#endif
   }
   (void)CreateScaleTitle(new_w);
   (void)CreateScaleScrollBar(new_w);
@@ -1047,10 +1045,8 @@ static Boolean SetValues(Widget cw,
   HandleScrollBar(cur, req, new_w);
   /*  Set the font struct for the value displayed  */
   if (DIFF(scale.font_list)) {
-#if !USE_XFT
     if ((cur->scale.font_list == NULL) && (cur->scale.font_struct != NULL))
       XFreeFont(XtDisplay(cur), cur->scale.font_struct);
-#endif
     if (cur->scale.font_list)
       XmFontListFree(cur->scale.font_list);
     if (new_w->scale.font_list == NULL)
@@ -1059,14 +1055,11 @@ static Boolean SetValues(Widget cw,
     if (new_w->scale.font_list != NULL) {
       if (!XmeRenderTableGetDefaultFont(new_w->scale.font_list, &new_w->scale.font_struct))
         new_w->scale.font_struct = NULL;
-#if USE_XFT
-      /* TODO: should it be ifndef? */
     }
     else {
       new_w->scale.font_struct = XLoadQueryFont(XtDisplay(new_w), XmDEFAULT_FONT);
       if (new_w->scale.font_struct == NULL)
         new_w->scale.font_struct = XLoadQueryFont(XtDisplay(new_w), "*");
-#endif
     }
     XtReleaseGC((Widget)new_w, new_w->scale.foreground_GC);
     GetForegroundGC(new_w);
@@ -1161,10 +1154,8 @@ static void Destroy(Widget wid)
 {
   XmScaleWidget sw = (XmScaleWidget)wid;
   XtReleaseGC((Widget)sw, sw->scale.foreground_GC);
-#if USE_XFT
   if (sw->scale.font_list == NULL && sw->scale.font_struct != NULL)
     XFreeFont(XtDisplay(sw), sw->scale.font_struct);
-#endif
   if (sw->scale.font_list)
     XmFontListFree(sw->scale.font_list);
   if (sw->scale.value_region)
