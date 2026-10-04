@@ -40,10 +40,12 @@
 
 #    define _XM_BANNED(instead) __attribute__((__deprecated__("unbounded, use " instead)))
 
-extern int sprintf(char *, const char *, ...) _XM_BANNED("snprintf");
-extern int vsprintf(char *, const char *, va_list) _XM_BANNED("vsnprintf");
-extern char *strcpy(char *, const char *) _XM_BANNED("memcpy, snprintf or XtNewString");
-extern char *strcat(char *, const char *) _XM_BANNED("memcpy, snprintf or _XmConcatStrings");
+/* The names are in parentheses because glibc's _FORTIFY_SOURCE defines
+ * some of them as function-like macros for Clang. */
+extern int(sprintf)(char *, const char *, ...) _XM_BANNED("snprintf");
+extern int(vsprintf)(char *, const char *, va_list) _XM_BANNED("vsnprintf");
+extern char *(strcpy)(char *, const char *) _XM_BANNED("memcpy, snprintf or XtNewString");
+extern char *(strcat)(char *, const char *) _XM_BANNED("memcpy, snprintf or _XmConcatStrings");
 
 /* Xt's XtNewString macro expands to strcpy: give it a bounded body. */
 static inline char *_XmBannedNewString(const char *str)
