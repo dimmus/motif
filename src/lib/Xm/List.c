@@ -6772,10 +6772,7 @@ static void APIReplaceItemsPos(
     reset_width |= (lw->list.InternalList[position - 1]->width == old_max_width);
     reset_height |= (lw->list.InternalList[position - 1]->height == old_max_height);
     ReplaceItem(lw, new_items[i], position);
-    if (lw->list.selectedItems && lw->list.selectedItemCount > 0) {
-      BuildSelectedList(lw, TRUE);
-      nsel += ReplaceInternalElement(lw, position, select);
-    }
+    nsel += ReplaceInternalElement(lw, position, select);
   }
   if (select || (nsel != lw->list.selectedPositionCount))
     UpdateSelectedPositions(lw, nsel);

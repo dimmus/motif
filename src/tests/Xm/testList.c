@@ -823,6 +823,32 @@ START_TEST(list_replace_unselected_duplicates)
 }
 END_TEST
 
+static Dimension list_width(Widget list)
+{
+	Dimension w = 0;
+
+	XtVaGetValues(list, XmNwidth, &w, NULL);
+	return w;
+}
+
+/* Items replaced by position are measured again without a selection. */
+START_TEST(list_replace_pos_measures)
+{
+	Widget list = make_list(XmBROWSE_SELECT, 20, "item %d", 0);
+	XmString wide = item("a much, much wider item %d", 1);
+	Dimension base;
+
+	XtRealizeWidget(shell);
+	base = list_width(list);
+	XmListReplaceItemsPos(list, &wide, 1, 5);
+	ck_assert_int_gt(list_width(list), base);
+	XmListSelectPos(list, 3, False);
+	XmListReplaceItemsPos(list, &wide, 1, 3);
+	ck_assert_int_eq(check_selection(list), 1);
+	XmStringFree(wide);
+}
+END_TEST
+
 /* Many items added and deleted one at a time, at both ends. */
 START_TEST(list_grow_and_shrink)
 {
@@ -871,6 +897,7 @@ void list_suite(SRunner *runner)
 	tcase_add_test(t, list_duplicates_long);
 	tcase_add_test(t, list_lookup_compare_semantics);
 	tcase_add_test(t, list_items_resource);
+	tcase_add_test(t, list_replace_pos_measures);
 	tcase_add_test(t, list_grow_and_shrink);
 	tcase_add_checked_fixture(t, _init_xt, uninit_xt);
 	tcase_set_timeout(t, 60);
