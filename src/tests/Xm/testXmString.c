@@ -330,6 +330,38 @@ START_TEST(concat_long_text)
 }
 END_TEST
 
+/*
+ * XmStringCopy shares the string.  The reference counts were 6 bits
+ * (optimized strings) and 8 bits wide, so every 64th or 256th copy was
+ * a full clone.
+ */
+START_TEST(copy_shares)
+{
+	XmString s[2], copies[1000];
+	int i, j;
+
+	s[0] = XmStringCreateLocalized("The quick brown fox");
+	s[1] = cat(XmStringCreateLocalized("one"), sep(),
+		   XmStringCreateLocalized("two"), NULL);
+	ck_assert(_XmStrOptimized(s[0]));
+	ck_assert(_XmStrMultiple(s[1]));
+	for (j = 0; j < 2; j++) {
+		for (i = 0; i < 1000; i++) {
+			copies[i] = XmStringCopy(s[j]);
+			ck_assert_ptr_eq(copies[i], s[j]);
+		}
+		ck_assert_uint_eq(_XmStrRefCountGet(s[j]), 1001);
+		for (i = 0; i < 1000; i++)
+			XmStringFree(copies[i]);
+		ck_assert_uint_eq(_XmStrRefCountGet(s[j]), 1);
+	}
+	assert_text(s[0], "The quick brown fox");
+	assert_text(s[1], "onetwo");
+	XmStringFree(s[0]);
+	XmStringFree(s[1]);
+}
+END_TEST
+
 START_TEST(line_count)
 {
 	XmString s = cat(XmStringCreateLocalized("one"), sep(),
@@ -1155,6 +1187,7 @@ void xmstring_suite(SRunner *runner)
 	tcase_add_test(t, empty_strings);
 	tcase_add_test(t, concat_text);
 	tcase_add_test(t, concat_long_text);
+	tcase_add_test(t, copy_shares);
 	tcase_add_test(t, line_count);
 	tcase_add_test(t, concat_keeps_tab_after_text);
 	tcase_add_test(t, empty_text_component);

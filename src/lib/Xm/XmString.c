@@ -1232,22 +1232,27 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
       b_str = (XmString)&b_tmp;
       _XmStrInit(b_str, XmSTRING_MULTIPLE_ENTRY);
       _XmStrEntryCount(b_str) = 1;
-      _XmStrRefCountSet(b, 0);
+      b->opt_str.pad = 0; /* the segment's permanent and soft_line_break */
       _XmEntryTabsSet(b, _XmStrTabs(b));
       _XmEntryImm(b) = 1;
       if (_XmStrText(b) != (char *)_XmEntryTextGet((_XmStringEntry)b)) {
-        /* If the XtPointer in the union in the
-         * optimized segment leads to padding in the structure
-         * between the header and the text data
-         * (it will on some 64-bit architectures) we have
-         * to move the text data, since the optimized
-         * string does not have this padding.
+        /* The text of a segment starts at its data union, which
+         * is not where the text of a string starts: move it.
+         * Move it before shrinking the block, and after
+         * growing it.
          */
+        unsigned int len = _XmStrByteCount(b);
         unsigned int size = sizeof(_XmStringOptSegRec);
-        if (_XmStrByteCount(b) > sizeof(XtPointer))
-          size += _XmStrByteCount(b) - sizeof(XtPointer);
-        b = (XmString)XtRealloc((char *)b, size);
-        memmove(_XmEntryTextGet((_XmStringEntry)b), _XmStrText(b), _XmStrByteCount(b));
+        if (len > sizeof(XtPointer))
+          size += len - sizeof(XtPointer);
+        if ((char *)_XmEntryTextGet((_XmStringEntry)b) < _XmStrText(b)) {
+          memmove(_XmEntryTextGet((_XmStringEntry)b), _XmStrText(b), len);
+          b = (XmString)XtRealloc((char *)b, size);
+        }
+        else {
+          b = (XmString)XtRealloc((char *)b, size);
+          memmove(_XmEntryTextGet((_XmStringEntry)b), _XmStrText(b), len);
+        }
       }
       b_entry = (_XmStringEntry)b;
       _XmStrEntry(b_str) = &b_entry;

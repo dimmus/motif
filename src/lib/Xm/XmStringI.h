@@ -131,6 +131,11 @@ typedef struct __XmParseMappingRec {
   256 bytes with an associated string direction and up to three
   implicit tabs.
   The text is stored immediately after the header within the string.
+
+  The first word has the layout of an optimized segment's header
+  (_XmStringOptSegHdrRec): XmStringConcatAndFree turns a string it owns
+  into a segment in place.  pad must stay zero for that, as it overlays
+  the segment's permanent, soft_line_break and immediate bits.
  ****************************************************************/
 typedef struct __XmStringOptHeader {
   unsigned int type : 2;                     /* XmSTRING_OPTIMIZED */
@@ -143,7 +148,8 @@ typedef struct __XmStringOptHeader {
   unsigned int str_dir : 2;                  /* string direction set by app */
   unsigned int flipped : 1;                  /* whether the text has been flipped */
   unsigned int tabs : 2;                     /* number of tabs preceding the text */
-  unsigned int refcount : 6;                 /* reference count */
+  unsigned int pad : 6;                      /* zero */
+  unsigned int refcount;                     /* reference count */
 } _XmStringOptHeader;
 
 typedef struct __XmStringOpt {
@@ -168,7 +174,8 @@ typedef struct __XmStringMultiHeader {
   unsigned int type : 2;          /* XmSTRING_MULTIPLE_ENTRY */
   unsigned int implicit_line : 1; /* 1 => linefeed at end */
   unsigned int entry_count : 21;
-  unsigned char refcount;
+  unsigned int pad : 8;
+  unsigned int refcount;
 } _XmStringMultiHeader;
 
 typedef struct __XmStringMulti {
