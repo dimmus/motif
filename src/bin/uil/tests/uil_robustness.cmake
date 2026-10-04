@@ -17,9 +17,10 @@ file(MAKE_DIRECTORY "${WORK_DIR}")
 set(failures 0)
 
 # uil_case(<name> <expected rc: 0, 1 or ANY> <regex the output must match>
+#          [FORBID <regex the output must not match>]
 #          [ENV var=value...] ARGS <uil arguments>...)
 function(uil_case name expect_rc expect_regex)
-  cmake_parse_arguments(C "" "" "ENV;ARGS" ${ARGN})
+  cmake_parse_arguments(C "" "FORBID" "ENV;ARGS" ${ARGN})
   execute_process(
     COMMAND ${CMAKE_COMMAND} -E env ASAN_OPTIONS=detect_leaks=0 ${C_ENV}
             ${UIL} ${C_ARGS}
@@ -38,6 +39,9 @@ function(uil_case name expect_rc expect_regex)
     set(ok FALSE)
   endif()
   if(NOT expect_regex STREQUAL "" AND NOT out MATCHES "${expect_regex}")
+    set(ok FALSE)
+  endif()
+  if(C_FORBID AND out MATCHES "${C_FORBID}")
     set(ok FALSE)
   endif()
   if(ok)
@@ -134,6 +138,16 @@ uil_case(localized_string 1 "not terminated" ARGS -o a.uid -s lstr.uil)
 # An empty source file divided by its size of zero.
 file(WRITE "${WORK_DIR}/empty.uil" "")
 uil_case(empty_file 1 "invalid module structure" ARGS -o a.uid empty.uil)
+
+# A binary operator whose operand is an undeclared name: the second
+# operand used to be dereferenced (NULL), and a missing first operand
+# made later expressions report bogus circular definitions.
+file(WRITE "${WORK_DIR}/undeclared.uil"
+  "module m\nobject w : XmLabel { arguments {\n"
+  "XmNlabelString = compound_string('a') & nosuch1;\n"
+  "XmNx = nosuch2 + 1; XmNy = 2 * 3; }; };\nend module;\n")
+uil_case(undeclared_operand 1 "value nosuch2 was never defined"
+         FORBID "circularly defined" ARGS -o a.uid undeclared.uil)
 
 # Environment and database names.
 uil_case(lang_codeset 1 "unknown character set"

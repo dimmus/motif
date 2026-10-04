@@ -2952,16 +2952,34 @@ sym_value_entry_type *sem_evaluate_value_expr(sym_value_entry_type *value_entry)
     /*
      ** Validate the first argument for the expression. If it is NULL,
      ** then return with no further processing, since this is usually
-     ** due to previous compilation errors.
+     ** due to previous compilation errors.  The next expression starts
+     ** a new circular reference check.
      */
     if ( value_entry->az_exp_op1 == NULL )
-      return NULL;
+    {
+	in_expr = FALSE;
+	return NULL;
+    }
     sem_evaluate_value_expr(value_entry->az_exp_op1);
     in_expr = TRUE;
     op1_type = validate_arg (value_entry->az_exp_op1,
 			     value_entry->b_expr_opr);
     op1_entry = value_entry->az_exp_op1;
     res_type = op1_type;
+    /*
+     ** A binary operator whose second operand is missing (for example
+     ** an undeclared name) has already been diagnosed; like a missing
+     ** first operand, it is not evaluated any further.  The operations
+     ** below would dereference it.
+     */
+    if (value_entry->az_exp_op2 == NULL &&
+	value_entry->b_expr_opr > sym_k_last_unary_op &&
+	value_entry->b_expr_opr <= sym_k_last_binary_op)
+    {
+	in_expr = FALSE;
+	return NULL;
+    }
+
     /*
      ** If it's a binary expression, evaluate the second argument and
      ** perform any necessary conversions
