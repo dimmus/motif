@@ -1297,7 +1297,6 @@ void ShowActiveIcon (ClientData *pcd)
 	if ((!ACTIVE_PSD->useIconBox) ||
 	    (P_ICON_BOX(pcd) == NULL))
 	{
-#ifndef MOTIF_ONE_DOT_ONE
 	    if (ICON_DECORATION(pcd) & ICON_IMAGE_PART)
 	    {
 		Dimension dheight, dwidth;
@@ -1336,9 +1335,6 @@ void ShowActiveIcon (ClientData *pcd)
 			    (unsigned int) ICON_WIDTH(pcd),
 			    (unsigned int) ICON_HEIGHT(pcd), False);
 	    }
-#else
-	    XClearWindow (DISPLAY, ICON_FRAME_WIN(pcd));
-#endif
 	}
 	else
 	{
@@ -1369,11 +1365,7 @@ void ShowActiveIcon (ClientData *pcd)
 	}
 
 	/* simulate exposure of window */
-#ifndef MOTIF_ONE_DOT_ONE
 	IconExposureProc(pcd, False);
-#else
-	IconExposureProc(pcd, True);
-#endif
 
     }
 
@@ -1442,7 +1434,6 @@ void ShowInactiveIcon (ClientData *pcd, Boolean refresh)
 	    if ((!ACTIVE_PSD->useIconBox) ||
 	        (P_ICON_BOX(pcd) == NULL))
 	    {
-#ifndef MOTIF_ONE_DOT_ONE
 		XmeClearBorder (DISPLAY, ICON_FRAME_WIN(pcd),
 				0, 0,
 				ICON_WIDTH(pcd), ICON_IMAGE_HEIGHT(pcd), 4);
@@ -1452,9 +1443,6 @@ void ShowInactiveIcon (ClientData *pcd, Boolean refresh)
 			    0, ICON_IMAGE_HEIGHT(pcd),
 			    (unsigned int) ICON_WIDTH(pcd),
 			    (unsigned int) ICON_HEIGHT(pcd), False);
-#else
-		XClearWindow (DISPLAY, ICON_FRAME_WIN(pcd));
-#endif
 	    }
 	    else
 	    {
@@ -1472,11 +1460,7 @@ void ShowInactiveIcon (ClientData *pcd, Boolean refresh)
 
 
         /* simulate exposure of window */
-#ifndef MOTIF_ONE_DOT_ONE
 	    IconExposureProc(pcd, False);
-#else
-	    IconExposureProc(pcd, True);
-#endif
 	}
 
     }

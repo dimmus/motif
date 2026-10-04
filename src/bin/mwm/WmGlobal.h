@@ -64,9 +64,6 @@
  * Value definitions and macros:
  */
 
-#ifdef MOTIF_ONE_DOT_ONE
-#define XmFONTLIST_DEFAULT_TAG	"XmSTRING_DEFAULT_CHARSET"
-#endif
 #ifdef WSM
 
 extern int WmIdentity;

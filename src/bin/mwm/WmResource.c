@@ -48,9 +48,7 @@ static char rcsid[] = "$TOG: WmResource.c /main/14 1997/04/15 10:30:02 dbl $"
 
 #include <Xm/XmP.h>
 #include <Xm/RowColumn.h>
-#ifndef MOTIF_ONE_DOT_ONE
 #include <Xm/ScreenP.h>		/* for XmGetXmScreen and screen.moveOpaque */
-#endif
 
 /*
  * include extern functions
@@ -4750,10 +4748,8 @@ ProcessScreenResources (WmScreenData *pSD, unsigned char *screenName)
 	    wmScreenResources,
 	    XtNumber (wmScreenResources), NULL, 0);
 
-#ifndef MOTIF_ONE_DOT_ONE
 	pSD->moveOpaque = (((XmScreen) XmGetXmScreen(XtScreen(pSD->screenTopLevelW)))
 			   -> screen.moveOpaque);
-#endif
     }
 
 #else /* WSM */
@@ -4779,10 +4775,8 @@ ProcessScreenResources (WmScreenData *pSD, unsigned char *screenName)
 	    (String)screenName, (String)screenName, wmScreenResources,
 	    XtNumber (wmScreenResources), NULL, 0);
 
-#ifndef MOTIF_ONE_DOT_ONE
 	pSD->moveOpaque =(((XmScreen) XmGetXmScreen(XtScreen(pSD->screenTopLevelW)))
 			  -> screen.moveOpaque);
-#endif
     }
 #endif /* WSM */
 

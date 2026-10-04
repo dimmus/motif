@@ -47,10 +47,8 @@ extern void HandleIconBoxButtonMotion (Widget icon, XtPointer client_data,
 				       XEvent *pev);
 extern void HandleIconBoxIconKeyPress (Widget icon, XtPointer dummy,
 				       XKeyEvent *keyEvent);
-#ifndef MOTIF_ONE_DOT_ONE
 extern void IconScrollVisibleCallback (Widget w, XtPointer client_data,
 				  XmAnyCallbackStruct *call_data);
-#endif
 extern void IconActivateCallback (Widget w, XtPointer client_data,
 				  XmAnyCallbackStruct *call_data);
 extern Boolean IconVisible (ClientData *pCD);

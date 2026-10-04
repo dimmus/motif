@@ -60,9 +60,7 @@ static char rcsid[] = "$XConsortium: MrmIfile.c /main/13 1996/11/13 13:56:30 drk
 #include <errno.h>
 #include <fcntl.h>
 
-#ifndef X_NOT_STDC_ENV
 #include <unistd.h>
-#endif
 
 
 /*

@@ -101,9 +101,7 @@ extern FunctionTableEntry functionTable[];
 extern int F_NOP_INDEX;
 #endif /* WSM */
 
-#ifndef MOTIF_ONE_DOT_ONE
 #include <Xm/MenuShellP.h>
-#endif
 
 
 
@@ -718,14 +716,9 @@ Boolean WmDispatchMenuEvent (XButtonEvent *event)
 	    {
 		PopGadgetOut (pCD, FRAME_SYSTEM);
 	    }
-#ifdef MOTIF_ONE_DOT_ONE
-	    TraversalOn (pCD->systemMenuSpec);
-	    doXtDispatchEvent = False;
-#else
  	    _XmGetMenuState(XtParent(pCD->systemMenuSpec->menuWidget))
 		->MS_LastManagedMenuTime = ((XButtonEvent *)event)->time;
 	    doXtDispatchEvent = True;
-#endif
 #ifdef WSM
           }
 	  else if ((!wmGD.clickData.pCD) &&
@@ -758,15 +751,10 @@ Boolean WmDispatchMenuEvent (XButtonEvent *event)
 
 		 if (timeDiff < wmGD.doubleClickTime)
 		 {
-#ifdef MOTIF_ONE_DOT_ONE
-		   TraversalOn (wmGD.menuActive);
-		   doXtDispatchEvent = False;
-#else
 		   _XmGetMenuState (XtParent(wmGD.menuActive->menuWidget))
 		       ->MS_LastManagedMenuTime =
 			   ((XButtonEvent *)event)->time;
 		   doXtDispatchEvent = True;
-#endif
 		 }
 	    wmGD.clickData.clickPending = False;
 	    }

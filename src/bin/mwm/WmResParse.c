@@ -62,12 +62,7 @@ static char rcsid[] = "$XConsortium: WmResParse.c /main/9 1996/11/01 10:17:34 dr
 #include <X11/Xatom.h>
 #include <X11/Xlocale.h>
 
-#ifdef MOTIF_ONE_DOT_ONE
-#include <stdio.h>
-#include <pwd.h>
-#else
 #include <Xm/XmP.h>             /* for XmeGetHomeDirName */
-#endif
 #include <unistd.h>
 
 /* maximum string lengths */
@@ -105,9 +100,6 @@ static char rcsid[] = "$XConsortium: WmResParse.c /main/9 1996/11/01 10:17:34 dr
 #include "WmImage.h"
 #include "WmXSMP.h"
 
-#ifdef MOTIF_ONE_DOT_ONE
-extern char   *getenv ();
-#endif
 #ifdef PANELIST
 # include <errno.h>
 # define HOME_DT_WMRC    "/.dt/dtwmrc"
@@ -204,9 +196,6 @@ typedef struct _CCIFuncArg {
 } CCIFuncArg;
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
 
-#ifdef MOTIF_ONE_DOT_ONE
-void GetHomeDirName(String  fileName);
-#endif
 #ifdef WSM
 static String GetNetworkFileName (char *pchFile);
 #endif /* WSM */
@@ -1691,58 +1680,6 @@ unsigned int PeekAhead(unsigned char *currentChar,
 
 
 
-#ifdef MOTIF_ONE_DOT_ONE
-/*************************************<->*************************************
- *
- *  GetHomeDirName (fileName)
- *
- *  Description:
- *  -----------
- *  This function finds the "HOME" directory
- *
- *
- *  Inputs:
- *  ------
- *  fileName
- *
- *  Outputs:
- *  -------
- *  fileName
- *
- *  Comments:
- *  --------
- *
- *************************************<->***********************************/
-void GetHomeDirName(String  fileName)
-{
-        int uid;
-        struct passwd *pw;
-        char *ptr = NULL;
-
-        if((ptr = getenv("HOME")) == NULL)
-        {
-            if((ptr = getenv("USER")) != NULL)
-	    {
-		pw = getpwnam(ptr);
-	    }
-            else
-            {
-                uid = getuid();
-                pw = getpwuid(uid);
-            }
-
-            if (pw)
-	    {
-                ptr = pw->pw_dir;
-	    }
-            else
-	    {
-                ptr = "";
-	    }
-        }
-        strcpy(fileName, ptr);
-}
-#endif
 
 
 /*************************************<->*************************************
@@ -2041,9 +1978,7 @@ FILE *FopenConfigFile (void)
     char    *LANG, *LANGp;
     FILE    *fileP;
 
-#ifndef MOTIF_ONE_DOT_ONE
     char *homeDir = XmeGetHomeDirName();
-#endif
 #ifdef PANELIST
     Boolean stackPushed;
 #endif /* PANELIST */
@@ -2098,11 +2033,7 @@ FILE *FopenConfigFile (void)
         if ((wmGD.configFile[0] == '~') && (wmGD.configFile[1] == '/'))
 	/* handle "~/..." */
 	{
-#ifdef MOTIF_ONE_DOT_ONE
-	    GetHomeDirName(cfileName);
-#else
 	    strcpy (cfileName, homeDir);
-#endif
 	    if (LANG != NULL)
 	    {
 		strncat(cfileName, "/", MAXWMPATH-strlen(cfileName));
@@ -2124,11 +2055,7 @@ FILE *FopenConfigFile (void)
 		/*
 		 * Just try $HOME/.mwmrc
 		 */
-#ifdef MOTIF_ONE_DOT_ONE
-		GetHomeDirName(cfileName);
-#else
 		strcpy (cfileName, homeDir);
-#endif
 		strncat(cfileName, &(wmGD.configFile[1]),
 			MAXWMPATH-strlen(cfileName));
 		if ((fileP = fopen (cfileName, "r")) != NULL)
@@ -2192,11 +2119,7 @@ FILE *FopenConfigFile (void)
 #define HOME_MWMRC "/.mwmrc"
 #define SLASH_MWMRC "/system.mwmrc"
 
-#ifdef MOTIF_ONE_DOT_ONE
-    GetHomeDirName(cfileName);
-#else
     strcpy (cfileName, homeDir);
-#endif
 
 #ifdef WSM
     if (MwmBehavior)
@@ -2257,11 +2180,7 @@ FILE *FopenConfigFile (void)
 	/*
 	 * Just try $HOME/.mwmrc
 	 */
-#ifdef MOTIF_ONE_DOT_ONE
-	GetHomeDirName(cfileName);
-#else
     strcpy (cfileName, homeDir);
-#endif
 #ifdef WSM
 	if (MwmBehavior)
 	{
@@ -7064,62 +6983,16 @@ void ProcessMotifBindings (void)
 {
     char           fileName[MAXWMPATH+1];
     char	  *bindings = NULL;
-#ifndef MOTIF_ONE_DOT_ONE
     char	  *homeDir = XmeGetHomeDirName();
-#else
-    FILE          *fileP;
-#endif
 
     /*
      *  Look in the user's home directory for .motifbind
      */
 
-#ifdef MOTIF_ONE_DOT_ONE
-    GetHomeDirName(fileName);
-#else
     strcpy (fileName, homeDir);
-#endif
     strncat(fileName, "/", MAXWMPATH-strlen(fileName));
     strncat(fileName, MOTIF_BINDINGS_FILE, MAXWMPATH-strlen(fileName));
 
-#ifdef MOTIF_ONE_DOT_ONE
-    if ((fileP = fopen (fileName, "r")) != NULL)
-    {
-        unsigned char   buffer[MBBSIZ];
-        int             count;
-        Boolean         first = True;
-        int             mode = PropModeReplace;
-        Window          propWindow;
-
-        /*
-         * Get the atom for the property.
-         */
-        wmGD.xa_MOTIF_BINDINGS =
-                XInternAtom (DISPLAY, _XA_MOTIF_BINDINGS, False);
-
-        /*
-         * The property goes on the root window of screen zero
-         */
-        propWindow = RootWindow(DISPLAY, 0);
-
-        /*
-         * Copy file contents to property on root window of screen 0.
-         */
-        while ( (count=fread((char *) &buffer[0], 1, MBBSIZ, fileP)) > 0)
-        {
-            XChangeProperty (DISPLAY, propWindow, wmGD.xa_MOTIF_BINDINGS,
-                                XA_STRING, 8, mode,
-                                &buffer[0], count);
-
-            if (first)
-            {
-                first = False;
-                mode = PropModeAppend;
-            }
-        }
-    }
-
-#else
     XDeleteProperty (DISPLAY, RootWindow (DISPLAY, 0),
 		XInternAtom (DISPLAY, "_MOTIF_BINDINGS", False));
     XDeleteProperty (DISPLAY, RootWindow (DISPLAY, 0),
@@ -7135,7 +7008,6 @@ void ProcessMotifBindings (void)
 	_XmVirtKeysLoadFallbackBindings (DISPLAY, &bindings);
     }
     XtFree (bindings);
-#endif
 } /* END OF FUNCTION ProcessMotifBindings */
 
 #ifdef PANELIST

@@ -43,9 +43,7 @@ static char rcsid[] = "$XConsortium: WmResCvt.c /main/4 1995/11/01 11:49:54 rswi
 #include <stdio.h>
 #include <stdlib.h>
 
-#ifndef MOTIF_ONE_DOT_ONE
 #include <Xm/XmosP.h>
-#endif
 
 /*
  * include extern functions

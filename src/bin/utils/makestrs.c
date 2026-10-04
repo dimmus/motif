@@ -33,11 +33,7 @@
 
 #include <stdio.h>
 #include <X11/Xos.h>
-#ifndef X_NOT_STDC_ENV
 #include <stdlib.h>
-#else
-char *malloc();
-#endif
 
 
 typedef struct _TableEnt {
