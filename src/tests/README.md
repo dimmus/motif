@@ -15,7 +15,7 @@ relative path, so CTest runs them from a copy of those directories in the
 build tree (`<build>/src/tests/fixtures`).
 
 Suites labelled `X11` (`FontList`, `FontListEntry`, `XmStringCT`,
-`Widgets`, `Text`, `Layout`, `I18nLocale`, `Rtl`) need
+`Widgets`, `Text`, `Layout`, `I18nLocale`, `Rtl`, `Xim`) need
 an X server, as do the `Uil.load*`
 tests, those in `interactive/` and `visual/` and some in `fuzz/`.  When
 `xvfb-run` is found at configure time, CTest starts each of them under
@@ -45,6 +45,12 @@ The i18n suites:
 - `Rtl` builds widgets under a left-to-right and a right-to-left shell
   and checks that the second layout is the mirror of the first (Label,
   PushButton, Form, RowColumn, ScrolledWindow, scrolled Text and List).
+- `Xim` types through `stubxim` (`xim/stubxim.c`), a small input method
+  server that speaks the XIM protocol to Xlib, so that XmIm's
+  on-the-spot preedit callbacks, over-the-spot spot location,
+  off-the-spot areas, commits and XIC resets run end to end.  It runs in
+  a UTF-8 locale and, as `Xm.Xim.<locale>`, in the generated `ja_JP`
+  ones.
 
 The other directories:
 

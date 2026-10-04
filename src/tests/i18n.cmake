@@ -1,6 +1,6 @@
 # Locales for the i18n suites, included by CMakeLists.txt.
 #
-# The I18nLocale suite also runs in locales that are
+# The I18nLocale and Xim suites also run in locales that are
 # rarely installed: they are generated at build time with glibc's
 # localedef into <build>/src/tests/locale, without root, and the tests
 # run with LOCPATH pointing there and MOTIF_TEST_LOCALE naming the
@@ -72,5 +72,8 @@ endfunction()
 
 foreach(_locale IN LISTS MOTIF_TEST_LOCALES)
     motif_locale_test(I18nLocale ${_locale})
+    if(_locale MATCHES "^ja_JP")
+        motif_locale_test(Xim ${_locale})
+    endif()
 endforeach()
 

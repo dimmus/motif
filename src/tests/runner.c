@@ -42,6 +42,7 @@ static const struct suite_entry {
 	{ "I18nLocale",    i18n_locale_suite,     1 },
 	{ "Layout",        layout_suite,          1 },
 	{ "Rtl",           rtl_suite,             1 },
+	{ "Xim",           xim_suite,             1 },
 };
 
 #define N_SUITES (sizeof suite_table / sizeof suite_table[0])

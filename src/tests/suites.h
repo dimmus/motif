@@ -33,5 +33,6 @@ void i18n_suite(SRunner *runner);
 void i18n_locale_suite(SRunner *runner);
 void layout_suite(SRunner *runner);
 void rtl_suite(SRunner *runner);
+void xim_suite(SRunner *runner);
 
 #endif /* SUITES_H */

@@ -37,12 +37,13 @@ set(MOTIF_TEST_SRCS
     Xm/testI18nLocale.c
     Xm/testLayout.c
     Xm/testRtl.c
+    Xm/testXim.c
     i18n_util.c
 )
 
 # Suites that open a display, and suites that do not.
 set(MOTIF_TEST_X_SUITES FontListEntry FontList XmStringCT Widgets Text Layout
-    I18nLocale Rtl)
+    I18nLocale Rtl Xim)
 set(MOTIF_TEST_SUITES Svg Log LogConfig XmString I18n)
 set(MOTIF_TEST_DEFS "")
 
@@ -93,6 +94,13 @@ target_include_directories(motif_tests PRIVATE
     ${CMAKE_BINARY_DIR}/include
 )
 target_link_libraries(motif_tests PRIVATE Xm PkgConfig::CHECK Threads::Threads)
+
+# The input method server the Xim suite types through.
+add_executable(stubxim xim/stubxim.c)
+target_link_libraries(stubxim PRIVATE PkgConfig::MOTIF_XT)
+target_compile_definitions(motif_tests PRIVATE
+    STUBXIM_PATH="$<TARGET_FILE:stubxim>")
+add_dependencies(motif_tests stubxim)
 
 # The i18n suites use iconv, a library of its own where it is not in the
 # C library (found already when WITH_UTF8 is on, for libXm).
