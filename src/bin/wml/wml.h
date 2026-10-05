@@ -628,6 +628,7 @@ extern DynamicHandleListDefPtr	wml_tok_insens_ptr;
  */
 extern char *wmlAllocateString (char *);		/* dynamic string copy */
 extern void wmlUpperCaseString (char *);		/* convert to upper case */
+extern FILE *wmlOpenOutputFile (const char *);		/* create output file */
 extern void wmlInitHList (DynamicHandleListDefPtr, int, int);			/* init dynamic list */
 extern void wmlResizeHList (DynamicHandleListDefPtr, int);			/* resize a list */
 extern void wmlClearHList (DynamicHandleListDefPtr);			/* clear a list for reuse */

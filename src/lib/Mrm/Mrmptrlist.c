@@ -383,12 +383,12 @@ UrmPlistFindString (URMPointerListPtr		list_id ,
   /*
    *  Local variables
    */
-  MrmCount		ndx ;		/* search index */
+  int			ndx ;		/* search index */
 
 
   for ( ndx=0 ; ndx<UrmPlistNum(list_id) ; ndx++ )
     if ( strcmp(stg,(String)UrmPlistPtrN(list_id,ndx)) == 0 )
-      return ndx ;
+      return (MrmCount) ndx ;
   return -1 ;
 
 }

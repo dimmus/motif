@@ -123,7 +123,7 @@ static void wmlOutputWmlUilMm(void)
 	/**
 	 * Open the output file. Write the canned header stuff
 	 */
-	if (!(outfil = fopen("wml-uil.mm", "w+"))) {
+	if (!(outfil = wmlOpenOutputFile("wml-uil.mm"))) {
 		fputs("Couldn't open wml-uil.mm", stderr);
 		return;
 	}

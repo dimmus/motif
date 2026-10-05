@@ -56,6 +56,8 @@ static char rcsid[] = "$TOG: UilLstLst.c /main/20 1999/07/21 09:03:16 vipin $"
 
 #include <stdarg.h>
 #include <string.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 #include "UilDefI.h"
 
@@ -249,17 +251,27 @@ void	Uil_lst_cleanup_listing(void)
 status	create_listing_file(uil_fcb_type *az_fcb)
 
 {
+    int fd;
+
     /* place the file name in the expanded_name buffer */
 
     strncpy(az_fcb->expanded_name, Uil_cmd_z_command.ac_listing_file, sizeof(az_fcb->expanded_name) - 1);
     az_fcb->expanded_name[sizeof(az_fcb->expanded_name) - 1] = '\0';
 
-    /* open the file */
+    /* open the file; like fopen "w" but with mode 0644 */
 
-    az_fcb->az_file_ptr = fopen(Uil_cmd_z_command.ac_listing_file, "w");
+    fd = open(Uil_cmd_z_command.ac_listing_file,
+	      O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    if (fd < 0)
+	return src_k_open_error;
+
+    az_fcb->az_file_ptr = fdopen(fd, "w");
 
     if (az_fcb->az_file_ptr == NULL)
+    {
+	close(fd);
 	return src_k_open_error;
+    }
 
     /* assume 66 lines on a page */
 

@@ -36,6 +36,8 @@ static char rcsid[] = "$TOG: wmldbcreate.c /main/8 1997/04/14 12:55:30 dbl $"
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 #include <Mrm/MrmWidget.h>
 #include <Xm/Xm.h>
@@ -100,6 +102,22 @@ int _DEBUG=FALSE;
 char outfilename[80];
 char debugfilename[80];
 
+/*
+ * Like fopen(name, "w"), but create the file with mode 0644 rather than 0666.
+ */
+static FILE *open_output(const char *name)
+{
+    FILE *fil;
+    int fd = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+
+    if (fd < 0)
+	return NULL;
+    fil = fdopen(fd, "w");
+    if (fil == NULL)
+	close(fd);
+    return fil;
+}
+
 int main(int argc, char **argv)
 {
     /* _db_header	header; */ /* unused variable */
@@ -115,11 +133,23 @@ int main(int argc, char **argv)
 	    }
 	else if ((strcmp("-o", *argv) == 0))
 		 {
-		 strcpy(outfilename, argv[1]);
+		 int len;
+
+		 if (argc < 2)
+		     {
+		     printf("\nMissing file name after -o");
+		     exit (1);
+		     }
+		 len = snprintf(outfilename, sizeof(outfilename), "%s", argv[1]);
+		 if (len < 0 || (size_t)len >= sizeof(outfilename))
+		     {
+		     printf("\nFile name too long: %s", argv[1]);
+		     exit (1);
+		     }
 		 }
 	}
 
-    bfile = fopen(outfilename, "w");
+    bfile = open_output(outfilename);
     if (bfile == (FILE *) NULL)
 	{
 	printf("\nCouldnt't open %s", outfilename);
@@ -127,7 +157,7 @@ int main(int argc, char **argv)
 	}
     if (_DEBUG)
 	{
-	afile = fopen(debugfilename, "w");
+	afile = open_output(debugfilename);
 	if (afile == (FILE *) NULL)
 	    {
 	    printf("\nCouldn't open %s", debugfilename);

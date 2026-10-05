@@ -1300,7 +1300,7 @@ WmlClassDefPtr		clsobj;		/* current class */
 /*
  * Open the output file.
  */
-outfil = fopen ( "wml.report", "w+");
+outfil = wmlOpenOutputFile ( "wml.report" );
 if ( outfil == NULL )
     {
     printf ("\nCouldn't open wml.report");

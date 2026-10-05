@@ -69,7 +69,7 @@ static char rcsid[] = "$XConsortium: MrmIfile.c /main/13 1996/11/13 13:56:30 drk
  *
  */
 
-#define	PMODE	0666	/* Default protection mode before umask		*/
+#define	PMODE	0644	/* Default protection mode before umask		*/
 #define FAILURE	-1	/* creat/stat returns this			*/
 #define FNAMELEN 256	/* documented minimum size of returned_fname	*/
 

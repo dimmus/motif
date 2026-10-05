@@ -34,6 +34,7 @@
 #include <stdio.h>
 #include <X11/Xos.h>
 #include <stdlib.h>
+#include <fcntl.h>
 
 
 typedef struct _TableEnt {
@@ -222,6 +223,18 @@ CopyTmplEpilog (FILE* tmpl, FILE* f)
 	(void) fputs (buf, f);
 }
 
+/* Like fopen (name, mode) for writing, but creates the file with 0644. */
+static FILE*
+OpenOutput (const char* name, const char* mode)
+{
+    FILE* f;
+    int fd = open (name, O_RDWR | O_CREAT | O_TRUNC, 0644);
+
+    if (fd < 0) return NULL;
+    if ((f = fdopen (fd, mode)) == NULL) (void) close (fd);
+    return f;
+}
+
 static char* abistring[] = {
    "Default", "Array per string", "Intel", "Intel BC", "SPARC", "Function" };
 
@@ -234,7 +247,7 @@ WriteHeader (char* tagline, File* phile, int abi)
 	                                  IntelABIWriteHeader, IntelABIWriteHeader,
 	                                  SPARCABIWriteHeader, FunctionWriteHeader };
 
-    if ((f = fopen (phile->name, "w+")) == NULL) exit (1);
+    if ((f = OpenOutput (phile->name, "w+")) == NULL) exit (1);
 
     if (phile->tmpl) CopyTmplProlog (phile->tmpl, f);
 
@@ -430,6 +443,22 @@ WriteSource(char* tagline, int abi)
     }
 }
 
+/* Return a copy of the argument following the directive tok in buf. */
+static char*
+CopyArg (const char* buf, const char* tok)
+{
+    const char* arg = buf + strlen (tok);
+    size_t len;
+    char* ret;
+
+    if (*arg) arg++;	/* skip the separator */
+    len = strlen (arg) + 1;
+    if ((ret = malloc (len)) == NULL)
+	exit(1);
+    memcpy (ret, arg, len);
+    return ret;
+}
+
 static void
 DoLine(char* buf)
 {
@@ -484,9 +513,7 @@ DoLine(char* buf)
 
 	    if ((phile = (File*) malloc (sizeof(File))) == NULL)
 		exit(1);
-	    if ((phile->name = malloc (strlen (buf + strlen (file_str)) + 1)) == NULL)
-		exit(1);
-	    (void) strcpy (phile->name, buf + strlen (file_str) + 1);
+	    phile->name = CopyArg (buf, file_str);
 	    phile->table = NULL;
 	    phile->tablecurrent = NULL;
 	    phile->tabletail = &phile->table;
@@ -503,9 +530,7 @@ DoLine(char* buf)
 	    Table* table;
 	    if ((table = (Table*) malloc (sizeof(Table))) == NULL)
 		exit(1);
-	    if ((table->name = malloc (strlen (buf + strlen (table_str)) + 1)) == NULL)
-		exit(1);
-	    (void) strcpy (table->name, buf + strlen (table_str) + 1);
+	    table->name = CopyArg (buf, table_str);
 	    table->tableent = NULL;
 	    table->tableentcurrent = NULL;
 	    table->tableenttail = &table->tableent;
@@ -518,29 +543,19 @@ DoLine(char* buf)
 	}
 	break;
     case X_PREFIX_TOKEN:
-	if ((prefixstr = malloc (strlen (buf + strlen (prefix_str)) + 1)) == NULL)
-	    exit(1);
-	(void) strcpy (prefixstr, buf + strlen (prefix_str) + 1);
+	prefixstr = CopyArg (buf, prefix_str);
 	break;
     case X_FEATURE_TOKEN:
-	if ((featurestr = malloc (strlen (buf + strlen (feature_str)) + 1)) == NULL)
-	    exit(1);
-	(void) strcpy (featurestr, buf + strlen (feature_str) + 1);
+	featurestr = CopyArg (buf, feature_str);
 	break;
     case X_EXTERNREF_TOKEN:
-	if ((externrefstr = malloc (strlen (buf + strlen (externref_str)) + 1)) == NULL)
-	    exit(1);
-	(void) strcpy (externrefstr, buf + strlen (externref_str) + 1);
+	externrefstr = CopyArg (buf, externref_str);
 	break;
     case X_EXTERNDEF_TOKEN:
-	if ((externdefstr = malloc (strlen (buf + strlen (externdef_str)) + 1)) == NULL)
-	    exit(1);
-	(void) strcpy (externdefstr, buf + strlen (externdef_str) + 1);
+	externdefstr = CopyArg (buf, externdef_str);
 	break;
     case X_CTMPL_TOKEN:
-	if ((ctmplstr = malloc (strlen (buf + strlen (ctmpl_str)) + 1)) == NULL)
-	    exit(1);
-	(void) strcpy (ctmplstr, buf + strlen (ctmpl_str) + 1);
+	ctmplstr = CopyArg (buf, ctmpl_str);
 	break;
     case X_HTMPL_TOKEN:
 	if ((filecurrent->tmpl = fopen (buf + strlen (htmpl_str) + 1, "r")) == NULL) {
@@ -550,9 +565,7 @@ DoLine(char* buf)
 	}
 	break;
     case X_CONST_TOKEN:
-	if ((conststr = malloc (strlen (buf + strlen (const_str)) + 1)) == NULL)
-	    exit(1);
-	(void) strcpy (conststr, buf + strlen (const_str) + 1);
+	conststr = CopyArg (buf, const_str);
 	break;
     default:
 	{
@@ -567,8 +580,11 @@ DoLine(char* buf)
 	    else
 		    right = buf + 1;
 	    if (buf[0] == 'H') {
-		    strcpy (lbuf, prefixstr);
-		    strcat (lbuf, right);
+		    int n = snprintf (lbuf, sizeof lbuf, "%s%s", prefixstr, right);
+		    if (n < 0 || (size_t) n >= sizeof lbuf) {
+			    (void) fprintf (stderr, "String too long: %s\n", right);
+			    exit (1);
+		    }
 		    right = lbuf;
 	    }
 
@@ -578,10 +594,10 @@ DoLine(char* buf)
 	    if ((tableent = (TableEnt*)malloc(sizeof(TableEnt) + len)) == NULL)
 		exit(1);
 	    tableent->left = (char *)(tableent + 1);
-	    strcpy(tableent->left, buf);
+	    memcpy(tableent->left, buf, llen);
 	    if (llen != len) {
 		tableent->right = tableent->left + llen;
-		strcpy(tableent->right, right);
+		memcpy(tableent->right, right, rlen);
 	    } else {
 		tableent->right = tableent->left + 1;
 	    }

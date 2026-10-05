@@ -30,6 +30,8 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
 char buf[1024];
 
 char *OSF_COPYRIGHT = "$\n\
@@ -81,6 +83,7 @@ char *OSF_COPYRIGHT_C = "/*\n\
 
 static void parse_args(
            int argc, char **argv, char **prefix, char **source_file_name);
+static FILE *open_output(const char *name);
 
 /****************************************************************************
  *
@@ -122,15 +125,19 @@ main(
 	exit(1);
     }
 
-    strcpy(header_name, prefix);
-    strcat(header_name, "MsgI.h");
+    /* subs below holds "_<prefix>Msg" in 11 bytes. */
+    if (strlen(prefix) > 6) {
+	fprintf(stderr, "Prefix too long: %s\n", prefix);
+	exit(1);
+    }
 
-    header = fopen(header_name, "w");
+    snprintf(header_name, sizeof header_name, "%sMsgI.h", prefix);
 
-    strcpy(catalog_name, prefix);
-    strcat(catalog_name, ".msg");
+    header = open_output(header_name);
 
-    catalog = fopen(catalog_name, "w");
+    snprintf(catalog_name, sizeof catalog_name, "%s.msg", prefix);
+
+    catalog = open_output(catalog_name);
 
     source = fopen(source_file_name, "r");
 
@@ -219,9 +226,7 @@ main(
 	  continue;
 
 	/* Find the substring to look for, based on the prefix. */
-	strcpy(subs, "_");
-	strcat(subs, prefix);
-	strcat(subs, "Msg");
+	snprintf(subs, sizeof subs, "_%sMsg", prefix);
 	len_subs = strlen(subs);
 
 	p = strstr(p, subs);
@@ -309,4 +314,18 @@ static void parse_args(
 	*source_file_name = *argv;
     }
 
+}
+
+
+/* Like fopen(name, "w"), but create the file with mode 0644. */
+static FILE *open_output(const char *name)
+{
+    FILE *fp;
+    int fd = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+
+    if (fd < 0)
+	return NULL;
+    if ((fp = fdopen(fd, "w")) == NULL)
+	close(fd);
+    return fp;
 }

@@ -182,7 +182,7 @@ static void wmlOutputUilSymGen(void)
 	/**
 	 * Open the output file. Write the canned header stuff
 	 */
-	if (!(outfil = fopen("UilSymGen.h", "w+"))) {
+	if (!(outfil = wmlOpenOutputFile("UilSymGen.h"))) {
 		fputs("Couldn't open UilSymGen.h", stderr);
 		return;
 	}
@@ -309,7 +309,7 @@ externaldef(uil_sym_glbl) unsigned char *child_class_table =\n\
 	/**
 	 * Open the output file. Write canned header.
 	 */
-	if (!(outfil = fopen("UilSymChCl.h", "w+"))) {
+	if (!(outfil = wmlOpenOutputFile("UilSymChCl.h"))) {
 		fputs("Couldn't open UilSymChCL.h", stderr);
 		return;
 	}
@@ -361,7 +361,7 @@ externaldef(uil_sym_glbl) unsigned char *argument_type_table =\n\
 	/**
 	 * Open the output file. Write canned header.
 	 */
-	if (!(outfil = fopen("UilSymArTy.h", "w+"))) {
+	if (!(outfil = wmlOpenOutputFile("UilSymArTy.h"))) {
 		fputs("Couldn't open UilSymArTy.h", stderr);
 		return;
 	}
@@ -409,7 +409,7 @@ externaldef(uil_sym_glbl) unsigned short int *related_argument_table =\n\
 	/**
 	 * Open the output file. Write canned header.
 	 */
-	if (!(outfil = fopen("UilSymRArg.h", "w+"))) {
+	if (!(outfil = wmlOpenOutputFile("UilSymRArg.h"))) {
 		fputs("Couldn't open UilSymRArg.h", stderr);
 		return;
 	}
@@ -501,7 +501,7 @@ externaldef(uil_sym_glbl) char **uil_reason_toolkit_names =\n\
 	/**
 	 * Open the output file. Write canned header.
 	 */
-	if (!(outfil = fopen("UilUrmClas.h", "w+"))) {
+	if (!(outfil = wmlOpenOutputFile("UilUrmClas.h"))) {
 		fputs("Couldn't open UilUrmClas.h", stderr);
 		return;
 	}
@@ -634,7 +634,7 @@ externaldef(uil_sym_glbl) unsigned char *constraint_tab =\n\
 	/**
 	 * Open the output file. Write canned header.
 	 */
-	if (!(outfil = fopen("UilConst.h", "w+"))) {
+	if (!(outfil = wmlOpenOutputFile("UilConst.h"))) {
 		fputs("Couldn't open UilConst.h", stderr);
 		return;
 	}
@@ -718,7 +718,7 @@ externaldef(uil_sym_glbl) unsigned char **allowed_reason_table =\n\
 	/**
 	 * Open the output file. Write canned header.
 	 */
-	if (!(outfil = fopen("UilSymReas.h", "w+"))) {
+	if (!(outfil = wmlOpenOutputFile("UilSymReas.h"))) {
 		fputs("Couldn't open UilSymReas.h", stderr);
 		return;
 	}
@@ -827,7 +827,7 @@ externaldef(uil_sym_glbl) unsigned char **allowed_argument_table =\n\
 	/**
 	 * Open the output file. Write canned header.
 	 */
-	if (!(outfil = fopen("UilSymArTa.h", "w+"))) {
+	if (!(outfil = wmlOpenOutputFile("UilSymArTa.h"))) {
 		fputs("Couldn't open UilSymArTa.h", stderr);
 		return;
 	}
@@ -936,7 +936,7 @@ externaldef(uil_sym_glbl) unsigned char **allowed_child_table =\n\
 	/**
 	 * Open the output file. Write canned header.
 	 */
-	if (!(outfil = fopen("UilSymChTa.h", "w+"))) {
+	if (!(outfil = wmlOpenOutputFile("UilSymChTa.h"))) {
 		fputs("Couldn't open UilSymChTa.h", stderr);
 		return;
 	}
@@ -1042,7 +1042,7 @@ externaldef(uil_sym_glbl) unsigned char **allowed_control_table =\n\
 	/**
 	 * Open the output file. Write canned header.
 	 */
-	if (!(outfil = fopen("UilSymCtl.h", "w+"))) {
+	if (!(outfil = wmlOpenOutputFile("UilSymCtl.h"))) {
 		fputs("Couldn't open UilSymCtl.h", stderr);
 		return;
 	}
@@ -1200,7 +1200,7 @@ externaldef(uil_sym_glbl) char **uil_child_names =\n\
 	/**
 	 * Open the output file. Write canned header.
 	 */
-	if (!(outfil = fopen("UilSymNam.h", "w+"))) {
+	if (!(outfil = wmlOpenOutputFile("UilSymNam.h"))) {
 		fputs("Couldn't open UilSymNam.h", stderr);
 		return;
 	}
@@ -1353,7 +1353,7 @@ externaldef(uil_sym_glbl) int *enumval_values_table =\n\
 	/**
 	 * Open the output file. Write the canned header stuff
 	 */
-	if (!(outfil = fopen("UilSymEnum.h", "w+"))) {
+	if (!(outfil = wmlOpenOutputFile("UilSymEnum.h"))) {
 		fputs("Couldn't open UilSymEnum.h", stderr);
 		return;
 	}
@@ -1519,7 +1519,7 @@ externaldef(uil_sym_glbl) unsigned short int charset_lang_table_max = %d;\n";
 	/**
 	 * Open the output file. Write the canned header stuff
 	 */
-	if (!(outfil = fopen("UilSymCSet.h", "w+"))) {
+	if (!(outfil = wmlOpenOutputFile("UilSymCSet.h"))) {
 		fputs("Couldn't open UilSymCSet.h", stderr);
 		return;
 	}

@@ -498,7 +498,7 @@ externaldef(uil_sym_glbl) key_keytable_entry_type *key_table_case_ins =\n\
 	/**
  	 * Open the output file.
  	 */
-	if (!(outfil = fopen("UilKeyTab.h", "w+"))) {
+	if (!(outfil = wmlOpenOutputFile("UilKeyTab.h"))) {
 		fputs("Couldn't open UilKeyTab.h", stderr);
 		return;
 	}
@@ -666,7 +666,7 @@ externaldef(uil_sym_glbl) int tok_num_tokens = %d;\n";
 	/**
  	 * Open the output file.
  	 */
-	if (!(outfil = fopen("UilTokName.h", "w+"))) {
+	if (!(outfil = wmlOpenOutputFile("UilTokName.h"))) {
 		fputs("Couldn't open UilTokName.h", stderr);
 		return;
 	}

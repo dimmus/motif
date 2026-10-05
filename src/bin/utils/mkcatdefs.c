@@ -26,6 +26,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include <locale.h>
 #include <ctype.h>
 
@@ -62,6 +63,7 @@ static int chkcontin(char *);
 static int insert(char *, int);
 static int nsearch(char *);
 static int hash(char *);
+static FILE *open_output(const char *);
 
 
 /*
@@ -121,10 +123,13 @@ main (int argc,
       fprintf (stderr, "mkcatdefs: header file name too long\n");
       exit (1);
     }
-    sprintf (outname, "%s", mname);
+    if ((size_t)snprintf (outname, sizeof outname, "%s", mname) >= sizeof outname) {
+      fprintf (stderr, "mkcatdefs: header file name too long\n");
+      exit (1);
+    }
     if (strrchr(mname,'/'))
       mname = strrchr(mname,'/') + 1;
-    if ((outfp = fopen (outname, "w")) == NULL) {
+    if ((outfp = open_output (outname)) == NULL) {
       fprintf (stderr, "mkcatdefs: Cannot open %s\n", outname);
       exit (1);
     } else  {
@@ -158,7 +163,11 @@ main (int argc,
     count = argc;
   for (i = 2; i < count; i++) {
     /* open input file */
-    sprintf (inname, "%s", argv[i]);
+    if ((size_t)snprintf (inname, sizeof inname, "%s", argv[i]) >= sizeof inname) {
+      fprintf (stderr, "mkcatdefs: file name too long: %s\n", argv[i]);
+      errflg = 1;
+      continue;
+    }
     if (strcmp(inname,"-") == 0) {
       strcpy(inname,"stdin");
       descfile = stdin;       /* input from stdin if no source files */
@@ -218,7 +227,7 @@ static void
 mkcatdefs(char *fname)
      /*---- fname: message descriptor file name ----*/
 {
-  char msgname [PATH_MAX];
+  char msgname [MAXLINELEN];	/* large enough for any word of line */
   char line [MAXLINELEN];
   char *cp;
   char *cpt;
@@ -267,8 +276,7 @@ mkcatdefs(char *fname)
 	  break;
       }
       if (cp != cpt) {
-	sscanf (cp, "%s", msgname);
-	if ((m = nsearch(msgname)) > 0) {
+	if (sscanf (cp, "%s", msgname) == 1 && (m = nsearch(msgname)) > 0) {
 	  fprintf (msgfp, "$ %d", m);
 	  cp += strlen(msgname);
 	  fprintf (msgfp, "%s", cp);
@@ -280,8 +288,15 @@ mkcatdefs(char *fname)
 	  ((len = mblen(&(cp[3]), MB_CUR_MAX)) == 1) &&
 	  (isspace(cp[3]) != 0)) {
 	char setname [MAXIDLEN];
+	int end = 0;
 
-	sscanf (cp+3+len, "%s", setname);
+	/* field width is MAXIDLEN - 1 */
+	if (sscanf (cp+3+len, "%63s%n", setname, &end) != 1 ||
+	    (cp[3+len+end] != '\0' && isspace((unsigned char)cp[3+len+end]) == 0)) {
+	  fprintf (stderr, "mkcatdefs: invalid set identifier:\n\t%s", line);
+	  errflg = 1;
+	  return;
+	}
 	if (inclfile)
 	  fprintf (outfp, "\n/* definitions for set %s */\n", setname);
 	if (isdigit(setname[0])) {
@@ -344,9 +359,16 @@ mkcatdefs(char *fname)
 	  contin = 0;
       } else if (setno > 1) { /* set must have been seen first */
 	char msgname_local [MAXIDLEN];
+	int end = 0;
 
 	msgname_local [0] = '\0';
-	if (sscanf (cp, "%s", msgname_local) && msgname_local[0]) {
+	/* field width is MAXIDLEN - 1 */
+	if (sscanf (cp, "%63s%n", msgname_local, &end) == 1 && msgname_local[0]) {
+	  if (cp[end] != '\0' && isspace((unsigned char)cp[end]) == 0) {
+	    fprintf (stderr, "mkcatdefs: identifier too long:\n\t%s", line);
+	    errflg = 1;
+	    return;
+	  }
 	  len = mblen(cp, MB_CUR_MAX);
 	  if (len < 0) {
 	    fprintf (stderr,
@@ -608,4 +630,24 @@ hash (char *name) /* pointer to symbol */
     hashval += *name++;
 
   return (hashval & (HASHMAX));
+}
+
+/*
+ * NAME: open_output
+ *
+ * FUNCTION: Like fopen (name, "w"), but create the file with mode 0644.
+ *
+ * RETURNS: The stream, or NULL on failure.
+ */
+static FILE *
+open_output(const char *name)
+{
+  FILE *fp;
+  int fd = open (name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+
+  if (fd < 0)
+    return NULL;
+  if ((fp = fdopen (fd, "w")) == NULL)
+    close (fd);
+  return fp;
 }

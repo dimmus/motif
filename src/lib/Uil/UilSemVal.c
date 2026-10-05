@@ -53,6 +53,7 @@ static char rcsid[] = "$TOG: UilSemVal.c /main/18 1997/09/15 14:15:21 cshi $"
 **/
 
 #include <stdlib.h>
+#include <limits.h>
 #include <setjmp.h>
 #include <Mrm/MrmAppl.h>
 #include <Xm/XmStrDefs.h>
@@ -3740,8 +3741,15 @@ sym_value_entry_type *sem_evaluate_value_expr(sym_value_entry_type *value_entry)
 	  case integer_arg_type:
 	  case horizontal_integer_arg_type:
 	  case vertical_integer_arg_type:
-	    value_entry->value.l_integer =
-	      op1_ptr->integer_value * op2_ptr->integer_value;
+	  {
+	    long long	product;
+
+	    product = (long long) op1_ptr->integer_value *
+	      op2_ptr->integer_value;
+	    if ((product < INT_MIN) || (product > INT_MAX))
+	      goto error_occurred;
+	    value_entry->value.l_integer = (long) product;
+	  }
 	    if (op1_entry->b_arg_type != op2_entry->b_arg_type)
 	      {
 		diag_issue_diagnostic(d_different_units,

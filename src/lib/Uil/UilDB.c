@@ -55,6 +55,7 @@ static char rcsid[] = "$XConsortium: UilDB.c /main/11 1996/11/21 20:03:11 drk $"
  */
 #include <stdlib.h>
 #include <unistd.h>
+#include <sys/stat.h>
 #include <pwd.h>  /* for getpwnam, getpwuid */
 #include "UilDefI.h"
 
@@ -91,6 +92,22 @@ db_check_table_size (_db_header_ptr header, int extra, size_t item_size)
 	(size_t) header->num_items + extra >
 	(size_t) header->table_size / item_size)
 	diag_issue_diagnostic (d_bad_database, diag_k_no_source, diag_k_no_column);
+}
+
+/*
+ * The number of bytes between the current position of fp and the end of
+ * the file, which bounds what a table read from the database can need.
+ * -1 if it cannot be determined.
+ */
+static off_t
+db_bytes_left (FILE *fp)
+{
+    struct stat st;
+    long pos = ftell (fp);
+
+    if (pos < 0 || fstat (fileno (fp), &st) != 0 || !S_ISREG (st.st_mode))
+	return -1;
+    return st.st_size - pos;
 }
 
 /*
@@ -735,6 +752,7 @@ void db_read_length_and_string(_db_header_ptr header)
 	int		*lengths;
 	char		*string_table;
 	char		**table = NULL;
+	off_t		bytes_left;
 
 	switch (header->table_id)
 	    {
@@ -827,6 +845,10 @@ void db_read_length_and_string(_db_header_ptr header)
 	    if (lengths[i] > 0)
 		string_size += lengths[i] + 1;
 	    }
+	bytes_left = db_bytes_left (dbfile);
+	if (bytes_left >= 0 && string_size > bytes_left)
+	    diag_issue_diagnostic (d_bad_database,
+				   diag_k_no_source, diag_k_no_column);
 
 	string_table = XtMalloc (sizeof (unsigned char) * string_size);
 	return_num_items = fread(string_table,

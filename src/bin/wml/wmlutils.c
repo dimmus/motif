@@ -40,6 +40,8 @@ static char rcsid[] = "$XConsortium: wmlutils.c /main/8 1995/08/29 11:11:24 drk 
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 
 /*
@@ -52,13 +54,44 @@ char *wmlAllocateString (char *stg)
 {
 
 char		*dynstg;	/* the dynamic copy */
+size_t		len;		/* size of the copy */
 
 
 if ( stg == NULL ) return NULL;
 
-dynstg = (char *) malloc (strlen(stg)+1);
-strcpy (dynstg, stg);
+len = strlen(stg) + 1;
+dynstg = (char *) malloc (len);
+if ( dynstg == NULL )
+    {
+    fputs ("wml: out of memory\n", stderr);
+    exit (1);
+    }
+memcpy (dynstg, stg, len);
 return dynstg;
+
+}
+
+
+
+/*
+ * Utility to create (or truncate) an output file for reading and writing,
+ * like fopen (name, "w+") but created with mode 0644 rather than 0666.
+ * Returns NULL on failure.
+ */
+
+FILE *wmlOpenOutputFile (const char *name)
+
+{
+
+int		fd;		/* file descriptor */
+FILE		*fil;		/* stream on fd */
+
+
+fd = open (name, O_RDWR | O_CREAT | O_TRUNC, 0644);
+if ( fd < 0 ) return NULL;
+fil = fdopen (fd, "w+");
+if ( fil == NULL ) close (fd);
+return fil;
 
 }
 
