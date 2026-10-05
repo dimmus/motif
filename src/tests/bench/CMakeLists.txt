@@ -6,9 +6,10 @@
 # which writes <build>/src/tests/bench/xmbench.json.  XMBENCH_ARGS passes
 # extra arguments (for example "-r 3 -s 0.1 micro").
 #
-# xmbench-proxy adds latency between a client and the X server and
-# counts round trips; it is built with the tests, since the bench.proxy
-# test checks it.
+# bench.py runs xmbench under its own pinned Xvfb, optionally behind
+# xmbench-proxy (added latency, round trip counts), and compares two
+# builds; see src/tests/README.md.  The proxy is built with the tests,
+# since the bench.proxy test checks it.
 
 add_library(xmbench_preload MODULE EXCLUDE_FROM_ALL preload.c)
 target_include_directories(xmbench_preload PRIVATE ${MOTIF_XT_INCLUDE_DIRS})
@@ -70,4 +71,12 @@ add_test(NAME bench.proxy COMMAND bench_proxy_test
 set_tests_properties(bench.proxy PROPERTIES LABELS X11 SKIP_RETURN_CODE 77)
 if(MOTIF_TEST_ENV)
     set_tests_properties(bench.proxy PROPERTIES ENVIRONMENT "${MOTIF_TEST_ENV}")
+endif()
+
+# The comparison logic of bench.py, on canned results.
+find_package(Python3 COMPONENTS Interpreter)
+if(Python3_Interpreter_FOUND)
+    add_test(NAME bench.compare
+        COMMAND ${Python3_EXECUTABLE} -B
+            ${CMAKE_CURRENT_SOURCE_DIR}/test_bench.py)
 endif()
