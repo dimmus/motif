@@ -824,13 +824,15 @@ int GetBitmapIndex (WmScreenData *pSD, char *name)
 
     if (path)
     {
+        size_t pathLen = strlen (path) + 1;
+
         if ((bitmapc->path = (String)
-                 XtMalloc ((unsigned int)(strlen (path) + 1))) == NULL)
+                 XtMalloc ((unsigned int)pathLen)) == NULL)
         {
             MWarning (((char *)GETMESSAGE(38, 6, "Insufficient memory for bitmap %s\n")), name);
 	    return (-1);
         }
-        strcpy (bitmapc->path, path);
+        memcpy (bitmapc->path, path, pathLen);
 
         if (XReadBitmapFile (DISPLAY, pSD->rootWindow, path,
 			     &bitmapc->width, &bitmapc->height,
@@ -930,8 +932,14 @@ char *BitmapPathName(char *string)
      * Handle "~/.."
      */
     {
-	strcpy (fileName, homeDir);
-        strncat (fileName, &(string[1]), MAXWMPATH - strlen (fileName));
+	int len = snprintf (fileName, sizeof(fileName), "%s%s",
+			    homeDir, &(string[1]));
+
+	if (len < 0 || (size_t) len >= sizeof(fileName))
+	{
+	    /* Too long; return the name as is so the lookup fails. */
+	    return (string);
+	}
 	return (fileName);
     }
 
@@ -945,22 +953,23 @@ char *BitmapPathName(char *string)
      * Relative to nonNULL bitmapDirectory (which may have relative to HOME)
      */
     {
+	int len;
+
 	if ((wmGD.bitmapDirectory[0] == '~') &&
 	    (wmGD.bitmapDirectory[1] == '/'))
 	{
-	    strcpy (fileName, homeDir);
-            strncat (fileName, &wmGD.bitmapDirectory[1],
-		     MAXWMPATH - strlen (fileName));
+	    len = snprintf (fileName, sizeof(fileName), "%s%s/%s", homeDir,
+			    &wmGD.bitmapDirectory[1], string);
 	} else {
-	    strcpy (fileName, wmGD.bitmapDirectory);
+	    len = snprintf (fileName, sizeof(fileName), "%s/%s",
+			    wmGD.bitmapDirectory, string);
 	}
-        strncat (fileName, "/", MAXWMPATH - strlen (fileName));
-        strncat (fileName, string, MAXWMPATH - strlen (fileName));
 
-/* Test file for existence. */
+/* Test file for existence (skip it if the path does not fit). */
 
 	subs[0].substitution = "";
-	if ((retname = XtFindFile(fileName, subs, 0,
+	if (len >= 0 && (size_t) len < sizeof(fileName) &&
+	    (retname = XtFindFile(fileName, subs, 0,
 				  (XtFilePredicate) NULL)) != NULL) {
 	  XtFree(retname);
 	  return (fileName);
@@ -972,6 +981,7 @@ char *BitmapPathName(char *string)
     {
 	char *search_path;
 	Boolean user_path;
+	size_t len;
 
 	search_path = _XmOSInitPath(string, MATCH_PATH, &user_path);
 	subs[0].match = user_path ? MATCH_XBM : MATCH_CHAR;
@@ -984,7 +994,12 @@ char *BitmapPathName(char *string)
 	if (!retname)
 	  return (string);
 
-	strncpy(fileName, retname, MAXWMPATH);
+	len = strlen(retname);
+	if (len >= sizeof(fileName)) {
+	  XtFree(retname);
+	  return (string);
+	}
+	memcpy(fileName, retname, len + 1);
 	XtFree(retname);
 	return (fileName);
     }

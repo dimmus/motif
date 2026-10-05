@@ -1944,6 +1944,21 @@ static char *ExtractLocaleName(String lang)
 #define RC_DEFAULT_CONFIG_SUBDIR	"/config/C"
 #endif /* WSM */
 
+/*
+ * cfileName is built with bounded copies (snprintf/strncat); a name that
+ * fills the buffer may have been truncated, so skip it rather than open
+ * some other file.
+ */
+static FILE *
+FopenCfileName (void)
+{
+    if (strlen (cfileName) >= MAXWMPATH)
+    {
+	return (NULL);
+    }
+    return (fopen (cfileName, "r"));
+}
+
 /*************************************<->*************************************
  *
  *  FopenConfigFile ()
@@ -2033,14 +2048,14 @@ FILE *FopenConfigFile (void)
         if ((wmGD.configFile[0] == '~') && (wmGD.configFile[1] == '/'))
 	/* handle "~/..." */
 	{
-	    strcpy (cfileName, homeDir);
+	    snprintf (cfileName, sizeof(cfileName), "%s", homeDir);
 	    if (LANG != NULL)
 	    {
 		strncat(cfileName, "/", MAXWMPATH-strlen(cfileName));
 		strncat(cfileName, LANG, MAXWMPATH-strlen(cfileName));
 	    }
 	    strncat(cfileName, &(wmGD.configFile[1]), MAXWMPATH-strlen(cfileName));
-	    if ((fileP = fopen (cfileName, "r")) != NULL)
+	    if ((fileP = FopenCfileName ()) != NULL)
 	    {
 		if (LANG != NULL) {
 		    XtFree(LANG);
@@ -2055,10 +2070,10 @@ FILE *FopenConfigFile (void)
 		/*
 		 * Just try $HOME/.mwmrc
 		 */
-		strcpy (cfileName, homeDir);
+		snprintf (cfileName, sizeof(cfileName), "%s", homeDir);
 		strncat(cfileName, &(wmGD.configFile[1]),
 			MAXWMPATH-strlen(cfileName));
-		if ((fileP = fopen (cfileName, "r")) != NULL)
+		if ((fileP = FopenCfileName ()) != NULL)
 		{
 		  if (LANG != NULL) {
 		      XtFree(LANG);
@@ -2101,7 +2116,7 @@ FILE *FopenConfigFile (void)
 	  }
 	  else if ((fileP == NULL) && stackPushed)
 	  {
-		strcpy (cfileName, wmGD.configFile);
+		snprintf (cfileName, sizeof(cfileName), "%s", wmGD.configFile);
 	  }
 #endif /* PANELIST */
 	}
@@ -2119,7 +2134,7 @@ FILE *FopenConfigFile (void)
 #define HOME_MWMRC "/.mwmrc"
 #define SLASH_MWMRC "/system.mwmrc"
 
-    strcpy (cfileName, homeDir);
+    snprintf (cfileName, sizeof(cfileName), "%s", homeDir);
 
 #ifdef WSM
     if (MwmBehavior)
@@ -2165,7 +2180,7 @@ FILE *FopenConfigFile (void)
     }
     strncat(cfileName, HOME_MWMRC, MAXWMPATH - strlen(cfileName));
 #endif /* WSM */
-    if ((fileP = fopen (cfileName, "r")) != NULL)
+    if ((fileP = FopenCfileName ()) != NULL)
     {
         if (LANG != NULL) {
 	    XtFree(LANG);
@@ -2180,7 +2195,7 @@ FILE *FopenConfigFile (void)
 	/*
 	 * Just try $HOME/.mwmrc
 	 */
-    strcpy (cfileName, homeDir);
+    snprintf (cfileName, sizeof(cfileName), "%s", homeDir);
 #ifdef WSM
 	if (MwmBehavior)
 	{
@@ -2199,7 +2214,7 @@ FILE *FopenConfigFile (void)
 #else /* WSM */
         strncat(cfileName, HOME_MWMRC, MAXWMPATH - strlen(cfileName));
 #endif /* WSM */
-	if ((fileP = fopen (cfileName, "r")) != NULL)
+	if ((fileP = FopenCfileName ()) != NULL)
 	{
 	  if (LANG != NULL) {
 	      XtFree(LANG);
@@ -2275,7 +2290,7 @@ FILE *FopenConfigFile (void)
 	strncat(cfileName, LANG, MAXWMPATH-strlen(cfileName));
 	strncat(cfileName, SLASH_MWMRC, MAXWMPATH - strlen(cfileName));
 #endif /* WSM */
-	if ((fileP = fopen (cfileName, "r")) != NULL)
+	if ((fileP = FopenCfileName ()) != NULL)
 	{
 	  XtFree(LANG);
 	  LANG = NULL;
@@ -2522,7 +2537,7 @@ static void ParseMenuSet (WmScreenData *pSD, unsigned char *lineP)
 	XtFree ((char *)menuSpec);
 	return;
     }
-    strcpy (menuSpec->name, (char *)string);
+    memcpy (menuSpec->name, (char *)string, strlen ((char *)string) + 1);
 
     /*
      * Add the empty structure to the head of the menu specification list.
@@ -3153,9 +3168,7 @@ static Boolean ParseClientCommand (unsigned char **linePP, MenuSpec *menuSpec,
 		    "Insufficient memory for menu item label")));
         return (FALSE);
     }
-    strcpy(stream, (char *) string);
-    strcat(stream, " ");
-    strcat(stream, (char *) *linePP);
+    snprintf(stream, linelen, "%s %s", (char *) string, (char *) *linePP);
 
     for (;;)
     {
@@ -3417,7 +3430,7 @@ static Boolean ParseWmLabel (WmScreenData *pSD, MenuItem *menuItem,
         return (FALSE);
     }
 
-    strcpy (menuItem->label, (char *)string);
+    memcpy (menuItem->label, (char *)string, strlen ((char *)string) + 1);
     menuItem->labelType = XmSTRING;
 
     /*
@@ -6935,7 +6948,8 @@ static void ParseScreensArgument (int argc, char *argv[], int *pArgnum,
 	}
 	else
 	{
-	    strcpy((char *)wmGD.screenNames[sNum], (char *)string);
+	    memcpy((char *)wmGD.screenNames[sNum], (char *)string,
+		   1 + strlen((char *)string));
 	    nameCount++;
 	}
     }
@@ -6984,21 +6998,23 @@ void ProcessMotifBindings (void)
     char           fileName[MAXWMPATH+1];
     char	  *bindings = NULL;
     char	  *homeDir = XmeGetHomeDirName();
+    int		   len;
 
     /*
      *  Look in the user's home directory for .motifbind
+     *  (skip it if the path does not fit).
      */
 
-    strcpy (fileName, homeDir);
-    strncat(fileName, "/", MAXWMPATH-strlen(fileName));
-    strncat(fileName, MOTIF_BINDINGS_FILE, MAXWMPATH-strlen(fileName));
+    len = snprintf (fileName, sizeof(fileName), "%s/%s",
+		    homeDir, MOTIF_BINDINGS_FILE);
 
     XDeleteProperty (DISPLAY, RootWindow (DISPLAY, 0),
 		XInternAtom (DISPLAY, "_MOTIF_BINDINGS", False));
     XDeleteProperty (DISPLAY, RootWindow (DISPLAY, 0),
 		XInternAtom (DISPLAY, "_MOTIF_DEFAULT_BINDINGS", False));
 
-    if (_XmVirtKeysLoadFileBindings (fileName, &bindings) == True) {
+    if (len >= 0 && (size_t) len < sizeof(fileName) &&
+	_XmVirtKeysLoadFileBindings (fileName, &bindings) == True) {
 	XChangeProperty (DISPLAY, RootWindow(DISPLAY, 0),
 		XInternAtom (DISPLAY, "_MOTIF_BINDINGS", False),
 		XA_STRING, 8, PropModeReplace,

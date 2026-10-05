@@ -2543,7 +2543,8 @@ FixupBindingsString(
           continue ;
         }
 
-      if(    (strpbrk( (ks_ptr - 1), " \t>") == (ks_ptr - 1))
+      if(    (ks_ptr != fixed_str)
+          && (strpbrk( (ks_ptr - 1), " \t>") == (ks_ptr - 1))
           && (strpbrk( ks_ptr, " \t\n") == (ks_ptr + orig_len))    )
         {
           unsigned new_len = strlen( repl_xref->new_name) ;
@@ -2639,7 +2640,6 @@ VirtKeys4DIN(
             {
               String new_bstring = FixupBindingsString( bindingsString,
                                                                 vkeysym_xref) ;
-              XtFree( bindingsString) ;
               if(    new_bstring != NULL    )
                 {
                   PropChanged4DIN = TRUE ;

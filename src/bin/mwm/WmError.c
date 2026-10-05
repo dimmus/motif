@@ -386,7 +386,7 @@ MWarning (char *format, char *message)
     
     if (strlen(format) + strlen(message) < (size_t) MAXWMPATH)
     {
-        sprintf (pch, format, message);
+        snprintf (pch, sizeof(pch), format, message);
         XtWarning (pch);
     }
     else

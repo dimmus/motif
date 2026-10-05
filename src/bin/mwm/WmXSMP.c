@@ -28,6 +28,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <fcntl.h>
+#include <unistd.h>
 #include <sys/param.h>
 #include <X11/Intrinsic.h>
 #include <X11/Shell.h>
@@ -336,7 +338,7 @@ getClientDBName(void)
 					   EXTRA_FN_CHARS) *
 					  sizeof(char)))
 			!= (char *)NULL)
-			strcpy(wmGD.dbFileName, *argP);
+			memcpy(wmGD.dbFileName, *argP, strlen(*argP) + 1);
 		}
 		break;
 	    }
@@ -360,12 +362,12 @@ getClientDBName(void)
     if (wmGD.dbFileName == (char *)NULL)
     {
 	char *homeDir = XmeGetHomeDirName();
+	size_t size = strlen(homeDir) + strlen(dtwmFileName) + 2 +
+	    EXTRA_FN_CHARS;
 
-	if ((wmGD.dbFileName =
-	     (char *)XtMalloc((strlen(homeDir) + strlen(dtwmFileName) + 2 +
-			       EXTRA_FN_CHARS) * sizeof(char)))
+	if ((wmGD.dbFileName = (char *)XtMalloc(size * sizeof(char)))
 	    != (char *)NULL)
-	    sprintf(wmGD.dbFileName, "%s/%s", homeDir, dtwmFileName);
+	    snprintf(wmGD.dbFileName, size, "%s/%s", homeDir, dtwmFileName);
     }
 }
 
@@ -1248,6 +1250,7 @@ SaveClientResourceDB(void)
     String mySessionID;
     char dbFileName[MAXPATHLEN];
     FILE *fp;
+    int fd;
     int scr;
     WmScreenData *pSD;
     ClientData *pCD;
@@ -1261,8 +1264,14 @@ SaveClientResourceDB(void)
 #endif
     if (!buildDBFileName(dbFileName, True))
 	return (XrmDatabase)NULL;
-    if ((fp = fopen(dbFileName, "w")) == (FILE *)NULL)
+    /* Per-user session state: keep it private. */
+    if ((fd = open(dbFileName, O_WRONLY | O_CREAT | O_TRUNC, 0600)) < 0)
 	return (XrmDatabase)NULL;
+    if ((fp = fdopen(fd, "w")) == (FILE *)NULL)
+    {
+	close(fd);
+	return (XrmDatabase)NULL;
+    }
 
     XtVaGetValues(wmGD.topLevelW,
 		  XtNsessionID, &mySessionID,
