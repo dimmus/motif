@@ -30,6 +30,7 @@ void xmstring_ct_suite(SRunner *runner);
 void xmstring_extent_suite(SRunner *runner);
 void widgets_suite(SRunner *runner);
 void text_suite(SRunner *runner);
+void clipboard_suite(SRunner *runner);
 void i18n_suite(SRunner *runner);
 void layout_suite(SRunner *runner);
 

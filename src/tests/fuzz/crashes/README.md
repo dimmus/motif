@@ -10,14 +10,6 @@ stays green.
 These are Motif bugs, found by the fuzzers added with the tests; none is
 fixed in this change (fixing them is another workstream).
 
-## clipboard/corrupt-record-exit
-`XmClipboardInquirePendingItems` on a malformed `_MOTIF_CLIP_*` record
-set reaches `ClipboardError` (`CutPaste.c`), which prints a message and
-calls `exit(1)`.  Any client that writes the root-window clipboard
-properties can make every Motif application that touches the clipboard
-exit.  The reproducer is replayed with `FUZZ_CLIPBOARD_EXIT=1`, which
-lets the exit happen instead of catching it.
-
 ## uid/corrupt-xmstring-segv
 A corrupt `.uid` makes `MrmFetchWidget` create an `XmPushButton` whose
 `XmNlabelString` is not a valid compound string; `Label.c` Initialize

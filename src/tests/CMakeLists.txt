@@ -33,12 +33,13 @@ set(MOTIF_TEST_SRCS
     Xm/testXmString.c
     Xm/testWidgets.c
     Xm/testText.c
+    Xm/testClipboard.c
     Xm/testI18n.c
     Xm/testLayout.c
 )
 
 # Suites that open a display, and suites that do not.
-set(MOTIF_TEST_X_SUITES FontListEntry FontList XmStringCT XmStringExtent Widgets Text Layout)
+set(MOTIF_TEST_X_SUITES FontListEntry FontList XmStringCT XmStringExtent Widgets Text Clipboard Layout)
 set(MOTIF_TEST_SUITES Svg Log LogConfig XmString I18n)
 set(MOTIF_TEST_DEFS "")
 
@@ -148,6 +149,7 @@ endfunction()
 
 add_subdirectory(uil)
 add_subdirectory(interactive)
+add_subdirectory(hostile)
 add_subdirectory(visual)
 if(WITH_FUZZERS)
     add_subdirectory(fuzz)

@@ -37,8 +37,15 @@ static char rcsid[] = "$TOG: CutPaste.c /main/27 1999/05/26 17:42:48 samborn $"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+/* A corrupt clipboard record is almost always another client's doing:
+   any client can rewrite the _MOTIF_CLIP_* root-window properties this
+   code reads.  Report it as a warning, which returns, rather than with
+   XtErrorMsg, whose default handler calls exit() and lets any such
+   client terminate every Motif application that touches the clipboard.
+   Every ClipboardError() call site already bails out with a failure
+   return, so the operation fails cleanly instead. */
 #define XMERROR(key, message) \
-  XtErrorMsg(key, "xmClipboardError", "XmToolkitError", message, NULL, NULL)
+  XtWarningMsg(key, "xmClipboardError", "XmToolkitError", message, NULL, NULL)
 #define XMRETRY 3
 #define XM_APPEND 0
 #define XM_REPLACE 1
@@ -685,7 +692,6 @@ static void CleanupHeader(Display *display)
 static void ClipboardError(char *key, char *message)
 {
   XMERROR(key, message);
-  exit(1);
 }
 
 /*---------------------------------------------*/

@@ -39,6 +39,7 @@ static const struct suite_entry {
 	{ "XmStringExtent", xmstring_extent_suite, 1 },
 	{ "Widgets",       widgets_suite,         1 },
 	{ "Text",          text_suite,            1 },
+	{ "Clipboard",     clipboard_suite,       1 },
 	{ "I18n",          i18n_suite,            0 },
 	{ "Layout",        layout_suite,          1 },
 };

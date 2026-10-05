@@ -14,12 +14,13 @@
  * Input: records of [kind][id (2 bytes)][length (2 bytes)][data], where
  * kind 0 is the header, 1 the next id record and anything else item id.
  *
- * Known library bug: on a record it finds corrupt the clipboard code
- * reports a fatal error and calls exit() (CutPaste.c, ClipboardError),
- * so any client can make every Motif application that touches the
- * clipboard exit.  To keep fuzzing past that, the Xt error handler
- * jumps back here, unless FUZZ_CLIPBOARD_EXIT is set (crashes/clipboard
- * is replayed that way to show the exit).
+ * A record it finds corrupt is reported with a warning now and the
+ * clipboard operation fails cleanly, so a hostile client can no longer
+ * make the application exit (it used to: ClipboardError() called
+ * XtErrorMsg(), whose default handler exits).  The former reproducer is
+ * now the clean corpus seed corpus/clipboard/corrupt-record-exit.  The
+ * fatal error handler below, and FUZZ_CLIPBOARD_EXIT, are kept so the
+ * old behaviour reappears if anything regresses to XtErrorMsg.
  */
 #include <setjmp.h>
 #include <X11/Xatom.h>
