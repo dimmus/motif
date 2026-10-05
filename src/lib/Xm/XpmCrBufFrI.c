@@ -54,7 +54,7 @@ LFUNC(WritePixels,
        unsigned int *pixels,
        XpmColor *colors));
 LFUNC(WriteExtensions,
-      void,
+      int,
       (char *dataptr,
        unsigned int data_size,
        unsigned int *used_size,
@@ -111,8 +111,11 @@ int XpmCreateBufferFromXpmImage(char **buffer_return, XpmImage *image, XpmInfo *
   cmts = info && (info->valuemask & XpmComments);
   extensions = info && (info->valuemask & XpmExtensions) && info->nextensions;
   /* compute the extensions and comments size */
-  if (extensions)
+  if (extensions) {
     ext_size = ExtensionsSize(info->extensions, info->nextensions);
+    if (!ext_size) /* too big */
+      return XpmNoMemory;
+  }
   if (cmts)
     cmt_size = CommentsSize(info);
   /* write the header line */
@@ -124,7 +127,7 @@ int XpmCreateBufferFromXpmImage(char **buffer_return, XpmImage *image, XpmInfo *
   ptr = (char *)XpmMalloc(ptr_size);
   if (!ptr)
     return XpmNoMemory;
-  strncpy(ptr, buf, strlen(buf) + 1);
+  memcpy(ptr, buf, used_size + 1);
   /* write the values line */
   if (cmts && info->hints_cmt) {
     used_size += snprintf(ptr + used_size, ptr_size - used_size, "/*%s*/\n", info->hints_cmt);
@@ -188,9 +191,12 @@ int XpmCreateBufferFromXpmImage(char **buffer_return, XpmImage *image, XpmInfo *
               image->data,
               image->colorTable);
   /* print extensions */
-  if (extensions)
-    WriteExtensions(
+  if (extensions) {
+    ErrorStatus = WriteExtensions(
         ptr + used_size, ptr_size - used_size, &used_size, info->extensions, info->nextensions);
+    if (ErrorStatus != XpmSuccess)
+      RETURN(ErrorStatus);
+  }
   /* close the array (the 4 bytes left for "};\n" and its NUL) */
   memcpy(ptr + used_size, "};\n", 4);
   *buffer_return = ptr;
@@ -213,6 +219,7 @@ static int WriteColors(char **dataptr,
   unsigned int a, key, l;
   char *s, *s2;
   char **defaults;
+  int n;
   *buf = '"';
   for (a = 0; a < ncolors; a++, colors++) {
     defaults = (char **)colors;
@@ -223,10 +230,11 @@ static int WriteColors(char **dataptr,
     s += cpp;
     for (key = 1; key <= NKEYS; key++, defaults++) {
       if ((s2 = *defaults)) {
-        s += snprintf(s, sizeof(buf) - (s - buf), "\t%s %s", xpmColorKeys[key - 1], s2);
-        /* now let's check if s points out-of-bounds */
-        if ((size_t)(s - buf) > sizeof(buf))
+        n = snprintf(s, sizeof(buf) - (s - buf), "\t%s %s", xpmColorKeys[key - 1], s2);
+        /* never let s point out-of-bounds */
+        if (n < 0 || (size_t)n >= sizeof(buf) - (s - buf))
           return (XpmNoMemory);
+        s += n;
       }
     }
     if (sizeof(buf) - (s - buf) < 4)
@@ -234,8 +242,12 @@ static int WriteColors(char **dataptr,
     strncpy(s, "\",\n", 4);
     s[3] = '\0';
     l = s + 3 - buf;
-    if (*data_size >= UINT_MAX - l || *data_size + l <= *used_size ||
-        (*data_size + l - *used_size) <= sizeof(buf))
+    /*
+     * The l bytes go at *used_size, which must not be past *data_size.
+     * (This used to also require more than sizeof(buf) bytes to spare,
+     * which made every image of a normal size fail with XpmNoMemory.)
+     */
+    if (*data_size >= UINT_MAX - l || *used_size > *data_size)
       return (XpmNoMemory);
     s = (char *)XpmRealloc(*dataptr, *data_size + l);
     if (!s)
@@ -260,7 +272,7 @@ static void WritePixels(char *dataptr,
 {
   char *s = dataptr;
   unsigned int x, y, h;
-  if (height <= 1)
+  if (height == 0) /* a single row is just the last row below */
     return;
   h = height - 1;
   for (y = 0; y < h; y++) {
@@ -292,17 +304,25 @@ static void WritePixels(char *dataptr,
 static unsigned int ExtensionsSize(XpmExtension *ext, unsigned int num)
 {
   unsigned int x, y, a, size;
+  size_t len;
   char **line;
   size = 0;
   if (num == 0)
     return (0); /* ok? */
   for (x = 0; x < num; x++, ext++) {
     /* 11 = 10 (for ',\n"XPMEXT ') + 1 (for '"') */
-    size += strlen(ext->name) + 11;
+    len = strlen(ext->name) + 11;
+    if (len > UINT_MAX - size)
+      return (0);
+    size += len;
     a = ext->nlines; /* how can we trust ext->nlines to be not out-of-bounds? */
-    for (y = 0, line = ext->lines; y < a; y++, line++)
+    for (y = 0, line = ext->lines; y < a; y++, line++) {
       /* 4 = 3 (for ',\n"') + 1 (for '"') */
-      size += strlen(*line) + 4;
+      len = strlen(*line) + 4;
+      if (len > UINT_MAX - size)
+        return (0);
+      size += len;
+    }
   }
   /* 13 is for ',\n"XPMENDEXT"' */
   if (size > UINT_MAX - 13) /* unlikely */
@@ -310,24 +330,39 @@ static unsigned int ExtensionsSize(XpmExtension *ext, unsigned int num)
   return size + 13;
 }
 
-static void WriteExtensions(char *dataptr,
-                            unsigned int data_size,
-                            unsigned int *used_size,
-                            XpmExtension *ext,
-                            unsigned int num)
+static int WriteExtensions(char *dataptr,
+                           unsigned int data_size,
+                           unsigned int *used_size,
+                           XpmExtension *ext,
+                           unsigned int num)
 {
   unsigned int x, y, a;
   char **line;
   char *s = dataptr;
+  size_t left = data_size;
+  int n;
+  /* fail rather than let s run past the end if the size was wrong */
   for (x = 0; x < num; x++, ext++) {
-    s += snprintf(s, data_size - (s - dataptr), ",\n\"XPMEXT %s\"", ext->name);
+    n = snprintf(s, left, ",\n\"XPMEXT %s\"", ext->name);
+    if (n < 0 || (size_t)n >= left)
+      return (XpmNoMemory);
+    s += n;
+    left -= n;
     a = ext->nlines;
     for (y = 0, line = ext->lines; y < a; y++, line++) {
-      s += snprintf(s, data_size - (s - dataptr), ",\n\"%s\"", *line);
+      n = snprintf(s, left, ",\n\"%s\"", *line);
+      if (n < 0 || (size_t)n >= left)
+        return (XpmNoMemory);
+      s += n;
+      left -= n;
     }
   }
-  strncpy(s, ",\n\"XPMENDEXT\"", data_size - (s - dataptr) - 1);
-  *used_size += s - dataptr + 13;
+  n = snprintf(s, left, ",\n\"XPMENDEXT\"");
+  if (n < 0 || (size_t)n >= left)
+    return (XpmNoMemory);
+  s += n;
+  *used_size += s - dataptr;
+  return (XpmSuccess);
 }
 
 static int CommentsSize(XpmInfo *info)

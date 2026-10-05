@@ -35,13 +35,22 @@
 #  include <config.h>
 #endif
 #include "XpmI.h"
+#include <fcntl.h>
+#include <unistd.h>
 
 int XpmWriteFileFromBuffer(const char *filename, char *buffer)
 {
   size_t fcheck, len;
-  FILE *fp = fopen(filename, "w");
-  if (!fp)
+  FILE *fp;
+  /* an image file: not world-writable, whatever the umask */
+  int fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+  if (fd < 0)
     return XpmOpenFailed;
+  fp = fdopen(fd, "w");
+  if (!fp) {
+    close(fd);
+    return XpmOpenFailed;
+  }
   len = strlen(buffer);
   fcheck = fwrite(buffer, len, 1, fp);
   fclose(fp);

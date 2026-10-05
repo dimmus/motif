@@ -936,8 +936,11 @@ Pixmap _XmConvertToBW(Widget w, Pixmap pm)
   XpmCreatePixmapFromXpmImage(XtDisplay(w), pm, &im, &bw_pixmap, 0, NULL);
   if (bw_pixmap)
     XpmCreateBufferFromPixmap(XtDisplay(w), &data_after, bw_pixmap, 0, NULL);
-  if (data_before && data_after && !strcmp(data_before, data_after))
+  if (data_before && data_after && !strcmp(data_before, data_after)) {
+    /* Nothing changed: drop the copy and use the original. */
+    XFreePixmap(XtDisplay(w), bw_pixmap);
     bw_pixmap = 0;
+  }
   if (data_before)
     XpmFree(data_before);
   if (data_after)

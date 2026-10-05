@@ -202,12 +202,11 @@ int XpmCreateDataFromXpmImage(char ***data_return, XpmImage *image, XpmInfo *inf
   ErrorStatus = XpmSuccess;
 /* exit point, free only locally allocated variables */
 exit:
-  if (header) {
-    for (l = 0; l < header_nlines; l++)
-      if (header[l])
-        XpmFree(header[l]);
-    XpmFree(header);
-  }
+  /* header is never NULL here: every RETURN comes after its allocation */
+  for (l = 0; l < header_nlines; l++)
+    if (header[l])
+      XpmFree(header[l]);
+  XpmFree(header);
   return (ErrorStatus);
 }
 
@@ -221,6 +220,7 @@ static int CreateColors(char **dataptr,
   unsigned int a, key, l;
   char *s, *s2;
   char **defaults;
+  int n;
   /* can ncolors be trusted here? */
   for (a = 0; a < ncolors; a++, colors++, dataptr++) {
     defaults = (char **)colors;
@@ -232,10 +232,11 @@ static int CreateColors(char **dataptr,
       return XpmNoMemory;
     for (key = 1; key <= NKEYS; key++, defaults++) {
       if ((s2 = *defaults)) {
-        s += snprintf(s, sizeof(buf) - (s - buf), "\t%s %s", xpmColorKeys[key - 1], s2);
-        /* does s point out-of-bounds? */
-        if (sizeof(buf) < (size_t)(s - buf))
+        n = snprintf(s, sizeof(buf) - (s - buf), "\t%s %s", xpmColorKeys[key - 1], s2);
+        /* never let s point out-of-bounds */
+        if (n < 0 || (size_t)n >= sizeof(buf) - (s - buf))
           return XpmNoMemory;
+        s += n;
       }
     }
     /* what about using strdup()? */
@@ -261,7 +262,7 @@ static void CreatePixels(char **dataptr,
 {
   char *s;
   unsigned int x, y, h, offset;
-  if (height <= 1)
+  if (height == 0) /* a single row is just the last row below */
     return;
   h = height - 1;
   offset = width * cpp + 1;

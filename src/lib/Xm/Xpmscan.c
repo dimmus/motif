@@ -225,7 +225,7 @@ int XpmCreateXpmImageFromImage(Display *display,
   else
     cpp = 0;
   if ((height > 0 && width >= UINT_MAX / height) ||
-      width * height >= UINT_MAX / sizeof(unsigned int))
+      (size_t)width * height >= UINT_MAX / sizeof(unsigned int))
     RETURN(XpmNoMemory);
   pmap.pixelindex = (unsigned int *)XpmCalloc(width * height, sizeof(unsigned int));
   if (!pmap.pixelindex)
