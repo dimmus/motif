@@ -2437,9 +2437,9 @@ void _XmTextEnableRedisplay(XmTextWidget widget)
 /* Count the number of characters represented in the char* str.  By
  * definition, if MB_CUR_MAX == 1 then num_count_bytes == number of characters.
  * Otherwise, use mblen to calculate. */
-int _XmTextCountCharacters(char *str, int num_count_bytes)
+int _XmTextCountCharacters(const char *str, int num_count_bytes)
 {
-  char *bptr;
+  const char *bptr;
   int count = 0;
   int char_size = 0;
   if (num_count_bytes <= 0)

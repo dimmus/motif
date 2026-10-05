@@ -117,12 +117,12 @@ extern void XmTextDisableRedisplay(Widget widget);
 extern void XmTextEnableRedisplay(Widget widget);
 extern Boolean XmTextFindString(Widget w,
                                 XmTextPosition start,
-                                char *search_string,
+                                const char *search_string,
                                 XmTextDirection direction,
                                 XmTextPosition *position);
 extern Boolean XmTextFindStringWcs(Widget w,
                                    XmTextPosition start,
-                                   wchar_t *wc_string,
+                                   const wchar_t *wc_string,
                                    XmTextDirection direction,
                                    XmTextPosition *position);
 /********    End Public Function Declarations    ********/
