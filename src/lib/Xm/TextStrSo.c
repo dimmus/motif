@@ -1336,7 +1336,7 @@ XmTextSource _XmStringSourceCreate(char *value, Boolean is_wchar)
     data->old_length = 0;
     data->ptr = _XmMallocArray(data->maxlength, char_size);
     tmp_value = _XmMallocArray(num_chars + 1, max_char_size);
-    ret_value = wcstombs(tmp_value, wc_value, (num_chars + 1) * max_char_size);
+    ret_value = wcstombs(tmp_value, wc_value, (size_t)(num_chars + 1) * max_char_size);
     data->value = NULL; /* Scratch area for block->ptr conversions */
     /* Doesnt include NULL */
     if (ret_value < 0)

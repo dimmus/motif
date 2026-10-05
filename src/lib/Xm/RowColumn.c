@@ -1863,7 +1863,7 @@ static char *GetRealKey(XmRowColumnWidget rc, char *str)
   char *buf = NULL;
   size_t len = 0, size = 0, need;
   char *ks;
-  int num_keys;
+  int num_keys, n;
   XmKeyBinding keys;
   keysym = XStringToKeysym(str);
   if (keysym == NoSymbol)
@@ -1879,14 +1879,20 @@ static char *GetRealKey(XmRowColumnWidget rc, char *str)
         size = 2 * need;
         buf = XtRealloc(buf, size);
       }
-      len += snprintf(buf + len,
-                      size - len,
-                      "%s%s%s%s<KeyUp>%s",
-                      len ? ", " : "",
-                      (mods & ControlMask) ? "Ctrl " : "",
-                      (mods & ShiftMask) ? "Shift " : "",
-                      (mods & Mod1Mask) ? "Alt " : "",
-                      ks);
+      n = snprintf(buf + len,
+                   size - len,
+                   "%s%s%s%s<KeyUp>%s",
+                   len ? ", " : "",
+                   (mods & ControlMask) ? "Ctrl " : "",
+                   (mods & ShiftMask) ? "Shift " : "",
+                   (mods & Mod1Mask) ? "Alt " : "",
+                   ks);
+      /* Cannot happen (need was reserved above); drop the entry if so. */
+      if (n < 0 || (size_t)n >= size - len) {
+        buf[len] = '\0';
+        continue;
+      }
+      len += (size_t)n;
     }
   XtFree((char *)keys);
   return buf;

@@ -5590,7 +5590,8 @@ static void ListItemVisible(Widget wid, XEvent *event, String *params, Cardinal 
       return;
   }
   else {
-    sscanf(*params, "%d", &percentage);
+    if (sscanf(*params, "%d", &percentage) != 1)
+      return;
     if (percentage == 100)
       percentage--;
     item = (lw->list.visibleItemCount * percentage) / 100;

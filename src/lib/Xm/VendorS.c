@@ -1392,6 +1392,36 @@ static void VendorExtInitialize(Widget req,
   ve->vendor.leave_time = (Time)0;
 }
 
+/*
+ * The warning header and message texts come from the error database or
+ * the message catalog, so check them before using them as formats: only
+ * accept %%, and at most max_args %s (or %d, which RepType.c uses for a
+ * number passed in a parameter) with an optional '-' flag, width and
+ * precision; never %n, '*' or positional arguments.
+ */
+static Boolean IsSafeWarningFormat(const char *fmt, int max_args)
+{
+  int count = 0;
+  for (; *fmt != '\0'; fmt++) {
+    if (*fmt != '%')
+      continue;
+    if (*++fmt == '%')
+      continue;
+    if (*fmt == '-')
+      fmt++;
+    while (*fmt >= '0' && *fmt <= '9')
+      fmt++;
+    if (*fmt == '.') {
+      fmt++;
+      while (*fmt >= '0' && *fmt <= '9')
+        fmt++;
+    }
+    if ((*fmt != 's' && *fmt != 'd') || ++count > max_args)
+      return False;
+  }
+  return True;
+}
+
 /************************************************************************
  *  MotifWarningHandler
  *    Build up a warning message and print it
@@ -1417,7 +1447,10 @@ static void MotifWarningHandler(
   /* Widget names, font names and message parameters can be arbitrarily
    * long, so every write below is bounded and long messages are
    * truncated. */
-  ret = snprintf(buf, sizeof(buf), header, name, s_class);
+  if (!IsSafeWarningFormat(header, 2))
+    ret = snprintf(buf, sizeof(buf), _XmMsgMotif_0000, name, s_class);
+  else
+    ret = snprintf(buf, sizeof(buf), header, name, s_class);
   if (ret < 0) {
     buf[0] = '\0';
     pos = 0;
@@ -1426,7 +1459,7 @@ static void MotifWarningHandler(
     pos = sizeof(buf) - 1;
   else
     pos = (size_t)ret;
-  if (num_params && *num_params > 1) {
+  if (num_params && *num_params > 1 && IsSafeWarningFormat(buf2, 10)) {
     int i = *num_params - 1;
     char *par[10];
     if (i > 10)

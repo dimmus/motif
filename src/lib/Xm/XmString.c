@@ -1412,7 +1412,7 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
   }
   if (merged && !_XmStrImplicitLine(a_str))
     _XmStrEntryCount(a_str)--;
-  if (b_sc - merged > 0 && _XmStrImplicitLine(a_str)) {
+  if (b_sc > (unsigned int)merged && _XmStrImplicitLine(a_str)) {
     Boolean free_b_line = (modify_b && _XmEntryMultiple(b_line) &&
                            ((_XmStringEntry)b_seg != b_line));
     if (_XmEntryMultiple(a_line)) {
@@ -1450,7 +1450,7 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
         XtFree((char *)b_line);
     }
   }
-  else if (b_sc - merged > 0 && !_XmStrImplicitLine(a_str)) {
+  else if (b_sc > (unsigned int)merged && !_XmStrImplicitLine(a_str)) {
     for (i = 0; (unsigned int)i < (b_sc - merged); i++) {
       /* Check if b_str is a singleton (b_tmp) or a real array */
       if (b_str == (XmString)&b_tmp) {
@@ -1857,7 +1857,7 @@ static void OptLineMetrics(XmRenderTable r,
   int prev_val, val, i, ref_cnt, rt_ref_cnt;
   XmTabList tl = NULL;
   XmTab tab;
-  unsigned short tab_cnt;
+  unsigned int tab_cnt;
   Dimension tab_w = 0;
   _XmRendition rend_int;
   /* compute rendition */
@@ -2040,7 +2040,7 @@ static void LineMetrics(_XmStringEntry line,
   int prev_val, val;
   XmTabList tl = NULL;
   XmTab tab;
-  unsigned short tab_cnt;
+  unsigned int tab_cnt;
   _XmStringNREntry seg, peek_seg;
   XmDirection lay_dir = 0;
   Boolean set_direction = FALSE;
@@ -3834,7 +3834,7 @@ static void DrawLine(Display *d,
   int i, prev_val, val, offset;
   XmTabList tl = NULL;
   XmTab tab;
-  unsigned short tab_cnt;
+  unsigned int tab_cnt;
   /* Absolute tabs use this as left margin */
   offset = x;
   if (opt) {

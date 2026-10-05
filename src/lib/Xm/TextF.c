@@ -2316,7 +2316,7 @@ Boolean _XmTextFieldReplaceText(XmTextFieldWidget tf,
       else
         size = sizeof(wchar_t);
       insert_orig = _XmMallocArray(insert_length, size);
-      memcpy(insert_orig, insert, insert_length * size);
+      memcpy(insert_orig, insert, (size_t)insert_length * size);
     }
     else
       insert_orig = NULL;
@@ -2343,7 +2343,7 @@ Boolean _XmTextFieldReplaceText(XmTextFieldWidget tf,
     else {
       if (FUnderVerifyPreedit(tf))
         if (insert_length != insert_length_orig ||
-            memcmp(insert, insert_orig, insert_length * size) != 0)
+            memcmp(insert, insert_orig, (size_t)insert_length * size) != 0)
         {
           FVerifyCommitNeeded(tf) = True;
           PreEnd(tf) += insert_length - insert_length_orig;
@@ -5363,10 +5363,16 @@ static char *OctalEscapes(const char *s, int n)
 {
   size_t size = 4 * (size_t)n + 1, len = 0;
   char *buf = _XmMallocArray(size, 1);
-  int i;
+  int i, w;
   buf[0] = '\0';
-  for (i = 0; i < n; i++)
-    len += snprintf(buf + len, size - len, "\\%o", (unsigned char)s[i]);
+  for (i = 0; i < n; i++) {
+    w = snprintf(buf + len, size - len, "\\%o", (unsigned char)s[i]);
+    if (w < 0 || (size_t)w >= size - len) {
+      buf[len] = '\0'; /* cannot happen: 4 bytes per char were reserved */
+      break;
+    }
+    len += (size_t)w;
+  }
   return buf;
 }
 
@@ -6424,7 +6430,7 @@ static Boolean SetValues(
         old_s = temp = _XmMallocArray(new_tf->text.string_length + 1, new_tf->text.max_char_size);
         ret_val = wcstombs(temp,
                            TextF_WcValue(new_tf),
-                           (new_tf->text.string_length + 1) * new_tf->text.max_char_size);
+                           (size_t)(new_tf->text.string_length + 1) * new_tf->text.max_char_size);
         if (ret_val < 0)
           temp[0] = '\0';
         mod_ver_ret = ModifyVerify(
@@ -7233,8 +7239,10 @@ static void PreeditDraw(XIC xic, XPointer client_data, XIMPreeditDrawCallbackStr
       }
       else {
         mb = _XmMallocArray(insert_length + 1, tf->text.max_char_size);
-        strncpy(mb, call_data->text->string.multi_byte, insert_length * tf->text.max_char_size);
-        mb[insert_length * tf->text.max_char_size] = '\0';
+        strncpy(mb,
+                call_data->text->string.multi_byte,
+                (size_t)insert_length * tf->text.max_char_size);
+        mb[(size_t)insert_length * tf->text.max_char_size] = '\0';
         escapement = XmbTextExtents((XFontSet)TextF_Font(tf), mb, strlen(mb), &overall_ink, NULL);
         XtFree(mb);
         mb = NULL;
@@ -7583,8 +7591,9 @@ char *XmTextFieldGetString(Widget w)
     }
     else {
       temp_str = (char *)_XmMallocArray(tf->text.max_char_size, tf->text.string_length + 1);
-      ret_val = wcstombs(
-          temp_str, TextF_WcValue(tf), (tf->text.string_length + 1) * tf->text.max_char_size);
+      ret_val = wcstombs(temp_str,
+                         TextF_WcValue(tf),
+                         (size_t)(tf->text.string_length + 1) * tf->text.max_char_size);
       if (ret_val < 0)
         temp_str[0] = '\0';
       _XmAppUnlock(app);
@@ -7847,7 +7856,7 @@ void XmTextFieldSetStringWcs(Widget w, wchar_t *wc_value)
   for (num_chars = 0, tmp_wc = wc_value; *tmp_wc != (wchar_t)0L; num_chars++)
     tmp_wc++; /* count number of wchar_t's */
   tmp = _XmMallocArray(num_chars + 1, tf->text.max_char_size);
-  result = wcstombs(tmp, wc_value, (num_chars + 1) * tf->text.max_char_size);
+  result = wcstombs(tmp, wc_value, (size_t)(num_chars + 1) * tf->text.max_char_size);
   if (result == -1) /* invalid data: set the empty string */
     tmp[0] = '\0';
   XmTextFieldSetString(w, tmp);
@@ -7892,7 +7901,7 @@ static void TextFieldReplace(
     }
     else { /* need to convert to char* before calling Replace */
       value = _XmMallocArray(length + 1, tf->text.max_char_size);
-      length = wcstombs(value, wc_value, (length + 1) * tf->text.max_char_size);
+      length = wcstombs(value, wc_value, (size_t)(length + 1) * tf->text.max_char_size);
       if (length < 0) { /* invalid data: insert the empty string */
         value[0] = '\0';
         length = 0;

@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <fcntl.h>
 #include <pthread.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -458,9 +459,15 @@ void XmLogPrintCbFile(const XmLogDomain *d,
 
   // data should be a filename string, not a FILE pointer
   const char *filename = (const char *)data;
-  FILE *f = fopen(filename, "a");
-  if (!f)
+  // The log may contain user data: create it private to the user.
+  int fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0600);
+  if (fd < 0)
     return;
+  FILE *f = fdopen(fd, "a");
+  if (!f) {
+    close(fd);
+    return;
+  }
 
   // Simple prefix printing
   const char *level_name = (level >= 0 && level < XM_LOG_LEVELS) ? _level_names[level] : "UNK";

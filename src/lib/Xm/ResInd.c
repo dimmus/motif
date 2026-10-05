@@ -225,7 +225,7 @@ static XmParseResult ParseUnitString(String spec,
                                      int *unit_type)     /* RETURN */
 {
   char *string = spec;
-  double power;
+  double power, value;
   int sign;
   char c;
   /* Skip leading whitespace */
@@ -240,9 +240,9 @@ static XmParseResult ParseUnitString(String spec,
    * point or not to avoid parsing an extra time.
    */
   /* Parse digits left of decimal point */
-  *float_value = 0;
+  value = 0;
   while ((*string >= '0') && (*string <= '9')) {
-    *float_value = 10.0 * *float_value + (*string - '0');
+    value = 10.0 * value + (*string - '0');
     string++;
   }
   /* Handle decimal point */
@@ -251,11 +251,11 @@ static XmParseResult ParseUnitString(String spec,
   /* Parse digits right of decimal point */
   power = 1.0;
   while ((*string >= '0') && (*string <= '9')) {
-    *float_value = 10.0 * *float_value + (*string - '0');
+    value = 10.0 * value + (*string - '0');
     power *= 10;
     string++;
   }
-  *float_value = sign * *float_value / power;
+  *float_value = (float)(sign * value / power);
   /* Skip whitespace between float and unit */
   while (((c = *string) >= 0 && (c <= 127)) && (isspace(c)))
     string++;

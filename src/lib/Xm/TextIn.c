@@ -1781,9 +1781,10 @@ static void ScrollCursorVertically(Widget w, XEvent *event, String *params, Card
           break;
   }
   else {
+    if (sscanf(*params, "%d", &percentage) != 1)
+      return;
     tw->text.top_character = 0;
     tw->text.bottom_position = tw->text.last_position;
-    sscanf(*params, "%d", &percentage);
     desired_line = ((data->number_lines - 1) * percentage) / 100;
   }
   if (tw->text.cursor_position == tw->text.line[tw->text.number_lines].start)

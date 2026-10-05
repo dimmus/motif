@@ -3051,7 +3051,7 @@ void XmRenderTableGetDefaultFontExtents(XmRenderTable rendertable,
   short indx;
   int h, a, d;
   XtAppContext app = NULL;
-  if (_XmRTDisplay(rendertable))
+  if (rendertable && _XmRTDisplay(rendertable))
     app = XtDisplayToApplicationContext(_XmRTDisplay(rendertable));
   if (app)
     _XmAppLock(app);

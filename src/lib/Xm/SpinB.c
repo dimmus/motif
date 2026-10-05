@@ -2205,7 +2205,7 @@ static Boolean CvtStringToPositionValue(Display *display,
   XtArgVal value;
   int offset = XtOffsetOf(XmSpinBoxConstraintPart, position);
   Widget w = *((Widget *)args[0].addr);
-  if (sscanf(from->addr, "%ld", (long *)&value) == 0) {
+  if (sscanf(from->addr, "%ld", (long *)&value) != 1) {
     XtDisplayStringConversionWarning(display, (char *)from->addr, XmRPositionValue);
     return False;
   }
@@ -2290,7 +2290,7 @@ int XmSpinBoxValidatePosition(Widget text_field, int *position)
     return (XmCURRENT_VALUE);
   }
   string = textT->getValue(text_field, XmFORMAT_MBYTE);
-  if (sscanf(string, "%f", &fPosition) == 0) {
+  if (sscanf(string, "%f", &fPosition) != 1) {
     if (position) {
       XtArgVal external_position = wc->position;
       GetPositionValue(text_field, positionOffset, &external_position);

@@ -227,7 +227,7 @@ static String GetRealTranslations(Display *dpy,
   size_t len = 0, size = 256, need;
   char *keystring;
   Cardinal i;
-  int num_vkeys;
+  int num_vkeys, n;
   XmKeyBinding vkeys;
   KeySym keysym;
   Modifiers mods;
@@ -256,14 +256,20 @@ static String GetRealTranslations(Display *dpy,
       }
       /* "Alt" may not be always right, hence Mod1;
          actions contain line separators. */
-      len += snprintf(buf + len,
-                      size - len,
-                      "%s%s%s<Key>%s: %s",
-                      (mods & ControlMask) ? "Ctrl " : "",
-                      (mods & ShiftMask) ? "Shift " : "",
-                      (mods & Mod1Mask) ? "Mod1 " : "",
-                      keystring,
-                      keys[i].action);
+      n = snprintf(buf + len,
+                   size - len,
+                   "%s%s%s<Key>%s: %s",
+                   (mods & ControlMask) ? "Ctrl " : "",
+                   (mods & ShiftMask) ? "Shift " : "",
+                   (mods & Mod1Mask) ? "Mod1 " : "",
+                   keystring,
+                   keys[i].action);
+      /* Cannot happen (need was reserved above); drop the entry if so. */
+      if (n < 0 || (size_t)n >= size - len) {
+        buf[len] = '\0';
+        continue;
+      }
+      len += (size_t)n;
     }
     XtFree((char *)vkeys);
   }

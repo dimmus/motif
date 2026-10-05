@@ -290,7 +290,7 @@ char *_XmGetRealXlations(Display *dpy, _XmBuildVirtualKeyStruct *keys, int num_k
   char *buf;
   size_t len = 0, size = 256, need;
   char *keystring;
-  int i;
+  int i, n;
   int num_vkeys;
   XmKeyBinding vkeys;
   KeySym keysym;
@@ -314,14 +314,20 @@ char *_XmGetRealXlations(Display *dpy, _XmBuildVirtualKeyStruct *keys, int num_k
         buf = XtRealloc(buf, size);
       }
       /* "Alt" may not be right on some systems, hence Mod1 */
-      len += snprintf(buf + len,
-                      size - len,
-                      "%s%s%s<Key>%s: %s",
-                      (mods & ControlMask) ? "Ctrl " : "",
-                      (mods & ShiftMask) ? "Shift " : "",
-                      (mods & Mod1Mask) ? "Mod1 " : "",
-                      keystring,
-                      keys[i].action);
+      n = snprintf(buf + len,
+                   size - len,
+                   "%s%s%s<Key>%s: %s",
+                   (mods & ControlMask) ? "Ctrl " : "",
+                   (mods & ShiftMask) ? "Shift " : "",
+                   (mods & Mod1Mask) ? "Mod1 " : "",
+                   keystring,
+                   keys[i].action);
+      /* Cannot happen (need was reserved above); drop the entry if so. */
+      if (n < 0 || (size_t)n >= size - len) {
+        buf[len] = '\0';
+        continue;
+      }
+      len += (size_t)n;
     }
     XtFree((char *)vkeys);
   }
