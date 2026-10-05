@@ -207,7 +207,7 @@ static DtCachedDir MakeCachedDirEntry(String dirName)
 
 static DtCachedDirListStruct cacheList;
 
-void XmeFlushIconFileCache(String path)
+void XmeFlushIconFileCache(const char *path)
 {
   Cardinal dirNameLen;
   Cardinal i;
@@ -395,9 +395,9 @@ static XmHashValue HashIconName(XmHashKey key)
 }
 
 String XmGetIconFileName(Screen *screen,
-                         String imageInstanceName,
-                         String imageClassName,
-                         String hostPrefix,
+                         const char *imageInstanceName,
+                         const char *imageClassName,
+                         const char *hostPrefix,
                          unsigned int size)
 {
   Display *display = DisplayOfScreen(screen);
@@ -472,13 +472,16 @@ String XmGetIconFileName(Screen *screen,
       iconSubs[M_SUB].substitution = NULL;
       break;
   }
-  iconSubs[H_SUB].substitution = hostPrefix;
+  /* The names are only read: XtResolvePathname() reads the */
+  /* substitutions, and the caches keep copies. */
+  iconSubs[H_SUB].substitution = (String)hostPrefix;
   if (useIconFileCache)
     testFileFunc = TestIconFile;
   else
     testFileFunc = NULL;
-  names[0] = imageInstanceName;
-  names[1] = imageClassName;
+  names[0] = (String)imageInstanceName;
+  names[1] = (String)imageClassName;
+
   names_w_size[0] = names_w_size[1] = (String)NULL;
   /** loop over the two names */
   for (i = 0; i < 2; i++) {

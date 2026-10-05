@@ -659,7 +659,7 @@ Widget XmCreateDialogShell(Widget p, char *name, ArgList al, Cardinal ac)
  *   child of the shell; returns the child widget.
  ****************/
 Widget XmeCreateClassDialog(
-    WidgetClass w_class, Widget ds_p, String name, ArgList bb_args, Cardinal bb_n)
+    WidgetClass w_class, Widget ds_p, const char *name, ArgList bb_args, Cardinal bb_n)
 {
   Widget bb;       /*  child	*/
   Widget ds;       /*  DialogShell		*/

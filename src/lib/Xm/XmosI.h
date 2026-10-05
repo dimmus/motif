@@ -60,7 +60,7 @@ extern int _XmOSFileCompare(XmConst void *sp1, XmConst void *sp2);
 extern String _XmOSInitPath(String file_name, String env_pathname, Boolean *user_path);
 extern String _XmOSBuildFileName(String file, String path);
 extern int _XmOSPutenv(char *string);
-extern void _XmOSGenerateMaskName(String imageName, String maskNameBuf, size_t buf_len);
+extern void _XmOSGenerateMaskName(const char *imageName, String maskNameBuf, size_t buf_len);
 extern Status _XmOSGetInitialCharsDirection(XtPointer characters,
                                             XmTextType type,
                                             XmStringTag locale,

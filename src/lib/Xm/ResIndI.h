@@ -42,7 +42,7 @@ extern unsigned char _XmGetUnitType(Widget widget);
 extern int _XmConvertFloatUnitsToIntUnits(
     int unitType, float unitValue, int *intUnitType, float *intUnitValue, int default_from_type);
 extern int _XmConvertStringToUnits(Screen *screen,
-                                   String spec,
+                                   const char *spec,
                                    int default_from_type,
                                    int orientation,
                                    int to_type,

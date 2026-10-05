@@ -32,7 +32,7 @@ typedef struct _XmPictureStateRec *XmPictureState;
 #  ifdef __cplusplus
 extern "C" {
 #  endif
-XmPicture XmParsePicture(char *);
+XmPicture XmParsePicture(const char *);
 XmPictureState XmGetNewPictureState(XmPicture);
 char *XmPictureProcessCharacter(XmPictureState, char, Boolean *);
 void XmPictureDelete(XmPicture);

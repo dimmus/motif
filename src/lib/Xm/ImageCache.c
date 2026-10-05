@@ -149,7 +149,7 @@ static int GetOverrideColors(Screen *screen,
                              XmAccessColorData acc_color,
                              XpmColorSymbol *override_colors);
 static XtEnum GetXpmImage(Screen *screen,
-                          char *image_name,
+                          const char *image_name,
                           char *file_name,
                           XmAccessColorData acc_color,
                           XImage **image,
@@ -157,7 +157,7 @@ static XtEnum GetXpmImage(Screen *screen,
                           Pixel **pixels,
                           int *npixels);
 static XtEnum GetImage(Screen *screen,
-                       char *image_name,
+                       const char *image_name,
                        XmAccessColorData acc_color,
                        XImage **image,
                        unsigned short *pixmap_resolution,
@@ -228,7 +228,7 @@ static void InitializeImageSet(void)
  *		Allow a hot_spot to be specified
  *
  ************************************************************************/
-Boolean _XmInstallImage(XImage *image, char *image_name, int hot_x, int hot_y)
+Boolean _XmInstallImage(XImage *image, const char *image_name, int hot_x, int hot_y)
 {
   ImageData *entry;
   /*  Error checking  */
@@ -239,7 +239,8 @@ Boolean _XmInstallImage(XImage *image, char *image_name, int hot_x, int hot_y)
     InitializeImageSet();
   /*  Verify that the image_name is not already in the image set.  */
   _XmProcessLock();
-  if (_XmGetHashEntry(image_set, image_name) != NULL) {
+  /* CompareStrings and HashString only read the key */
+  if (_XmGetHashEntry(image_set, (XmHashKey)image_name) != NULL) {
     _XmProcessUnlock();
     return (False);
   }
@@ -262,7 +263,7 @@ Boolean _XmInstallImage(XImage *image, char *image_name, int hot_x, int hot_y)
  *	id to be used for further referencing.
  *
  ************************************************************************/
-Boolean XmInstallImage(XImage *image, char *image_name)
+Boolean XmInstallImage(XImage *image, const char *image_name)
 {
   Boolean ret_val;
   _XmProcessLock();
@@ -516,7 +517,7 @@ static int GetOverrideColors(Screen *screen,
 }
 
 static XtEnum GetXpmImage(Screen *screen,
-                          char *image_name, /* original image file name */
+                          const char *image_name, /* original image file name */
                           char *file_name,
                           XmAccessColorData acc_color,
                           XImage **image,
@@ -655,7 +656,7 @@ static XtEnum GetXpmImage(Screen *screen,
  * Load an image from a file
  */
 static XtEnum LoadImage(Screen *screen,
-                        char *image_name,
+                        const char *image_name,
                         XmAccessColorData acc_color,
                         XImage **image,
                         unsigned short *pixmap_res,
@@ -719,7 +720,7 @@ static XtEnum LoadImage(Screen *screen,
  *
  ************************************************************************/
 static XtEnum GetImage(Screen *screen,
-                       char *image_name,
+                       const char *image_name,
                        XmAccessColorData acc_color,
                        XImage **image,
                        unsigned short *pixmap_resolution,
@@ -743,7 +744,8 @@ static XtEnum GetImage(Screen *screen,
     return FALSE;
   /*** look in the XImage cache first */
   _XmProcessLock();
-  entry = (ImageData *)_XmGetHashEntry(image_set, image_name);
+  /* CompareStrings and HashString only read the key */
+  entry = (ImageData *)_XmGetHashEntry(image_set, (XmHashKey)image_name);
   _XmProcessUnlock();
   if (entry) {
     /*  If the image is a builtin image then get it.  */
@@ -791,13 +793,14 @@ Boolean _XmGetImage(Screen *screen, char *image_name, XImage **image)
  *       Used by IconFile.c
  *
  ************************************************************************/
-Boolean _XmInImageCache(String image_name)
+Boolean _XmInImageCache(const char *image_name)
 {
   XtPointer ret_val;
   if (!image_set)
     return False;
   _XmProcessLock();
-  ret_val = _XmGetHashEntry(image_set, image_name);
+  /* CompareStrings and HashString only read the key */
+  ret_val = _XmGetHashEntry(image_set, (XmHashKey)image_name);
   _XmProcessUnlock();
   return (ret_val != NULL);
 }
@@ -1009,7 +1012,7 @@ Boolean _XmGetPixmapData(Screen *screen,
 /* the real one, used by PixConv and locally too */
 Pixmap _XmGetScaledPixmap(Screen *screen,
                           Widget widget,
-                          char *image_name,
+                          const char *image_name,
                           XmAccessColorData acc_color,
                           int depth,
                           Boolean only_if_exists,
@@ -1041,7 +1044,7 @@ Pixmap _XmGetScaledPixmap(Screen *screen,
   /* since resolution can be dynamic for a printer, we need
        to use the resolution too, when scaling is 0 */
   pix_data.screen = screen;
-  pix_data.image_name = image_name;
+  pix_data.image_name = (char *)image_name; /* only a lookup key */
   pix_data.depth = depth;
   pix_data.acc_color = acc_color;
   pix_data.print_resolution = 100; /* default */
@@ -1279,7 +1282,7 @@ Pixmap _XmGetColoredPixmap(Screen *screen,
  * the given dimension and that of the image.
  */
 Pixmap XmGetSizedPixmap(Widget widget,
-                        char *image_name,
+                        const char *image_name,
                         Pixel foreground,
                         Pixel background,
                         int depth,
@@ -1306,7 +1309,7 @@ Pixmap XmGetSizedPixmap(Widget widget,
 }
 
 Pixmap XmGetScaledPixmap(Widget widget,
-                         char *image_name,
+                         const char *image_name,
                          Pixel foreground,
                          Pixel background,
                          int depth,
@@ -1340,7 +1343,7 @@ Pixmap XmGetScaledPixmap(Widget widget,
  *
  *******************************************************************/
 Pixmap XmGetPixmapByDepth(
-    Screen *screen, char *image_name, Pixel foreground, Pixel background, int depth)
+    Screen *screen, const char *image_name, Pixel foreground, Pixel background, int depth)
 {
   XmAccessColorDataRec acc_color_rec;
   Pixmap ret_val;
@@ -1365,7 +1368,7 @@ Pixmap XmGetPixmapByDepth(
  *  This one is deprecated, but keep it in here, it was public.
  *
  ************************************************************************/
-Pixmap XmGetPixmap(Screen *screen, char *image_name, Pixel foreground, Pixel background)
+Pixmap XmGetPixmap(Screen *screen, const char *image_name, Pixel foreground, Pixel background)
 {
   Pixmap ret_val;
   XtAppContext app = XtDisplayToApplicationContext(DisplayOfScreen(screen));
@@ -1382,7 +1385,8 @@ Pixmap XmGetPixmap(Screen *screen, char *image_name, Pixel foreground, Pixel bac
  *  XmeGetMask
  *
  ************************************************************************/
-Pixmap XmeGetMask(Screen *screen, char *image_name)
+Pixmap XmeGetMask(Screen *screen, const char *image_name)
+
 {
   char mask_name[256];
   Pixmap ret_val;

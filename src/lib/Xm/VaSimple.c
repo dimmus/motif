@@ -902,7 +902,7 @@ Widget XmVaCreateSimpleCheckBox(Widget parent, String name, XtCallbackProc callb
  *       a returned widget if one can be created, NULL on error.
  */
 Widget XmeVLCreateWidget(
-    char *name, WidgetClass wc, Widget parent, Boolean managed, va_list al, int count)
+    const char *name, WidgetClass wc, Widget parent, Boolean managed, va_list al, int count)
 {
   Widget w;
   ArgList args;

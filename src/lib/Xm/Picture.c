@@ -24,7 +24,7 @@
 #include <Xm/PictureP.h>
 static XmPictureNode *_XiGetNewNode(XmPictureRec *);
 static void _XmPictureParseNode(
-    XmPictureRec *, char **, XmPictureNode **, XmPictureNode **, Boolean);
+    XmPictureRec *, const char **, XmPictureNode **, XmPictureNode **, Boolean);
 static XmPictureTransition *_XiGetNewTransition(XmTransType, XmPictureNode *, XmPictureNode *);
 static void _XmPictureSetState(unsigned char *, int);
 static char _XmPictureGetState(unsigned char *, int);
@@ -40,7 +40,7 @@ static void _XmPictureFillTraverse(XmPictureRec *, int, XmAutoFill *);
  * Parses the given string into an XmPicture object.  Returns NULL on a
  * mal-formed picture
  */
-XmPicture XmParsePicture(char *input)
+XmPicture XmParsePicture(const char *input)
 {
   XmPictureRec *picture;
   XmPictureNode *root_node;
@@ -238,7 +238,7 @@ char *XmPictureDoAutoFill(XmPictureState state)
  * or EOS.
  */
 static void _XmPictureParseNode(XmPictureRec *picture,
-                                char **in_string,
+                                const char **in_string,
                                 XmPictureNode **start_return,
                                 XmPictureNode **end_return,
                                 Boolean returnNOW)

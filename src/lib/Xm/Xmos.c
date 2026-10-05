@@ -1071,10 +1071,10 @@ int XmeMicroSleep(long usecs)
  *		string		The input 8859-1 value.
  *
  ************************************************************************/
-XmString XmeGetLocalizedString(char *reserved, /* unused */
-                               Widget widget,  /* unused */
-                               char *resource, /* unused */
-                               String string)
+XmString XmeGetLocalizedString(const char *reserved, /* unused */
+                               Widget widget,        /* unused */
+                               const char *resource, /* unused */
+                               const char *string)
 {
   return XmStringCreateLocalized(string);
 }
@@ -1145,11 +1145,12 @@ void _XmOSFindPathParts(String path, String *filenameRtn, String *suffixRtn)
  *        or        joe in joe_m
  *
  ************************************************************/
-void _XmOSGenerateMaskName(String imageName, String maskNameBuf, size_t buf_len)
+void _XmOSGenerateMaskName(const char *imageName, String maskNameBuf, size_t buf_len)
 {
   String file, suffix;
   int len;
-  _XmOSFindPathParts(imageName, &file, &suffix);
+  /* _XmOSFindPathParts() only scans the name. */
+  _XmOSFindPathParts((String)imageName, &file, &suffix);
   if (suffix) {
     len = (int)(suffix - imageName) - 1;
     /* point before the '.' */
@@ -1227,7 +1228,7 @@ static XmOSMethodEntry method_table[] = {
  *   get the function that implements the requested method.
  ****************************************************************/
 XmOSMethodStatus XmOSGetMethod(Widget w, /* unused */
-                               String method_id,
+                               const char *method_id,
                                XtPointer *method,
                                XtPointer *os_data)
 {

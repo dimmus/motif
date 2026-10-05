@@ -1329,11 +1329,11 @@ extern Cardinal XmGetSecondaryResourceData(WidgetClass w_class,
 
 /********    Public Function Declarations for ImageCache.c    ********/
 
-extern Boolean XmInstallImage(XImage *image, char *image_name);
+extern Boolean XmInstallImage(XImage *image, const char *image_name);
 extern Boolean XmUninstallImage(XImage *image);
-extern Pixmap XmGetPixmap(Screen *screen, char *image_name, Pixel foreground, Pixel background);
+extern Pixmap XmGetPixmap(Screen *screen, const char *image_name, Pixel foreground, Pixel background);
 extern Pixmap XmGetPixmapByDepth(
-    Screen *screen, char *image_name, Pixel foreground, Pixel background, int depth);
+    Screen *screen, const char *image_name, Pixel foreground, Pixel background, int depth);
 
 /**
  * Get a pixmap, scaled to the given width and height. If either
@@ -1341,7 +1341,7 @@ extern Pixmap XmGetPixmapByDepth(
  * the given dimension and that of the image.
  */
 extern Pixmap XmGetSizedPixmap(Widget widget,
-                               char *image_name,
+                               const char *image_name,
                                Pixel foreground,
                                Pixel background,
                                int depth,
@@ -1406,7 +1406,7 @@ extern char *XmCvtXmStringToUTF8String(XmString string);
 /********    Public Function Declarations for ResInd.c    ********/
 
 extern int XmConvertStringToUnits(
-    Screen *screen, String spec, int orientation, int to_type, XtEnum *parse_error);
+    Screen *screen, const char *spec, int orientation, int to_type, XtEnum *parse_error);
 extern int XmConvertUnits(Widget widget,
                           int dimension,
                           int from_type,

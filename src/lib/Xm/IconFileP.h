@@ -33,7 +33,7 @@
 extern "C" {
 #  endif
 /********    Private Function Declarations for IconFile.c    ********/
-extern void XmeFlushIconFileCache(String path);
+extern void XmeFlushIconFileCache(const char *path);
 /********    End Private Function Declarations    ********/
 #  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */
