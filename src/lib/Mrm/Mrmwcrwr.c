@@ -58,6 +58,19 @@ static char rcsid[] = "$XConsortium: Mrmwcrwr.c /main/14 1996/11/13 14:06:42 drk
 #include "MrmosI.h"
 #include "MrmMsgI.h"
 
+
+/*
+ * The validation and binding helpers below report an error and return
+ * its status when the context or widget record is invalid, leaving the
+ * pointers they bind NULL.  Return that status from the caller rather
+ * than go on to use them.
+ */
+#define CWR_CHECK(call)					\
+  do {							\
+    Cardinal cwr_status = (call) ;			\
+    if ( cwr_status != MrmSUCCESS ) return cwr_status ;	\
+  } while (0)
+
 /*
  *
  *  TABLE OF CONTENTS
@@ -260,7 +273,7 @@ UrmCWRSetClass (URMResourceContextPtr	context_id,
   /*
    * Validate record
    */
-  UrmCWR__ValidateContext (context_id, "UrmCWRSetClass") ;
+  CWR_CHECK (UrmCWR__ValidateContext (context_id, "UrmCWRSetClass")) ;
 
   /*
    * Validate the class code. If unknown, must have a non-null class name.
@@ -343,7 +356,7 @@ UrmCWRInitArglist (URMResourceContextPtr	context_id,
   /*
    * Validate record
    */
-  UrmCWR__ValidateContext (context_id, "UrmCWRInitArglist") ;
+  CWR_CHECK (UrmCWR__ValidateContext (context_id, "UrmCWRInitArglist")) ;
 
   /*
    * Error check that the number of arguments is reasonable
@@ -437,9 +450,9 @@ UrmCWRSetCompressedArgTag (URMResourceContextPtr	context_id,
   /*
    * Validate record, arglist descriptor, and argument number
    */
-  UrmCWR__ValidateContext (context_id, "UrmCWRSetCompressedArgTag") ;
-  UrmCWR__BindArgPtrs
-    (context_id, "UrmCWRSetCompressedArgTag", arg_ndx, &argdesc, &argptr) ;
+  CWR_CHECK (UrmCWR__ValidateContext (context_id, "UrmCWRSetCompressedArgTag")) ;
+  CWR_CHECK (UrmCWR__BindArgPtrs
+    (context_id, "UrmCWRSetCompressedArgTag", arg_ndx, &argdesc, &argptr)) ;
 
   /*
    * Validate the compressed code and set the argument.
@@ -508,9 +521,9 @@ UrmCWRSetUncompressedArgTag (URMResourceContextPtr	context_id ,
   /*
    * Validate record, arglist descriptor, and argument number
    */
-  UrmCWR__ValidateContext (context_id, "UrmCWRSetUncompressedArgTag") ;
-  UrmCWR__BindArgPtrs
-    (context_id, "UrmCWRSetUncompressedArgTag", arg_ndx, &argdesc, &argptr) ;
+  CWR_CHECK (UrmCWR__ValidateContext (context_id, "UrmCWRSetUncompressedArgTag")) ;
+  CWR_CHECK (UrmCWR__BindArgPtrs
+    (context_id, "UrmCWRSetUncompressedArgTag", arg_ndx, &argdesc, &argptr)) ;
 
   /*
    * Append the tag string to the record and set the argument
@@ -518,8 +531,8 @@ UrmCWRSetUncompressedArgTag (URMResourceContextPtr	context_id ,
   result = UrmCWR__AppendString (context_id, tag, &offset) ;
   if ( result != MrmSUCCESS ) return result ;
 
-  UrmCWR__BindArgPtrs
-    (context_id, "UrmCWRSetUncompressedArgTag", arg_ndx, &argdesc, &argptr) ;
+  CWR_CHECK (UrmCWR__BindArgPtrs
+    (context_id, "UrmCWRSetUncompressedArgTag", arg_ndx, &argdesc, &argptr)) ;
 
   argptr->tag_code = UilMrmUnknownCode ;
   argptr->stg_or_relcode.tag_offs = offset ;
@@ -622,9 +635,9 @@ UrmCWRSetArgValue (URMResourceContextPtr	context_id,
    * Validate record, arglist descriptor, and argument number.
    * Set the argument type now.
    */
-  UrmCWR__ValidateContext (context_id, "UrmCWRSetArgValue") ;
-  UrmCWR__BindArgPtrs
-    (context_id, "UrmCWRSetArgValue", arg_ndx, &argdesc, &argptr) ;
+  CWR_CHECK (UrmCWR__ValidateContext (context_id, "UrmCWRSetArgValue")) ;
+  CWR_CHECK (UrmCWR__BindArgPtrs
+    (context_id, "UrmCWRSetArgValue", arg_ndx, &argdesc, &argptr)) ;
 
   argptr->arg_val.rep_type = type ;
 
@@ -653,8 +666,8 @@ UrmCWRSetArgValue (URMResourceContextPtr	context_id,
       result = UrmCWR__AppendString
 	(context_id, (char *)arg_val, &offset) ;
       if ( result != MrmSUCCESS ) return result ;
-      UrmCWR__BindArgPtrs
-	(context_id, "UrmCWRSetArgValue", arg_ndx, &argdesc, &argptr) ;
+      CWR_CHECK (UrmCWR__BindArgPtrs
+	(context_id, "UrmCWRSetArgValue", arg_ndx, &argdesc, &argptr)) ;
       argptr->arg_val.datum.offset = offset ;
       return MrmSUCCESS ;
 
@@ -662,8 +675,8 @@ UrmCWRSetArgValue (URMResourceContextPtr	context_id,
       result = UrmCWR__AppendCString
 	(context_id, (XmString)arg_val, &offset) ;
       if ( result != MrmSUCCESS ) return result ;
-      UrmCWR__BindArgPtrs
-	(context_id, "UrmCWRSetArgValue", arg_ndx, &argdesc, &argptr) ;
+      CWR_CHECK (UrmCWR__BindArgPtrs
+	(context_id, "UrmCWRSetArgValue", arg_ndx, &argdesc, &argptr)) ;
       argptr->arg_val.datum.offset = offset ;
       return MrmSUCCESS ;
 
@@ -671,8 +684,8 @@ UrmCWRSetArgValue (URMResourceContextPtr	context_id,
       result = UrmCWR__AppendWcharString
 	(context_id, (wchar_t *)arg_val, &offset) ;
       if ( result != MrmSUCCESS ) return result ;
-      UrmCWR__BindArgPtrs
-	(context_id, "UrmCWRSetArgValue", arg_ndx, &argdesc, &argptr) ;
+      CWR_CHECK (UrmCWR__BindArgPtrs
+	(context_id, "UrmCWRSetArgValue", arg_ndx, &argdesc, &argptr)) ;
       argptr->arg_val.datum.offset = offset ;
       return MrmSUCCESS ;
 
@@ -699,8 +712,8 @@ UrmCWRSetArgValue (URMResourceContextPtr	context_id,
 
       *dblptr = *((double *) arg_val) ;
       _MrmOSHostDoubleToIEEE(dblptr);
-      UrmCWR__BindArgPtrs
-	(context_id, "UrmCWRSetArgValue", arg_ndx, &argdesc, &argptr) ;
+      CWR_CHECK (UrmCWR__BindArgPtrs
+	(context_id, "UrmCWRSetArgValue", arg_ndx, &argdesc, &argptr)) ;
       argptr->arg_val.datum.offset = offset ;
       return MrmSUCCESS ;
 
@@ -714,8 +727,8 @@ UrmCWRSetArgValue (URMResourceContextPtr	context_id,
 	(context_id, UrmColorTableSize(src_ct), &offset, (char **)&dst_ct) ;
       if ( result != MrmSUCCESS )
 	return result ;
-      UrmCWR__BindArgPtrs
-	(context_id, "UrmCWRSetArgValue", arg_ndx, &argdesc, &argptr) ;
+      CWR_CHECK (UrmCWR__BindArgPtrs
+	(context_id, "UrmCWRSetArgValue", arg_ndx, &argdesc, &argptr)) ;
       argptr->arg_val.datum.offset = offset ;
       return MrmSUCCESS ;
 
@@ -727,8 +740,8 @@ UrmCWRSetArgValue (URMResourceContextPtr	context_id,
 	return result ;
       UrmCopyAllocatedIconImage (dst_icon, src_icon) ;
       /* ??relocate pointers to offsets?? */
-      UrmCWR__BindArgPtrs
-	(context_id, "UrmCWRSetArgValue", arg_ndx, &argdesc, &argptr) ;
+      CWR_CHECK (UrmCWR__BindArgPtrs
+	(context_id, "UrmCWRSetArgValue", arg_ndx, &argdesc, &argptr)) ;
       argptr->arg_val.datum.offset = offset ;
       return MrmSUCCESS ;
 
@@ -805,9 +818,9 @@ UrmCWRSetArgResourceRef(URMResourceContextPtr	context_id,
    * Validate record, arglist descriptor, and argument number.
    * Set the argument type.
    */
-  UrmCWR__ValidateContext (context_id, "UrmCWRSetArgResourceRef") ;
-  UrmCWR__BindArgPtrs
-    (context_id, "UrmCWRSetArgResourceRef", arg_ndx, &argdesc, &argptr) ;
+  CWR_CHECK (UrmCWR__ValidateContext (context_id, "UrmCWRSetArgResourceRef")) ;
+  CWR_CHECK (UrmCWR__BindArgPtrs
+    (context_id, "UrmCWRSetArgResourceRef", arg_ndx, &argdesc, &argptr)) ;
 
   argptr->arg_val.rep_type = MrmRtypeResource ;
 
@@ -818,8 +831,8 @@ UrmCWRSetArgResourceRef(URMResourceContextPtr	context_id,
     (context_id, access, group, type, key_type, index, resource_id, &offset) ;
   if ( result != MrmSUCCESS ) return result ;
 
-  UrmCWR__BindArgPtrs
-    (context_id, "UrmCWRSetArgResourceRef", arg_ndx, &argdesc, &argptr) ;
+  CWR_CHECK (UrmCWR__BindArgPtrs
+    (context_id, "UrmCWRSetArgResourceRef", arg_ndx, &argdesc, &argptr)) ;
   argptr->arg_val.datum.offset = offset ;
 
   /*
@@ -887,9 +900,9 @@ UrmCWRSetArgChar8Vec (URMResourceContextPtr	context_id,
   /*
    * Validate record, arglist descriptor, and argument number.
    */
-  UrmCWR__ValidateContext (context_id, "UrmCWRSetArgChar8Vec") ;
-  UrmCWR__BindArgPtrs
-    (context_id, "UrmCWRSetArgChar8Vec", arg_ndx, &argdesc, &argptr) ;
+  CWR_CHECK (UrmCWR__ValidateContext (context_id, "UrmCWRSetArgChar8Vec")) ;
+  CWR_CHECK (UrmCWR__BindArgPtrs
+    (context_id, "UrmCWRSetArgChar8Vec", arg_ndx, &argdesc, &argptr)) ;
 
   /*
    * Validate vector - make sure it doesn't contain too many elements
@@ -910,8 +923,8 @@ UrmCWRSetArgChar8Vec (URMResourceContextPtr	context_id,
 				   (char **)&vecptr) ;
   if ( result != MrmSUCCESS ) return result ;
 
-  UrmCWR__BindArgPtrs
-    (context_id, "UrmCWRSetArgChar8Vec", arg_ndx, &argdesc, &argptr) ;
+  CWR_CHECK (UrmCWR__BindArgPtrs
+    (context_id, "UrmCWRSetArgChar8Vec", arg_ndx, &argdesc, &argptr)) ;
   argptr->arg_val.rep_type = MrmRtypeChar8Vector ;
   argptr->arg_val.datum.offset = vecoffs ;
 
@@ -923,8 +936,8 @@ UrmCWRSetArgChar8Vec (URMResourceContextPtr	context_id,
       result = UrmCWR__AppendString (context_id, stg_vec[ndx], &offset) ;
       if ( result != MrmSUCCESS ) return result ;
       widgetrec = (RGMWidgetRecordPtr) UrmRCBuffer(context_id) ;
-      UrmCWR__BindArgPtrs
-        (context_id, "UrmCWRSetArgChar8Vec", arg_ndx, &argdesc, &argptr) ;
+      CWR_CHECK (UrmCWR__BindArgPtrs
+        (context_id, "UrmCWRSetArgChar8Vec", arg_ndx, &argdesc, &argptr)) ;
       vecptr = (RGMTextVectorPtr) ((char *)widgetrec + vecoffs) ;
       vecptr->item[ndx].text_item.rep_type = MrmRtypeChar8 ;
       vecptr->item[ndx].text_item.offset = offset ;
@@ -1000,9 +1013,9 @@ UrmCWRSetArgCStringVec (URMResourceContextPtr	context_id,
   /*
    * Validate record, arglist descriptor, and argument number.
    */
-  UrmCWR__ValidateContext (context_id, "UrmCWRSetArgCStringVec") ;
-  UrmCWR__BindArgPtrs
-    (context_id, "UrmCWRSetArgCStringVec", arg_ndx, &argdesc, &argptr) ;
+  CWR_CHECK (UrmCWR__ValidateContext (context_id, "UrmCWRSetArgCStringVec")) ;
+  CWR_CHECK (UrmCWR__BindArgPtrs
+    (context_id, "UrmCWRSetArgCStringVec", arg_ndx, &argdesc, &argptr)) ;
 
   /*
    * Validate vector - make sure it doesn't contain too many elements
@@ -1023,8 +1036,8 @@ UrmCWRSetArgCStringVec (URMResourceContextPtr	context_id,
 				   (char **)&vecptr) ;
   if ( result != MrmSUCCESS ) return result ;
 
-  UrmCWR__BindArgPtrs
-    (context_id, "UrmCWRSetArgCStringVec", arg_ndx, &argdesc, &argptr) ;
+  CWR_CHECK (UrmCWR__BindArgPtrs
+    (context_id, "UrmCWRSetArgCStringVec", arg_ndx, &argdesc, &argptr)) ;
   argptr->arg_val.rep_type = MrmRtypeCStringVector ;
   argptr->arg_val.datum.offset = vecoffs ;
 
@@ -1036,8 +1049,8 @@ UrmCWRSetArgCStringVec (URMResourceContextPtr	context_id,
       result = UrmCWR__AppendCString (context_id, cstg_vec[ndx], &offset) ;
       if ( result != MrmSUCCESS ) return result ;
       widgetrec = (RGMWidgetRecordPtr) UrmRCBuffer(context_id) ;
-      UrmCWR__BindArgPtrs
-        (context_id, "UrmCWRSetArgCStringVec", arg_ndx, &argdesc, &argptr) ;
+      CWR_CHECK (UrmCWR__BindArgPtrs
+        (context_id, "UrmCWRSetArgCStringVec", arg_ndx, &argdesc, &argptr)) ;
       vecptr = (RGMTextVectorPtr) ((char *)widgetrec + vecoffs) ;
       vecptr->item[ndx].text_item.rep_type = MrmRtypeCString ;
       vecptr->item[ndx].text_item.offset = offset ;
@@ -1117,9 +1130,9 @@ UrmCWRSetArgCallback (URMResourceContextPtr	context_id ,
    * Validate record, arglist descriptor, and argument number.
    * Set the argument type.
    */
-  UrmCWR__ValidateContext (context_id, "UrmCWRSetArgCallback") ;
-  UrmCWR__BindArgPtrs
-    (context_id, "UrmCWRSetArgCallback", arg_ndx, &argdesc, &argptr) ;
+  CWR_CHECK (UrmCWR__ValidateContext (context_id, "UrmCWRSetArgCallback")) ;
+  CWR_CHECK (UrmCWR__BindArgPtrs
+    (context_id, "UrmCWRSetArgCallback", arg_ndx, &argdesc, &argptr)) ;
 
   argptr->arg_val.rep_type = MrmRtypeCallback ;
 
@@ -1138,8 +1151,8 @@ UrmCWRSetArgCallback (URMResourceContextPtr	context_id ,
 				   (char **)&cbdesc) ;
   if ( result != MrmSUCCESS ) return result ;
 
-  UrmCWR__BindArgPtrs
-    (context_id, "UrmCWRSetArgCallback", arg_ndx, &argdesc, &argptr) ;
+  CWR_CHECK (UrmCWR__BindArgPtrs
+    (context_id, "UrmCWRSetArgCallback", arg_ndx, &argdesc, &argptr)) ;
   argptr->arg_val.datum.offset = offset ;
 
   cbdesc->validation = URMCallbackDescriptorValid ;
@@ -1233,9 +1246,9 @@ UrmCWRSetCallbackItem (URMResourceContextPtr	context_id,
   /*
    * Validate context and bind pointers to callback descriptor and item
    */
-  UrmCWR__ValidateContext (context_id, "UrmCWRSetCallbackItem") ;
-  UrmCWR__BindCallbackPtrs (context_id, "UrmCWRSetCallbackItem",
-			    cb_offs, item_ndx, &cbdesc, &itmptr) ;
+  CWR_CHECK (UrmCWR__ValidateContext (context_id, "UrmCWRSetCallbackItem")) ;
+  CWR_CHECK (UrmCWR__BindCallbackPtrs (context_id, "UrmCWRSetCallbackItem",
+			    cb_offs, item_ndx, &cbdesc, &itmptr)) ;
 
   /*
    * Validate the routine (must be non-empty)
@@ -1250,8 +1263,8 @@ UrmCWRSetCallbackItem (URMResourceContextPtr	context_id,
   result = UrmCWR__AppendString (context_id, routine, &offset) ;
   if ( result != MrmSUCCESS ) return result ;
 
-  UrmCWR__BindCallbackPtrs (context_id, "UrmCWRSetCallbackItem",
-			    cb_offs, item_ndx, &cbdesc, &itmptr) ;
+  CWR_CHECK (UrmCWR__BindCallbackPtrs (context_id, "UrmCWRSetCallbackItem",
+			    cb_offs, item_ndx, &cbdesc, &itmptr)) ;
   itmptr->cb_item.routine = offset ;
 
   /*
@@ -1279,8 +1292,8 @@ UrmCWRSetCallbackItem (URMResourceContextPtr	context_id,
       result = UrmCWR__AppendString
 	(context_id, (char *)itm_val, &offset) ;
       if ( result != MrmSUCCESS ) return result ;
-      UrmCWR__BindCallbackPtrs (context_id, "UrmCWRSetCallbackItem",
-				cb_offs, item_ndx, &cbdesc, &itmptr) ;
+      CWR_CHECK (UrmCWR__BindCallbackPtrs (context_id, "UrmCWRSetCallbackItem",
+				cb_offs, item_ndx, &cbdesc, &itmptr)) ;
       itmptr->cb_item.datum.offset = offset ;
       return MrmSUCCESS ;
 
@@ -1292,8 +1305,8 @@ UrmCWRSetCallbackItem (URMResourceContextPtr	context_id,
       result = UrmCWR__AppendCString
 	(context_id, (XmString)itm_val, &offset) ;
       if ( result != MrmSUCCESS ) return result ;
-      UrmCWR__BindCallbackPtrs (context_id, "UrmCWRSetCallbackItem",
-				cb_offs, item_ndx, &cbdesc, &itmptr) ;
+      CWR_CHECK (UrmCWR__BindCallbackPtrs (context_id, "UrmCWRSetCallbackItem",
+				cb_offs, item_ndx, &cbdesc, &itmptr)) ;
       itmptr->cb_item.datum.offset = offset ;
       return MrmSUCCESS ;
 
@@ -1301,8 +1314,8 @@ UrmCWRSetCallbackItem (URMResourceContextPtr	context_id,
       result = UrmCWR__AppendWcharString
 	(context_id, (wchar_t *)itm_val, &offset) ;
       if ( result != MrmSUCCESS ) return result ;
-      UrmCWR__BindCallbackPtrs (context_id, "UrmCWRSetCallbackItem",
-				cb_offs, item_ndx, &cbdesc, &itmptr) ;
+      CWR_CHECK (UrmCWR__BindCallbackPtrs (context_id, "UrmCWRSetCallbackItem",
+				cb_offs, item_ndx, &cbdesc, &itmptr)) ;
       itmptr->cb_item.datum.offset = offset ;
       return MrmSUCCESS ;
 
@@ -1318,8 +1331,8 @@ UrmCWRSetCallbackItem (URMResourceContextPtr	context_id,
       if ( result != MrmSUCCESS ) return result ;
       *dblptr = *((double *) itm_val) ;
       _MrmOSHostDoubleToIEEE(dblptr);
-      UrmCWR__BindCallbackPtrs (context_id, "UrmCWRSetCallbackItem",
-				cb_offs, item_ndx, &cbdesc, &itmptr) ;
+      CWR_CHECK (UrmCWR__BindCallbackPtrs (context_id, "UrmCWRSetCallbackItem",
+				cb_offs, item_ndx, &cbdesc, &itmptr)) ;
       itmptr->cb_item.datum.offset = offset ;
       return MrmSUCCESS ;
 
@@ -1405,9 +1418,9 @@ UrmCWRSetCallbackItemRes (URMResourceContextPtr		context_id,
   /*
    * Validate context and bind pointers to callback descriptor and item
    */
-  UrmCWR__ValidateContext (context_id, "UrmCWRSetCallbackItemRes") ;
-  UrmCWR__BindCallbackPtrs (context_id, "UrmCWRSetCallbackItemRes",
-			    cb_offs, item_ndx, &cbdesc, &itmptr) ;
+  CWR_CHECK (UrmCWR__ValidateContext (context_id, "UrmCWRSetCallbackItemRes")) ;
+  CWR_CHECK (UrmCWR__BindCallbackPtrs (context_id, "UrmCWRSetCallbackItemRes",
+			    cb_offs, item_ndx, &cbdesc, &itmptr)) ;
 
   /*
    * Validate the routine (must be non-empty)
@@ -1422,8 +1435,8 @@ UrmCWRSetCallbackItemRes (URMResourceContextPtr		context_id,
   result = UrmCWR__AppendString (context_id, routine, &offset) ;
   if ( result != MrmSUCCESS ) return result ;
 
-  UrmCWR__BindCallbackPtrs (context_id, "UrmCWRSetCallbackItemRes",
-			    cb_offs, item_ndx, &cbdesc, &itmptr) ;
+  CWR_CHECK (UrmCWR__BindCallbackPtrs (context_id, "UrmCWRSetCallbackItemRes",
+			    cb_offs, item_ndx, &cbdesc, &itmptr)) ;
   itmptr->cb_item.routine = offset ;
 
   /*
@@ -1433,8 +1446,8 @@ UrmCWRSetCallbackItemRes (URMResourceContextPtr		context_id,
     (context_id, access, group, type, key_type, index, resource_id, &offset) ;
   if ( result != MrmSUCCESS ) return result ;
 
-  UrmCWR__BindCallbackPtrs (context_id, "UrmCWRSetCallbackItemRes",
-			    cb_offs, item_ndx, &cbdesc, &itmptr) ;
+  CWR_CHECK (UrmCWR__BindCallbackPtrs (context_id, "UrmCWRSetCallbackItemRes",
+			    cb_offs, item_ndx, &cbdesc, &itmptr)) ;
   itmptr->cb_item.rep_type = MrmRtypeResource ;
   itmptr->cb_item.datum.offset = offset ;
 
@@ -1494,9 +1507,9 @@ UrmCWRSetExtraArgs (URMResourceContextPtr	context_id ,
    * Validate record, arglist descriptor. Bind usual pointers, although
    * argptr not used. Set the extra args field.
    */
-  UrmCWR__ValidateContext (context_id, "UrmCWRSetExtraArgs") ;
-  UrmCWR__BindArgPtrs
-    (context_id, "UrmCWRSetExtraArgs", 0, &argdesc, &argptr) ;
+  CWR_CHECK (UrmCWR__ValidateContext (context_id, "UrmCWRSetExtraArgs")) ;
+  CWR_CHECK (UrmCWR__BindArgPtrs
+    (context_id, "UrmCWRSetExtraArgs", 0, &argdesc, &argptr)) ;
 
   argdesc->extra = nextra ;
   return MrmSUCCESS ;
@@ -1556,7 +1569,7 @@ UrmCWRInitChildren (URMResourceContextPtr	context_id ,
   /*
    * Validate record
    */
-  UrmCWR__ValidateContext (context_id, "UrmCWRInitChildren") ;
+  CWR_CHECK (UrmCWR__ValidateContext (context_id, "UrmCWRInitChildren")) ;
 
   /*
    * Error check that the number of children is reasonable
@@ -1660,7 +1673,7 @@ UrmCWRSetChild (URMResourceContextPtr	context_id,
   /*
    * Validate record
    */
-  UrmCWR__ValidateContext (context_id, "UrmCWRSetChild") ;
+  CWR_CHECK (UrmCWR__ValidateContext (context_id, "UrmCWRSetChild")) ;
 
   widgetrec = (RGMWidgetRecordPtr) UrmRCBuffer(context_id) ;
   if ( widgetrec->children_offs == 0 )
@@ -1748,7 +1761,7 @@ Cardinal UrmCWRSetComment (URMResourceContextPtr	context_id ,
   /*
    * Validate record
    */
-  UrmCWR__ValidateContext (context_id, "UrmCWRSetComment") ;
+  CWR_CHECK (UrmCWR__ValidateContext (context_id, "UrmCWRSetComment")) ;
 
   /*
    * Append the comment if it is non-empty
@@ -1829,7 +1842,7 @@ UrmCWRSetCreationCallback (URMResourceContextPtr	context_id ,
    * Validate record, arglist descriptor, and argument number.
    * Set the argument type.
    */
-  UrmCWR__ValidateContext (context_id, "UrmCWRSetCreationCallback") ;
+  CWR_CHECK (UrmCWR__ValidateContext (context_id, "UrmCWRSetCreationCallback")) ;
 
   /*
    * Confirm that the number of items is reasonable, then size and
@@ -2120,8 +2133,8 @@ UrmCWR__GuaranteeSpace (URMResourceContextPtr	context_id,
   *addr = NULL ;
   widgetrec = (RGMWidgetRecordPtr) UrmRCBuffer(context_id) ;
   if ( ! UrmWRValid(widgetrec) )
-    return Urm__UT_Error ("UrmCWR__GuaranteeSpace", _MrmMMsg_0026,
-			  NULL, context_id, MrmBAD_RECORD) ;
+    return (Urm__UT_Error ("UrmCWR__GuaranteeSpace", _MrmMMsg_0026,
+			  NULL, context_id, MrmBAD_RECORD), MrmBAD_RECORD) ;
 
   delta = _FULLWORD (delta) ;
   result = UrmResizeResourceContext (context_id, widgetrec->size+delta) ;
@@ -2206,8 +2219,8 @@ UrmCWR__AppendResource (URMResourceContextPtr	context_id,
     {
     case URMrIndex:
       if ( strlen(index) <= 0 )
-	return Urm__UT_Error ("UrmCWR__AppendResource", _MrmMMsg_0102,
-			      NULL, context_id, MrmNULL_INDEX) ;
+	return (Urm__UT_Error ("UrmCWR__AppendResource", _MrmMMsg_0102,
+			      NULL, context_id, MrmNULL_INDEX), MrmNULL_INDEX) ;
       descsiz = sizeof(RGMResourceDesc) + strlen(index) ;
       result = UrmCWR__GuaranteeSpace
 	(context_id, descsiz, offset, (char **)&resdesc) ;
@@ -2237,8 +2250,8 @@ UrmCWR__AppendResource (URMResourceContextPtr	context_id,
       return MrmSUCCESS ;
 
     default:
-      return Urm__UT_Error ("UrmCWR__AppendResource", _MrmMMsg_0103,
-			    NULL, context_id, MrmBAD_KEY_TYPE) ;
+      return (Urm__UT_Error ("UrmCWR__AppendResource", _MrmMMsg_0103,
+			    NULL, context_id, MrmBAD_KEY_TYPE), MrmBAD_KEY_TYPE) ;
     }
 
 }
@@ -2285,12 +2298,12 @@ UrmCWR__ValidateContext (URMResourceContextPtr	context_id ,
 
 
   if ( ! UrmRCValid(context_id) )
-    return Urm__UT_Error (routine, _MrmMMsg_0043,
-			  NULL, NULL, MrmBAD_CONTEXT) ;
+    return (Urm__UT_Error (routine, _MrmMMsg_0043,
+			  NULL, NULL, MrmBAD_CONTEXT), MrmBAD_CONTEXT) ;
   widgetrec = (RGMWidgetRecordPtr) UrmRCBuffer(context_id) ;
   if ( ! UrmWRValid(widgetrec) )
-    return Urm__UT_Error (routine, _MrmMMsg_0026,
-			  NULL, context_id, MrmBAD_WIDGET_REC) ;
+    return (Urm__UT_Error (routine, _MrmMMsg_0026,
+			  NULL, context_id, MrmBAD_WIDGET_REC), MrmBAD_WIDGET_REC) ;
   return MrmSUCCESS ;
 
 }
@@ -2354,15 +2367,15 @@ UrmCWR__BindArgPtrs (URMResourceContextPtr	context_id ,
   if ( UrmWRValid(widgetrec) )
     *descptr = (RGMArgListDescPtr) ((char *)widgetrec+widgetrec->arglist_offs) ;
   else
-    return Urm__UT_Error (routine, _MrmMMsg_0026,
-			  NULL, context_id, MrmBAD_RECORD) ;
+    return (Urm__UT_Error (routine, _MrmMMsg_0026,
+			  NULL, context_id, MrmBAD_RECORD), MrmBAD_RECORD) ;
 
   /*
    * Validate argument index and set pointer
    */
   if ( argndx >= (Cardinal)(*descptr)->count )
-    return Urm__UT_Error (routine, _MrmMMsg_0104,
-			  NULL, context_id, MrmOUT_OF_BOUNDS) ;
+    return (Urm__UT_Error (routine, _MrmMMsg_0104,
+			  NULL, context_id, MrmOUT_OF_BOUNDS), MrmOUT_OF_BOUNDS) ;
   *argptr = &(*descptr)->args[argndx] ;
 
   return MrmSUCCESS ;
@@ -2430,19 +2443,19 @@ UrmCWR__BindCallbackPtrs (URMResourceContextPtr		context_id,
   if ( UrmWRValid(widgetrec) )
     *descptr = (RGMCallbackDescPtr) ((char *)widgetrec+descoffs) ;
   else
-    return Urm__UT_Error (routine, _MrmMMsg_0105,
-			  NULL, context_id, MrmBAD_RECORD) ;
+    return (Urm__UT_Error (routine, _MrmMMsg_0105,
+			  NULL, context_id, MrmBAD_RECORD), MrmBAD_RECORD) ;
 
   if ( (*descptr)->validation != URMCallbackDescriptorValid )
-    return Urm__UT_Error (routine, _MrmMMsg_0106,
-			  NULL, context_id, MrmBAD_CALLBACK) ;
+    return (Urm__UT_Error (routine, _MrmMMsg_0106,
+			  NULL, context_id, MrmBAD_CALLBACK), MrmBAD_CALLBACK) ;
 
   /*
    * validate item index and compute item pointer
    */
   if ( itemndx >= (Cardinal)(*descptr)->count )
-    return Urm__UT_Error (routine, _MrmMMsg_0107,
-			  NULL, context_id, MrmOUT_OF_BOUNDS) ;
+    return (Urm__UT_Error (routine, _MrmMMsg_0107,
+			  NULL, context_id, MrmOUT_OF_BOUNDS), MrmOUT_OF_BOUNDS) ;
   *itmptr = &(*descptr)->item[itemndx] ;
   return MrmSUCCESS ;
 

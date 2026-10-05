@@ -526,7 +526,7 @@ insert(char *tname,
        */
 
 {
-  struct name *ptr,*optr = NULL;
+  struct name *ptr,*optr = NULL;	/* optr: parent of the new node */
   int rslt = -1,i,hashval;
 
   hashval = hash(tname);
@@ -555,7 +555,7 @@ insert(char *tname,
     ptr->regnr = seqno;
 
     /* not first entry in tree so update branch pointer */
-    if (symtab[hashval]) {
+    if (optr != NULL) {
       if (rslt < 0)
 	optr->left = ptr;
       else
