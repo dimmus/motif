@@ -1,0 +1,188 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: Motif
+Upstream-Contact: https://github.com/dimmus/motif/issues
+Source: https://github.com/dimmus/motif
+
+Files: *
+Copyright: 1987-2012, The Open Group
+           2012-2026, Motif contributors (see AUTHORS)
+License: LGPL-2.1+
+
+Files: src/lib/Xm/Xpm*
+Copyright: 1989-1995, GROUPE BULL
+License: Bull
+
+Files: src/lib/Xm/nanosvg.h
+       src/lib/Xm/nanosvgrast.h
+Copyright: 2013-2014, Mikko Mononen <memon@inside.org>
+           2002-2004, Maxim Shemanarev (McSeem)
+License: Zlib
+
+Files: tools/cmake/config/*
+       tools/cmake/scripts/make_source_archive.py
+       tools/cmake/scripts/make_test.py
+       tools/cmake/scripts/make_update.py
+Copyright: 2024, Motif Authors
+License: Expat
+
+Files: src/examples/lib/Xmd/RegEditI.h
+Copyright: 1989, X Consortium
+License: X11
+
+Files: src/tests/environment/fonts/bdf/*
+Copyright: 1984-1987, Adobe Systems, Inc.
+           1988, Digital Equipment Corporation
+           1988, Bitstream, Inc.
+           1989, Sony Corporation
+           1989, Network Computing Devices, Inc.
+License: X11-fonts
+Comment: X core fonts, used by the test suite only.  Each BDF file carries
+ its copyright notice and licence in its COMMENT lines.
+
+Files: src/tests/environment/fonts/bdf/6x*.bdf
+       src/tests/environment/fonts/bdf/8x13*.bdf
+       src/tests/environment/fonts/bdf/9x15*.bdf
+       src/tests/environment/fonts/bdf/cursor.bdf
+       src/tests/environment/fonts/bdf/hbr8x13.bdf
+       src/tests/environment/fonts/bdf/k14-1.bdf
+       src/tests/environment/fonts/bdf/rkana14.bdf
+Copyright: none
+License: public-domain
+Comment: X core fonts, used by the test suite only.
+
+Files: src/examples/programs/hellomotifi18n/bdf/*
+Copyright: 1991, Joseph Friedman
+License: public-domain
+Comment: Fonts of an example program.  The Hebrew characters of
+ heb8x13.bdf are copyright 1991 by Joseph Friedman, who grants permission
+ to use, copy, modify, distribute, and sell them for any purpose without
+ fee, provided that the copyright notice appears in all copies.
+
+Files: debian/*
+Copyright: 2026, dimmus <dmitri.chudinov@gmail.com>
+License: LGPL-2.1+
+
+License: LGPL-2.1+
+ This library is free software; you can redistribute it and/or modify it
+ under the terms of the GNU Lesser General Public License as published by
+ the Free Software Foundation; either version 2.1 of the License, or (at
+ your option) any later version.
+ .
+ This library is distributed in the hope that it will be useful, but
+ WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser
+ General Public License for more details.
+ .
+ On Debian systems, the complete text of the GNU Lesser General Public
+ License version 2.1 can be found in "/usr/share/common-licenses/LGPL-2.1".
+
+License: Bull
+ Permission is hereby granted, free of charge, to any person obtaining a
+ copy of this software and associated documentation files (the
+ "Software"), to deal in the Software without restriction, including
+ without limitation the rights to use, copy, modify, merge, publish,
+ distribute, sublicense, and/or sell copies of the Software, and to permit
+ persons to whom the Software is furnished to do so, subject to the
+ following conditions:
+ .
+ The above copyright notice and this permission notice shall be included
+ in all copies or substantial portions of the Software.
+ .
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+ NO EVENT SHALL GROUPE BULL BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ DEALINGS IN THE SOFTWARE.
+ .
+ Except as contained in this notice, the name of GROUPE BULL shall not be
+ used in advertising or otherwise to promote the sale, use or other
+ dealings in this Software without prior written authorization from
+ GROUPE BULL.
+
+License: Zlib
+ This software is provided 'as-is', without any express or implied
+ warranty.  In no event will the authors be held liable for any damages
+ arising from the use of this software.
+ .
+ Permission is granted to anyone to use this software for any purpose,
+ including commercial applications, and to alter it and redistribute it
+ freely, subject to the following restrictions:
+ .
+ 1. The origin of this software must not be misrepresented; you must not
+ claim that you wrote the original software. If you use this software in
+ a product, an acknowledgment in the product documentation would be
+ appreciated but is not required.
+ 2. Altered source versions must be plainly marked as such, and must not
+ be misrepresented as being the original software.
+ 3. This notice may not be removed or altered from any source
+ distribution.
+
+License: Expat
+ Permission is hereby granted, free of charge, to any person obtaining a
+ copy of this software and associated documentation files (the
+ "Software"), to deal in the Software without restriction, including
+ without limitation the rights to use, copy, modify, merge, publish,
+ distribute, sublicense, and/or sell copies of the Software, and to permit
+ persons to whom the Software is furnished to do so, subject to the
+ following conditions:
+ .
+ The above copyright notice and this permission notice shall be included
+ in all copies or substantial portions of the Software.
+ .
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+ NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+ OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+ USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+License: X11
+ Permission is hereby granted, free of charge, to any person obtaining a
+ copy of this software and associated documentation files (the
+ "Software"), to deal in the Software without restriction, including
+ without limitation the rights to use, copy, modify, merge, publish,
+ distribute, sublicense, and/or sell copies of the Software, and to permit
+ persons to whom the Software is furnished to do so, subject to the
+ following conditions:
+ .
+ The above copyright notice and this permission notice shall be included
+ in all copies or substantial portions of the Software.
+ .
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN
+ NO EVENT SHALL THE X CONSORTIUM BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ DEALINGS IN THE SOFTWARE.
+ .
+ Except as contained in this notice, the name of the X Consortium shall
+ not be used in advertising or otherwise to promote the sale, use or other
+ dealings in this Software without prior written authorization from the X
+ Consortium.
+
+License: X11-fonts
+ Permission to use, copy, modify, and distribute this software and its
+ documentation for any purpose and without fee is hereby granted, provided
+ that the above copyright notices appear in all copies and that both those
+ copyright notices and this permission notice appear in supporting
+ documentation, and that the names of the copyright holders not be used in
+ advertising or publicity pertaining to distribution of the software
+ without specific, written prior permission.  The copyright holders make
+ no representations about the suitability of this software for any
+ purpose.  It is provided "as is" without express or implied warranty.
+ .
+ THE COPYRIGHT HOLDERS DISCLAIM ALL WARRANTIES WITH REGARD TO THIS
+ SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ FITNESS, IN NO EVENT SHALL THE COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER
+ RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF
+ CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
+ CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+License: public-domain
+ These fonts are marked "Public domain font.  Share and enjoy." in their
+ COPYRIGHT properties (cursor.bdf: "These glyphs are unencumbered").

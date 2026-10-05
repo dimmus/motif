@@ -1,0 +1,3 @@
+libUil.so.5 libuil5 #MINVER#
+* Build-Depends-Package: libmotif-dev
+ (symver)UIL_2.5 2.5.0

@@ -1,0 +1,3 @@
+libXm.so.5 libxm5 #MINVER#
+* Build-Depends-Package: libmotif-dev
+ (symver)XM_2.5 2.5.0

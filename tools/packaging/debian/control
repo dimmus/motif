@@ -1,0 +1,152 @@
+Source: motif
+Section: libs
+Priority: optional
+Maintainer: dimmus <dmitri.chudinov@gmail.com>
+Build-Depends:
+ debhelper-compat (= 13),
+ bison,
+ check <!nocheck>,
+ cmake,
+ flex,
+ libfl-dev,
+ libfontconfig-dev,
+ libfreetype-dev,
+ libjpeg-dev,
+ libpng-dev,
+ libx11-dev,
+ libxext-dev,
+ libxft-dev,
+ libxmu-dev,
+ libxpm-dev,
+ libxrender-dev,
+ libxt-dev,
+ ninja-build,
+ pkgconf,
+ x11proto-dev,
+ xauth <!nocheck>,
+ xbitmaps,
+ xdotool <!nocheck>,
+ xfonts-base <!nocheck>,
+ xfonts-utils <!nocheck>,
+ xserver-xephyr <!nocheck>,
+ xvfb <!nocheck>,
+Standards-Version: 4.7.2
+Homepage: https://github.com/dimmus/motif
+Vcs-Browser: https://github.com/dimmus/motif
+Vcs-Git: https://github.com/dimmus/motif.git
+Rules-Requires-Root: no
+
+Package: libxm5
+Architecture: any
+Multi-Arch: same
+Depends:
+ libmotif-common (= ${source:Version}),
+ ${misc:Depends},
+ ${shlibs:Depends},
+Description: Motif - X/Motif shared library
+ Motif is the user interface toolkit of the Common Desktop Environment:
+ a set of widgets (buttons, menus, lists, text fields, dialogs, ...) for
+ X11 applications, built on the X Toolkit Intrinsics.
+ .
+ This package contains libXm, the Motif widget library.  Its SONAME is
+ libXm.so.5: it is not binary compatible with the libXm.so.4 of Motif
+ 2.3, so programs built against that have to be rebuilt.
+
+Package: libmrm5
+Architecture: any
+Multi-Arch: same
+Depends:
+ ${misc:Depends},
+ ${shlibs:Depends},
+Description: Motif - MRM (Motif Resource Manager) shared library
+ Motif is the user interface toolkit of the Common Desktop Environment:
+ a set of widgets (buttons, menus, lists, text fields, dialogs, ...) for
+ X11 applications, built on the X Toolkit Intrinsics.
+ .
+ This package contains libMrm, which creates the widget hierarchies
+ described by UID files, the compiled form of UIL interface descriptions.
+
+Package: libuil5
+Architecture: any
+Multi-Arch: same
+Depends:
+ ${misc:Depends},
+ ${shlibs:Depends},
+Description: Motif - UIL (User Interface Language) shared library
+ Motif is the user interface toolkit of the Common Desktop Environment:
+ a set of widgets (buttons, menus, lists, text fields, dialogs, ...) for
+ X11 applications, built on the X Toolkit Intrinsics.
+ .
+ This package contains libUil, the UIL compiler as a library, for
+ programs that compile UIL descriptions at run time.
+
+Package: libmotif-common
+Section: x11
+Architecture: all
+Multi-Arch: foreign
+Depends:
+ ${misc:Depends},
+Description: Motif - common files
+ Motif is the user interface toolkit of the Common Desktop Environment:
+ a set of widgets (buttons, menus, lists, text fields, dialogs, ...) for
+ X11 applications, built on the X Toolkit Intrinsics.
+ .
+ This package contains the virtual key binding files that libXm reads
+ for the vendor of the X server.
+
+Package: libmotif-dev
+Section: libdevel
+Architecture: any
+Multi-Arch: same
+Depends:
+ libfontconfig-dev,
+ libjpeg-dev,
+ libmrm5 (= ${binary:Version}),
+ libpng-dev,
+ libuil5 (= ${binary:Version}),
+ libx11-dev,
+ libxext-dev,
+ libxft-dev,
+ libxm5 (= ${binary:Version}),
+ libxmu-dev,
+ libxpm-dev,
+ libxt-dev,
+ pkgconf,
+ ${misc:Depends},
+Description: Motif - development files
+ Motif is the user interface toolkit of the Common Desktop Environment:
+ a set of widgets (buttons, menus, lists, text fields, dialogs, ...) for
+ X11 applications, built on the X Toolkit Intrinsics.
+ .
+ This package contains the headers of libXm, libMrm and libUil, the
+ pkg-config files (motif, mrm, uil), the CMake package for
+ find_package(Motif CONFIG), the Motif bitmaps and the manual pages of
+ the library functions and widgets.
+
+Package: mwm
+Section: x11
+Architecture: any
+Depends:
+ ${misc:Depends},
+ ${shlibs:Depends},
+Description: Motif Window Manager
+ Motif is the user interface toolkit of the Common Desktop Environment:
+ a set of widgets (buttons, menus, lists, text fields, dialogs, ...) for
+ X11 applications, built on the X Toolkit Intrinsics.
+ .
+ This package contains mwm, the Motif window manager, and xmbind, which
+ sets the virtual key bindings of Motif programs for a display.
+
+Package: uil
+Section: devel
+Architecture: any
+Depends:
+ ${misc:Depends},
+ ${shlibs:Depends},
+Description: Motif - UIL (User Interface Language) compiler
+ Motif is the user interface toolkit of the Common Desktop Environment:
+ a set of widgets (buttons, menus, lists, text fields, dialogs, ...) for
+ X11 applications, built on the X Toolkit Intrinsics.
+ .
+ This package contains uil, which compiles UIL interface descriptions
+ into the UID files that libMrm loads.

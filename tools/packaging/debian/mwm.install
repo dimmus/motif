@@ -1,0 +1,6 @@
+etc/X11/system.mwmrc
+usr/bin/mwm
+usr/bin/xmbind
+usr/share/man/man1/mwm.1
+usr/share/man/man1/xmbind.1
+usr/share/man/man4/mwmrc.4
