@@ -45,7 +45,7 @@ jobs:
         env:
           MOTIF_REPO_URL: ${{ github.server_url }}/${{ github.repository }}
         run: tools/dev/env/ci/dist.sh "$TAG" _dist
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: dist
           path: _dist/
@@ -58,7 +58,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v7
         with:
           name: dist
           path: _dist
@@ -79,7 +79,7 @@ jobs:
         run: tools/dev/env/ci/build.sh
       - name: Upload test logs
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: test-logs-release
           path: ${{ runner.temp }}/motif-${{ env.TAG }}/_build/ctest-output.log
@@ -93,7 +93,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v7
         with:
           name: dist
           path: _dist

@@ -40,7 +40,7 @@ jobs:
         # Recent runner kernels randomise mmap() over more bits than the
         # ASan runtime of the distribution compilers can cope with.
         run: sudo sysctl vm.mmap_rnd_bits=28
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           path: .ccache
           key: ccache-ubuntu-${{ matrix.cc }}-${{ matrix.profile }}-${{ github.sha }}
@@ -55,7 +55,7 @@ jobs:
         run: tools/dev/env/ci/build.sh
       - name: Upload test logs
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: test-logs-ubuntu-${{ matrix.cc }}-${{ matrix.profile }}
           path: |
@@ -91,7 +91,7 @@ jobs:
           cd "${{ github.workspace }}"
           tools/dev/env/ci/deps.sh
         shell: alpine.sh --root {0}
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           path: .ccache
           key: ccache-alpine-${{ matrix.arch }}-${{ matrix.cc }}-${{ matrix.profile }}-${{ github.sha }}
@@ -105,7 +105,7 @@ jobs:
         shell: alpine.sh {0}
       - name: Upload test logs
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: test-logs-alpine-${{ matrix.arch }}-${{ matrix.cc }}-${{ matrix.profile }}
           path: |
@@ -121,10 +121,10 @@ jobs:
     timeout-minutes: 300
     steps:
       - uses: actions/checkout@v5
-      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-qemu-action@v4
         with:
           platforms: s390x
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           path: .ccache
           key: ccache-s390x-${{ github.sha }}
@@ -140,7 +140,7 @@ jobs:
             sh -c 'tools/dev/env/ci/deps.sh && tools/dev/env/ci/build.sh'
       - name: Upload test logs
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: test-logs-s390x
           path: |
@@ -165,7 +165,7 @@ jobs:
             CC=cc MOTIF_CI_PROFILE=debug MOTIF_CI_NO_SKIP=1 sh tools/dev/env/ci/build.sh
       - name: Upload test logs
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: test-logs-freebsd
           path: |
@@ -188,7 +188,7 @@ jobs:
       - uses: actions/checkout@v5
       - name: Install dependencies
         run: tools/dev/env/ci/deps.sh
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           path: .ccache
           key: ccache-werror-${{ matrix.cc }}-${{ github.sha }}
@@ -227,7 +227,7 @@ jobs:
         run: tools/dev/env/ci/package-smoke.sh _build _stage
       - name: Upload logs
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: package-logs-${{ strategy.job-index }}
           path: |
@@ -256,7 +256,7 @@ jobs:
         run: tools/dev/env/ci/static-analysis.sh ${{ matrix.tool }} _build-analysis _analysis
       - name: Upload report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: static-analysis-${{ matrix.tool }}
           path: _analysis/
@@ -287,7 +287,7 @@ jobs:
           tools/dev/env/ci/abi-check.sh "$@"
       - name: Upload ABI dumps and reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: abi
           path: |
@@ -307,7 +307,7 @@ jobs:
         run: tools/dev/env/ci/repro-check.sh _repro
       - name: Upload diffoscope report
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: diffoscope
           path: |
