@@ -60,10 +60,10 @@ extern void XmCvtStringToUnitType(XrmValuePtr args,
 XM_ALTERNATIVE(Use XmStringCreateLocalized instead)
 extern XmString XmStringCreateSimple(const char *text);
 XM_ALTERNATIVE(Use XmStringLtoRCreate instead)
-extern XmString XmStringCreateLtoR(const char *text, XmStringCharSet charset);
+extern XmString XmStringCreateLtoR(const char *text, const char *charset);
 XM_ALTERNATIVE(Use XmStringComponentCreate and XmStringConcat instead)
-extern XmString XmStringSegmentCreate(char *text,
-                                      XmStringCharSet charset,
+extern XmString XmStringSegmentCreate(const char *text,
+                                      const char *charset,
                                       XmStringDirection direction,
                                       Boolean separator);
 XM_ALTERNATIVE(Use XmStringGetNextTriple instead)
@@ -83,7 +83,7 @@ extern Boolean XmStringGetNextSegment(XmStringContext context,
                                       XmStringDirection *direction,
                                       Boolean *separator);
 XM_ALTERNATIVE(Use XmStringUnparse instead)
-extern Boolean XmStringGetLtoR(XmString string, XmStringCharSet charset, char **text);
+extern Boolean XmStringGetLtoR(XmString string, const char *charset, char **text);
 XM_ALTERNATIVE(Use XmStringConcat instead)
 extern XmString XmStringNConcat(XmString first, XmString second, int n);
 XM_ALTERNATIVE(Use XmStringCopy instead)
@@ -91,15 +91,15 @@ extern XmString XmStringNCopy(XmString str, int n);
 XM_ALTERNATIVE(Use XmStringCompare instead)
 extern Boolean XmStringByteCompare(XmString a1, XmString b1);
 XM_ALTERNATIVE(Use XmFontListAppendEntry instead)
-extern XmFontList XmFontListCreate(XFontStruct *font, XmStringCharSet charset);
+extern XmFontList XmFontListCreate(XFontStruct *font, const char *charset);
 XM_ALTERNATIVE(Use XmFontListAppendEntry instead)
-extern XmFontList XmFontListCreate_r(XFontStruct *font, XmStringCharSet charset, Widget wid);
+extern XmFontList XmFontListCreate_r(XFontStruct *font, const char *charset, Widget wid);
 XM_ALTERNATIVE(Use XmFontListAppendEntry instead)
-extern XmFontList XmStringCreateFontList(XFontStruct *font, XmStringCharSet charset);
+extern XmFontList XmStringCreateFontList(XFontStruct *font, const char *charset);
 XM_ALTERNATIVE(Use XmFontListAppendEntry instead)
-extern XmFontList XmStringCreateFontList_r(XFontStruct *font, XmStringCharSet charset, Widget wid);
+extern XmFontList XmStringCreateFontList_r(XFontStruct *font, const char *charset, Widget wid);
 XM_ALTERNATIVE(Use XmFontListAppendEntry instead)
-extern XmFontList XmFontListAdd(XmFontList old, XFontStruct *font, XmStringCharSet charset);
+extern XmFontList XmFontListAdd(XmFontList old, XFontStruct *font, const char *charset);
 XM_ALTERNATIVE(Use XmFontListNextEntry instead)
 extern Boolean XmFontListGetNextFont(XmFontContext context,
                                      XmStringCharSet *charset,

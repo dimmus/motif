@@ -381,7 +381,7 @@ XmTab XmTabCreate(float value,
                   unsigned char units,
                   XmOffsetModel offset_model,
                   unsigned char alignment,
-                  char *decimal)
+                  const char *decimal)
 {
   XmTab tab;
   _XmProcessLock();

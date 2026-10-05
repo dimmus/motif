@@ -170,7 +170,7 @@ XmStringTable XmStringTableParseStringArray(XtPointer *strings,
 
 XtPointer *XmStringTableUnparse(XmStringTable table,
                                 Cardinal count,
-                                XmStringTag tag,
+                                const char *tag,
                                 XmTextType tag_type,
                                 XmTextType output_type,
                                 XmParseTable parse,
@@ -209,15 +209,13 @@ XmString XmStringTableToXmString(XmStringTable table, Cardinal count, XmString b
   return (str);
 }
 
-XmString XmStringPutRendition(XmString string, XmStringTag rendition)
+XmString XmStringPutRendition(XmString string, const char *rendition)
 {
   /* Quick and dirty.  Fix for beta! */
   XmString str, tmp1, tmp2;
-  tmp1 = XmStringComponentCreate(
-      XmSTRING_COMPONENT_RENDITION_BEGIN, strlen(rendition), (XtPointer)rendition);
+  tmp1 = XmStringComponentCreate(XmSTRING_COMPONENT_RENDITION_BEGIN, strlen(rendition), rendition);
   tmp2 = XmStringConcatAndFree(tmp1, XmStringCopy(string));
-  tmp1 = XmStringComponentCreate(
-      XmSTRING_COMPONENT_RENDITION_END, strlen(rendition), (XtPointer)rendition);
+  tmp1 = XmStringComponentCreate(XmSTRING_COMPONENT_RENDITION_END, strlen(rendition), rendition);
   str = XmStringConcatAndFree(tmp2, tmp1);
   return (str);
 }

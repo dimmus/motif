@@ -157,7 +157,7 @@ extern XmRendition _XmRenditionCreate(Display *display,
                                       Widget widget,
                                       String resname,
                                       String resclass,
-                                      XmStringTag tag,
+                                      const char *tag,
                                       ArgList arglist,
                                       Cardinal argcount,
                                       Boolean *in_db);

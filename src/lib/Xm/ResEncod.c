@@ -85,8 +85,8 @@ typedef enum {
 
 /* Internal context block */
 typedef struct _ct_context {
-  OctetPtr octet;     /* octet ptr into compound text stream */
-  OctetPtr lastoctet; /* ptr to last octet in stream */
+  const_OctetPtr octet;     /* octet ptr into compound text stream */
+  const_OctetPtr lastoctet; /* ptr to last octet in stream */
 
   struct {               /* flags */
     unsigned dircs : 1;  /* direction control seq encountered */
@@ -99,9 +99,9 @@ typedef struct _ct_context {
   ct_Direction *dirstack;           /* direction stack pointer */
   unsigned int dirsp;               /* current dir stack index */
   unsigned int dirstacksize;        /* size of direction stack */
-  OctetPtr encoding;                /* ptr to current encoding sequence */
+  const_OctetPtr encoding;          /* ptr to current encoding sequence */
   unsigned int encodinglen;         /* length of encoding sequence */
-  OctetPtr item;                    /* ptr to current item */
+  const_OctetPtr item;              /* ptr to current item */
   unsigned int itemlen;             /* length of current item */
   unsigned int version;             /* version of compound text */
   XmConst char *gl_charset;         /* ptr to GL character set */
@@ -282,7 +282,7 @@ static SegmentEncoding _encoding_registry = {
     XmFONTLIST_DEFAULT_TAG, XmFONTLIST_DEFAULT_TAG, &_loc_encoding_registry};
 static SegmentEncoding *_encoding_registry_ptr = &_encoding_registry;
 /********    Static Function Declarations    ********/
-static SegmentEncoding *FindEncoding(char *fontlist_tag);
+static SegmentEncoding *FindEncoding(const char *fontlist_tag);
 static Boolean processCharsetAndText(XmStringCharSet tag,
                                      OctetPtr ctext,
                                      Boolean separator,
@@ -302,9 +302,9 @@ static Boolean processExtendedSegmentsHack(ct_context *ctx, Octet final);
 static Boolean cvtTextToXmString(XrmValue *from, XrmValue *to);
 static void outputXmString(ct_context *ctx, Boolean separator);
 static XmString concatStringToXmString(XmString compoundstring,
-                                       char *textstring,
+                                       const char *textstring,
                                        int textlen,
-                                       char *charset,
+                                       const char *charset,
                                        XmStringDirection direction,
                                        Boolean separator);
 static Boolean processESC(ct_context *ctx, Octet final);
@@ -336,7 +336,7 @@ static char *ConvertWithIconv(const char *str, unsigned int len, iconv_t convert
  *    encountered that have been unregistered.
  *
  ************************************************************************/
-static SegmentEncoding *FindEncoding(char *fontlist_tag)
+static SegmentEncoding *FindEncoding(const char *fontlist_tag)
 {
   SegmentEncoding *prevPtr, *encodingPtr = _encoding_registry_ptr;
   String encoding = NULL;
@@ -384,7 +384,7 @@ static SegmentEncoding *FindEncoding(char *fontlist_tag)
  *    for an already registered tag.
  *
  ************************************************************************/
-char *XmRegisterSegmentEncoding(char *fontlist_tag, char *ct_encoding)
+char *XmRegisterSegmentEncoding(const char *fontlist_tag, const char *ct_encoding)
 {
   SegmentEncoding *encodingPtr = NULL;
   String ret_val = NULL;
@@ -451,7 +451,7 @@ XtPointer _XmGetEncodingRegistryTarget(int *length)
  *    specified font list element tag.  Returns NULL if not found.
  *
  ************************************************************************/
-char *XmMapSegmentEncoding(char *fontlist_tag)
+char *XmMapSegmentEncoding(const char *fontlist_tag)
 {
   SegmentEncoding *encodingPtr = NULL;
   String ret_val = NULL;
@@ -472,7 +472,7 @@ char *XmMapSegmentEncoding(char *fontlist_tag)
  *	for this to work.
  *
  ************************************************************************/
-XmString XmCvtCTToXmString(char *text)
+XmString XmCvtCTToXmString(const char *text)
 {
   ct_context *ctx; /* compound text context block */
   Boolean ok = True;
@@ -481,7 +481,7 @@ XmString XmCvtCTToXmString(char *text)
   XmString xmsReturned; /* returned Xm string */
   ctx = (ct_context *)XtMalloc(sizeof(ct_context));
   /* initialize the context block */
-  ctx->octet = (OctetPtr)text;
+  ctx->octet = (const_OctetPtr)text;
   ctx->flags.dircs = False;
   ctx->flags.gchar = False;
   ctx->flags.ignext = False;
@@ -742,7 +742,7 @@ static Boolean processESCHack(ct_context *ctx, Octet final)
 
 static Boolean processExtendedSegmentsHack(ct_context *ctx, Octet final)
 {
-  OctetPtr esptr;      /* ptr into ext seg */
+  const_OctetPtr esptr; /* ptr into ext seg */
   unsigned int seglen; /* length of ext seg */
   unsigned int len;    /* length */
   String charset_copy; /* ptr to NULL-terminated copy of ext seg charset */
@@ -792,7 +792,7 @@ static Boolean processExtendedSegmentsHack(ct_context *ctx, Octet final)
           break;
         }
         charset_copy = XtMalloc(len + 1);
-        strncpy(charset_copy, (char *)esptr, len);
+        strncpy(charset_copy, (const char *)esptr, len);
         charset_copy[len] = EOS;
         esptr += len + 1;       /* point to text part */
         len = seglen - len - 1; /* calc length of text part */
@@ -1095,20 +1095,20 @@ static Boolean cvtTextToXmString(XrmValue *from, XrmValue *to)
   return (ok);
 }
 
-static char **cvtCTsegment(ct_context *ctx, OctetPtr item, unsigned int length)
+static char **cvtCTsegment(ct_context *ctx, const_OctetPtr item, unsigned int length)
 {
   XTextProperty tmp_prop;
-  OctetPtr octets;
-  Boolean free_octets = False;
+  const_OctetPtr octets;
+  OctetPtr copy = NULL;
   int count;
   int ret_val;
   char **strings = NULL;
   if (ctx->encoding) {
     if (ctx->encoding + ctx->encodinglen != item) {
-      octets = (OctetPtr)_XmMallocArray(ctx->encodinglen + length, sizeof(Octet));
-      memcpy((char *)octets, (char *)ctx->encoding, ctx->encodinglen);
-      memcpy((char *)(octets + ctx->encodinglen), (char *)item, length);
-      free_octets = True;
+      copy = (OctetPtr)_XmMallocArray(ctx->encodinglen + length, sizeof(Octet));
+      memcpy((char *)copy, (const char *)ctx->encoding, ctx->encodinglen);
+      memcpy((char *)(copy + ctx->encodinglen), (const char *)item, length);
+      octets = copy;
     }
     else {
       octets = ctx->encoding;
@@ -1117,7 +1117,8 @@ static char **cvtCTsegment(ct_context *ctx, OctetPtr item, unsigned int length)
   else {
     octets = ctx->item;
   }
-  tmp_prop.value = octets;
+  /* XmbTextPropertyToTextList() only reads the value. */
+  tmp_prop.value = (unsigned char *)octets;
   tmp_prop.encoding = XInternAtom(_XmGetDefaultDisplay(), XmSCOMPOUND_TEXT, False);
   tmp_prop.format = 8;
   tmp_prop.nitems = ctx->encodinglen + length;
@@ -1126,9 +1127,9 @@ static char **cvtCTsegment(ct_context *ctx, OctetPtr item, unsigned int length)
     XFreeStringList(strings);
     strings = NULL;
   }
-  if (free_octets)
-    XtFree((char *)octets);
+  XtFree((char *)copy);
   return strings;
+
 }
 
 /* outputXmString */
@@ -1190,9 +1191,9 @@ static void outputXmString(ct_context *ctx, Boolean separator)
     /* OK to do single segment output but always use GR charset */
     ctx->xmstring = concatStringToXmString(
         ctx->xmstring,
-        (char *)ctx->item,
+        (const char *)ctx->item,
         ctx->itemlen,
-        (char *)ctx->gr_charset,
+        ctx->gr_charset,
         (XmStringDirection)((_CurDir(ctx) == ct_Dir_LeftToRight) ?
                                 XmSTRING_DIRECTION_L_TO_R :
                                 ((_CurDir(ctx) == ct_Dir_RightToLeft) ? XmSTRING_DIRECTION_R_TO_L :
@@ -1214,9 +1215,9 @@ static void outputXmString(ct_context *ctx, Boolean separator)
           assert(j > start);
           ctx->xmstring = concatStringToXmString(
               ctx->xmstring,
-              (char *)ctx->item + start,
+              (const char *)ctx->item + start,
               j - start,
-              (char *)ctx->gr_charset,
+              ctx->gr_charset,
               (XmStringDirection)((_CurDir(ctx) == ct_Dir_LeftToRight) ?
                                       XmSTRING_DIRECTION_L_TO_R :
                                       ((_CurDir(ctx) == ct_Dir_RightToLeft) ?
@@ -1234,9 +1235,9 @@ static void outputXmString(ct_context *ctx, Boolean separator)
           assert(j > start);
           ctx->xmstring = concatStringToXmString(
               ctx->xmstring,
-              (char *)ctx->item + start,
+              (const char *)ctx->item + start,
               j - start,
-              (char *)ctx->gl_charset,
+              ctx->gl_charset,
               (XmStringDirection)((_CurDir(ctx) == ct_Dir_LeftToRight) ?
                                       XmSTRING_DIRECTION_L_TO_R :
                                       ((_CurDir(ctx) == ct_Dir_RightToLeft) ?
@@ -1252,9 +1253,9 @@ static void outputXmString(ct_context *ctx, Boolean separator)
     /* output last segment */
     ctx->xmstring = concatStringToXmString(
         ctx->xmstring,
-        (char *)ctx->item + start,
+        (const char *)ctx->item + start,
         ctx->itemlen - start,
-        (char *)((curseg_is_gl) ? ctx->gl_charset : ctx->gr_charset),
+        (curseg_is_gl) ? ctx->gl_charset : ctx->gr_charset,
         (XmStringDirection)((_CurDir(ctx) == ct_Dir_LeftToRight) ?
                                 XmSTRING_DIRECTION_L_TO_R :
                                 ((_CurDir(ctx) == ct_Dir_RightToLeft) ? XmSTRING_DIRECTION_R_TO_L :
@@ -1270,9 +1271,9 @@ static void outputXmString(ct_context *ctx, Boolean separator)
 }
 
 static XmString concatStringToXmString(XmString compoundstring,
-                                       char *textstring,
+                                       const char *textstring,
                                        int textlen,
-                                       char *charset,
+                                       const char *charset,
                                        XmStringDirection direction,
                                        Boolean separator)
 {
@@ -1368,7 +1369,7 @@ static Boolean processCSI(ct_context *ctx, Octet final)
 
 static Boolean processExtendedSegments(ct_context *ctx, Octet final)
 {
-  OctetPtr esptr;      /* ptr into ext seg */
+  const_OctetPtr esptr; /* ptr into ext seg */
   unsigned int seglen; /* length of ext seg */
   unsigned int len;    /* length */
   String charset_copy; /* ptr to NULL-terminated copy of ext seg charset */
@@ -1415,7 +1416,7 @@ static Boolean processExtendedSegments(ct_context *ctx, Octet final)
           break;
         }
         charset_copy = XtMalloc(len + 1);
-        strncpy(charset_copy, (char *)esptr, len);
+        strncpy(charset_copy, (const char *)esptr, len);
         charset_copy[len] = EOS;
         esptr += len + 1;       /* point to text part */
         len = seglen - len - 1; /* calc length of text part */

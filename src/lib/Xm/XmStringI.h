@@ -705,8 +705,8 @@ extern Boolean _XmFontListSearch(XmFontList fontlist,
                                  XmStringCharSet charset,
                                  short *indx,
                                  XFontStruct **font_struct);
-extern int _XmStringIndexCacheTag(XmStringTag tag, int length);
-extern XmStringTag _XmStringCacheTag(XmStringTag tag, int length);
+extern int _XmStringIndexCacheTag(const char *tag, int length);
+extern XmStringTag _XmStringCacheTag(const char *tag, int length);
 extern Boolean _XmStringInitContext(_XmStringContext *context, _XmString string);
 extern Boolean _XmStringGetNextSegment(_XmStringContext context,
                                        XmStringCharSet *charset,
@@ -891,10 +891,10 @@ extern unsigned char _XmEntryTabsGet(_XmStringEntry entry);
 extern unsigned int _XmEntryTextTypeGet(_XmStringEntry entry);
 extern void _XmEntryTextSet(_XmStringEntry entry, XtPointer val);
 extern unsigned char *_XmStringTruncateASN1(unsigned char *str, int n);
-extern unsigned int _XmStringByteStreamValidLength(unsigned char *stream, unsigned long size);
+extern unsigned int _XmStringByteStreamValidLength(const unsigned char *stream, unsigned long size);
 extern void _XmStringContextCopy(_XmStringContext target, _XmStringContext source);
 extern void _XmStringContextFree(_XmStringContext target);
-extern XmString _XmStringNCreate(char *text, XmStringTag tag, int len);
+extern XmString _XmStringNCreate(const char *text, const char *tag, int len);
 extern void _XmStringSegmentNew(_XmString string, int line_index, _XmStringEntry value, int copy);
 extern void _XmStringContextReInit(_XmStringContext context, _XmString string);
 extern int _XmConvertFactor(unsigned char units, float *factor);
