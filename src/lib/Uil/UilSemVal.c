@@ -236,10 +236,17 @@ static char	*operator_symbol[ ] = {
     /* coerce */	"coerce operator",
 				  };
 
+/* Indexed by the numeric argument types, boolean_arg_type through
+ * vertical_float_arg_type. */
 static char	*value_text[ ] = {
-    /* boolean */	"boolean expression",
-    /* integer */	"integer expression",
-    /* float */		"floating point expression",
+    /* boolean */		"boolean expression",
+    /* integer */		"integer expression",
+    /* single float */		"floating point expression",
+    /* float */			"floating point expression",
+    /* horizontal integer */	"integer expression",
+    /* vertical integer */	"integer expression",
+    /* horizontal float */	"floating point expression",
+    /* vertical float */	"floating point expression",
 			};
 
 static sym_argument_entry_type		**arg_seen;
@@ -4133,7 +4140,8 @@ sym_value_entry_type *sem_evaluate_value_expr(sym_value_entry_type *value_entry)
     diag_issue_diagnostic
       ( d_out_range,
        _sar_source_pos2( value_entry ),
-       value_text[ (int)res_type ],
+       ((unsigned)res_type < XtNumber(value_text)) ?
+	 value_text[ (int)res_type ] : "expression",
        ""
        );
     res_type = error_arg_type;
