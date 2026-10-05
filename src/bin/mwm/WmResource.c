@@ -3327,7 +3327,8 @@ ProcessScreenListResource (void)
 	    }
 	    else
 	    {
-		strcpy((char *)wmGD.screenNames[sNum], (char *)string);
+		memcpy((char *)wmGD.screenNames[sNum], (char *)string,
+		       strlen((char *)string) + 1);
 		sNum++;
 	    }
 	}

@@ -261,13 +261,15 @@ WriteHeader (char* tagline, File* phile, int abi)
 
     /* do the right thing for Motif, i.e. avoid _XmXmStrDefs_h_ */
     if (strcmp (prefixstr, "Xm") == 0) {
-	if ((fileprotstr = malloc (strlen (phile->name) + 3)) == NULL)
+	size_t len = strlen (phile->name) + 3;
+	if ((fileprotstr = malloc (len)) == NULL)
 	   exit (1);
-	(void) sprintf (fileprotstr, "_%s_", phile->name);
+	(void) snprintf (fileprotstr, len, "_%s_", phile->name);
     } else {
-	if ((fileprotstr = malloc (strlen (phile->name) + strlen (prefixstr) +  3)) == NULL)
+	size_t len = strlen (phile->name) + strlen (prefixstr) + 3;
+	if ((fileprotstr = malloc (len)) == NULL)
 	   exit (1);
-	(void) sprintf (fileprotstr, "_%s%s_", prefixstr, phile->name);
+	(void) snprintf (fileprotstr, len, "_%s%s_", prefixstr, phile->name);
     }
 
     for (tmp = fileprotstr; *tmp; tmp++) if (*tmp == '.') *tmp = '_';

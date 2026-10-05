@@ -544,9 +544,14 @@ insert(char *tname,
   if (rslt == 0)  /* found the symbol already defined */
     return (-1);
   else {          /* symbol not defined yet so put it into symbol table */
+    size_t len = strlen(tname) + 1;
+
     ptr = (struct name *)calloc(1, sizeof(struct name));
-    ptr->regname = malloc(strlen(tname) + 1);
-    strcpy (ptr->regname, tname);
+    if (ptr == NULL || (ptr->regname = malloc(len)) == NULL) {
+      fprintf (stderr, "mkcatdefs: out of memory\n");
+      exit (1);
+    }
+    memcpy (ptr->regname, tname, len);
     ptr->regnr = seqno;
 
     /* not first entry in tree so update branch pointer */

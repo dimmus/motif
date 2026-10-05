@@ -6972,8 +6972,8 @@ static void ParseScreensArgument (int argc, char *argv[], int *pArgnum,
 	    }
 	    else
 	    {
-		strcpy((char *)wmGD.screenNames[sNum],
-		       (char *)wmGD.screenNames[0]);
+		memcpy((char *)wmGD.screenNames[sNum],
+		       (char *)wmGD.screenNames[0], lastLen);
 	    }
 	}
     }

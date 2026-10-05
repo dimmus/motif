@@ -302,7 +302,7 @@ buildDBFileName(char fileNameBuf[MAXPATHLEN], Boolean doingSave)
     if (strlen(fileName) >= MAXPATHLEN)
 	return False;
 
-    strcpy(fileNameBuf, fileName);
+    memcpy(fileNameBuf, fileName, strlen(fileName) + 1);
 
 #endif
 
