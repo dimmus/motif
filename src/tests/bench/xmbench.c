@@ -23,7 +23,9 @@
  *
  * The X requests and round trips of a case are counted before the final
  * XSync that each timed run ends with (the time includes it, so that the
- * server's share of the work is measured too).
+ * server's share of the work is measured too).  The JSON output also
+ * has their exact totals per timed run (the median over REPEAT runs),
+ * which the per-op figures round away when they are rare.
  *
  * Cases that need an X server are skipped when DISPLAY is unset; xmbench
  * exits with 77 when every selected case was skipped.  Results are
@@ -89,6 +91,7 @@ struct counters {
 
 struct result {
 	double ns, cpu, mallocs, requests, rtrips, icvalues;
+	double run_requests, run_rtrips;   /* per timed run, not per op */
 };
 
 static XtAppContext app;
@@ -152,7 +155,8 @@ static void run_case(const struct bench_case *bc, long n, int repeat,
 		     struct result *res)
 {
 	double ns[MAX_REPEAT], cpu[MAX_REPEAT], ma[MAX_REPEAT], rq[MAX_REPEAT];
-	double rt[MAX_REPEAT], ic[MAX_REPEAT];
+	double rt[MAX_REPEAT], ic[MAX_REPEAT], rq_run[MAX_REPEAT];
+	double rt_run[MAX_REPEAT];
 	int r;
 
 	if (bc->init)
@@ -182,6 +186,8 @@ static void run_case(const struct bench_case *bc, long n, int repeat,
 		rq[r] = (double)(after.requests - before.requests) / ops;
 		rt[r] = (double)(after.replies - before.replies) / ops;
 		ic[r] = (double)(after.icvalues - before.icvalues) / ops;
+		rq_run[r] = after.requests - before.requests;
+		rt_run[r] = after.replies - before.replies;
 		if (bc->teardown)
 			bc->teardown();
 		drain();
@@ -195,6 +201,8 @@ static void run_case(const struct bench_case *bc, long n, int repeat,
 	res->requests = median(rq, repeat);
 	res->rtrips = median(rt, repeat);
 	res->icvalues = median(ic, repeat);
+	res->run_requests = median(rq_run, repeat);
+	res->run_rtrips = median(rt_run, repeat);
 }
 
 /* Re-execute with the counting library preloaded, unless already done. */
@@ -1308,9 +1316,11 @@ int main(int argc, char **argv)
 		fprintf(jf, "{\n  \"bench\": \"xmbench\",\n  \"version\": 1,\n"
 			"  \"repeat\": %d,\n  \"scale\": %g,\n"
 			"  \"threads\": %s,\n"
-			"  \"counters\": %s,\n  \"cases\": [", repeat, scale,
+			"  \"counters\": %s,\n  \"display\": %s,\n"
+			"  \"cases\": [", repeat, scale,
 			threads ? "true" : "false",
-			c_mallocs ? "true" : "false");
+			c_mallocs ? "true" : "false",
+			dpy ? "true" : "false");
 	}
 	printf("%-24s %9s %12s %12s %9s %9s %8s %8s\n", "case", "n", "ns/op",
 	       "cpu-ns/op", "mallocs", "requests", "rtrips", "icvalues");
@@ -1341,11 +1351,13 @@ int main(int argc, char **argv)
 				"\"mallocs_per_op\": %.4f, "
 				"\"requests_per_op\": %.4f, "
 				"\"round_trips_per_op\": %.4f, "
-				"\"icvalues_per_op\": %.4f}",
+				"\"icvalues_per_op\": %.4f, "
+				"\"requests_per_run\": %g, "
+				"\"round_trips_per_run\": %g}",
 				ran ? "," : "", bc->name, bc->group, n, res.ns,
 				res.cpu,
 				res.mallocs, res.requests, res.rtrips,
-				res.icvalues);
+				res.icvalues, res.run_requests, res.run_rtrips);
 		ran++;
 	}
 	if (jf) {
