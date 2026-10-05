@@ -141,14 +141,70 @@ working with a newer one.  So:
   functions, headers, resources or enumeration values at the end.
   Adding `const` is source compatible for callers; only code that
   stores the function in a pointer of the old type has to adjust.
-  `XmStringCreate`, `XmStringCreateLocalized`, `XmStringLtoRCreate`,
-  `XmStringCreateSimple` and `XmStringCreateLtoR` take `const char *`
-  text for that reason.  The `XmText`/`XmTextField` setters do not: their
-  `modifyVerify` callbacks may change the caller's text in place.
+  [Const parameters](#const-parameters) lists the functions that take
+  `const` strings, and those that do not and why.
 
 A change that has to break one of these rules is an ABI break: bump
 `MOTIF_SOVERSION` (all three libraries), reset the version nodes, and
 record it in the release notes.
+
+### Const parameters
+
+Every string, tag, name and buffer parameter that a function only reads
+(or copies) is a pointer to `const`, so that string literals and
+`const` data can be passed without a cast; a C++ program cannot pass a
+literal as `char *` at all.  The C ABI does not change: abidiff counts
+these as harmless changes and reports them only with `--harmless`.
+The functions are:
+
+| Header | Functions (parameters) |
+|--------|------------------------|
+| `Xm.h` | `XmStringCreate`, `XmStringLtoRCreate` (text, tag); `XmStringCreateLocalized` (text); `XmStringGenerate` (text, tag, rendition); `XmStringPutRendition` (rendition); `XmStringComponentCreate` (value); `XmStringUnparse`, `XmStringTableUnparse` (tag); `XmCvtByteStreamToXmString`, `XmStringByteStreamLength` (stream); `XmCvtCTToXmString` (text); `XmRegisterSegmentEncoding`, `XmMapSegmentEncoding` (tag, encoding); `XmRenditionCreate`, `XmRenderTableGetRendition` (tag); `XmRenderTableCvtFromProp` (property); `XmTabCreate` (decimal); `XmFontListEntryCreate`, `XmFontListEntryCreate_r`, `XmFontListEntryLoad` (font name, tag); `XmInstallImage`, `XmGetPixmap`, `XmGetPixmapByDepth`, `XmGetSizedPixmap` (image name); `XmConvertStringToUnits` (spec); `XmVaCreateSimpleMenuBar`, `...PopupMenu`, `...PulldownMenu`, `...OptionMenu`, `...RadioBox`, `...CheckBox` (name) |
+| `obsolete.h` | `XmStringCreateSimple` (text); `XmStringCreateLtoR`, `XmStringSegmentCreate` (text, tag); `XmStringGetLtoR`, `XmFontListCreate`, `XmFontListCreate_r`, `XmStringCreateFontList`, `XmStringCreateFontList_r`, `XmFontListAdd` (tag) |
+| widget headers | `XmVaCreate<Class>`, `XmVaCreateManaged<Class>` of every widget (name) |
+| `AtomMgr.h` | `XmInternAtom` (name) |
+| `CutPaste.h` | `XmClipboardCopy` (format, data); `XmClipboardCopyByName` (data); `XmClipboardRetrieve`, `XmClipboardInquireLength`, `XmClipboardInquirePendingItems`, `XmClipboardRegisterFormat` (format) |
+| `Ext.h` | `XmCompareISOLatin1` (both); `XmCopyISOLatin1Lowered` (source) |
+| `IconFile.h`, `IconFileP.h` | `XmGetIconFileName` (names, host prefix); `XmeFlushIconFileCache` (path) |
+| `Picture.h` | `XmParsePicture` (picture) |
+| `Print.h` | `XmPrintSetup` (shell name); `XmPrintToFile` (file name) |
+| `RepType.h` | `XmRepTypeRegister` (type name, values); `XmRepTypeGetId` (type name) |
+| `Text.h` | `XmTextFindString`, `XmTextFindStringWcs` (search string) |
+| `XmP.h` | `XmeCreateClassDialog`, `XmeVLCreateWidget` (name); `XmeGetMask` (image name); `XmeNamesAreEqual` (both); `XmeParseUnits` (spec); `XmeWarning` (message); `XmeGetLocalizedString` (strings) |
+| `XmosP.h` | `XmOSGetMethod` (method name) |
+| `MrmDecls.h` | `MrmFetchWidget`, `MrmFetchWidgetOverride`, `MrmFetchLiteral`, `MrmFetchIconLiteral`, `MrmFetchBitmapLiteral`, `MrmFetchColorLiteral` (index); `MrmFetchInterfaceModule` (module name); `MrmOpenHierarchyFromBuffer`, `MrmOpenHierarchyFromBufferWithSize` (UID image); `MrmRegisterClass`, `MrmRegisterClassWithCleanup` (class and creation procedure names) |
+| `MrmosI.h` | `_MrmOSSetLocale` (locale) |
+
+`XmStringTag` and `XmStringCharSet` are typedefs for `char *`, to which a
+`const` cannot be added, so these parameters are spelled `const char *`.
+
+These are left as they are:
+
+- The `XmCreate<Class>` functions (and `XmCreateSimple...`) keep a
+  `String` name.  Their address is used as a creation procedure,
+  `Widget (*)(Widget, String, ArgList, Cardinal)`: `MrmRegisterClass`
+  takes one, and libMrm and applications register them so.  A `const`
+  name changes the function's type, which GCC 14 and later and Clang
+  reject as an incompatible pointer type, and C++ always.
+- The text of the `XmText`, `XmTextField` and `XmDataField` setters
+  (`SetString`, `Insert`, `Replace` and their `Wcs` forms).  The
+  `modifyVerify` callbacks get a copy, but the caller's buffer reaches
+  widget-writer hooks typed as writable without one: the text source's
+  `Replace` method (`XmTextBlock.ptr`) and the AccessTextual trait's
+  `setValue`.
+- Parameters handed to callbacks: the text and tag of
+  `XmStringParseText` and `XmStringTableParseStringArray` (to the
+  `XmParseProc`s), the override name of `MrmFetchWidgetOverride` (to the
+  creation procedure), the `message_data` and `status_data` of `Uil`.
+  `XmeGetDirection` and `XmeGetNextCharacter` are `XmParseProc`s, whose
+  type is fixed.
+- Arrays of strings (`String *`, `XmStringTag *`, XPM `char **` data):
+  C does not convert `char **` to `const char *const *` implicitly.
+- The XPM functions of `XpmP.h`, which keep the signatures of libXpm's
+  `<X11/xpm.h>`.
+- `XmString` itself: it is an opaque handle, and `const XmString` would
+  only make the pointer const.
+- Output parameters.
 
 ### Checking a change
 
