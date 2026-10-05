@@ -1188,7 +1188,7 @@ GetMnemonic(Widget w)
   return(mw -> menu_button.mnemonic);
 }
 
-static char* GetActivateCBName()
+static char* GetActivateCBName(void)
 {
   return(XmNactivateCallback);
 }

@@ -33,6 +33,7 @@
 #include <X11/Xlib.h>
 #include <X11/Intrinsic.h>
 #include <Xm/Xm.h>
+#include "input.h"
 
 static XtAppContext app_context;
 
@@ -56,7 +57,6 @@ static String fallback_reslist[] = {
   NULL
   };
 
-extern int dialog_init(int *argc, char **argv, Display *dpy);
 
 /****************************************************************
  * base:

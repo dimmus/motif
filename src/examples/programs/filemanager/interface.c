@@ -49,7 +49,7 @@ static char rcsid[] = "$XConsortium: interface.c /main/6 1995/07/14 09:41:50 drk
 #include <Xmd/Help.h>
 #include "filemanager.h"
 
-Widget
+static Widget
 CreateMenuButton(char* name, Widget parent, XtCallbackProc callback,
 		 XtPointer data, char mnemonic)
 {

@@ -48,7 +48,6 @@ Page pages[MAXPAGES];
 extern int currentPage;
 extern int modified;
 int maxpages;
-Page AllocPage();
 
 /* Pages are stored pretty simply:
  * each page starts with "*PLabel"
@@ -60,7 +59,7 @@ Page AllocPage();
  * regular lines start with .
  */
 
-void ParseNewLines(char * label)
+static void ParseNewLines(char * label)
 {
     /* look for "\n" and change in '\n' and compact */
 
@@ -315,7 +314,7 @@ SaveDB(char* filename)
   fclose(output);
 }
 
-Page AllocPage()
+Page AllocPage(void)
 {
   Page p;
 

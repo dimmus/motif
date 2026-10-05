@@ -241,7 +241,7 @@ CreatePulldown(char* name, char mnemonic,
 	       Widget parent, menu_info *info,
 	       WidgetList array, Cardinal size)
 {
-  int i;
+  Cardinal i;
   Widget cascade_button, pulldown;
   Arg args[10];
   char buffer[128];

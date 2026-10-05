@@ -189,7 +189,7 @@ InitializeAppInfo(void)
 /* This procedure sets the color in the GC for drawing the rectangles
  * in a new color.
  */
-void
+static void
 SetColor(Display *display, Pixel color)
 {
 
@@ -509,8 +509,8 @@ RectFind(Position x, Position y)
     for (i = appInfo->numRects - 1; i >= 0; i--) {
 
         rect = appInfo->rectDpyTable[i];
-        if (rect->x <= x && rect->x + rect->width >= x &&
-            rect->y <= y && rect->y + rect->height >= y) {
+        if (rect->x <= (CARD32) x && rect->x + rect->width >= (CARD32) x &&
+            rect->y <= (CARD32) y && rect->y + rect->height >= (CARD32) y) {
             return(rect);
         }
 

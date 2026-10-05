@@ -46,6 +46,7 @@
 #include <Xm/ToggleB.h>
 #include <Xm/MessageB.h>
 #include <Xmd/Help.h>
+#include "input.h"
 
 #define WI_INPUT 0
 #define WI_MAINWINDOW 1
@@ -596,7 +597,7 @@ SelectFont(Widget widget,
   Cardinal num_children, num_swchildren;
   Widget form = widget;
   Boolean set = False;
-  int i, j;
+  Cardinal i, j;
 
   XtVaGetValues(cbs->widget, XmNfontList, &fontlist, XmNset, &set, NULL);
   if (!set)
@@ -643,7 +644,7 @@ SelectColor(Widget widget,
   Cardinal num_children, num_swchildren;
   Widget form = widget;
   Boolean set;
-  int i, j;
+  Cardinal i, j;
 
   XtVaGetValues(cbs->widget, XmNforeground, &color, XmNset, &set, NULL);
   if (!set)

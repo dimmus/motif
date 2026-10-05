@@ -144,7 +144,7 @@ static void      HandlePropertyChange (XEvent *event);
 static void      UpdatePannerView (PannerInfoRec *pInfoList, int remoteDsp);
 static void      DrawWindows (PannerInfoRec *);
 static void      DrawThumb (PannerInfoRec *);
-static void      SetupColorsAndGCs();
+static void      SetupColorsAndGCs(void);
 static GC        GetXorGC (Widget);
 static GC        GetCanvasGC (Widget);
 static void      SetWindowColor (PannerInfoRec *, int);
@@ -161,12 +161,12 @@ static XtPointer PackCARD16 (XtPointer, CARD16);
 static XtPointer PackCARD8 (XtPointer, CARD8);
 static void      CreateMenuBar (Widget parent);
 static void      MenuCB (Widget w, XtPointer clientData, XtPointer callData);
-static void      DoUpdatePanner ();
-static void      DoAddDisplay ();
-static void      DoHelp ();
-static void      DoQuit ();
-static void      CheckPinnedState ();
-static void      ShowPinStateWarning ();
+static void      DoUpdatePanner (void);
+static void      DoAddDisplay (void);
+static void      DoHelp (void);
+static void      DoQuit (void);
+static void      CheckPinnedState (void);
+static void      ShowPinStateWarning (void);
 static void      HandleInitialExpose (Widget, XtPointer, XEvent *, Boolean *);
 
 
@@ -641,7 +641,7 @@ DrawWindows (PannerInfoRec *panner_data)
        * become invalid while where still processing the list.
        */
       oldHandler = XSetErrorHandler(IgnoreError);
-      for (i=0; i<childCount; i++)
+      for (i=0; i<(int)childCount; i++)
 	{
 	  XWindowAttributes attr;
 
@@ -684,7 +684,7 @@ DrawThumb (PannerInfoRec *pInfo)
  | Called once at the beginning to setup some drawing stuff.      |
  *----------------------------------------------------------------*/
 static void
-SetupColorsAndGCs()
+SetupColorsAndGCs(void)
 {
   int i;
   XColor color;
@@ -1106,7 +1106,7 @@ MenuCB (Widget w, XtPointer clientData, XtPointer callData)
  |                         DoUpdatePanner                         |
  *----------------------------------------------------------------*/
 static void
-DoUpdatePanner ()
+DoUpdatePanner (void)
 {
   XClearArea(pInfoList[LOCAL].display,
 	     XtWindow(pInfoList[DSP].canvas),
@@ -1121,7 +1121,7 @@ DoUpdatePanner ()
  |                          DoAddDisplay                          |
  *----------------------------------------------------------------*/
 static void
-DoAddDisplay ()
+DoAddDisplay (void)
 {
   static Widget dlog = NULL;
   Arg           args[3];
@@ -1145,7 +1145,7 @@ DoAddDisplay ()
  |                              DoHelp                            |
  *----------------------------------------------------------------*/
 static void
-DoHelp ()
+DoHelp (void)
 {
   static Widget dlog = NULL;
   Arg           args[3];
@@ -1167,7 +1167,7 @@ DoHelp ()
  |                              DoQuit                            |
  *----------------------------------------------------------------*/
 static void
-DoQuit ()
+DoQuit (void)
 {
   XSync (pInfoList[LOCAL].display, False);
   XCloseDisplay (pInfoList[LOCAL].display);
@@ -1180,7 +1180,7 @@ DoQuit ()
 /*----------------------------------------------------------------*
  |                         GetTimeStamp                           |
  *----------------------------------------------------------------*/
-Time
+static Time
 GetTimestamp (Display *dsp)
 {
   XEvent            event;

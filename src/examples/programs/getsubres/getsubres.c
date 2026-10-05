@@ -134,7 +134,7 @@ static ClassArrayRec class_array[] = {
 };
 
 /* stupid c compiler */
-static void InitClassArray () {
+static void InitClassArray (void) {
   int n;
 
   n = 0;
@@ -247,7 +247,7 @@ AddToBuffer (String fmt, ...)
 
     (void) vsprintf(tmp, fmt, args);
     tmplen = strlen(tmp) ;
-    columns = (columns > tmplen)? columns : tmplen ;
+    columns = ((Cardinal) columns > tmplen)? columns : (short) tmplen ;
     buffer = XtRealloc(buffer, curpos + tmplen + 1);
     for (i=0 ; tmp[i]; i++) {
 	buffer[curpos++] = tmp[i] ;

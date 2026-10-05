@@ -6,6 +6,7 @@
 #include <Xm/RowColumn.h>
 #include <stdio.h>
 #include <ctype.h>
+#include "misc.h"
 
 /*
  * Include stdlib.h and malloc.h if code is C++, ANSI, or Extended ANSI.
@@ -116,7 +117,7 @@ static Boolean	extractSegment		(wchar_t**, wchar_t**, int *,
 static XmString	StringToXmString	(char*);
 static char*	getNextCStrDelim	(char*);
 static int	getCStrCount		(char*);
-static wchar_t *CStrCommonWideCharsGet	();
+static wchar_t *CStrCommonWideCharsGet	(void);
 
 /*****************************************************************************
  *	STATIC CODE
@@ -759,7 +760,7 @@ static XmString StringToXmString
 	 */
 	if (textLen)
 	{
-	    if (textBufLen <= (textLen * sizeof(wchar_t)))
+	    if (textBufLen <= (int) (textLen * sizeof(wchar_t)))
 	    {
 		textBufLen = (textLen + 1) * sizeof(wchar_t);
 		textBuf = (char*)XtRealloc(textBuf, textBufLen);
@@ -768,7 +769,7 @@ static XmString StringToXmString
 
 	    if (tagLen)
 	    {
-		if (tagBufLen <= (tagLen * sizeof(wchar_t)))
+		if (tagBufLen <= (int) (tagLen * sizeof(wchar_t)))
 		{
 		    tagBufLen = (tagLen + 1) * sizeof(wchar_t);
 		    tagBuf = (char*)XtRealloc(tagBuf, tagBufLen);
@@ -918,7 +919,7 @@ static int getCStrCount
  * Output:
  *     	cwc - wchar_t * : this array should never be written to or FREEd.
  */
-static wchar_t *CStrCommonWideCharsGet()
+static wchar_t *CStrCommonWideCharsGet(void)
 {
     static wchar_t	*CommonWideChars = NULL;
     /*
@@ -1221,7 +1222,7 @@ static void XmStringTableCvtDestroy
  * Output:
  *      None
  */
-void RegisterBxConverters
+static void RegisterBxConverters
     ARGLIST((appContext))
         GRA(XtAppContext, appContext)
 {
@@ -1249,7 +1250,7 @@ void RegisterBxConverters
  *      None
  */
 #ifndef IGNORE_CONVERT
-XtPointer CONVERT
+static XtPointer CONVERT
     ARGLIST((w, from_string, to_type, to_size, success))
         ARG(Widget, w)
         ARG(char *, from_string)
@@ -1377,7 +1378,7 @@ XtPointer CONVERT
 
 #ifndef IGNORE_MENU_POST
 
-void MENU_POST
+static void MENU_POST
     ARGLIST((p, mw, ev, dispatch))
         UARG(Widget, p)
         ARG(XtPointer, mw)
@@ -1394,7 +1395,7 @@ void MENU_POST
     XtSetArg(args[argcnt], XmNwhichButton, &button);
     argcnt++;
     XtGetValues(m, args, argcnt);
-    if(e->button != button) return;
+    if((int) e->button != button) return;
     XmMenuPosition(m, e);
     XtManageChild(m);
 }
@@ -1421,7 +1422,7 @@ void MENU_POST
  *          calculated at creation time.
  */
 
-void SET_BACKGROUND_COLOR
+static void SET_BACKGROUND_COLOR
     ARGLIST((w, args, argcnt, bg_color))
         ARG(Widget, w)
         ARG(ArgList, args)
@@ -1530,7 +1531,7 @@ void SET_BACKGROUND_COLOR
 #ifndef _BX_FIND_TOP_SHELL
 #define _BX_FIND_TOP_SHELL
 
-Widget BxFindTopShell
+static Widget BxFindTopShell
     ARGLIST((start))
         GRA(Widget, start)
 {
@@ -1560,7 +1561,7 @@ Widget BxFindTopShell
 #ifndef _BX_WIDGETIDS_FROM_NAMES
 #define _BX_WIDGETIDS_FROM_NAMES
 
-WidgetList BxWidgetIdsFromNames
+static WidgetList BxWidgetIdsFromNames
     ARGLIST((ref, cbName, stringList))
         ARG(Widget, ref)
         ARG(char, *cbName)
@@ -2054,7 +2055,8 @@ ARG(register char *, p)
 ARG(unsigned int, l)
 GRA(unsigned int *, ui_return)
 {
-    register int n, i;
+    register int n;
+    register unsigned int i;
 
     n = 0;
     for (i = 0; i < l; i++)
@@ -2927,11 +2929,11 @@ GRA(Pixel *, pixels)
 
     iptr = pixelindex;
     if (image->depth == 1) {
-	for (y = 0; y < height; y++)
-	    for (x = 0; x < width; x++, iptr++) {
+	for (y = 0; y < (int) height; y++)
+	    for (x = 0; x < (int) width; x++, iptr++) {
 		pixel = pixels[*iptr];
 		for (i = 0, px = pixel;
-		     i < sizeof(unsigned long); i++, px >>= 8)
+		     i < (int) sizeof(unsigned long); i++, px >>= 8)
 		    ((unsigned char *) &pixel)[i] = (unsigned char)px;
 		src = &image->data[XYINDEX(x, y, image)];
 		dst = (char *) &px;
@@ -2949,13 +2951,13 @@ GRA(Pixel *, pixels)
 		    *dst++ = *src++;
 	    }
     } else {
-	for (y = 0; y < height; y++)
-	    for (x = 0; x < width; x++, iptr++) {
+	for (y = 0; y < (int) height; y++)
+	    for (x = 0; x < (int) width; x++, iptr++) {
 		pixel = pixels[*iptr];
 		if (image->depth == 4)
 		    pixel &= 0xf;
 		for (i = 0, px = pixel;
-		     i < sizeof(unsigned long); i++, px >>= 8)
+		     i < (int) sizeof(unsigned long); i++, px >>= 8)
 		    ((unsigned char *) &pixel)[i] = (unsigned char)px;
 		src = &image->data[ZINDEX(x, y, image)];
 		dst = (char *) &px;
@@ -3001,8 +3003,8 @@ GRA(Pixel *, pixels)
     iptr = pixelindex;
 #ifndef WORD64
     if (*((char *) &byteorderpixel) == image->byte_order) {
-	for (y = 0; y < height; y++)
-	    for (x = 0; x < width; x++, iptr++) {
+	for (y = 0; y < (int) height; y++)
+	    for (x = 0; x < (int) width; x++, iptr++) {
 		paddr =
 		    (unsigned int *)(&(image->data[ZINDEX32(x, y, image)]));
 		*paddr = (unsigned int)pixels[*iptr];
@@ -3010,8 +3012,8 @@ GRA(Pixel *, pixels)
     } else
 #endif
     if (image->byte_order == MSBFirst)
-	for (y = 0; y < height; y++)
-	    for (x = 0; x < width; x++, iptr++) {
+	for (y = 0; y < (int) height; y++)
+	    for (x = 0; x < (int) width; x++, iptr++) {
 		addr = &((unsigned char *) image->data)[ZINDEX32(x, y, image)];
 		addr[0] = (unsigned char)(pixels[*iptr] >> 24);
 		addr[1] = (unsigned char)(pixels[*iptr] >> 16);
@@ -3019,8 +3021,8 @@ GRA(Pixel *, pixels)
 		addr[3] = (unsigned char)(pixels[*iptr]);
 	    }
     else
-	for (y = 0; y < height; y++)
-	    for (x = 0; x < width; x++, iptr++) {
+	for (y = 0; y < (int) height; y++)
+	    for (x = 0; x < (int) width; x++, iptr++) {
 		addr = &((unsigned char *) image->data)[ZINDEX32(x, y, image)];
 		addr[3] = (unsigned char)(pixels[*iptr] >> 24);
 		addr[2] = (unsigned char)(pixels[*iptr] >> 16);
@@ -3047,15 +3049,15 @@ GRA(Pixel *, pixels)
 
     iptr = pixelindex;
     if (image->byte_order == MSBFirst)
-	for (y = 0; y < height; y++)
-	    for (x = 0; x < width; x++, iptr++) {
+	for (y = 0; y < (int) height; y++)
+	    for (x = 0; x < (int) width; x++, iptr++) {
 		addr = &((unsigned char *) image->data)[ZINDEX16(x, y, image)];
 		addr[0] = (unsigned char)(pixels[*iptr] >> 8);
 		addr[1] = (unsigned char)(pixels[*iptr]);
 	    }
     else
-	for (y = 0; y < height; y++)
-	    for (x = 0; x < width; x++, iptr++) {
+	for (y = 0; y < (int) height; y++)
+	    for (x = 0; x < (int) width; x++, iptr++) {
 		addr = &((unsigned char *) image->data)[ZINDEX16(x, y, image)];
 		addr[1] = (unsigned char)(pixels[*iptr] >> 8);
 		addr[0] = (unsigned char)(pixels[*iptr]);
@@ -3079,8 +3081,8 @@ GRA(Pixel *, pixels)
     register int x, y;
 
     iptr = pixelindex;
-    for (y = 0; y < height; y++)
-	for (x = 0; x < width; x++, iptr++)
+    for (y = 0; y < (int) height; y++)
+	for (x = 0; x < (int) width; x++, iptr++)
 	    image->data[ZINDEX8(x, y, image)] = (char)pixels[*iptr];
 }
 
@@ -3106,8 +3108,8 @@ GRA(Pixel *, pixels)
     else {
 	iptr = pixelindex;
 	if (image->bitmap_bit_order == MSBFirst)
-	    for (y = 0; y < height; y++)
-		for (x = 0; x < width; x++, iptr++) {
+	    for (y = 0; y < (int) height; y++)
+		for (x = 0; x < (int) width; x++, iptr++) {
 		    yoff = ZINDEX1(x, y, image);
 		    xoff = x & 7;
 		    bit = 0x80 >> xoff;
@@ -3117,8 +3119,8 @@ GRA(Pixel *, pixels)
 			image->data[yoff] &= ~bit;
 		}
 	else
-	    for (y = 0; y < height; y++)
-		for (x = 0; x < width; x++, iptr++) {
+	    for (y = 0; y < (int) height; y++)
+		for (x = 0; x < (int) width; x++, iptr++) {
 		    yoff = ZINDEX1(x, y, image);
 		    xoff = x & 7;
 		    bit = 1 << xoff;

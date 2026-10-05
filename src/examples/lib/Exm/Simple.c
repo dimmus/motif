@@ -68,7 +68,7 @@ static XmConst int FIND_NATURAL_SIZE = 0;
 /* Declare all static functions. */
 static void ClassInitialize(void);
 static void ClassPartInitialize (
-                        WidgetClass widgetClass );
+                        WidgetClass widget_class );
 static void Initialize(
                         Widget request_w,
                         Widget new_w,
@@ -320,10 +320,10 @@ ClassInitialize( void )
  *****************************************************************************/
 static void
 ClassPartInitialize (
-        WidgetClass widgetClass
+        WidgetClass widget_class
                     )
 {
- ExmSimpleWidgetClass wc = (ExmSimpleWidgetClass)widgetClass;
+ ExmSimpleWidgetClass wc = (ExmSimpleWidgetClass)widget_class;
  ExmSimpleWidgetClass sc = (ExmSimpleWidgetClass) wc->core_class.superclass;
 
  /* The following code allows subclasses of ExmSimple to inherit certain

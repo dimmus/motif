@@ -74,7 +74,7 @@ static void p_motifanim_speed(Widget widget, int * tag, XmScaleCallbackStruct * 
 static void p_motifanim_draw(Widget widget, int * tag, XmAnyCallbackStruct * callback_data);
 static void p_motifanim_exit(Widget widget, char * tag, XmAnyCallbackStruct * callback_data);
 static void p_motifanim_help(Widget w, XtPointer client_data, XtPointer call_data);
-static void InitAnim();
+static void InitAnim(void);
 
        /* binding of uil procedure names with C functions */
 static MRMRegisterArg	regvec[] = {
@@ -211,7 +211,7 @@ int main(int argc, String argv[])
 }
 
 
-static void InitAnim()
+static void InitAnim(void)
 {
 
     XGCValues gcv;
@@ -285,7 +285,7 @@ static Boolean fstep(XtPointer client_data)
 	speedcount = 0 ;
 	XClearArea(XtDisplay(drawingArea), XtWindow(drawingArea),
 		   xanim, yanim, wanim[ianim], hanim[ianim] , False);
-	xanim = (xanim > width)?(-wanim[ianim]):(xanim+step_size) ;
+	xanim = (xanim > width)?(-(int)wanim[ianim]):(xanim+step_size) ;
 	ianim = (ianim == nimage)?0:(ianim+1);
 	XCopyArea(XtDisplay(drawingArea), panim[ianim], XtWindow(drawingArea),
 		  gc, 0, 0, wanim[ianim], hanim[ianim],

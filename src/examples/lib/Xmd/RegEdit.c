@@ -628,7 +628,8 @@ static int
 FindChildren(Widget parent, Widget **children, Boolean normal, Boolean popup)
 {
     CompositeWidget cw = (CompositeWidget) parent;
-    int i, num_children, current = 0;
+    Cardinal i;
+    int num_children, current = 0;
 
     num_children = 0;
 
@@ -1464,7 +1465,7 @@ _XEditResResetStream(ProtocolStream *stream)
 static Boolean
 _XEditResGet8(ProtocolStream *stream, unsigned char *val)
 {
-    if (stream->size < (stream->current - stream->top))
+    if (stream->size < (unsigned long) (stream->current - stream->top))
 	return(FALSE);
 
     *val = *((stream->current)++);

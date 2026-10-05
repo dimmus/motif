@@ -54,4 +54,16 @@ typedef struct {
 
 extern OptionsRec options;
 
+/* actions.c */
+extern void NewPage(Widget, XtPointer, XmPushButtonCallbackStruct *);
+extern void DeletePage(Widget, XtPointer, XmPushButtonCallbackStruct *);
+extern void EditPage(Widget, XtPointer, XmPushButtonCallbackStruct *);
+extern void SaveIt(Widget, char *, XmPushButtonCallbackStruct *);
+extern void FixPages(void);
+
+/* io.c */
+extern Page AllocPage(void);
+extern void ReadDB(char *);
+extern void SaveDB(char *);
+
 #endif /* Page_H */

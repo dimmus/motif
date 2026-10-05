@@ -550,7 +550,7 @@ process_printer_list(Widget w)
   XmdPrintWidget pw = (XmdPrintWidget)w;
   char *str = pw -> print.printer_list;
   char c;
-  int n;
+  Cardinal n;
   int count;
   Boolean is_path;
   char buf[128];
@@ -607,7 +607,7 @@ process_printer_list(Widget w)
   }
 
   /* Now put new strings in */
-  for(count = 0; count < pw -> print.num_printers; count++) {
+  for(count = 0; count < (int) pw -> print.num_printers; count++) {
     XmString label_str;
 
     label_str = XmStringCreateLocalized(pw -> print.printers[count]);
@@ -659,7 +659,7 @@ do_print_cb(Widget button, Widget pw, XtPointer ignore)
   XmdPrintWidget print = (XmdPrintWidget) pw;
   XmdPrintCallbackStruct cbstruct;
   Widget history;
-  int i;
+  Cardinal i;
   char* temp;
 
   cbstruct.reason = XmCR_OK;

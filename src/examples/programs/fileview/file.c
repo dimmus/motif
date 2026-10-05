@@ -68,7 +68,7 @@ char * ReadFile(FILE * file, int *filesize)
 /*   fgetpos(file, (fpos_t *) filesize);*/
    rewind(file);
    buffer = (char *) XtMalloc(*filesize+1);
-   if (fread(buffer, 1, *filesize, file) == *filesize ) {
+   if (fread(buffer, 1, *filesize, file) == (size_t) *filesize ) {
       buffer[*filesize] = '\0';
       return buffer;
    }

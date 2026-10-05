@@ -63,7 +63,7 @@ targetConvertCallback(Widget wid, XtPointer ignore,
     if (cs -> location_data == NULL) {
       WidgetList selected;
       Cardinal count;
-      int i;
+      Cardinal i;
 
       /* First get list of selected items. */
       XtVaGetValues(fileviewer,

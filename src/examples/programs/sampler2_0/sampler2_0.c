@@ -171,7 +171,7 @@ NULL
 int main(int argc, char *argv[])
 {
     XtAppContext app_context;
-    int i ;
+    Cardinal i ;
     Widget mainw, nb ;
     NotebookDataStruct nb_data ;
     XmNotebookCallbackStruct nb_call_data ;

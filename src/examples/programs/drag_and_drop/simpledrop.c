@@ -369,7 +369,7 @@ static void SomethingDropped(Widget dropSite, XtPointer client_data,
       call_data->operation = XmDROP_COPY;
       this->drop_x = call_data->x;
       this->drop_y = call_data->y;
-      for (i = 0; i < num_targets; i++ )
+      for (i = 0; i < (int) num_targets; i++ )
 	if (exports[i] == StringAtom
 	    || exports[i] == CTAtom
 	    || exports[i] == PixmapAtom) {

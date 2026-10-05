@@ -1296,7 +1296,7 @@ PreferredTarget(
  int string_index = -1;
  int text_index = -1;
 
-  for (n = 0; n < num_targets; n++) {
+  for (n = 0; n < (int) num_targets; n++) {
     if (targets[n] == MOTIF_C_S) cs_index = n;
     if (targets[n] == COMPOUND_TEXT) ct_index = n;
     if (targets[n] == TEXT) text_index = n;

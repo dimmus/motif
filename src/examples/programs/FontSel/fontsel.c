@@ -28,11 +28,6 @@
 Widget G_font = NULL;
 
 /**************************************************************
- *		FORWARD DECLARATIONS
- **************************************************************/
-Widget CreateDemoForm(Widget);
-
-/**************************************************************
  *		DEFINES
  **************************************************************/
 
@@ -68,7 +63,7 @@ static String fallbacks[] = {
  * Returns:       nothing
  *
  */
-void
+static void
 InitializeDemoForm(Widget form)
 {
     Widget w;

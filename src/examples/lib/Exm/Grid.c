@@ -63,7 +63,7 @@ static void GetDialogTitle(
                         int resource,
                         XtArgVal *value) ;
 static void ClassPartInitialize(
-                        WidgetClass widgetClass);
+                        WidgetClass widget_class);
 static void Initialize(
                         Widget request_w,
                         Widget new_w,
@@ -415,10 +415,10 @@ GetDialogTitle(
  ****************************************************************************/
 static void
 ClassPartInitialize (
-        WidgetClass widgetClass
+        WidgetClass widget_class
                     )
 {
- ExmGridWidgetClass wc = (ExmGridWidgetClass)widgetClass;
+ ExmGridWidgetClass wc = (ExmGridWidgetClass)widget_class;
  ExmGridWidgetClass sc = (ExmGridWidgetClass)wc->core_class.superclass;
 
   /* The following code allows subclasses of ExmGrid to inherit three of
@@ -432,11 +432,11 @@ ClassPartInitialize (
 
   /* Install the XmQTdialogShellSavyy trait on this class and on
      all its future subclasses. */
-    XmeTraitSet(widgetClass, XmQTdialogShellSavvy, (XtPointer) &gridDST);
+    XmeTraitSet(widget_class, XmQTdialogShellSavvy, (XtPointer) &gridDST);
 
   /* Install the XmQTspecifyRenderTable trait on this class and on
      all its future subclasses. */
-    XmeTraitSet(widgetClass, XmQTspecifyRenderTable, (XtPointer) &gridSRTT);
+    XmeTraitSet(widget_class, XmQTspecifyRenderTable, (XtPointer) &gridSRTT);
 }
 
 
@@ -929,7 +929,8 @@ Layout (
  Dimension TotalHeightOfGridWidget = gw->core.height;
  Dimension AvailWidthForChildren = 1, AvailHeightForChildren = 1;
  Dimension WidthAllottedEachChild, HeightAllottedEachChild;
- int i, row, column;
+ Cardinal i;
+ int row, column;
 
     /* Lay out the children that ExmGrid is currently managing.
        Each child will be placed somewhere on the rowxcolumn grid. */
@@ -1020,7 +1021,7 @@ CalcSize (
  ExmGridWidget gw = (ExmGridWidget) wid ;
  Dimension maxWidth = 1;
  Dimension maxHeight = 1;
- int i;
+ Cardinal i;
 
   /* Examine each of Grid's children.  Find the biggest child.  The
      ideal size of the Grid will be large enough to accomodate the

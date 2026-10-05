@@ -57,7 +57,7 @@ int  maxIcons = 0;
 int  validIcons = 0;
 WidgetList IconGadgets = NULL;
 
-static void doOptionMenu();
+static void doOptionMenu(void);
 
 static void getIcons(int ind, Pixmap *icon, Pixmap *mask,
 		     Pixmap *sicon, Pixmap *smask);
@@ -73,7 +73,7 @@ qsCompare(void *xx, void *yy)
   return(strcmp(x -> name, y -> name));
 }
 
-static void SortChildren()
+static void SortChildren(void)
 {
   int i;
 
@@ -89,7 +89,7 @@ static void SortChildren()
 
 /* Determine real full pathname */
 /* This code is UNIX pathname dependent */
-char*
+static char*
 expandPath(char *dirname)
 {
   char buf[1024];
@@ -452,7 +452,7 @@ static void readIcon(char * str, Pixmap * icon, Pixmap * mask, Pixel fg, Pixel b
       int len = strlen(str);
       if (len > 4) {
         int copy_len = len - 4;
-        if (copy_len >= sizeof(msk)) copy_len = sizeof(msk) - 1;
+        if (copy_len >= (int) sizeof(msk)) copy_len = sizeof(msk) - 1;
         snprintf(msk, sizeof(msk), "%.*s_m.xpm", copy_len, str);
       } else {
         strcpy(msk, str);
@@ -554,7 +554,7 @@ getIcons(int ind, Pixmap *icon, Pixmap *mask, Pixmap *sicon, Pixmap *smask)
 /* Break off components and stuff into the pushbuttons */
 /* This code is entirely UNIX pathname dependent */
 
-static void doOptionMenu()
+static void doOptionMenu(void)
 {
   int i;
   XmString stemp;

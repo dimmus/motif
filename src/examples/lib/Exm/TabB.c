@@ -260,7 +260,7 @@ static XmOffsetPtr offsets;
  *      instantiated.
  *
  ************************************************************************/
-static void ClassInitialize()
+static void ClassInitialize(void)
 {
  /* Register new representation types.  These new representation types
     will hold the names of the valid values of the ExmNopenSide resource. */

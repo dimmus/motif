@@ -376,7 +376,7 @@ Destroy(
         Widget wid )
 {
   XmdHelpWidget help = (XmdHelpWidget) wid;
-  int i;
+  Cardinal i;
 
   /* Cleanup internal allocations */
   for(i = 0; i < help -> help.num_titles; i++) {
@@ -492,7 +492,7 @@ Layout(
 {
   XmdHelpWidget help = (XmdHelpWidget) wid;
   Widget child;
-  int i;
+  Cardinal i;
   int x;
   int y;
   int spacing = help -> help.spacing;
@@ -664,7 +664,7 @@ CalcSize (
          )
 {
   XmdHelpWidget hw = (XmdHelpWidget) wid ;
-  int i;
+  Cardinal i;
   int spacing = hw -> help.spacing;
   int width = 0;
   int height = 1;
@@ -748,7 +748,7 @@ ReadHelpFile(Widget w)
   char *filename;
   FILE *input;
   char line[256];
-  int i;
+  Cardinal i;
   Widget tab;
   Arg args[10];
   int n;
@@ -1024,7 +1024,7 @@ page_change(Widget w, XtPointer help_w, XmNotebookCallbackStruct *cb)
 
   if (index < 0) index = 0;
 
-  if (index >= help -> help.num_titles) return;
+  if ((Cardinal) index >= help -> help.num_titles) return;
 
   XtVaSetValues(help -> help.text_display,
 #ifdef USE_LABEL
@@ -1098,7 +1098,7 @@ XmdGotoHelpItem(Widget w, int item, Widget help)
   Widget notebook = XtNameToWidget(help, "*Notebook");
   XmdHelpWidget hw = (XmdHelpWidget) help;
 
-  if (item < 0 || item >= hw -> help.num_titles) return;
+  if (item < 0 || (Cardinal) item >= hw -> help.num_titles) return;
 
   XtVaSetValues(notebook, XmNcurrentPageNumber, item + 1, NULL, NULL);
 }

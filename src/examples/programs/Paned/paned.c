@@ -21,17 +21,13 @@
 #include <Xm/Paned.h>
 #include <Xm/ToggleB.h>
 
+#include "paned.h"
+
 /**************************************************************
  *		GLOBALS
  **************************************************************/
 Widget G_paned = NULL;
 Widget G_form = NULL;
-
-/**************************************************************
- *		FORWARD DECLARATIONS
- **************************************************************/
-Widget Createform(Widget);
-Widget Createpaned(Widget);
 
 /**************************************************************
  *		DEFINES
@@ -72,8 +68,8 @@ static String fallbacks[] = {
  * Arguments:     This is an XtCallback
  * Returns:       Nothing
  */
-void
-InitControls()
+static void
+InitControls(void)
 {
     Arg args[5];
     Cardinal argcnt;

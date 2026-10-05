@@ -37,6 +37,7 @@
 #include <Exm/Grid.h>
 #include <Exm/TabB.h>
 #include <Exm/Panner.h>
+#include <Exm/ExmMrm.h>
 
 /**********************************************************************
  *
@@ -44,7 +45,7 @@
  *
  *********************************************************************/
 
-int ExmMrmInitialize()
+int ExmMrmInitialize(void)
 {
     MrmRegisterClass (MrmwcUnknown, "ExmSimple",
 			"ExmCreateSimple", ExmCreateSimple,

@@ -30,13 +30,7 @@ void CreateLabel(Widget , XtPointer , XtPointer );
 /**************************************************************
 External functions
 **************************************************************/
-#define ARGLIST(p)	(
-#define ARG(a, b)	a b,
-#define GRA(a, b)	a b)
-extern Pixmap XPM_PIXMAP
-ARGLIST((w, pixmapName))
-ARG(Widget, w)
-GRA(char **, pixmapName);
+#include "misc.h"
 
 
 /*

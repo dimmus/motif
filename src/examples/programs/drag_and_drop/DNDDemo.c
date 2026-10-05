@@ -700,7 +700,7 @@ CheckTargets(Widget w, Display *display, Boolean *rectFound,
     *rectFound = *bgFound = *pixFound = False;
 
     /* search through the export targets */
-    for (n = 0; n < numExportTargets; n++) {
+    for (n = 0; n < (int) numExportTargets; n++) {
 
         if (exportTargets[n] == MY_RECT)
             *rectFound = True;
@@ -1114,7 +1114,7 @@ CancelDrop(Widget w, XtPointer call, XtPointer ignore)
 }
 
 
-void
+static void
 ChangeOperation(Widget widget,
 		                void *client_data,
 		XmAnyCallbackStruct *call_data)

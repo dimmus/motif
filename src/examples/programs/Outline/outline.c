@@ -478,7 +478,7 @@ opened or closed. To use this callback, press the Node State Callback toggle.",
  * Arguments:     This is an XtCallback
  * Returns:       Nothing
  */
-void NodeStateCB(Widget w, XtPointer client, XtPointer call)
+static void NodeStateCB(Widget w, XtPointer client, XtPointer call)
 {
     Arg args[5];
     Cardinal argcnt;

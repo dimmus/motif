@@ -30,7 +30,7 @@
 #include <Xm/Xm.h>
 #include "Help.h"
 
-void quitCB( Widget widget, char *tag, XmAnyCallbackStruct *callback_data )
+static void quitCB( Widget widget, char *tag, XmAnyCallbackStruct *callback_data )
 {
   exit(0);
 }

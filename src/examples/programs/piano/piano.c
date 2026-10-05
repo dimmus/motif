@@ -332,7 +332,7 @@ Settable resources are:\\n\
 /*----------------------------------------------------------------*
  |                         MyErrorHandler                         |
  *----------------------------------------------------------------*/
-int MyErrorHandler (Display *display, XErrorEvent *errorEvent)
+static int MyErrorHandler (Display *display, XErrorEvent *errorEvent)
 {
   /* this is most likely invoked when the frequency selected is out of range. */
   printf("X Error!\n");
@@ -344,7 +344,7 @@ int MyErrorHandler (Display *display, XErrorEvent *errorEvent)
 /*----------------------------------------------------------------*
  |                             DoQuit                             |
  *----------------------------------------------------------------*/
-void DoQuit ()
+static void DoQuit (void)
 {
   exit(0);
 }
@@ -353,7 +353,7 @@ void DoQuit ()
 /*----------------------------------------------------------------*
  |                             DoHelp                             |
  *----------------------------------------------------------------*/
-void DoHelp ()
+static void DoHelp (void)
 {
   static Widget dlog = NULL;
   Arg           args[3];
@@ -373,7 +373,7 @@ void DoHelp ()
 /*----------------------------------------------------------------*
  |                             MenuCB                             |
  *----------------------------------------------------------------*/
-void MenuCB (Widget w, XtPointer clientData, XtPointer callData)
+static void MenuCB (Widget w, XtPointer clientData, XtPointer callData)
 {
   switch ((long)clientData)
     {
@@ -386,7 +386,7 @@ void MenuCB (Widget w, XtPointer clientData, XtPointer callData)
 /*--------------------------------------------------------------------*
  |                            DoAddVoiceCB                            |
  *--------------------------------------------------------------------*/
-void DoAddVoiceCB (Widget w, XtPointer clientData, XtPointer callData)
+static void DoAddVoiceCB (Widget w, XtPointer clientData, XtPointer callData)
 {
   XmSelectionBoxCallbackStruct *cb = (XmSelectionBoxCallbackStruct *)callData;
   String        dspName;
@@ -498,7 +498,7 @@ void ClearVoiceCB (Widget w, XtPointer clientData, XtPointer callData)
 /*--------------------------------------------------------------------*
  |                              ArmKey                                |
  *--------------------------------------------------------------------*/
-void ArmKey (XtPointer clientData, XtIntervalId *id)
+static void ArmKey (XtPointer clientData, XtIntervalId *id)
 {
   Widget key_widget = (Widget) clientData;
   XEvent event;
@@ -514,7 +514,7 @@ void ArmKey (XtPointer clientData, XtIntervalId *id)
 /*--------------------------------------------------------------------*
  |                            DisarmKey                               |
  *--------------------------------------------------------------------*/
-void DisarmKey (XtPointer clientData, XtIntervalId *id)
+static void DisarmKey (XtPointer clientData, XtIntervalId *id)
 {
   Widget key_widget = (Widget) clientData;
   XEvent event;
@@ -529,7 +529,7 @@ void DisarmKey (XtPointer clientData, XtIntervalId *id)
  | based on milliseconds.  Add a timeout for each note to play, then  |
  | let things go.                                                     |
  *--------------------------------------------------------------------*/
-void PlayNotes (XtPointer clientData, XtIntervalId *id)
+static void PlayNotes (XtPointer clientData, XtIntervalId *id)
 {
   NoteRec *note = (NoteRec *)clientData;
   XEvent event;
@@ -590,7 +590,7 @@ void PlayAllCB (Widget staff, XtPointer clientData, XtPointer callData)
 /*--------------------------------------------------------------------*
  |                            DoSaveVoiceCB                           |
  *--------------------------------------------------------------------*/
-void DoSaveVoiceCB (Widget w, XtPointer clientData, XtPointer callData)
+static void DoSaveVoiceCB (Widget w, XtPointer clientData, XtPointer callData)
 {
   XmFileSelectionBoxCallbackStruct *fdata =
     (XmFileSelectionBoxCallbackStruct *)callData;
@@ -632,7 +632,7 @@ void DoSaveVoiceCB (Widget w, XtPointer clientData, XtPointer callData)
 /*--------------------------------------------------------------------*
  |                            SaveVoiceCB                             |
  *--------------------------------------------------------------------*/
-void SaveVoiceCB (Widget w, XtPointer clientData, XtPointer callData)
+static void SaveVoiceCB (Widget w, XtPointer clientData, XtPointer callData)
 {
   Widget        staff = (Widget)clientData;
   static Widget fsdlog = NULL;
@@ -663,7 +663,7 @@ void SaveVoiceCB (Widget w, XtPointer clientData, XtPointer callData)
 /*--------------------------------------------------------------------*
  |                           DoLoadVoiceCB                            |
  *--------------------------------------------------------------------*/
-void DoLoadVoiceCB (Widget w, XtPointer clientData, XtPointer callData)
+static void DoLoadVoiceCB (Widget w, XtPointer clientData, XtPointer callData)
 {
   XmFileSelectionBoxCallbackStruct *fdata =
     (XmFileSelectionBoxCallbackStruct *)callData;
@@ -741,7 +741,7 @@ void DoLoadVoiceCB (Widget w, XtPointer clientData, XtPointer callData)
 /*--------------------------------------------------------------------*
  |                            LoadVoiceCB                             |
  *--------------------------------------------------------------------*/
-void LoadVoiceCB (Widget w, XtPointer clientData, XtPointer callData)
+static void LoadVoiceCB (Widget w, XtPointer clientData, XtPointer callData)
 {
   Widget        staff = (Widget)clientData;
   static Widget fsdlog = NULL;
@@ -1154,7 +1154,7 @@ void SetNoteCB (Widget w, XtPointer clientData, XtPointer callData)
 /*--------------------------------------------------------------------*
  |                             NoteNumber                             |
  *--------------------------------------------------------------------*/
-int NoteNumber (int ledgerLine, Boolean isASharp)
+static int NoteNumber (int ledgerLine, Boolean isASharp)
 {
    int n = 0;
 
@@ -1184,7 +1184,7 @@ int NoteNumber (int ledgerLine, Boolean isASharp)
 /*--------------------------------------------------------------------*
  |                         DeleteNoteAtPosn                           |
  *--------------------------------------------------------------------*/
-void DeleteNoteAtPosn (Widget staff, int x, int y)
+static void DeleteNoteAtPosn (Widget staff, int x, int y)
 {
    int        ledgerLine, noteIndex, i;
    Dimension  height;
@@ -1383,7 +1383,7 @@ void PostStaffMenu (Widget w, XtPointer clientData, XEvent *event, Boolean *disp
 
 
    XtVaGetValues(menu, XmNwhichButton, &button, NULL);
-   if (btnEvent->button == button)
+   if ((int) btnEvent->button == button)
      {
 	XmMenuPosition(menu, btnEvent);
 	XtManageChild(menu);
@@ -1514,7 +1514,7 @@ void CvtStrToFloat (XrmValue *args, Cardinal *nargs, XrmValue *fromVal, XrmValue
  | .keyWidth:      (int)                                          |
  |     -- white key pixel width. black keys are calculated.       |
  *----------------------------------------------------------------*/
-AppData *GetAppResources (Widget w)
+static AppData *GetAppResources (Widget w)
 {
    AppData *app_data;
 
@@ -1534,7 +1534,7 @@ AppData *GetAppResources (Widget w)
 /*--------------------------------------------------------------------*
  |                         GetNoteImagePixmap                         |
  *--------------------------------------------------------------------*/
-Pixmap GetNoteImagePixmap(Widget w, NoteType note)
+static Pixmap GetNoteImagePixmap(Widget w, NoteType note)
 {
    Pixel    fg, bg;
    Display *dsp = XtDisplay(w);
@@ -1573,7 +1573,7 @@ Pixmap GetNoteImagePixmap(Widget w, NoteType note)
 /*--------------------------------------------------------------------*
  |                         GetNoteMaskPixmap                          |
  *--------------------------------------------------------------------*/
-Pixmap GetNoteMaskPixmap(Widget w, NoteType note)
+static Pixmap GetNoteMaskPixmap(Widget w, NoteType note)
 {
    Pixel    fg, bg;
    Display *dsp = XtDisplay(w);
@@ -1610,7 +1610,7 @@ Pixmap GetNoteMaskPixmap(Widget w, NoteType note)
 /*--------------------------------------------------------------------*
  |                           BuildNoteTable                           |
  *--------------------------------------------------------------------*/
-void BuildNoteTable (Widget w)
+static void BuildNoteTable (Widget w)
 {
    NoteType i;
 
@@ -1625,7 +1625,7 @@ void BuildNoteTable (Widget w)
 /*--------------------------------------------------------------------*
  |                          CreateMenuBar                             |
  *--------------------------------------------------------------------*/
-void CreateMenuBar (Widget parent)
+static void CreateMenuBar (Widget parent)
 {
   Cardinal n;
   Arg      args[10];

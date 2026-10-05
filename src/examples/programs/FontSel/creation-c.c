@@ -31,7 +31,7 @@
  *     Registers all the converters for all widgets.
  */
 static void
-BxRegisterConverters()
+BxRegisterConverters(void)
 {
     XtInitializeWidgetClass(xmSeparatorWidgetClass);
     XtInitializeWidgetClass(xmPushButtonWidgetClass);
@@ -50,16 +50,6 @@ BxRegisterConverters()
  */
 extern XtPointer CONVERT(void);
 
-
-/*
- * Callback procedure declarations
- */
-extern void CreateHypeLabel(Widget w, XtPointer client, XtPointer call);
-extern void ShowFontValChCB(Widget w, XtPointer client, XtPointer call);
-extern void ExplainCB(Widget w, XtPointer client, XtPointer call);
-extern void ShowCurFont(Widget w, XtPointer client, XtPointer call);
-extern void ShowOtherCB(Widget w, XtPointer client, XtPointer call);
-extern void QuitCB(Widget w, XtPointer client, XtPointer call);
 
 /*
  * Function: CreateDemoForm()

@@ -57,9 +57,7 @@ Widget editDialog = 0, deleteDialog = 0;
 
 void SetPage(int);
 void AdjustPages(int, int);
-void FixPages();
 void PageChange(Widget w, XtPointer i, XmNotebookCallbackStruct *cs);
-Page AllocPage();
 char* Trim(char*);
 extern void SaveDB(char*);
 
@@ -85,7 +83,7 @@ NewPage(Widget w, XtPointer i, XmPushButtonCallbackStruct *cs)
   SetPage(currentPage);
 }
 
-void
+static void
 DoDeletePage(Widget w, XtPointer i, XmPushButtonCallbackStruct *cs)
 {
   Arg args[2];
@@ -144,7 +142,7 @@ DeletePage(Widget w, XtPointer i, XmPushButtonCallbackStruct *cs)
 
 Widget labelEditW, majorTabW, minorTabW;
 
-void
+static void
 DoEditPage(Widget w, XtPointer ig, XmPushButtonCallbackStruct *cs)
 {
   char *temp;
@@ -391,7 +389,7 @@ AdjustPages(int startpage, int ins)
   }
 }
 
-void FixPages() {
+void FixPages(void) {
   int i;
   Arg args[2];
 

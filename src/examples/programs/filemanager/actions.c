@@ -151,7 +151,7 @@ deleteItem(Widget widget, XtPointer ignore, XtPointer ignore2)
 {
   WidgetList selected;
   Cardinal count;
-  int i;
+  Cardinal i;
 
   /* First get list of selected items. */
   XtVaGetValues(fileviewer,

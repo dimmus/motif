@@ -102,7 +102,7 @@ static void    expose_callback(Widget widget, XtPointer tag, XtPointer callback_
 static void    speed_callback(Widget widget, XtPointer tag, XtPointer callback_data);
 static void    NextBitmap(XtPointer client_data, XtIntervalId *id);
 
-int delayInterval(int speed)
+static int delayInterval(int speed)
 {
   double maxDelay = 1000.0;
   double val      = (double)(abs(speed));

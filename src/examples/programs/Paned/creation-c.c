@@ -17,13 +17,15 @@
 #include <Xm/RowColumn.h>
 #include <Xm/Paned.h>
 
+#include "paned.h"
+
 
 /*
  * Function: BxRegisterConverters()
  *     Registers all the converters for all widgets.
  */
 static void
-BxRegisterConverters()
+BxRegisterConverters(void)
 {
     XtInitializeWidgetClass(xmPushButtonWidgetClass);
     XtInitializeWidgetClass(xmToggleButtonWidgetClass);
@@ -42,17 +44,6 @@ BxRegisterConverters()
 extern XtPointer CONVERT(void);
 extern void MENU_POST(Widget p, XtPointer mw, XEvent *ev, Boolean *dispatch);
 
-
-/*
- * Callback procedure declarations
- */
-extern void CreateLabel(Widget w, XtPointer client, XtPointer call);
-extern void OtherResCB(Widget w, XtPointer client, XtPointer call);
-extern void ConstraintResCB(Widget w, XtPointer client, XtPointer call);
-extern void OrientChValCB(Widget w, XtPointer client, XtPointer call);
-extern void SepValChCB(Widget w, XtPointer client, XtPointer call);
-extern void QuitCB(Widget w, XtPointer client, XtPointer call);
-extern void SashValChCB(Widget w, XtPointer client, XtPointer call);
 
 /*
  * Function: Createpaned()

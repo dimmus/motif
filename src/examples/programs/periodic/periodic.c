@@ -763,7 +763,7 @@ static Boolean toggle_boolean[] = {
 #define RESET_VALUE(w, list, value)				\
   {								\
     int pos;							\
-    for (pos = 0; pos < XtNumber(list); pos++)			\
+    for (pos = 0; pos < (int) XtNumber(list); pos++)		\
       if (list[pos] == value)					\
 	{							\
 	  XtVaSetValues(w, XmNselectedPosition, pos + 1, NULL);	\
