@@ -452,7 +452,9 @@ target_compile_definitions(motif_build_flags INTERFACE
   $<$<PLATFORM_ID:SunOS>:__EXTENSIONS__>
   ${MOTIF_CONFIG_DEFINITIONS}
 )
-target_compile_options(motif_build_flags INTERFACE ${MOTIF_C_WARNINGS})
+# The warnings are C ones; the only C++ in the tree is a test of the headers.
+target_compile_options(motif_build_flags INTERFACE
+  "$<$<COMPILE_LANGUAGE:C>:${MOTIF_C_WARNINGS}>")
 
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/include/Xm ${CMAKE_BINARY_DIR}/include/Mrm)
 

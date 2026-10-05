@@ -9,8 +9,9 @@
  *
  *   uidload [--buffer] [--procs file.uil]... file.uid... [check ...]
  *
- * --buffer reads the (single) file into memory and opens it with
- * MrmOpenHierarchyFromBufferWithSize instead of from the file.
+ * --buffer maps the (single) file into memory, read-only, and opens it
+ * with MrmOpenHierarchyFromBufferWithSize instead of from the file: Mrm
+ * takes the buffer as const, and a write to it would fault.
  *
  * --procs registers every procedure that file.uil declares, so that
  * callbacks resolve; they do nothing.
@@ -23,10 +24,14 @@
  * Exits 0 on success, 1 on failure and 77 when there is no display.
  */
 #include <ctype.h>
+#include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <strings.h>
+#include <unistd.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
 #include <X11/Intrinsic.h>
 #include <X11/Shell.h>
 #include <Xm/Xm.h>
@@ -219,27 +224,24 @@ static void pump(Display *dpy)
 	}
 }
 
-static unsigned char *read_file(const char *path, size_t *size)
+static const unsigned char *map_file(const char *path, size_t *size)
 {
-	FILE *f = fopen(path, "rb");
-	unsigned char *buf;
-	long len;
+	struct stat st;
+	void *map;
+	int fd = open(path, O_RDONLY);
 
-	if (!f)
+	if (fd < 0)
 		return NULL;
-	if (fseek(f, 0, SEEK_END) || (len = ftell(f)) <= 0 ||
-	    fseek(f, 0, SEEK_SET)) {
-		fclose(f);
+	if (fstat(fd, &st) || st.st_size <= 0) {
+		close(fd);
 		return NULL;
 	}
-	buf = malloc((size_t)len);
-	if (buf && fread(buf, 1, (size_t)len, f) != (size_t)len) {
-		free(buf);
-		buf = NULL;
-	}
-	fclose(f);
-	*size = (size_t)len;
-	return buf;
+	map = mmap(NULL, (size_t)st.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
+	close(fd);
+	if (map == MAP_FAILED)
+		return NULL;
+	*size = (size_t)st.st_size;
+	return map;
 }
 
 /* The names of the resources of one group indexed in the hierarchy */
@@ -264,7 +266,7 @@ static int fetch_literals(MrmHierarchy h, Display *dpy)
 	if (!names)
 		return 0;
 	for (i = 0; i < UrmPlistNum(names); i++) {
-		String name = (String)UrmPlistPtrN(names, i);
+		const char *name = (const char *)UrmPlistPtrN(names, i);
 		XtPointer value = NULL;
 		MrmCode type = 0;
 		Cardinal rc;
@@ -289,7 +291,7 @@ static int fetch_literals(MrmHierarchy h, Display *dpy)
 }
 
 struct fetched {
-	char *name;
+	const char *name;
 	Widget w;
 };
 
@@ -404,7 +406,7 @@ static int check(struct fetched *f, int n, const char *spec)
 int main(int argc, char **argv)
 {
 	const char *display = getenv("DISPLAY");
-	unsigned char *buffer = NULL;
+	const unsigned char *buffer = NULL;
 	String paths[16];
 	int n_paths = 0;
 	struct fetched *fetched;
@@ -415,7 +417,8 @@ int main(int argc, char **argv)
 	Display *dpy;
 	int use_buffer = 0, first, i, n_fetched = 0, n_failed = 0;
 	int n_literals, ok = 1, xargc = 1;
-	char *xargv[] = { "uidload", NULL };
+	static char argv0[] = "uidload";
+	char *xargv[] = { argv0, NULL };
 	size_t size = 0;
 	Widget parent;
 
@@ -455,7 +458,7 @@ int main(int argc, char **argv)
 	XSetErrorHandler(x_error_handler);
 
 	if (use_buffer) {
-		buffer = read_file(paths[0], &size);
+		buffer = map_file(paths[0], &size);
 		if (!buffer) {
 			fprintf(stderr, "uidload: cannot read %s\n", paths[0]);
 			return 1;
@@ -478,8 +481,7 @@ int main(int argc, char **argv)
 	}
 
 	/* A manager to fetch into, so that gadgets have a valid parent */
-	parent = XmCreateBulletinBoard(top, "uidload_parent", NULL, 0);
-	XtManageChild(parent);
+	parent = XmVaCreateManagedBulletinBoard(top, "uidload_parent", NULL);
 
 	names = index_names(h, URMgWidget);
 	if (!names)
@@ -487,7 +489,7 @@ int main(int argc, char **argv)
 
 	fetched = calloc((size_t)UrmPlistNum(names) + 1, sizeof *fetched);
 	for (i = 0; i < UrmPlistNum(names); i++) {
-		char *name = (char *)UrmPlistPtrN(names, i);
+		const char *name = (const char *)UrmPlistPtrN(names, i);
 		Widget w = NULL;
 		Cardinal rc;
 
@@ -524,7 +526,8 @@ int main(int argc, char **argv)
 	UrmPlistFree(names);
 	free(fetched);
 	MrmCloseHierarchy(h);
-	free(buffer);
+	if (buffer)
+		munmap((void *)buffer, size);
 	XtDestroyApplicationContext(app);
 	for (i = 0; i < n_procs; i++)
 		free(procs[i].name);
