@@ -44,8 +44,8 @@ Boolean XmToggleButtonGadgetGetState(Widget w);
 void XmToggleButtonGadgetSetState(Widget w, Boolean newstate, Boolean notify);
 Boolean XmToggleButtonGadgetSetValue(Widget w, XmToggleButtonState newstate, Boolean notify);
 Widget XmCreateToggleButtonGadget(Widget parent, char *name, Arg *arglist, Cardinal argCount);
-Widget XmVaCreateToggleButtonGadget(Widget parent, char *name, ...);
-Widget XmVaCreateManagedToggleButtonGadget(Widget parent, char *name, ...);
+Widget XmVaCreateToggleButtonGadget(Widget parent, const char *name, ...);
+Widget XmVaCreateManagedToggleButtonGadget(Widget parent, const char *name, ...);
 /********    End Public Function Declarations    ********/
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

@@ -43,8 +43,8 @@ extern Widget XmCreatePushButtonGadget(Widget parent,
                                        char *name,
                                        ArgList arglist,
                                        Cardinal argcount);
-extern Widget XmVaCreatePushButtonGadget(Widget parent, char *name, ...);
-extern Widget XmVaCreateManagedPushButtonGadget(Widget parent, char *name, ...);
+extern Widget XmVaCreatePushButtonGadget(Widget parent, const char *name, ...);
+extern Widget XmVaCreateManagedPushButtonGadget(Widget parent, const char *name, ...);
 /********    End Public Function Declarations    ********/
 #  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

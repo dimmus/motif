@@ -42,8 +42,8 @@ Widget XmCreateDataField(Widget, String, ArgList, Cardinal);
 /*
  * Variable argument list functions
  */
-extern Widget XmVaCreateDataField(Widget parent, char *name, ...);
-extern Widget XmVaCreateManagedDataField(Widget parent, char *name, ...);
+extern Widget XmVaCreateDataField(Widget parent, const char *name, ...);
+extern Widget XmVaCreateManagedDataField(Widget parent, const char *name, ...);
 Boolean _XmDataFieldReplaceText(
     XmDataFieldWidget, XEvent *, XmTextPosition, XmTextPosition, char *, int, Boolean);
 extern void XmDataFieldSetString(Widget, char *);

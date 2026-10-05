@@ -1145,7 +1145,7 @@ Widget XmCreateFrame(Widget parent, char *name, ArgList arglist, Cardinal argcou
   return (XtCreateWidget(name, xmFrameWidgetClass, parent, arglist, argcount));
 }
 
-Widget XmVaCreateFrame(Widget parent, char *name, ...)
+Widget XmVaCreateFrame(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -1159,7 +1159,7 @@ Widget XmVaCreateFrame(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedFrame(Widget parent, char *name, ...)
+Widget XmVaCreateManagedFrame(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

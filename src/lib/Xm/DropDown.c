@@ -2099,7 +2099,7 @@ Widget XmCreateDropDown(Widget parent, String name, ArgList args, Cardinal num_a
   return (XtCreateWidget(name, xmDropDownWidgetClass, parent, args, num_args));
 }
 
-Widget XmVaCreateDropDown(Widget parent, char *name, ...)
+Widget XmVaCreateDropDown(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -2113,7 +2113,7 @@ Widget XmVaCreateDropDown(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedDropDown(Widget parent, char *name, ...)
+Widget XmVaCreateManagedDropDown(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;
@@ -2214,8 +2214,8 @@ Widget XmDropDownGetChild(Widget w, int num)
 extern WidgetClass xmCombinationBox2WidgetClass XM_ALIAS(xmDropDownWidgetClass);
 String XmCombinationBox2GetValue(Widget) XM_ALIAS(XmDropDownGetValue);
 Widget XmCreateCombinationBox2(Widget, char *, ArgList, Cardinal) XM_ALIAS(XmCreateDropDown);
-Widget XmVaCreateCombinationBox2(Widget, char *, ...) XM_ALIAS(XmVaCreateDropDown);
-Widget XmVaCreateManagedCombinationBox2(Widget, char *, ...) XM_ALIAS(XmVaCreateManagedDropDown);
+Widget XmVaCreateCombinationBox2(Widget, const char *, ...) XM_ALIAS(XmVaCreateDropDown);
+Widget XmVaCreateManagedCombinationBox2(Widget, const char *, ...) XM_ALIAS(XmVaCreateManagedDropDown);
 Widget XmCombinationBox2GetLabel(Widget) XM_ALIAS(XmDropDownGetLabel);
 Widget XmCombinationBox2GetArrow(Widget) XM_ALIAS(XmDropDownGetArrow);
 Widget XmCombinationBox2GetText(Widget) XM_ALIAS(XmDropDownGetText);

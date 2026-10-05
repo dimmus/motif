@@ -2980,7 +2980,7 @@ Widget XmCreateIconGadget(Widget parent, char *name, ArgList arglist, Cardinal a
   return (XtCreateWidget(name, xmIconGadgetClass, parent, arglist, argcount));
 }
 
-Widget XmVaCreateIconGadget(Widget parent, char *name, ...)
+Widget XmVaCreateIconGadget(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -2994,7 +2994,7 @@ Widget XmVaCreateIconGadget(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedIconGadget(Widget parent, char *name, ...)
+Widget XmVaCreateManagedIconGadget(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

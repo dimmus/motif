@@ -3206,7 +3206,7 @@ Widget XmCreateForm(Widget parent, char *name, ArgList arglist, Cardinal argcoun
   return (XtCreateWidget(name, xmFormWidgetClass, parent, arglist, argcount));
 }
 
-Widget XmVaCreateForm(Widget parent, char *name, ...)
+Widget XmVaCreateForm(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -3220,7 +3220,7 @@ Widget XmVaCreateForm(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedForm(Widget parent, char *name, ...)
+Widget XmVaCreateManagedForm(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

@@ -489,7 +489,7 @@ Widget XmCreateDrawingArea(Widget p, String name, ArgList args, Cardinal n)
   return (XtCreateWidget(name, xmDrawingAreaWidgetClass, p, args, n));
 }
 
-Widget XmVaCreateDrawingArea(Widget parent, char *name, ...)
+Widget XmVaCreateDrawingArea(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -503,7 +503,7 @@ Widget XmVaCreateDrawingArea(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedDrawingArea(Widget parent, char *name, ...)
+Widget XmVaCreateManagedDrawingArea(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

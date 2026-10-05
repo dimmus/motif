@@ -57,9 +57,9 @@ extern Widget XmCreateCombinationBox2(Widget w, char *name, ArgList args, Cardin
  * Variable argument list functions
  */
 XM_ALTERNATIVE(Use XmDropDown instead)
-extern Widget XmVaCreateCombinationBox2(Widget parent, char *name, ...);
+extern Widget XmVaCreateCombinationBox2(Widget parent, const char *name, ...);
 XM_ALTERNATIVE(Use XmDropDown instead)
-extern Widget XmVaCreateManagedCombinationBox2(Widget parent, char *name, ...);
+extern Widget XmVaCreateManagedCombinationBox2(Widget parent, const char *name, ...);
 /*      Function Name:  XmCombinationBox2GetLabel
  *      Description:    Returns the "label" child of the XmCombinationBox2
  *      Arguments:      w - The XmCombinationBox2 Widget

@@ -45,8 +45,8 @@ extern Widget XmCreateFileSelectionDialog(Widget ds_p,
                                           String name,
                                           ArgList fsb_args,
                                           Cardinal fsb_n);
-extern Widget XmVaCreateFileSelectionBox(Widget parent, char *name, ...);
-extern Widget XmVaCreateManagedFileSelectionBox(Widget parent, char *name, ...);
+extern Widget XmVaCreateFileSelectionBox(Widget parent, const char *name, ...);
+extern Widget XmVaCreateManagedFileSelectionBox(Widget parent, const char *name, ...);
 /********    End Public Function Declarations    ********/
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

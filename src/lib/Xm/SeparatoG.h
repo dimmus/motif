@@ -36,8 +36,8 @@ typedef struct _XmSeparatorGadgetRec *XmSeparatorGadget;
 typedef struct _XmSeparatorGCacheObjRec *XmSeparatorGCacheObject;
 /********    Public Function Declarations    ********/
 Widget XmCreateSeparatorGadget(Widget parent, char *name, ArgList arglist, Cardinal argcount);
-Widget XmVaCreateSeparatorGadget(Widget parent, char *name, ...);
-Widget XmVaCreateManagedSeparatorGadget(Widget parent, char *name, ...);
+Widget XmVaCreateSeparatorGadget(Widget parent, const char *name, ...);
+Widget XmVaCreateManagedSeparatorGadget(Widget parent, const char *name, ...);
 /********    End Public Function Declarations    ********/
 #  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

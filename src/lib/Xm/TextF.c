@@ -8449,7 +8449,7 @@ Widget XmCreateTextField(Widget parent, char *name, ArgList arglist, Cardinal ar
   return (XtCreateWidget(name, xmTextFieldWidgetClass, parent, arglist, argcount));
 }
 
-Widget XmVaCreateTextField(Widget parent, char *name, ...)
+Widget XmVaCreateTextField(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -8463,7 +8463,7 @@ Widget XmVaCreateTextField(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedTextField(Widget parent, char *name, ...)
+Widget XmVaCreateManagedTextField(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

@@ -35,8 +35,8 @@ typedef struct _XmSeparatorClassRec *XmSeparatorWidgetClass;
 typedef struct _XmSeparatorRec *XmSeparatorWidget;
 /********    Public Function Declarations    ********/
 Widget XmCreateSeparator(Widget parent, char *name, ArgList arglist, Cardinal argcount);
-Widget XmVaCreateSeparator(Widget parent, char *name, ...);
-Widget XmVaCreateManagedSeparator(Widget parent, char *name, ...);
+Widget XmVaCreateSeparator(Widget parent, const char *name, ...);
+Widget XmVaCreateManagedSeparator(Widget parent, const char *name, ...);
 /********    End Public Function Declarations    ********/
 #  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

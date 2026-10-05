@@ -1440,20 +1440,26 @@ extern Widget XmCreateSimpleCheckBox(Widget parent, String name, ArgList args, C
 /********    End Public Function Declarations    ********/
 
 /********    Public Function Declarations for VaSimple.c   ********/
-extern Widget XmVaCreateSimpleMenuBar(Widget parent, String name, ...);
-extern Widget XmVaCreateSimplePopupMenu(Widget parent, String name, XtCallbackProc callback, ...);
+extern Widget XmVaCreateSimpleMenuBar(Widget parent, const char *name, ...);
+extern Widget XmVaCreateSimplePopupMenu(Widget parent,
+                                        const char *name,
+                                        XtCallbackProc callback,
+                                        ...);
 extern Widget XmVaCreateSimplePulldownMenu(
-    Widget parent, String name, int post_from_button, XtCallbackProc callback, ...);
+    Widget parent, const char *name, int post_from_button, XtCallbackProc callback, ...);
 extern Widget XmVaCreateSimpleOptionMenu(Widget parent,
-                                         String name,
+                                         const char *name,
                                          XmString option_label,
                                          KeySym option_mnemonic,
                                          int button_set,
                                          XtCallbackProc callback,
                                          ...);
 extern Widget XmVaCreateSimpleRadioBox(
-    Widget parent, String name, int button_set, XtCallbackProc callback, ...);
-extern Widget XmVaCreateSimpleCheckBox(Widget parent, String name, XtCallbackProc callback, ...);
+    Widget parent, const char *name, int button_set, XtCallbackProc callback, ...);
+extern Widget XmVaCreateSimpleCheckBox(Widget parent,
+                                       const char *name,
+                                       XtCallbackProc callback,
+                                       ...);
 /********    End Public Function Declarations    ********/
 
 /********    Public Function Declarations for TrackLoc.c    ********/

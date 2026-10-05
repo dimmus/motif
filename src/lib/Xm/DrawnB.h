@@ -40,8 +40,8 @@ typedef struct _XmDrawnButtonClassRec *XmDrawnButtonWidgetClass;
 typedef struct _XmDrawnButtonRec *XmDrawnButtonWidget;
 /********    Public Function Declarations    ********/
 extern Widget XmCreateDrawnButton(Widget parent, char *name, ArgList arglist, Cardinal argcount);
-extern Widget XmVaCreateDrawnButton(Widget parent, char *name, ...);
-extern Widget XmVaCreateManagedDrawnButton(Widget parent, char *name, ...);
+extern Widget XmVaCreateDrawnButton(Widget parent, const char *name, ...);
+extern Widget XmVaCreateManagedDrawnButton(Widget parent, const char *name, ...);
 /********    End Public Function Declarations    ********/
 #  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

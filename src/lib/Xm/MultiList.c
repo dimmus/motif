@@ -941,7 +941,7 @@ Widget XmCreateMultiList(Widget parent, String name, ArgList args, Cardinal num_
   return (XtCreateWidget(name, xmMultiListWidgetClass, parent, args, num_args));
 }
 
-Widget XmVaCreateMultiList(Widget parent, char *name, ...)
+Widget XmVaCreateMultiList(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -955,7 +955,7 @@ Widget XmVaCreateMultiList(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedMultiList(Widget parent, char *name, ...)
+Widget XmVaCreateManagedMultiList(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;
@@ -1129,8 +1129,8 @@ extern WidgetClass xmExt18ListWidgetClass XM_ALIAS(xmMultiListWidgetClass);
 XmMultiListRowInfo **XmExt18ListGetSelectedRows(Widget) XM_ALIAS(XmMultiListGetSelectedRows);
 Widget XmCreateExtended18List(Widget, String, ArgList, Cardinal) XM_ALIAS(XmCreateMultiList);
 Widget XmCreateExt18List(Widget, String, ArgList, Cardinal) XM_ALIAS(XmCreateMultiList);
-Widget XmVaCreateExt18List(Widget, char *, ...) XM_ALIAS(XmVaCreateMultiList);
-Widget XmVaCreateManagedExt18List(Widget, char *, ...) XM_ALIAS(XmVaCreateManagedMultiList);
+Widget XmVaCreateExt18List(Widget, const char *, ...) XM_ALIAS(XmVaCreateMultiList);
+Widget XmVaCreateManagedExt18List(Widget, const char *, ...) XM_ALIAS(XmVaCreateManagedMultiList);
 void XmExt18ListUnselectAllItems(Widget) XM_ALIAS(XmMultiListUnselectAllItems);
 void XmExt18ListUnselectItem(Widget, XmMultiListRowInfo *) XM_ALIAS(XmMultiListUnselectItem);
 void XmExt18ListToggleRow(Widget, short) XM_ALIAS(XmMultiListToggleRow);

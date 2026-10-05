@@ -44,8 +44,8 @@ extern Widget XmTabStackXYToWidget(Widget, int, int);
 /*
  * Variable argument list functions
  */
-extern Widget XmVaCreateTabStack(Widget parent, char *name, ...);
-extern Widget XmVaCreateManagedTabStack(Widget parent, char *name, ...);
+extern Widget XmVaCreateTabStack(Widget parent, const char *name, ...);
+extern Widget XmVaCreateManagedTabStack(Widget parent, const char *name, ...);
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration */
 #endif

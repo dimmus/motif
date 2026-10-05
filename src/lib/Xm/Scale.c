@@ -2651,7 +2651,7 @@ Widget XmCreateScale(Widget parent, char *name, ArgList arglist, Cardinal argcou
   return (XtCreateWidget(name, xmScaleWidgetClass, parent, arglist, argcount));
 }
 
-Widget XmVaCreateScale(Widget parent, char *name, ...)
+Widget XmVaCreateScale(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -2665,7 +2665,7 @@ Widget XmVaCreateScale(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedScale(Widget parent, char *name, ...)
+Widget XmVaCreateManagedScale(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

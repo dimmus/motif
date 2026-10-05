@@ -2542,7 +2542,7 @@ Widget XmCreateRowColumn(Widget p, char *name, ArgList al, Cardinal ac)
   return w;
 }
 
-Widget XmVaCreateRowColumn(Widget parent, char *name, ...)
+Widget XmVaCreateRowColumn(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -2556,7 +2556,7 @@ Widget XmVaCreateRowColumn(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedRowColumn(Widget parent, char *name, ...)
+Widget XmVaCreateManagedRowColumn(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

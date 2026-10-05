@@ -2750,7 +2750,7 @@ Widget XmCreateLabelGadget(Widget parent, char *name, Arg *arglist, Cardinal arg
   return XtCreateWidget(name, xmLabelGadgetClass, parent, arglist, argCount);
 }
 
-Widget XmVaCreateLabelGadget(Widget parent, char *name, ...)
+Widget XmVaCreateLabelGadget(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -2764,7 +2764,7 @@ Widget XmVaCreateLabelGadget(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedLabelGadget(Widget parent, char *name, ...)
+Widget XmVaCreateManagedLabelGadget(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

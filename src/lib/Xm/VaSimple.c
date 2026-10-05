@@ -446,7 +446,7 @@ static void _XmVaProcessEverything(Widget widget,
   }
 }
 
-Widget XmVaCreateSimpleMenuBar(Widget parent, String name, ...)
+Widget XmVaCreateSimpleMenuBar(Widget parent, const char *name, ...)
 {
 #define MB_EXTRA_ARGS 1
   va_list var;
@@ -487,7 +487,8 @@ Widget XmVaCreateSimpleMenuBar(Widget parent, String name, ...)
   n++;
   XtSetArg(args[n], XmNbuttonMnemonics, menuBarMnemonics);
   n++;
-  widget = XmCreateSimpleMenuBar(parent, name, args, n);
+  /* XmCreateSimpleMenuBar() only hands the name to XtCreateWidget(). */
+  widget = XmCreateSimpleMenuBar(parent, (String)name, args, n);
   if (args != NULL) {
     XtFree((char *)args);
   }
@@ -512,7 +513,7 @@ Widget XmVaCreateSimpleMenuBar(Widget parent, String name, ...)
 }
 
 Widget XmVaCreateSimplePulldownMenu(
-    Widget parent, String name, int post_from_button, XtCallbackProc callback, ...)
+    Widget parent, const char *name, int post_from_button, XtCallbackProc callback, ...)
 {
 #define PD_EXTRA_ARGS 3
   va_list var;
@@ -561,7 +562,8 @@ Widget XmVaCreateSimplePulldownMenu(
   n++;
   XtSetArg(args[n], XmNbuttonAcceleratorText, pulldownMenuAcceleratorText);
   n++;
-  widget = XmCreateSimplePulldownMenu(parent, name, args, n);
+  /* XmCreateSimplePulldownMenu() only hands the name to XtCreateWidget(). */
+  widget = XmCreateSimplePulldownMenu(parent, (String)name, args, n);
   if (args != NULL) {
     XtFree((char *)args);
   }
@@ -585,7 +587,10 @@ Widget XmVaCreateSimplePulldownMenu(
   return (widget);
 }
 
-Widget XmVaCreateSimplePopupMenu(Widget parent, String name, XtCallbackProc callback, ...)
+Widget XmVaCreateSimplePopupMenu(Widget parent,
+                                 const char *name,
+                                 XtCallbackProc callback,
+                                 ...)
 {
 #define PU_EXTRA_ARGS 2
   va_list var;
@@ -632,7 +637,8 @@ Widget XmVaCreateSimplePopupMenu(Widget parent, String name, XtCallbackProc call
   n++;
   XtSetArg(args[n], XmNbuttonAcceleratorText, popupMenuAcceleratorText);
   n++;
-  widget = XmCreateSimplePopupMenu(parent, name, args, n);
+  /* XmCreateSimplePopupMenu() only hands the name to XtCreateWidget(). */
+  widget = XmCreateSimplePopupMenu(parent, (String)name, args, n);
   if (args != NULL) {
     XtFree((char *)args);
   }
@@ -657,7 +663,7 @@ Widget XmVaCreateSimplePopupMenu(Widget parent, String name, XtCallbackProc call
 }
 
 Widget XmVaCreateSimpleOptionMenu(Widget parent,
-                                  String name,
+                                  const char *name,
                                   XmString option_label,
                                   KeySym option_mnemonic,
                                   int button_set,
@@ -715,7 +721,8 @@ Widget XmVaCreateSimpleOptionMenu(Widget parent,
   n++;
   XtSetArg(args[n], XmNbuttonAcceleratorText, optionMenuAcceleratorText);
   n++;
-  widget = XmCreateSimpleOptionMenu(parent, name, args, n);
+  /* XmCreateSimpleOptionMenu() only hands the name to XtCreateWidget(). */
+  widget = XmCreateSimpleOptionMenu(parent, (String)name, args, n);
   if (args != NULL) {
     XtFree((char *)args);
   }
@@ -740,7 +747,7 @@ Widget XmVaCreateSimpleOptionMenu(Widget parent,
 }
 
 Widget XmVaCreateSimpleRadioBox(
-    Widget parent, String name, int button_set, XtCallbackProc callback, ...)
+    Widget parent, const char *name, int button_set, XtCallbackProc callback, ...)
 {
 #define RB_EXTRA_ARGS 3
   va_list var;
@@ -789,7 +796,8 @@ Widget XmVaCreateSimpleRadioBox(
   n++;
   XtSetArg(args[n], XmNbuttonAcceleratorText, radioBoxAcceleratorText);
   n++;
-  widget = XmCreateSimpleRadioBox(parent, name, args, n);
+  /* XmCreateSimpleRadioBox() only hands the name to XtCreateWidget(). */
+  widget = XmCreateSimpleRadioBox(parent, (String)name, args, n);
   if (args != NULL) {
     XtFree((char *)args);
   }
@@ -813,7 +821,10 @@ Widget XmVaCreateSimpleRadioBox(
   return (widget);
 }
 
-Widget XmVaCreateSimpleCheckBox(Widget parent, String name, XtCallbackProc callback, ...)
+Widget XmVaCreateSimpleCheckBox(Widget parent,
+                                 const char *name,
+                                 XtCallbackProc callback,
+                                 ...)
 {
 #define CB_EXTRA_ARGS 2
   va_list var;
@@ -860,7 +871,8 @@ Widget XmVaCreateSimpleCheckBox(Widget parent, String name, XtCallbackProc callb
   n++;
   XtSetArg(args[n], XmNbuttonAcceleratorText, checkBoxAcceleratorText);
   n++;
-  widget = XmCreateSimpleCheckBox(parent, name, args, n);
+  /* XmCreateSimpleCheckBox() only hands the name to XtCreateWidget(). */
+  widget = XmCreateSimpleCheckBox(parent, (String)name, args, n);
   if (args != NULL) {
     XtFree((char *)args);
   }

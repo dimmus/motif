@@ -3490,7 +3490,7 @@ Widget XmCreateText(Widget parent, char *name, ArgList arglist, Cardinal argcoun
   return XtCreateWidget(name, xmTextWidgetClass, parent, arglist, argcount);
 }
 
-Widget XmVaCreateText(Widget parent, char *name, ...)
+Widget XmVaCreateText(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -3504,7 +3504,7 @@ Widget XmVaCreateText(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedText(Widget parent, char *name, ...)
+Widget XmVaCreateManagedText(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

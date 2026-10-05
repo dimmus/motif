@@ -928,7 +928,7 @@ Widget XmCreateButtonBox(Widget parent, String name, ArgList args, Cardinal num_
   return (XtCreateWidget(name, xmButtonBoxWidgetClass, parent, args, num_args));
 }
 
-Widget XmVaCreateButtonBox(Widget parent, char *name, ...)
+Widget XmVaCreateButtonBox(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -942,7 +942,7 @@ Widget XmVaCreateButtonBox(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedButtonBox(Widget parent, char *name, ...)
+Widget XmVaCreateManagedButtonBox(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

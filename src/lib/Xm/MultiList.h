@@ -61,8 +61,8 @@ XmMultiListRowInfo **XmMultiListGetSelectedRows(Widget w);
  */
 extern Widget XmCreateMultiList(Widget w, char *name, ArgList args, Cardinal num_args);
 extern Widget XmCreateMultiList(Widget w, char *name, ArgList args, Cardinal num_args);
-extern Widget XmVaCreateMultiList(Widget parent, char *name, ...);
-extern Widget XmVaCreateManagedMultiList(Widget parent, char *name, ...);
+extern Widget XmVaCreateMultiList(Widget parent, const char *name, ...);
+extern Widget XmVaCreateManagedMultiList(Widget parent, const char *name, ...);
 /*  Function Name: XmMultiListUnselectAllItems
  *  Description:   Unselects all rows
  *  Arguments:     w - the ilist widget.

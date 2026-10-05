@@ -64,8 +64,8 @@ extern Widget XmCreateNotebook(Widget parent, String name, ArgList arglist, Card
 extern XmNotebookPageStatus XmNotebookGetPageInfo(Widget notebook,
                                                   int page_number,
                                                   XmNotebookPageInfo *page_info);
-extern Widget XmVaCreateNotebook(Widget parent, char *name, ...);
-extern Widget XmVaCreateManagedNotebook(Widget parent, char *name, ...);
+extern Widget XmVaCreateNotebook(Widget parent, const char *name, ...);
+extern Widget XmVaCreateManagedNotebook(Widget parent, const char *name, ...);
 #ifdef __cplusplus
 }
 #endif

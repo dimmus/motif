@@ -2746,7 +2746,7 @@ Widget XmCreateFileSelectionBox(Widget p, String name, ArgList args, Cardinal n)
   return (XtCreateWidget(name, xmFileSelectionBoxWidgetClass, p, args, n));
 }
 
-Widget XmVaCreateFileSelectionBox(Widget parent, char *name, ...)
+Widget XmVaCreateFileSelectionBox(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -2760,7 +2760,7 @@ Widget XmVaCreateFileSelectionBox(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedFileSelectionBox(Widget parent, char *name, ...)
+Widget XmVaCreateManagedFileSelectionBox(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

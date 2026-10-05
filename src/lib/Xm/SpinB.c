@@ -2229,7 +2229,7 @@ Widget XmCreateSpinBox(Widget parent, String name, ArgList arglist, Cardinal arg
   return (XtCreateWidget(name, xmSpinBoxWidgetClass, parent, arglist, argcount));
 }
 
-Widget XmVaCreateSpinBox(Widget parent, char *name, ...)
+Widget XmVaCreateSpinBox(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -2243,7 +2243,7 @@ Widget XmVaCreateSpinBox(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedSpinBox(Widget parent, char *name, ...)
+Widget XmVaCreateManagedSpinBox(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

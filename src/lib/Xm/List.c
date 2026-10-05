@@ -7672,7 +7672,7 @@ Widget XmCreateList(Widget parent, char *name, ArgList args, Cardinal argCount)
   return XtCreateWidget(name, xmListWidgetClass, parent, args, argCount);
 }
 
-Widget XmVaCreateList(Widget parent, char *name, ...)
+Widget XmVaCreateList(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -7686,7 +7686,7 @@ Widget XmVaCreateList(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedList(Widget parent, char *name, ...)
+Widget XmVaCreateManagedList(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

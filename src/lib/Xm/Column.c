@@ -2140,7 +2140,7 @@ Widget XmCreateColumn(Widget parent, String name, ArgList arg_list, Cardinal arg
   return (XtCreateWidget(name, xmColumnWidgetClass, parent, arg_list, arg_cnt));
 }
 
-Widget XmVaCreateColumn(Widget parent, char *name, ...)
+Widget XmVaCreateColumn(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -2154,7 +2154,7 @@ Widget XmVaCreateColumn(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedColumn(Widget parent, char *name, ...)
+Widget XmVaCreateManagedColumn(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

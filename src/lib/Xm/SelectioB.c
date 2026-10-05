@@ -1690,7 +1690,7 @@ Widget XmCreateSelectionBox(Widget p, String name, ArgList args, Cardinal n)
   return (XtCreateWidget(name, xmSelectionBoxWidgetClass, p, args, n));
 }
 
-Widget XmVaCreateSelectionBox(Widget parent, char *name, ...)
+Widget XmVaCreateSelectionBox(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -1704,7 +1704,7 @@ Widget XmVaCreateSelectionBox(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedSelectionBox(Widget parent, char *name, ...)
+Widget XmVaCreateManagedSelectionBox(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

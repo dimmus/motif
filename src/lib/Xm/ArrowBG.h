@@ -37,8 +37,8 @@ extern Widget XmCreateArrowButtonGadget(Widget parent,
                                         char *name,
                                         ArgList arglist,
                                         Cardinal argcount);
-extern Widget XmVaCreateManagedArrowButtonGadget(Widget parent, char *name, ...);
-extern Widget XmVaCreateArrowButtonGadget(Widget parent, char *name, ...);
+extern Widget XmVaCreateManagedArrowButtonGadget(Widget parent, const char *name, ...);
+extern Widget XmVaCreateArrowButtonGadget(Widget parent, const char *name, ...);
 /********    End Public Function Declarations    ********/
 #  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

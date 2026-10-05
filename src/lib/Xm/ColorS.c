@@ -1536,7 +1536,7 @@ Widget XmCreateColorSelector(Widget parent, String name, ArgList args, Cardinal 
   return (XtCreateWidget(name, xmColorSelectorWidgetClass, parent, args, num_args));
 }
 
-Widget XmVaCreateColorSelector(Widget parent, char *name, ...)
+Widget XmVaCreateColorSelector(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -1550,7 +1550,7 @@ Widget XmVaCreateColorSelector(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedColorSelector(Widget parent, char *name, ...)
+Widget XmVaCreateManagedColorSelector(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

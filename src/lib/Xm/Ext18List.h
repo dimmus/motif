@@ -58,9 +58,9 @@ extern Widget XmCreateExtended18List(Widget, String, ArgList, Cardinal);
 XM_ALTERNATIVE(Use XmMultiList instead)
 extern Widget XmCreateExt18List(Widget, String, ArgList, Cardinal);
 XM_ALTERNATIVE(Use XmMultiList instead)
-extern Widget XmVaCreateExt18List(Widget parent, char *name, ...);
+extern Widget XmVaCreateExt18List(Widget parent, const char *name, ...);
 XM_ALTERNATIVE(Use XmMultiList instead)
-extern Widget XmVaCreateManagedExt18List(Widget parent, char *name, ...);
+extern Widget XmVaCreateManagedExt18List(Widget parent, const char *name, ...);
 /*  Function Name: XmExt18ListUnselectAllItems
  *  Description:   Unselects all rows
  *  Arguments:     w - the ilist widget.

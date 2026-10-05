@@ -1139,7 +1139,7 @@ Widget XmCreateMainWindow(Widget parent, char *name, ArgList args, Cardinal argC
   return (XtCreateWidget(name, xmMainWindowWidgetClass, parent, args, argCount));
 }
 
-Widget XmVaCreateMainWindow(Widget parent, char *name, ...)
+Widget XmVaCreateMainWindow(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -1153,7 +1153,7 @@ Widget XmVaCreateMainWindow(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedMainWindow(Widget parent, char *name, ...)
+Widget XmVaCreateManagedMainWindow(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

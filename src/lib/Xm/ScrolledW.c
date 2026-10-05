@@ -2860,7 +2860,7 @@ Widget XmCreateScrolledWindow(Widget parent, char *name, ArgList args, Cardinal 
   return (XtCreateWidget(name, xmScrolledWindowWidgetClass, parent, args, argCount));
 }
 
-Widget XmVaCreateScrolledWindow(Widget parent, char *name, ...)
+Widget XmVaCreateScrolledWindow(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -2874,7 +2874,7 @@ Widget XmVaCreateScrolledWindow(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedScrolledWindow(Widget parent, char *name, ...)
+Widget XmVaCreateManagedScrolledWindow(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

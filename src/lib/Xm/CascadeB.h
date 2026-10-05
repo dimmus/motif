@@ -39,8 +39,8 @@ extern void XmCascadeButtonHighlight(Widget cb, Boolean highlight);
 /*
  * Variable argument list functions
  */
-extern Widget XmVaCreateCascadeButton(Widget parent, char *name, ...);
-extern Widget XmVaCreateManagedCascadeButton(Widget parent, char *name, ...);
+extern Widget XmVaCreateCascadeButton(Widget parent, const char *name, ...);
+extern Widget XmVaCreateManagedCascadeButton(Widget parent, const char *name, ...);
 /********    End Public Function Declarations    ********/
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

@@ -53,8 +53,8 @@ extern void XmTextSetHighlight(Widget w,
                                XmHighlightMode mode);
 extern Widget XmCreateScrolledText(Widget parent, char *name, ArgList arglist, Cardinal argcount);
 extern Widget XmCreateText(Widget parent, char *name, ArgList arglist, Cardinal argcount);
-extern Widget XmVaCreateText(Widget parent, char *name, ...);
-extern Widget XmVaCreateManagedText(Widget parent, char *name, ...);
+extern Widget XmVaCreateText(Widget parent, const char *name, ...);
+extern Widget XmVaCreateManagedText(Widget parent, const char *name, ...);
 extern int XmTextGetSubstring(
     Widget widget, XmTextPosition start, int num_chars, int buf_size, char *buffer);
 extern int XmTextGetSubstringWcs(

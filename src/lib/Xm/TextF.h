@@ -91,8 +91,8 @@ void XmTextFieldSetHighlight(Widget w,
                              XmHighlightMode mode);
 int XmTextFieldGetBaseline(Widget w);
 Widget XmCreateTextField(Widget parent, char *name, ArgList arglist, Cardinal argcount);
-Widget XmVaCreateTextField(Widget parent, char *name, ...);
-Widget XmVaCreateManagedTextField(Widget parent, char *name, ...);
+Widget XmVaCreateTextField(Widget parent, const char *name, ...);
+Widget XmVaCreateManagedTextField(Widget parent, const char *name, ...);
 /********    End Public Function Declarations    ********/
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */
