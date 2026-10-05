@@ -146,7 +146,7 @@ static Boolean	extractSegment		(wchar_t**, wchar_t**, int *,
 static XmString	StringToXmString	(char*);
 static char*	getNextCStrDelim	(char*);
 static int	getCStrCount		(char*);
-static wchar_t *CStrCommonWideCharsGet	();
+static wchar_t *CStrCommonWideCharsGet	(void);
 
 /*****************************************************************************
  *	STATIC CODE
@@ -727,9 +727,9 @@ static XmString StringToXmString
         GRA(char *,str)
 {
     static char*	tagBuf = NULL;
-    static int		tagBufLen = 0;
+    static size_t	tagBufLen = 0;
     static char*	textBuf = NULL;
-    static int		textBufLen = 0;
+    static size_t	textBufLen = 0;
 
     wchar_t		*ctx;
     wchar_t		*tag;
@@ -948,7 +948,7 @@ static int getCStrCount
  * Output:
  *     	cwc - wchar_t * : this array should never be written to or FREEd.
  */
-static wchar_t *CStrCommonWideCharsGet()
+static wchar_t *CStrCommonWideCharsGet(void)
 {
     static wchar_t	*CommonWideChars = NULL;
 
@@ -1247,7 +1247,7 @@ static void XmStringTableCvtDestroy(
  * Output:
  *      None
  */
-void RegisterConverters(
+static void RegisterConverters(
     XtAppContext appContext)
 {
     XtAppSetTypeConverter(appContext, XmRString, XmRXmString,
@@ -1274,7 +1274,7 @@ void RegisterConverters(
  *      None
  */
 #ifndef IGNORE_CONVERT
-XtPointer CONVERT(
+static XtPointer CONVERT(
     Widget w,
     char *from_string,
     char *to_type,
@@ -1399,7 +1399,7 @@ XtPointer CONVERT(
 
 #ifndef IGNORE_MENU_POST
 
-void MENU_POST(
+static void MENU_POST(
     Widget p,
     XtPointer mw,
     XEvent *ev,
@@ -1407,7 +1407,7 @@ void MENU_POST(
 {
     Arg	args[2];
     int	argcnt;
-    int	button;
+    unsigned int	button;
     Widget m = (Widget)mw;
     XButtonEvent *e = (XButtonEvent *)ev;
 
@@ -1442,7 +1442,7 @@ void MENU_POST(
  *          calculated at creation time.
  */
 
-void SET_BACKGROUND_COLOR(
+static void SET_BACKGROUND_COLOR(
     Widget w,
     ArgList args,
     Cardinal *argcnt,
@@ -1550,7 +1550,7 @@ void SET_BACKGROUND_COLOR(
 #ifndef __FIND_TOP_SHELL
 #define __FIND_TOP_SHELL
 
-Widget FindTopShell
+static Widget FindTopShell
     ARGLIST((start))
         GRA(Widget, start)
 {
@@ -1580,7 +1580,7 @@ Widget FindTopShell
 #ifndef __WIDGETIDS_FROM_NAMES
 #define __WIDGETIDS_FROM_NAMES
 
-WidgetList WidgetIdsFromNames
+static WidgetList WidgetIdsFromNames
     ARGLIST((ref, cbName, stringList))
         ARG(Widget, ref)
         ARG(char, *cbName)
@@ -2027,7 +2027,7 @@ LFUNC(atoui, unsigned int, (char *p, unsigned int l, unsigned int *ui_return));
 #define Const
 #endif
 
-Pixmap XPM_PIXMAP
+static Pixmap XPM_PIXMAP
 ARGLIST((w, pixmapName))
 ARG(Widget, w)
 GRA(char **, pixmapName)
@@ -2076,7 +2076,7 @@ ARG(register char *, p)
 ARG(unsigned int, l)
 GRA(unsigned int *, ui_return)
 {
-    register int n, i;
+    register unsigned int n, i;
 
     n = 0;
     for (i = 0; i < l; i++)
@@ -2945,7 +2945,8 @@ GRA(Pixel *, pixels)
     register char *dst;
     int nbytes;
     register unsigned int *iptr;
-    register int x, y, i;
+    register unsigned int x, y;
+    register int i;
 
     iptr = pixelindex;
     if (image->depth == 1) {
@@ -2953,7 +2954,7 @@ GRA(Pixel *, pixels)
 	    for (x = 0; x < width; x++, iptr++) {
 		pixel = pixels[*iptr];
 		for (i = 0, px = pixel;
-		     i < sizeof(unsigned long); i++, px >>= 8)
+		     i < (int)sizeof(unsigned long); i++, px >>= 8)
 		    ((unsigned char *) &pixel)[i] = (unsigned char)px;
 		src = &image->data[XYINDEX(x, y, image)];
 		dst = (char *) &px;
@@ -2977,7 +2978,7 @@ GRA(Pixel *, pixels)
 		if (image->depth == 4)
 		    pixel &= 0xf;
 		for (i = 0, px = pixel;
-		     i < sizeof(unsigned long); i++, px >>= 8)
+		     i < (int)sizeof(unsigned long); i++, px >>= 8)
 		    ((unsigned char *) &pixel)[i] = (unsigned char)px;
 		src = &image->data[ZINDEX(x, y, image)];
 		dst = (char *) &px;
@@ -3018,7 +3019,7 @@ GRA(Pixel *, pixels)
     register unsigned char *addr;
     register unsigned int *paddr;
     register unsigned int *iptr;
-    register int x, y;
+    register unsigned int x, y;
 
     iptr = pixelindex;
 #ifndef WORD64
@@ -3065,7 +3066,7 @@ GRA(Pixel *, pixels)
 {
     register unsigned char *addr;
     register unsigned int *iptr;
-    register int x, y;
+    register unsigned int x, y;
 
     iptr = pixelindex;
     if (image->byte_order == MSBFirst)
@@ -3098,7 +3099,7 @@ GRA(Pixel *, pixels)
 
 {
     register unsigned int *iptr;
-    register int x, y;
+    register unsigned int x, y;
 
     iptr = pixelindex;
     for (y = 0; y < height; y++)
@@ -3121,7 +3122,7 @@ GRA(Pixel *, pixels)
     unsigned char bit;
     int xoff, yoff;
     register unsigned int *iptr;
-    register int x, y;
+    register unsigned int x, y;
 
     if (image->byte_order != image->bitmap_bit_order)
 	SetImagePixels(image, width, height, pixelindex, pixels);

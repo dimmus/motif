@@ -20,6 +20,8 @@
 #include <ctype.h>
 #include <stdlib.h>
 
+#include "creation.h"
+
 /*
  * Macros to make code look nicer between ANSI and K&R.
  */

@@ -43,4 +43,23 @@ static char * allviewpix_icon[] = {
 
 
 extern Widget Createform(Widget parent);
+
+/*
+ * Convenience functions from utilities file (bxutils.c).
+ */
+extern void RegisterBxConverters(XtAppContext);
+extern XtPointer CONVERT(Widget, char *, char *, int, Boolean *);
+extern XtPointer DOUBLE(double);
+extern XtPointer SINGLE(float);
+extern void MENU_POST(Widget, XtPointer, XEvent *, Boolean *);
+extern Pixmap XPM_PIXMAP(Widget, char**);
+extern void SET_BACKGROUND_COLOR(Widget, ArgList, Cardinal*, Pixel);
+extern Widget BxFindTopShell(Widget);
+extern WidgetList BxWidgetIdsFromNames(Widget, char*, char*);
+
+/*
+ * Callbacks from callbacks.c.
+ */
+extern void BxExitCB(Widget, XtPointer, XtPointer);
+extern void BxSetValuesCB(Widget, XtPointer, XtPointer);
 #endif

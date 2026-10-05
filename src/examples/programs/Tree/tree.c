@@ -42,13 +42,7 @@
 /**************************************************************
 External functions
 **************************************************************/
-#define ARGLIST(p)	(
-#define ARG(a, b)	a b,
-#define GRA(a, b)	a b)
-extern Pixmap XPM_PIXMAP
-ARGLIST((w, pixmapName))
-ARG(Widget, w)
-GRA(char **, pixmapName);
+#include "bxutil.h"
 
 
 /**************************************************************
@@ -592,7 +586,7 @@ static void CompressStyleCB(Widget w, XtPointer client, XtPointer call)
  * Arguments:     This is an XtCallback
  * Returns:       Nothing
  */
-void NodeStateCB(Widget w, XtPointer client, XtPointer call)
+static void NodeStateCB(Widget w, XtPointer client, XtPointer call)
 {
     Arg args[5];
     Cardinal argcnt;
@@ -927,7 +921,7 @@ void MakeControlPanel(Widget right_pane)
 	}
 
 	{
-	int i;
+	Cardinal i;
 	for (i=0;i<XtNumber(resources);i++)
 		{
 		Arg local_args[8];

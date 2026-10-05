@@ -22,7 +22,7 @@ static void PlayerOptionMenu( Widget, DemoInfo );
  *     Registers all the converters for all widgets.
  */
 static void
-RegisterConverters()
+RegisterConverters(void)
 {
     XtInitializeWidgetClass(xmPushButtonWidgetClass);
     XtInitializeWidgetClass(xmToggleButtonWidgetClass);
@@ -41,7 +41,7 @@ RegisterConverters()
  * Function prototypes for routines
  * located in utilities file.
  */
-extern XtPointer CONVERT();
+extern XtPointer CONVERT(Widget, char *, char *, int, Boolean *);
 extern void MENU_POST(Widget p, XtPointer mw, XEvent *ev, Boolean *dispatch);
 
 

@@ -160,7 +160,7 @@ shown to the user.",
 }
 
 static XmString
-CreateHelpArea()
+CreateHelpArea(void)
 {
   XmString xmstr =
     XmStringLtoRCreate(

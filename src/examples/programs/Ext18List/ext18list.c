@@ -68,7 +68,6 @@ PlayerData players[] = {
  *		FORWARD DECLARATIONS
  **************************************************************/
 Widget Createform(Widget, DemoInfo);
-static void QuitCB(Widget, XtPointer, XtPointer);
 
 /**************************************************************
  *		DEFINES
@@ -127,7 +126,7 @@ static String fallbacks[] = {
  * Returns:       nothing
  *
  */
-void
+static void
 InitializeData(Widget shell)
 {
   porsche_pix = XPM_PIXMAP(shell, porsche);
