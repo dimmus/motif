@@ -90,6 +90,11 @@ distribution's flags, checks the staged install (symlinks, RPATH,
 `ldd`), installs it and builds a client through pkg-config and
 through `find_package(Motif)`.
 
+`tools/packaging` has a Debian packaging (`debian/`, to copy into the
+tree) and an RPM spec for Fedora; CI builds both with
+`dpkg-buildpackage` and `rpmbuild` (`distro-package.sh`).  See
+`tools/packaging/README.md`.
+
 ## Cross-compiling
 
 The build runs `makestrs`, `mkcatdefs`, `wml`, `wmluiltok` and `uil`,
@@ -109,6 +114,9 @@ the source tree:
 - `static-analysis.sh clang-tidy|scan-build|cppcheck BUILD_DIR OUT_DIR`
   runs an analyser and compares its findings with the baselines in
   `tools/dev/env/ci/baselines`;
-- `abi-check.sh REF...` compares the ABI of libXm and libMrm with older
-  revisions using libabigail;
+- `abi-check.sh REF...` compares the ABI of libXm, libMrm and libUil
+  with older revisions, or with upstream Motif 2.3.8 (`upstream-2.3.8`),
+  using libabigail;
+- `distro-package.sh` builds, checks and installs the Debian or RPM
+  packages of `tools/packaging` in a throwaway container;
 - `repro-check.sh DIR` builds twice and compares the results.

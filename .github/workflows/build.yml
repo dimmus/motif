@@ -236,6 +236,39 @@ jobs:
             _build/install_manifest.txt
           if-no-files-found: ignore
 
+  distro-package:
+    # The packaging of tools/packaging, built as the distribution builds
+    # it: dpkg-buildpackage -us -uc -b with debian/ and rpmbuild -ba with
+    # rpm/motif.spec (both run the test suite), lintian and rpmlint
+    # (errors fail), then the packages are installed and a client is built
+    # against them.
+    name: Distribution package (${{ matrix.image }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    container: ${{ matrix.image }}
+    strategy:
+      fail-fast: false
+      matrix:
+        image: ["debian:trixie", "fedora:latest"]
+    steps:
+      - uses: actions/checkout@v5
+      - name: Build, check, install and consume the packages
+        run: tools/dev/env/ci/distro-package.sh _pkg
+      - name: Upload the packages and logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: distro-package-${{ strategy.job-index }}
+          path: |
+            _pkg/*.deb
+            _pkg/*.changes
+            _pkg/*.buildinfo
+            _pkg/rpmbuild/RPMS/
+            _pkg/rpmbuild/SRPMS/
+            _pkg/*.log
+            _pkg/*.txt
+          if-no-files-found: ignore
+
   static-analysis:
     # Ratchet mode: findings are compared per file and check with the
     # baselines in tools/dev/env/ci/baselines/.  Arch Linux has the newest

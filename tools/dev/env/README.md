@@ -355,8 +355,10 @@ the source tree:
 | `build.sh` | Configure, build and run `ctest --no-tests=error`; `MOTIF_CI_PROFILE` is `debug`, `debug-asan`, `release` or `release-lto`, `CC` picks the compiler |
 | `package-smoke.sh` | Build with the Debian/Fedora packaging flags and libdir, then run `install-check.sh` |
 | `install-check.sh BUILD STAGE` | Check a staged install (symlinks, RPATH, `ldd`), install it for real and build and run `consumer/hello.c` through `pkg-config motif` and `find_package(Motif)` |
+| `consumer-check.sh PREFIX LIBDIR` | Build and run `consumer/hello.c` against an installed Motif through `pkg-config motif` and `find_package(Motif)` |
+| `distro-package.sh [OUT]` | In a `debian:trixie` or `fedora:latest` container: build the packages of `tools/packaging` with `dpkg-buildpackage` or `rpmbuild`, run lintian or rpmlint, install them and run `consumer-check.sh` |
 | `static-analysis.sh TOOL BUILD OUT` | Run `scan-build`, `clang-tidy` (with the top-level `.clang-tidy`) or `cppcheck` and ratchet the findings against `ci/baselines/TOOL.txt` |
-| `abi-check.sh REF...` | Compare the libXm/libMrm ABI with older revisions using libabigail |
+| `abi-check.sh REF...` | Compare the libXm/libMrm/libUil ABI, the types of the installed headers and the string tables with older revisions or `upstream-2.3.8`, using libabigail (suppressions in `ci/abi/`) |
 | `repro-check.sh WORK` | Build twice with `SOURCE_DATE_EPOCH` and compare the installs with diffoscope |
 | `dist.sh TAG [OUT]` | Make the release tarball of a version tag (`git archive`, `xz`), its SHA-256 and the release notes from `CHANGELOG.md` |
 

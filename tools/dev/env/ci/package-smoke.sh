@@ -7,9 +7,9 @@
 # consume test.  Run it from the top of the source tree, as root in a
 # throwaway debian:stable or fedora:latest container.
 #
-# This deliberately does not carry a debian/ directory or a spec file; it
-# checks that the CMake build gives packagers what they need.  Elsewhere
-# it falls back to generic hardening flags.
+# It checks that the CMake build gives packagers what they need, without
+# a packaging of its own; distro-package.sh builds the real packages of
+# tools/packaging.  Elsewhere it falls back to generic hardening flags.
 #
 # Usage: package-smoke.sh [BUILD_DIR [STAGE_DIR]]
 
