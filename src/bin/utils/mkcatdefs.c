@@ -526,7 +526,7 @@ insert(char *tname,
        */
 
 {
-  struct name *ptr,*optr;
+  struct name *ptr,*optr = NULL;
   int rslt = -1,i,hashval;
 
   hashval = hash(tname);

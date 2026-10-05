@@ -2116,6 +2116,8 @@ UrmCWR__GuaranteeSpace (URMResourceContextPtr	context_id,
   Cardinal		result ;	/* function results */
   RGMWidgetRecordPtr	widgetrec ;	/* widget record in context */
 
+  *offset = 0 ;
+  *addr = NULL ;
   widgetrec = (RGMWidgetRecordPtr) UrmRCBuffer(context_id) ;
   if ( ! UrmWRValid(widgetrec) )
     return Urm__UT_Error ("UrmCWR__GuaranteeSpace", _MrmMMsg_0026,
@@ -2192,6 +2194,8 @@ UrmCWR__AppendResource (URMResourceContextPtr	context_id,
   MrmSize		descsiz ;	/* descriptor size */
   RGMResourceDescPtr	resdesc ;	/* resource descriptor */
 
+
+  *offset = 0 ;
 
   /*
    * Acquire and set a resource descriptor. If an RID reference, no extra is
@@ -2340,6 +2344,9 @@ UrmCWR__BindArgPtrs (URMResourceContextPtr	context_id ,
   RGMWidgetRecordPtr	widgetrec ;	/* widget record in context */
 
 
+  *descptr = NULL ;
+  *argptr = NULL ;
+
   /*
    * Pick up a widget  record, and set descriptor pointer.
    */
@@ -2412,6 +2419,9 @@ UrmCWR__BindCallbackPtrs (URMResourceContextPtr		context_id,
    *  Local variables
    */
   RGMWidgetRecordPtr	widgetrec ;	/* widget record in context */
+
+  *descptr = NULL ;
+  *itmptr = NULL ;
 
   /*
    * Pick up a widget  record, and set descriptor pointer.

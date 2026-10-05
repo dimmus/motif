@@ -24,9 +24,9 @@
  * compile: use snprintf, vsnprintf, memcpy with a known length,
  * XtNewString or _XmConcatStrings instead.
  *
- * Clang ignores the redeclarations when glibc's _FORTIFY_SOURCE
- * wrappers are in effect (optimized builds), so the ban is enforced by
- * GCC builds and by unoptimized Clang builds.
+ * The functions are declared before <stdio.h> and <string.h> are
+ * included: with _FORTIFY_SOURCE, glibc defines them there as inline
+ * wrappers, and Clang ignores an attribute added after the definition.
  */
 #ifndef _XmBannedI_h
 #  define _XmBannedI_h
@@ -34,18 +34,23 @@
 #  if defined(__GNUC__) || defined(__clang__)
 
 #    include <stdarg.h>
-#    include <stdio.h>
-#    include <string.h>
-#    include <X11/Intrinsic.h>
 
 #    define _XM_BANNED(instead) __attribute__((__deprecated__("unbounded, use " instead)))
 
-/* The names are in parentheses because glibc's _FORTIFY_SOURCE defines
- * some of them as function-like macros for Clang. */
+/* The names are in parentheses in case they are function-like macros. */
 extern int(sprintf)(char *, const char *, ...) _XM_BANNED("snprintf");
 extern int(vsprintf)(char *, const char *, va_list) _XM_BANNED("vsnprintf");
 extern char *(strcpy)(char *, const char *) _XM_BANNED("memcpy, snprintf or XtNewString");
 extern char *(strcat)(char *, const char *) _XM_BANNED("memcpy, snprintf or _XmConcatStrings");
+
+#    include <stdio.h>
+#    include <string.h>
+#    include <X11/Intrinsic.h>
+
+/* For Clang, glibc's _FORTIFY_SOURCE makes sprintf a function-like macro
+ * that calls the builtin directly: remove it so a call reaches the
+ * declaration above. */
+#    undef sprintf
 
 /* Xt's XtNewString macro expands to strcpy: give it a bounded body. */
 static inline char *_XmBannedNewString(const char *str)
