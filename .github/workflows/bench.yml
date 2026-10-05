@@ -1,0 +1,63 @@
+name: Bench
+
+# The benchmark regression gate: xmbench on the pull request's head and on
+# its base, built and run in the same job so that both see the same
+# machine.  It fails on any increase of a round trip count, and on a
+# median time per operation more than 5 % slower when the rounds show
+# that it is not noise; see src/tests/README.md.
+on:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      base:
+        description: "Base to compare the selected ref against"
+        default: master
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  CCACHE_DIR: ${{ github.workspace }}/.ccache
+  CCACHE_MAXSIZE: 400M
+  CCACHE_COMPRESS: "true"
+
+jobs:
+  gate:
+    name: xmbench regression gate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          path: head
+      - name: Check out the base
+        # The merge base, so that only the changes of the pull request
+        # are measured.
+        env:
+          BASE: ${{ github.event.pull_request.base.sha || format('origin/{0}', inputs.base) }}
+        run: |
+          base=$(git -C head merge-base "$BASE" HEAD)
+          echo "Comparing $(git -C head rev-parse --short HEAD) against $(git -C head rev-parse --short "$base")"
+          git -C head worktree add --detach ../base "$base"
+      - name: Install dependencies
+        run: head/tools/dev/env/ci/deps.sh
+      - uses: actions/cache@v4
+        with:
+          path: .ccache
+          key: ccache-bench-${{ github.sha }}
+          restore-keys: ccache-bench-
+      - name: Run the gate
+        run: head/src/tests/bench/gate.sh base head bench-results
+      - name: Upload the results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bench-results
+          path: bench-results/
+          if-no-files-found: ignore
