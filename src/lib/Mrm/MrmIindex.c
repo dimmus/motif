@@ -188,7 +188,7 @@ Idb__INX_EntryString (IDBRecordBufferPtr	buffer,
 
 Cardinal
 Idb__INX_ReturnItem (IDBFile			file_id,
-		     char			*index,
+		     const char			*index,
 		     IDBDataHandle		*data_entry)
 {
 
@@ -288,7 +288,7 @@ Idb__INX_ReturnItem (IDBFile			file_id,
 
 Cardinal
 Idb__INX_FindIndex (IDBFile			file_id,
-		    char			*index,
+		    const char			*index,
 		    IDBRecordBufferPtr		*buffer_return,
 		    MrmCount			*index_return)
 {
@@ -383,7 +383,7 @@ Idb__INX_FindIndex (IDBFile			file_id,
 
 Cardinal
 Idb__INX_SearchIndex (IDBFile			file_id,
-		      char			*index,
+		      const char			*index,
 		      IDBRecordBufferPtr	buffer,
 		      MrmCount			*index_return)
 {

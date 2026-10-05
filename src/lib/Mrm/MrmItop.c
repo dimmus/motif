@@ -217,7 +217,7 @@ UrmIdbOpenFileRead (String			name,
  */
 
 Cardinal
-UrmIdbOpenBuffer (unsigned char 		*uid_buffer,
+UrmIdbOpenBuffer (const unsigned char 	*uid_buffer,
 		  IDBFile			*file_id_return)
 {
 
@@ -261,7 +261,7 @@ UrmIdbOpenBuffer (unsigned char 		*uid_buffer,
  */
 
 Cardinal
-UrmIdbOpenBufferWithSize (unsigned char 	*uid_buffer,
+UrmIdbOpenBufferWithSize (const unsigned char *uid_buffer,
 			  size_t		uid_buffer_size,
 			  IDBFile		*file_id_return)
 {
@@ -461,7 +461,7 @@ UrmIdbCloseFile (IDBFile		file_id,
 
 Cardinal
 UrmIdbGetIndexedResource (IDBFile			file_id,
-			  String			index,
+			  const char			*index,
 			  MrmGroup			group_filter,
 			  MrmType			type_filter,
 			  URMResourceContextPtr		context_id)

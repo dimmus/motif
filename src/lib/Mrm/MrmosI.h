@@ -40,7 +40,7 @@ extern void _MrmOSHostFloatToIEEE(float *val);
 extern void _MrmOSHostDoubleToIEEE(double *val);
 extern void _MrmOSIEEEFloatToHost(float *val);
 extern void _MrmOSIEEEDoubleToHost(double *val);
-extern String _MrmOSSetLocale(String locale);
+extern String _MrmOSSetLocale(const char *locale);
 
 /********    End Private Function Declarations    ********/
 

@@ -198,7 +198,7 @@ Urm__OpenHierarchyInternal (MrmCount			num_files,
 			    MrmOsOpenParamPtr		*os_ext_list,
 			    MrmHierarchy		*hierarchy_id_return,
 			    MrmFlag			in_memory,
-			    unsigned char		*uid_buffer,
+			    const unsigned char	*uid_buffer,
 			    size_t			uid_buffer_size)
 {
 
@@ -421,7 +421,7 @@ Urm__OpenHierarchy (MrmCount			num_files,
 		    MrmOsOpenParamPtr		*os_ext_list,
 		    MrmHierarchy		*hierarchy_id_return,
 		    MrmFlag			in_memory,
-		    unsigned char		*uid_buffer)
+		    const unsigned char	*uid_buffer)
 {
 
   return Urm__OpenHierarchyInternal (num_files, name_list, os_ext_list,
@@ -436,7 +436,7 @@ Urm__OpenHierarchy (MrmCount			num_files,
  * size is not known) holding the image of a UID file.
  */
 Cardinal
-Urm__OpenHierarchyFromBuffer (unsigned char		*uid_buffer,
+Urm__OpenHierarchyFromBuffer (const unsigned char	*uid_buffer,
 			      size_t			uid_buffer_size,
 			      MrmHierarchy		*hierarchy_id_return)
 {
@@ -565,7 +565,7 @@ Urm__CloseHierarchy (MrmHierarchy	hierarchy_id)
 
 Cardinal
 UrmHGetIndexedResource (MrmHierarchy		hierarchy_id,
-			String			index ,
+			const char			*index ,
 			MrmGroup			group_filter,
 			MrmType			type_filter,
 			URMResourceContextPtr	context_id,
