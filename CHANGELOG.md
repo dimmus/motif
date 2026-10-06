@@ -5,6 +5,19 @@ upstream release (December 2017).  The git history has the details.
 
 ## Unreleased
 
+### Documentation
+
+- `doc/guide` rewritten as a technical architecture guide of sixteen
+  chapters, with every excerpt taken from the sources in this tree and
+  linked to them: the Xt object model, base class extensions and
+  traits, resources and string tables, drawing, the widget system with
+  case studies of DataField, Form and Container, a SpinBox walk-through,
+  the graphics pipeline and its caches, compound strings, locking and
+  memory safety, the Text and List data structures, and drag and drop.
+  A new chapter on the history of Motif development, from the 1980s
+  vendor toolkits and OSF to the LGPL release and the current trees,
+  consolidates publicly available sources with their evidence graded.
+
 ### Security
 
 - XmString layout: a string with layout direction pushes that are not
