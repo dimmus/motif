@@ -37,13 +37,11 @@ static char rcsid[] = "$TOG: VirtKeys.c /main/22 1999/06/02 14:45:52 samborn $"
 #include <Xm/DisplayP.h>
 #include <Xm/TransltnsP.h>
 #include <Xm/XmosP.h>
-#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #define defaultFallbackBindings _XmVirtKeys_fallbackBindingString
 #define BUFFERSIZE 2048
-#define MAXLINE 256
     /********    Static Function Declarations    ********/
     static Boolean
     CvtStringToVirtualBinding(Display * dpy,
@@ -63,7 +61,6 @@ static void FindVirtKey(Display *dpy,
                         Modifiers *modifiers_return,
                         KeySym *keysym_return);
 static Modifiers EffectiveStdModMask(Display *dpy, KeySym *kc_map, int ks_per_kc);
-static void LoadVendorBindings(Display *display, char *path, FILE *fp, String *binding);
 /********    End Static Function Declarations    ********/
 static XmConst XmVirtualKeysymRec virtualKeysyms[] = {
     {XmVosfActivate, osfXK_Activate},
@@ -681,52 +678,6 @@ Boolean _XmVirtKeysLoadFileBindings(char *fileName, String *binding)
   return True;
 }
 
-static void LoadVendorBindings(Display *display, char *path, FILE *fp, String *binding)
-{
-  char buffer[MAXLINE];
-  char *bindFile;
-  char *vendor;
-  char *vendorV;
-  size_t size;
-  char *ptr;
-  char *start;
-  vendor = ServerVendor(display);
-  size = strlen(vendor) + 20; /* assume rel.# is < 19 digits */
-  vendorV = XtMalloc(size);
-  snprintf(vendorV, size, "%s %d", vendor, VendorRelease(display));
-  while (fgets(buffer, MAXLINE, fp) != NULL) {
-    ptr = buffer;
-    while (*ptr != '"' && *ptr != '!' && *ptr != '\0')
-      ptr++;
-    if (*ptr != '"')
-      continue;
-    start = ++ptr;
-    while (*ptr != '"' && *ptr != '\0')
-      ptr++;
-    if (*ptr != '"')
-      continue;
-    *ptr = '\0';
-    if ((strcmp(start, vendor) == 0) || (strcmp(start, vendorV) == 0)) {
-      ptr++;
-      while (isspace((unsigned char)*ptr) && *ptr)
-        ptr++;
-      if (*ptr == '\0')
-        continue;
-      start = ptr;
-      while (!isspace((unsigned char)*ptr) && *ptr != '\n' && *ptr)
-        ptr++;
-      *ptr = '\0';
-      bindFile = _XmOSBuildFileName(path, start);
-      if (_XmVirtKeysLoadFileBindings(bindFile, binding)) {
-        XtFree(bindFile);
-        break;
-      }
-      XtFree(bindFile);
-    }
-  }
-  XtFree(vendorV);
-}
-
 int _XmVirtKeysLoadFallbackBindings(Display *display, String *binding)
 {
   enum { XmA_MOTIF_BINDINGS, XmA_MOTIF_DEFAULT_BINDINGS, NUM_ATOMS };
@@ -734,11 +685,8 @@ int _XmVirtKeysLoadFallbackBindings(Display *display, String *binding)
   static char *atom_names[] = {XmS_MOTIF_BINDINGS, XmS_MOTIF_DEFAULT_BINDINGS};
   XmConst XmDefaultBindingStringRec *currDefault;
   int i;
-  FILE *fp;
   char *homeDir;
   char *fileName;
-  char *bindDir;
-  static XmConst char xmbinddir_fallback[] = XMBINDDIR_FALLBACK;
   Atom atoms[XtNumber(atom_names)];
   *binding = NULL;
   assert(XtNumber(atom_names) == NUM_ATOMS);
@@ -748,15 +696,6 @@ int _XmVirtKeysLoadFallbackBindings(Display *display, String *binding)
   fileName = _XmOSBuildFileName(homeDir, MOTIFBIND);
   _XmVirtKeysLoadFileBindings(fileName, binding);
   XtFree(fileName);
-  /* Look for a match in the user's xmbind.alias */
-  if (*binding == NULL) {
-    fileName = _XmOSBuildFileName(homeDir, XMBINDFILE);
-    if ((fp = fopen(fileName, "r")) != NULL) {
-      LoadVendorBindings(display, homeDir, fp, binding);
-      fclose(fp);
-    }
-    XtFree(fileName);
-  }
   if (*binding != NULL) {
     /* Set the user property for future Xm applications. */
     XChangeProperty(display,
@@ -769,26 +708,13 @@ int _XmVirtKeysLoadFallbackBindings(Display *display, String *binding)
                     strlen(*binding));
     return 0;
   }
-  /* Look for a match in the system xmbind.alias */
-  if (*binding == NULL) {
-    if ((bindDir = getenv(XMBINDDIR)) == NULL)
-      bindDir = (char *)xmbinddir_fallback;
-    fileName = _XmOSBuildFileName(bindDir, XMBINDFILE);
-    if ((fp = fopen(fileName, "r")) != NULL) {
-      LoadVendorBindings(display, bindDir, fp, binding);
-      fclose(fp);
-    }
-    XtFree(fileName);
-  }
-  /* Check hardcoded fallbacks (for 1.1 bc) */
-  if (*binding == NULL) {
-    for (i = 0, currDefault = fallbackBindingStrings; (unsigned int)i < XtNumber(fallbackBindingStrings);
-         i++, currDefault++)
-    {
-      if (strcmp(currDefault->vendorName, ServerVendor(display)) == 0) {
-        *binding = XtNewString(currDefault->defaults);
-        break;
-      }
+  /* Check hardcoded fallbacks, chosen by the server vendor string */
+  for (i = 0, currDefault = fallbackBindingStrings; (unsigned int)i < XtNumber(fallbackBindingStrings);
+       i++, currDefault++)
+  {
+    if (strcmp(currDefault->vendorName, ServerVendor(display)) == 0) {
+      *binding = XtNewString(currDefault->defaults);
+      break;
     }
   }
   /* Use generic fallback bindings */

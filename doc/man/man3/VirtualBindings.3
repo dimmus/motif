@@ -76,69 +76,21 @@ application\&.
 .IP "   \(bu" 6
 The file \fB\&.motifbind\fP in the user\&'s home directory\&.
 .IP "   \(bu" 6
-A set of bindings based on the vendor string and optionally the vendor
-release of the X server\&.
-Motif searches for these bindings in the following steps:
-.RS
-.IP "   0." 6
-If the file \fBxmbind\&.alias\fP exists in the user\&'s home directory,
-Motif searches this file for a pathname associated with the vendor
-string or with the vendor string and vendor release\&.
-If it finds such a pathname and if that file exists, Motif loads the
-bindings contained in that file\&.
-.IP "   1." 6
-If it has found no bindings, Motif next looks for the file
-\fBxmbind\&.alias\fP in the directory specified by the environment
-variable \fBXMBINDDIR\fP, if \fBXMBINDDIR\fP is set, or in the directory
-\fB/usr/lib/Xm/bindings\fP if \fBXMBINDDIR\fP is not set\&.
-If this file exists Motif searches it for a pathname associated with the
-vendor string or with the vendor string and vendor release\&.
-If it finds such a pathname and if that file exists, Motif loads the
-bindings contained in that file\&.
-.IP "   2." 6
-If it still has found no bindings, Motif loads a set of hard-coded
-fallback bindings\&.
-.RE
+A set of bindings built into Motif\&.
+If the X server vendor string, as returned by the X client
+\fBxdpyinfo\fP or the Xlib function \fBXServerVendor\fP, matches one
+of the vendors Motif has bindings for, Motif uses those bindings\&.
+Otherwise it uses a generic set\&.
 .PP
-The \fBxmbind\&.alias\fP file contains zero or more lines of the following form:
-.PP
-.nf
-\f(CW"\fIvendor_string\fP[ \fIvendor_release\fP]"    \fIbindings_file\fP\fR
-.fi
-.PP
-.PP
-where \fIvendor_string\fP is the X server vendor name as returned by the
-X client \fBxdpyinfo\fP or the Xlib function \fBXServerVendor\fP, and
-must appear in double quotes\&.
-If \fIvendor_release\fP is included, it is the X server vendor release
-number as returned by the X client \fBxdpyinfo\fP or the Xlib function
-\fBXVendorRelease\fP, and must also be contained within the double
-quotes separated by one space from \fIvendor_string\fP\&.
-The \fIvendor_release\fP argument is provided to allow support
-of changes in keyboard
-hardware from a vendor, assuming that the vendor increments the release
-number to flag such changes\&.
-Alternatively, the vendor may simply use a unique vendor string for each
-different keyboard\&.
-.PP
-The \fIbindings_file\fP argument is the pathname of
-the file containing the bindings
-themselves\&.
-It can be a relative or absolute pathname\&.
-If it it is a relative pathname, it is relative to the location of the
-\fBxmbind\&.alias\fP file\&.
-.PP
-Comment lines in the \fBxmbind\&.alias\fP file begin with ! (exclamation
-point)\&.
-.PP
-The bindings found in either the \fB\&.motifbind\fP file or the vendor
-mapping are placed in a property on the root window\&.
-This property is used to determine the bindings for subsequent Motif
+The bindings found in the \fB\&.motifbind\fP file are placed in the
+\fB_MOTIF_BINDINGS\fP property on the root window, and the built-in
+bindings in the \fB_MOTIF_DEFAULT_BINDINGS\fP property\&.
+These properties are used to determine the bindings for subsequent Motif
 applications\&.
 .PP
 On startup \fBmwm\fP attempts to load the file \fB\&.motifbind\fP in the
 user\&'s home directory\&.
-If this is unsuccessful, it loads the vendor bindings as described
+If this is unsuccessful, it loads the built-in bindings as described
 previously\&.
 It places the bindings it loads in a property on the root window for use
 by subsequent Motif applications\&.
@@ -148,9 +100,17 @@ from a file if that file is specified on the
 command line\&.
 If no file is specified on the command line, it attempts to load the
 file \fB\&.motifbind\fP in the user\&'s home directory\&.
-If this fails, it loads the vendor bindings as described previously\&.
+If this fails, it loads the built-in bindings as described previously\&.
 It places the bindings it loads in a property on the root window for use
 by subsequent Motif applications\&.
+.PP
+Sample \fB\&.motifbind\fP files are installed in the \fBX11/bindings\fP
+directory under the data directory, typically
+\fB/usr/share/X11/bindings\fP\&.
+\fBCDE\fP holds the Common Desktop Environment bindings for a generic
+keyboard and \fBpc\fP the Style Guide bindings for PC keyboards\&.
+Motif does not read that directory itself; copy a file to
+\fB\&.motifbind\fP or load it with \fBxmbind\fP\&.
 .PP
 The format of the specification for mapping \fB<osf>\fP keysyms to
 actual keysyms is similar to that of a specification for an event
@@ -198,11 +158,10 @@ Following is an example of a specification for the
 .fi
 .PP
 .PP
-The format of a \fB\&.motifbind\fP file or of a file containing vendor
-bindings is the same, except that the binding specification for each
+The format of a \fB\&.motifbind\fP file is the same, except that the binding specification for each
 keysym is placed on a separate line\&.
 The previous example specification appears as follows in a
-\fB\&.motifbind\fP or vendor bindings file:
+\fB\&.motifbind\fP file:
 .PP
 .nf
 \f(CWosfBackSpace:       <Key>BackSpace

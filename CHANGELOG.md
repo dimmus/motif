@@ -5,6 +5,20 @@ upstream release (December 2017).  The git history has the details.
 
 ## Unreleased
 
+### Compatibility
+
+- The `xmbind.alias` lookup is gone.  libXm, mwm and xmbind no longer
+  read `~/xmbind.alias` or `$XMBINDDIR/xmbind.alias` to pick a bindings
+  file from the X server vendor string; they read `~/.motifbind` and
+  otherwise use the built-in bindings, which still include the vendor
+  tables libXm has always carried.  The vendor files that went with the
+  alias (dec, doubleclick, hal, hp, ibm, sgi, sony, sun, sun_at) and
+  `xmbind.alias` are no longer installed, and the installed `XmosP.h`
+  no longer defines `XMBINDDIR`, `XMBINDDIR_FALLBACK` or `XMBINDFILE`.
+  The `CDE` and `pc` files are still installed in `share/X11/bindings`
+  as sample `.motifbind` files.  No current X server reported a vendor
+  string the alias file matched.
+
 ### Documentation
 
 - `doc/guide` rewritten as a technical architecture guide of sixteen

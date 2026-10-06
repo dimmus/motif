@@ -73,11 +73,6 @@ extern "C" {
     'P' /* referenced in InitPath strings and in the files \
     that uses it (ImageCache.c and Mrmhier.c) */
 /* OS-dependent file info for VirtKeys */
-#  define XMBINDDIR "XMBINDDIR"
-#  ifndef XMBINDDIR_FALLBACK
-#    define XMBINDDIR_FALLBACK "/usr/lib/Xm/bindings"
-#  endif
-#  define XMBINDFILE "xmbind.alias"
 #  define MOTIFBIND ".motifbind"
 
 typedef enum { XmOS_METHOD_NULL, XmOS_METHOD_DEFAULTED, XmOS_METHOD_REPLACED } XmOSMethodStatus;

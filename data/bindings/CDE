@@ -25,9 +25,8 @@
 !
 ! Bindings for CDE 1.0, generic keyboard
 !
-! This file does not correspond to any specific server, so it cannot
-! be accessed via xmbind.aliases.  If you wish to use these bindings,
-! copy them into ~/.motifbind or use xmbind to load this file directly.
+! To use these bindings, copy this file to ~/.motifbind or load it
+! with xmbind.
 
 osfActivate	   : <Key>KP_Enter, <Key>Execute
 osfAddMode	   : Shift<Key>F8

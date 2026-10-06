@@ -310,7 +310,7 @@ src/bin/utils    build-time tools (makestrs, mkcatdefs, mkmsgcat)
 src/examples     example programs
 src/tests        the tests, fuzzers, benchmarks and layout A/B harness
 include          config.h.in and stub CDE headers for the build
-data             key bindings, bitmaps and the pkg-config templates
+data             sample key bindings, bitmaps and the pkg-config templates
 localized        translated message catalogs
 doc              manual pages and documentation
 tools            CMake helpers and presets, CI and development scripts
