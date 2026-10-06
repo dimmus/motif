@@ -33,7 +33,7 @@ jobs:
         with:
           languages: c-cpp
           build-mode: manual
-          queries: security-extended
+          config-file: ./.github/codeql/codeql-config.yml
       - name: Build
         env:
           # CodeQL sees only what is actually compiled; ccache hits would
