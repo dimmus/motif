@@ -1422,6 +1422,62 @@ static Boolean IsSafeWarningFormat(const char *fmt, int max_args)
   return True;
 }
 
+/*
+ * Append fmt to buf (size bytes, pos of them used), expanding the
+ * conversions IsSafeWarningFormat accepts with the params: %% and up to
+ * nparams of %s or %d, each with an optional '-' flag, width and
+ * precision.  The text is never handed to printf as a format; a missing
+ * parameter prints as "(null)" and the result is truncated to fit.
+ * Returns the new length.
+ */
+static size_t AppendWarningText(
+    char *buf, size_t size, size_t pos, const char *fmt, String *params, int nparams)
+{
+  int used = 0;
+  while (*fmt != '\0' && pos < size - 1) {
+    const char *conv = fmt + 1;
+    int left = 0, width = 0, prec = -1, n;
+    if (*fmt != '%' || *conv == '%') {
+      buf[pos++] = *fmt;
+      fmt += (*fmt == '%') ? 2 : 1;
+      continue;
+    }
+    if (*conv == '-') {
+      left = 1;
+      conv++;
+    }
+    while (*conv >= '0' && *conv <= '9' && width < 10000)
+      width = width * 10 + (*conv++ - '0');
+    if (*conv == '.') {
+      prec = 0;
+      conv++;
+      while (*conv >= '0' && *conv <= '9' && prec < 10000)
+        prec = prec * 10 + (*conv++ - '0');
+    }
+    if (left)
+      width = -width;
+    if (*conv == 's') {
+      const char *str = (used < nparams && params[used] != NULL) ? params[used] : "(null)";
+      n = snprintf(&buf[pos], size - pos, "%*.*s", width, prec, str);
+    }
+    else if (*conv == 'd') {
+      int value = (used < nparams) ? (int)(long)params[used] : 0;
+      n = snprintf(&buf[pos], size - pos, "%*.*d", width, prec, value);
+    }
+    else { /* not accepted by IsSafeWarningFormat: copy the '%' as it is */
+      buf[pos++] = *fmt++;
+      continue;
+    }
+    used++;
+    fmt = conv + 1;
+    if (n < 0)
+      break;
+    pos += ((size_t)n < size - pos) ? (size_t)n : size - pos - 1;
+  }
+  buf[pos] = '\0';
+  return pos;
+}
+
 /************************************************************************
  *  MotifWarningHandler
  *    Build up a warning message and print it
@@ -1432,8 +1488,8 @@ static void MotifWarningHandler(
     String name, String type, String s_class, String message, String *params, Cardinal *num_params)
 {
   char buf[1024], buf2[1024], header[200], *bp;
+  String hdr_params[2];
   size_t pos, n;
-  int ret;
   if (!(params && num_params && (*num_params > 0) && (params[*num_params - 1] == XME_WARNING)) &&
       previousWarningHandler)
   {
@@ -1446,40 +1502,21 @@ static void MotifWarningHandler(
   XtGetErrorDatabaseText("motif", "header", "Motif", _XmMMsgMotif_0000, header, sizeof(header));
   /* Widget names, font names and message parameters can be arbitrarily
    * long, so every write below is bounded and long messages are
-   * truncated. */
-  if (!IsSafeWarningFormat(header, 2))
-    ret = snprintf(buf, sizeof(buf), _XmMsgMotif_0000, name, s_class);
-  else
-    ret = snprintf(buf, sizeof(buf), header, name, s_class);
-  if (ret < 0) {
-    buf[0] = '\0';
-    pos = 0;
-  }
-  else if ((size_t)ret >= sizeof(buf))
-    pos = sizeof(buf) - 1;
-  else
-    pos = (size_t)ret;
+   * truncated.  The texts come from the error database, so they are
+   * expanded by AppendWarningText rather than used as printf formats. */
+  hdr_params[0] = name;
+  hdr_params[1] = s_class;
+  pos = AppendWarningText(buf,
+                          sizeof(buf),
+                          0,
+                          IsSafeWarningFormat(header, 2) ? header : _XmMsgMotif_0000,
+                          hdr_params,
+                          2);
   if (num_params && *num_params > 1 && IsSafeWarningFormat(buf2, 10)) {
-    int i = *num_params - 1;
-    char *par[10];
+    int i = *num_params - 1; /* the last one is the XME_WARNING marker */
     if (i > 10)
       i = 10;
-    memcpy((char *)par, (char *)params, i * sizeof(String));
-    bzero((char *)&par[i], (10 - i) * sizeof(String));
-    if (snprintf(&buf[pos],
-                 sizeof(buf) - pos,
-                 buf2,
-                 par[0],
-                 par[1],
-                 par[2],
-                 par[3],
-                 par[4],
-                 par[5],
-                 par[6],
-                 par[7],
-                 par[8],
-                 par[9]) < 0)
-      buf[pos] = '\0';
+    (void)AppendWarningText(buf, sizeof(buf), pos, buf2, params, i);
   }
   else
     (void)snprintf(&buf[pos], sizeof(buf) - pos, "%s", buf2);

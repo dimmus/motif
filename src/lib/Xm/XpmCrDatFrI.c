@@ -164,7 +164,7 @@ int XpmCreateDataFromXpmImage(char ***data_return, XpmImage *image, XpmInfo *inf
       image->height + ext_nlines >= UINT_MAX / sizeof(char *))
     RETURN(XpmNoMemory);
   data_size = (image->height + ext_nlines) * sizeof(char *);
-  if (image->height > UINT_MAX / offset || image->height * offset > UINT_MAX - data_size)
+  if (image->height > UINT_MAX / offset || data_size > UINT_MAX - image->height * offset)
     RETURN(XpmNoMemory);
   data_size += image->height * offset;
   if (header_size > UINT_MAX - ext_size || header_size + ext_size >= (UINT_MAX - data_size))

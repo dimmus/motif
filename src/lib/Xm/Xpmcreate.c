@@ -996,13 +996,10 @@ static int CreateXImage(Display *display,
    * On failure, destroy the image and clear *image_return, so that our
    * callers' error paths don't destroy it a second time.
    */
-  if (height != 0 && (unsigned int)(*image_return)->bytes_per_line >= INT_MAX / height) {
-    XDestroyImage(*image_return);
-    *image_return = NULL;
-    return XpmNoMemory;
-  }
   /* now that bytes_per_line must have been set properly alloc data */
-  if ((*image_return)->bytes_per_line == 0 || height == 0) {
+  if ((*image_return)->bytes_per_line <= 0 || height == 0 ||
+      height >= INT_MAX / (unsigned int)(*image_return)->bytes_per_line)
+  {
     XDestroyImage(*image_return);
     *image_return = NULL;
     return XpmNoMemory;

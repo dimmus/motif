@@ -313,18 +313,20 @@ int xpmGetString(xpmData *data, char **sptr, unsigned int *l)
   int c;
   char *p = NULL, *q, buf[BUFSIZ];
   if (!data->type || data->type == XPMBUFFER) {
-    if (data->cptr) {
-      char *start = data->cptr;
-      while ((c = *data->cptr) && c != data->Eos)
-        data->cptr++;
-      n = data->cptr - start + 1;
-      p = (char *)XpmMalloc(n);
-      if (!p)
-        return (XpmNoMemory);
-      strncpy(p, start, n);
-      if (data->type) /* XPMBUFFER */
-        p[n - 1] = '\0';
-    }
+    char *start = data->cptr;
+    /* An array with fewer lines than its header claims (or a NULL
+     * entry) has no string here; callers expect one. */
+    if (!start)
+      return (XpmFileInvalid);
+    while ((c = *data->cptr) && c != data->Eos)
+      data->cptr++;
+    n = data->cptr - start + 1;
+    p = (char *)XpmMalloc(n);
+    if (!p)
+      return (XpmNoMemory);
+    strncpy(p, start, n);
+    if (data->type) /* XPMBUFFER */
+      p[n - 1] = '\0';
   }
   else {
     FILE *file = data->stream.file;

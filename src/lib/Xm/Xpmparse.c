@@ -587,6 +587,7 @@ int xpmParseExtensions(xpmData *data, XpmExtension **extensions, unsigned int *n
   /* look for the key word XPMEXT, skip lines before this */
   while ((notstart = strncmp("XPMEXT", string, 6)) && (notend = strncmp("XPMENDEXT", string, 9))) {
     XpmFree(string);
+    string = NULL;
     if ((status = xpmNextString(data)) == XpmSuccess)
       status = xpmGetString(data, &string, &l);
     if (status != XpmSuccess) {
@@ -624,6 +625,7 @@ int xpmParseExtensions(xpmData *data, XpmExtension **extensions, unsigned int *n
     }
     strncpy(ext->name, s + a, l - a - 6);
     XpmFree(string);
+    string = NULL;
     /* now store the related lines */
     if ((status = xpmNextString(data)) == XpmSuccess)
       status = xpmGetString(data, &string, &l);
