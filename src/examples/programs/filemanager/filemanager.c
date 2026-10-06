@@ -98,8 +98,6 @@ main(int argc, char* argv[])
   Arg		args[10];
   int 		n = 0;
   Pixel		fg, bg;
-  Display	*display_local;
-  int		time;
   char		*str;
   int 		i;
 
@@ -199,7 +197,6 @@ static int
 ErrorHandler(Display *display_local, XErrorEvent *event)
 {
   char errortext[100];
-  XmString tmp;
 
   XGetErrorText(display_local, event -> error_code, errortext, 100);
 

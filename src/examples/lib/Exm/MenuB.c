@@ -482,7 +482,9 @@ BorderHighlight (
         Widget w
                 )
 {
+#ifdef USE_ORIGINAL_MOTIF_CODE
   ExmMenuButtonWidgetClass wc = (ExmMenuButtonWidgetClass)XtClass(w);
+#endif
   ExmMenuButtonWidget mw = (ExmMenuButtonWidget)w;
 
   if (mw->menu_button.armed == True) return;
@@ -516,7 +518,9 @@ BorderUnhighlight (
         Widget w
                   )
 {
+#ifdef USE_ORIGINAL_MOTIF_CODE
   ExmMenuButtonWidgetClass wc = (ExmMenuButtonWidgetClass)XtClass(w);
+#endif
   ExmMenuButtonWidget mw = (ExmMenuButtonWidget)w;
 
   if (mw->menu_button.armed == False)
@@ -783,7 +787,6 @@ ArmAndActivate (
                )
 {
   ExmMenuButtonWidget mw = (ExmMenuButtonWidget)w;
-  Boolean already_armed = mw->menu_button.armed;
   XmAnyCallbackStruct cb;
   Boolean parent_is_torn = False;
   Boolean torn_has_focus = False;
@@ -900,7 +903,6 @@ VisualDisarm (
              )
 {
   ExmMenuButtonWidget mw = (ExmMenuButtonWidget)cd;
-  ExmMenuButtonWidgetClass wc = (ExmMenuButtonWidgetClass)XtClass(mw);
 
   mw->menu_button.visual_timer = 0;
 
@@ -943,14 +945,10 @@ BtnDown (
         Cardinal *num_params
         )
 {
-  ExmMenuButtonWidgetClass wc = (ExmMenuButtonWidgetClass)XtClass(w);
   ExmMenuButtonWidget mw = (ExmMenuButtonWidget)w;
-  XmAnyCallbackStruct cb;
 
   Boolean validButton = False;
-  Boolean already_armed;
   ShellWidget popup;
-  int	status;
 
   XmMenuSystemTrait menuSTrait;
 
@@ -970,8 +968,6 @@ BtnDown (
   if (!validButton) return;
 
   menuSTrait -> controlTraversal(XtParent(mw), True);
-
-  status = menuSTrait -> status(XtParent(w));
 
   /* Popdown other popus that may be up */
   if (!(popup = (ShellWidget) menuSTrait -> getPopupPosted (XtParent(mw)))) {
@@ -1002,7 +998,6 @@ BtnDown (
 
   /* get the location cursor - get consistent with Gadgets */
 
-  already_armed = mw->menu_button.armed;
   mw->menu_button.armed = True;
   _XmRecordEvent(event);
 }
@@ -1025,7 +1020,6 @@ BtnUp (
   ExmMenuButtonWidget mw = (ExmMenuButtonWidget)w;
   Widget parent = XtParent(mw);
   XmAnyCallbackStruct cb;
-  Boolean flushDone = False;
   Boolean validButton = False;
   Boolean popped_up;
   Widget shell = XtParent(XtParent(mw));
@@ -1066,7 +1060,6 @@ BtnUp (
   if (! mw -> menu_button.skip_callback &&
       mw->menu_button.activate_callback) {
     XFlush (XtDisplay(mw));
-    flushDone = True;
     XtCallCallbackList ((Widget)mw, mw->menu_button.activate_callback, &cb);
   }
 
@@ -1087,7 +1080,6 @@ BtnUp (
 		    mw->primitive.shadow_thickness, XmSHADOW_OUT);
 
     XFlush (XtDisplay (mw));
-    flushDone = True;
 
     if (mw->core.being_destroyed == False &&
 	mw->menu_button.visual_timer == 0) {
@@ -1130,7 +1122,6 @@ MenuButtonHelp (
         Cardinal *num_params
                )
 {
-  ExmMenuButtonWidgetClass wc = (ExmMenuButtonWidgetClass)XtClass(w);
   ExmMenuButtonWidget mw = (ExmMenuButtonWidget)w;
   XmMenuSystemTrait menuSTrait;
 

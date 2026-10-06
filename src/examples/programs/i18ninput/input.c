@@ -204,7 +204,6 @@ form_widget(char    * name,
   XtCallbackList cbl;
   XtCallbackRec cbs1[2];
   XtCallbackRec cbs2[2];
-  int inc;
   int n;
 
   /***************** object of type : XmForm *****************/
@@ -349,7 +348,6 @@ create_input_widget(char    * name,
   Arg pargs[5];
   Widget tmpw;
   Widget widget_array[60];
-  int inc;
   int n;
   int pn;
 

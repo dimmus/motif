@@ -64,6 +64,7 @@ int             yytknval2;              /* terminal token value 2 */
 
 %}
 
+%option noinput nounput
 %p 3000
 %%
 

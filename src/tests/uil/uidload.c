@@ -102,8 +102,10 @@ static const char *next_token(const char *p, size_t *len)
 			break;
 		}
 	}
-	if (!*p)
+	if (!*p) {
+		*len = 0;
 		return NULL;
+	}
 	if (isalpha((unsigned char)*p) || *p == '_' || *p == '$') {
 		const char *s = p;
 		while (isalnum((unsigned char)*p) || *p == '_' || *p == '$')

@@ -31,11 +31,7 @@ static char rcsid[] = "$TOG: version.c /main/14 1999/10/12 09:32:45 mgreess $"
 #endif
 #endif
 
-#ifndef        lint
-#define        osfversion() \
-   static char _motif_version[] = "@(#)Motif mwm 2.5.0 Release";
-#else  /* lint */
-#define        osfversion()
-#endif /* lint */
-
-osfversion()
+/* An external definition, so that the what(1) string stays in the
+ * binary; MWM_VERSION is the project version, set by CMakeLists.txt. */
+extern const char _motif_version[];
+const char _motif_version[] = "@(#)Motif mwm " MWM_VERSION " Release";

@@ -104,7 +104,9 @@ static Cardinal stack_heap = 0 ;
 #define SSB_NUMERIC	0
 #define SSB_STRING	1
 #define NUM_SSB_WIDGETS	2
+#ifdef SAMPLER_TEST_SSPINB
 static Widget	ssb_widgets[NUM_SSB_WIDGETS];
+#endif
 
 
 
@@ -141,12 +143,14 @@ static void sb_ValueChangedCB(Widget w, XtPointer client_data,
 			      XtPointer call_data);
 static void tf_ActivateCB(Widget w, XtPointer client_data,
 			    XtPointer call_data);
+#ifdef SAMPLER_TEST_SSPINB
 static void sb_ApplyCB(Widget w, XtPointer client_data,
 			    XtPointer call_data);
 static void sb_CancelCB(Widget w, XtPointer client_data,
 			    XtPointer call_data);
 static void sb_OkCB(Widget w, XtPointer client_data,
 			    XtPointer call_data);
+#endif
 static Widget ssb_GetTextField(Widget w);
 
 
@@ -174,7 +178,6 @@ int main(int argc, char *argv[])
     Cardinal i ;
     Widget mainw, nb ;
     NotebookDataStruct nb_data ;
-    XmNotebookCallbackStruct nb_call_data ;
 
     XtSetLanguageProc(NULL, NULL, NULL);
     toplevel = XtVaAppInitialize(&app_context, APP_CLASS, NULL, 0,
@@ -592,8 +595,11 @@ static void
 InitScaleCombo (Widget w, XtPointer client_data, XtPointer call_data)
 {
     Arg			args[1];
-    Widget		applyb, cbb, scale, selectb;
+    Widget		cbb, scale;
     Widget		spinb, sspinb_s, sspinb_n, textual;
+#ifdef SAMPLER_TEST_SSPINB
+    Widget		applyb, selectb;
+#endif
     XtCallbackRec	sbModifyVerifyList[] = {
 				                                {sb_ModifyVerifyCB, (void *) NULL},
 				{(XtCallbackProc) NULL, (void *) NULL}
@@ -606,6 +612,7 @@ InitScaleCombo (Widget w, XtPointer client_data, XtPointer call_data)
 				{tf_ActivateCB, (void *) NULL},
 				{(XtCallbackProc) NULL, (void *) NULL}
 			    };
+#ifdef SAMPLER_TEST_SSPINB
     XtCallbackRec	sbApplyList[] = {
 				{sb_ApplyCB, (void *) NULL},
 				{(XtCallbackProc) NULL, (void *) NULL}
@@ -618,6 +625,7 @@ InitScaleCombo (Widget w, XtPointer client_data, XtPointer call_data)
 				{sb_OkCB, (void *) NULL},
 				{(XtCallbackProc) NULL, (void *) NULL}
 			    };
+#endif
 
     cbb = XtVaCreateWidget("ComboBox", xmComboBoxWidgetClass, w, NULL);
     XtRealizeWidget(cbb);
@@ -845,9 +853,10 @@ InitClassArray (void)
 static void
 sb_ModifyVerifyCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
+#ifdef SAMPLER_TEST_SSPINB
     char			*buffer;
+#endif
     XmSpinBoxCallbackStruct	*cbs = (XmSpinBoxCallbackStruct *) call_data;
-    int				position = cbs->position;
     Widget			textual = (Widget) NULL;
 
     if (XtIsSubclass(w, xmSimpleSpinBoxWidgetClass))
@@ -875,9 +884,10 @@ sb_ModifyVerifyCB(Widget w, XtPointer client_data, XtPointer call_data)
 static void
 sb_ValueChangedCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
+#ifdef SAMPLER_TEST_SSPINB
     char			*buffer;
+#endif
     XmSpinBoxCallbackStruct	*cbs = (XmSpinBoxCallbackStruct *) call_data;
-    int				position = cbs->position;
     Widget			textual = (Widget) NULL;
 
     if (XtIsSubclass(w, xmSimpleSpinBoxWidgetClass))
@@ -904,7 +914,7 @@ static void
 tf_ActivateCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
     Arg		args[1];
-    int		position, minimum;
+    int		position;
     Widget	textual = (Widget) w;
 
     if (XmSpinBoxValidatePosition (textual, &position) == XmCURRENT_VALUE)
@@ -918,6 +928,7 @@ tf_ActivateCB(Widget w, XtPointer client_data, XtPointer call_data)
 }
 
 
+#ifdef SAMPLER_TEST_SSPINB
 /* ARGSUSED */
 /* ARGSUSED */
 static void
@@ -977,6 +988,7 @@ sb_OkCB(Widget w, XtPointer client_data, XtPointer call_data)
 
     XmSimpleSpinBoxSetItem(ssb_widgets[SSB_STRING], xmstring);
 }
+#endif
 
 
 /* ARGSUSED */

@@ -54,7 +54,6 @@ Createpaned(Widget parent)
 {
     Arg    	args[512];
     Cardinal   	argcnt;
-    Boolean   	argok;
     Widget 	retval;
     Widget	paned;
     Widget	pane_form_zero;
@@ -70,7 +69,6 @@ Createpaned(Widget parent)
     Widget	label_three;
     Widget	sash_three_tog;
 
-    argok = False;
 
     BxRegisterConverters();
 
@@ -267,7 +265,6 @@ Createform(Widget parent)
 {
     Arg    	args[512];
     Cardinal   	argcnt;
-    Boolean   	argok;
     Widget 	retval;
     Widget	form;
     Widget	frame;
@@ -287,7 +284,6 @@ Createform(Widget parent)
     Widget	cons_res;
     Widget	quit_pb;
 
-    argok = False;
 
     BxRegisterConverters();
 

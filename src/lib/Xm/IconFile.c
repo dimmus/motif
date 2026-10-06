@@ -631,7 +631,7 @@ String XmGetIconFileName(Screen *screen,
         dirNameLen = filePtr - fileName - 1;
       }
       dirName = (String)XtMalloc(dirNameLen + 1);
-      strncpy(dirName, fileName, dirNameLen);
+      memcpy(dirName, fileName, dirNameLen);
       dirName[dirNameLen] = '\0';
       iNameEntry->dirName = dirName;
       iNameEntry->leafName = XtNewString(filePtr);

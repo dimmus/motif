@@ -555,17 +555,6 @@ RectSetPixmap(RectPtr rect, Display *display, Window window, Pixmap pixmap)
 }
 
 
-/* This function gets the retangle's pixmap. The pixmap portion of the
- * rectangle is not currently being used.
- */
-/* ARGSUSED */
-static Pixmap
-RectGetPixmap(RectPtr rect)
-{
-    return (rect->pixmap);
-}
-
-
 /* This procedure gets the retangle's height and width.  */
 /* ARGSUSED */
 static void
@@ -760,7 +749,6 @@ void
 StartRect(Widget w, XEvent *event, String *params, Cardinal *num_params)
 {
 
-    Display *display = XtDisplay(w);
     RectPtr rect;
     Position x = event->xbutton.x;
     Position y = event->xbutton.y;

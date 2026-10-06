@@ -303,6 +303,7 @@ Idb__INX_FindIndex (IDBFile			file_id,
    * Initialize search at the root of the index, then continue searching
    * until either the index is found or search terminates at some leaf record.
    */
+  *index_return = 0 ;
   if ( !file_id->index_root ) return MrmFAILURE ;
   result = Idb__BM_GetRecord (file_id, file_id->index_root, buffer_return) ;
   if ( result != MrmSUCCESS ) return result ;

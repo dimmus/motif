@@ -2013,8 +2013,6 @@ static void SpinNSetValue(Widget nav, XmNavigatorData nav_data, Boolean notify)
   int lastValue;
   int numericCount;
   int i;
-  int minimum;
-  int increment;
   Mask mask;
   if (nav_data->valueMask & NavDimMask)
     spinW->spinBox.dim_mask = nav_data->dimMask;
@@ -2036,14 +2034,12 @@ static void SpinNSetValue(Widget nav, XmNavigatorData nav_data, Boolean notify)
           (spinC->minimum_value != ACCESS_DIM(mask, nav_data->minimum)))
       {
         XtSetArg(arglist[argCount], XmNminimumValue, ACCESS_DIM(mask, nav_data->minimum));
-        minimum = ACCESS_DIM(mask, nav_data->minimum);
         argCount++;
       }
       if ((nav_data->valueMask & NavIncrement) &&
           (spinC->increment_value != ACCESS_DIM(mask, nav_data->increment)))
       {
         XtSetArg(arglist[argCount], XmNincrementValue, ACCESS_DIM(mask, nav_data->increment));
-        increment = ACCESS_DIM(mask, nav_data->increment);
         argCount++;
       }
       /* Process value if different from current value or either

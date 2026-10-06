@@ -60,7 +60,6 @@ CreateDemoForm(Widget parent)
 {
     Arg    	args[512];
     Cardinal   	argcnt;
-    Boolean   	argok;
     Widget 	retval;
     Widget	form;
     Widget	font_frame;
@@ -79,7 +78,6 @@ CreateDemoForm(Widget parent)
     Widget	separator2;
     Widget	quit_pb;
 
-    argok = False;
 
     BxRegisterConverters();
 

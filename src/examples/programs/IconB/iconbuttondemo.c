@@ -17,8 +17,6 @@
 #include <Xm/Paned.h>
 #include "small.bm"
 #include <pixmaps/crab.xpm>
-#include <pixmaps/eye.xpm>
-#include <pixmaps/porsche.xpm>
 #include <pixmaps/stopsign.xpm>
 
 void Exit(Widget , XtPointer , XtPointer );
@@ -252,13 +250,12 @@ main(int argc, char **argv)
 {
     Arg args[15];
     Cardinal argcnt;
-    Widget top, iconBoxframe, iconBox, infoframe, infolabel,
+    Widget top, iconBoxframe, iconBox, infoframe,
            big_pane, right_pane, placeRC, xRC, yRC,
-           placeLabel, xLabel, yLabel,
            pushButton, pushButton1, pushButton2,
            iconButton1, iconButton2, iconButton3,
            iconButton4, iconButton5, iconPushButton6,
-           iconToggleButton7, iconLabel,
+           iconToggleButton7,
            quitPB;
     Widget explain_scrolled, buttonBox;
     Pixmap icon_pixmap;
@@ -351,7 +348,7 @@ specify which cell in the Icon Box each child should go.\n\
 					     xmScrolledWindowWidgetClass,
 					     infoframe, args, argcnt );
 
-    infolabel = XtVaCreateManagedWidget("infolabel", xmLabelWidgetClass,
+    XtVaCreateManagedWidget("infolabel", xmLabelWidgetClass,
 					explain_scrolled,
                                XmNx, 2, XmNy, 2,
                                XmNalignment, XmALIGNMENT_BEGINNING,
@@ -385,7 +382,7 @@ specify which cell in the Icon Box each child should go.\n\
 				      XmNshowSash, False,
                                NULL);
 
-    placeLabel = XtVaCreateManagedWidget("placeLabel", xmLabelWidgetClass,
+    XtVaCreateManagedWidget("placeLabel", xmLabelWidgetClass,
                                placeRC,
                                XmNx, 3, XmNy, 3,
                                NULL);
@@ -395,7 +392,7 @@ specify which cell in the Icon Box each child should go.\n\
                                XmNx, 82, XmNy, 3,
                                NULL);
 
-    xLabel = XtVaCreateManagedWidget("xLabel", xmLabelWidgetClass,
+    XtVaCreateManagedWidget("xLabel", xmLabelWidgetClass,
                                xRC,
                                XmNx, 3, XmNy, 3,
                                NULL);
@@ -405,7 +402,7 @@ specify which cell in the Icon Box each child should go.\n\
                                XmNx, 82, XmNy, 3,
                                NULL);
 
-    yLabel = XtVaCreateManagedWidget("yLabel", xmLabelWidgetClass, yRC,
+    XtVaCreateManagedWidget("yLabel", xmLabelWidgetClass, yRC,
                                XmNx, 3, XmNy, 3,
                                NULL);
 

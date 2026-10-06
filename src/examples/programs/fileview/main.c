@@ -40,7 +40,6 @@ static void DoneCallback(Widget button,
 			 XtPointer client_data, XtPointer call_data)
 
 {
-   ViewPtr this = (ViewPtr) client_data;
    Widget b;
 
    XtVaGetValues(locale_box, XmNmenuHistory, &b, NULL);
@@ -55,18 +54,17 @@ static void DoneCallback(Widget button,
 static Widget CreateLocaleBox(ViewPtr this, OS os, String os_name)
 {
    Widget select_box, pick_form;
-   Widget framed[2], frame;
+   Widget framed[2];
    Widget languages[MaxLanguage+1] ;
    Widget oss[MaxOS+1] ;
-   int i, lang;
+   int i;
    Arg args[20];
    int count;
    int n;
-   Widget os_panel;
    Widget lang_frame, os_frame;
    char s[255];
    int def_lang = 0;
-   XmString msg, msg1, msg2;
+   XmString msg;
 
    n = 0;
    XtSetArg(args[n], XmNmessageString,
@@ -202,7 +200,6 @@ int main(int argc, char *argv[])
    XEvent event;
    String new_locale;
    char msg[128];
-   String lang = getenv("LANG");
    OS os;
    struct utsname os_def;
    char filename[255];
@@ -331,7 +328,7 @@ static String MyLanguageProc(Display * dpy, String xnl,
 static ViewPtr NewFileShell(Widget parent, ViewPtr this,
 			   int argc, char *argv[])
 {
-   Widget mw, children[4], menubar, entry;
+   Widget mw, children[4], entry;
    Arg args[20];
    String names[8];
    XtCallbackProc procs[8];
@@ -530,7 +527,7 @@ static void HelpCallback(Widget	widget, ViewPtr this,
   if ( HelpDialog == NULL ) {
      Arg args[8];
      int n = 0;
-     XmString help1, help2, help3, help_msg;
+     XmString help1, help2, help_msg;
 
      help1 = XmStringConcatAndFree(FetchString(this, "help_file"),
 				   XmStringSeparatorCreate());
@@ -557,7 +554,6 @@ static void HelpCallback(Widget	widget, ViewPtr this,
 static void OpenNewShellCallback(Widget widget, ViewPtr this,
 			 XmPushButtonCallbackStruct *call_data)
 {
-   XmPushButtonCallbackStruct dummy_data;
    ViewPtr view;
 
    view = NewFileShell(theWidgetRoot, NULL, 0, NULL);
@@ -572,9 +568,6 @@ static void OpenNewShellCallback(Widget widget, ViewPtr this,
 static void OpenFileCallback(Widget widget, ViewPtr this,
 			 XmPushButtonCallbackStruct *call_data)
 {
-   Arg args[8];
-   int n = 0;
-
    if (this->fsb == NULL) {
       this->fsb = CreateFileSelectionBox(this);
       XtManageChild(this->fsb);

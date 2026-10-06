@@ -444,8 +444,6 @@ Realize(Widget w,
         XtValueMask *p_valueMask,
         XSetWindowAttributes *attributes )
 {
-   Mask valueMask = *p_valueMask;
-
    /* First call Primitive's method */
    xmPrimitiveClassRec.core_class.realize(w, p_valueMask, attributes);
 
@@ -606,8 +604,8 @@ SetValues (
    }
 
  /* Redisplay on change in sensitivity */
- if (XtIsSensitive(new_w) != XtIsSensitive(old_w))
-   redisplayFlag = True;
+   if (XtIsSensitive(new_w) != XtIsSensitive(old_w))
+     redisplayFlag = True;
 
  /* If the widget's foreground or background color changes,
     then we must update the GC. */

@@ -69,23 +69,16 @@ Widget
 {
     Arg    	args[512];
     Cardinal   	argcnt;
-    Boolean   	argok;
-    Widget 	retval;
     Widget	big_pane,right_pane;
     Widget	listframe;
-    Widget	extlist;
     Widget	lineup_frame;
     Widget	lineup_row;
     Widget	add_rc;
     Widget	rem_rc;
-    Widget	elist_op_frame;
-    Widget	elist_op_row;
     Widget	unsel_pb;
     Widget	quit_pb;
-    Widget	explain_frame, explain_scrolled ;
+    Widget	explain_scrolled ;
     Widget	explain_label;
-
-    argok = False;
 
     RegisterConverters();
 

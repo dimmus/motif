@@ -75,11 +75,6 @@ static void Layout(
 		   Widget, Widget );
 static void Resize (
                         Widget w );
-static void SetValuesAlmost(
-                        Widget cw,
-                        Widget nw,
-                        XtWidgetGeometry *request,
-                        XtWidgetGeometry *reply) ;
 static XtGeometryResult QueryGeometry (
                         Widget w,
                         XtWidgetGeometry *request,
@@ -228,7 +223,6 @@ Initialize(Widget request_w,
 	   ArgList p_args,
 	   Cardinal *num_args)
 {
-  XmdHelpWidget rw = (XmdHelpWidget) request_w;
   XmdHelpWidget nw = (XmdHelpWidget) new_w;
   Arg args[20];
   int n, i;
@@ -405,7 +399,6 @@ SetValues (
           )
 {
   XmdHelpWidget cw = (XmdHelpWidget)old_w;
-  XmdHelpWidget rw = (XmdHelpWidget)request_w;
   XmdHelpWidget nw = (XmdHelpWidget)new_w;
 
   if (nw -> help.rendertable != cw -> help.rendertable) {
@@ -451,30 +444,6 @@ Resize (
        )
 {
   Layout(w, NULL);
-}
-
-/*************************************************************************
- *
- *  SetValuesAlmost:
- *       Called by the Intrinsics when an XtMakeGeometryRequest call
- *       returns either XmGeometryAlmost or XtGeometryNo.
- *
- ***************************************************************************/
-static void
-SetValuesAlmost(
-        Widget cw,		/* unused */
-        Widget nw,
-        XtWidgetGeometry *request,
-        XtWidgetGeometry *reply )
-{
-  /* The parent said XtGeometryNo to the geometry request.
-     Therefore, we need to relayout because this request
-     was due to a change in internal geometry resource of the ExmGrid */
-    if (!reply->request_mode) {
-      Layout(nw, NULL);
-    }
-
-    *request = *reply;
 }
 
 /***************************************************************************
@@ -529,8 +498,6 @@ QueryGeometry (
         XtWidgetGeometry *reply
               )
 {
-  XmdHelpWidget help = (XmdHelpWidget) w;
-
   /* If the parent calls XtQueryGeometry before the widget has been
      realized, use the current size as the preferred size. */
   /* Deal with user initial size setting */
@@ -619,9 +586,7 @@ ChangeManaged(
         Widget w
              )
 {
-  XmdHelpWidget help = (XmdHelpWidget) w;
   Dimension helpWidth, helpHeight;
-  int i;
 
   /* If you get an initial (C) size from the user or application, keep it.
      Otherwise, just force width and height to 0 so that CalcSize will
@@ -668,9 +633,6 @@ CalcSize (
   int spacing = hw -> help.spacing;
   int width = 0;
   int height = 1;
-  int x, y;
-
-  x = y = spacing;
 
   /* There are only a few children.  They are laid out in a simple
      left to right fashion */

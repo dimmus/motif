@@ -203,7 +203,6 @@ ToggleFindArea(Widget w, XtPointer client, XtPointer call )
 {
   DemoInfo demo_info = (DemoInfo)client;
   Arg args[5];
-  Cardinal argcnt = 0;
   Boolean is_set;
 
   XtSetArg( args[0], XmNset, &is_set );
@@ -252,7 +251,6 @@ UpdateRemLabelStr(Widget w,XtPointer client, XtPointer call )
 {
   DemoInfo demo_info = (DemoInfo)client;
   Arg args[5];
-  Cardinal argcnt;
   XmMultiListRowInfo *row_info = (XmMultiListRowInfo *)call;
 
   if (row_info && row_info->values)

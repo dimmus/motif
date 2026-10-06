@@ -156,7 +156,6 @@ outlineCB(Widget widget, char* subdirname,
   if (callback_data -> new_outline_state == True) {
     Widget parent = callback_data -> item;
     char *path;
-    int ind;
     FileInfoRec *f = GetInfoFromWidget(parent);
 
     if (! f -> dirRead) {
@@ -475,7 +474,6 @@ getIcons(int ind, Pixmap *icon, Pixmap *mask, Pixmap *sicon, Pixmap *smask)
 {
   Boolean	isdir;
   Boolean	isexec;
-  Boolean	canRead;
   FileInfoRec *info = &FI[ind];
   mode_t	mode;
   XrmQuark	path[10];
@@ -624,7 +622,6 @@ selectCB(Widget w, XtPointer ignore, XtPointer cb)
   XmContainerSelectCallbackStruct *cbstruct =
     (XmContainerSelectCallbackStruct *) cb;
   char *temp;
-  Boolean found = False;
   Widget target = cbstruct -> selected_items[0];
   mode_t mode;
   FileInfoRec *f;

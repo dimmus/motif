@@ -294,11 +294,9 @@ static Boolean SendPlaneID(Widget drag_context, Atom *selection, Atom *target,
 			 XtPointer *value, unsigned long *length,
 			 int *format)
 {
-   Airport this;
    Flight flight;
 
    XtVaGetValues(drag_context, XmNclientData, &flight, NULL);
-   this = flight->from;
 
    if (*target == FlightAtom) {
       long * data = (long *) XtMalloc(sizeof(long));

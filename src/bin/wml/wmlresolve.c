@@ -448,7 +448,6 @@ WmlSynResourceDefPtr	cursyn;		/* current syntactic object */
 WmlResourceDefPtr	newobj;		/* new resolved object */
 int			ndx;		/* loop index */
 int			code;		/* assigned sym_k code value */
-char			errmsg[300];
 
 /*
  * Initialize the object vector. Then process the syntactic vector,
@@ -523,7 +522,6 @@ WmlSynResourceDefPtr	cursyn;		/* current syntactic object */
 WmlResourceDefPtr	newobj;		/* new resolved object */
 int			ndx;		/* loop index */
 int			code;		/* assigned sym_k code value */
-char			errmsg[300];
 
 /*
  * Initialize the object vector. Then process the syntactic vector,
@@ -887,7 +885,6 @@ void wmlResolveValidateClass (void)
 {
 
 int			ndx;		/* loop index */
-int			max;		/* maximum code value */
 WmlClassDefPtr		clsobj;		/* current class object */
 WmlSynClassDefPtr	synobj;		/* syntactic class object */
 WmlClassDefPtr		superobj;	/* superclass */
@@ -1059,7 +1056,6 @@ void wmlResolveClassInherit(WmlClassDefPtr clsobj)
 
 WmlClassDefPtr		superobj;	/* superclass object */
 WmlClassDefPtr		parentobj;	/* parentclass object */
-int			ndx;		/* loop index */
 WmlResourceDefPtr	resobj;		/* current resource object */
 WmlClassResDefPtr	refobj;		/* current resource reference */
 WmlClassResDefPtr	srcref;		/* source of copy */
@@ -1342,7 +1338,6 @@ void wmlResolvePrintClass (FILE *outfil, WmlClassDefPtr clsobj)
 
 int			ndx;		/* loop index */
 WmlSynClassDefPtr	synobj;		/* syntactic object */
-WmlClassCtrlDefPtr	ctrlref;	/* controls reference */
 WmlClassDefPtr		ctrlobj;	/* current class in control */
 
 
@@ -1635,9 +1630,6 @@ void wmlMarkReferencePointers (WmlClassDefPtr clsobj)
 
 {
 
-int			ndx;		/* loop index */
-WmlClassDefPtr		mrkcls;		/* class object to mark */
-WmlResourceDefPtr	mrkres;		/* resource object to mark */
 WmlClassResDefPtr	resref;		/* resource reference */
 WmlClassCtrlDefPtr	ctrlref;	/* controls reference */
 

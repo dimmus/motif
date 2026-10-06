@@ -40,7 +40,6 @@ static char rcsid[] = "$XConsortium: WmImage.c /main/7 1996/11/14 13:50:30 rswis
 
 #include "WmGlobal.h"
 
-#define MWM_NEED_IIMAGE
 #include "WmIBitmap.h"
 
 #include <Xm/XmosP.h>
@@ -108,12 +107,6 @@ Pixmap MakeClientIconPixmap (
   unsigned int  bitmapHeight;
   unsigned int  border;
   unsigned int  depth;
-  WmScreenData *pSD;
-
-  if (pCD)
-    pSD = pCD->pSD;
-  else
-    pSD = wmGD.pActiveSD;
 
   /*
    * Get pixmap attributes and ensure that it is usable.

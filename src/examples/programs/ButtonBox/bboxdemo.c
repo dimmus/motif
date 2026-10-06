@@ -289,13 +289,13 @@ main(int argc, char **argv)
 {
     Arg args[5];
     Cardinal argcnt;
-    Widget top, bboxframe, infoframe, infolabel, resframe, resform,
-           bboxSizeRC, boxSizeLabel, togl_btn1, togl_btn2, pushButton, radioRC,
-           fillOptionRC, fillOptionLabel, fillOptionMenu, nonePB, minorPB,
+    Widget top, bboxframe, infoframe, resframe, resform,
+           bboxSizeRC, togl_btn1, togl_btn2, pushButton, radioRC,
+           fillOptionRC, fillOptionMenu, nonePB, minorPB,
            majorPB, allPB, menuShell, pulldownMenu, pushButton1,widRC,
-           widLabel, widText, htRC, htLabel, htText, pushButton2, orientRC,
-           orientLabel, pushButton3, pushButton4, quitPB, bbox_PB1, bbox_PB2,
-           bbox_PB3, bbox_PB4, togl_btn3, togl_btn4, orientRadio, bform;
+           widText, htRC, htText, pushButton2, orientRC,
+           pushButton3, pushButton4, quitPB,
+           togl_btn3, togl_btn4, orientRadio, bform;
 
     XtAppContext app;
 
@@ -362,16 +362,16 @@ main(int argc, char **argv)
  *
  */
 
-    bbox_PB1 = XmVaCreateManagedPushButton(bbox, "FirstButton",
+    XmVaCreateManagedPushButton(bbox, "FirstButton",
                 NULL);
 
-    bbox_PB2 = XmVaCreateManagedPushButton(bbox, "SecondButton",
+    XmVaCreateManagedPushButton(bbox, "SecondButton",
                 NULL);
 
-    bbox_PB3 = XmVaCreateManagedPushButton(bbox, "ThirdButton",
+    XmVaCreateManagedPushButton(bbox, "ThirdButton",
                 NULL);
 
-    bbox_PB4 = XtCreateManagedWidget("LastButton",
+    XtCreateManagedWidget("LastButton",
                 xmPushButtonWidgetClass,
                 bbox,
                 NULL,
@@ -427,7 +427,7 @@ Press the \"Explain...\" button to find out more about a particular resource.",
                                NULL);
     XtManageChild(quitPB);
 
-    infolabel = XtVaCreateManagedWidget("infolabel", xmLabelWidgetClass,
+    XtVaCreateManagedWidget("infolabel", xmLabelWidgetClass,
                                infoframe,
                                XmNx, 2, XmNy, 2,
                                XmNalignment, XmALIGNMENT_BEGINNING,
@@ -504,7 +504,7 @@ Press the \"Explain...\" button to find out more about a particular resource.",
                                XmNrowColumnType, XmWORK_AREA,
                                NULL);
 
-    boxSizeLabel = XtVaCreateManagedWidget("boxSizeLabel", xmLabelWidgetClass,
+    XtVaCreateManagedWidget("boxSizeLabel", xmLabelWidgetClass,
                                bboxSizeRC,
                                XmNx, 3, XmNy, 3,
                                NULL);
@@ -528,7 +528,7 @@ Press the \"Explain...\" button to find out more about a particular resource.",
                                XmNx, 265, XmNy, 3,
                                NULL);
 
-    fillOptionLabel = XtVaCreateManagedWidget("fillOptionLabel",
+    XtVaCreateManagedWidget("fillOptionLabel",
                                xmLabelWidgetClass, fillOptionRC,
                                XmNx, 3, XmNy, 3,
                                NULL);
@@ -576,7 +576,7 @@ Press the \"Explain...\" button to find out more about a particular resource.",
                                XmNx, 262, XmNy, 3,
                                NULL);
 
-    widLabel = XtVaCreateManagedWidget("widLabel", xmLabelWidgetClass, widRC,
+    XtVaCreateManagedWidget("widLabel", xmLabelWidgetClass, widRC,
                                XmNx, 3, XmNy, 3,
                                NULL);
 
@@ -588,7 +588,7 @@ Press the \"Explain...\" button to find out more about a particular resource.",
                                XmNx, 217, XmNy, 3,
                                NULL);
 
-    htLabel = XtVaCreateManagedWidget("htLabel", xmLabelWidgetClass, htRC,
+    XtVaCreateManagedWidget("htLabel", xmLabelWidgetClass, htRC,
                                XmNx, 3, XmNy, 3,
                                NULL);
 
@@ -600,7 +600,7 @@ Press the \"Explain...\" button to find out more about a particular resource.",
                                XmNx, 217, XmNy, 3,
                                NULL);
 
-    orientLabel = XtVaCreateManagedWidget("orientLabel", xmLabelWidgetClass,
+    XtVaCreateManagedWidget("orientLabel", xmLabelWidgetClass,
                                orientRC,
                                XmNx, 3, XmNy, 3,
                                NULL);

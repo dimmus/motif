@@ -75,7 +75,9 @@ static char rcsid[] = "$XConsortium: UilMain.c /main/14 1996/06/03 15:49:20 pasc
 
 extern int main  _ARGUMENTS(( int l_argc , char *rac_argv []));
 
+#ifndef CALLABLE
 static void common_main  _ARGUMENTS(( void ));
+#endif /* !CALLABLE */
 static void common_cleanup  _ARGUMENTS(( void ));
 
 #ifdef CALLABLE
@@ -145,6 +147,7 @@ static unsigned	   doing_exit = 0;
 **--
 **/
 
+#ifndef CALLABLE
 static void	common_main(void)
 {
 #if XM_MSGCAT
@@ -218,6 +221,7 @@ static void	common_main(void)
     uil_exit( uil_l_compile_status );
 
 }
+#endif /* !CALLABLE */
 
 
 /*

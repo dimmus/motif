@@ -2050,7 +2050,6 @@ char *_XmTextToLocaleText(
   char **values;
   int num_values = 0;
   char *total_value = NULL;
-  int i;
   if (type == XA_STRING || type == COMPOUND_TEXT
 #if XM_UTF8
       || type == UTF8_STRING

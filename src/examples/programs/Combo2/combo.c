@@ -69,7 +69,6 @@ main (int argc,char *argv[])
 {
 	XtAppContext app_context;
 	Widget app_shell;
-	Display *display;
 
         XtSetLanguageProc(NULL, (XtLanguageProc) NULL, NULL);
 

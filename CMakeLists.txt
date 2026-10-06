@@ -403,20 +403,7 @@ if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
     -Werror=implicit-function-declaration
     -Werror=return-type
     -Werror=vla
-    # Legacy code patterns that are not worth the churn
-    -Wno-char-subscripts
-    -Wno-unknown-pragmas
-    -Wno-div-by-zero
-    -Wno-stringop-overread
-    -Wno-misleading-indentation
-    -Wno-unused-function
-    -Wno-unused-variable
-    -Wno-unused-but-set-variable
-    -Wno-unused-value
   )
-  if(CMAKE_C_COMPILER_ID STREQUAL "Clang")
-    motif_check_c_flags(MOTIF_C_WARNINGS -Wno-tautological-compare)
-  endif()
 endif()
 
 # -----------------------------------------------------------------------------
@@ -649,6 +636,14 @@ endif()
 # build directory with WITH_PGO=USE and rebuild.  With Clang, merge the raw
 # profiles first: llvm-profdata merge -o ${MOTIF_PGO_DIR}/default.profdata
 # ${MOTIF_PGO_DIR}/*.profraw
+#
+# Only the code the training runs is instrumented and optimized with the
+# profile: the libraries and mwm (MOTIF_PGO_TARGETS, applied at the end of
+# this file).  The examples, the tests and the build tools would have no
+# profile, and their many main() functions would share one profile record.
+# Every program is linked with the profiling runtime, which the
+# instrumented static libraries need.
+set(MOTIF_PGO_COMPILE_OPTIONS)
 if(WITH_PGO)
   if(NOT CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
     message(FATAL_ERROR "WITH_PGO is only supported with GCC and Clang")
@@ -661,22 +656,20 @@ if(WITH_PGO)
     else()
       set(_motif_pgo_flags -fprofile-generate=${MOTIF_PGO_DIR})
     endif()
-    add_compile_options(${_motif_pgo_flags})
+    set(MOTIF_PGO_COMPILE_OPTIONS ${_motif_pgo_flags})
     add_link_options(${_motif_pgo_flags})
     unset(_motif_pgo_flags)
   elseif(WITH_PGO STREQUAL "USE")
     if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
       # Code the training did not run is optimized as usual rather than for
-      # size, and sources without a profile are not an error.
-      add_compile_options(-fprofile-use=${MOTIF_PGO_DIR} -fprofile-partial-training
-        -Wno-missing-profile)
+      # size.
+      set(MOTIF_PGO_COMPILE_OPTIONS -fprofile-use=${MOTIF_PGO_DIR} -fprofile-partial-training)
     else()
       if(NOT EXISTS ${MOTIF_PGO_DIR}/default.profdata)
         message(FATAL_ERROR "WITH_PGO=USE: ${MOTIF_PGO_DIR}/default.profdata not found; "
           "merge the raw profiles with llvm-profdata first")
       endif()
-      add_compile_options(-fprofile-use=${MOTIF_PGO_DIR}/default.profdata
-        -Wno-profile-instr-unprofiled -Wno-profile-instr-out-of-date)
+      set(MOTIF_PGO_COMPILE_OPTIONS -fprofile-use=${MOTIF_PGO_DIR}/default.profdata)
     endif()
   else()
     message(FATAL_ERROR "WITH_PGO must be OFF, GENERATE or USE, not '${WITH_PGO}'")
@@ -815,6 +808,18 @@ endif()
 
 if(WITH_DOCS)
     add_subdirectory(doc)
+endif()
+
+# The targets built with the profile (see "Profile-guided optimization").
+# UilCompiler holds the UIL compiler objects that libUil and uil share;
+# the training runs them through uil.
+if(MOTIF_PGO_COMPILE_OPTIONS)
+  foreach(_target IN ITEMS Xm Mrm UilCompiler mwm)
+    if(TARGET ${_target})
+      target_compile_options(${_target} PRIVATE ${MOTIF_PGO_COMPILE_OPTIONS})
+    endif()
+  endforeach()
+  unset(_target)
 endif()
 
 # The training workload of WITH_PGO=GENERATE: the test suite (WITH_TESTS),

@@ -56,7 +56,6 @@ static FILE *msgfp;
 static FILE *descfile;
 static char inname [PATH_MAX];
 static char outname [PATH_MAX];
-static char catname [PATH_MAX];
 static char *mname;
 static void mkcatdefs(char *);
 static int chkcontin(char *);
@@ -527,7 +526,7 @@ insert(char *tname,
 
 {
   struct name *ptr,*optr = NULL;	/* optr: parent of the new node */
-  int rslt = -1,i,hashval;
+  int rslt = -1,hashval;
 
   hashval = hash(tname);
   ptr = symtab[hashval];
@@ -590,15 +589,14 @@ nsearch (char *tname)
        */
 
 {
-  struct name *ptr,*optr;
-  int rslt = -1,i,hashval;
+  struct name *ptr;
+  int rslt = -1,hashval;
 
   hashval = hash(tname);
   ptr = symtab[hashval];
 
   /* search the binary tree for specified symbol */
   while (ptr && (rslt = strcmp(tname,ptr->regname))) {
-    optr=ptr;
     if (rslt<0)
       ptr = ptr->left;
     else

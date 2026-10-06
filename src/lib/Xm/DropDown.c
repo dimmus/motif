@@ -58,7 +58,6 @@ static XtGeometryResult QueryGeometry(Widget, XtWidgetGeometry *, XtWidgetGeomet
 static void ClassPartInitialize(WidgetClass);
 static void ClassInitialize(void);
 static void ExposeMethod(Widget, XEvent *, Region);
-static Boolean ComboBoxParentProcess(Widget wid, XmParentProcessData event);
 /************************
  * Actions and callbacks.
  ************************/
@@ -76,7 +75,6 @@ static void SBBtnUpEH(Widget, XtPointer, XEvent *, Boolean *);
  *********************/
 static XmDropDownWidget FindComboBox(Widget);
 static void PopdownList(Widget);
-static void LoseFocusHandler(Widget, XtPointer, XEvent *, Boolean *);
 static void RegisterShellHandler(Widget);
 static void CreateChildren(Widget, ArgList, Cardinal);
 static void CreatePopup(Widget, ArgList, Cardinal);
@@ -1127,27 +1125,6 @@ static void ShellButtonEvent(Widget w, XtPointer cbw_ptr, XEvent *event, Boolean
   if (XmDropDown_list_state(cbw) !=
       XmDropDown_POSTED) /* in case this popup shell is used for more than one combobox */
     ArrowClicked(XmDropDown_arrow(cbw), cbw_ptr, NULL);
-}
-
-/*	Function Name: LoseFocusHandler
- *	Description: This function is called whenever the shell loses focus
- *                   in this case we should bring down the list.
- *	Arguments: w - the shell widget.
- *                 cbw_ptr - the combo box widget pointer.
- *                 event - the event that caused this action.
- *                 junk - *** UNUSED ***.
- *	Returns: none.
- */
-/* ARGSUSED */
-static void LoseFocusHandler(Widget w, XtPointer cbw_ptr, XEvent *event, Boolean *junk)
-{
-  XmDropDownWidget cbw = (XmDropDownWidget)cbw_ptr;
-  XFocusChangeEvent *fevent = &(event->xfocus);
-  if ((event->xany.type != FocusOut) || (XmDropDown_list_state(cbw) != XmDropDown_UNPOSTED) ||
-      (fevent->detail == NotifyInferior))
-  {
-    return;
-  }
 }
 
 /*	Function Name: ComboUnpost

@@ -247,7 +247,6 @@ void	sem_resolve_forward_refs(void)
     {
 	sym_name_entry_type	* name_entry;
 	sym_value_entry_type	* value_entry;
-	sym_obj_entry_type	* obj_entry;
 
 
 	/*
@@ -267,7 +266,6 @@ void	sem_resolve_forward_refs(void)
 
 	name_entry = fwd_val_entry->az_name;
 	value_entry = (sym_value_entry_type *) name_entry->az_object;
-	obj_entry = (sym_obj_entry_type *) name_entry->az_object;
 
 	if (value_entry == NULL)
 	{

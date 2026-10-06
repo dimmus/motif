@@ -37,6 +37,7 @@
 #include "integCursor.h"
 #endif /* INTEGRATION_TESTING */
 
+#ifdef MWM_NEED_TIME32
 #define time32_width 32
 #define time32_height 32
 #define time32_x_hot 15
@@ -69,6 +70,7 @@ static unsigned char time32m_bits[] = {
    0xee, 0xff, 0xff, 0x77, 0xcf, 0xff, 0xff, 0xf3, 0xff, 0xff, 0xff, 0xff,
    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 
+#endif /* MWM_NEED_TIME32 */
 #endif /* LARGECURSORS */
 
 
@@ -98,6 +100,7 @@ static unsigned char time16m_bits[] = {
 
 #ifdef LARGECURSORS
 
+#ifdef MWM_NEED_NOENTER32
 #define noenter32_width 32
 #define noenter32_height 32
 #define noenter32_x_hot 15
@@ -129,6 +132,7 @@ static unsigned char noenter32m_bits[] = {
    0xc0, 0xff, 0xff, 0x03, 0x80, 0xff, 0xff, 0x01, 0x00, 0xff, 0xff, 0x00,
    0x00, 0xfc, 0x3f, 0x00, 0x00, 0xe0, 0x07, 0x00};
 
+#endif /* MWM_NEED_NOENTER32 */
 #endif /* LARGECURSORS */
 
 #ifdef MWM_NEED_NOENTER16

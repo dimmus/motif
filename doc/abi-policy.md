@@ -192,6 +192,9 @@ cmake -B _build -DWITH_PGO=USE && ninja -C _build
 
 With Clang, merge the raw profiles first:
 `llvm-profdata merge -o _build/pgo/default.profdata _build/pgo/*.profraw`.
+The profile covers the code the training runs: libXm, libMrm, the UIL
+compiler and mwm.  The examples, tests and build tools are built as
+usual.
 
 ### Measurements
 

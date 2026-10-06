@@ -1461,7 +1461,6 @@ void		sar_save_argument_pair(yystype *argument_frame, yystype *value_frame, yyst
     sym_list_entry_type		* list_entry;
     sym_value_entry_type	* val_value_entry;
     sym_value_entry_type	* arg_value_entry;
-    unsigned char		actual_tag;
 
     /* yystype			* source_frame; */ /* unused but set variable */
 
@@ -1491,7 +1490,6 @@ void		sar_save_argument_pair(yystype *argument_frame, yystype *value_frame, yyst
 	argument_frame );
 
     val_value_entry = (sym_value_entry_type *) value_frame->value.az_symbol_entry;
-    actual_tag = val_value_entry->header.b_tag;
 
 /*    Create and fill in the argument node.    */
 
@@ -2107,8 +2105,6 @@ void		sar_add_forward_list_entry(yystype *entry_frame)
     yystype			* list_frame;
     sym_list_entry_type		* list_entry;
     sym_obj_entry_type		* entry_entry;
-    sym_name_entry_type		* name_entry;
-    /* yystype			* source_frame; */ /* unused but set variable */
     sym_nested_list_entry_type	*nested_entry;
 
     /* source_frame = & yylval; */ /* unused assignment */
@@ -2120,8 +2116,6 @@ void		sar_add_forward_list_entry(yystype *entry_frame)
 
     _assert (list_entry->header.b_tag == sym_k_list_entry,
 	     "list entry missing");
-
-    name_entry = (sym_name_entry_type *) entry_frame->value.az_symbol_entry;
 
     nested_entry = (sym_nested_list_entry_type *)
 	sem_allocate_node (sym_k_nested_list_entry,
@@ -2184,14 +2178,12 @@ yystype				* obj_frame;
 sym_widget_entry_type		* widget_entry;
 unsigned int			widget_type;
 sym_obj_entry_type		* obj_entry;
-yystype				* source_frame;
 
 
 
 /*
  * Search the syntax stack for the object frame.
  */
-source_frame = & yylval;
 obj_frame = sem_find_object (current_frame - 1);
 obj_entry = (sym_obj_entry_type *) obj_frame->value.az_symbol_entry;
 

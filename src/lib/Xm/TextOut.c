@@ -1357,7 +1357,6 @@ void _XmChangeHSB(XmTextWidget tw)
   OutputData data = tw->text.output->data;
   int local_total = 0;
   int new_size = 0;
-  int offset;
   XmNavigatorDataRec nav_data;
   if (tw->text.disable_depth != 0)
     return;
@@ -1381,7 +1380,6 @@ void _XmChangeHSB(XmTextWidget tw)
     if (new_size + tw->text.top_line > local_total)
       new_size = local_total - tw->text.top_line;
     data->ignorehbar = True;
-    offset = local_total - (tw->text.number_lines + tw->text.top_line);
     nav_data.value.x = tw->text.top_line;
     nav_data.minimum.x = 0;
     nav_data.maximum.x = local_total;
@@ -4799,12 +4797,10 @@ static void SliderMove(Widget w, XtPointer closure, XtPointer cd)
   XmTextWidget tw = (XmTextWidget)closure;
   XmNavigatorDataRec nav_data;
   int offset, n;
-  int new_top;
   XPoint xmim_point;
   XRectangle xmim_area;
   Arg args[10];
   OutputData data = tw->text.output->data;
-  int local_total = 0;
   /* get the navigator information using the trait getValue since I
      cannot use a callback struct */
   nav_data.valueMask = NavValue;
@@ -4814,11 +4810,6 @@ static void SliderMove(Widget w, XtPointer closure, XtPointer cd)
     if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
       data->suspend_voffset = True;
       tw->text.hsbar_scrolling = True;
-      if (tw->text.top_line + tw->text.number_lines > (Cardinal)tw->text.total_lines)
-        local_total = tw->text.top_line + tw->text.number_lines;
-      else
-        local_total = tw->text.total_lines;
-      new_top = local_total - nav_data.value.x - tw->text.number_lines;
       offset = nav_data.value.x - tw->text.top_line;
       tw->text.top_line = nav_data.value.x;
       EraseInsertionPoint(tw);

@@ -42,15 +42,6 @@
 
 
 
-#define MAX_CLIENT_CMDS 1000
-
-
-
-
-
-static CARD32 cmdKillList[MAX_CLIENT_CMDS];
-static unsigned long cmdKillListIndex;
-
 #define ScrNum(w) (XScreenNumberOfScreen(XtScreen(w)))
 #define CCI_TREE(w) (wmGD.Screens[ScrNum(w)].cciTree)
 #define CCI_TREE_OF_SCR(scr) (wmGD.Screens[(scr)].cciTree)
@@ -185,7 +176,6 @@ FindDuplicateName(
      CmdTree  *menuTree,
      char     *name)
 {
-  CmdTree *tmp;
   CARD32  duplicateID;
 
   if (menuTree == NULL)
@@ -344,8 +334,6 @@ DefineCommand (
   CARD32  commandID, commandSet, selection, duplicateID;
   String  name, defaultLabel;
   Boolean found = False;
-  Window  owner;
-  XWindowAttributes attr;
   UnpackStream stream;
 
   /*
@@ -1048,87 +1036,6 @@ RemoveCommand (
 
 
 /*---------------------------------------------------------------------------*
- |                           RemoveMatchingCommands                          |
- | Recursively removes commands that match a given window in the specified   |
- | command tree.                                                             |
- *---------------------------------------------------------------------------*/
-/*ARGSUSED*/
-static void
-RemoveMatchingCommands (
-     int    scr,
-     Window clientWindow,
-     CmdTree *tree)
-{
-  if (tree == NULL)
-    return;
-
-  if (tree->subTrees != NULL)
-    RemoveMatchingCommands(scr, clientWindow, tree->subTrees);
-
-  if (tree->notifyWindow == clientWindow)
-    {
-      cmdKillList[ cmdKillListIndex++ ] = tree->commandID;
-    }
-
-  if (tree->next != NULL)
-    RemoveMatchingCommands(scr, clientWindow, tree->next);
-}
-
-
-
-/*---------------------------------------------------------------------------*
- |                           RemoveCommandsForClient                         |
- | This function will remove any command that was inserted by this client.   |
- *---------------------------------------------------------------------------*/
-static void
-RemoveCommandsForClient (
-     int    scr,
-     Window clientWindow)
-{
-  int i;
-
-  ShowWaitState (TRUE);
-
-  cmdKillListIndex = 0;
-  RemoveMatchingCommands(scr, clientWindow, CCI_TREE_OF_SCR(scr));
-
-  /*
-   * Remove any matching commands on the root menu.
-   */
-  for (i = 0;  (long unsigned int)i < cmdKillListIndex;  i++)
-    {
-      CmdTree *tPtr, *pNext;
-      MenuSpec *pMS;
-      WmScreenData *pSD = ACTIVE_PSD;
-
-      while ((tPtr = FindCmd (cmdKillList[ i ], CCI_TREE_OF_SCR(scr))))
-	{
-	  /* make sure ModifyClientCommandTree can't muck with cmdTree. */
-	  pNext = tPtr->next;
-	  tPtr->next = NULL;
-
-	  ModifyClientCommandTree (pSD, NULL, ALL, tPtr,
-				   REMOVE, F_CONTEXT_ALL, NULL);
-	  /* restore tree. */
-	  tPtr->next = pNext;
-
-	  /*
-	   * if this command caused a menu spec to be created, remove it.
-	   */
-	  DestroyMenuSpec(pSD, cmdKillList[i]);
-
-	  /*
-	   * Now delete the matching entry in the command tree.
-	   */
-	  DeleteCommand(cmdKillList[ i ], &CCI_TREE_OF_SCR(scr));
-	}
-    }
-
-  ShowWaitState (FALSE);
-}
-
-
-/*---------------------------------------------------------------------------*
  |                            InvokeMessageReply                             |
  *---------------------------------------------------------------------------*/
 /*ARGSUSED*/
@@ -1287,13 +1194,13 @@ GetMaximizeInfo(ClientData *pcd, XtPointer reply)
 
 
 
-	reply = PackCARD32 (reply, (CARD32)filledCount);
-	reply = PackCARD32 (reply, (CARD32)maximize_button.id);
-	reply = PackCARD32 (reply, (CARD32)maximize_button.rect.x);
-	reply = PackCARD32 (reply, (CARD32)maximize_button.rect.y);
-	reply = PackCARD32 (reply, (CARD32)maximize_button.rect.width);
-	reply = PackCARD32 (reply, (CARD32)maximize_button.rect.height);
-	reply = PackCARD32 (reply, (CARD32)frameWin);
+      reply = PackCARD32 (reply, (CARD32)filledCount);
+      reply = PackCARD32 (reply, (CARD32)maximize_button.id);
+      reply = PackCARD32 (reply, (CARD32)maximize_button.rect.x);
+      reply = PackCARD32 (reply, (CARD32)maximize_button.rect.y);
+      reply = PackCARD32 (reply, (CARD32)maximize_button.rect.width);
+      reply = PackCARD32 (reply, (CARD32)maximize_button.rect.height);
+      reply = PackCARD32 (reply, (CARD32)frameWin);
 }
 
 
@@ -1509,22 +1416,22 @@ GetMoveInfo(ClientData *pcd, XtPointer reply)
 	 FillInvalidInfo (&menu);
 
 
-	 reply = PackCARD32 (reply, (CARD32)filledCount);
-	 reply = PackCARD32 (reply, (CARD32)title.id);
-	 reply = PackCARD32 (reply, (CARD32)title.rect.x);
-	 reply = PackCARD32 (reply, (CARD32)title.rect.y);
-	 reply = PackCARD32 (reply, (CARD32)title.rect.width);
-	 reply = PackCARD32 (reply, (CARD32)title.rect.height);
-       	 reply = PackCARD32 (reply, (CARD32)menu.id);
-	 reply = PackCARD32 (reply, (CARD32)menu.rect.x);
-	 reply = PackCARD32 (reply, (CARD32)menu.rect.y);
-	 reply = PackCARD32 (reply, (CARD32)menu.rect.width);
-	 reply = PackCARD32 (reply, (CARD32)menu.rect.height);
-	 reply = PackCARD32 (reply, (CARD32)upperBorderWidth);
-	 reply = PackCARD32 (reply, (CARD32)lowerBorderWidth);
-	 reply = PackCARD32 (reply, (CARD32)windowX);
-	 reply = PackCARD32 (reply, (CARD32)windowY);
-	 reply = PackCARD32 (reply, (CARD32)frameWin);
+        reply = PackCARD32 (reply, (CARD32)filledCount);
+        reply = PackCARD32 (reply, (CARD32)title.id);
+        reply = PackCARD32 (reply, (CARD32)title.rect.x);
+        reply = PackCARD32 (reply, (CARD32)title.rect.y);
+        reply = PackCARD32 (reply, (CARD32)title.rect.width);
+        reply = PackCARD32 (reply, (CARD32)title.rect.height);
+        reply = PackCARD32 (reply, (CARD32)menu.id);
+        reply = PackCARD32 (reply, (CARD32)menu.rect.x);
+        reply = PackCARD32 (reply, (CARD32)menu.rect.y);
+        reply = PackCARD32 (reply, (CARD32)menu.rect.width);
+        reply = PackCARD32 (reply, (CARD32)menu.rect.height);
+        reply = PackCARD32 (reply, (CARD32)upperBorderWidth);
+        reply = PackCARD32 (reply, (CARD32)lowerBorderWidth);
+        reply = PackCARD32 (reply, (CARD32)windowX);
+        reply = PackCARD32 (reply, (CARD32)windowY);
+        reply = PackCARD32 (reply, (CARD32)frameWin);
 
     }
 
@@ -1560,14 +1467,14 @@ GetResizeInfo(ClientData *pcd, XtPointer reply, int dir)
 
 
        for (i=0; i < filledCount; i++)
-	if (pcd->pTitleGadgets[i].id == FRAME_TITLE)
-	   {
-	      CopyMwmGadget (&(pcd->pTitleGadgets[i]), &title);
-              titleFound = True;
-	   }
+         if (pcd->pTitleGadgets[i].id == FRAME_TITLE)
+           {
+             CopyMwmGadget (&(pcd->pTitleGadgets[i]), &title);
+             titleFound = True;
+           }
 
-	if (titleFound == False)
-	   FillInvalidInfo (&title);
+       if (titleFound == False)
+         FillInvalidInfo (&title);
 
 
 
@@ -1766,11 +1673,6 @@ GetIconMenuItemSelectInfo(ClientData *pcd, XtPointer reply, Boolean use_icon_box
   CARD32 lastRow, lastCol;
   CARD32 iPlaceW, iPlaceH;
   CARD32 clientState;
-  CARD32 useIconBox;
-
-
-
-  useIconBox = pcd->pSD->useIconBox;
 
   icon_box = pcd->pIconBox;
 
@@ -2031,7 +1933,6 @@ GetItemCheckInfo(ClientData *pcd, XtPointer reply)
   MenuSpec *menuSpec;
   int menuItemCount;
   int clientState;
-  int titleGadgetCount;
   int titleId, systemId, minimizeId, maximizeId, northwestId;
   int upperBorderWidth, lowerBorderWidth;
   Window menuWin;
@@ -2159,10 +2060,9 @@ GetAutomationData (XtPointer input, unsigned long inputLen, int inputFmt, Atom *
   CARD32 infoWanted;
 
   Window winId;
-  XtPointer reply;
   int size;
 
-  int i, n, menuItemCount = 0;
+  int n, menuItemCount = 0;
   MenuItem *menu_item;
   UnpackStream stream;
 

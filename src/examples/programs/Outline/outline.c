@@ -61,7 +61,7 @@ static int done = 0;
 #define CODE "void\n\
 BuildHierarchy(Widget parent)\n\
 {\n\
-    Widget outline, hierarchy, w1, w2, w3;\n\
+    Widget outline, w1, w2, w3;\n\
 \n\
     outline = XtCreateManagedWidget(\"outline_widget\", xmOutlineWidgetClass,\n\
               parent, NULL, (Cardinal) 0);\n\
@@ -272,7 +272,7 @@ main(int argc, char **argv)
 static void
 BuildHierarchy(Widget parent, WidgetClass class)
 {
-    Widget outline, hierarchy, w1, w2, w3;
+    Widget outline, w1, w2, w3;
 
     G_outline = outline = XtCreateManagedWidget("outline_widget", class,
 					  parent, NULL, (Cardinal) 0);
@@ -350,7 +350,6 @@ void WriteUpHype(Widget parent)
 {
     Arg args[5];
     Cardinal argcnt;
-    Widget w;
     XmString xmstring;
 
     xmstring = XmStringLtoRCreate(
@@ -371,8 +370,8 @@ Press \"Other Resources...\" for more information on the various resources.",
     XtSetArg(args[argcnt], XmNmarginWidth, 10); argcnt++;
     XtSetArg(args[argcnt], XmNalignment, XmALIGNMENT_BEGINNING); argcnt++;
     XtSetArg(args[argcnt], XmNlabelString, xmstring); argcnt++;
-    w = XtCreateManagedWidget("hypelabel", xmLabelWidgetClass,
-			      parent, args, argcnt);
+    XtCreateManagedWidget("hypelabel", xmLabelWidgetClass,
+			  parent, args, argcnt);
 
     XmStringFree(xmstring);
 
@@ -590,8 +589,8 @@ void MakeControlPanel(Widget parent)
 {
     Arg args[5];
     Cardinal argcnt;
-    Widget big_rc, rc_1, rc_2, show_pb, explain_pb, ladder_tog, ladder_lab,
-    callback_tog, callback_lab, quit_pb, autoclose_tog, sep, connect_tog;
+    Widget big_rc, rc_1, rc_2, show_pb, explain_pb,
+    callback_tog, callback_lab, quit_pb, autoclose_tog, connect_tog;
 
     /* Big Vertical Row Column for the control panel */
     argcnt = 0;
@@ -618,8 +617,8 @@ void MakeControlPanel(Widget parent)
 		  CallbackTogCB, (XtPointer) callback_lab);
 
     argcnt = 0;
-    sep = XtCreateManagedWidget("sep_two", xmSeparatorWidgetClass,
-				rc_1, args, argcnt);
+    XtCreateManagedWidget("sep_two", xmSeparatorWidgetClass,
+			  rc_1, args, argcnt);
 
     argcnt = 0;
     autoclose_tog = XtCreateManagedWidget("autoclose_tog",
@@ -629,8 +628,8 @@ void MakeControlPanel(Widget parent)
 		  AutoCloseTogCB, NULL);
 
     argcnt = 0;
-    sep = XtCreateManagedWidget("sep_two", xmSeparatorWidgetClass,
-				rc_1, args, argcnt);
+    XtCreateManagedWidget("sep_two", xmSeparatorWidgetClass,
+			  rc_1, args, argcnt);
 
     argcnt = 0;
     connect_tog = XtCreateManagedWidget("connect_tog",

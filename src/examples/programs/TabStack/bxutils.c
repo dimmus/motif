@@ -548,7 +548,6 @@ static Boolean extractSegment
     Boolean		sep;
     int			dir;
     Boolean		done;
-    int			*lenUp;
     Boolean		checkDir;
     wchar_t		*commonWChars;
     wchar_t		emptyStrWcs[1];
@@ -565,7 +564,6 @@ static Boolean extractSegment
     dir = XmSTRING_DIRECTION_L_TO_R;
     sep = False;
     done = False;
-    lenUp = NULL;
     commonWChars = CStrCommonWideCharsGet();
 
     /*
@@ -1478,13 +1476,12 @@ void SET_BACKGROUND_COLOR
         ARG(Cardinal *, argcnt)
         GRA(Pixel, bg_color)
 {
+#if ((XmVERSION == 1) && (XmREVISION > 0))
     int		i;
     int		topShadowLoc;
     int		bottomShadowLoc;
     int		selectLoc;
     int		fgLoc;
-
-#if ((XmVERSION == 1) && (XmREVISION > 0))
 
     /*
      * Walk through the arglist to see if the user set the top or
@@ -3594,216 +3591,3 @@ GRA(char **, pixmapName)
 }
 
 #endif
-
-/* This structure is for capturing app-defaults values for a Class */
-
-typedef struct _UIAppDefault
-{
-    char*		cName;		/* Class name */
-    char*		wName; 		/* Widget name */
-    char*		cInstName;	/* Name of class instance(nested) */
-    char*		wRsc;		/* Widget resource */
-    char*		value;		/* value read from app-defaults */
-} UIAppDefault;
-
-
-static void setDefaultResources ARGLIST((_name, w, resourceSpec))
-ARG(char*, _name)
-ARG(Widget, w)
-GRA(String *,resourceSpec)
-{
-   int         i;
-   Display    *dpy = XtDisplay ( w );	  /* Retrieve the display pointer */
-   XrmDatabase rdb = NULL;             /* A resource data base */
-
-   /* Create an empty resource database */
-
-   rdb = XrmGetStringDatabase ( "" );
-
-   /* Add the Component resources, prepending the name of the component */
-
-   i = 0;
-   while ( resourceSpec[i] != NULL )
-   {
-       char buf[2048];
-
-       snprintf(buf, sizeof(buf), "*%s%s", _name, resourceSpec[i++]);
-       XrmPutLineResource( &rdb, buf );
-   }
-
-   /* Merge them into the Xt database, with lowest precendence */
-
-   if ( rdb )
-   {
-#if (XlibSpecificationRelease>=5)
-        XrmDatabase db = XtDatabase(dpy);
-	XrmCombineDatabase(rdb, &db, FALSE);
-#else
-        XrmMergeDatabases ( dpy->db, &rdb );
-        dpy->db = rdb;
-#endif
-    }
-}
-
-/*
- * This method gets all the resources from the app-defaults file
- * (resource databse) and fills in the table (defs) if the app default
- * value exists.
- */
-static void
-InitAppDefaults ARGLIST((parent, defs))
-ARG(Widget, parent)
-GRA(UIAppDefault *, defs)
-{
-    XrmQuark		cQuark;
-    XrmQuark		rsc[6];
-    XrmRepresentation	rep;
-    XrmValue		val;
-    XrmDatabase		rdb;
-    int			rscIdx;
-
-    /* Get the database */
-
-    if ((rdb = XrmGetDatabase(XtDisplay(parent))) == NULL)
-    {
-	return;			/*  Can't get the database */
-    }
-
-    /* Look for each resource in the table */
-
-    while (defs->wName)
-    {
-	rscIdx = 0;
-
-	cQuark = XrmStringToQuark(defs->cName);	/* class quark */
-	rsc[rscIdx++] = cQuark;
-	if (defs->wName[0] == '\0')
-	{
-	    rsc[rscIdx++] = cQuark;
-	}
-	else
-	{
-	    rsc[rscIdx++] = XrmStringToQuark(defs->wName);
-	}
-
-	if (defs->cInstName && defs->cInstName[0] != '\0')
-	{
-	    rsc[rscIdx++] = XrmStringToQuark(defs->cInstName);
-	}
-
-	rsc[rscIdx++] = XrmStringToQuark(defs->wRsc);
-	rsc[rscIdx++] = NULLQUARK;
-
-	if (XrmQGetResource(rdb, rsc, rsc, &rep, &val))
-	{
-	    defs->value = strdup((char*)val.addr);
-	}
-	defs++;
-    }
-}
-
-/*
- * This method applies the app defaults for the class to a specific
- * instance. All the widgets in the path are loosly coupled (use *).
- * To override a specific instance, use a tightly coupled app defaults
- * resource line (use .).
- */
-static void
-SetAppDefaults ARGLIST((w, defs, inst_name))
-ARG(Widget,w)
-ARG(UIAppDefault*, defs)
-GRA(char*, inst_name)
-{
-   Display*		dpy = XtDisplay ( w );	/*  Retrieve the display */
-   XrmDatabase		rdb = NULL;		/* A resource data base */
-   char			lineage[1024];
-   char			buf[2048];
-   Widget       	parent;
-
-   /* Protect ourselves */
-
-   if (inst_name == NULL) return;
-
-   /*  Create an empty resource database */
-
-   rdb = XrmGetStringDatabase ( "" );
-
-   /* Start the lineage with our name and then get our parents */
-
-   snprintf(lineage, sizeof(lineage), "*%s", inst_name);
-   parent = w;
-
-   while (parent)
-   {
-       WidgetClass wclass = XtClass(parent);
-
-       if (wclass == applicationShellWidgetClass) break;
-
-       strcpy(buf, lineage);
-       int len = snprintf(lineage, sizeof(lineage), "*%s%s", XtName(parent), buf);
-       if (len >= (int)sizeof(lineage)) {
-           /* Truncation occurred, but this is acceptable for this use case */
-           lineage[sizeof(lineage) - 1] = '\0';
-       }
-
-       parent = XtParent(parent);
-   }
-
-   /*  Add the Component resources, prepending the name of the component */
-
-   while (defs->wName != NULL)
-   {
-       /*
-        * We don't deal with the resource if it isn't found in the
-	* Xrm database at class initializtion time (in initAppDefaults).
-	*/
-       if (defs->value == NULL)
-       {
-	   defs++;
-	   continue;
-       }
-
-       /* Build up string after lineage */
-       if (defs->cInstName != NULL)
-       {
-	   /* Don't include class instance name if it is also the instance */
-	   /* being affected.  */
-
-	   if (*defs->cInstName != '\0')
-	   {
-	       snprintf(buf, sizeof(buf), "%s.%s*%s.%s: %s",
-		       lineage, defs->wName, defs->cInstName, defs->wRsc,
-		       defs->value);
-	   }
-	   else
-	   {
-	       snprintf(buf, sizeof(buf), "%s.%s.%s: %s",
-		       lineage, defs->wName, defs->wRsc, defs->value);
-	   }
-       }
-       else if (*defs->wName != '\0')
-       {
-	   snprintf(buf, sizeof(buf), "%s*%s.%s: %s",
-		   lineage, defs->wName, defs->wRsc, defs->value);
-       }
-       else
-       {
-	   snprintf(buf, sizeof(buf), "%s.%s: %s", lineage, defs->wRsc, defs->value);
-       }
-
-       XrmPutLineResource( &rdb, buf );
-       defs++;
-   }
-
-   /* Merge them into the Xt database, with lowest precendence */
-   if ( rdb )
-   {
-#if (XlibSpecificationRelease >= 5)
-        XrmDatabase db = XtDatabase(dpy);
-	XrmCombineDatabase(rdb, &db, FALSE);
-#else
-        XrmMergeDatabases ( dpy->db, &rdb );
-        dpy->db = rdb;
-#endif
-    }
-}

@@ -60,9 +60,7 @@ static char rcsid[] = "$TOG: DragBS.c /main/29 1998/03/18 15:10:28 csn $"
  *  available, _XmAllocMotifAtom() adds an atom to the table with the
  *  specified timestamp, updates the "_MOTIF_DRAG_ATOMS" property on
  *  motifWindow, and returns the new atom.  These new atoms are named
- *  "_MOTIF_ATOM_n" where n is 1, 2, 3, ... .  The routine _XmGetMotifAtom()
- *  returns the atom from the atoms table with nonzero timestamp less than
- *  but closest to a specified value.  It does not change the atoms table.
+ *  "_MOTIF_ATOM_n" where n is 1, 2, 3, ... .
  *  A client frees an atom by calling _XmFreeMotifAtom(), which sets the
  *  atom's timestamp to 0 and updates the "_MOTIF_DRAG_ATOMS" property on
  *  motifWindow.  To minimize property access, the client saves the address
@@ -1179,62 +1177,6 @@ Atom _XmAllocMotifAtom(Widget shell, Time time)
     atomReturn = atomsTable->entries[i].atom;
   }
   WriteAtomsTable(display, atomsTable);
-  XUngrabServer(display);
-  XFlush(display);
-  return (atomReturn);
-}
-
-/*****************************************************************************
- *
- *  _XmGetMotifAtom ()
- *
- *  Get the atom from the atoms table with nonzero timestamp less than but
- *  closest to the specified value.
- ***************************************************************************/
-static Atom _XmGetMotifAtom(Widget shell, Time time)
-{
-  Display *display = XtDisplay(shell);
-  xmAtomsTable atomsTable;
-  Cardinal i;
-  Atom atomReturn = None;
-  Time c_time;
-  /*
-   *  Get the atoms table saved in the display's context.
-   *  This table will be updated from the motifWindow property.
-   */
-  if (!(atomsTable = GetAtomsTable(display))) {
-    _XmInitTargetsTable(display);
-    atomsTable = GetAtomsTable(display);
-  }
-  /*
-   *  Lock and retrieve the atoms table from motifWindow.
-   *  If this fails, then either the motifWindow or the atoms table
-   *  property on motifWindow has been destroyed, so reinitialize.
-   *  Try to find the atom with nonzero timestamp less than but closest
-   *  to the specified value.
-   */
-  XGrabServer(display);
-  if (!ReadAtomsTable(display, atomsTable)) {
-    XUngrabServer(display);
-    _XmInitTargetsTable(display);
-    XGrabServer(display);
-    atomsTable = GetAtomsTable(display);
-  }
-  for (i = 0; i < atomsTable->numEntries; i++) {
-    if ((atomsTable->entries[i].time) && (atomsTable->entries[i].time <= time)) {
-      break;
-    }
-  }
-  if (i < atomsTable->numEntries) {
-    atomReturn = atomsTable->entries[i].atom;
-    c_time = atomsTable->entries[i++].time;
-    for (; i < atomsTable->numEntries; i++) {
-      if ((atomsTable->entries[i].time > c_time) && (atomsTable->entries[i].time < time)) {
-        atomReturn = atomsTable->entries[i].atom;
-        c_time = atomsTable->entries[i].time;
-      }
-    }
-  }
   XUngrabServer(display);
   XFlush(display);
   return (atomReturn);

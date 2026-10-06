@@ -89,7 +89,6 @@ static MRMRegisterArg	regvec[] = {
 static MrmCount regnum = XtNumber(regvec);
 
 
-static Display 	*display;
 static XtAppContext    app_context;
 
 /**
@@ -133,9 +132,7 @@ int main(int argc, String argv[])
      *  Declare the variables to contain the two widget ids
      */
     Widget toplevel, motifanimmain = NULL ;
-    Arg arglist[1] ;
     char uidanimfile[100] ;
-    int n;
 
 
     MrmInitialize ();
