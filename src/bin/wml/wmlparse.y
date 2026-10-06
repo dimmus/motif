@@ -35,7 +35,7 @@
 
 #include "wml.h"
 
-#include <string.h>		/* for strcpy() */
+#include <string.h>		/* for memcpy() */
 
 #ifndef XmConst
 #define XmConst const
@@ -719,7 +719,7 @@ predefined_charset_attribute_value
  */
 name
 	: STRING
-		{ strcpy (yynameval, (XmConst char *)yystringval); }
+		{ memcpy (yynameval, yystringval, strlen (yystringval) + 1); }
 	;
 
 %%
