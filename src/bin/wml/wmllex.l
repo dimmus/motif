@@ -130,7 +130,12 @@ int             yytknval2;              /* terminal token value 2 */
 "#"[^\n]*	{}
 
 [a-zA-Z_][a-zA-Z0-9$_]* {	/* string without quotes	*/
-	strcpy (yystringval, (XmConst char *) yytext);
+	if (yyleng >= BUF_SIZE) {
+		printf ("\nName too long near %.40s, line %d",
+			yytext, wml_line_count);
+		return ERRORTOKEN;
+	}
+	memcpy (yystringval, yytext, yyleng + 1);
 	return STRING;
 	}
 
@@ -139,7 +144,12 @@ int             yytknval2;              /* terminal token value 2 */
 		}
 
 \"[^"\n]*\"	{	/* String in quotes	*/
-		strncpy(yystringval, (XmConst char *) yytext+1, yyleng - 2);
+		if (yyleng - 2 >= BUF_SIZE) {
+			printf ("\nString too long near %.40s, line %d",
+				yytext, wml_line_count);
+			return ERRORTOKEN;
+		}
+		memcpy (yystringval, yytext + 1, yyleng - 2);
 		yystringval[yyleng-2] = '\0' ;
 		return STRING;
 		}

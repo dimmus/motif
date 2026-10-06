@@ -93,6 +93,20 @@ typedef struct _token
 TokenRec token[1000];
 TokenRec temp;
 
+/* A malloc'd copy of text (the current token). */
+static char *copy_text (const char *text)
+{
+    size_t size = strlen (text) + 1;
+    char *copy = (char *) malloc (size);
+
+    if (copy == NULL)
+    {
+	fputs ("wmluiltok: out of memory\n", stderr);
+	exit (1);
+    }
+    return (char *) memcpy (copy, text, size);
+}
+
 void add_token (Token t);
 int yywrap (void);
 
@@ -141,35 +155,30 @@ int used		= 0;
 			switch (state)
 			{
 			    case 0:
-				temp.name = (char *)
-				    strcpy ((char *)
-					malloc (strlen ((XmConst char *)yytext) + 1), (XmConst char *)yytext);
+				temp.name = copy_text ((XmConst char *)yytext);
 
 				temp.num_syn = 0; 
 				break;
 
 			    case 1:
-				temp.id = (char *)
-				    strcpy ((char *)
-					malloc (strlen ((XmConst char *)yytext) + 1), (XmConst char *)yytext);
+				temp.id = copy_text ((XmConst char *)yytext);
 				break;
 
 			    case 2:
-				temp.class = (char *)
-				    strcpy ((char *)
-					malloc (strlen ((XmConst char *)yytext) + 1), (XmConst char *)yytext);
+				temp.class = copy_text ((XmConst char *)yytext);
 				break;
 
 			    case 3:
-				temp.syn[temp.num_syn] = (char *)
-				    strcpy ((char *)
-					malloc (strlen ((XmConst char *)yytext) + 1), (XmConst char *)yytext);
-				temp.num_syn++;
-
-				if (temp.num_syn > MAX_SYN)
+				if (temp.num_syn >= MAX_SYN)
+				{
 				    printf (
 					"ERROR, too many synonyms, line %d\n",
 					line_num);
+				    break;
+				}
+				temp.syn[temp.num_syn] =
+				    copy_text ((XmConst char *)yytext);
+				temp.num_syn++;
 				break;
 			}
 
