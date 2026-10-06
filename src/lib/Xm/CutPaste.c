@@ -1528,6 +1528,14 @@ static unsigned long ClipboardIsMarkedForDelete(Display *display,
 }
 
 /*---------------------------------------------*/
+/* The list of item ids stored after the header, at the byte offset
+   header->dataItemList (in 32-bit units). */
+static itemId *ClipboardItemList(ClipboardHeader header)
+{
+  return (itemId *)((char *)header + header->dataItemList * CONVERT_32_FACTOR);
+}
+
+/*---------------------------------------------*/
 static void ClipboardDeleteItem(Display *display,
                                 Window window,
                                 ClipboardHeader header,
@@ -1538,7 +1546,7 @@ static void ClipboardDeleteItem(Display *display,
   int nextpasteindex;
   int lastflag = 0;
   /* find the delete id in the header item list */
-  listptr = (itemId *)((char *)header + header->dataItemList * CONVERT_32_FACTOR);
+  listptr = ClipboardItemList(header);
   i = 0;
   nextpasteindex = 0;
   nextpasteid = 0;
@@ -1628,7 +1636,7 @@ static void ClipboardDeleteMarked(Display *display, Window window, ClipboardHead
   itemId *nextIdPtr;
   unsigned long endi, i;
   /* find the header item list */
-  nextIdPtr = (itemId *)((char *)header + header->dataItemList * CONVERT_32_FACTOR);
+  nextIdPtr = ClipboardItemList(header);
   i = 0;
   endi = header->currItems;
   /* run through the item list looking for things to delete */
@@ -3424,7 +3432,7 @@ int XmClipboardInquirePendingItems(Display *display, /* Display id of applicatio
   loc_count = 0;
   /* get the clipboard header */
   header = ClipboardOpen(display, 0);
-  id_ptr = (itemId *)((char *)header + header->dataItemList * CONVERT_32_FACTOR);
+  id_ptr = ClipboardItemList(header);
   /* the item count comes from the root window: keep the size in range */
   nitems = header->currItems;
   if (nitems > (Cardinal)~0 / sizeof(XmClipboardPendingRec))

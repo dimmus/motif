@@ -1,0 +1,29 @@
+# CodeQL configuration for the Code Scanning workflow (codeql.yml).
+#
+# Motif is a desktop toolkit, a window manager and their build tools.
+# None of them is setuid or serves other users, so the environment, the
+# command line and the user's own resource files are trusted input to
+# the process that reads them.  Two security-extended queries treat
+# exactly that input as attacker-controlled and only flag intended
+# behaviour here:
+#
+# - cpp/path-injection: mwm, libXm and the UIL compiler open the files
+#   that $HOME, XBMLANGPATH, XMBINDDIR, the command line or .mwmrc name,
+#   which is what those settings are for.
+# - cpp/uncontrolled-process-operation: mwm's f.exec and restart run
+#   the commands the user configured.
+#
+# Overflows on these paths (building a file name in a fixed buffer, for
+# instance) are still reported by other queries such as
+# cpp/unbounded-write.
+
+name: Motif CodeQL configuration
+
+queries:
+  - uses: security-extended
+
+query-filters:
+  - exclude:
+      id: cpp/path-injection
+  - exclude:
+      id: cpp/uncontrolled-process-operation

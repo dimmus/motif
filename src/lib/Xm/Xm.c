@@ -529,26 +529,26 @@ Boolean _XmIsISO10646(Display *dpy, XFontStruct *font)
  */
 size_t _XmUtf8ToUcs2Buf(char *draw_text, size_t seg_len, XChar2b *buf)
 {
-  char *ep;
+  size_t i;
   unsigned short codepoint;
   XChar2b *ptr;
-  ep = draw_text + seg_len;
-  for (ptr = buf; draw_text < ep; ptr++) {
-    if ((draw_text[0] & 0x80) == 0) {
-      codepoint = draw_text[0];
-      draw_text++;
+  for (ptr = buf, i = 0; i < seg_len; ptr++) {
+    if ((draw_text[i] & 0x80) == 0) {
+      codepoint = draw_text[i];
+      i++;
     }
-    else if ((draw_text[0] & 0x20) == 0 && ep - draw_text >= 2) {
-      codepoint = (draw_text[0] & 0x1F) << 6 | (draw_text[1] & 0x3F);
-      draw_text += 2;
+    else if ((draw_text[i] & 0x20) == 0 && i + 1 < seg_len) {
+      codepoint = (draw_text[i] & 0x1F) << 6 | (draw_text[i + 1] & 0x3F);
+      i += 2;
     }
-    else if ((draw_text[0] & 0x30) == 0x20 && ep - draw_text >= 3) {
-      codepoint = (draw_text[0] & 0x0F) << 12 | (draw_text[1] & 0x3F) << 6 | (draw_text[2] & 0x3F);
-      draw_text += 3;
+    else if ((draw_text[i] & 0x30) == 0x20 && i + 2 < seg_len) {
+      codepoint = (draw_text[i] & 0x0F) << 12 | (draw_text[i + 1] & 0x3F) << 6 |
+                  (draw_text[i + 2] & 0x3F);
+      i += 3;
     }
     else { /* wrong UTF-8 */
       codepoint = (unsigned)'?';
-      draw_text++;
+      i++;
     }
     ptr->byte1 = (codepoint >> 8) & 0xff;
     ptr->byte2 = codepoint & 0xff;

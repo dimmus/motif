@@ -45,6 +45,24 @@
 #include <X11/IntrinsicP.h>
 #include <X11/Intrinsic.h>
 #include <X11/StringDefs.h>
+
+/*
+ * Xt's XtNewString macro copies with strcpy into a buffer it has just
+ * sized; copy the known length instead, as libXm does (XmBannedI.h).
+ */
+static inline String WmNewString (String str)
+{
+    size_t size;
+
+    if (str == NULL)
+    {
+	return (NULL);
+    }
+    size = strlen (str) + 1;
+    return ((String) memcpy (XtMalloc ((Cardinal) size), str, size));
+}
+#undef XtNewString
+#define XtNewString(str) WmNewString (str)
 #include <Xm/MwmUtil.h>
 #include <Xm/Xm.h>
 #ifdef WSM
