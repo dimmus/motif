@@ -73,7 +73,7 @@ GNUInstallDirs:
 | `lib/cmake/Motif` | The CMake package for `find_package(Motif CONFIG)` |
 | `bin/uil`, `bin/mwm`, `bin/xmbind` | Programs |
 | `etc/X11/system.mwmrc` | mwm's default configuration (`CMAKE_INSTALL_SYSCONFDIR`) |
-| `share/X11/bindings` | Virtual key bindings for xmbind |
+| `share/X11/bindings` | Sample `.motifbind` files (`CDE`, `pc`) |
 | `include/X11/bitmaps` | Bitmaps used by Motif applications |
 | `share/man/man1`, `man3`, `man4`, `man5` | Manual pages (`WITH_DOCS`) |
 | `share/doc/motif` | `doc/*.md`, `doc/guide`, `AUTHORS`, `CHANGELOG.md`, `SECURITY.md` (`WITH_DOCS`) |

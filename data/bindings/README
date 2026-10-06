@@ -1,30 +1,22 @@
-/* $XConsortium: README /main/3 1996/07/15 13:55:02 drk $ */
+This directory contains sample ".motifbind" files:
 
-This directory contains a collection of sample ".motifbind" files:
+CDE - Common Desktop Environment bindings for a generic keyboard, with
+      Ctrl+C, Ctrl+X and Ctrl+V for copy, cut and paste
+pc  - OSF/Motif Style Guide bindings for PC keyboards
 
-CDE - Common Desktop Environment
-dec - DEC workstations (still relevant for historical compatibility)
-doubleclick - Generic double-click bindings
-hal - HAL workstations
-hp - HP workstations
-ibm - IBM workstations
-pc - PC systems
-sgi - Silicon Graphics (still relevant)
-sony - Sony workstations
-sun - Sun workstations (still relevant)
-sun_at - Sun AT keyboards
+They are installed in share/X11/bindings.  Motif does not read them on
+its own.  To use one, copy it to ~/.motifbind, where mwm, xmbind and
+Motif applications look for it, or load it into the running X server
+with
 
-These files were provided by various vendors, though not necessarily
-the vendors whose hardware they apply to.  Each file contains a set of
-keyboard bindings that is suggested for use on that particular
-server/hardware combination.  These files should be used as examples
-of ~/.motifbind files to work from.
+    xmbind /usr/share/X11/bindings/CDE
 
-By copying the appropriate file into the user's home directory and
-renaming it to ".motifbind", the bindings will be recognized and used
-when the Motif window manager is (re)started.
-These bindings will override any other default bindings except those
-initiated within a client application (using XtOverrideTranslations).
+Without ~/.motifbind and without a bindings property on the root window,
+Motif uses its built-in bindings.  See VirtualBindings(3) and xmbind(1).
 
-These examples are provided, as is, only as a service to the vendors
-and users.
+Earlier releases also shipped bindings for old vendor workstations
+(DEC, HaL, HP, IBM, SGI, Sony, Sun) and an xmbind.alias file that chose
+one of them from the X server vendor string.  Current X servers report
+vendor strings that none of those entries matched, so the files and the
+alias lookup were removed.  The bindings for those vendors that libXm
+has always carried built in are still chosen by vendor string.

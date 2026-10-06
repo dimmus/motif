@@ -8,7 +8,7 @@
 # behaviour here:
 #
 # - cpp/path-injection: mwm, libXm and the UIL compiler open the files
-#   that $HOME, XBMLANGPATH, XMBINDDIR, the command line or .mwmrc name,
+#   that $HOME, XBMLANGPATH, the command line or .mwmrc name,
 #   which is what those settings are for.
 # - cpp/uncontrolled-process-operation: mwm's f.exec and restart run
 #   the commands the user configured.

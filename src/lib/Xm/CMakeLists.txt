@@ -587,12 +587,10 @@ target_include_directories(Xm
         ${CMAKE_BINARY_DIR}/include/Xm
 )
 
-# Run-time search paths, compiled in as absolute paths.  The key bindings
-# are installed by data/bindings, and the bitmaps by data/bitmaps under
-# INCDIR.
+# Run-time search paths, compiled in as absolute paths.  The bitmaps are
+# installed by data/bitmaps under INCDIR.
 target_compile_definitions(Xm
     PRIVATE
-        XMBINDDIR_FALLBACK="${CMAKE_INSTALL_FULL_DATADIR}/X11/bindings"
         INCDIR="${CMAKE_INSTALL_FULL_INCLUDEDIR}/X11"
         LIBDIR="${CMAKE_INSTALL_FULL_LIBDIR}/X11"
         DATADIR="${CMAKE_INSTALL_FULL_DATADIR}"
