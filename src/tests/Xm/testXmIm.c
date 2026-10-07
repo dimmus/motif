@@ -6,9 +6,9 @@
  *
  * XmIm: what reaches the input context.  The suite interposes the Xlib
  * input method calls XmIm makes (XSetICValues, XCreateIC, XGetIMValues)
- * to count the XSetICValues requests (each one is a round trip with an
- * input method server) and to see the spot location and area they
- * carry.  They forward to Xlib's local input method
+ * and XFilterEvent, to count the XSetICValues requests (each one is a
+ * round trip with an input method server) and to see the spot location
+ * and area they carry.  They forward to Xlib's local input method
  * (XMODIFIERS=@im=none), except in the "over the spot" cases: the local
  * input method has no XIMPreeditPosition style, which is the one that
  * takes an area, so there XGetIMValues reports that style, XCreateIC
@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <X11/Intrinsic.h>
+#include <X11/keysym.h>
 #include <Xm/Xm.h>
 #include <Xm/RowColumn.h>
 #include <Xm/Text.h>
@@ -55,7 +56,8 @@ static struct {
 	unsigned long areas;	/* preedit XNArea values passed */
 	XPoint spot;		/* the last of them */
 	XRectangle area;
-} im;
+	long spots_at_key;	/* spots when a KeyPress was filtered */
+} im = { .spots_at_key = -1 };
 
 static void record(const ImArg *a, int preedit)
 {
@@ -99,6 +101,7 @@ static void collect(va_list ap, ImArg *a)
 typedef char *(*set_ic_fn)(XIC, ...);
 typedef char *(*get_im_fn)(XIM, ...);
 typedef XIC (*create_ic_fn)(XIM, ...);
+typedef Bool (*filter_fn)(XEvent *, Window);
 
 char *XSetICValues(XIC ic, ...)
 {
@@ -174,6 +177,17 @@ XIC XCreateIC(XIM xim, ...)
 	return IM_FORWARD(real, xim, a);
 }
 
+Bool XFilterEvent(XEvent *event, Window window)
+{
+	static filter_fn real;
+
+	if (!real)
+		real = (filter_fn)dlsym(RTLD_NEXT, "XFilterEvent");
+	if (im.active && event->type == KeyPress && im.spots_at_key < 0)
+		im.spots_at_key = (long)im.spots;
+	return real(event, window);
+}
+
 /* ------------------------------------------------------------------ */
 /* Fixture                                                             */
 /* ------------------------------------------------------------------ */
@@ -201,6 +215,7 @@ static void reset_counts(void)
 {
 	im.set_calls = im.creates = im.spots = im.areas = 0;
 	im.spot.x = im.spot.y = -1;
+	im.spots_at_key = -1;
 }
 
 static void setup_im(int fake)
@@ -297,15 +312,201 @@ static void set_spot(Widget w, short x, short y)
 /* Tests                                                               */
 /* ------------------------------------------------------------------ */
 
+/* 1000 cursor moves in one event are one XSetICValues, with the last spot. */
+START_TEST(spot_cursor_moves_coalesced)
+{
+	XPoint last = spot_of(CURSOR_POS(999));
+	int i;
+
+	for (i = 0; i < 1000; i++)
+		XmTextSetInsertionPosition(text, CURSOR_POS(i));
+	ck_assert_uint_eq(im.set_calls, 0);
+	pump();
+	ck_assert_uint_eq(im.set_calls, 1);
+	ck_assert_uint_eq(im.spots, 1);
+	ck_assert_spot(im.spot, last.x, last.y);
+	ck_assert_spot(ic_spot(), last.x, last.y);
+}
+END_TEST
+
+START_TEST(spot_values_coalesced)
+{
+	int i;
+
+	for (i = 0; i < 1000; i++)
+		set_spot(text, 5 + i, 7 + i / 2);
+	ck_assert_uint_eq(im.set_calls, 0);
+	pump();
+	ck_assert_uint_eq(im.set_calls, 1);
+	ck_assert_spot(im.spot, 5 + 999, 7 + 999 / 2);
+	ck_assert_spot(ic_spot(), 5 + 999, 7 + 999 / 2);
+
+	/* Unchanged, and back to the spot the context has: nothing sent. */
+	set_spot(text, 5 + 999, 7 + 999 / 2);
+	set_spot(text, 1, 1);
+	set_spot(text, 5 + 999, 7 + 999 / 2);
+	pump();
+	ck_assert_uint_eq(im.set_calls, 1);
+}
+END_TEST
+
+/* A key event is filtered by the input method after the pending spot. */
+START_TEST(spot_sent_before_next_key)
+{
+	Display *dpy = XtDisplay(text);
+	XEvent ev;
+	int i;
+
+	for (i = 0; i < 2; i++) {
+		memset(&ev, 0, sizeof ev);
+		ev.xkey.type = KeyPress;
+		ev.xkey.display = dpy;
+		ev.xkey.window = XtWindow(text);
+		ev.xkey.root = DefaultRootWindow(dpy);
+		ev.xkey.time = CurrentTime;
+		ev.xkey.same_screen = True;
+		ev.xkey.keycode = XKeysymToKeycode(dpy, XK_b);
+		reset_counts();
+		set_spot(text, 30 + i, 40);
+		XPutBackEvent(dpy, &ev);
+		if (i == 0) {
+			/* XtAppMainLoop */
+			while (im.spots_at_key < 0)
+				XtAppProcessEvent(app, XtIMAll);
+		} else {
+			/* XtAppNextEvent and XtDispatchEvent */
+			XEvent next;
+
+			while (im.spots_at_key < 0) {
+				XtAppNextEvent(app, &next);
+				XtDispatchEvent(&next);
+			}
+		}
+		ck_assert_int_eq(im.spots_at_key, 1);
+		pump();
+	}
+}
+END_TEST
+
+/* Values other than the spot are sent at once, with the pending spot. */
+START_TEST(spot_sent_with_other_values)
+{
+	Pixel fg;
+
+	XtVaGetValues(text, XmNforeground, &fg, NULL);
+	set_spot(text, 11, 12);
+	ck_assert_uint_eq(im.set_calls, 0);
+	XmImVaSetValues(text, XmNforeground, fg, NULL);
+	ck_assert_uint_eq(im.set_calls, 1);
+	ck_assert_uint_eq(im.spots, 1);
+	ck_assert_spot(im.spot, 11, 12);
+	pump();
+	ck_assert_uint_eq(im.set_calls, 1);
+	ck_assert_spot(ic_spot(), 11, 12);
+}
+END_TEST
+
+START_TEST(spot_flushed_on_focus)
+{
+	/* Focus in on the same widget */
+	set_spot(text, 13, 14);
+	XmImVaSetFocusValues(text, NULL);
+	ck_assert_uint_eq(im.spots, 1);
+	ck_assert_spot(im.spot, 13, 14);
+
+	/* Focus out */
+	set_spot(text, 15, 16);
+	XmImUnsetFocus(text);
+	ck_assert_uint_eq(im.spots, 2);
+	ck_assert_spot(im.spot, 15, 16);
+	pump();
+	ck_assert_uint_eq(im.spots, 2);
+	ck_assert_spot(ic_spot(), 15, 16);
+}
+END_TEST
+
+/* The shared context moves to another widget: the old spot is dropped. */
+START_TEST(spot_focus_window_change)
+{
+	XPoint pt = { 17, 18 };
+
+	set_spot(text, 99, 99);
+	XmImVaSetFocusValues(text2, XmNspotLocation, &pt, NULL);
+	ck_assert_uint_eq(im.spots, 1);
+	ck_assert_spot(im.spot, 17, 18);
+	pump();
+	ck_assert_uint_eq(im.spots, 1);
+
+	/* The same coordinates, relative to the first widget, are sent. */
+	XmImVaSetFocusValues(text, XmNspotLocation, &pt, NULL);
+	ck_assert_uint_eq(im.spots, 2);
+}
+END_TEST
+
+START_TEST(spot_flushed_for_xic_users)
+{
+	set_spot(text, 19, 20);
+	ck_assert_ptr_nonnull(XmImGetXIC(text, XmINHERIT_POLICY, NULL, 0));
+	ck_assert_uint_eq(im.spots, 1);
+	set_spot(text, 21, 22);
+	ck_assert_ptr_nonnull(XmImSetXIC(text, NULL));
+	ck_assert_uint_eq(im.spots, 2);
+	ck_assert_spot(im.spot, 21, 22);
+}
+END_TEST
+
+/* A pending spot does not outlive the widget or its window. */
+START_TEST(spot_with_widget_destroyed)
+{
+	/*
+	 * The context is shared with "text" and outlives "text2": it gets
+	 * the spot while the focus window still exists.
+	 */
+	XmImVaSetFocusValues(text2, NULL);
+	reset_counts();
+	set_spot(text2, 23, 24);
+	ck_assert_uint_eq(im.set_calls, 0);
+	XtDestroyWidget(text2);
+	text2 = NULL;
+	ck_assert_uint_eq(im.spots, 1);
+	ck_assert_spot(im.spot, 23, 24);
+	pump();
+	ck_assert_uint_eq(im.spots, 1);
+
+	/* The focus window is destroyed: the spot is dropped. */
+	XmImVaSetFocusValues(text, NULL);
+	reset_counts();
+	set_spot(text, 25, 26);
+	ck_assert_uint_eq(im.set_calls, 0);
+	XtUnrealizeWidget(top);
+	pump();
+	ck_assert_uint_eq(im.spots, 0);
+
+	/* With the last reference, the context is destroyed. */
+	XtRealizeWidget(top);
+	pump();
+	XmImVaSetFocusValues(text, NULL);
+	reset_counts();
+	set_spot(text, 27, 28);
+	ck_assert_uint_eq(im.set_calls, 0);
+	XtDestroyWidget(text);
+	text = NULL;
+	pump();
+	ck_assert_uint_eq(im.set_calls, 0);
+}
+END_TEST
+
 /*
  * A value the input method refuses makes XmIm recreate the context;
  * this reused the argument lists after freeing them.
  */
 START_TEST(recreate_after_refused_value)
 {
+	set_spot(text, 29, 30);
 	XmImVaSetValues(text, "motifTestBogusValue", (XtPointer)1, NULL);
 	ck_assert_uint_eq(im.set_calls, 1);
 	ck_assert_uint_ge(im.creates, 1);
+	ck_assert_spot(im.spot, 29, 30);
 	ck_assert_ptr_nonnull(XmImSetXIC(text, NULL));
 	pump();
 	set_spot(text, 31, 32);
@@ -314,8 +515,8 @@ START_TEST(recreate_after_refused_value)
 }
 END_TEST
 
-/* Over the spot, Text passes its unchanged display area with every spot. */
-START_TEST(over_the_spot_area_sent_once)
+/* Over the spot, Text passes its display area with every spot. */
+START_TEST(over_the_spot_coalesced)
 {
 	XPoint last = spot_of(CURSOR_POS(999));
 	XRectangle area;
@@ -330,18 +531,22 @@ START_TEST(over_the_spot_area_sent_once)
 
 	for (i = 0; i < 1000; i++)
 		XmTextSetInsertionPosition(text, CURSOR_POS(i));
+	ck_assert_uint_eq(im.set_calls, 0);
 	pump();
+	ck_assert_uint_eq(im.set_calls, 1);
 	ck_assert_uint_eq(im.areas, 0);
-	ck_assert_uint_eq(im.spots, 1000);
 	ck_assert_spot(im.spot, last.x, last.y);
 
-	/* A new area is sent. */
+	/* A new area is sent at once, with the spot. */
 	area.width -= 10;
 	last.x += 3;
 	XmImVaSetValues(text, XmNspotLocation, &last, XmNarea, &area, NULL);
+	ck_assert_uint_eq(im.set_calls, 2);
 	ck_assert_uint_eq(im.areas, 1);
 	ck_assert_uint_eq(im.area.width, area.width);
 	ck_assert_spot(im.spot, last.x, last.y);
+	pump();
+	ck_assert_uint_eq(im.set_calls, 2);
 }
 END_TEST
 
@@ -350,15 +555,23 @@ void xmim_suite(SRunner *runner)
 	Suite *s = suite_create("XmIm");
 	TCase *t;
 
-	t = tcase_create("Input context");
+	t = tcase_create("Spot location");
 	tcase_add_checked_fixture(t, setup, teardown);
+	tcase_add_test(t, spot_cursor_moves_coalesced);
+	tcase_add_test(t, spot_values_coalesced);
+	tcase_add_test(t, spot_sent_before_next_key);
+	tcase_add_test(t, spot_sent_with_other_values);
+	tcase_add_test(t, spot_flushed_on_focus);
+	tcase_add_test(t, spot_focus_window_change);
+	tcase_add_test(t, spot_flushed_for_xic_users);
+	tcase_add_test(t, spot_with_widget_destroyed);
 	tcase_add_test(t, recreate_after_refused_value);
 	tcase_set_timeout(t, 60);
 	suite_add_tcase(s, t);
 
 	t = tcase_create("Over the spot");
 	tcase_add_checked_fixture(t, setup_fake, teardown);
-	tcase_add_test(t, over_the_spot_area_sent_once);
+	tcase_add_test(t, over_the_spot_coalesced);
 	tcase_set_timeout(t, 60);
 	suite_add_tcase(s, t);
 

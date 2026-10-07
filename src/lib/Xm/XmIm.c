@@ -90,6 +90,9 @@ typedef struct _XmImXICRec {
   Boolean spot_valid;          /* ...if this is set. */
   XRectangle area;             /* Last preedit XNArea given to the XIC, */
   Boolean area_valid;          /* ...if this is set. */
+  XPoint pending_spot;         /* XNSpotLocation not given to the XIC yet, */
+  Boolean spot_pending;        /* ...if this is set. */
+  XtIntervalId spot_timer;     /* Sends pending_spot (SpotTimeout). */
 } XmImXICRec, *XmImXICInfo;
 
 typedef struct _XmImShellRec {
@@ -173,6 +176,9 @@ static void set_callback_values(
 static void regist_real_callback(Widget w, XIMProc call, int swc);
 static XICProc get_real_callback(Widget w, int swc, Widget *real_widget);
 static void move_preedit_string(XmImXICInfo icp, Widget wfrom, Widget wto);
+static void drop_spot(XmImXICInfo icp);
+static void flush_spot(XmImXICInfo icp);
+static void SpotTimeout(XtPointer closure, XtIntervalId *id);
 /********    End Static Function Declarations    ********/
 typedef int (*XmImResLProc)(String, XPointer, VaArgList, VaArgList, VaArgList);
 
@@ -314,10 +320,18 @@ void XmImSetFocusValues(Widget w, ArgList args, Cardinal num_args)
   xic_info->focus_window = XtWindow(w);
   /* The spot location and the area are relative to the focus window. */
   if (wind != XtWindow(w)) {
+    drop_spot(xic_info);
     xic_info->spot_valid = False;
     xic_info->area_valid = False;
   }
   set_values(w, args, num_args, XmINHERIT_POLICY);
+  /* set_values frees the record if it cannot create the XIC. */
+  if ((xic_info = get_current_xic(get_xim_info(p), w)) == NULL) {
+    _XmAppUnlock(app);
+    return;
+  }
+  /* The input method gets the new spot before the focus. */
+  flush_spot(xic_info);
   if (wind != XtWindow(w)) {
     /* Safe, since we have a window - so it's no gadget */
     XtVaGetValues(w, XmNbackground, &bg, NULL);
@@ -378,6 +392,7 @@ void XmImUnsetFocus(Widget w)
     _XmAppUnlock(app);
     return;
   }
+  flush_spot(xic_info);
   if (xic_info->xic)
     XUnsetICFocus(xic_info->xic);
   xic_info->has_focus = False;
@@ -526,8 +541,10 @@ XIC XmImGetXIC(Widget w, XmInputPolicy input_policy, ArgList args, Cardinal num_
   }
   /* Set the values, which creates an XIC. */
   set_values(w, args, num_args, input_policy);
-  /* Return the current XIC. */
-  if (xic_info != NULL) {
+  /* Return the current XIC, up to date: the caller may use it directly.
+   * set_values frees the record if it cannot create the XIC. */
+  if ((xic_info = get_current_xic(xim_info, w)) != NULL) {
+    flush_spot(xic_info);
     _XmAppUnlock(app);
     return xic_info->xic;
   }
@@ -557,9 +574,16 @@ XIC XmImSetXIC(Widget widget, XIC xic)
       _XmAppUnlock(app);
       return NULL;
     }
-    /* Force creation of the XIC. */
-    if (xic_info->xic == NULL)
+    /* Force creation of the XIC, which frees the record on failure. */
+    if (xic_info->xic == NULL) {
       set_values(widget, NULL, 0, XmINHERIT_POLICY);
+      if ((xic_info = get_current_xic(xim_info, widget)) == NULL) {
+        _XmAppUnlock(app);
+        return NULL;
+      }
+    }
+    /* The caller may use the XIC directly. */
+    flush_spot(xic_info);
     _XmAppUnlock(app);
     return xic_info->xic;
   }
@@ -945,16 +969,18 @@ static void set_values(Widget w, ArgList args, Cardinal num_args, XmInputPolicy 
     }
     if (name == spot_name && argp->value) {
       /*
-       * Text widgets set the spot on every cursor move, and with an
-       * input method server XSetICValues is a round trip.  Do not
-       * send the spot the XIC already has.
+       * Text widgets set the spot on every cursor move, often several
+       * times for one edit, and with an input method server
+       * XSetICValues is a round trip.  Only remember the latest spot
+       * here; it is sent below with other values, or by SpotTimeout
+       * once the current event has been processed.  A spot the XIC
+       * already has is not sent at all.
        */
       XPoint *new_spot = (XPoint *)argp->value;
-      if (icp->xic && icp->spot_valid && icp->spot.x == new_spot->x &&
-          icp->spot.y == new_spot->y)
-        continue;
-      spot = *new_spot;
-      spot_set = True;
+      icp->pending_spot = *new_spot;
+      icp->spot_pending = !(icp->xic && icp->spot_valid && icp->spot.x == new_spot->x &&
+                            icp->spot.y == new_spot->y);
+      continue;
     }
     IsCallback(name)
     {
@@ -980,6 +1006,20 @@ static void set_values(Widget w, ArgList args, Cardinal num_args, XmInputPolicy 
       VaSetArg(&xic_vlist, argp->name, (XPointer)argp->value);
       unrecognized = True;
     }
+  }
+  if (icp->spot_pending) {
+    if (icp->xic && preedit_vlist.count == 0 && status_vlist.count == 0 && xic_vlist.count == 0) {
+      /* Only the spot changed. */
+      if (!icp->spot_timer)
+        icp->spot_timer = XtAppAddTimeOut(
+            XtWidgetToApplicationContext(w), 0, SpotTimeout, (XtPointer)icp);
+      return;
+    }
+    /* Other values are set: send the spot with them. */
+    spot = icp->pending_spot;
+    spot_set = True;
+    drop_spot(icp);
+    VaSetArg(&preedit_vlist, XNSpotLocation, (XPointer)&spot);
   }
   /* We do not create the IC until the initial data is ready to be passed */
   assert(xim_info != NULL);
@@ -1065,7 +1105,7 @@ static void set_values(Widget w, ArgList args, Cardinal num_args, XmInputPolicy 
     }
   }
   else if (preedit_vlist.count == 0 && status_vlist.count == 0 && xic_vlist.count == 0) {
-    /* Nothing to change, e.g. a spot location and area the XIC has. */
+    /* Nothing to change, e.g. only an area the XIC already has. */
   }
   else {
     /* The values given, without the nested lists added below. */
@@ -1201,6 +1241,50 @@ static void set_values(Widget w, ArgList args, Cardinal num_args, XmInputPolicy 
     XtVaGetValues(w, XmNbackground, &bg, NULL);
     XtVaSetValues(p, XmNbackground, bg, NULL);
   }
+}
+
+/* Forget the spot location set_values deferred. */
+static void drop_spot(XmImXICInfo icp)
+{
+  icp->spot_pending = False;
+  if (icp->spot_timer) {
+    XtRemoveTimeOut(icp->spot_timer);
+    icp->spot_timer = 0;
+  }
+}
+
+/* Give the XIC the spot location set_values deferred, if any. */
+static void flush_spot(XmImXICInfo icp)
+{
+  XVaNestedList list;
+  XPoint spot = icp->pending_spot;
+  Boolean pending = icp->spot_pending;
+  drop_spot(icp);
+  if (!pending || icp->xic == NULL)
+    return;
+  list = XVaCreateNestedList(0, XNSpotLocation, (XPointer)&spot, NULL);
+  icp->spot = spot;
+  icp->spot_valid = (XSetICValues(icp->xic, XNPreeditAttributes, list, NULL) == NULL);
+  XFree(list);
+}
+
+/*
+ * A timeout of 0 runs when the event being dispatched has been
+ * processed: XtAppNextEvent and XtAppProcessEvent call expired timers
+ * before they take the next event from the queue.  So the input method
+ * has the spot of an edit before XtDispatchEvent filters the next key
+ * event through it, as when every spot was sent at once.  A work
+ * procedure would not do: it runs only once the event queue is empty.
+ */
+static void SpotTimeout(XtPointer closure, XtIntervalId *id) /* unused */
+{
+  XmImXICInfo icp = (XmImXICInfo)closure;
+  icp->spot_timer = 0;
+  /* The spot is relative to the focus window; it was unrealized. */
+  if (icp->focus_window && icp->widget_refs.num_refs > 0 &&
+      XtWindowToWidget(XtDisplay(icp->widget_refs.refs[0]), icp->focus_window) == NULL)
+    icp->spot_pending = False;
+  flush_spot(icp);
 }
 
 static void ImFreePreeditBuffer(PreeditBuffer pb)
@@ -2025,13 +2109,21 @@ static void unset_current_xic(XmImXICInfo xic_info,
                               XmImDisplayInfo xim_info,
                               Widget widget)
 {
+  Cardinal refs_left;
   /* Remove the current xic for this widget. */
   assert(xim_info->current_xics != (XContext)0);
   (void)XDeleteContext(XtDisplay(widget), (XID)widget, xim_info->current_xics);
   if (im_info->current_widget == widget)
     im_info->current_widget = NULL;
   /* Remove this widget as a reference to this XIC. */
-  if (remove_ref(&xic_info->widget_refs, widget) == 0) {
+  refs_left = remove_ref(&xic_info->widget_refs, widget);
+  /* Unless the XIC is destroyed below, give it the pending spot now:
+   * its focus window may be this widget's, which is going away. */
+  if (refs_left == 0 && xic_info->anonymous)
+    drop_spot(xic_info);
+  else
+    flush_spot(xic_info);
+  if (refs_left == 0) {
     /* Remove this xic_info from the master list. */
     XmImXICInfo *ptr;
     for (ptr = &(im_info->iclist); *ptr != NULL; ptr = &((*ptr)->next))
