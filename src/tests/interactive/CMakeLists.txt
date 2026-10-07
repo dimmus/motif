@@ -21,6 +21,15 @@ if(TARGET mwm)
         $<TARGET_FILE:mwm> $<TARGET_FILE:wmclient>)
     set_tests_properties(Mwm.xdotool PROPERTIES LABELS "X11;Interactive"
         RESOURCE_LOCK xvfb TIMEOUT 180)
+
+    # mwm as the window manager of the test display: focus timestamps,
+    # the properties it reads when it manages a window and later,
+    # _NET_CLIENT_LIST, and the title after many changes in a row.
+    add_executable(mwm_tests testMwm.c)
+    target_link_libraries(mwm_tests PRIVATE PkgConfig::CHECK
+        PkgConfig::MOTIF_XT)
+    motif_x_test(Mwm.manage $<TARGET_FILE:mwm_tests> $<TARGET_FILE:mwm>)
+    set_tests_properties(Mwm.manage PROPERTIES TIMEOUT 180)
 endif()
 
 motif_test_set_env()

@@ -34,6 +34,10 @@ The other directories:
 - `interactive/` drives a Text/TextField program and mwm (in a nested
   Xephyr) with real input through `xdotool` (`Text.xdotool`,
   `Mwm.xdotool`); they are skipped without `xdotool` or `Xephyr`.
+  `Mwm.manage` (`mwm_tests`, libcheck) runs mwm as the window manager
+  of its display and checks the focus timestamps, the properties it
+  reads when it manages a window and later, `_NET_CLIENT_LIST`, and the
+  title shown after many title changes in a row.
 - `visual/` renders a fixed scene with the BDF fonts of
   `environment/fonts` and compares it with `golden/scene.png`
   (`Visual.*`; `--target update-golden` regenerates it).
