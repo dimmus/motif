@@ -1,23 +1,41 @@
 .TH "XmMultiListSelectAllItems" "library call"
 .SH "NAME"
-\fBXmMultiListSelectAllItems\fP \(em an MultiList function that selects all rows of the list
+\fBXmMultiListSelectAllItems\fP,
+\fBXmExt18ListSelectAllItems\fP \(em MultiList functions that select all rows of the list
 .iX "XmMultiListSelectAllItems"
+.iX "XmExt18ListSelectAllItems"
 .iX "MultiList functions" "XmMultiListSelectAllItems"
 .SH "SYNOPSIS"
 .PP
 .nf
 #include <Xm/MultiList\&.h>
 \fBvoid \fBXmMultiListSelectAllItems\fP\fR(
-\fBWidget \fBwidget\fR\fR);
+\fBWidget \fBwidget\fR\fR,
+\fBBoolean \fBnotify\fR\fR);
+.PP
+#include <Xm/Ext18List\&.h>
+\fBvoid \fBXmExt18ListSelectAllItems\fP\fR(
+\fBWidget \fBwidget\fR\fR,
+\fBBoolean \fBnotify\fR\fR);
 .fi
 .SH "DESCRIPTION"
 .PP
 Selects all rows of the passed MultiList widget and returns nothing\&.
 .IP "\fIwidget\fP" 10
-Specifies the ID of the MultiList widget from whose list items is deselected\&.
+Specifies the ID of the MultiList widget\&.
+.IP "\fInotify\fP" 10
+Specifies a Boolean value that when TRUE invokes the selection callback
+for the current mode\&. From an application interface view, calling this
+function with \fInotify\fP True is indistinguishable from a user-initiated
+selection action\&.
+When \fInotify\fP is FALSE, no callbacks are called\&.
 .PP
 For a complete definition of MultiList and its associated resources, see
 \fBXmMultiList\fP(3)\&.
+.PP
+\fBXmExt18ListSelectAllItems\fP is the obsolete name of \fBXmMultiListSelectAllItems\fP, from the time
+the MultiList was called the Ext18List; \fB<Xm/Ext18List\&.h>\fP
+declares it deprecated\&.
 .SH "RELATED"
 .PP
 \fBXmMultiList\fP(3)\&.

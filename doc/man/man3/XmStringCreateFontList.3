@@ -1,0 +1,45 @@
+.TH "XmStringCreateFontList" "library call"
+.nh
+.SH "NAME"
+\fB\%XmStringCreateFontList\fP,
+\fB\%XmStringCreateFontList_r\fP \(em Create a font list from a font
+.iX "XmStringCreateFontList"
+.iX "font list functions" "XmStringCreateFontList"
+.iX "font list functions" "XmStringCreateFontList_r"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/Xm\&.h>
+.PP
+\fBXmFontList \fBXmStringCreateFontList\fP\fR(
+\fBXFontStruct *\fBfont\fR\fR,
+\fBXmStringCharSet \fBcharset\fR\fR);
+.PP
+\fBXmFontList \fBXmStringCreateFontList_r\fP\fR(
+\fBXFontStruct *\fBfont\fR\fR,
+\fBXmStringCharSet \fBcharset\fR\fR,
+\fBWidget \fBwid\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+These functions are obsolete; use \fB\%XmRenditionCreate\fP and
+\fB\%XmRenderTableAddRenditions\fP\&.  They create a font list with one
+entry, the font \fIfont\fP tagged \fIcharset\fP, as
+\fB\%XmFontListAppendEntry\fP(NULL,
+\fB\%XmFontListEntryCreate\fP(\fIcharset\fP,
+\fB\%XmFONT_IS_FONT\fP, \fIfont\fP)) does\&.  The \fIwid\fP argument of
+\fB\%XmStringCreateFontList_r\fP is not used\&.
+.IP "\fIfont\fP" 10
+Specifies the font\&.
+.IP "\fIcharset\fP" 10
+Specifies the tag of the entry\&.
+.IP "\fIwid\fP" 10
+Is not used\&.
+.SH "RETURN"
+.PP
+Returns a new font list, which the caller frees with
+\fB\%XmFontListFree\fP\&.
+.SH "RELATED"
+.PP
+\fB\%XmFontListCreate\fP(3), \fB\%XmFontListEntryCreate\fP(3) and
+\fB\%XmRenditionCreate\fP(3)\&.

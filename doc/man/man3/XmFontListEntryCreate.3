@@ -48,9 +48,11 @@
 .ta 8n 16n 24n 32n 40n 48n 56n 64n 72n
 .TH "XmFontListEntryCreate" "library call"
 .SH "NAME"
-\fBXmFontListEntryCreate\fP \(em A font list function that creates a font list entry
+\fBXmFontListEntryCreate\fP,
+\fBXmFontListEntryCreate_r\fP \(em Font list functions that create a font list entry
 .iX "XmFontListEntryCreate"
 .iX "font list functions" "XmFontListEntryCreate"
+.iX "font list functions" "XmFontListEntryCreate_r"
 .SH "SYNOPSIS"
 .PP
 .nf
@@ -59,11 +61,21 @@
 \fBchar *\fBtag\fR\fR,
 \fBXmFontType \fBtype\fR\fR,
 \fBXtPointer \fBfont\fR\fR);
+.PP
+\fBXmFontListEntry \fBXmFontListEntryCreate_r\fP\fR(
+\fBchar *\fBtag\fR\fR,
+\fBXmFontType \fBtype\fR\fR,
+\fBXtPointer \fBfont\fR\fR,
+\fBWidget \fBwid\fR\fR);
 .fi
 .SH "DESCRIPTION"
 .PP
 \fBXmFontListEntryCreate\fP creates a font list entry that
 contains either a font or font set and is identified by a tag\&.
+\fBXmFontListEntryCreate_r\fP is the same, for programs that use several
+application contexts in threads: the entry is created for the display
+of \fIwid\fP, under the lock of its application context\&.
+The font must be on that display\&.
 .IP "\fItag\fP" 10
 Specifies a NULL terminated string for the tag of the font
 list entry\&. The tag may be specified as \fBXmFONTLIST_DEFAULT_TAG\fP,
@@ -76,6 +88,8 @@ a font set\&. Valid values are \fBXmFONT_IS_FONT\fP and
 .IP "\fIfont\fP" 10
 Specifies either an \fBXFontSet\fP returned by \fBXCreateFontSet\fP or
 a pointer to an \fBXFontStruct\fP returned by \fBXLoadQueryFont\fP\&.
+.IP "\fIwid\fP" 10
+Specifies a widget on the display of the font\&.
 .PP
 The toolkit does not copy the X Font structure specified by the
 \fIfont\fP argument\&. Therefore, an application programmer must not
@@ -83,7 +97,8 @@ free \fBXFontStruct\fP or \fBXFontSet\fP until all font lists and/or font
 entries that reference it have been freed\&.
 .SH "RETURN"
 .PP
-Returns a font list entry\&.
+Returns a font list entry, or NULL if \fIfont\fP or \fItag\fP is NULL
+or \fItype\fP is not valid\&.
 The function allocates space to hold the
 returned font list entry\&. The application is responsible for managing the
 allocated space\&. The application can recover the allocated space by calling

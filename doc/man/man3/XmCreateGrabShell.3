@@ -1,0 +1,46 @@
+.TH "XmCreateGrabShell" "library call"
+.nh
+.SH "NAME"
+\fB\%XmCreateGrabShell\fP \(em The GrabShell widget creation function
+.iX "XmCreateGrabShell"
+.iX "creation functions" "XmCreateGrabShell"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/GrabShell\&.h>
+\fBWidget \fBXmCreateGrabShell\fP\fR(
+\fBWidget \fBparent\fR\fR,
+\fBchar *\fBname\fR\fR,
+\fBArgList \fBal\fR\fR,
+\fBCardinal \fBac\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmCreateGrabShell\fP creates a GrabShell, with
+\fB\%XtCreatePopupShell\fP, and returns its widget ID\&.  A GrabShell is
+the
+VendorShell subclass that ComboBox and DropDown use for their pop-up
+list: when it is mapped it grabs the keyboard and the pointer (with
+the \fB\%XmNgrabStyle\fP and \fB\%XmNownerEvents\fP resources)\&.  A
+button
+press outside it pops it down, and so does a button release later than
+the multi-click time after it was posted; its owner pops it down with
+the \fB\%GrabShellPopdown\fP action\&.  It is override redirect and
+draws a
+shadow (\fB\%XmNshadowThickness\fP) around its child\&.
+.IP "\fIparent\fP" 10
+Specifies the parent widget ID\&.
+.IP "\fIname\fP" 10
+Specifies the name of the created widget\&.
+.IP "\fIal\fP" 10
+Specifies the argument list\&.
+.IP "\fIac\fP" 10
+Specifies the number of attribute/value pairs in the argument list
+(\fIal\fP)\&.
+.SH "RETURN"
+.PP
+Returns the GrabShell widget ID\&.
+.SH "RELATED"
+.PP
+\fB\%XmComboBox\fP(3), \fB\%XmDropDown\fP(3) and
+\fB\%XtCreatePopupShell\fP(3)\&.

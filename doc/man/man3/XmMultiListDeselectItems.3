@@ -1,14 +1,22 @@
 .ta 8n 16n 24n 32n 40n 48n 56n 64n 72n
 .TH "XmMultiListDeselectItems" "library call"
 .SH "NAME"
-\fBXmMultiListDeselectItems\fP \(em A MultiList function that deselects items in the list by matching column entries
+\fBXmMultiListDeselectItems\fP,
+\fBXmExt18ListDeselectItems\fP \(em MultiList functions that deselect items in the list by matching column entries
 .iX "XmMultiListDeselectItems"
+.iX "XmExt18ListDeselectItems"
 .iX "List functions" "XmMultiListDeselectItems"
 .SH "SYNOPSIS"
 .PP
 .nf
 #include <Xm/MultiList\&.h>
 \fBvoid \fBXmMultiListDeselectItems\fP\fR(
+\fBWidget \fBwidget\fR\fR,
+\fBXmString \fBitem\fR\fR,
+\fBint \fBcolumn\fR\fR);
+.PP
+#include <Xm/Ext18List\&.h>
+\fBvoid \fBXmExt18ListDeselectItems\fP\fR(
 \fBWidget \fBwidget\fR\fR,
 \fBXmString \fBitem\fR\fR,
 \fBint \fBcolumn\fR\fR);
@@ -27,6 +35,10 @@ looking for any column\&.
 .PP
 For a complete definition of MultiList and its associated resources, see
 \fBXmMultiList\fP(3)\&.
+.PP
+\fBXmExt18ListDeselectItems\fP is the obsolete name of \fBXmMultiListDeselectItems\fP, from the time
+the MultiList was called the Ext18List; \fB<Xm/Ext18List\&.h>\fP
+declares it deprecated\&.
 .SH "RELATED"
 .PP
 \fBXmMultiList\fP(3)\&.

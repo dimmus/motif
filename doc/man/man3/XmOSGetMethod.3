@@ -1,0 +1,45 @@
+.TH "XmOSGetMethod" "library call"
+.nh
+.SH "NAME"
+\fB\%XmOSGetMethod\fP \(em Returns an operating system dependent method of Motif
+.iX "XmOSGetMethod"
+.iX "Xme functions" "XmOSGetMethod"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/XmosP\&.h>
+\fBXmOSMethodStatus \fBXmOSGetMethod\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBString \fBmethod_name\fR\fR,
+\fBXtPointer *\fBmethod\fR\fR,
+\fBXtPointer *\fBos_data\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmOSGetMethod\fP returns the procedure that implements the
+operating
+system dependent method \fImethod_name\fP in this build of Motif\&.  The
+methods are \fB\%XmMCharDirection\fP, which returns the direction of a
+character (an \fB\%XmCharDirectionProc\fP), and
+\fB\%XmMInitialCharsDirection\fP, which returns the direction of the
+start
+of a text (an \fB\%XmInitialDirectionProc\fP)\&.
+.IP "\fIw\fP" 10
+Is not used\&.
+.IP "\fImethod_name\fP" 10
+Specifies the method\&.
+.IP "\fImethod\fP" 10
+Specifies the procedure the caller would use, or NULL, and returns
+the procedure of Motif\&.
+.IP "\fIos_data\fP" 10
+Returns data for the method, or NULL\&.
+.SH "RETURN"
+.PP
+Returns \fB\%XmOS_METHOD_REPLACED\fP if \fImethod\fP was changed,
+\fB\%XmOS_METHOD_DEFAULTED\fP if it was left as it was (it already held
+the
+procedure of Motif, or the method is not known), and
+\fB\%XmOS_METHOD_NULL\fP if \fImethod\fP is NULL\&.
+.SH "RELATED"
+.PP
+\fB\%XmeGetDirection\fP(3)\&.

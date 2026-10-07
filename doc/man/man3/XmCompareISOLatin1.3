@@ -1,0 +1,56 @@
+.TH "XmCompareISOLatin1" "library call"
+.nh
+.SH "NAME"
+\fB\%XmCompareISOLatin1\fP,
+\fB\%XmCopyISOLatin1Lowered\fP \(em Compare and lower ISO Latin-1 strings without regard to case
+.iX "XmCompareISOLatin1"
+.iX "string functions" "XmCompareISOLatin1"
+.iX "string functions" "XmCopyISOLatin1Lowered"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/Ext\&.h>
+.PP
+\fBint \fBXmCompareISOLatin1\fP\fR(
+\fBchar *\fBfirst\fR\fR,
+\fBchar *\fBsecond\fR\fR);
+.PP
+\fBvoid \fBXmCopyISOLatin1Lowered\fP\fR(
+\fBchar *\fBdst\fR\fR,
+\fBchar *\fBsrc\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+These functions treat strings as ISO 8859-1 text, whose upper case
+letters are A to Z, and U+00C0 to U+00DE except U+00D7; they do not
+depend on the locale\&.  The Motif extension widgets use them in their
+resource converters, to accept a value in any case\&.
+.PP
+\fB\%XmCompareISOLatin1\fP compares \fIfirst\fP and \fIsecond\fP without
+regard
+to case\&.  \fB\%XmCopyISOLatin1Lowered\fP copies \fIsrc\fP to \fIdst\fP
+with the
+upper case letters made lower case; \fIdst\fP must have room for the
+string and its terminating null character, and may be \fIsrc\fP\&.
+.IP "\fIfirst\fP" 10
+Specifies a string\&.
+.IP "\fIsecond\fP" 10
+Specifies the other string\&.
+.IP "\fIdst\fP" 10
+Specifies where to copy the string\&.
+.IP "\fIsrc\fP" 10
+Specifies the string to copy\&.
+.SH "RETURN"
+.PP
+\fB\%XmCompareISOLatin1\fP returns 0 if the strings are equal without
+regard to case, and another value otherwise\&.
+.SH "BUGS"
+.PP
+A non-zero result of \fB\%XmCompareISOLatin1\fP is the difference
+between
+the characters of \fIsecond\fP and \fIfirst\fP where they differ, as
+they are
+and not lowered, so its sign does not order the strings\&.
+.SH "RELATED"
+.PP
+\fB\%XmeNamesAreEqual\fP(3)\&.

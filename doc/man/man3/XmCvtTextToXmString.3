@@ -1,0 +1,70 @@
+.TH "XmCvtTextToXmString" "library call"
+.nh
+.SH "NAME"
+\fB\%XmCvtTextToXmString\fP,
+\fB\%XmCvtXmStringToText\fP \(em Resource converters between compound text and compound strings
+.iX "XmCvtTextToXmString"
+.iX "compound string functions" "XmCvtTextToXmString"
+.iX "compound string functions" "XmCvtXmStringToText"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/Xm\&.h>
+.PP
+\fBBoolean \fBXmCvtTextToXmString\fP\fR(
+\fBDisplay *\fBdisplay\fR\fR,
+\fBXrmValuePtr \fBargs\fR\fR,
+\fBCardinal *\fBnum_args\fR\fR,
+\fBXrmValue *\fBfrom_val\fR\fR,
+\fBXrmValue *\fBto_val\fR\fR,
+\fBXtPointer *\fBconverter_data\fR\fR);
+.PP
+\fBBoolean \fBXmCvtXmStringToText\fP\fR(
+\fBDisplay *\fBdisplay\fR\fR,
+\fBXrmValuePtr \fBargs\fR\fR,
+\fBCardinal *\fBnum_args\fR\fR,
+\fBXrmValue *\fBfrom_val\fR\fR,
+\fBXrmValue *\fBto_val\fR\fR,
+\fBXtPointer *\fBconverter_data\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+These are new-style resource converters (\fB\%XtTypeConverter\fP)
+between
+compound text, the encoding of \fB\%COMPOUND_TEXT\fP selections and
+properties, and XmString\&.  They are what \fB\%XmCvtCTToXmString\fP and
+\fB\%XmCvtXmStringToCT\fP call, and can be registered with
+\fB\%XtSetTypeConverter\fP or called with \fB\%XtCallConverter\fP\&.
+.PP
+\fB\%XmCvtTextToXmString\fP converts the compound text of \fIfrom_val\fP
+(\fB\%addr\fP and \fB\%size\fP) and returns the new XmString itself in
+the
+\fB\%addr\fP member of \fIto_val\fP\&.  \fB\%XmCvtXmStringToText\fP
+converts the
+XmString in \fIfrom_val\fP->\fB\%addr\fP and returns in \fIto_val\fP a
+new
+null-terminated compound text string and its length (NULL and 0 for
+an empty XmString)\&.  The caller frees the results
+(\fB\%XmStringFree\fP, \fB\%XtFree\fP)\&.  A conversion that fails
+prints a
+warning\&.
+.IP "\fIdisplay\fP" 10
+Specifies the display\&.
+.IP "\fIargs\fP" 10
+Is not used\&.
+.IP "\fInum_args\fP" 10
+Is not used\&.
+.IP "\fIfrom_val\fP" 10
+Specifies the value to convert\&.
+.IP "\fIto_val\fP" 10
+Returns the converted value\&.
+.IP "\fIconverter_data\fP" 10
+Is not used\&.
+.SH "RETURN"
+.PP
+The functions return True if the conversion succeeded, and False
+otherwise\&.
+.SH "RELATED"
+.PP
+\fB\%XmCvtCTToXmString\fP(3), \fB\%XmCvtXmStringToCT\fP(3) and
+\fB\%XtSetTypeConverter\fP(3)\&.
