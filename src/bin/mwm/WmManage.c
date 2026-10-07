@@ -767,7 +767,13 @@ ManageWindow (WmScreenData *pSD, Window clientWindow, long manageFlags)
 #else /* WSM */
     AddClientToList (pSD->pActiveWS, pCD, True /*on top*/);
 #endif /* WSM */
-    SetClientState (pCD, initialState, GetTimestamp());
+
+    /*
+     * SetClientState uses the time only to move the focus when a window
+     * leaves the normal or the minimized state; this one is withdrawn,
+     * so a timestamp would cost a round trip for nothing.
+     */
+    SetClientState (pCD, initialState, CurrentTime);
 
     /*
      * Set the keyboard input focus to the newly managed window if appropriate:
