@@ -226,7 +226,7 @@ void _XmPrimitiveEnter(Widget wid,
                        Cardinal *num_params) /* unused */
 {
   _XmToolTipEnter(wid, event, params, num_params);
-  if (_XmGetFocusPolicy(wid) == XmPOINTER) {
+  if (event && _XmGetFocusPolicy(wid) == XmPOINTER) {
     if (event->xcrossing.focus) {
       _XmCallFocusMoved(XtParent(wid), wid, event);
       _XmWidgetFocusChange(wid, XmENTER);
@@ -241,7 +241,7 @@ void _XmPrimitiveLeave(Widget wid,
                        Cardinal *num_params) /* unused */
 {
   _XmToolTipLeave(wid, event, params, num_params);
-  if (_XmGetFocusPolicy(wid) == XmPOINTER) {
+  if (event && _XmGetFocusPolicy(wid) == XmPOINTER) {
     if (event->xcrossing.focus) {
       _XmCallFocusMoved(wid, XtParent(wid), event);
       _XmWidgetFocusChange(wid, XmLEAVE);
@@ -259,7 +259,7 @@ void _XmPrimitiveFocusInInternal(Widget wid,
                                  String *params,       /* unused */
                                  Cardinal *num_params) /* unused */
 {
-  if (!(event->xfocus.send_event) || _XmGetFocusFlag(wid, XmFOCUS_IGNORE))
+  if (!event || !(event->xfocus.send_event) || _XmGetFocusFlag(wid, XmFOCUS_IGNORE))
     return;
   if (_XmGetFocusPolicy(wid) == XmPOINTER) {
     /* Maybe Mwm trying to catch up with us. */
@@ -280,7 +280,7 @@ void _XmPrimitiveFocusOut(Widget wid,
                           String *params,       /* unused */
                           Cardinal *num_params) /* unused */
 {
-  if (event->xfocus.send_event && !(wid->core.being_destroyed) &&
+  if (event && event->xfocus.send_event && !(wid->core.being_destroyed) &&
       (_XmGetFocusPolicy(wid) == XmEXPLICIT))
   {
     _XmWidgetFocusChange(wid, XmFOCUS_OUT);
