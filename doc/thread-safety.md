@@ -314,6 +314,10 @@ request reaches the application's handler.
 
 ## Limits
 
+- The colour calculation procedures of `XmNcolorCalculationProc` and
+  `XmSetColorCalculation` are called with the process lock held (as Xt
+  calls type converters): such a procedure must not wait for another
+  thread that uses Motif or Xt.
 - Interfaces without a display argument (`XmCvtXmStringToCT`,
   `XmCvtCTToXmString`, the unit conversions, XmString drawing and
   measuring with a render table made without a display, `MrmOpenHierarchy`
