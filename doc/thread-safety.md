@@ -305,7 +305,12 @@ has a trap for that display, for a request made since the trap started
 (and of the error code and resource asked for, if any), and passes any
 other error to the handler that was installed before.  With Xt's
 locking, the thread that reads a reply is the one holding the
-application lock, which made the request.
+application lock, which made the request.  A handler that another
+thread installs while traps are on becomes the one errors are passed
+to, and stays installed when the last trap ends.  The `XErrors` suite
+(`src/tests/Xm/testXErrors.c`) checks, through `XmeClipboardSource`,
+that a trapped error stays inside Motif and that an error of an earlier
+request reaches the application's handler.
 
 ## Limits
 
