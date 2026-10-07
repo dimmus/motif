@@ -142,6 +142,10 @@ static Boolean LookupXftFont(Display *display, XmRendition rend, XftFont **font)
 static void CacheXftFont(Display *display, XmRendition rend);
 #endif
 /********    End Static Function Declarations    ********/
+/* The warnings, failed conversions and XmNnoFontCallback calls made */
+/* so far while creating renditions.  A converted render table whose */
+/* creation made any is not cached (see _XmRenderTableCvtCachePut). */
+static unsigned long rendition_failures = 0;
 /* Resource List. */
 /************************************************************************/
 /* N.B.:  The SetDefault procedure has a hardcoded list of all the	*/
@@ -360,6 +364,75 @@ static XrmResourceList CompileResourceTable(XtResourceList resources, Cardinal n
   return (table);
 }
 
+/* The rendition resources, compiled on first use.  Call with the */
+/* process lock held. */
+static XrmResourceList RenditionResourceTable(void)
+{
+  static XrmResourceList table = NULL;
+  if (table == NULL)
+    table = CompileResourceTable(_XmRenditionResources, _XmNumRenditionResources);
+  return (table);
+}
+
+#define SEARCH_LIST_SIZE 100
+
+/* The database that the resources of renditions for wid, or for */
+/* display dsp when wid is NULL, come from. */
+static XrmDatabase RenditionDatabase(Display *dsp, Widget wid)
+{
+  if (wid != NULL)
+    return (XtScreenDatabase(XtScreenOfObject(wid)));
+  if (dsp != NULL)
+    return (XtScreenDatabase(DefaultScreenOfDisplay(dsp)));
+  return (NULL);
+}
+
+/* Set names and classes to those of wid and its ancestors, if wid is */
+/* not NULL, followed by resname and resclass.  Returns their number; */
+/* the arrays, of 100 entries, have room for two more. */
+static Cardinal RenditionNames(
+    Widget wid, String resname, String resclass, XrmName *names, XrmClass *classes)
+{
+  Cardinal length = 0;
+  if (wid != NULL)
+    length = GetNamesAndClasses(wid, names, classes);
+  names[length] = XrmStringToQuark(resname);
+  classes[length] = XrmStringToQuark(resclass);
+  return (length + 1);
+}
+
+/* Get the search list of db for the resources of rendition tag (NULL */
+/* for the default rendition), under the length names and classes */
+/* from RenditionNames.  *searchList is stackSearchList, of */
+/* SEARCH_LIST_SIZE entries, or an array for the caller to free. */
+static void RenditionSearchList(XrmDatabase db,
+                                XrmName *names,
+                                XrmClass *classes,
+                                Cardinal length,
+                                XmStringTag tag,
+                                XrmHashTable *stackSearchList,
+                                XrmHashTable **searchList)
+{
+  static XrmClass QRendition = NULLQUARK;
+  unsigned int searchListSize = SEARCH_LIST_SIZE;
+  if (QRendition == NULLQUARK)
+    QRendition = XrmPermStringToQuark(XmCRendition);
+  if (tag != NULL) {
+    names[length] = XrmStringToQuark(tag);
+    classes[length] = QRendition;
+    length++;
+  }
+  names[length] = NULLQUARK;
+  classes[length] = NULLQUARK;
+  *searchList = stackSearchList;
+  while (!XrmQGetSearchList(db, names, classes, *searchList, searchListSize)) {
+    if (*searchList == stackSearchList)
+      *searchList = NULL;
+    *searchList = (XrmHashTable *)_XmReallocArray(
+        (char *)*searchList, searchListSize *= 2, sizeof(XrmHashTable));
+  }
+}
+
 /*
  * Convert value, of type from_type, to to_type for a rendition of wid,
  * like XtConvertAndStore.  But XtConvertAndStore holds a reference to a
@@ -392,23 +465,21 @@ static Boolean GetResources(XmRendition rend,
                             ArgList arglist,
                             Cardinal argcount)
 {
-  XrmName names[100];
-  XrmClass classes[100];
-  Cardinal length = 0;
   static XrmQuarkList quarks = NULL;
   static Cardinal num_quarks = 0;
   static Boolean *found = NULL;
   int i, j;
-  static XrmResourceList table = NULL;
-  static XrmQuark QString;
+  XrmResourceList table;
+  static XrmQuark QString = NULLQUARK;
   static XrmQuark Qfont;
   Arg *arg;
   XrmName argName;
   XrmResource *res;
-  XrmDatabase db = NULL;
-  XrmHashTable stackSearchList[100];
+  XrmName names[100];
+  XrmClass classes[100];
+  XrmDatabase db;
+  XrmHashTable stackSearchList[SEARCH_LIST_SIZE];
   XrmHashTable *searchList = stackSearchList;
-  unsigned int searchListSize = 100;
   Boolean got_one = False;
   XrmValue value;
   XrmQuark rawType;
@@ -432,19 +503,6 @@ static Boolean GetResources(XmRendition rend,
   if (found == NULL)
     found = (Boolean *)_XmMallocArray(_XmNumRenditionResources, sizeof(Boolean));
   bzero(found, _XmNumRenditionResources * sizeof(Boolean));
-  /* Compile names and classes. */
-  if (wid != NULL)
-    length = GetNamesAndClasses(wid, names, classes);
-  names[length] = XrmStringToQuark(resname);
-  classes[length] = XrmStringToQuark(resclass);
-  length++;
-  if (tag != NULL) {
-    names[length] = XrmStringToQuark(tag);
-    classes[length] = XrmPermStringToQuark(XmCRendition);
-    length++;
-  }
-  names[length] = NULLQUARK;
-  classes[length] = NULLQUARK;
   /* Cache arglist */
   if (num_quarks < argcount) {
     quarks = (XrmQuark *)_XmReallocArray((char *)quarks, argcount, sizeof(XrmQuark));
@@ -452,9 +510,8 @@ static Boolean GetResources(XmRendition rend,
   }
   for (i = 0; (Cardinal)i < argcount; i++)
     quarks[i] = XrmStringToQuark(arglist[i].name);
-  /* Compile resource description into XrmResourceList if not already done. */
-  if (table == NULL) {
-    table = CompileResourceTable(_XmRenditionResources, _XmNumRenditionResources);
+  table = RenditionResourceTable();
+  if (QString == NULLQUARK) {
     QString = XrmPermStringToQuark(XtCString);
     Qfont = XrmPermStringToQuark(XmNfont);
   }
@@ -470,21 +527,14 @@ static Boolean GetResources(XmRendition rend,
     }
   }
   /* DB query */
-  /* Get database */
-  if ((wid != NULL) || (dsp != NULL)) {
-    if (wid != NULL)
-      db = XtScreenDatabase(XtScreenOfObject(wid));
-    else
-      db = XtScreenDatabase(DefaultScreenOfDisplay(dsp));
-    /* Get searchlist */
-    while (!XrmQGetSearchList(db, names, classes, searchList, searchListSize)) {
-      if (searchList == stackSearchList)
-        searchList = NULL;
-      searchList = (XrmHashTable *)_XmReallocArray((char *)searchList,
-                                                   searchListSize *= 2,
-                                                   sizeof(XrmHashTable));
-    }
-  }
+  if ((db = RenditionDatabase(dsp, wid)) != NULL)
+    RenditionSearchList(db,
+                        names,
+                        classes,
+                        RenditionNames(wid, resname, resclass, names, classes),
+                        tag,
+                        stackSearchList,
+                        &searchList);
   /* Loop over table */
   for (j = 0, res = table; (Cardinal)j < _XmNumRenditionResources; j++, res++) {
     if (!found[j]) {
@@ -508,6 +558,8 @@ static Boolean GetResources(XmRendition rend,
             else
               copied = have_value = ConvertResource(
                   wid, rawType, &value, XrmQuarkToString(res->xrm_type), &convValue);
+            if (!have_value)
+              rendition_failures++;
           }
           else
             have_value = False;
@@ -1585,6 +1637,9 @@ static void RenditionWarning(char *tag, char *type, char *message, Display *dpy)
   char *params[1];
   Cardinal num_params = 1;
   Display *d;
+  _XmProcessLock();
+  rendition_failures++;
+  _XmProcessUnlock();
   /* the MotifWarningHandler installed in VendorS.c knows about
      this convention */
   params[0] = XME_WARNING;
@@ -1739,6 +1794,9 @@ static void ValidateAndLoadFont(XmRendition rend, Display *display)
             /* We must know for sure whether there are any */
             /* callbacks, so we have to use XtHasCallbacks. */
             if (XtHasCallbacks((Widget)dsp, XmNnoFontCallback) == XtCallbackHasSome) {
+              _XmProcessLock();
+              rendition_failures++;
+              _XmProcessUnlock();
               XtCallCallbackList((Widget)dsp, dsp->display.noFontCallback, &cb);
               return;
             }
@@ -1925,6 +1983,412 @@ void XmRenditionFree(XmRendition rendition)
   _XmProcessLock();
   FreeRendition(rendition);
   FreeHandle(rendition);
+  _XmProcessUnlock();
+}
+
+/*
+ * Render tables converted from resource strings.
+ *
+ * The String to RenderTable converters look up the resources of each
+ * rendition in the resource database under the names and classes of the
+ * widget and its ancestors ("*form*renderTable.bold.fontName"), so one
+ * string can make different tables for different widgets, and Xt does
+ * not cache them.  But a table depends on its widget only through the
+ * values that those lookups find, and through the screen and colormap
+ * that the values are converted for (the converters of the rendition
+ * resources take no other argument from the widget).  A key holds all
+ * of that, with the string, the resource name and the locale; a table
+ * converted for one widget is kept under its key, and a widget whose key
+ * is the same gets a copy of it, which shares its renditions, instead of
+ * a new table.
+ *
+ * A string that names no rendition is a font list, whose entries look
+ * up their resources for the display rather than for the widget: the
+ * entry of such a table also holds what those lookups found, and is used
+ * only while they still find the same.
+ *
+ * A table is only kept when making it gave no warning, no failed
+ * conversion and no XmNnoFontCallback call, and when all its fonts are
+ * loaded, so that a copy behaves as a new table would.  The tables are
+ * kept per display: a table is dropped once nothing else holds it, and
+ * all of them when the display is closed.
+ */
+typedef struct {
+  char *data;
+  Cardinal size, max;
+  char *stack; /* the initial buffer, on the caller's stack */
+} XmRTKeyRec, *XmRTKey;
+
+typedef struct _XmRTCacheEntryRec {
+  XmHashValue hash;
+  XmRTKeyRec key;         /* widget lookups */
+  XmRTKeyRec check;       /* display lookups of a font list, by tag */
+  XmRenderTable table;    /* NULL until the entry is cached */
+  unsigned long failures; /* rendition_failures when the key was made */
+} XmRTCacheEntryRec, *XmRTCacheEntry;
+
+typedef struct _XmRTCacheRec {
+  struct _XmRTCacheRec *next;
+  Display *display;
+  XmHashTable entries; /* XmRTCacheEntry -> XmRTCacheEntry */
+  Cardinal sweep;      /* look for unused tables at this many entries */
+} XmRTCacheRec;
+
+static XmRTCacheRec *_XmRTCaches = NULL;
+
+/* A key starts in a buffer of this size on the stack. */
+#define KEY_BUF_SIZE 512
+
+static void KeyInit(XmRTKey key, char *stack, Cardinal size)
+{
+  key->data = key->stack = stack;
+  key->size = 0;
+  key->max = size;
+}
+
+static void KeyGrow(XmRTKey key, Cardinal size)
+{
+  key->max = 2 * (key->size + size);
+  if (key->data == key->stack) {
+    key->data = XtMalloc(key->max);
+    memcpy(key->data, key->stack, key->size);
+  }
+  else
+    key->data = XtRealloc(key->data, key->max);
+}
+
+static inline void KeyAdd(XmRTKey key, const void *data, Cardinal size)
+{
+  if (key->size + size > key->max)
+    KeyGrow(key, size);
+  memcpy(key->data + key->size, data, size);
+  key->size += size;
+}
+
+/* Free a key, or move it from the stack to the heap. */
+static void KeyFree(XmRTKey key)
+{
+  if (key->data != key->stack)
+    XtFree(key->data);
+  key->data = NULL;
+}
+
+static void KeyKeep(XmRTKey to, XmRTKey key)
+{
+  to->size = to->max = key->size;
+  to->stack = NULL;
+  to->data = XtMalloc(MAX(key->size, 1));
+  memcpy(to->data, key->data, key->size);
+  KeyFree(key);
+}
+
+/* Add to key what GetResources finds in db for rendition tag (NULL */
+/* for the default rendition) under the length names and classes from */
+/* RenditionNames: which resources are found, and the type and value */
+/* of each. */
+static void KeyAddRendition(XmRTKey key,
+                            XrmDatabase db,
+                            XrmName *names,
+                            XrmClass *classes,
+                            Cardinal length,
+                            XmStringTag tag)
+{
+  XrmHashTable stackSearchList[SEARCH_LIST_SIZE];
+  XrmHashTable *searchList = stackSearchList;
+  XrmResourceList res = RenditionResourceTable();
+  XrmRepresentation type;
+  XrmValue value;
+  unsigned long found = 0; /* a bit for each of the 17 resources */
+  Cardinal j, found_at;
+  /* As in _XmRenditionCreate. */
+  if ((tag != NULL) && (strcmp(tag, XmSTRING_DEFAULT_CHARSET) == 0))
+    tag = _XmStringGetCurrentCharset();
+  found_at = key->size;
+  KeyAdd(key, &found, sizeof(found));
+  if (db == NULL)
+    return;
+  RenditionSearchList(db, names, classes, length, tag, stackSearchList, &searchList);
+  for (j = 0; j < _XmNumRenditionResources; j++, res++)
+    if (XrmQGetSearchResource(searchList, res->xrm_name, res->xrm_class, &type, &value)) {
+      found |= 1UL << j;
+      KeyAdd(key, &type, sizeof(type));
+      KeyAdd(key, &value.size, sizeof(value.size));
+      if (value.addr != NULL)
+        KeyAdd(key, value.addr, value.size);
+    }
+  memcpy(key->data + found_at, &found, sizeof(found));
+  if (searchList != stackSearchList)
+    XtFree((char *)searchList);
+}
+
+/* Add to check what XmFontListEntryLoad finds for each of the */
+/* renditions tagged in tags, from a font list entry, of display. */
+static void KeyAddFontListRenditions(XmRTKey check, Display *display, XmRTKey tags)
+{
+  XrmName names[100];
+  XrmClass classes[100];
+  XrmDatabase db = RenditionDatabase(display, NULL);
+  Cardinal length = RenditionNames(NULL, XmS, XmCFontList, names, classes);
+  char *tag;
+  for (tag = tags->data; tag < tags->data + tags->size; tag += strlen(tag) + 1) {
+    KeyAdd(check, tag, strlen(tag) + 1);
+    KeyAddRendition(check, db, names, classes, length, tag);
+  }
+}
+
+static Boolean CompareRTCacheEntry(XmHashKey k1, XmHashKey k2)
+{
+  XmRTCacheEntry e1 = (XmRTCacheEntry)k1, e2 = (XmRTCacheEntry)k2;
+  return (e1->hash == e2->hash && e1->key.size == e2->key.size &&
+          memcmp(e1->key.data, e2->key.data, e1->key.size) == 0);
+}
+
+static XmHashValue HashRTCacheEntry(XmHashKey k)
+{
+  return (((XmRTCacheEntry)k)->hash);
+}
+
+/* Whether the display lookups of the font list of a cached entry */
+/* still find the same. */
+static Boolean RTCacheEntryValid(XmRTCacheEntry entry, Display *display)
+{
+  XmRTKeyRec tags, now;
+  char tags_buf[KEY_BUF_SIZE], now_buf[KEY_BUF_SIZE];
+  char *p;
+  Boolean valid;
+  if (entry->check.size == 0)
+    return (True);
+  /* The tags are the strings at the start of each part of check. */
+  KeyInit(&tags, tags_buf, sizeof(tags_buf));
+  for (p = entry->check.data; p < entry->check.data + entry->check.size;) {
+    unsigned long found;
+    Cardinal j;
+    KeyAdd(&tags, p, strlen(p) + 1);
+    p += strlen(p) + 1;
+    memcpy(&found, p, sizeof(found));
+    p += sizeof(found);
+    for (j = 0; j < _XmNumRenditionResources; j++)
+      if (found & (1UL << j)) {
+        unsigned int size;
+        p += sizeof(XrmRepresentation);
+        memcpy(&size, p, sizeof(size));
+        p += sizeof(size) + size;
+      }
+  }
+  KeyInit(&now, now_buf, sizeof(now_buf));
+  KeyAddFontListRenditions(&now, display, &tags);
+  valid = (now.size == entry->check.size && memcmp(now.data, entry->check.data, now.size) == 0);
+  KeyFree(&tags);
+  KeyFree(&now);
+  return (valid);
+}
+
+static void FreeRTCacheEntry(XmRTCacheEntry entry)
+{
+  if (entry->table != NULL)
+    XmRenderTableFree(entry->table);
+  XtFree(entry->key.data);
+  XtFree(entry->check.data);
+  XtFree((char *)entry);
+}
+
+static Boolean FreeRTCacheMapProc(XmHashKey k, XtPointer value, XtPointer data)
+{
+  FreeRTCacheEntry((XmRTCacheEntry)value);
+  return False;
+}
+
+/* Drop a table that only the cache holds. */
+static Boolean SweepRTCacheMapProc(XmHashKey k, XtPointer value, XtPointer data)
+{
+  XmRTCacheEntry entry = (XmRTCacheEntry)value;
+  if (_XmRTRefcount(entry->table) == 1) {
+    (void)_XmRemoveHashEntry((XmHashTable)data, k);
+    FreeRTCacheEntry(entry);
+  }
+  return False;
+}
+
+/* Destroy callback of the hook object of a display, which */
+/* XtCloseDisplay destroys while the display is still open. */
+static void RTCacheDisplayClosed(Widget w, XtPointer client_data, XtPointer call_data)
+{
+  XmRTCacheRec **prev, *rec;
+  _XmProcessLock();
+  for (prev = &_XmRTCaches; (rec = *prev) != NULL; prev = &rec->next)
+    if (rec->display == (Display *)client_data) {
+      *prev = rec->next;
+      _XmMapHashTable(rec->entries, FreeRTCacheMapProc, NULL);
+      _XmFreeHashTable(rec->entries);
+      XtFree((char *)rec);
+      break;
+    }
+  _XmProcessUnlock();
+}
+
+/* Call with the process lock held. */
+static XmRTCacheRec *FindRTCache(Display *display, Boolean create)
+{
+  XmRTCacheRec *rec;
+  for (rec = _XmRTCaches; rec != NULL; rec = rec->next)
+    if (rec->display == display)
+      return (rec);
+  if (!create)
+    return (NULL);
+  rec = XtNew(XmRTCacheRec);
+  rec->display = display;
+  rec->entries = _XmAllocHashTable(16, CompareRTCacheEntry, HashRTCacheEntry);
+  rec->sweep = 16;
+  rec->next = _XmRTCaches;
+  _XmRTCaches = rec;
+  XtAddCallback(
+      XtHooksOfDisplay(display), XtNdestroyCallback, RTCacheDisplayClosed, (XtPointer)display);
+  return (rec);
+}
+
+/*
+ * The String to RenderTable converter for resource resname of wid calls
+ * this before converting spec.  It returns a copy of the table cached
+ * for the same key, or NULL with a pending key in *pending, which the
+ * converter passes to _XmRenderTableCvtCachePut with the table it makes.
+ */
+XmRenderTable _XmRenderTableCvtCacheGet(
+    Widget wid, String resname, String resclass, char *spec, XtPointer *pending)
+{
+  XmRTCacheEntryRec key;
+  XmRTCacheEntry entry = NULL, cached;
+  XmRTCacheRec *rec;
+  XmRenderTable table = NULL;
+  char key_buf[KEY_BUF_SIZE], spec_buf[256];
+  XrmName names[100];
+  XrmClass classes[100];
+  Cardinal length, i;
+  XrmDatabase db;
+  Screen *screen;
+  Widget w;
+  char *s, *tag, *strtok_buf;
+  const char *locale;
+  size_t spec_len = strlen(spec);
+  unsigned int h;
+  *pending = NULL;
+  if (wid == NULL)
+    return (NULL);
+  _XmProcessLock();
+  KeyInit(&key.key, key_buf, sizeof(key_buf));
+  key.check.data = NULL;
+  key.check.size = 0;
+  key.table = NULL;
+  key.failures = rendition_failures;
+  /* The screen and the colormap that the values are converted for. */
+  screen = XtScreenOfObject(wid);
+  KeyAdd(&key.key, &screen, sizeof(screen));
+  for (w = wid; !XtIsWidget(w); w = XtParent(w))
+    ;
+  KeyAdd(&key.key, &w->core.colormap, sizeof(Colormap));
+  /* The locale of font sets. */
+  locale = setlocale(LC_ALL, NULL);
+  if (locale == NULL)
+    locale = "";
+  KeyAdd(&key.key, locale, strlen(locale) + 1);
+  KeyAdd(&key.key, resname, strlen(resname) + 1);
+  KeyAdd(&key.key, spec, spec_len + 1);
+  /* Only this much is hashed: the values found for the widgets that */
+  /* use a string seldom differ, and are compared anyway. */
+  for (h = 0, i = 0; i < key.key.size; i++)
+    h = h * 31 + (unsigned char)key.key.data[i];
+  key.hash = (XmHashValue)(h & 0x7FFFFFFF);
+  /* The values found for each rendition that the converter makes. */
+  db = RenditionDatabase(NULL, wid);
+  length = RenditionNames(wid, resname, resclass, names, classes);
+  KeyAddRendition(&key.key, db, names, classes, length, NULL);
+  s = (spec_len < sizeof(spec_buf)) ? memcpy(spec_buf, spec, spec_len + 1) : XtNewString(spec);
+  for (tag = strtok_r(s, _XmRENDITION_TAG_DELIMITERS, &strtok_buf); tag != NULL;
+       tag = strtok_r(NULL, _XmRENDITION_TAG_DELIMITERS, &strtok_buf))
+    KeyAddRendition(&key.key, db, names, classes, length, tag);
+  if (s != spec_buf)
+    XtFree(s);
+  if ((rec = FindRTCache(XtDisplayOfObject(wid), False)) != NULL &&
+      (cached = (XmRTCacheEntry)_XmGetHashEntry(rec->entries, (XmHashKey)&key)) != NULL &&
+      RTCacheEntryValid(cached, XtDisplayOfObject(wid)))
+    table = XmRenderTableCopy(cached->table, NULL, 0);
+  if (table == NULL) {
+    entry = XtNew(XmRTCacheEntryRec);
+    *entry = key;
+    KeyKeep(&entry->key, &key.key);
+  }
+  else
+    KeyFree(&key.key);
+  _XmProcessUnlock();
+  *pending = (XtPointer)entry;
+  return (table);
+}
+
+/* Whether the fonts of all the renditions of table are loaded. */
+static Boolean RenderTableFontsLoaded(XmRenderTable table)
+{
+  XmRendition rend;
+  int i;
+  for (i = 0; i < _XmRTCount(table); i++) {
+    rend = _XmRTRenditions(table)[i];
+    if ((_XmRendFont(rend) == NULL) &&
+#if USE_XFT
+        (_XmRendXftFont(rend) == NULL) &&
+#endif
+        NameIsString(_XmRendFontName(rend)))
+      return (False);
+  }
+  return (True);
+}
+
+/*
+ * Cache table, which the converter made for the pending key from
+ * _XmRenderTableCvtCacheGet, or free the key if table is NULL or must
+ * not be shared.  wid is the widget of the conversion, and font_list
+ * whether the string was converted as a font list.
+ */
+void _XmRenderTableCvtCachePut(Widget wid,
+                               XtPointer pending,
+                               XmRenderTable table,
+                               Boolean font_list)
+{
+  XmRTCacheEntry entry = (XmRTCacheEntry)pending, stale;
+  XmRTCacheRec *rec;
+  Display *display = XtDisplayOfObject(wid);
+  if (entry == NULL)
+    return;
+  _XmProcessLock();
+  if ((table != NULL) && (entry->failures == rendition_failures) &&
+      RenderTableFontsLoaded(table) && (rec = FindRTCache(display, True)) != NULL)
+  {
+    if (font_list) {
+      XmRTKeyRec tags, check;
+      char tags_buf[KEY_BUF_SIZE], check_buf[KEY_BUF_SIZE];
+      int i;
+      KeyInit(&tags, tags_buf, sizeof(tags_buf));
+      for (i = 0; i < _XmRTCount(table); i++) {
+        XmStringTag tag = _XmRendTag(_XmRTRenditions(table)[i]);
+        KeyAdd(&tags, tag, strlen(tag) + 1);
+      }
+      KeyInit(&check, check_buf, sizeof(check_buf));
+      KeyAddFontListRenditions(&check, display, &tags);
+      KeyFree(&tags);
+      KeyKeep(&entry->check, &check);
+    }
+    /* An entry whose font list lookups found something else. */
+    if ((stale = (XmRTCacheEntry)_XmRemoveHashEntry(rec->entries, (XmHashKey)entry)) != NULL)
+      FreeRTCacheEntry(stale);
+    if (_XmHashTableCount(rec->entries) >= rec->sweep) {
+      _XmMapHashTable(rec->entries, SweepRTCacheMapProc, (XtPointer)rec->entries);
+      rec->sweep = MAX(16, 2 * _XmHashTableCount(rec->entries));
+    }
+    entry->table = XmRenderTableCopy(table, NULL, 0);
+    _XmAddHashEntry(rec->entries, (XmHashKey)entry, (XtPointer)entry);
+    if (_XmHashTableCount(rec->entries) > _XmHashTableSize(rec->entries))
+      _XmResizeHashTable(rec->entries, 2 * _XmHashTableSize(rec->entries));
+    entry = NULL;
+  }
+  if (entry != NULL)
+    FreeRTCacheEntry(entry);
   _XmProcessUnlock();
 }
 
