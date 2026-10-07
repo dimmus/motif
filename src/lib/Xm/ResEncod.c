@@ -122,6 +122,10 @@ typedef struct _EncodingRegistry {
   char *fontlist_tag;
   char *ct_encoding;
   struct _EncodingRegistry *next;
+  /* The built-in entries are static and hold literals.  These say what */
+  /* XmRegisterSegmentEncoding allocated, and so has to free. */
+  Boolean allocated;          /* the entry and its tag */
+  Boolean encoding_allocated; /* ct_encoding */
 } SegmentEncoding;
 
 #define EncodingRegistryTag(er) ((SegmentEncoding *)(er))->fontlist_tag
@@ -282,7 +286,7 @@ static SegmentEncoding _encoding_registry = {
     XmFONTLIST_DEFAULT_TAG, XmFONTLIST_DEFAULT_TAG, &_loc_encoding_registry};
 static SegmentEncoding *_encoding_registry_ptr = &_encoding_registry;
 /********    Static Function Declarations    ********/
-static SegmentEncoding *FindEncoding(const char *fontlist_tag);
+static SegmentEncoding **FindEncoding(const char *fontlist_tag);
 static Boolean processCharsetAndText(XmStringCharSet tag,
                                      OctetPtr ctext,
                                      Boolean separator,
@@ -331,49 +335,17 @@ static char *ConvertWithIconv(const char *str, unsigned int len, iconv_t convert
 /************************************************************************
  *
  *  FindEncoding
- *    Find the SegmentEncoding with fontlist_tag.  Return NULL if no
- *    such SegmentEncoding exists.  As a side effect, free any encodings
- *    encountered that have been unregistered.
+ *    Find the SegmentEncoding with fontlist_tag.  Return the link that
+ *    points to it, or NULL if no such SegmentEncoding exists.
  *
  ************************************************************************/
-static SegmentEncoding *FindEncoding(const char *fontlist_tag)
+static SegmentEncoding **FindEncoding(const char *fontlist_tag)
 {
-  SegmentEncoding *prevPtr, *encodingPtr = _encoding_registry_ptr;
-  String encoding = NULL;
-  if (encodingPtr) {
-    if (strcmp(fontlist_tag, EncodingRegistryTag(encodingPtr)) == 0) {
-      encoding = EncodingRegistryEncoding(encodingPtr);
-      /* Free unregistered encodings. */
-      if (encoding == NULL) {
-        _encoding_registry_ptr = EncodingRegistryNext(encodingPtr);
-        XtFree((char *)encodingPtr);
-        encodingPtr = NULL;
-      }
-      return (encodingPtr);
-    }
-  }
-  else
-    return (encodingPtr);
-  for (prevPtr = encodingPtr, encodingPtr = EncodingRegistryNext(encodingPtr); encodingPtr != NULL;
-       prevPtr = encodingPtr, encodingPtr = EncodingRegistryNext(encodingPtr))
-  {
-    if (strcmp(fontlist_tag, EncodingRegistryTag(encodingPtr)) == 0) {
-      encoding = EncodingRegistryEncoding(encodingPtr);
-      /* Free unregistered encodings. */
-      if (encoding == NULL) {
-        EncodingRegistryNext(prevPtr) = EncodingRegistryNext(encodingPtr);
-        XtFree((char *)encodingPtr);
-        encodingPtr = NULL;
-      }
-      return (encodingPtr);
-    }
-    /* Free unregistered encodings. */
-    else if (EncodingRegistryEncoding(encodingPtr) == NULL) {
-      EncodingRegistryNext(prevPtr) = EncodingRegistryNext(encodingPtr);
-      XtFree((char *)encodingPtr);
-    }
-  }
-  return (NULL);
+  SegmentEncoding **link;
+  for (link = &_encoding_registry_ptr; *link != NULL; link = &EncodingRegistryNext(*link))
+    if (strcmp(fontlist_tag, EncodingRegistryTag(*link)) == 0)
+      return link;
+  return NULL;
 }
 
 /************************************************************************
@@ -381,23 +353,44 @@ static SegmentEncoding *FindEncoding(const char *fontlist_tag)
  *  XmRegisterSegmentEncoding
  *    Register a compound text encoding format for a specified font list
  *    element tag.  Returns NULL for a new tag or a copy of the old encoding
- *    for an already registered tag.
+ *    for an already registered tag.  A NULL ct_encoding unregisters the
+ *    tag.
  *
  ************************************************************************/
 char *XmRegisterSegmentEncoding(const char *fontlist_tag, const char *ct_encoding)
 {
-  SegmentEncoding *encodingPtr = NULL;
+  SegmentEncoding **link;
+  SegmentEncoding *encodingPtr;
   String ret_val = NULL;
   _XmProcessLock();
-  encodingPtr = FindEncoding(fontlist_tag);
-  if (encodingPtr) {
+  link = FindEncoding(fontlist_tag);
+  if (link) {
+    encodingPtr = *link;
     ret_val = XtNewString(EncodingRegistryEncoding(encodingPtr));
-    EncodingRegistryEncoding(encodingPtr) = ct_encoding ? XtNewString(ct_encoding) : (String)NULL;
+    if (encodingPtr->encoding_allocated)
+      XtFree(EncodingRegistryEncoding(encodingPtr));
+    if (ct_encoding != NULL) {
+      EncodingRegistryEncoding(encodingPtr) = XtNewString(ct_encoding);
+      encodingPtr->encoding_allocated = True;
+    }
+    else {
+      /* Unlink the entry, and free it unless it is a built-in one. */
+      *link = EncodingRegistryNext(encodingPtr);
+      if (encodingPtr->allocated) {
+        XtFree(EncodingRegistryTag(encodingPtr));
+        XtFree((char *)encodingPtr);
+      }
+      else {
+        EncodingRegistryEncoding(encodingPtr) = NULL;
+        encodingPtr->encoding_allocated = False;
+      }
+    }
   }
   else if (ct_encoding != NULL) {
     encodingPtr = (SegmentEncoding *)XtMalloc((Cardinal)sizeof(SegmentEncoding));
     EncodingRegistryTag(encodingPtr) = XtNewString(fontlist_tag);
     EncodingRegistryEncoding(encodingPtr) = XtNewString(ct_encoding);
+    encodingPtr->allocated = encodingPtr->encoding_allocated = True;
     EncodingRegistryNext(encodingPtr) = _encoding_registry_ptr;
     _encoding_registry_ptr = encodingPtr;
   }
@@ -453,12 +446,12 @@ XtPointer _XmGetEncodingRegistryTarget(int *length)
  ************************************************************************/
 char *XmMapSegmentEncoding(const char *fontlist_tag)
 {
-  SegmentEncoding *encodingPtr = NULL;
+  SegmentEncoding **link;
   String ret_val = NULL;
   _XmProcessLock();
-  encodingPtr = FindEncoding(fontlist_tag);
-  if (encodingPtr)
-    ret_val = XtNewString(EncodingRegistryEncoding(encodingPtr));
+  link = FindEncoding(fontlist_tag);
+  if (link)
+    ret_val = XtNewString(EncodingRegistryEncoding(*link));
   _XmProcessUnlock();
   return (ret_val);
 }

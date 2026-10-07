@@ -919,6 +919,108 @@ END_TEST
 #endif
 
 /*
+ * Compound text segment encodings.  Unregistering a tag used to leave
+ * its entry in the registry with a NULL encoding, for the next lookup
+ * to unlink and free: that lookup freed the built-in entries, which are
+ * static, read the next entry out of one it had just freed, and freed
+ * neither the tag nor any replaced encoding.
+ */
+
+static void expect_encoding(const char *tag, const char *encoding)
+{
+	char *got = XmMapSegmentEncoding(tag);
+
+	ck_assert_msg(got != NULL, "no encoding for %s", tag);
+	ck_assert_str_eq(got, encoding);
+	XtFree(got);
+}
+
+/* XmRegisterSegmentEncoding returns a copy of the old encoding, if any */
+static void expect_register(const char *tag, const char *encoding,
+			    const char *old)
+{
+	char *got = XmRegisterSegmentEncoding(tag, encoding);
+
+	if (old) {
+		ck_assert_msg(got != NULL, "%s was not registered", tag);
+		ck_assert_str_eq(got, old);
+	} else
+		ck_assert_ptr_null(got);
+	XtFree(got);
+}
+
+START_TEST(segment_encoding_register)
+{
+	expect_register("TestTagA", "ISO8859-15", NULL);
+	expect_register("TestTagB", "KOI8-R", NULL);
+	expect_register("TestTagA", "ISO8859-2", "ISO8859-15");
+	expect_encoding("TestTagA", "ISO8859-2");
+	/* B is ahead of A in the registry, the built-in entries behind it */
+	expect_register("TestTagA", NULL, "ISO8859-2");
+	ck_assert_ptr_null(XmMapSegmentEncoding("TestTagA"));
+	expect_encoding("TestTagB", "KOI8-R");
+	expect_encoding("ISO8859-9", "ISO8859-9");
+	expect_register("TestTagB", NULL, "KOI8-R");
+	ck_assert_ptr_null(XmMapSegmentEncoding("TestTagB"));
+	expect_register("TestTagB", NULL, NULL);
+	expect_register("TestTagA", "ISO8859-5", NULL);
+	expect_encoding("TestTagA", "ISO8859-5");
+	/* Unregister the middle one of three, then look past it */
+	expect_register("TestTagB", "KOI8-R", NULL);
+	expect_register("TestTagC", "KOI8-U", NULL);
+	expect_register("TestTagB", NULL, "KOI8-R");
+	expect_encoding("ISO8859-9", "ISO8859-9");
+	expect_encoding("TestTagA", "ISO8859-5");
+	expect_encoding("TestTagC", "KOI8-U");
+	expect_register("TestTagC", NULL, "KOI8-U");
+	expect_register("TestTagA", NULL, "ISO8859-5");
+}
+END_TEST
+
+START_TEST(segment_encoding_builtin)
+{
+	/* A built-in entry: unregister it and look past it */
+	expect_register("ISO8859-1", NULL, "ISO8859-1");
+	ck_assert_ptr_null(XmMapSegmentEncoding("ISO8859-1"));
+	expect_encoding("ISO8859-2", "ISO8859-2");
+	expect_encoding("GB2312.1980-0", "GB2312.1980-0");
+	expect_register("ISO8859-1", "ISO8859-1", NULL);
+	expect_encoding("ISO8859-1", "ISO8859-1");
+	/* Replace a built-in encoding twice, then unregister it */
+	expect_register("ISO8859-2", "latin2", "ISO8859-2");
+	expect_register("ISO8859-2", "ISO8859-2", "latin2");
+	expect_encoding("ISO8859-2", "ISO8859-2");
+	expect_register("ISO8859-3", "latin3", "ISO8859-3");
+	expect_register("ISO8859-3", NULL, "latin3");
+	ck_assert_ptr_null(XmMapSegmentEncoding("ISO8859-3"));
+	expect_register("ISO8859-3", "ISO8859-3", NULL);
+	expect_encoding("ISO8859-4", "ISO8859-4");
+}
+END_TEST
+
+#ifdef HAVE_LSAN
+START_TEST(segment_encoding_leak)
+{
+	char *old;
+
+	old = XmRegisterSegmentEncoding("TestTagLeak", "ISO8859-15");
+	XtFree(old);
+	old = XmRegisterSegmentEncoding("TestTagLeak", "ISO8859-2");
+	XtFree(old);
+	old = XmRegisterSegmentEncoding("TestTagLeak", NULL);
+	XtFree(old);
+	old = XmRegisterSegmentEncoding("ISO8859-2", "latin2");
+	XtFree(old);
+	old = XmRegisterSegmentEncoding("ISO8859-2", NULL);
+	XtFree(old);
+	old = XmMapSegmentEncoding("ISO8859-3");
+	XtFree(old);
+	ck_assert_msg(!leaks_found(), "XmRegisterSegmentEncoding leaked");
+}
+END_TEST
+#endif
+
+/*
  * Parse tables
  */
 
@@ -1134,6 +1236,14 @@ void xmstring_suite(SRunner *runner)
 
 	t = tcase_create("Parse tables");
 	tcase_add_test(t, parse_table_round_trip);
+	suite_add_tcase(s, t);
+
+	t = tcase_create("Segment encodings");
+	tcase_add_test(t, segment_encoding_register);
+	tcase_add_test(t, segment_encoding_builtin);
+#ifdef HAVE_LSAN
+	tcase_add_test(t, segment_encoding_leak);
+#endif
 	suite_add_tcase(s, t);
 
 	t = tcase_create("Tab lists");
