@@ -4,7 +4,7 @@
  * Licensed under the LGPL 2.1 license.
  *
  * Tests for the requests that make the client wait for the X server:
- * the ScrollBar autorepeat.
+ * the ScrollBar autorepeat and XmGetVisibility.
  */
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* RTLD_NEXT */
@@ -15,6 +15,9 @@
 #include <X11/Intrinsic.h>
 #include <X11/Xlib.h>
 #include <Xm/XmP.h>
+#include <Xm/BulletinB.h>
+#include <Xm/PushB.h>
+#include <Xm/PushBG.h>
 #include <Xm/ScrollBarP.h>
 #include <check.h>
 
@@ -23,11 +26,11 @@
 static Widget shell;
 
 /*
- * Count the calls libXm makes to an Xlib function that waits for a
- * reply.  The definition here takes precedence over libX11's for the
- * calls from libXm, and passes them on.
+ * Count the calls libXm makes to two Xlib functions that wait for a
+ * reply.  The definitions here take precedence over libX11's for the
+ * calls from libXm, and pass them on.
  */
-static int n_sync;
+static int n_sync, n_query_tree;
 
 int XSync(Display *display, Bool discard)
 {
@@ -37,6 +40,17 @@ int XSync(Display *display, Bool discard)
 		*(void **)&real = dlsym(RTLD_NEXT, "XSync");
 	n_sync++;
 	return real(display, discard);
+}
+
+Status XQueryTree(Display *display, Window w, Window *root, Window *parent, Window **children,
+		  unsigned int *n)
+{
+	static Status (*real)(Display *, Window, Window *, Window *, Window **, unsigned int *);
+
+	if (!real)
+		*(void **)&real = dlsym(RTLD_NEXT, "XQueryTree");
+	n_query_tree++;
+	return real(display, w, root, parent, children, n);
 }
 
 static void _init_xt(void)
@@ -185,6 +199,91 @@ START_TEST(scrollbar_repeat_keeps_pace_with_server)
 }
 END_TEST
 
+/*
+ * XmGetVisibility: obscured by the windows of later siblings, in the
+ * stacking order of the server.
+ */
+static Widget board(void)
+{
+	Widget bb = XtVaCreateManagedWidget("bb", xmBulletinBoardWidgetClass, shell, XmNwidth, 200,
+					    XmNheight, 200, XmNmarginWidth, 0, XmNmarginHeight, 0,
+					    XmNresizePolicy, XmRESIZE_NONE, NULL);
+	return bb;
+}
+
+static Widget child(Widget parent, WidgetClass wc, const char *name, int x, int y)
+{
+	return XtVaCreateManagedWidget(name, wc, parent, XmNx, x, XmNy, y, XmNwidth, 80,
+				       XmNheight, 40, XmNrecomputeSize, False, NULL);
+}
+
+START_TEST(visibility_widget_siblings)
+{
+	Widget bb = board();
+	Widget a = child(bb, xmPushButtonWidgetClass, "a", 10, 10);
+	Widget b = child(bb, xmPushButtonWidgetClass, "b", 10, 10);
+	Display *display = XtDisplay(shell);
+
+	XtRealizeWidget(shell);
+	settle();
+	XRaiseWindow(display, XtWindow(b));
+	ck_assert_int_eq(XmGetVisibility(a), XmVISIBILITY_FULLY_OBSCURED);
+	XRaiseWindow(display, XtWindow(a));
+	ck_assert_int_eq(XmGetVisibility(a), XmVISIBILITY_UNOBSCURED);
+	XRaiseWindow(display, XtWindow(b));
+	XtVaSetValues(b, XmNx, 50, NULL);
+	ck_assert_int_eq(XmGetVisibility(a), XmVISIBILITY_PARTIALLY_OBSCURED);
+	XtUnmanageChild(b);
+	ck_assert_int_eq(XmGetVisibility(a), XmVISIBILITY_UNOBSCURED);
+}
+END_TEST
+
+/* Windows that are not widgets count too; only the server knows them. */
+START_TEST(visibility_other_windows)
+{
+	Widget bb = board();
+	Widget a = child(bb, xmPushButtonWidgetClass, "a", 10, 10);
+	Display *display = XtDisplay(shell);
+	Window w;
+
+	XtRealizeWidget(shell);
+	settle();
+	w = XCreateSimpleWindow(display, XtWindow(bb), 20, 10, 40, 40, 0, 0, 0);
+	XMapWindow(display, w);
+	n_query_tree = 0;
+	ck_assert_int_eq(XmGetVisibility(a), XmVISIBILITY_PARTIALLY_OBSCURED);
+	ck_assert_int_eq(n_query_tree, 1);
+	XMoveResizeWindow(display, w, 0, 0, 100, 60);
+	ck_assert_int_eq(XmGetVisibility(a), XmVISIBILITY_FULLY_OBSCURED);
+	XLowerWindow(display, w);
+	ck_assert_int_eq(XmGetVisibility(a), XmVISIBILITY_UNOBSCURED);
+	XRaiseWindow(display, w);
+	XUnmapWindow(display, w);
+	ck_assert_int_eq(XmGetVisibility(a), XmVISIBILITY_UNOBSCURED);
+	XDestroyWindow(display, w);
+}
+END_TEST
+
+/* A gadget has no window to look up among its siblings': no request. */
+START_TEST(visibility_gadget)
+{
+	Widget bb = board();
+	Widget g = child(bb, xmPushButtonGadgetClass, "g", 10, 10);
+	Widget b = child(bb, xmPushButtonWidgetClass, "b", 10, 10);
+	Display *display = XtDisplay(shell);
+	unsigned long next;
+
+	XtRealizeWidget(shell);
+	settle();
+	XRaiseWindow(display, XtWindow(b));
+	n_query_tree = 0;
+	next = NextRequest(display);
+	ck_assert_int_eq(XmGetVisibility(g), XmVISIBILITY_UNOBSCURED);
+	ck_assert_int_eq(n_query_tree, 0);
+	ck_assert_uint_eq(NextRequest(display), next);
+}
+END_TEST
+
 void roundtrips_suite(SRunner *runner)
 {
 	Suite *s = suite_create("RoundTrips");
@@ -195,6 +294,14 @@ void roundtrips_suite(SRunner *runner)
 	tcase_add_test(t, scrollbar_repeat_keeps_pace_with_server);
 	tcase_add_checked_fixture(t, _init_xt, uninit_xt);
 	tcase_set_timeout(t, 60);
+	suite_add_tcase(s, t);
+
+	t = tcase_create("Visibility");
+	tcase_add_test(t, visibility_widget_siblings);
+	tcase_add_test(t, visibility_other_windows);
+	tcase_add_test(t, visibility_gadget);
+	tcase_add_checked_fixture(t, _init_xt, uninit_xt);
+	tcase_set_timeout(t, 30);
 	suite_add_tcase(s, t);
 	srunner_add_suite(runner, s);
 }
