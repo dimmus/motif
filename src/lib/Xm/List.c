@@ -66,6 +66,7 @@ static char rcsid[] = "$TOG: List.c /main/47 1999/10/12 16:58:17 mgreess $"
 #include <Xm/XmP.h>
 #include <Xm/XmosP.h>
 #include <stdio.h>
+#include <limits.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
@@ -2719,8 +2720,10 @@ static char *ResizeArray(char *array, int *size, int count, size_t elsize)
     *size = 0;
     return NULL;
   }
-  if (count > *size)
-    new_size = MAX(MAX(count, *size + *size / 2), 8);
+  if (count > *size) {
+    new_size = ((*size <= INT_MAX - *size / 2) ? *size + *size / 2 : INT_MAX);
+    new_size = MAX(MAX(count, new_size), 8);
+  }
   else if (count < *size / 4)
     new_size = count + count / 2;
   else
