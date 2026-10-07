@@ -639,6 +639,34 @@ START_TEST(display_close)
 }
 END_TEST
 
+/* The lookups of a widget nested deeper than the arrays of names and */
+/* classes on the stack, of 100 entries, allow for. */
+START_TEST(deeply_nested_widget)
+{
+	Widget parent = shell, l;
+	XmRendition r;
+	String font_name = NULL;
+	Arg a[1];
+	int i;
+
+	put_font("*renderTable.t", "fixed");
+	/* XmRenditionCreate looks up the resource class only. */
+	put_font("*RenderTable.u", "8x13");
+	for (i = 0; i < 150; i++)
+		parent = XmCreateRowColumn(parent, "rc", NULL, 0);
+	l = label(parent, "l", "t");
+	ck_assert_str_eq(font_name_of(table_of(l), "t"), "fixed");
+	/* A cached table, and a rendition made for the widget. */
+	ck_assert(shared(table_of(l), table_of(label(parent, "l", "t"))));
+	r = XmRenditionCreate(l, "u", NULL, 0);
+	XtSetArg(a[0], XmNfontName, &font_name);
+	XmRenditionRetrieve(r, a, 1);
+	ck_assert(font_name != NULL && font_name != (String)XmAS_IS);
+	ck_assert_str_eq(font_name, "8x13");
+	XmRenditionFree(r);
+}
+END_TEST
+
 void rendertable_suite(SRunner *runner)
 {
 	Suite *s = suite_create("RenderTable");
@@ -660,6 +688,7 @@ void rendertable_suite(SRunner *runner)
 	tcase_add_test(t, table_in_use_stays_cached);
 	tcase_add_test(t, display_close);
 	tcase_add_test(t, default_render_table_display_close);
+	tcase_add_test(t, deeply_nested_widget);
 	tcase_add_checked_fixture(t, _init_xt, uninit_xt);
 	tcase_set_timeout(t, 30);
 	suite_add_tcase(s, t);
