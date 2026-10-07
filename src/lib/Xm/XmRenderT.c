@@ -2076,6 +2076,26 @@ static inline void KeyAdd(XmRTKey key, const void *data, Cardinal size)
   key->size += size;
 }
 
+/* A hash of all of key, a word at a time: the keys of one string */
+/* differ only in the values found for the widgets. */
+static XmHashValue KeyHash(XmRTKey key)
+{
+  unsigned long h = key->size, w;
+  Cardinal i;
+  for (i = 0; i + sizeof(w) <= key->size; i += sizeof(w)) {
+    memcpy(&w, key->data + i, sizeof(w));
+    h = (h ^ w) * 0x9E3779B1UL;
+    h ^= h >> 15;
+  }
+  if (i < key->size) {
+    w = 0;
+    memcpy(&w, key->data + i, key->size - i);
+    h = (h ^ w) * 0x9E3779B1UL;
+  }
+  h ^= h >> (sizeof(h) * 4);
+  return ((XmHashValue)(h & 0x7FFFFFFF));
+}
+
 /* Free a key, or move it from the stack to the heap. */
 static void KeyFree(XmRTKey key)
 {
@@ -2325,14 +2345,13 @@ XmRenderTable _XmRenderTableCvtCacheGet(
   char key_buf[KEY_BUF_SIZE], spec_buf[256];
   XrmName names[100];
   XrmClass classes[100];
-  Cardinal length, i;
+  Cardinal length;
   XrmDatabase db;
   Screen *screen;
   Widget w;
   char *s, *tag, *strtok_buf;
   const char *locale;
   size_t spec_len = strlen(spec);
-  unsigned int h;
   *pending = NULL;
   if (wid == NULL)
     return (NULL);
@@ -2356,11 +2375,6 @@ XmRenderTable _XmRenderTableCvtCacheGet(
   KeyAdd(&key.key, locale, strlen(locale) + 1);
   KeyAdd(&key.key, resname, strlen(resname) + 1);
   KeyAdd(&key.key, spec, spec_len + 1);
-  /* Only this much is hashed: the values found for the widgets that */
-  /* use a string seldom differ, and are compared anyway. */
-  for (h = 0, i = 0; i < key.key.size; i++)
-    h = h * 31 + (unsigned char)key.key.data[i];
-  key.hash = (XmHashValue)(h & 0x7FFFFFFF);
   /* The values found for each rendition that the converter makes. */
   db = RenditionDatabase(NULL, wid);
   length = RenditionNames(wid, resname, resclass, names, classes);
@@ -2371,6 +2385,7 @@ XmRenderTable _XmRenderTableCvtCacheGet(
     KeyAddRendition(&key.key, db, names, classes, length, tag);
   if (s != spec_buf)
     XtFree(s);
+  key.hash = KeyHash(&key.key);
   if ((rec = FindRTCache(XtDisplayOfObject(wid), False)) != NULL &&
       (cached = (XmRTCacheEntry)_XmGetHashEntry(rec->entries, (XmHashKey)&key)) != NULL &&
       RTCacheEntryValid(cached, XtDisplayOfObject(wid))) {
