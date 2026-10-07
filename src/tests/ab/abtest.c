@@ -3,7 +3,8 @@
  *
  * Licensed under the LGPL 2.1 license.
  *
- * xm_abtest: A/B harness for the Form, Container and List layout code.
+ * xm_abtest: A/B harness for the Form, Container and List layout code,
+ * and for the String to RenderTable conversion.
  * Builds pseudo-random configurations, drives them through the API and
  * through real input (xdotool), and prints child geometry, selection
  * state, scroll state, callbacks and a hash of the window pixels after
@@ -13,12 +14,15 @@
  *   xm_abtest MODE SEED [SIZE]
  *
  * MODE is form, formcyc, formgrid, formcolumn, formwide, container,
- * list or listscroll.  SIZE 0 (the default) lets the seed choose.
+ * list, listscroll or rendertable.  SIZE 0 (the default) lets the seed
+ * choose.
  * Setting ABT_DESTROY_UNMANAGED also destroys unmanaged Form children.
  */
 #include <Xm/XmP.h>
 #include <X11/CompositeP.h>
+#include <Xm/BulletinB.h>
 #include <Xm/Container.h>
+#include <Xm/Display.h>
 #include <Xm/DrawingA.h>
 #include <Xm/Form.h>
 #include <Xm/IconG.h>
@@ -26,9 +30,13 @@
 #include <Xm/LabelG.h>
 #include <Xm/List.h>
 #include <Xm/PushB.h>
+#include <Xm/RowColumn.h>
 #include <Xm/ScrollBar.h>
 #include <Xm/ScrolledW.h>
 #include <X11/Xutil.h>
+#ifdef USE_XFT
+#include <X11/Xft/Xft.h>
+#endif
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -1003,6 +1011,237 @@ static void list_test(int nitems)
   }
 }
 
+/* ---------------------------------------------------------- RenderTable */
+
+/*
+ * Render tables converted from strings, for random resource databases
+ * and widget trees: the rendition resources come from database entries
+ * with tight and loose bindings to widget names and classes, and change
+ * while widgets are created.  Prints every table of every widget and,
+ * through quiet(), every warning, so that the conversion and its side
+ * effects can be compared between two builds.
+ */
+static const char *rt_names[] = {"a", "b", "c"};
+static const char *rt_tags[] = {"t1", "t2", "t3", "t4"};
+static const char *rt_resnames[] = {"renderTable", "buttonRenderTable", "labelRenderTable",
+                                    "textRenderTable"};
+static int no_font_calls;
+
+static void rt_no_font(Widget w, XtPointer cd, XtPointer call)
+{
+  XmDisplayCallbackStruct *cb = (XmDisplayCallbackStruct *)call;
+  printf("  noFontCallback %s\n", cb->font_name ? cb->font_name : "(null)");
+  no_font_calls++;
+}
+
+/* A random database entry for a rendition resource. */
+static void rt_entry(void)
+{
+  XrmDatabase db = XtScreenDatabase(XtScreen(top));
+  char line[512];
+  int n = 0, i, depth = rn(3);
+  static const char *values[][8] = {
+      {"fontName", "fixed", "9x15", "8x13bold", "6x13", "-no-such-font-*", "Sans", "Monospace"},
+      {"fontType", "FONT_IS_FONT", "FONT_IS_FONT", "FONT_IS_FONTSET", "FONT_IS_XFT",
+       "FONT_IS_FONT", "NO_SUCH_TYPE", "FONT_IS_XFT"},
+      {"renditionForeground", "red", "blue", "#123456", "no-such-color", "unspecified_pixel",
+       "black", "white"},
+      {"underlineType", "SINGLE_LINE", "DOUBLE_LINE", "NO_LINE", "AS_IS", "NO_SUCH_LINE",
+       "SINGLE_DASHED_LINE", "DOUBLE_DASHED_LINE"},
+      {"tabList", "1in", "1in, +2in", "10, 20, 30", "bogus", "2cm", "+1.5in", "0"},
+      {"fontSize", "8", "10", "12", "14", "x", "16", "9"},
+      {"fontStyle", "Bold", "Italic", "Regular", "Bold Italic", "Thin", "Oblique", "Medium"},
+      {"loadModel", "LOAD_IMMEDIATE", "LOAD_IMMEDIATE", "LOAD_DEFERRED", "LOAD_IMMEDIATE",
+       "NO_SUCH_MODEL", "LOAD_IMMEDIATE", "LOAD_IMMEDIATE"},
+  };
+  int which = rn(16);
+  if (which >= 8)
+    which = which < 12 ? 0 : 1; /* mostly fonts */
+  n += snprintf(line + n, sizeof(line) - n, "*");
+  for (i = 0; i < depth; i++)
+    n += snprintf(line + n, sizeof(line) - n, "%s%s", rn(3) ? rt_names[rn(3)] : "XmRowColumn",
+                  rn(2) ? "*" : ".");
+  if (rn(4))
+    n += snprintf(line + n, sizeof(line) - n, "%s.", rt_resnames[rn(5) == 0 ? 1 + rn(3) : 0]);
+  if (rn(5))
+    n += snprintf(line + n, sizeof(line) - n, "%s.", rt_tags[rn(4)]);
+  else if (rn(2))
+    n += snprintf(line + n, sizeof(line) - n, "?.");
+  snprintf(line + n, sizeof(line) - n, "%s: %s", values[which][0], values[which][1 + rn(7)]);
+  printf("  db %s\n", line);
+  XrmPutLineResource(&db, line);
+}
+
+static void rt_spec(char *spec, size_t size)
+{
+  int i, n = 0, k = rn(6);
+  if (k == 0) {
+    static const char *lists[] = {"fixed", "fixed,9x15=bold", "8x13bold=t1, fixed",
+                                  "-misc-fixed-*-*-*-*-13-*-*-*-*-*-*-*", "fixed;9x15:fs"};
+    snprintf(spec, size, "%s", lists[rn(5)]);
+    return;
+  }
+  for (i = 0; i < k; i++)
+    n += snprintf(spec + n, size - n, "%s%s", i ? (rn(2) ? " " : ", ") : "", rt_tags[rn(4)]);
+}
+
+static void rt_dump(const char *what, XmRenderTable rt)
+{
+  XmStringTag *tags = NULL;
+  int i, n;
+  printf("  %s:", what);
+  if (rt == NULL) {
+    printf(" none\n");
+    return;
+  }
+  n = XmRenderTableGetTags(rt, &tags);
+  for (i = 0; i < n; i++) {
+    XmRendition r = XmRenderTableGetRendition(rt, tags[i]);
+    XmStringTag tag = NULL;
+    String font_name = NULL, style = NULL;
+    XmFontType type = 0;
+    XtPointer font = NULL;
+    unsigned char load = 0, ul = 0, st = 0;
+    XmTabList tabs = NULL;
+    Pixel fg = 0, bg = 0;
+    int size = 0;
+    Arg a[12];
+    Cardinal m = 0;
+    XtSetArg(a[m], XmNtag, &tag), m++;
+    XtSetArg(a[m], XmNfontName, &font_name), m++;
+    XtSetArg(a[m], XmNfontType, &type), m++;
+    XtSetArg(a[m], XmNloadModel, &load), m++;
+    XtSetArg(a[m], XmNtabList, &tabs), m++;
+    XtSetArg(a[m], XmNrenditionForeground, &fg), m++;
+    XtSetArg(a[m], XmNrenditionBackground, &bg), m++;
+    XtSetArg(a[m], XmNunderlineType, &ul), m++;
+    XtSetArg(a[m], XmNstrikethruType, &st), m++;
+    XtSetArg(a[m], XmNfontStyle, &style), m++;
+    XtSetArg(a[m], XmNfontSize, &size), m++;
+    XmRenditionRetrieve(r, a, m);
+    printf(" [%s name=%s type=%d load=%d tabs=%d fg=%lx bg=%lx ul=%d st=%d style=%s size=%d",
+           tag, font_name == (String)XmAS_IS ? "AS_IS" : font_name ? font_name : "-", (int)type,
+           load, tabs == (XmTabList)XmAS_IS ? -1 : tabs ? (int)XmTabListTabCount(tabs) : 0, fg,
+           bg, ul, st, style ? style : "-", size);
+    /* The font, without loading a deferred one. */
+    if (load != XmLOAD_DEFERRED) {
+      XtSetArg(a[0], XmNfont, &font);
+      XmRenditionRetrieve(r, a, 1);
+      if (font != NULL && font != (XtPointer)XmAS_IS && type == XmFONT_IS_FONT) {
+        XFontStruct *fs = (XFontStruct *)font;
+        printf(" font=%d/%d/%d", fs->ascent, fs->descent, fs->max_bounds.width);
+      }
+      else if (font != NULL && font != (XtPointer)XmAS_IS && type == XmFONT_IS_FONTSET) {
+        XFontStruct **fonts;
+        char **names;
+        int nf = XFontsOfFontSet((XFontSet)font, &fonts, &names);
+        printf(" fontset=%d/%s", nf, nf ? names[0] : "-");
+      }
+#ifdef USE_XFT
+      if (type == XmFONT_IS_XFT) {
+        XftFont *xf = NULL;
+        XtSetArg(a[0], XmNxftFont, &xf);
+        XmRenditionRetrieve(r, a, 1);
+        if (xf != NULL && xf != (XftFont *)XmAS_IS)
+          printf(" xft=%d/%d/%d", xf->ascent, xf->descent, xf->max_advance_width);
+      }
+#endif
+    }
+    printf("]");
+    XmRenditionFree(r);
+    XtFree(tags[i]);
+  }
+  XtFree((char *)tags);
+  printf("\n");
+}
+
+static void rt_dump_widget(Widget w)
+{
+  XmRenderTable rt = NULL;
+  printf(" %s %s\n", XtClass(w)->core_class.class_name, XtName(w));
+  if (XtIsSubclass(w, xmBulletinBoardWidgetClass)) {
+    XtVaGetValues(w, XmNbuttonRenderTable, &rt, NULL);
+    rt_dump("button", rt);
+    XtVaGetValues(w, XmNlabelRenderTable, &rt, NULL);
+    rt_dump("label", rt);
+    XtVaGetValues(w, XmNtextRenderTable, &rt, NULL);
+    rt_dump("text", rt);
+  }
+  else if (!XtIsSubclass(w, xmRowColumnWidgetClass)) {
+    XtVaGetValues(w, XmNrenderTable, &rt, NULL);
+    rt_dump("render", rt);
+  }
+}
+
+static void rendertable_test(int nwidgets)
+{
+  Widget parents[64];
+  int nparents = 1, i, j;
+  char spec[128];
+  if (rn(3) == 0)
+    XtAddCallback(XmGetXmDisplay(dpy), XmNnoFontCallback, rt_no_font, NULL);
+  for (i = 0, j = 4 + rn(30); i < j; i++)
+    rt_entry();
+  parents[0] = XtVaCreateWidget("a", xmRowColumnWidgetClass, top, NULL);
+  for (i = 0; i < nwidgets; i++) {
+    Widget parent = parents[rn(nparents)], w;
+    const char *name = rt_names[rn(3)];
+    Arg args[4];
+    Cardinal n = 0;
+    if (rn(12) == 0)
+      rt_entry();
+    rt_spec(spec, sizeof spec);
+    switch (rn(8)) {
+      case 0:
+        if (nparents < 64) {
+          w = parents[nparents++] =
+              XtVaCreateWidget(name, xmRowColumnWidgetClass, parent, NULL);
+          break;
+        }
+        /* FALLTHROUGH */
+      case 1:
+        if (nparents < 64) {
+          char spec2[128], spec3[128];
+          rt_spec(spec2, sizeof spec2);
+          rt_spec(spec3, sizeof spec3);
+          w = parents[nparents++] = XtVaCreateWidget(
+              name, xmBulletinBoardWidgetClass, parent, XtVaTypedArg, XmNbuttonRenderTable,
+              XmRString, spec, (int)strlen(spec) + 1, XtVaTypedArg, XmNlabelRenderTable,
+              XmRString, spec2, (int)strlen(spec2) + 1, XtVaTypedArg,
+              rn(2) ? XmNtextRenderTable : XmNtextFontList, XmRString, spec3,
+              (int)strlen(spec3) + 1, NULL);
+          break;
+        }
+        /* FALLTHROUGH */
+      case 2:
+        w = XtVaCreateWidget(name, xmLabelGadgetClass, parent, XtVaTypedArg, XmNrenderTable,
+                             XmRString, spec, (int)strlen(spec) + 1, NULL);
+        break;
+      case 3:
+        w = XtVaCreateWidget(name, xmPushButtonWidgetClass, parent, NULL);
+        break;
+      case 4:
+        w = XtVaCreateWidget(name, xmLabelWidgetClass, parent, XtVaTypedArg, XmNfontList,
+                             XmRString, spec, (int)strlen(spec) + 1, NULL);
+        break;
+      default:
+        XtSetArg(args[n], XmNlabelString, NULL), n++;
+        w = XtCreateWidget(name, xmLabelWidgetClass, parent, args, n);
+        XtVaSetValues(w, XtVaTypedArg, XmNrenderTable, XmRString, spec, (int)strlen(spec) + 1,
+                      NULL);
+        break;
+    }
+    printf("widget %d (%s) spec \"%s\"\n", i, XtName(parent), spec);
+    rt_dump_widget(w);
+    if (rn(10) == 0 && w != parents[nparents - 1]) {
+      printf("destroy %s\n", XtName(w));
+      fflush(stdout);
+      XtDestroyWidget(w);
+    }
+  }
+  printf("noFontCallback calls %d\n", no_font_calls);
+}
+
 static void quiet(String msg) { printf("  warning: %s\n", msg); }
 static int xerr(Display *d, XErrorEvent *e)
 {
@@ -1044,6 +1283,8 @@ int main(int argc, char **argv)
     scroll_mode = 1;
     list_test(size ? size : 20 + rn(400));
   }
+  else if (!strcmp(mode, "rendertable"))
+    rendertable_test(size ? size : 10 + rn(60));
   printf("done\n");
   return 0;
 }
