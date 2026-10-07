@@ -140,7 +140,8 @@ working with a newer one.  So:
   `register` or other storage-class noise from prototypes, adding new
   functions, headers, resources or enumeration values at the end.
   Adding `const` is source compatible for callers; only code that
-  stores the function in a pointer of the old type has to adjust.
+  stores the function in a pointer of the old type, or declares the
+  function itself with the old prototype, has to adjust.
   [Const parameters](#const-parameters) lists the functions that take
   `const` strings, and those that do not and why.
 
@@ -152,8 +153,8 @@ record it in the release notes.
 
 Every string, tag, name and buffer parameter that a function only reads
 (or copies) is a pointer to `const`, so that string literals and
-`const` data can be passed without a cast; a C++ program cannot pass a
-literal as `char *` at all.  The C ABI does not change: abidiff counts
+`const` data can be passed without a cast; C++ does not convert a
+literal to `char *` (GCC and Clang accept it with a warning).  The C ABI does not change: abidiff counts
 these as harmless changes and reports them only with `--harmless`.
 The functions are:
 
