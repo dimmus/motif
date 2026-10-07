@@ -1,7 +1,8 @@
 # Layout A/B harness
 
 Tools for checking that a change to the Form, Container or List layout
-code keeps their behaviour identical, and for timing it.  They were used
+code keeps their behaviour identical, and for timing it; and for
+measuring round trips over a slow connection.  They were used
 to validate the layout performance work (the Form sort and sizing, the
 Container insert fast path and the List selection and scrolling changes).
 They are not tests: a comparison needs two builds of libXm, so nothing
@@ -41,6 +42,30 @@ Timings:
     for lib in build-old build-new; do
         LD_LIBRARY_PATH=$lib/src/lib/Xm xvfb-run -a \
             build-new/src/tests/ab/xm_layoutbench form 1000
+    done
+
+## Round trips and latency
+
+A round trip costs nothing on a local Xvfb and a lot over ssh or a
+remote display.  To see it:
+
+- `latency.sh DELAY_MS COMMAND...` starts a private Xvfb and runs
+  COMMAND with `DISPLAY` going through `xproxy.py`, which holds the X
+  traffic DELAY_MS in each direction (a round trip of about twice
+  DELAY_MS) and appends to `latency-stats.jsonl` one line per connection
+  with its requests (by opcode), replies (round trips), events and
+  errors.  `DRIVER_DISPLAY` names the Xvfb itself.
+- `xm_repeatbench [HOLD_MS [WORK [RUNS]]]` holds a ScrollBar arrow down
+  through XTest on `DRIVER_DISPLAY` and prints the repeat rate and how
+  long after the release the application saw it and the server had
+  drawn everything.  WORK adds that many 800x600 copies per repeat, for
+  a server that cannot keep up.  It is built when libXtst is found.
+
+The ScrollBar autorepeat used to XSync after every repeat; to compare:
+
+    for lib in build-old build-new; do
+        LD_LIBRARY_PATH=$lib/src/lib/Xm src/tests/ab/latency.sh 25 \
+            build-new/src/tests/ab/xm_repeatbench 3000 0 5
     done
 
 ## Notes
