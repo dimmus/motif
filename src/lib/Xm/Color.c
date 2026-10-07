@@ -684,11 +684,25 @@ static void CalculateColorsRGB(
     XColor *bg_color, XColor *fg_color, XColor *sel_color, XColor *ts_color, XColor *bs_color)
 {
   int brightness = Brightness(bg_color);
+  Boolean inited;
   /* An application may call this through XmGetColorCalculation */
   _XmProcessLock();
-  /* make sure DefaultThresholds are inited */
-  if (!XmTHRESHOLDS_INITD)
-    GetDefaultThresholdsForScreen(DefaultScreenOfDisplay(_XmGetDefaultDisplay()));
+  inited = XmTHRESHOLDS_INITD;
+  _XmProcessUnlock();
+  /* make sure DefaultThresholds are inited.  GetColors has done so
+     before it calls this; a direct caller may hold no lock, and the
+     XmScreen is fetched under its application lock, which is taken
+     before the process lock. */
+  if (!inited) {
+    Display *display = _XmGetDefaultDisplay();
+    if (display != NULL) {
+      _XmDisplayToAppContext(display);
+      _XmAppLock(app);
+      GetDefaultThresholdsForScreen(DefaultScreenOfDisplay(display));
+      _XmAppUnlock(app);
+    }
+  }
+  _XmProcessLock();
   if (brightness < XmCOLOR_DARK_THRESHOLD)
     CalculateColorsForDarkBackground(bg_color, fg_color, sel_color, ts_color, bs_color);
   else if (brightness > XmCOLOR_LITE_THRESHOLD)

@@ -153,7 +153,7 @@ caller reads its own thread's buffer.
 | ButtonBox.c | `option` | converter |
 | Color.c | `colorBlocks`, `lastColorBlock` (was `Color_Set`, `Set_Count`, `Set_Size`) | fixed: grows by blocks that do not move (`_XmSearchColorCache` and `_XmAddToColorCache` return pointers into it, which a realloc in another thread left dangling); entries of a display are dropped when its XmDisplay is destroyed; locked |
 | Color.c | `default_set`, `default_set_count`, `default_set_size` | fixed: moved to file scope, flushed per display; locked |
-| Color.c | `XmCOLOR_*_THRESHOLD`, `XmFOREGROUND_THRESHOLD`, `XmTHRESHOLDS_INITD` | fixed: set (per screen, shared) and used under the lock, marked initialized only once set |
+| Color.c | `XmCOLOR_*_THRESHOLD`, `XmFOREGROUND_THRESHOLD`, `XmTHRESHOLDS_INITD` | fixed: set (per screen, shared) and used under the lock, marked initialized only once set; `CalculateColorsRGB`, which an application may call through `XmGetColorCalculation`, sets them under the application lock of the default display (the XmScreen is fetched under it), not inside the process lock |
 | Color.c | `ColorRGBCalcProc` | fixed: read under the lock by `XmGetColorCalculation` and `XmSetColorCalculation` |
 | Color.c | `color` (GetDefaultBackgroundColor), `background` (GetDefaultColors) | locked (callers hold the lock) |
 | Color.c | `new_value` (XmeGetDefaultPixel) | default, fixed: `_Thread_local`; `XmeGetDefaultPixel`, also called by applications, takes the lock for the cache |
