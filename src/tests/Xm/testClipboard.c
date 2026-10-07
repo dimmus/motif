@@ -331,6 +331,63 @@ START_TEST(retrieve_corrupt_releases_lock)
 }
 END_TEST
 
+static void drain_events(Display *dpy)
+{
+	XSync(dpy, False);
+	while (XtAppPending(app))
+		XtAppProcessEvent(app, XtIMAll);
+}
+
+/*
+ * The operation that finds the record set corrupt resets the clipboard
+ * when it ends, so the corruption is reported once and the clipboard
+ * then works normally.  (It used to write its copy of the header back,
+ * dangling item id included, and every later copy warned again.)
+ */
+START_TEST(corrupt_record_is_reset)
+{
+	Display *dpy = XtDisplay(top);
+	Window root = RootWindow(dpy, 0);
+	long item_id = 0, data_id = 0, private_id = 0;
+	unsigned long outlen = 0;
+	char buf[64];
+	int i;
+
+	clear_records(dpy, root);
+	drop_item(dpy, root, copy_string(dpy, win, "hello"));
+	drain_events(dpy);
+
+	/* this copy meets the dangling item and reports it */
+	if (XmClipboardStartCopy(dpy, win, NULL, CurrentTime, NULL, NULL,
+				 &item_id) == ClipboardSuccess) {
+		XmClipboardCopy(dpy, win, item_id, "STRING", "lost", 4, 0,
+				&data_id);
+		XmClipboardEndCopy(dpy, win, item_id);
+	}
+	ck_assert_int_gt(saw_warning, 0);
+	ck_assert(lock_owner(dpy) == None);
+	drain_events(dpy);
+
+	/* from then on the clipboard is clean */
+	saw_warning = 0;
+	for (i = 0; i < 3; i++) {
+		copy_string(dpy, win, "again");
+		drain_events(dpy);
+		memset(buf, 0, sizeof buf);
+		ck_assert_int_eq(XmClipboardRetrieve(dpy, win, "STRING", buf,
+						     sizeof buf - 1, &outlen,
+						     &private_id),
+				 ClipboardSuccess);
+		ck_assert_uint_eq(outlen, 5);
+		ck_assert_str_eq(buf, "again");
+		drain_events(dpy);
+	}
+	ck_assert_int_eq(saw_warning, 0);
+	ck_assert(lock_owner(dpy) == None);
+	clear_records(dpy, root);
+}
+END_TEST
+
 void clipboard_suite(SRunner *runner)
 {
 	Suite *s = suite_create("Clipboard");
@@ -342,6 +399,7 @@ void clipboard_suite(SRunner *runner)
 	tcase_add_test(t, undo_copy_corrupt_releases_lock);
 	tcase_add_test(t, copy_by_name_corrupt_releases_lock);
 	tcase_add_test(t, retrieve_corrupt_releases_lock);
+	tcase_add_test(t, corrupt_record_is_reset);
 	tcase_set_timeout(t, 60);
 	suite_add_tcase(s, t);
 	srunner_add_suite(runner, s);

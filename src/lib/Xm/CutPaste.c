@@ -357,6 +357,14 @@ static XmCutPasteProc *cbProcTable = NULL;
 static long *cbIdTable = NULL;
 static int maxCbProcs = 0;
 
+/* CleanupHeader() resets a clipboard found corrupt, but the operation
+   that found it carries on and normally writes its own copy of the
+   header back, dangling item ids and all, which would leave every later
+   operation meeting (and warning about) the same corruption.  So the
+   display whose clipboard was reset is remembered, and the header is
+   deleted again when the operation gives the clipboard lock back. */
+static Display *clipboard_reset_display = NULL;
+
 /*---------------------------------------------*/
 /* internal routines			       */
 /*---------------------------------------------*/
@@ -687,6 +695,9 @@ static void CleanupHeader(Display *display)
   XDeleteProperty(
       display, RootWindow(display, 0), XInternAtom(display, XmS_MOTIF_CLIP_HEADER, False));
   XFlush(display);
+  _XmProcessLock();
+  clipboard_reset_display = display;
+  _XmProcessUnlock();
 }
 
 /*---------------------------------------------*/
@@ -2111,6 +2122,11 @@ static int ClipboardLock(Display *display, Window window)
         _XmAppUnlock(app);
         return (ClipboardLocked);
       }
+      /* a new outermost operation: any earlier reset is complete */
+      _XmProcessLock();
+      if (clipboard_reset_display == display)
+        clipboard_reset_display = NULL;
+      _XmProcessUnlock();
     }
     else {
       XtFree((char *)lockptr);
@@ -2169,6 +2185,17 @@ static int ClipboardUnlock(Display *display, Window window, Boolean all_levels)
       display, XM_LOCK_ID, (XtPointer)lockptr, length, PropModeReplace, 32, False, XA_INTEGER);
   XtFree((char *)lockptr);
   if (release_lock == True) {
+    Boolean reset;
+    _XmProcessLock();
+    reset = (clipboard_reset_display == display);
+    if (reset)
+      clipboard_reset_display = NULL;
+    _XmProcessUnlock();
+    /* the clipboard was found corrupt during this operation: drop the
+       header it may have written back since (see CleanupHeader) */
+    if (reset)
+      XDeleteProperty(
+          display, RootWindow(display, 0), XInternAtom(display, XmS_MOTIF_CLIP_HEADER, False));
     XSetSelectionOwner(display, _MOTIF_CLIP_LOCK, None, ClipboardGetCurrentTime(display));
   }
   return (ClipboardSuccess);
