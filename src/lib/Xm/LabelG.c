@@ -2278,6 +2278,7 @@ static Boolean SetValues(Widget cw,
     /* Recreate the GC's if the font has been changed */
     XtReleaseGC(XtParent(current), LabG_NormalGC(current));
     XtReleaseGC(XtParent(current), LabG_InsensitiveGC(current));
+    XtReleaseGC(XtParent(current), LabG_ShadowGC(current));
     SetNormalGC(new_w);
     flag = True;
   }
@@ -2431,6 +2432,7 @@ Boolean _XmLabelGCVTRedraw(Widget kid, Widget cur_parent, Widget new_parent, Mas
   if (do_normal) {
     XtReleaseGC(XtParent(lw), LabG_NormalGC(lw));
     XtReleaseGC(XtParent(lw), LabG_InsensitiveGC(lw));
+    XtReleaseGC(XtParent(lw), LabG_ShadowGC(lw));
     SetNormalGC((XmLabelGadget)lw);
   }
   if (visual_flag & (VisualTopShadowColor | VisualTopShadowPixmap)) {
