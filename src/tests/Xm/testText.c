@@ -955,6 +955,60 @@ START_TEST(secondary_no_event)
 }
 END_TEST
 
+/*
+ * The secondary selection started in a widget that is not the focus
+ * widget of its shell, while the destination is in another shell, as
+ * in another application: the keyboard grab of the drag gives the
+ * source's shell the focus, and its focus widget used to take the
+ * destination, and the text with it.  _i: bit 0, the widgets of the
+ * second shell are TextFields; bit 1, the destination is one.
+ */
+START_TEST(secondary_focus_grab)
+{
+	Widget dst = create_text_widget("dst", (_i & 2) != 0, 0);
+	Widget shell2, bb2, focus, src;
+	Display *dpy;
+	Atom destination;
+
+	shell2 = XtVaAppCreateShell("second", "Second", topLevelShellWidgetClass,
+				    XtDisplay(top), XmNx, 0, XmNy, 400, NULL);
+	bb2 = XmCreateBulletinBoard(shell2, "bb", NULL, 0);
+	XtManageChild(bb2);
+	focus = XtVaCreateManagedWidget("focus",
+					(_i & 1) ? xmTextFieldWidgetClass
+						 : xmTextWidgetClass,
+					bb2, XmNcolumns, 30, NULL);
+	src = XtVaCreateManagedWidget("src",
+				      (_i & 1) ? xmTextFieldWidgetClass
+					       : xmTextWidgetClass,
+				      bb2, XmNy, 100, XmNcolumns, 30, NULL);
+	XtRealizeWidget(top);
+	XtRealizeWidget(shell2);
+	pump();
+	dpy = XtDisplay(top);
+	destination = XInternAtom(dpy, "_MOTIF_DESTINATION", False);
+	XmTextSetString(dst, "dest");
+	XmTextSetString(focus, "focus");
+	XmTextSetString(src, "abc def ghi");
+
+	/* The second shell had the focus, on "focus"; then the user
+	 * clicked in dst, in the first one. */
+	XSetInputFocus(dpy, XtWindow(shell2), RevertToParent, CurrentTime);
+	pump();
+	ck_assert(XmProcessTraversal(focus, XmTRAVERSE_CURRENT));
+	pump();
+	XSetInputFocus(dpy, XtWindow(top), RevertToParent, CurrentTime);
+	pump();
+	click(dst, 4);
+	ck_assert_int_eq(XGetSelectionOwner(dpy, destination), XtWindow(dst));
+
+	secondary_drag(src, 4, 7, "copy-to");
+	assert_text(dst, "destdef");
+	assert_text(focus, "focus");
+	ck_assert_int_eq(XGetSelectionOwner(dpy, destination), XtWindow(dst));
+}
+END_TEST
+
 void text_suite(SRunner *runner)
 {
 	Suite *s = suite_create("Text");
@@ -998,6 +1052,7 @@ void text_suite(SRunner *runner)
 	tcase_add_loop_test(t, secondary_move_refused, 0, 8);
 	tcase_add_loop_test(t, primary_quick_move_refused, 0, 8);
 	tcase_add_loop_test(t, secondary_no_event, 0, 4);
+	tcase_add_loop_test(t, secondary_focus_grab, 0, 4);
 	tcase_set_timeout(t, 60);
 	suite_add_tcase(s, t);
 

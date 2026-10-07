@@ -3586,8 +3586,10 @@ static void TextFocusIn(Widget w, XEvent *event, String *params, Cardinal *num_p
   XmTextWidget tw = (XmTextWidget)w;
   if (!event || !event->xfocus.send_event)
     return;
+  /* Not when a widget of this application grabbed the keyboard for a
+   * secondary selection: the destination may be in another one. */
   if (_XmGetFocusPolicy(w) == XmEXPLICIT && !_XmTextHasDestination(w) &&
-      !tw->text.input->data->sel_start)
+      !tw->text.input->data->sel_start && !_XmFocusFromGrab(w))
     _XmTextSetDestinationSelection(
         w, tw->text.cursor_position, False, XtLastTimestampProcessed(XtDisplay(w)));
   _XmPrimitiveFocusIn(w, event, params, num_params);

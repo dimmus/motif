@@ -44,6 +44,8 @@ The other directories:
 - `interactive/` drives a Text/TextField program and mwm (in a nested
   Xephyr) with real input through `xdotool` (`Text.xdotool`,
   `Mwm.xdotool`); they are skipped without `xdotool` or `Xephyr`.
+  `Text.xdotool` also makes secondary selections (Alt+Button2 drags)
+  within one process and between two.
 - `visual/` renders a fixed scene with the BDF fonts of
   `environment/fonts` and compares it with `golden/scene.png`
   (`Visual.*`; `--target update-golden` regenerates it).

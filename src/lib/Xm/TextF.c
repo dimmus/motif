@@ -3778,7 +3778,10 @@ static void TextFocusIn(Widget w, XEvent *event, char **params, Cardinal *num_pa
       if (((XmTextFieldWidgetClass)XtClass(w))->primitive_class.border_highlight) {
         (*((XmTextFieldWidgetClass)XtClass(w))->primitive_class.border_highlight)(w);
       }
-      if (!tf->text.has_destination && !tf->text.sel_start)
+      /* Not when a widget of this application grabbed the keyboard
+       * for a secondary selection: the destination may be in another
+       * one. */
+      if (!tf->text.has_destination && !tf->text.sel_start && !_XmFocusFromGrab(w))
         (void)SetDestination(
             w, TextF_CursorPosition(tf), False, XtLastTimestampProcessed(XtDisplay(w)));
     }

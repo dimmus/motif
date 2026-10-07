@@ -57,6 +57,7 @@ typedef struct _XmFocusDataRec {
   unsigned char focus_policy; /* Mirrors focus_policy resource when focus */
   XmTravGraphRec trav_graph;  /*   data retrieved using _XmGetFocusData().*/
   Widget first_focus;
+  Boolean focus_from_grab; /* The shell has the focus for a keyboard grab */
 } XmFocusDataRec;
 
 typedef enum {
@@ -129,6 +130,7 @@ extern Boolean _XmCallFocusMoved(Widget old, Widget new_wid, XEvent *event);
 extern Boolean _XmMgrTraversal(Widget wid, XmTraversalDirection direction);
 extern void _XmClearFocusPath(Widget wid);
 extern Boolean _XmFocusIsHere(Widget w);
+extern Boolean _XmFocusFromGrab(Widget w);
 extern unsigned char _XmGetFocusPolicy(Widget w);
 extern Widget _XmFindTopMostShell(Widget w);
 extern void _XmFocusModelChanged(Widget wid, XtPointer client_data, XtPointer call_data);
