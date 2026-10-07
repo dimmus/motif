@@ -518,13 +518,23 @@ static int TrapErrorHandler(Display *display, XErrorEvent *event)
 
 void _XmStartErrorTrap(XmErrorTrap trap, Display *display, int error_code, XID resource)
 {
+  XErrorHandler previous;
   trap->display = display;
   trap->error_code = (unsigned char)error_code;
   trap->resource = resource;
   trap->error = 0;
+  /* Install the handler, and remember the one it replaces, which gets
+     the errors no trap keeps.  It is installed again for every trap:
+     another thread may have put its own in while traps were on, and
+     that one is the application's handler now.  Never remember
+     TrapErrorHandler itself (an application may put back what it got
+     from XSetErrorHandler while a trap was on), or it would call
+     itself. */
   _XmProcessLock();
-  if (numErrorTraps++ == 0)
-    atomic_store(&trapPreviousHandler, XSetErrorHandler(TrapErrorHandler));
+  previous = XSetErrorHandler(TrapErrorHandler);
+  if (previous != TrapErrorHandler)
+    atomic_store(&trapPreviousHandler, previous);
+  numErrorTraps++;
   _XmProcessUnlock();
   trap->first_request = NextRequest(display);
   trap->prev = threadErrorTraps;
@@ -543,8 +553,12 @@ int _XmEndErrorTrap(XmErrorTrap trap, Boolean sync)
     }
   }
   _XmProcessLock();
-  if (--numErrorTraps == 0)
-    (void)XSetErrorHandler(atomic_load(&trapPreviousHandler));
+  if (--numErrorTraps == 0) {
+    XErrorHandler current = XSetErrorHandler(atomic_load(&trapPreviousHandler));
+    /* A handler another thread installed meanwhile stays */
+    if (current != TrapErrorHandler)
+      (void)XSetErrorHandler(current);
+  }
   _XmProcessUnlock();
   return trap->error;
 }
