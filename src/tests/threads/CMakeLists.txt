@@ -19,4 +19,15 @@ if(WITH_TSAN)
         "TSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/tsan.supp:halt_on_error=0:second_deadlock_stack=1")
 endif()
 
+# Two threads sharing one application context and display: the lock
+# order between Xt's application and process locks.
+add_executable(sharedapp sharedapp.c)
+target_link_libraries(sharedapp PRIVATE Xm Threads::Threads)
+motif_x_test(Threads.sharedapp $<TARGET_FILE:sharedapp> 3000)
+set_tests_properties(Threads.sharedapp PROPERTIES TIMEOUT 600)
+if(WITH_TSAN)
+    set_tests_properties(Threads.sharedapp PROPERTIES ENVIRONMENT
+        "TSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/tsan.supp:halt_on_error=0:second_deadlock_stack=1")
+endif()
+
 motif_test_set_env()

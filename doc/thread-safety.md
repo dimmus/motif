@@ -37,10 +37,14 @@ Three tools came out of the audit (internal, not exported):
 - `_XmStartErrorTrap` / `_XmEndErrorTrap` (Xm.c): catch the X errors of
   the requests a thread makes, without swapping Xlib's process-wide
   error handler around them (see below).
-- `_XmGetSubresources` (Xm.c): `XtGetSubresources` under the process
-  lock.  Xt compiles a static resource list in place on first use under
-  the application lock only, and Motif's lists are shared by all
-  application contexts.
+- `_XmGetSubresources` (Xm.c): `XtGetSubresources` under the
+  application lock and then the process lock.  Xt compiles a static
+  resource list in place on first use under the application lock only,
+  and Motif's lists are shared by all application contexts.  Some
+  callers (`XmCreateSimpleCheckBox`, `XmCreateSimpleRadioBox`) hold no
+  lock, so the application lock has to be taken here first: taking the
+  process lock first deadlocked with a thread of the same application
+  context holding the application lock (`Threads.sharedapp`).
 - `_XmFreeDefaultRenderTable`, `_XmFlushColorCache` (called from the
   XmDisplay's destroy method) and the screen case of
   `_XmCleanPixmapCache`: per-display caches are emptied when the
@@ -62,6 +66,15 @@ message and prompt dialogs, pixmaps, colours,
 compiled by the uil tests) opened, fetched and closed on each display.
 Displays are opened and closed again in each iteration, which is what
 found the stale per-display caches.
+
+`Threads.sharedapp` (`src/tests/threads/sharedapp.c`) has two threads
+share one application context and display: one creates simple check
+and radio boxes, the other buttons and labels.  It checks the order of
+the two locks (application, then process), which mtapps cannot, as its
+threads never share an application lock; a watchdog turns a deadlock
+into a failure.  ThreadSanitizer does not help there: Xt builds its
+recursive locks from a mutex and a condition variable, and holds the
+mutex only for a moment, so no lock-order inversion is visible to it.
 
 It runs in every build (it found the crashes listed below) and is the
 ThreadSanitizer test of a `WITH_TSAN` build, where any report fails it.

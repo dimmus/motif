@@ -448,6 +448,12 @@ Boolean _XmGetWindowPropertyChecked(Display *display,
  *	Motif's static lists are shared by all application contexts, so
  *	two threads could compile one at the same time.
  *
+ *	The application lock is taken first, as Xt does: some callers
+ *	(XmCreateSimpleCheckBox, ...) do not hold it, and taking the
+ *	process lock first deadlocks with a thread of the same
+ *	application context that holds the application lock and waits
+ *	for the process lock.
+ *
  ************************************************************************/
 void _XmGetSubresources(Widget w,
                         XtPointer base,
@@ -458,9 +464,12 @@ void _XmGetSubresources(Widget w,
                         ArgList args,
                         Cardinal num_args)
 {
+  _XmWidgetToAppContext(w);
+  _XmAppLock(app);
   _XmProcessLock();
   XtGetSubresources(w, base, name, class_name, resources, num_resources, args, num_args);
   _XmProcessUnlock();
+  _XmAppUnlock(app);
 }
 
 /************************************************************************
