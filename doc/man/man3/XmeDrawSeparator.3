@@ -1,7 +1,7 @@
 .TH "XmeDrawSeparator" "library call"
 .nh
 .SH "NAME"
-\fBXmeDrawSeparator\fP \(em A widget writer function that draws a separator line
+\fB\%XmeDrawSeparator\fP \(em A widget writer function that draws a separator line
 .iX "XmeDrawSeparator"
 .iX "Xme draw functions" "XmeDrawSeparator"
 .SH "SYNOPSIS"
@@ -25,7 +25,7 @@
 .fi
 .SH "DESCRIPTION"
 .PP
-\fBXmeDrawSeparator\fP draws a separator line of type
+\fB\%XmeDrawSeparator\fP draws a separator line of type
 \fIseparator_type\fP
 across the middle of the rectangle \fIx\fP, \fIy\fP, \fIwidth\fP,
 \fIheight\fP of the
@@ -41,8 +41,8 @@ double lines are 2 pixels apart\&.  The shadowed types are drawn with
 need
 a non-zero \fIshadow_thick\fP; the dashed shadowed types use dashes
 three
-times the shadow thickness long\&.  Nothing is drawn for \fBXmNO_LINE\fP
-or
+times the shadow thickness long\&.  Nothing is drawn for
+\fB\%XmNO_LINE\fP or
 if \fId\fP is None\&.
 .IP "\fIdisplay\fP" 10
 Specifies the display\&.
@@ -68,22 +68,23 @@ Specifies the thickness of the shadowed types\&.
 .IP "\fImargin\fP" 10
 Specifies the space left at both ends of the line\&.
 .IP "\fIorientation\fP" 10
-Specifies \fBXmHORIZONTAL\fP or \fBXmVERTICAL\fP\&.
+Specifies \fB\%XmHORIZONTAL\fP or \fB\%XmVERTICAL\fP\&.
 .IP "\fIseparator_type\fP" 10
-Specifies \fBXmNO_LINE\fP, \fBXmSINGLE_LINE\fP,
-\fBXmDOUBLE_LINE\fP, \fBXmSINGLE_DASHED_LINE\fP,
-\fBXmDOUBLE_DASHED_LINE\fP,
-\fBXmSHADOW_ETCHED_IN\fP, \fBXmSHADOW_ETCHED_OUT\fP,
-\fBXmSHADOW_ETCHED_IN_DASH\fP
-or \fBXmSHADOW_ETCHED_OUT_DASH\fP, as for the \fBXmNseparatorType\fP
+Specifies \fB\%XmNO_LINE\fP, \fB\%XmSINGLE_LINE\fP,
+\fB\%XmDOUBLE_LINE\fP, \fB\%XmSINGLE_DASHED_LINE\fP,
+\fB\%XmDOUBLE_DASHED_LINE\fP,
+\fB\%XmSHADOW_ETCHED_IN\fP, \fB\%XmSHADOW_ETCHED_OUT\fP,
+\fB\%XmSHADOW_ETCHED_IN_DASH\fP
+or \fB\%XmSHADOW_ETCHED_OUT_DASH\fP, as for the \fB\%XmNseparatorType\fP
 resource
-of \fBXmSeparator\fP(3)\&.
+of \fB\%XmSeparator\fP(3)\&.
 .PP
-Motif 1\&.2 called this function \fB_XmDrawSeparator\fP\&.  The library
-still exports that name for old binaries, and \fB<Xm/XmP\&.h>\fP defines
-it as a macro for \fBXmeDrawSeparator\fP unless \fBNO_XM_1_2_BC\fP is
-defined; new code should use \fBXmeDrawSeparator\fP\&.
+Motif 1\&.2 called this function \fB\%_XmDrawSeparator\fP\&.  The
+library still exports that name for old binaries, and
+\fB\%<Xm/XmP\&.h>\fP defines it as a macro for \fB\%XmeDrawSeparator\fP
+unless \fB\%NO_XM_1_2_BC\fP is defined; new code should use
+\fB\%XmeDrawSeparator\fP\&.
 .SH "RELATED"
 .PP
-\fBXmSeparator\fP(3), \fBXmSeparatorGadget\fP(3) and
-\fBXmeDrawShadows\fP(3)\&.
+\fB\%XmSeparator\fP(3), \fB\%XmSeparatorGadget\fP(3) and
+\fB\%XmeDrawShadows\fP(3)\&.

@@ -1,7 +1,7 @@
 .TH "XmeClearBorder" "library call"
 .nh
 .SH "NAME"
-\fBXmeClearBorder\fP \(em A widget writer function that clears the border of a rectangle
+\fB\%XmeClearBorder\fP \(em A widget writer function that clears the border of a rectangle
 .iX "XmeClearBorder"
 .iX "Xme draw functions" "XmeClearBorder"
 .SH "SYNOPSIS"
@@ -19,13 +19,13 @@
 .fi
 .SH "DESCRIPTION"
 .PP
-\fBXmeClearBorder\fP clears, with \fBXClearArea\fP and without
+\fB\%XmeClearBorder\fP clears, with \fB\%XClearArea\fP and without
 generating
 exposures, a band of thickness \fIshadow_thick\fP along the inside of
 the rectangle \fIx\fP, \fIy\fP, \fIwidth\fP, \fIheight\fP of the window
 \fIw\fP\&.  A widget
 uses it to erase the shadow or the highlight it drew with
-\fBXmeDrawShadows\fP or \fBXmeDrawHighlight\fP, for instance when it
+\fB\%XmeDrawShadows\fP or \fB\%XmeDrawHighlight\fP, for instance when it
 loses
 the focus\&.  Nothing is done if \fIw\fP is None or if
 \fIshadow_thick\fP,
@@ -45,10 +45,11 @@ Specifies the height of the rectangle\&.
 .IP "\fIshadow_thick\fP" 10
 Specifies the thickness of the band to clear\&.
 .PP
-Motif 1\&.2 called this function \fB_XmClearBorder\fP\&.  The library
-still exports that name for old binaries, and \fB<Xm/XmP\&.h>\fP defines
-it as a macro for \fBXmeClearBorder\fP unless \fBNO_XM_1_2_BC\fP is
-defined; new code should use \fBXmeClearBorder\fP\&.
+Motif 1\&.2 called this function \fB\%_XmClearBorder\fP\&.  The library
+still exports that name for old binaries, and \fB\%<Xm/XmP\&.h>\fP
+defines it as a macro for \fB\%XmeClearBorder\fP unless
+\fB\%NO_XM_1_2_BC\fP is defined; new code should use
+\fB\%XmeClearBorder\fP\&.
 .SH "RELATED"
 .PP
-\fBXmeDrawShadows\fP(3) and \fBXmeDrawHighlight\fP(3)\&.
+\fB\%XmeDrawShadows\fP(3) and \fB\%XmeDrawHighlight\fP(3)\&.

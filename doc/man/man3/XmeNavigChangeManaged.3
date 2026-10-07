@@ -1,0 +1,34 @@
+.TH "XmeNavigChangeManaged" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeNavigChangeManaged\fP \(em A widget writer function that keeps keyboard traversal right when children are managed
+.iX "XmeNavigChangeManaged"
+.iX "Xme functions" "XmeNavigChangeManaged"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/XmP\&.h>
+\fBvoid \fBXmeNavigChangeManaged\fP\fR(
+\fBWidget \fBwid\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeNavigChangeManaged\fP must be called from the change_managed
+method
+of every composite widget that can have traversable children, as the
+Motif managers and VendorShell do\&.  When the keyboard
+focus policy is \fB\%XmEXPLICIT\fP and \fIwid\fP is realized, it moves
+the focus
+away from a focus widget that is no longer traversable and, in a shell
+that has no focus widget yet, sets up the initial focus\&.
+.IP "\fIwid\fP" 10
+Specifies the composite widget\&.
+.PP
+Motif 1\&.2 called this function \fB\%_XmNavigChangeManaged\fP\&.  The
+library still exports that name for old binaries, and
+\fB\%<Xm/XmP\&.h>\fP defines it as a macro for
+\fB\%XmeNavigChangeManaged\fP unless \fB\%NO_XM_1_2_BC\fP is defined;
+new code should use \fB\%XmeNavigChangeManaged\fP\&.
+.SH "RELATED"
+.PP
+\fB\%XmManager\fP(3) and \fB\%XmProcessTraversal\fP(3)\&.

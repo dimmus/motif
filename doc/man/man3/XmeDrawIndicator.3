@@ -1,7 +1,7 @@
 .TH "XmeDrawIndicator" "library call"
 .nh
 .SH "NAME"
-\fBXmeDrawIndicator\fP \(em A widget writer function that draws a check mark or a cross
+\fB\%XmeDrawIndicator\fP \(em A widget writer function that draws a check mark or a cross
 .iX "XmeDrawIndicator"
 .iX "Xme draw functions" "XmeDrawIndicator"
 .SH "SYNOPSIS"
@@ -21,17 +21,18 @@
 .fi
 .SH "DESCRIPTION"
 .PP
-\fBXmeDrawIndicator\fP draws, with \fIgc\fP, the glyph of the indicator
-of a
+\fB\%XmeDrawIndicator\fP draws, with \fIgc\fP, the glyph of the
+indicator of a
 ToggleButton in the rectangle \fIx\fP, \fIy\fP, \fIwidth\fP,
 \fIheight\fP of the
 drawable \fId\fP, less \fImargin\fP pixels on each side\&.  The glyph is
 taken
-from the high four bits of \fItype\fP: \fBXmINDICATOR_CHECK\fP draws a
+from the high four bits of \fItype\fP: \fB\%XmINDICATOR_CHECK\fP draws a
 check
-mark and \fBXmINDICATOR_CROSS\fP a cross, both scaled to the
+mark and \fB\%XmINDICATOR_CROSS\fP a cross, both scaled to the
 rectangle\&.
-The box of the \fB_BOX\fP types is not drawn (use \fBXmeDrawShadows\fP);
+The box of the \fB\%_BOX\fP types is not drawn (use
+\fB\%XmeDrawShadows\fP);
 other values draw nothing\&.
 .IP "\fIdisplay\fP" 10
 Specifies the display\&.
@@ -50,11 +51,11 @@ Specifies the height of the rectangle\&.
 .IP "\fImargin\fP" 10
 Specifies the space between the rectangle and the glyph\&.
 .IP "\fItype\fP" 10
-Specifies the indicator type, as for the \fBXmNindicatorType\fP
-resource of \fBXmToggleButton\fP(3): \fBXmINDICATOR_CHECK\fP,
-\fBXmINDICATOR_CHECK_BOX\fP, \fBXmINDICATOR_CROSS\fP or
-\fBXmINDICATOR_CROSS_BOX\fP\&.
+Specifies the indicator type, as for the \fB\%XmNindicatorType\fP
+resource of \fB\%XmToggleButton\fP(3): \fB\%XmINDICATOR_CHECK\fP,
+\fB\%XmINDICATOR_CHECK_BOX\fP, \fB\%XmINDICATOR_CROSS\fP or
+\fB\%XmINDICATOR_CROSS_BOX\fP\&.
 .SH "RELATED"
 .PP
-\fBXmeDrawCircle\fP(3), \fBXmeDrawDiamond\fP(3) and
-\fBXmToggleButton\fP(3)\&.
+\fB\%XmeDrawCircle\fP(3), \fB\%XmeDrawDiamond\fP(3) and
+\fB\%XmToggleButton\fP(3)\&.

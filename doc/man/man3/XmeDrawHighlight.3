@@ -1,7 +1,7 @@
 .TH "XmeDrawHighlight" "library call"
 .nh
 .SH "NAME"
-\fBXmeDrawHighlight\fP \(em A widget writer function that draws the highlight border of a rectangle
+\fB\%XmeDrawHighlight\fP \(em A widget writer function that draws the highlight border of a rectangle
 .iX "XmeDrawHighlight"
 .iX "Xme draw functions" "XmeDrawHighlight"
 .SH "SYNOPSIS"
@@ -20,14 +20,14 @@
 .fi
 .SH "DESCRIPTION"
 .PP
-\fBXmeDrawHighlight\fP fills, with \fIgc\fP, a band of thickness
+\fB\%XmeDrawHighlight\fP fills, with \fIgc\fP, a band of thickness
 \fIhighlight_thick\fP along the inside of the rectangle \fIx\fP,
 \fIy\fP,
 \fIwidth\fP, \fIheight\fP of the drawable \fId\fP\&.  Primitive widgets
 draw their
 keyboard focus highlight this way, with the GC of the
-\fBXmNhighlightColor\fP resource, and erase it with
-\fBXmeClearBorder\fP\&.  Nothing is drawn if \fId\fP is None or if
+\fB\%XmNhighlightColor\fP resource, and erase it with
+\fB\%XmeClearBorder\fP\&.  Nothing is drawn if \fId\fP is None or if
 \fIhighlight_thick\fP, \fIwidth\fP or \fIheight\fP is 0\&.
 .IP "\fIdisplay\fP" 10
 Specifies the display\&.
@@ -46,12 +46,12 @@ Specifies the height of the rectangle\&.
 .IP "\fIhighlight_thick\fP" 10
 Specifies the thickness of the highlight, in pixels\&.
 .PP
-Motif 1\&.2 called this function \fB_XmDrawSimpleHighlight\fP\&.  The
-library still exports that name for old binaries, and \fB<Xm/XmP\&.h>\fP
-defines it as a macro for \fBXmeDrawHighlight\fP unless
-\fBNO_XM_1_2_BC\fP is defined; new code should use
-\fBXmeDrawHighlight\fP\&.
+Motif 1\&.2 called this function \fB\%_XmDrawSimpleHighlight\fP\&.  The
+library still exports that name for old binaries, and
+\fB\%<Xm/XmP\&.h>\fP defines it as a macro for \fB\%XmeDrawHighlight\fP
+unless \fB\%NO_XM_1_2_BC\fP is defined; new code should use
+\fB\%XmeDrawHighlight\fP\&.
 .SH "RELATED"
 .PP
-\fBXmeClearBorder\fP(3), \fBXmeDrawShadows\fP(3) and
-\fBXmPrimitive\fP(3)\&.
+\fB\%XmeClearBorder\fP(3), \fB\%XmeDrawShadows\fP(3) and
+\fB\%XmPrimitive\fP(3)\&.

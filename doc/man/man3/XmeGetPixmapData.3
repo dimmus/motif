@@ -1,0 +1,60 @@
+.TH "XmeGetPixmapData" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeGetPixmapData\fP \(em A widget writer function that returns what Motif knows about a pixmap
+.iX "XmeGetPixmapData"
+.iX "Xme functions" "XmeGetPixmapData"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/XmP\&.h>
+\fBBoolean \fBXmeGetPixmapData\fP\fR(
+\fBScreen *\fBscreen\fR\fR,
+\fBPixmap \fBpixmap\fR\fR,
+\fBchar **\fBimage_name\fR\fR,
+\fBint *\fBdepth\fR\fR,
+\fBPixel *\fBforeground\fR\fR,
+\fBPixel *\fBbackground\fR\fR,
+\fBint *\fBhot_x\fR\fR,
+\fBint *\fBhot_y\fR\fR,
+\fBunsigned int *\fBwidth\fR\fR,
+\fBunsigned int *\fBheight\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeGetPixmapData\fP returns the image name, depth, colours, hot
+spot
+and size of \fIpixmap\fP as the pixmap cache of Motif records them\&.  A
+pixmap that is not in the cache (one the application created itself)
+is entered in it, with its geometry queried from the server; its name,
+colours and hot spot are then not known\&.  Any of the return arguments
+may be NULL\&.
+.IP "\fIscreen\fP" 11
+Specifies the screen of the pixmap\&.
+.IP "\fIpixmap\fP" 11
+Specifies the pixmap\&.
+.IP "\fIimage_name\fP" 11
+Returns the name of the image the pixmap was made from\&.  It belongs to
+Motif\&.
+.IP "\fIdepth\fP" 11
+Returns the depth\&.
+.IP "\fIforeground\fP" 11
+Returns the foreground of a pixmap made from a bitmap\&.
+.IP "\fIbackground\fP" 11
+Returns the background of a pixmap made from a bitmap\&.
+.IP "\fIhot_x\fP" 11
+Returns the x coordinate of the hot spot\&.
+.IP "\fIhot_y\fP" 11
+Returns the y coordinate of the hot spot\&.
+.IP "\fIwidth\fP" 11
+Returns the width\&.
+.IP "\fIheight\fP" 11
+Returns the height\&.
+.SH "RETURN"
+.PP
+Returns True if the pixmap was in the cache, and False if it had to be
+added to it\&.
+.SH "RELATED"
+.PP
+\fB\%XmGetPixmapByDepth\fP(3), \fB\%XmInstallImage\fP(3) and
+\fB\%XmeGetMask\fP(3)\&.

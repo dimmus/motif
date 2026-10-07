@@ -1,7 +1,7 @@
 .TH "XmeDrawDiamond" "library call"
 .nh
 .SH "NAME"
-\fBXmeDrawDiamond\fP \(em A widget writer function that draws a three-dimensional diamond
+\fB\%XmeDrawDiamond\fP \(em A widget writer function that draws a three-dimensional diamond
 .iX "XmeDrawDiamond"
 .iX "Xme draw functions" "XmeDrawDiamond"
 .SH "SYNOPSIS"
@@ -23,9 +23,9 @@
 .fi
 .SH "DESCRIPTION"
 .PP
-\fBXmeDrawDiamond\fP draws the diamond-shaped indicator of a
-ToggleButton whose \fBXmNindicatorType\fP is
-\fBXmONE_OF_MANY_DIAMOND\fP\&.
+\fB\%XmeDrawDiamond\fP draws the diamond-shaped indicator of a
+ToggleButton whose \fB\%XmNindicatorType\fP is
+\fB\%XmONE_OF_MANY_DIAMOND\fP\&.
 The diamond fits in the square of side \fIwidth\fP at \fIx\fP, \fIy\fP;
 \fIheight\fP is not used\&.  An even \fIwidth\fP is reduced by one\&.
 The upper
@@ -61,11 +61,12 @@ Specifies the shadow thickness of the toggle\&.
 .IP "\fImargin\fP" 10
 Specifies the space between the shadow and the filled inside\&.
 .PP
-Motif 1\&.2 called this function \fB_XmDrawDiamond\fP\&.  The library
-still exports that name for old binaries, and \fB<Xm/XmP\&.h>\fP defines
-it as a macro for \fBXmeDrawDiamond\fP unless \fBNO_XM_1_2_BC\fP is
-defined; new code should use \fBXmeDrawDiamond\fP\&.
+Motif 1\&.2 called this function \fB\%_XmDrawDiamond\fP\&.  The library
+still exports that name for old binaries, and \fB\%<Xm/XmP\&.h>\fP
+defines it as a macro for \fB\%XmeDrawDiamond\fP unless
+\fB\%NO_XM_1_2_BC\fP is defined; new code should use
+\fB\%XmeDrawDiamond\fP\&.
 .SH "RELATED"
 .PP
-\fBXmeDrawCircle\fP(3), \fBXmeDrawIndicator\fP(3) and
-\fBXmToggleButton\fP(3)\&.
+\fB\%XmeDrawCircle\fP(3), \fB\%XmeDrawIndicator\fP(3) and
+\fB\%XmToggleButton\fP(3)\&.

@@ -1,0 +1,38 @@
+.TH "XmRenderTableGetDefaultFontExtents" "library call"
+.nh
+.SH "NAME"
+\fB\%XmRenderTableGetDefaultFontExtents\fP \(em Returns the height, ascent and descent of the default font of a render table
+.iX "XmRenderTableGetDefaultFontExtents"
+.iX "Render table functions" "XmRenderTableGetDefaultFontExtents"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/XmP\&.h>
+\fBvoid \fBXmRenderTableGetDefaultFontExtents\fP\fR(
+\fBXmRenderTable \fBrendertable\fR\fR,
+\fBint *\fBheight\fR\fR,
+\fBint *\fBascent\fR\fR,
+\fBint *\fBdescent\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmRenderTableGetDefaultFontExtents\fP returns the extents of the
+font
+of the rendition tagged \fB\%XmFONTLIST_DEFAULT_TAG\fP in
+\fIrendertable\fP or,
+if there is none, of its first rendition with a font\&.  The font may be
+a font, a font set (its first font is used) or an Xft font\&.  Any of
+the return arguments may be NULL\&.
+.IP "\fIrendertable\fP" 10
+Specifies the render table\&.
+.IP "\fIheight\fP" 10
+Returns the ascent plus the descent\&.
+.IP "\fIascent\fP" 10
+Returns the ascent\&.
+.IP "\fIdescent\fP" 10
+Returns the descent\&.
+.PP
+All three are 0 if no font is found\&.
+.SH "RELATED"
+.PP
+\fB\%XmeRenderTableGetDefaultFont\fP(3) and \fB\%XmRenderTable\fP(3)\&.

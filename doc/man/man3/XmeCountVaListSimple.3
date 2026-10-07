@@ -1,0 +1,34 @@
+.TH "XmeCountVaListSimple" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeCountVaListSimple\fP \(em A widget writer function that counts the arguments of a variable argument list
+.iX "XmeCountVaListSimple"
+.iX "Xme functions" "XmeCountVaListSimple"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/XmP\&.h>
+\fBint \fBXmeCountVaListSimple\fP\fR(
+\fBva_list \fBal\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeCountVaListSimple\fP returns the number of resource name and
+value
+pairs in the variable argument list \fIal\fP, up to the NULL name that
+ends it\&.  \fB\%XtVaTypedArg\fP and \fB\%XtVaNestedList\fP entries are
+counted as
+the arguments they stand for\&.  It is meant for the \fB\%XmVaCreate\fP
+convenience functions of widgets, which pass the count to
+\fB\%XmeVLCreateWidget\fP; \fIal\fP must be started again with
+\fB\%va_start\fP
+before it is used a second time\&.
+.IP "\fIal\fP" 10
+Specifies the variable argument list, positioned at its first resource
+name\&.
+.SH "RETURN"
+.PP
+Returns the number of arguments\&.
+.SH "RELATED"
+.PP
+\fB\%XmeVLCreateWidget\fP(3)\&.

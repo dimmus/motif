@@ -1,0 +1,46 @@
+.TH "XmeReplyToQueryGeometry" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeReplyToQueryGeometry\fP \(em A widget writer function that answers a geometry query
+.iX "XmeReplyToQueryGeometry"
+.iX "Xme functions" "XmeReplyToQueryGeometry"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/XmP\&.h>
+\fBXtGeometryResult \fBXmeReplyToQueryGeometry\fP\fR(
+\fBWidget \fBwidget\fR\fR,
+\fBXtWidgetGeometry *\fBintended\fR\fR,
+\fBXtWidgetGeometry *\fBdesired\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeReplyToQueryGeometry\fP gives the answer of a query_geometry
+method
+for a widget that only cares about its width and height\&.  The method
+sets the width and height it wants in \fIdesired\fP and returns the
+result of \fB\%XmeReplyToQueryGeometry\fP, which sets the request mode
+of
+\fIdesired\fP to \fB\%CWWidth | CWHeight\fP\&.
+.IP "\fIwidget\fP" 10
+Specifies the widget\&.
+.IP "\fIintended\fP" 10
+Specifies the geometry the parent intends to give\&.
+.IP "\fIdesired\fP" 10
+Specifies the preferred width and height, and returns the request
+mode\&.
+.PP
+Motif 1\&.2 called this function \fB\%_XmGMReplyToQueryGeometry\fP\&.
+The library still exports that name for old binaries, and
+\fB\%<Xm/XmP\&.h>\fP defines it as a macro for
+\fB\%XmeReplyToQueryGeometry\fP unless \fB\%NO_XM_1_2_BC\fP is defined;
+new code should use \fB\%XmeReplyToQueryGeometry\fP\&.
+.SH "RETURN"
+.PP
+Returns \fB\%XtGeometryYes\fP if the parent intends to give both the
+preferred width and height; otherwise \fB\%XtGeometryNo\fP if the
+preferred
+size is the current size, and \fB\%XtGeometryAlmost\fP if it is not\&.
+.SH "RELATED"
+.PP
+\fB\%XtQueryGeometry\fP(3) and \fB\%XmeConfigureObject\fP(3)\&.

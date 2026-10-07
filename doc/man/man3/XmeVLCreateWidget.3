@@ -1,0 +1,71 @@
+.TH "XmeVLCreateWidget" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeVLCreateWidget\fP \(em A widget writer function that creates a widget from a variable argument list
+.iX "XmeVLCreateWidget"
+.iX "Xme functions" "XmeVLCreateWidget"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/XmP\&.h>
+\fBWidget \fBXmeVLCreateWidget\fP\fR(
+\fBchar *\fBname\fR\fR,
+\fBWidgetClass \fBwc\fR\fR,
+\fBWidget \fBparent\fR\fR,
+\fBBoolean \fBmanaged\fR\fR,
+\fBva_list \fBal\fR\fR,
+\fBint \fBcount\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeVLCreateWidget\fP creates a widget of class \fIwc\fP, managed or
+not,
+from a variable argument list of resource name and value pairs ended
+by NULL\&.  It is how the \fB\%XmVaCreate\fP and
+\fB\%XmVaCreateManaged\fP
+convenience functions are written (see EXAMPLE)\&.
+.PP
+The list may only hold plain name and value pairs: \fB\%XtVaTypedArg\fP
+and
+\fB\%XtVaNestedList\fP are not supported\&.  \fB\%XmeVLCreateWidget\fP
+calls
+\fB\%va_end\fP on \fIal\fP\&.
+.IP "\fIname\fP" 10
+Specifies the name of the widget\&.
+.IP "\fIwc\fP" 10
+Specifies the class of the widget\&.
+.IP "\fIparent\fP" 10
+Specifies the parent widget\&.
+.IP "\fImanaged\fP" 10
+Specifies whether the widget is created managed
+(\fB\%XtCreateManagedWidget\fP) or not (\fB\%XtCreateWidget\fP)\&.
+.IP "\fIal\fP" 10
+Specifies the variable argument list\&.
+.IP "\fIcount\fP" 10
+Specifies the number of arguments in \fIal\fP, as
+\fB\%XmeCountVaListSimple\fP returns it\&.
+.SH "RETURN"
+.PP
+Returns the widget\&.
+.SH "EXAMPLE"
+.PP
+.nf
+Widget
+XmVaCreateManagedFoo(Widget parent, char *name, ...)
+{
+    va_list var;
+    int count;
+
+    va_start(var, name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+
+    va_start(var, name);
+    return XmeVLCreateWidget(name, xmFooWidgetClass, parent,
+                             True, var, count);
+}
+.fi
+.SH "RELATED"
+.PP
+\fB\%XmeCountVaListSimple\fP(3), \fB\%XtCreateWidget\fP(3) and
+\fB\%XtCreateManagedWidget\fP(3)\&.

@@ -1,0 +1,40 @@
+.TH "XmeRedisplayGadgets" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeRedisplayGadgets\fP \(em A widget writer function that redraws the gadgets of a manager
+.iX "XmeRedisplayGadgets"
+.iX "Xme functions" "XmeRedisplayGadgets"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/XmP\&.h>
+\fBvoid \fBXmeRedisplayGadgets\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBXEvent *\fBevent\fR\fR,
+\fBRegion \fBregion\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeRedisplayGadgets\fP calls the expose method of each managed
+gadget
+child of the manager \fIw\fP that intersects \fIregion\fP or, if
+\fIregion\fP is
+NULL, the rectangle of the Expose \fIevent\fP\&.  A manager calls it
+from its
+own expose method, since gadgets have no window and receive no
+exposures\&.
+.IP "\fIw\fP" 10
+Specifies the manager widget\&.
+.IP "\fIevent\fP" 10
+Specifies the Expose event\&.
+.IP "\fIregion\fP" 10
+Specifies the region to redraw, or NULL\&.
+.PP
+Motif 1\&.2 called this function \fB\%_XmRedisplayGadgets\fP\&.  The
+library still exports that name for old binaries, and
+\fB\%<Xm/XmP\&.h>\fP defines it as a macro for
+\fB\%XmeRedisplayGadgets\fP unless \fB\%NO_XM_1_2_BC\fP is defined; new
+code should use \fB\%XmeRedisplayGadgets\fP\&.
+.SH "RELATED"
+.PP
+\fB\%XmGadget\fP(3) and \fB\%XmManager\fP(3)\&.

@@ -1,0 +1,47 @@
+.TH "XmeParseUnits" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeParseUnits\fP \(em A widget writer function that parses the name of a unit type
+.iX "XmeParseUnits"
+.iX "Xme functions" "XmeParseUnits"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/XmP\&.h>
+\fBXmParseResult \fBXmeParseUnits\fP\fR(
+\fBString \fBspec\fR\fR,
+\fBint *\fBunitType\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeParseUnits\fP returns in \fIunitType\fP the unit type named by
+\fIspec\fP, as the unit of a resource value such as \fB\%2\&.5in\fP is
+written\&.
+The names are compared as \fB\%XmeNamesAreEqual\fP does\&.
+.IP "\fB\%XmPIXELS\fP" 10
+\fB\%pix\fP, \fB\%pixel\fP or \fB\%pixels\fP
+.IP "\fB\%XmINCHES\fP" 10
+\fB\%in\fP, \fB\%inch\fP or \fB\%inches\fP
+.IP "\fB\%XmCENTIMETERS\fP" 10
+\fB\%cm\fP, \fB\%centimeter\fP or \fB\%centimeters\fP
+.IP "\fB\%XmMILLIMETERS\fP" 10
+\fB\%mm\fP, \fB\%millimeter\fP or \fB\%millimeters\fP
+.IP "\fB\%XmPOINTS\fP" 10
+\fB\%pt\fP, \fB\%point\fP or \fB\%points\fP
+.IP "\fB\%XmFONT_UNITS\fP" 10
+\fB\%fu\fP, \fB\%font_unit\fP or \fB\%font_units\fP
+.IP "\fIspec\fP" 10
+Specifies the name of the unit\&.
+.IP "\fIunitType\fP" 10
+Returns the unit type\&.
+.SH "RETURN"
+.PP
+Returns \fB\%XmPARSE_UNITS_OK\fP if the unit was recognised,
+\fB\%XmPARSE_NO_UNITS\fP if \fIspec\fP is empty (the caller then uses
+its
+default unit), and \fB\%XmPARSE_ERROR\fP otherwise\&.  \fIunitType\fP is
+set only
+for \fB\%XmPARSE_UNITS_OK\fP\&.
+.SH "RELATED"
+.PP
+\fB\%XmConvertStringToUnits\fP(3) and \fB\%XmeNamesAreEqual\fP(3)\&.

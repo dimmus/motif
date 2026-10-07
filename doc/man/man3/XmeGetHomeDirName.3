@@ -1,0 +1,33 @@
+.TH "XmeGetHomeDirName" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeGetHomeDirName\fP \(em A widget writer function that returns the home directory of the user
+.iX "XmeGetHomeDirName"
+.iX "Xme functions" "XmeGetHomeDirName"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/XmP\&.h>
+\fBString \fBXmeGetHomeDirName\fP\fR(\fBvoid\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeGetHomeDirName\fP returns the home directory of the user: the
+value of \fB\%HOME\fP or, if it is not set, the directory of the
+password
+entry of the user named by \fB\%USER\fP or, failing that, of the real
+user
+ID\&.  The result is computed once and kept\&.
+.PP
+Motif 1\&.2 called this function \fB\%_XmOSGetHomeDirName\fP\&.  The
+library still exports that name for old binaries, and
+\fB\%<Xm/XmP\&.h>\fP defines it as a macro for \fB\%XmeGetHomeDirName\fP
+unless \fB\%NO_XM_1_2_BC\fP is defined; new code should use
+\fB\%XmeGetHomeDirName\fP\&.
+.SH "RETURN"
+.PP
+Returns the directory, or an empty string if it cannot be found\&.  The
+string belongs to Motif and must not be modified or freed\&.
+.SH "RELATED"
+.PP
+\fB\%XmGetIconFileName\fP(3)\&.

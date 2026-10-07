@@ -1,7 +1,7 @@
 .TH "XmeDrawArrow" "library call"
 .nh
 .SH "NAME"
-\fBXmeDrawArrow\fP \(em A widget writer function that draws a three-dimensional arrow
+\fB\%XmeDrawArrow\fP \(em A widget writer function that draws a three-dimensional arrow
 .iX "XmeDrawArrow"
 .iX "Xme draw functions" "XmeDrawArrow"
 .SH "SYNOPSIS"
@@ -23,7 +23,8 @@
 .fi
 .SH "DESCRIPTION"
 .PP
-\fBXmeDrawArrow\fP draws an arrow, as the ArrowButton does, centered in
+\fB\%XmeDrawArrow\fP draws an arrow, as the ArrowButton does, centered
+in
 the rectangle \fIx\fP, \fIy\fP, \fIwidth\fP, \fIheight\fP of the
 drawable \fId\fP\&.  The
 arrow is a square triangle whose side is the smaller of \fIwidth\fP and
@@ -60,13 +61,14 @@ Specifies the height of the rectangle\&.
 .IP "\fIshadow_thick\fP" 10
 Specifies the thickness of the shadow: 0, 1, or 2 and more\&.
 .IP "\fIdirection\fP" 10
-Specifies where the arrow points: \fBXmARROW_UP\fP,
-\fBXmARROW_DOWN\fP, \fBXmARROW_LEFT\fP or \fBXmARROW_RIGHT\fP\&.
+Specifies where the arrow points: \fB\%XmARROW_UP\fP,
+\fB\%XmARROW_DOWN\fP, \fB\%XmARROW_LEFT\fP or \fB\%XmARROW_RIGHT\fP\&.
 .PP
-Motif 1\&.2 called this function \fB_XmDrawArrow\fP\&.  The library
-still exports that name for old binaries, and \fB<Xm/XmP\&.h>\fP defines
-it as a macro for \fBXmeDrawArrow\fP unless \fBNO_XM_1_2_BC\fP is
-defined; new code should use \fBXmeDrawArrow\fP\&.
+Motif 1\&.2 called this function \fB\%_XmDrawArrow\fP\&.  The library
+still exports that name for old binaries, and \fB\%<Xm/XmP\&.h>\fP
+defines it as a macro for \fB\%XmeDrawArrow\fP unless
+\fB\%NO_XM_1_2_BC\fP is defined; new code should use
+\fB\%XmeDrawArrow\fP\&.
 .SH "RELATED"
 .PP
-\fBXmArrowButton\fP(3) and \fBXmeDrawShadows\fP(3)\&.
+\fB\%XmArrowButton\fP(3) and \fB\%XmeDrawShadows\fP(3)\&.
