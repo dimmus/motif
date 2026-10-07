@@ -1476,6 +1476,7 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
       if (modify_b) {
         /* Free leftover bits of b_seg */
         if (_XmEntryUnoptimized(b_seg)) {
+          _XmStringCacheFree(_XmEntryCacheGet((_XmStringEntry)b_seg));
           if (_XmEntryOptimized(a_last) ||
               (_XmUnoptSegRendBegins(a_last) != _XmUnoptSegRendBegins(b_seg)))
             XtFree((char *)_XmUnoptSegRendBegins(b_seg));

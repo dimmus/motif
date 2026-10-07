@@ -1634,6 +1634,38 @@ START_TEST(baseline_rendition_leak)
 	ck_assert_msg(!leaks_found(), "XmStringBaseline leaked");
 }
 END_TEST
+
+/*
+ * Measuring a multi-segment string gives its segments a layout cache.
+ * XmStringConcatAndFree freed the first segment of its second argument
+ * without that cache when it merged the segment's text into the last
+ * one of the first.
+ */
+START_TEST(concat_merged_segment_cache_leak)
+{
+	XmRenderTable rt = make_rt(XmFONTLIST_DEFAULT_TAG, "fixed",
+				   XmFONT_IS_FONT);
+	char *long_text = repeat("0123456789", 30);
+	XmString a, b;
+	Dimension w, h, w_a, w_b;
+
+	/* 300 bytes: unoptimized segments, which carry caches */
+	a = XmStringCreateLocalized(long_text);
+	b = XmStringCreateLocalized(long_text);
+	ck_assert(!_XmStrOptimized(a) && !_XmStrOptimized(b));
+	XmStringExtent(rt, a, &w_a, &h);
+	XmStringExtent(rt, b, &w_b, &h);
+	a = XmStringConcatAndFree(a, b);
+	ck_assert_int_eq(count_comps(a, XmSTRING_COMPONENT_LOCALE_TEXT) +
+			 count_comps(a, XmSTRING_COMPONENT_TEXT), 1);
+	XmStringExtent(rt, a, &w, &h);
+	ck_assert_uint_eq(w, w_a + w_b);
+	XmStringFree(a);
+	XmRenderTableFree(rt);
+	XtFree(long_text);
+	ck_assert_msg(!leaks_found(), "XmStringConcatAndFree leaked");
+}
+END_TEST
 #endif
 
 /* The extent and baseline of s with rt */
@@ -1895,6 +1927,7 @@ void xmstring_extent_suite(SRunner *runner)
 	tcase_add_test(t, extent_cache_follows_mrm_tabs);
 #ifdef HAVE_LSAN
 	tcase_add_test(t, baseline_rendition_leak);
+	tcase_add_test(t, concat_merged_segment_cache_leak);
 #endif
 	tcase_add_checked_fixture(t, _init_xt_extent, _uninit_xt_extent);
 	suite_add_tcase(s, t);
