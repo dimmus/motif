@@ -13,7 +13,7 @@
  *   xm_abtest MODE SEED [SIZE]
  *
  * MODE is form, formcyc, formgrid, formcolumn, formwide, container,
- * list, listapi or listscroll.  SIZE 0 (the default) lets the seed choose.
+ * list, listapi, listmix or listscroll.  SIZE 0 (the default) lets the seed choose.
  * Setting ABT_DESTROY_UNMANAGED also destroys unmanaged Form children.
  */
 #include <Xm/XmP.h>
@@ -1050,6 +1050,62 @@ static void dump_list_api(Widget list)
   dump_list(list);
 }
 
+/* listmix: actions of the List interleaved with the API, through
+ * XtCallActionProc with synthetic events (no xdotool). */
+static int api_mix;
+static Time mix_time = 1000;
+
+static void mix_key(Widget list, const char *action)
+{
+  XKeyEvent ev;
+  memset(&ev, 0, sizeof(ev));
+  ev.type = KeyPress;
+  ev.display = dpy;
+  ev.window = XtWindow(list);
+  ev.time = (mix_time += 1000);
+  printf("  action %s\n", action);
+  XtCallActionProc(list, (String)action, (XEvent *)&ev, NULL, 0);
+}
+
+/* A button event over position pos (1-based), or below the items. */
+static void mix_button(Widget list, int type, const char *action, int pos)
+{
+  XButtonEvent ev;
+  Position x = 4, y = 4;
+  Dimension w, h;
+  memset(&ev, 0, sizeof(ev));
+  if (!XmListPosToBounds(list, pos, &x, &y, &w, &h))
+    y = (Position)(XtHeight(list) - 2);
+  ev.type = type;
+  ev.display = dpy;
+  ev.window = XtWindow(list);
+  ev.x = x + 2;
+  ev.y = y + 1;
+  ev.button = Button1;
+  ev.time = (mix_time += (type == ButtonPress ? 1000 : 10));
+  printf("  action %s %d\n", action, pos);
+  XtCallActionProc(list, (String)action, (XEvent *)&ev, NULL, 0);
+}
+
+/* A visible position, for the button actions. */
+static int mix_pos(Widget list)
+{
+  int top_pos = 1, vis = 1;
+  XtVaGetValues(list, XmNtopItemPosition, &top_pos, XmNvisibleItemCount, &vis, NULL);
+  return top_pos + rn(vis + 1);
+}
+
+static const char *const mix_keys[] = {
+    "ListKbdSelectAll",  "ListKbdDeSelectAll", "ListKbdActivate",   "ListNextItem",
+    "ListPrevItem",      "ListShiftNextItem",  "ListShiftPrevItem", "ListCtrlNextItem",
+    "ListAddMode",       "ListBeginData",      "ListEndData",       "ListEndDataExtend",
+    "ListKbdBeginSelect", "ListKbdEndSelect",  "ListKbdCtrlSelect", "ListKbdCtrlUnSelect",
+    "ListKbdShiftSelect", "ListKbdShiftUnSelect", "ListKbdCancel",  "ListNextPage",
+};
+
+static const char *const mix_begin[] = {"ListBeginSelect", "ListBeginToggle", "ListBeginExtend"};
+static const char *const mix_end[] = {"ListEndSelect", "ListEndToggle", "ListEndExtend"};
+
 /* The List API only, with many duplicate items: lookups, selection and
  * replacement by value, and the item and selection resources. */
 static void list_api_test(int nitems)
@@ -1089,7 +1145,7 @@ static void list_api_test(int nitems)
   checkpoint("realize", top);
   dump_list_api(list);
   for (round = 0; round < 120; round++) {
-    int count, what = rn(22), k, m;
+    int count, what = rn(api_mix ? 32 : 22), k, m;
     XmString s, *t;
     int *p;
     XtVaGetValues(list, XmNitemCount, &count, NULL);
@@ -1228,6 +1284,61 @@ static void list_api_test(int nitems)
       case 21:
         XmListReplaceItemsPos(list, t, m, 1 + rn(count + 1));
         break;
+      case 22:
+      case 23:
+      case 24:
+        for (k = 0; k < m && k < 6; k++)
+          mix_key(list, mix_keys[rn(sizeof(mix_keys) / sizeof(mix_keys[0]))]);
+        break;
+      case 25:
+      case 26: {
+        /* a click, or a drag over a few items */
+        int b = rn(3), from = mix_pos(list);
+        mix_button(list, ButtonPress, mix_begin[b], from);
+        if (rn(2))
+          mix_button(list, MotionNotify, "ListButtonMotion", mix_pos(list));
+        mix_button(list, ButtonRelease, mix_end[b], mix_pos(list));
+        break;
+      }
+      case 27: {
+        /* the API between a press and its release */
+        int b = rn(3);
+        mix_button(list, ButtonPress, mix_begin[b], mix_pos(list));
+        switch (rn(5)) {
+          case 0:
+            XmListSelectPos(list, p[0], False);
+            break;
+          case 1:
+            XmListDeselectPos(list, p[0]);
+            break;
+          case 2:
+            XmListDeletePos(list, p[0]);
+            break;
+          case 3:
+            XmListAddItem(list, s, p[0]);
+            break;
+          default:
+            XmListSelectItem(list, s, rn(2));
+            break;
+        }
+        if (rn(2))
+          mix_button(list, MotionNotify, "ListButtonMotion", mix_pos(list));
+        mix_button(list, ButtonRelease, mix_end[b], mix_pos(list));
+        break;
+      }
+      case 28:
+        XtVaSetValues(list, XmNselectionPolicy,
+                      pick(4, XmSINGLE_SELECT, XmBROWSE_SELECT, XmMULTIPLE_SELECT,
+                           XmEXTENDED_SELECT),
+                      NULL);
+        break;
+      case 29:
+        XmListSetAddMode(list, rn(2));
+        break;
+      default:
+        for (k = 0; k < m && k < 8; k++)
+          XmListSelectPos(list, p[k], rn(2));
+        break;
     }
     for (k = 0; k < m; k++)
       XmStringFree(t[k]);
@@ -1278,6 +1389,10 @@ int main(int argc, char **argv)
     list_test(size ? size : rn(4) == 0 ? rn(3) : rn(300));
   else if (!strcmp(mode, "listapi"))
     list_api_test(size ? size : rn(4) == 0 ? rn(10) : rn(400));
+  else if (!strcmp(mode, "listmix")) {
+    api_mix = 1;
+    list_api_test(size ? size : rn(4) == 0 ? rn(10) : rn(400));
+  }
   else if (!strcmp(mode, "listscroll")) {
     scroll_mode = 1;
     list_test(size ? size : 20 + rn(400));

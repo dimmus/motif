@@ -14,7 +14,10 @@ here is registered with CTest or built by default.
   (attachment cycles), `formgrid`, `formcolumn`, `formwide`, `container`,
   `list`, `listscroll`, and `listapi` (the List API alone, without
   input: lookups, selection and replacement by value with many
-  duplicates, and the item and selection resources).
+  duplicates, and the item and selection resources), and `listmix`
+  (the same with keyboard and button actions of the List, called with
+  synthetic events, interleaved with the API, also between a button
+  press and its release, and changes of the selection policy).
 - `ab.sh OLD_LIBDIR NEW_LIBDIR MODE FIRST LAST [SIZE]` runs a range of
   seeds against both libraries and reports seeds whose output differs.
 - `xm_layoutbench form|container|list|listops N` times the phases of a
