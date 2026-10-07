@@ -2005,7 +2005,7 @@ static Boolean SetValues(Widget cw,
     Relayout = Redraw = True;
   }
   if (IG_LargeIconMask(nw) != IG_LargeIconMask(cw)) {
-    if (OwnLargeMask(cw)) {
+    if (OwnLargeMask(nw)) {
       XDeleteContext(XtDisplay(nw), MaskId(nw), largeIconContext);
       if (PIXMAP_VALID(IG_LargeIconMask(cw)))
         XmDestroyPixmap(XtScreen(cw), IG_LargeIconMask(cw));
@@ -2027,7 +2027,7 @@ static Boolean SetValues(Widget cw,
     IG_LargeIconRectHeight(nw) = (unsigned short)h;
   }
   if (IG_SmallIconMask(nw) != IG_SmallIconMask(cw)) {
-    if (OwnSmallMask(cw)) {
+    if (OwnSmallMask(nw)) {
       XDeleteContext(XtDisplay(nw), MaskId(nw), smallIconContext);
       if (PIXMAP_VALID(IG_SmallIconMask(cw)))
         XmDestroyPixmap(XtScreen(cw), IG_SmallIconMask(cw));

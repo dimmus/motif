@@ -353,6 +353,51 @@ START_TEST(icon_gadget_mask_owner)
 }
 END_TEST
 
+/*
+ * IconG.c SetValues: replacing a mask that the gadget fetched for itself
+ * releases that mask, and the gadget does not own the one it is given.
+ * SetValues looked for the ownership record of the scratch copy of the
+ * gadget that Xt passes as the current widget instead of the gadget's,
+ * so it never released the fetched mask, and Destroy then released the
+ * caller's mask in its place.
+ */
+START_TEST(icon_gadget_mask_set_values)
+{
+	char icon[1100], icon_mask[1100], other[1100];
+	Widget rc, w;
+	Pixmap fetched = XmUNSPECIFIED_PIXMAP, shared, got = None;
+
+	write_xbm("check_gadgets_sv.xbm", icon, sizeof icon);
+	write_xbm("check_gadgets_sv_m.xbm", icon_mask, sizeof icon_mask);
+	write_xbm("check_gadgets_sv_other.xbm", other, sizeof other);
+	rc = XmCreateRowColumn(top, "rc", NULL, 0);
+	w = XtVaCreateWidget("icon", xmIconGadgetClass, rc,
+			     XtVaTypedArg, XmNlargeIconPixmap, XmRString,
+			     icon, (int)strlen(icon) + 1, NULL);
+	XtVaGetValues(w, XmNlargeIconMask, &fetched, NULL);
+	unlink(icon);
+	unlink(icon_mask);
+	ck_assert_msg(fetched != XmUNSPECIFIED_PIXMAP, "no mask was fetched");
+
+	/* A mask from the pixmap cache, which the test holds a reference to. */
+	shared = XmGetPixmapByDepth(XtScreen(top), other, 1, 0, 1);
+	unlink(other);
+	ck_assert(shared != XmUNSPECIFIED_PIXMAP);
+	ck_assert(shared != fetched);
+	XtVaSetValues(w, XmNlargeIconMask, shared, NULL);
+	XtVaGetValues(w, XmNlargeIconMask, &got, NULL);
+	ck_assert(got == shared);
+
+	/* The fetched mask was released (and the cache forgot it). */
+	ck_assert_msg(!XmDestroyPixmap(XtScreen(top), fetched),
+		      "SetValues did not release the mask the gadget owned");
+
+	XtDestroyWidget(w);
+	ck_assert_msg(XmDestroyPixmap(XtScreen(top), shared),
+		      "an IconGadget released a mask it was given");
+}
+END_TEST
+
 void gadgets_suite(SRunner *runner)
 {
 	Suite *s = suite_create("Gadgets");
@@ -370,6 +415,7 @@ void gadgets_suite(SRunner *runner)
 	tcase_add_loop_test(t, gadget_values, 0, N_GADGET_CLASSES);
 	tcase_add_test(t, gadget_life_cycle);
 	tcase_add_test(t, icon_gadget_mask_owner);
+	tcase_add_test(t, icon_gadget_mask_set_values);
 	tcase_set_timeout(t, 60);
 	suite_add_tcase(s, t);
 
