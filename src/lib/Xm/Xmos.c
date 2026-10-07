@@ -177,9 +177,9 @@ static String GetQualifiedDir(String dirSpec)
           userDirLen = strlen(pwd_value->pw_dir);
           dirSpecLen = strlen(srcPtr);
           outputBuf = XtMalloc(userDirLen + dirSpecLen + 2);
-          strncpy(outputBuf, pwd_value->pw_dir, userDirLen);
+          memcpy(outputBuf, pwd_value->pw_dir, userDirLen);
           outputBuf[userDirLen] = '\0';
-          strncpy(&outputBuf[userDirLen], srcPtr, dirSpecLen);
+          memcpy(&outputBuf[userDirLen], srcPtr, dirSpecLen);
           outputBuf[userDirLen + dirSpecLen] = '\0';
         }
       }

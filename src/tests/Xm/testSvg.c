@@ -31,7 +31,7 @@ END_TEST
 START_TEST(load_test_image)
 {
 	FILE *fp;
-	XImage *img = NULL, *rast = NULL;
+	XImage *img = NULL;
 	int ret;
 
 	ck_assert_msg(fp = fopen("svg/test.svg", "rb"), "Failed to open svg/test.svg");

@@ -4535,7 +4535,6 @@ void	sar_cat_value_entry(sym_value_entry_type **target_entry, sym_value_entry_ty
 #define		k_op_state_compound	2
 #define		k_op_state_localized	4
 
-    int			    target_type;
     sym_value_entry_type    *value1_entry;
     sym_value_entry_type    *value2_entry;
     unsigned int	    op1_state;
@@ -4640,7 +4639,6 @@ void	sar_cat_value_entry(sym_value_entry_type **target_entry, sym_value_entry_ty
 		sem_cat_str_to_str
 		    (value1_entry, FALSE,
 		     value2_entry, FALSE);
-	    target_type  = sym_k_char_8_value;
 	}
 	else
 	{
@@ -4652,7 +4650,6 @@ void	sar_cat_value_entry(sym_value_entry_type **target_entry, sym_value_entry_ty
 		(*target_entry,
 		 value2_entry, FALSE);
 	    sem_evaluate_value_cs(*target_entry);
-	    target_type  = sym_k_compound_string_value;
 	}
 	break;
 
@@ -4686,7 +4683,6 @@ void	sar_cat_value_entry(sym_value_entry_type **target_entry, sym_value_entry_ty
 	(*target_entry)->value.xms_value =
 	    XmStringConcat((*target_entry)->value.xms_value,
 			   value2_entry->value.xms_value);
-	target_type  = sym_k_compound_string_value;
 	break;
 
     /*
@@ -4717,7 +4713,6 @@ void	sar_cat_value_entry(sym_value_entry_type **target_entry, sym_value_entry_ty
 	(*target_entry)->value.xms_value =
 	    XmStringConcat (value1_entry->value.xms_value,
 			    (*target_entry)->value.xms_value);
-	target_type  = sym_k_compound_string_value;
 	break;
 
     /*
@@ -4749,7 +4744,6 @@ void	sar_cat_value_entry(sym_value_entry_type **target_entry, sym_value_entry_ty
 	(*target_entry)->value.xms_value =
 	    XmStringConcat(value1_entry->value.xms_value,
 			   value2_entry->value.xms_value);
-	target_type  = sym_k_compound_string_value;
 	break;
 
     /*
@@ -4760,11 +4754,9 @@ void	sar_cat_value_entry(sym_value_entry_type **target_entry, sym_value_entry_ty
 	sem_cat_str_to_str
 	  (value1_entry, FALSE,
 	   value2_entry, FALSE);
-	target_type  = sym_k_localized_string_value;
 	break;
 
     default:   /* some form of error */
-	target_type = sym_k_error_value;
 	*target_entry = (sym_value_entry_type *) sym_az_error_value_entry;
 	break;
     }

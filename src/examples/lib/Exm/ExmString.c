@@ -396,8 +396,6 @@ Initialize (
 {
   ExmStringWidgetClass wc = (ExmStringWidgetClass)XtClass(new_w);
   ExmStringWidget nw = (ExmStringWidget)new_w;
-  unsigned char stringDirection;
-  Arg dirArgs[1];
 
   /* Copy the compound string and render table. */
   nw->string.compound_string = XmStringCopy(nw->string.compound_string);
@@ -459,7 +457,7 @@ Resize (
        )
 {
  ExmStringWidget sw = (ExmStringWidget)w;
- Dimension  mw, mh;
+ Dimension  mw;
  Dimension  window_decoration_thickness;
 
  /* Configure internal geometry using current size */
@@ -489,9 +487,6 @@ Resize (
           break;
     };
 
-
- /* Now do the same for the vertical dimension. */
-   mh = window_decoration_thickness + sw->simple.margin_height;
 
    /* If the widget has enough vertical space to display all the lines in
       the string, then center the string. */
@@ -816,7 +811,6 @@ WidgetBaselines(
  char* text1;
  char* text2;
  XmStringCharSet char_set1, char_set2;
- XmStringDirection direction1, direction2;
  /* XmFontList FontList; */
  XmRenderTable RenderTable;
  Boolean separator1, separator2;

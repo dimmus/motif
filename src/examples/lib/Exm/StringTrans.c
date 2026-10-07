@@ -682,7 +682,6 @@ ConvertProc(
  Atom FOREGROUND = XInternAtom(XtDisplay(w), "FOREGROUND", False);
  Atom BACKGROUND = XInternAtom(XtDisplay(w), "BACKGROUND", False);
  Atom TARGETS = XInternAtom(XtDisplay(w), XmSTARGETS, False);
- Atom MOTIF_DROP = XInternAtom(XtDisplay(w), XmS_MOTIF_DROP, False);
  Atom MOTIF_C_S = XInternAtom(XtDisplay(w), XmS_MOTIF_COMPOUND_STRING, False);
  Atom MOTIF_EXPORT_TARGETS =
    XInternAtom(XtDisplay(w), XmS_MOTIF_EXPORT_TARGETS, False);

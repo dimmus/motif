@@ -115,7 +115,6 @@ static String LangList[] = {
    "Javanais"
 };
 
-static Widget locale_dialog = NULL;
 static Widget locale_box;
 static Widget os_box = NULL;
 static String LocaleName = NULL;

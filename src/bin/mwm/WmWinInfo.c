@@ -2738,9 +2738,9 @@ ProcessWmTransientFor (ClientData *pCD)
 void
 MakeSystemMenu (ClientData *pCD)
 {
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if defined(MWM_QATS_PROTOCOL)
     MenuItem *lastItem;
-#endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
+#endif /* MWM_QATS_PROTOCOL */
 
     pCD->mwmMenuItems = GetMwmMenuItems(pCD);
     pCD->systemMenuSpec =

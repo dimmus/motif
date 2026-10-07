@@ -356,8 +356,6 @@ static void DoQuit (void)
 static void DoHelp (void)
 {
   static Widget dlog = NULL;
-  Arg           args[3];
-  int           n;
 
   if (dlog == NULL)
     {
@@ -476,7 +474,7 @@ void ClearVoiceCB (Widget w, XtPointer clientData, XtPointer callData)
 {
   Widget   staff = (Widget)clientData;
   StaffRec *staffData;
-  NoteRec  *notes, *np;
+  NoteRec  *np;
 
 
   staffData = GetStaffData(staff);
@@ -532,8 +530,6 @@ static void DisarmKey (XtPointer clientData, XtIntervalId *id)
 static void PlayNotes (XtPointer clientData, XtIntervalId *id)
 {
   NoteRec *note = (NoteRec *)clientData;
-  XEvent event;
-  XtCallbackList tempCallbackList;
   int dt = 0;
 
 
@@ -564,7 +560,6 @@ void PlayVoiceCB (Widget w, XtPointer clientData, XtPointer callData)
 {
   Widget    staff = (Widget)clientData;
   StaffRec *staffData;
-  NoteRec  *notes;
 
 
   staffData = GetStaffData(staff);
@@ -599,7 +594,6 @@ static void DoSaveVoiceCB (Widget w, XtPointer clientData, XtPointer callData)
   NoteRec  *note;
   FILE     *fp;
   char     *fileName;
-  static Widget errDlog = NULL;
 
 
   if (fdata->length > 0)
@@ -776,7 +770,7 @@ static void LoadVoiceCB (Widget w, XtPointer clientData, XtPointer callData)
 void DrawNotes (Widget staff, int x1, int x2)
 {
   StaffRec *staffData;
-  NoteRec  *notes, *np;
+  NoteRec  *np;
 
   staffData = GetStaffData(staff);
   if (staffData != NULL)
@@ -933,7 +927,7 @@ void BuildKeys (Widget parent)
 {
   Pixmap   iconPixmaps[MUG_SHOTS+1];
   int      i, j = 0, imageCount=MUG_SHOTS;
-  Boolean  pixmapsSet = FALSE, easterEgg = False;
+  Boolean  easterEgg = False;
   int      noteCount = appData->wkeyCount;
   static Boolean firstTime = True;
 
@@ -1035,8 +1029,7 @@ void BuildKeys (Widget parent)
  *--------------------------------------------------------------------*/
 Widget CreateKeyboard(Widget parent)
 {
-   int    i, j = 0;
-   Widget keyBoard, wKey, bKey;
+   Widget keyBoard;
 
 
    keyBoard = XtVaCreateWidget("keyBoard", xmFormWidgetClass, parent, NULL);
@@ -1053,7 +1046,6 @@ Widget CreateKeyboard(Widget parent)
  *--------------------------------------------------------------------*/
 void SetIcon (Widget w, Pixmap cursorPixmap)
 {
-   Pixel     fgPix, bgPix;
    Cursor    cursor;
    XColor    xcolors[2];
    Display  *dsp = XtDisplay(w);
@@ -1186,15 +1178,10 @@ static int NoteNumber (int ledgerLine, Boolean isASharp)
  *--------------------------------------------------------------------*/
 static void DeleteNoteAtPosn (Widget staff, int x, int y)
 {
-   int        ledgerLine, noteIndex, i;
-   Dimension  height;
+   int        noteIndex, i;
    StaffRec  *staffData;
    NoteRec   *np, *npTemp;
 
-
-   /* find the corresponding ledger line in the staff. */
-   XtVaGetValues(staff, XmNheight, &height, NULL);
-   ledgerLine = 15 - (16 * y / (int)height);
 
    noteIndex = x / 15;
 
@@ -1314,7 +1301,6 @@ void AddNoteToStaffCB (Widget staff, XtPointer clientData, XtPointer callData)
 {
    XmDrawingAreaCallbackStruct *cb = (XmDrawingAreaCallbackStruct *)callData;
    XButtonEvent *btnEvent = (XButtonEvent *)cb->event;
-   int           vposn, hposn;
 
 
    if ((btnEvent->button == Button1) && (btnEvent->type == ButtonPress))
@@ -1457,10 +1443,6 @@ Widget CreateNotebook(Widget parent)
 {
    NoteType noteType;
    Widget   notebook, noteButton[LAST_NOTE];
-   Pixel    fg, bg;
-   Display *dsp = XtDisplay(parent);
-   Window   win = RootWindowOfScreen(XtScreen(parent));
-   int      d   = DefaultDepthOfScreen(XtScreen(parent));
 
 
    notebook  = XtVaCreateManagedWidget("notebook", xmRowColumnWidgetClass, parent, NULL);
@@ -1578,7 +1560,6 @@ static Pixmap GetNoteMaskPixmap(Widget w, NoteType note)
    Pixel    fg, bg;
    Display *dsp = XtDisplay(w);
    Window   win = RootWindowOfScreen(XtScreen(w));
-   int      d   = DefaultDepthOfScreen(XtScreen(w));
    unsigned char    *data = NULL;
 
 
@@ -1631,13 +1612,13 @@ static void CreateMenuBar (Widget parent)
   Arg      args[10];
   Widget   menuBar;
   Widget   cascade1, cascade2;
-  Widget   menuPane1, menuPane2;
+  Widget   menuPane1;
   Widget   b1;
 
   menuBar   = XmCreateMenuBar(parent, "menuBar", NULL, 0);
 
   menuPane1 = XmCreatePulldownMenu(menuBar, "menuPane1", NULL, 0);
-  menuPane2 = XmCreatePulldownMenu(menuBar, "menuPane2", NULL, 0);
+  XmCreatePulldownMenu(menuBar, "menuPane2", NULL, 0);
 
   b1 = XtCreateManagedWidget("b1", xmPushButtonWidgetClass, menuPane1, NULL,0);
 
@@ -1669,8 +1650,6 @@ int
 main(int argc, char **argv)
 {
    Widget           shell, mainWin, panedWin;
-   Widget           keyboard, notebook;
-   int              fn;
    Pixel            fg, bg;
    XGCValues        values;
 
@@ -1689,12 +1668,12 @@ main(int argc, char **argv)
    panedWin = XtVaCreateManagedWidget("panedWin",
 				      xmPanedWindowWidgetClass, mainWin, NULL);
 
-   keyboard = CreateKeyboard(panedWin);
+   CreateKeyboard(panedWin);
 
    CreateScore(panedWin);
    BuildNoteTable(panedWin);
 
-   notebook = CreateNotebook(panedWin);
+   CreateNotebook(panedWin);
 
    SetAppIcon(shell);
 

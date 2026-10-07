@@ -356,7 +356,7 @@ main(int argc, char **argv)
 {
     Arg args[5];
     Cardinal argcnt;
-    Widget top, paned_top, w;
+    Widget top, paned_top;
     XtAppContext app;
 
     XtSetLanguageProc(NULL, (XtLanguageProc) NULL, NULL);

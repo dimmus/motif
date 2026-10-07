@@ -557,11 +557,16 @@ static int GetImagePixels(XImage *image, unsigned int width, unsigned int height
   data = image->data;
   iptr = pmap->pixelindex;
   depth = image->depth;
+  /* The XY paths copy bitmap_unit / 8 bytes into a Pixel and take x
+   * modulo bitmap_unit, and depth indexes low_bits_table. */
+  if (depth < 0 || (size_t)depth >= sizeof(low_bits_table) / sizeof(low_bits_table[0]))
+    return (XpmNoMemory);
+  if (image->bitmap_unit <= 0 || image->bitmap_unit % 8 != 0 ||
+      (size_t)image->bitmap_unit > 8 * sizeof(Pixel))
+    return (XpmNoMemory);
   lbt = low_bits_table[depth];
   ibpp = image->bits_per_pixel;
   offset = image->xoffset;
-  if (image->bitmap_unit < 0)
-    return (XpmNoMemory);
   if ((image->bits_per_pixel | image->depth) == 1) {
     ibu = image->bitmap_unit;
     for (y = 0; y < height; y++)

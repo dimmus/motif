@@ -2761,7 +2761,6 @@ static void DrawEtchedInMenu(XmToggleButtonWidget tb)
   int fh = tb->core.height - 2 * margin;
   Boolean restore_gc = False;
   GC tmp_gc = None;
-  XmDisplay dpy = (XmDisplay)XmGetXmDisplay(XtDisplay(tb));
   Pixel select_pix;
   if (tb->primitive.top_shadow_color == tb->toggle.select_color ||
       tb->primitive.bottom_shadow_color == tb->toggle.select_color)

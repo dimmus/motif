@@ -159,7 +159,6 @@ smSaveYourselfCallback(Widget w, XtPointer clientData, XtPointer callData)
 {
     XtCheckpointToken cpToken = (XtCheckpointToken)callData;
     XrmDatabase newClientDB;
-    int scr;
     static Boolean firstTime = True;
 
     /*
@@ -223,7 +222,7 @@ smSaveYourselfCallback(Widget w, XtPointer clientData, XtPointer callData)
 	/* Set new session properties if wmGD.dbFileName is valid. */
 	if (wmGD.dbFileName != (char *)NULL)
 	{
-	    char **newRestartCmd, **ptr;
+	    char **newRestartCmd;
 	    char *newDiscardCmd[4];
 	    Arg args[10];
 	    int nargs;

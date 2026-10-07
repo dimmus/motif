@@ -1,6 +1,5 @@
 # Wsm library sources
 set(WSM_SRCS
-    debug.c
     disp.c
     free.c
     pack.c

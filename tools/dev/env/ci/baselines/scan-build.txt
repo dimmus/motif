@@ -4,7 +4,7 @@
 2	src/bin/mwm/WmCEvent.c	Logic error: Dereference of null pointer
 3	src/bin/mwm/WmCmd.c	Logic error: Result of operation is garbage or undefined
 2	src/bin/mwm/WmCmd.c	Logic error: Uninitialized argument value
-14	src/bin/mwm/WmCmd.c	Unused code: Dead assignment
+13	src/bin/mwm/WmCmd.c	Unused code: Dead assignment
 1	src/bin/mwm/WmCmd.c	Unused code: Dead nested assignment
 2	src/bin/mwm/WmFeedback.c	Logic error: Dereference of null pointer
 1	src/bin/mwm/WmFunction.c	Logic error: Dangerous construct in a vforked process
@@ -12,14 +12,12 @@
 1	src/bin/mwm/WmFunction.c	Unused code: Dead assignment
 1	src/bin/mwm/WmIconBox.c	Logic error: Dereference of null pointer
 1	src/bin/mwm/WmIconBox.c	Logic error: Result of operation is garbage or undefined
-2	src/bin/mwm/WmImage.c	Unused code: Dead assignment
 1	src/bin/mwm/WmInitWs.c	API: Argument with 'nonnull' attribute passed null
 3	src/bin/mwm/WmKeyFocus.c	Logic error: Dereference of null pointer
 1	src/bin/mwm/WmMenu.c	API: Argument with 'nonnull' attribute passed null
 5	src/bin/mwm/WmMenu.c	Logic error: Dereference of null pointer
 1	src/bin/mwm/WmResParse.c	Logic error: Dereference of null pointer
 1	src/bin/mwm/WmResource.c	Logic error: Dereference of null pointer
-1	src/bin/mwm/WmSignal.c	Unused code: Dead assignment
 4	src/bin/mwm/WmWinInfo.c	Logic error: Dereference of null pointer
 1	src/bin/utils/makestrs.c	API: Argument with 'nonnull' attribute passed null
 1	src/bin/utils/makestrs.c	Logic error: Dereference of null pointer
@@ -27,7 +25,6 @@
 1	src/bin/utils/makestrs.c	Stream handling error: Invalid stream state
 1	src/bin/utils/makestrs.c	Stream handling error: Resource leak
 1	src/bin/utils/makestrs.c	Stream handling error: Stream already in EOF
-1	src/bin/utils/mkcatdefs.c	Unused code: Dead assignment
 2	src/bin/utils/mkmsgcat.c	Stream handling error: Invalid stream state
 1	src/bin/utils/mkmsgcat.c	Stream handling error: Resource leak
 2	src/bin/utils/mkmsgcat.c	Stream handling error: Stream already in EOF
@@ -46,15 +43,12 @@
 2	src/lib/Mrm/Mrmwcrw.c	Unused code: Dead assignment
 1	src/lib/Uil/UilLstLst.c	Logic error: Dereference of null pointer
 3	src/lib/Uil/UilP2Out.c	Logic error: Assigned value is uninitialized
-1	src/lib/Uil/UilP2Out.c	Unused code: Dead assignment
-1	src/lib/Uil/UilP2Reslv.c	Unused code: Dead assignment
 1	src/lib/Uil/UilSarMod.c	Logic error: Dereference of null pointer
 1	src/lib/Uil/UilSarObj.c	Logic error: Dereference of null pointer
-3	src/lib/Uil/UilSarObj.c	Unused code: Dead assignment
 4	src/lib/Uil/UilSarVal.c	Logic error: Dereference of null pointer
 1	src/lib/Uil/UilSemVal.c	Logic error: Assigned value is uninitialized
 3	src/lib/Uil/UilSemVal.c	Logic error: Dereference of null pointer
-6	src/lib/Uil/UilSemVal.c	Unused code: Dead assignment
+1	src/lib/Uil/UilSemVal.c	Unused code: Dead assignment
 1	src/lib/Uil/UilSrcSrc.c	Unused code: Dead assignment
 2	src/lib/Wsm/free.c	Unused code: Dead initialization
 1	src/lib/Wsm/pack.c	Unused code: Dead assignment
@@ -108,7 +102,7 @@
 5	src/lib/Xm/Scale.c	Logic error: Dereference of null pointer
 4	src/lib/Xm/Scale.c	Unused code: Dead nested assignment
 1	src/lib/Xm/SelectioB.c	Unused code: Dead assignment
-4	src/lib/Xm/SpinB.c	Unused code: Dead assignment
+2	src/lib/Xm/SpinB.c	Unused code: Dead assignment
 2	src/lib/Xm/SpinB.c	Unused code: Dead nested assignment
 1	src/lib/Xm/Synthetic.c	Unused code: Dead initialization
 1	src/lib/Xm/TabBox.c	Logic error: Dereference of null pointer
@@ -133,14 +127,13 @@
 2	src/lib/Xm/TextOut.c	Logic error: Assigned value is uninitialized
 3	src/lib/Xm/TextOut.c	Logic error: Dereference of null pointer
 1	src/lib/Xm/TextOut.c	Logic error: Result of operation is garbage or undefined
-9	src/lib/Xm/TextOut.c	Unused code: Dead assignment
+7	src/lib/Xm/TextOut.c	Unused code: Dead assignment
 2	src/lib/Xm/TextOut.c	Unused code: Dead nested assignment
 1	src/lib/Xm/TextSel.c	Unused code: Dead assignment
 1	src/lib/Xm/TextSel.c	Unused code: Dead initialization
 1	src/lib/Xm/TextStrSo.c	Logic error: Possibly undefined arithmetic operation involving a null pointer
 1	src/lib/Xm/TextStrSo.c	Unused code: Dead assignment
 2	src/lib/Xm/TextStrSo.c	Unused code: Dead nested assignment
-1	src/lib/Xm/ToggleB.c	Unused code: Dead initialization
 1	src/lib/Xm/ToggleBG.c	Unused code: Dead initialization
 1	src/lib/Xm/Transfer.c	API: Argument with 'nonnull' attribute passed null
 6	src/lib/Xm/TraversalI.c	Logic error: Dereference of null pointer

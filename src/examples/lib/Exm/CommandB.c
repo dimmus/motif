@@ -423,7 +423,6 @@ DrawShadow (
            )
 {
  ExmCommandButtonWidget cw = (ExmCommandButtonWidget)w;
- unsigned int  shadow_type;
 
  /* This routine draws the "inner shadow" of the widget.  Unlike the other
     subclasses of \*LExmSimple\*O, the \*LExmCommandButton\*O draws two
@@ -724,12 +723,10 @@ static void
 ShowAsDefault(Widget w,
 	      XtEnum state)
 {
- ExmCommandButtonWidgetClass cbwc = (ExmCommandButtonWidgetClass)XtClass(w);
  ExmCommandButtonWidget cbw = (ExmCommandButtonWidget)w;
  Position   start_x_of_outer_shadow,  start_y_of_outer_shadow;
  Dimension  margin_push_out=0;
  Dimension  width_of_outer_shadow, height_of_outer_shadow;
- int   dx, dy, width, height;
  GC    top_GC, bottom_GC;
  Dimension outer_shadow_thickness;
  int       outer_shadow_type;

@@ -42,6 +42,7 @@ static char rcsid[] = "$TOG: WmWinList.c /main/8 1997/06/10 15:50:50 samborn $"
 #include "WmGlobal.h"
 
 #define MWM_NEED_NOENTER16
+#define MWM_NEED_NOENTER32
 #include "WmBitmap.h"
 
 

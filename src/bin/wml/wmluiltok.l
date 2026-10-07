@@ -121,7 +121,7 @@ int used		= 0;
 
 %}
 
-
+%option noinput nounput
 
 %%
 

@@ -600,7 +600,6 @@ InitDraw(Graphic * 	   graph,
     Arg args[5];
     int	n ;
     Cardinal i ;
-    Dimension width, height ;
     String pstr, wstr ;
     int x, y ;
     Widget newpush ;

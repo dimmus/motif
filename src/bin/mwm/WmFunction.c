@@ -232,44 +232,6 @@ Boolean F_Beep (String args, ClientData *pCD, XEvent *event)
 
 
 
-/*
- * Handle Special case where the dirty window is the top most
- * transient window.  When this is the case, raising the window
- * that was on top (the window just below the dirty window) will
- * fail because Mwm stack database is out of sync.  So the solution
- * is to restack the dirty transient relative to the second to the
- * top transient.  This function is used to support freeFamily stacking.
- */
-static ClientData * FindSecondToTopTransient (ClientData *pcd)
-
-{
-    ClientData *pcdNext;
-    static ClientData *second;
-
-    pcdNext = pcd->transientChildren;
-    while (pcdNext)
-    {
-	if (pcdNext->transientChildren)
-	{
-	    if (!pcdNext->transientChildren->transientChildren)
-	    {
-		second = pcdNext;
-	    }
-	    FindSecondToTopTransient (pcdNext);
-	}
-	pcdNext = pcdNext->transientSiblings;
-	if (pcdNext && !pcdNext->transientSiblings)
-	{
-	    second = pcdNext;
-	}
-    }
-
-    return (second);
-
-} /* END OF FUNCTION */
-
-
-
 static Boolean ForceLowerWindow (ClientData *pcd)
 {
     XWindowChanges changes;

@@ -102,7 +102,6 @@ Pixel background;
 static void
 ModifyVerify(Widget w, XtPointer client_data, XtPointer call_data)
 {
-Widget shell = (Widget)client_data;
 XmTextVerifyCallbackStruct *cbs = (XmTextVerifyCallbackStruct *)call_data;
 int i;
 

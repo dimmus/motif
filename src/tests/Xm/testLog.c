@@ -359,18 +359,6 @@ START_TEST(test_build_time_config)
 }
 END_TEST
 
-// Setup function for Log tests
-static void log_setup(void)
-{
-   XmLogInit();
-}
-
-// Teardown function for Log tests
-static void log_teardown(void)
-{
-   XmLogShutdown();
-}
-
 void log_suite(SRunner *runner)
 {
    TCase *t;

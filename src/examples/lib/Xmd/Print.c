@@ -200,10 +200,9 @@ Initialize(Widget request_w,
 	   ArgList p_args,
 	   Cardinal *num_args)
 {
-  XmdPrintWidget rw = (XmdPrintWidget) request_w;
   XmdPrintWidget nw = (XmdPrintWidget) new_w;
   Arg args[20];
-  int n, i;
+  int n;
   Widget tmp;
   Widget rc_tmp, rc_tmp2;
   Widget printb, cancelb, helpb, sep;
@@ -502,7 +501,6 @@ SetValues (
           )
 {
   XmdPrintWidget cw = (XmdPrintWidget)old_w;
-  XmdPrintWidget rw = (XmdPrintWidget)request_w;
   XmdPrintWidget nw = (XmdPrintWidget)new_w;
   char buf[32];
 

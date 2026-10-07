@@ -3311,7 +3311,7 @@ int XmClipboardInquireFormat(Display *display, /* Display id of application inqu
       status = ClipboardTruncate;
       loc_outlength = bufferlength;
     }
-    strncpy((char *)buffer, ptr, (unsigned)loc_outlength);
+    memcpy(buffer, ptr, loc_outlength);
     /* loc_outlenght is truncated above.*/
     XtFree((char *)ptr);
   }

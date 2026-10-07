@@ -19,6 +19,23 @@ upstream release (December 2017).  The git history has the details.
   as sample `.motifbind` files.  No current X server reported a vendor
   string the alias file matched.
 
+### Build
+
+- The warning list no longer turns any warning off: the `-Wno-*`
+  flags for unused variables and functions, misleading indentation,
+  char subscripts, unknown pragmas, division by zero,
+  `-Wstringop-overread`, Clang's tautological comparisons and the
+  flex fall-throughs in wml are gone, and so are the ones that hid
+  missing or stale profiles under `WITH_PGO=USE`.  The libraries,
+  programs, tools, tests and examples build without warnings with GCC
+  and Clang, also with LTO, the sanitizers and PGO.  The dead code this
+  exposed was removed, including `src/lib/Wsm/debug.c`, and mwm's
+  what(1) version string now takes the project version.
+- `WITH_PGO` instruments and optimizes only the code the training runs:
+  libXm, libMrm, the UIL compiler and mwm.  The examples, tests and
+  build tools had no profile, and with Clang their many `main()`
+  functions shared one profile record.
+
 ### Documentation
 
 - `doc/guide` rewritten as a technical architecture guide of sixteen
@@ -34,6 +51,9 @@ upstream release (December 2017).  The git history has the details.
 
 ### Security
 
+- XPM: scanning an `XImage` whose `bitmap_unit` is zero, not a multiple
+  of 8 or wider than a pixel, or whose depth is above 32, divided by
+  zero or overflowed a stack variable; such images are now rejected.
 - XmString layout: a string with layout direction pushes that are not
   popped (or popped on a later line) could make `XmStringExtent` and
   `XmStringDraw` loop forever or read past the string's segments, so a

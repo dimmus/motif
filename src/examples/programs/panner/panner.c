@@ -251,8 +251,6 @@ OpenNewDisplay(
   char          **argv = NULL;
   Dimension       canvasW, canvasH;
   char            selectionName[40];
-  PannerInfoRec  *pInfo;
-  Widget          tab;
   XmString        tabName;
   XtCallbackList  cbList;
 
@@ -339,9 +337,9 @@ OpenNewDisplay(
     tabName = XmStringCreate("LOCAL",XmFONTLIST_DEFAULT_TAG);
   else
     tabName = XmStringCreate(displayName,XmFONTLIST_DEFAULT_TAG);
-  tab = XtVaCreateManagedWidget("tab", xmPushButtonWidgetClass, nb_widget,
-				XmNlabelString, tabName,
-				XmNchildType, XmMAJOR_TAB, NULL);
+  XtVaCreateManagedWidget("tab", xmPushButtonWidgetClass, nb_widget,
+			  XmNlabelString, tabName,
+			  XmNchildType, XmMAJOR_TAB, NULL);
   XmStringFree(tabName);
 
   panner_info[newDsp].thumbW = INIT_SCREEN_WIDTH;
@@ -383,7 +381,6 @@ UpdatePannerCB (
      XtPointer callData)
 {
   XmDrawingAreaCallbackStruct *cb = (XmDrawingAreaCallbackStruct *)callData;
-  PannerInfoRec *panner_list = (PannerInfoRec *)clientData;
 
   if (cb->reason == XmCR_EXPOSE)
     {
@@ -471,7 +468,6 @@ DestinationCB (
 {
   XmDestinationCallbackStruct *dcs = (XmDestinationCallbackStruct *)callData;
   PannerInfoRec *pInfo = (PannerInfoRec *)clientData;
-  Atom target;
 
 
   /*
@@ -1148,8 +1144,6 @@ static void
 DoHelp (void)
 {
   static Widget dlog = NULL;
-  Arg           args[3];
-  int           n;
 
   if (dlog == NULL)
     {
@@ -1258,8 +1252,6 @@ static void
 ShowPinStateWarning(void)
 {
   static Widget dlog = NULL;
-  Arg           args[3];
-  int           n;
 
   if (dlog == NULL)
     {

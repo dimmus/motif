@@ -37,6 +37,9 @@ set(MWM_SRCS
     WmProtocol.c
 )
 
+set_source_files_properties(version.c
+    PROPERTIES COMPILE_DEFINITIONS MWM_VERSION="${PROJECT_VERSION}")
+
 # Create mwm executable
 add_executable(mwm ${MWM_SRCS})
 

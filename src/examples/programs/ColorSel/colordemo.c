@@ -226,10 +226,10 @@ main(int argc, char **argv)
 {
     Arg args[5];
     Cardinal argcnt;
-    Widget top, colorframe, colorSelector, infoframe, infolabel,
-    buttonBox, rbuttonBox, lbuttonBox, colModeLabel, pushButton,
-    big_pane, right_pane, left_pane, explain_scrolled,
-    colNameLabel, marLabel, rgbFileLabel, quitPB, colorPB;
+    Widget top, colorframe, colorSelector, infoframe,
+    buttonBox, rbuttonBox, lbuttonBox, pushButton,
+    big_pane, right_pane, explain_scrolled,
+    quitPB, colorPB;
     XtAppContext app;
 
     XmString      xmstring;
@@ -297,7 +297,7 @@ main(int argc, char **argv)
 
     xmstring = CreateHelpArea();
 
-    infolabel = XtVaCreateManagedWidget("infolabel", xmLabelWidgetClass,
+    XtVaCreateManagedWidget("infolabel", xmLabelWidgetClass,
 					explain_scrolled,
 					XmNalignment, XmALIGNMENT_BEGINNING,
 					XmNlabelString, xmstring,
@@ -329,7 +329,7 @@ main(int argc, char **argv)
 				xmButtonBoxWidgetClass,
 				buttonBox, args, argcnt);
 
-    colModeLabel = XtVaCreateManagedWidget("colModeLabel",
+    XtVaCreateManagedWidget("colModeLabel",
 					   xmLabelWidgetClass,
 					   lbuttonBox, NULL);
 
@@ -340,7 +340,7 @@ main(int argc, char **argv)
 		  (XtPointer)EXPLAIN_MODE);
 
 
-    colNameLabel = XtVaCreateManagedWidget("colNameLabel",
+    XtVaCreateManagedWidget("colNameLabel",
 					   xmLabelWidgetClass,
 					   lbuttonBox, NULL);
 
@@ -350,7 +350,7 @@ main(int argc, char **argv)
     XtAddCallback(pushButton, XmNactivateCallback, Explain,
 		  (XtPointer)EXPLAIN_NAME);
 
-    marLabel = XtVaCreateManagedWidget("marLabel", xmLabelWidgetClass,
+    XtVaCreateManagedWidget("marLabel", xmLabelWidgetClass,
 					   lbuttonBox, NULL);
 
     pushButton = XtVaCreateManagedWidget("pushButton2",
@@ -359,7 +359,7 @@ main(int argc, char **argv)
     XtAddCallback(pushButton, XmNactivateCallback, Explain,
 		  (XtPointer)EXPLAIN_MAR);
 
-    rgbFileLabel = XtVaCreateManagedWidget("rgbFileLabel",
+    XtVaCreateManagedWidget("rgbFileLabel",
 					   xmLabelWidgetClass,
 					   lbuttonBox, NULL);
 

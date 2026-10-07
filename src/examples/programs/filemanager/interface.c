@@ -72,18 +72,14 @@ CreateMenuButton(char* name, Widget parent, XtCallbackProc callback,
 Widget
 CreateInterface(char* name, Widget parent)
 {
-  Widget top, menubar, selected, view, *selected_menu, *view_menu,
+  Widget top, menubar, *selected_menu, *view_menu,
          view_pulldown, form, dirOM_local, where, sw, dirMenu, lroot,
-         help, *help_menu, helpDialog, container, view_sub_menu,
+         *help_menu, helpDialog, container, view_sub_menu,
          show_hidden;
   Arg args[30];
   int n;
   Cardinal size;
   XmString tmp, tmp2;
-  Pixel white, black, lightblue, gray;
-  Display *display;
-  Screen *screen;
-  XmRendition rend[1];
   XmString headings[10];
   int num_headings;
 

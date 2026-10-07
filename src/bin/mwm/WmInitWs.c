@@ -199,7 +199,7 @@ InitMouseBinding(void)
 static void
 BuildLockMaskSequence(void)
 {
-    int i, j, k;
+    int j, k;
     unsigned int mask;
     unsigned int thisbit;
     Boolean bit_on;
@@ -320,7 +320,7 @@ SetupLockingModifierMask(void)
     Display *dpy = wmGD.display;
     int pkcLockingMods[NUM_LOCKING_MODS];
 
-    int kcq, kc;
+    int kc;
 
     for (i=0; (long unsigned int)i<NUM_LOCKING_MODS; i++)
     {

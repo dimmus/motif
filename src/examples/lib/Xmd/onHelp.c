@@ -44,7 +44,6 @@ int main(int argc, String argv[])
   XtAppContext app_context;
   int n;
   Widget toplevel, help;
-  Cardinal size;
   XmRendition rend[10];
   XmRenderTable rt;
   int i;

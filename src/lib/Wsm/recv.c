@@ -190,6 +190,7 @@ WSMIsKnownTarget(Widget w, Atom target)
     return(False);
 }
 
+#ifdef JUNK
 /*	Function Name: WSMGetTargetList
  *	Description: Returns the list of targets understood by the WSM
  *                   protocol.
@@ -236,6 +237,7 @@ WSMGetTargetList(Widget w, Boolean include_defaults, unsigned long *len_ret)
 
     return(list);
 }
+#endif /* JUNK */
 
 /*	Function Name: WSMProcessProtoTarget
  *	Description: Unpacks the data sent across to us that matches the

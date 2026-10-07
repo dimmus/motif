@@ -56,7 +56,6 @@
  * Localized strings, loaded at run time from a localized resource file
  */
 
-static XmString no_search_msg = NULL;
 static XmString not_found_msg = NULL;
 static XmString no_pattern_msg = NULL;
 static XmString search_msg = NULL;
@@ -65,7 +64,6 @@ static XmString search_msg = NULL;
  * UIL literal names for localized strings.
  */
 
-static String no_search = "no_search" ;
 static String not_found = "not_found" ;
 static String no_pattern = "no_pattern" ;
 static String search_prompt = "searchprompt";
@@ -75,8 +73,6 @@ static void CancelSearch(Widget button, ViewPtr this,
 
 static void SearchSubstring(Widget button, ViewPtr this,
 			    XmPushButtonCallbackStruct *call_data);
-
-static void NoInsert(Widget text, ViewPtr this, XmTextVerifyPtr verify);
 
 static void ChangeCurrentPane(Widget text, ViewPtr this,
 			      XmAnyCallbackStruct verify);

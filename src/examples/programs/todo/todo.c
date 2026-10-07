@@ -120,13 +120,12 @@ int
 main(int argc, char* argv[])
 {
   Widget mainw, menubar;
-  Widget *file_menu, *edit_menu, *selected_menu, *help_menu, temp;
+  Widget *file_menu, *selected_menu, *help_menu;
   Widget print_widget;
   Cardinal size;
   XtAppContext context;
   Arg args[10];
   int n, i;
-  XmString tmp;
   char temppath[256];
 
   if (argc == 2 && strcmp(argv[1], "-help") == 0) {
@@ -203,7 +202,6 @@ main(int argc, char* argv[])
 
   print_widget = XmdCreatePrintDialog(shell, "print_manager", NULL, 0);
   XtAddCallback(print_widget, XmdNprintCallback, (XtCallbackProc) Print, NULL);
-  tmp = XmStringCreateLocalized("About Printing");
 
   XtAddCallback(file_menu[FILE_PRINT], XmNactivateCallback,
 		(XtCallbackProc) manageCB, (XtPointer) print_widget);

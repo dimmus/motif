@@ -638,47 +638,47 @@ MrmCode				subtree_code;
 sym_control_entry_type		*subtree_control;
 
 
-_assert( (widget_entry->header.b_tag == sym_k_widget_entry) ||
-	 (widget_entry->header.b_tag == sym_k_gadget_entry) ||
-	 (widget_entry->header.b_tag == sym_k_child_entry),
-	 "object to be emitted is not an object" );
+    _assert( (widget_entry->header.b_tag == sym_k_widget_entry) ||
+    	 (widget_entry->header.b_tag == sym_k_gadget_entry) ||
+    	 (widget_entry->header.b_tag == sym_k_child_entry),
+    	 "object to be emitted is not an object" );
 
-_assert( (widget_entry->obj_header.b_flags &
-	 (sym_m_exported | sym_m_private)),
-	 "object being emitted is not exported or private" );
+    _assert( (widget_entry->obj_header.b_flags &
+    	 (sym_m_exported | sym_m_private)),
+    	 "object being emitted is not exported or private" );
 
-if (widget_entry->header.b_tag == sym_k_child_entry)
-  widget_variety = UilMrmAutoChildVariety;
-else widget_variety = UilMrmWidgetVariety;
+    if (widget_entry->header.b_tag == sym_k_child_entry)
+      widget_variety = UilMrmAutoChildVariety;
+    else widget_variety = UilMrmWidgetVariety;
 
-/*
-* Each real widget needs a name.  Automatic children just get an
-* empty string since the name is stored in the compression tables.
-* For real widgets, we use the user provided name
-* if there is one; otherwise widgetfile#-line#-col#
-* For example, widget-1-341-111 was defined in file=1, line=341
-* and column=11
-*/
-if (widget_variety == UilMrmAutoChildVariety)
-  widget_name = "";
-else if (widget_entry->obj_header.az_name == NULL)
-  {
-    snprintf(buffer, sizeof(buffer), "widget-%d-%d-%d",
-	    widget_entry->header.az_src_rec->b_file_number,
-	    widget_entry->header.az_src_rec->w_line_number,
-	    widget_entry->header.b_src_pos);
-    widget_name = buffer;
-  }
-else
-    widget_name = widget_entry->obj_header.az_name->c_text;
+    /*
+    * Each real widget needs a name.  Automatic children just get an
+    * empty string since the name is stored in the compression tables.
+    * For real widgets, we use the user provided name
+    * if there is one; otherwise widgetfile#-line#-col#
+    * For example, widget-1-341-111 was defined in file=1, line=341
+    * and column=11
+    */
+    if (widget_variety == UilMrmAutoChildVariety)
+      widget_name = "";
+    else if (widget_entry->obj_header.az_name == NULL)
+      {
+        snprintf(buffer, sizeof(buffer), "widget-%d-%d-%d",
+    	    widget_entry->header.az_src_rec->b_file_number,
+    	    widget_entry->header.az_src_rec->w_line_number,
+    	    widget_entry->header.b_src_pos);
+        widget_name = buffer;
+      }
+    else
+        widget_name = widget_entry->obj_header.az_name->c_text;
 
-access_code = URMaPublic;
-if (widget_entry->obj_header.b_flags & sym_m_private)
-    access_code = URMaPrivate;
+    access_code = URMaPublic;
+    if (widget_entry->obj_header.b_flags & sym_m_private)
+        access_code = URMaPrivate;
 
-urm_status = UrmCWRInit (out_az_context, widget_name, access_code, FALSE);
-if( urm_status != MrmSUCCESS)
-    issue_urm_error( "initializing context" );
+    urm_status = UrmCWRInit (out_az_context, widget_name, access_code, FALSE);
+    if( urm_status != MrmSUCCESS)
+        issue_urm_error( "initializing context" );
 
     /*
     **	Set the class of the widget.
@@ -3122,7 +3122,6 @@ void	create_color_table(sym_value_entry_type *table_entry, char *buffer)
 
 {
     RGMColorTable	    *table;
-    RGMColorTableEntry	    *item;
     RGMResourceDesc	    *desc;
     int			    i;
     MrmCode		    arg_form;
@@ -3146,8 +3145,6 @@ void	create_color_table(sym_value_entry_type *table_entry, char *buffer)
     **	Loop thru the colors in the table setting up both the index
     **	of offset for the colors and their resource descriptors.
     */
-
-    item = table->item;
 
     for (i = 0;  i < (int)table_entry->b_table_count;  i++)
     {

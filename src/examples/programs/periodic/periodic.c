@@ -518,7 +518,7 @@ static void
 DrawArea(
     Widget w )
 {
-    int i, x, y, m;
+    int i, m;
     XPoint p[NPOINTS];
 
     if (drawData->drawWidth == 0) return;
@@ -630,7 +630,7 @@ static void
 DrawButton(
     Widget w )
 {
-    int i, x, y, incX, incY;
+    int i, incX, incY;
     XArc a[NARCS];
 
     if (buttonData->drawWidth == 0 || !lightsOn) return;

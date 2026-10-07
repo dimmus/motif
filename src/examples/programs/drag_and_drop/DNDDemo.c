@@ -249,24 +249,6 @@ DragMotionCallback(Widget w, XtPointer client, XtPointer call)
 }
 
 
-/* This callback procedure resets the drag icon cursor to show
- * when the drag is in a valid region .  It cause the
- * state icon to become visible when a drop is at a valid
- * position for drag over effects.
- */
-/* ARGSUSED */
-static void
-DropSiteLeaveCallback(Widget w, XtPointer client, XtPointer call)
-{
-
-    Arg    args[1];
-
-    XtSetArg(args[0], XmNblendModel, XmBLEND_JUST_SOURCE);
-    XtSetValues(w, args, 1);
-
-}
-
-
 /* This callback procedure removes the icons when the drop is complete */
 /* ARGSUSED */
 static void
@@ -302,12 +284,6 @@ ColorRect(Widget w, XEvent *event, String *params, Cardinal *num_params)
         {NULL, NULL}
     };
 
-    static XtCallbackRec dropSiteLeaveCB[] = {
-        {DropSiteLeaveCallback, NULL},
-        {NULL, NULL}
-    };
-
-    Atom        targets[1];
     Widget      sourceIcon, stateIcon;
     Pixel       background, foreground;
     char        *source_bits, *source_mask;
@@ -404,9 +380,6 @@ RectConvert(Widget widget, XtPointer ignore, XmConvertCallbackStruct *cs)
     Atom            TARGETS = XmInternAtom(display, "TARGETS", False);
     Atom	    ME_TARGETS =
       XmInternAtom(display, XmS_MOTIF_EXPORT_TARGETS, False);
-    Atom            *targs;
-    int             target_count;
-    Arg             args[1];
     RectPtr         rect, oldRect;
 
     if (cs -> target == MY_RECT) {
@@ -549,7 +522,6 @@ static void
 RectOperationChangedCB(Widget w, XtPointer client, XtPointer call)
 {
 
-    XmDragMotionCallback    cb = (XmDragMotionCallback) call;
     DragConvertPtr          conv = (DragConvertPtr) client;
     Display                 *display;
     Window                  window;
@@ -605,7 +577,6 @@ static void
         {NULL, NULL}
     };
 
-    Atom            targets[1];
     Display         *display = XtDisplay(w);
     Widget          sourceCursorIcon;
     DragConvertPtr  conv;
@@ -965,9 +936,7 @@ TransferProcCallback(Widget wid,
     Atom            RECT_INFO = XmInternAtom(display, "RECT_INFO", False);
     Atom            PIXEL = XmInternAtom(display, "PIXEL", False);
     Atom            NULL_ATOM = XmInternAtom(display, "NULL", False);
-    Arg             args[10];
     RectPtr         rect;
-    int             n;
 
     /*
      * The delete target returns a NULL_ATOM type and value equal to NULL
@@ -1007,17 +976,6 @@ TransferProcCallback(Widget wid,
 }
 
 
-/* This procedure frees the data used the data transfer proc that
- * was passed from the drop procedure.
- */
-/* ARGSUSED */
-static void
-DropDestroyCB(Widget w, XtPointer clientData, XtPointer callData)
-{
-    XtFree((char *)clientData);
-}
-
-
 /* This procedure initiates the drop transfer. */
 /* ARGSUSED */
 static void
@@ -1025,14 +983,8 @@ HandleDrop(Widget w, XtPointer call, XtPointer call_data)
 {
   XmDestinationCallbackStruct *cs = (XmDestinationCallbackStruct *) call;
   XmDropProcCallbackStruct *ds;
-  static XtCallbackRec dropDestroyCB[] = {
-    {DropDestroyCB, NULL},
-    {NULL, NULL}
-  };
   Display                     *display = XtDisplay(w);
-  Arg                         args[10];
   DropTransfer                transferRec;
-  int                         n;
   Boolean                     rectFound, bgFound, pixFound;
   RectPtr                     rect;
   Boolean		      transferValid = False;

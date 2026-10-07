@@ -47,9 +47,6 @@ void FileOKCallback(Widget fsb, ViewPtr this,
    XmPushButtonCallbackStruct dummy;
    int filesize;
    XmStringContext ctxt;
-   XmStringCharSet charset;
-   XmStringDirection dir;
-   Boolean sep;
 
 
    XmStringInitContext(&ctxt, call_data->value);
@@ -368,20 +365,4 @@ static void SearchSubstring(Widget button, ViewPtr this,
       XmStringFree(search_string);
    }
    XtFree(substring);
-}
-
-/* =====================================================================
- * Reject text insertion
- */
-
-static void NoInsert(Widget text, ViewPtr this, XmTextVerifyPtr verify)
-{
-/*
- if (verify->startPos != verify->endPos)
-     printf("deleting text %d %d\n", verify->startPos, verify->endPos);
-   if (verify->text != NULL && verify->text->length > 0)
-     printf("inserting %d characters: '%s'\n",
-	    verify->text->length,
-	    verify->text->ptr);
-*/
 }

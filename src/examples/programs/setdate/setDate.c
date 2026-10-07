@@ -73,13 +73,10 @@ char *dateCommand = NULL;
 int main(int argc, char **argv)
 {
   Widget        shell, panedw, rc, rc2, sb1, sb2;
-  Widget	label, label2;
+  Widget	label;
   Arg args[20];
   int argcount;
-  int i;
   XmString months[12];
-  char *monthstr[12];
-  char buf[10];
   char *str;
 
   shell     = XtVaAppInitialize(&context, APP_CLASS, NULL, 0, &argc, argv,
@@ -264,13 +261,11 @@ XmSpinBoxCallbackStruct *call;
 
 void QuitAppl(Widget w, XtPointer i, XtPointer data)
 {
-  XmPushButtonCallbackStruct *e = (XmPushButtonCallbackStruct *) data;
   exit(0);
 }
 
 void Doit(Widget w, XtPointer client_data, XtPointer data)
 {
-  XmPushButtonCallbackStruct *e = (XmPushButtonCallbackStruct *) data;
   char buffer[80];
   char date[32];
 

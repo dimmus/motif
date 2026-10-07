@@ -108,8 +108,7 @@ manual page.
 ## Releases
 
 1. Set the version in `project(Motif VERSION ...)` in `CMakeLists.txt`
-   and in `src/bin/mwm/version.c`, and give `CHANGELOG.md` a
-   `## X.Y.Z (date)` section.
+   and give `CHANGELOG.md` a `## X.Y.Z (date)` section.
 2. Tag the commit with that version, `git tag -a X.Y.Z -m "Motif X.Y.Z"`,
    and push the tag.
 

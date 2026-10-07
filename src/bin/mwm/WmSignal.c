@@ -330,7 +330,6 @@ static void QuitWmSignalCallback (XtPointer client_data, XtSignalId *id)
 
 void ChildProcSignalHandler (int dummy)
 {
-   pid_t pid;
    int status;
    void (*intStat) (int);
    void (*quitStat) (int);
@@ -338,7 +337,7 @@ void ChildProcSignalHandler (int dummy)
    intStat = signal (SIGINT, SIG_IGN);
    quitStat = signal (SIGQUIT, SIG_IGN);
 
-   pid = wait(&status);
+   wait(&status);
    signal(SIGCHLD, ChildProcSignalHandler);
 
    signal (SIGINT, intStat);

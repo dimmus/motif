@@ -11,10 +11,6 @@
 
 #include "Log.h"
 
-// Forward declarations for setup/teardown functions
-void log_setup(void);
-void log_teardown(void);
-
 // Test that build-time configuration defines are available
 START_TEST(test_build_time_defines)
 {

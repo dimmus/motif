@@ -1588,9 +1588,9 @@ static void ChangeManaged(Widget wid)
 {
   XmFormWidget fw = (XmFormWidget)wid;
   XtWidgetGeometry g;
-  int i, j, k;
+  int i, k;
   XmFormConstraint c;
-  Widget w, child;
+  Widget child;
   /*
    * The following code works around a bug in the intrinsics
    * destroy processing.  The child is unmanaged before anything

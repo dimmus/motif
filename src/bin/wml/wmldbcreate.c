@@ -36,6 +36,7 @@ static char rcsid[] = "$TOG: wmldbcreate.c /main/8 1997/04/14 12:55:30 dbl $"
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <fcntl.h>
 #include <unistd.h>
 
@@ -283,6 +284,8 @@ void emit_chars(int table_id)
     unsigned char   *ptr = NULL;
     int		    i;
 
+    memset (&header, 0, sizeof (header));
+
     switch (table_id)
 	{
 	case Constraint_Tab:
@@ -360,6 +363,8 @@ void emit_ints_and_string(int table_id)
     key_keytable_entry_type *table = NULL;
     int			    i;
 
+    memset (&header, 0, sizeof (header));
+
     switch (table_id)
 	{
 	/*
@@ -399,6 +404,8 @@ void emit_char_table(int table_id)
     unsigned char *entry_vec;
     int i, j;
     int num_bits = _DB_BIT_VECTOR_SIZE (uil_max_object);
+
+    memset (&header, 0, sizeof (header));
 
     switch (table_id)
 	{
@@ -456,6 +463,8 @@ void emit_length_and_string(int table_id)
     /* char	*string_table; */ /* unused variable */
     char	**table = NULL;
     int		i;
+
+    memset (&header, 0, sizeof (header));
 
     switch (table_id)
 	{
