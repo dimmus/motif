@@ -15,9 +15,13 @@
  * osfUndo is not bound), so there is none to test; see
  * text_clipboard_undo_copy for XmClipboardUndoCopy().
  */
+#include <signal.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
+#include <sys/wait.h>
+#include <unistd.h>
 #include <X11/Intrinsic.h>
 #include <X11/Xatom.h>
 #include <X11/keysym.h>
@@ -1279,6 +1283,100 @@ START_TEST(secondary_focus_grab)
 }
 END_TEST
 
+/*
+ * Every action of XmText and XmTextField called without an event, as
+ * XtCallActionProc(w, action, NULL, NULL, 0) does: many used to
+ * dereference the event and crash.  Each action runs in a process of
+ * its own, with a connection of its own, so that one test reports all
+ * the actions that fail.  It is called in a shell with each keyboard
+ * focus policy, with the cursor inside the text and nothing selected,
+ * and then with the cursor inside a selection, without which most of
+ * the selection and clipboard actions return early.
+ */
+static Widget action_widget(WidgetClass wc, unsigned char policy)
+{
+	Widget shell, form, w;
+
+	shell = XtVaAppCreateShell(NULL, "Check_Text", topLevelShellWidgetClass,
+				   XtDisplay(top), XmNkeyboardFocusPolicy, policy,
+				   NULL);
+	form = XmCreateBulletinBoard(shell, "bb", NULL, 0);
+	XtManageChild(form);
+	w = XtVaCreateManagedWidget("w", wc, form, XmNcolumns, 30,
+				    XmNvalue, "abc def", NULL);
+	XtRealizeWidget(shell);
+	return w;
+}
+
+static void run_action(WidgetClass wc, const char *action)
+{
+	Widget w[2];
+	int i;
+
+	alarm(30);
+	top = init_xt("check_Text");
+	w[0] = action_widget(wc, XmEXPLICIT);
+	w[1] = action_widget(wc, XmPOINTER);
+	pump();
+	for (i = 0; i < 2; i++) {
+		XmTextSetInsertionPosition(w[i], 2);
+		XtCallActionProc(w[i], action, NULL, NULL, 0);
+		pump();
+		XmTextSetSelection(w[i], 4, 7, server_time(w[i]));
+		XmTextSetInsertionPosition(w[i], 5);
+		XtCallActionProc(w[i], action, NULL, NULL, 0);
+		pump();
+	}
+}
+
+static void check_actions_without_event(WidgetClass wc)
+{
+	XtActionList actions;
+	Cardinal n, i;
+	char failed[4096] = "";
+
+	XtInitializeWidgetClass(wc);
+	XtGetActionList(wc, &actions, &n);
+	ck_assert_uint_gt(n, 0);
+	for (i = 0; i < n; i++) {
+		size_t len = strlen(failed);
+		int status;
+		pid_t pid;
+
+		fflush(NULL);
+		pid = fork();
+		ck_assert_int_ne(pid, -1);
+		if (pid == 0) {
+			/* _exit(): the inherited connection and check's
+			 * state are the parent's. */
+			run_action(wc, actions[i].string);
+			_exit(0);
+		}
+		ck_assert_int_eq(waitpid(pid, &status, 0), pid);
+		if (WIFSIGNALED(status))
+			snprintf(failed + len, sizeof failed - len, " %s (%s)",
+				 actions[i].string, strsignal(WTERMSIG(status)));
+		else if (WEXITSTATUS(status) != 0)
+			snprintf(failed + len, sizeof failed - len, " %s (exit %d)",
+				 actions[i].string, WEXITSTATUS(status));
+	}
+	XtFree((char *)actions);
+	ck_assert_msg(!*failed, "%s actions without an event:%s",
+		      wc->core_class.class_name, failed);
+}
+
+START_TEST(textfield_actions_without_event)
+{
+	check_actions_without_event(xmTextFieldWidgetClass);
+}
+END_TEST
+
+START_TEST(text_actions_without_event)
+{
+	check_actions_without_event(xmTextWidgetClass);
+}
+END_TEST
+
 void text_suite(SRunner *runner)
 {
 	Suite *s = suite_create("Text");
@@ -1291,7 +1389,8 @@ void text_suite(SRunner *runner)
 	tcase_add_test(t, textfield_unconvertible_wcs);
 	tcase_add_test(t, textfield_alignment);
 	tcase_add_test(t, textfield_fontless_render_table);
-	tcase_set_timeout(t, 60);
+	tcase_add_test(t, textfield_actions_without_event);
+	tcase_set_timeout(t, 120);
 	suite_add_tcase(s, t);
 
 	t = tcase_create("DataField");
@@ -1312,7 +1411,8 @@ void text_suite(SRunner *runner)
 	tcase_add_test(t, text_fontless_render_table);
 	tcase_add_test(t, text_line_table_lookup);
 	tcase_add_test(t, text_clipboard_undo_copy);
-	tcase_set_timeout(t, 60);
+	tcase_add_test(t, text_actions_without_event);
+	tcase_set_timeout(t, 120);
 	suite_add_tcase(s, t);
 
 	t = tcase_create("Secondary selection");
