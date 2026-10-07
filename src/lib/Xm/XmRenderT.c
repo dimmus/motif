@@ -2069,6 +2069,8 @@ static void KeyGrow(XmRTKey key, Cardinal size)
   if (key->data == key->stack) {
     key->data = XtMalloc(key->max);
     memcpy(key->data, key->stack, key->size);
+    /* The key no longer uses the stack. */
+    key->stack = NULL;
   }
   else
     key->data = XtRealloc(key->data, key->max);
@@ -2297,7 +2299,7 @@ XmRenderTable _XmRenderTableCvtCacheGet(
   key.failures = rendition_failures;
   /* The screen and the colormap that the values are converted for. */
   screen = XtScreenOfObject(wid);
-  KeyAdd(&key.key, &screen, sizeof(screen));
+  KeyAdd(&key.key, &screen, sizeof(Screen *));
   for (w = wid; !XtIsWidget(w); w = XtParent(w))
     ;
   KeyAdd(&key.key, &w->core.colormap, sizeof(Colormap));
