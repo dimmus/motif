@@ -587,10 +587,7 @@ Widget XmVaCreateSimplePulldownMenu(
   return (widget);
 }
 
-Widget XmVaCreateSimplePopupMenu(Widget parent,
-                                 const char *name,
-                                 XtCallbackProc callback,
-                                 ...)
+Widget XmVaCreateSimplePopupMenu(Widget parent, const char *name, XtCallbackProc callback, ...)
 {
 #define PU_EXTRA_ARGS 2
   va_list var;
@@ -821,10 +818,7 @@ Widget XmVaCreateSimpleRadioBox(
   return (widget);
 }
 
-Widget XmVaCreateSimpleCheckBox(Widget parent,
-                                 const char *name,
-                                 XtCallbackProc callback,
-                                 ...)
+Widget XmVaCreateSimpleCheckBox(Widget parent, const char *name, XtCallbackProc callback, ...)
 {
 #define CB_EXTRA_ARGS 2
   va_list var;

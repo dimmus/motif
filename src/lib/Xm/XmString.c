@@ -898,7 +898,6 @@ int _XmStringIndexCacheTag(const char *tag, int length)
 }
 
 XmStringTag _XmStringCacheTag(const char *tag, int length)
-
 {
   int tag_index;
   XmStringTag ret_val;
@@ -4402,8 +4401,7 @@ static _XmString _XmStringOptCreate(const unsigned char *c,
     header = _read_length(c);
     switch (*c) {
       case XmSTRING_COMPONENT_RENDITION_BEGIN:
-        _XmStrRendIndex(string) = _XmStringIndexCacheTag((const char *)(c + header),
-                                                         (int)length);
+        _XmStrRendIndex(string) = _XmStringIndexCacheTag((const char *)(c + header), (int)length);
         _XmStrRendBegin(string) = TRUE;
         break;
       case XmSTRING_COMPONENT_LOCALE:
@@ -4427,8 +4425,7 @@ static _XmString _XmStringOptCreate(const unsigned char *c,
         memcpy(_XmStrText((_XmString)string), (c + header), textlen);
         break;
       case XmSTRING_COMPONENT_RENDITION_END:
-        _XmStrRendIndex(string) = _XmStringIndexCacheTag((const char *)(c + header),
-                                                         (int)length);
+        _XmStrRendIndex(string) = _XmStringIndexCacheTag((const char *)(c + header), (int)length);
         _XmStrRendEnd(string) = TRUE;
         break;
       case XmSTRING_COMPONENT_SEPARATOR: /* start new line */
@@ -4514,8 +4511,8 @@ static _XmString _XmStringNonOptCreate(const unsigned char *c,
             (XmStringTag *)_XmReallocArray((char *)_XmUnoptSegRendBegins(&seg),
                                            rend_cnt,
                                            sizeof(XmStringTag));
-        _XmUnoptSegRendBegins(&seg)[rend_cnt - 1] = _XmStringCacheTag(
-            (const char *)(c + header), (int)length);
+        _XmUnoptSegRendBegins(&seg)[rend_cnt - 1] = _XmStringCacheTag((const char *)(c + header),
+                                                                      (int)length);
         break;
       case XmSTRING_COMPONENT_LOCALE:
         if (txt_seen) {
@@ -4598,8 +4595,8 @@ static _XmString _XmStringNonOptCreate(const unsigned char *c,
             (XmStringTag *)_XmReallocArray((char *)_XmUnoptSegRendEnds(&seg),
                                            rend_cnt,
                                            sizeof(XmStringTag));
-        _XmUnoptSegRendEnds(&seg)[rend_cnt - 1] = _XmStringCacheTag(
-            (const char *)(c + header), (int)length);
+        _XmUnoptSegRendEnds(&seg)[rend_cnt - 1] = _XmStringCacheTag((const char *)(c + header),
+                                                                    (int)length);
         break;
       case XmSTRING_COMPONENT_LAYOUT_POP:
         if (pop_seen) {
@@ -6023,7 +6020,6 @@ void _Xm_dump_stream(unsigned char *cs)
   }
   c = cs;
   end = c + _read_string_length(c) + _read_header_length(c);
-
   while (c < end) {
     unsigned short length = _read_asn1_length(c);
     switch (*c) {
@@ -7757,7 +7753,6 @@ XmString XmStringGenerate(const void *text,
     unsigned int rend_index;
     assert(!_XmStrRendBegin(result) && !_XmStrRendEnd(result));
     rend_index = _XmStringIndexCacheTag(rendition, XmSTRING_TAG_STRLEN);
-
     if (rend_index < REND_INDEX_MAX) {
       _XmStrRendIndex(result) = rend_index;
       _XmStrRendBegin(result) = _XmStrRendEnd(result) = True;
@@ -7785,7 +7780,6 @@ XmString XmStringGenerate(const void *text,
           unsigned int rend_index;
           assert(!_XmEntryRendBeginCountGet(seg) && !_XmEntryRendEndCountGet(seg));
           rend_index = _XmStringIndexCacheTag(rendition, XmSTRING_TAG_STRLEN);
-
           if (rend_index < REND_INDEX_MAX) {
             _XmEntryRendIndex(seg) = rend_index;
             _XmEntryRendBeginCountSet(seg, 1);
@@ -7827,7 +7821,6 @@ XmString XmStringGenerate(const void *text,
         if (_XmEntryOptimized(seg)) {
           unsigned int rend_index;
           rend_index = _XmStringIndexCacheTag(rendition, XmSTRING_TAG_STRLEN);
-
           assert((_XmEntryRendBeginCountGet(seg) <= 1) && (_XmEntryRendEndCountGet(seg) == 0));
           if (((_XmEntryRendIndex(seg) == REND_INDEX_UNSET) ||
                (_XmEntryRendIndex(seg) == rend_index)) &&

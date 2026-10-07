@@ -237,7 +237,6 @@ Boolean XmStringGetLtoR(XmString string, const char *tag, char **text)
   char *t;
   XmStringTag c;
   const char *curtag = NULL;
-
   XmStringDirection d;
   Boolean s, is_local = FALSE, done = FALSE, is_default = FALSE;
   _XmProcessLock();

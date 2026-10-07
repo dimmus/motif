@@ -70,8 +70,11 @@ static XmParseResult ParseUnitString(const char *spec,
  *			future, if desired.
  *
  **********************************************************************/
-int XmConvertStringToUnits(
-    Screen *screen, const char *spec, int orientation, int to_type, XtEnum *parse_error) /* RETURN */
+int XmConvertStringToUnits(Screen *screen,
+                           const char *spec,
+                           int orientation,
+                           int to_type,
+                           XtEnum *parse_error) /* RETURN */
 {
   int value;
   _XmDisplayToAppContext(DisplayOfScreen(screen));

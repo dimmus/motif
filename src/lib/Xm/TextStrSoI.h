@@ -58,8 +58,11 @@ extern Boolean _XmStringSourceGetEditable(XmTextSource source);
 extern void _XmStringSourceSetEditable(XmTextSource source, Boolean editable);
 extern int _XmStringSourceGetMaxLength(XmTextSource source);
 extern void _XmStringSourceSetMaxLength(XmTextSource source, int max);
-extern int _XmTextBytesToCharacters(
-    char *characters, const char *bytes, int num_chars, Boolean add_null_terminator, int max_char_size);
+extern int _XmTextBytesToCharacters(char *characters,
+                                    const char *bytes,
+                                    int num_chars,
+                                    Boolean add_null_terminator,
+                                    int max_char_size);
 extern int _XmTextCharactersToBytes(char *bytes,
                                     char *characters,
                                     int num_chars,

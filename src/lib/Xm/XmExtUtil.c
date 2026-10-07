@@ -471,7 +471,9 @@ void _XmConfigureWidget(
 int XmCompareISOLatin1(const char *first, const char *second)
 {
   const unsigned char *ap, *bp;
-  for (ap = (const unsigned char *)first, bp = (const unsigned char *)second; *ap && *bp; ap++, bp++) {
+  for (ap = (const unsigned char *)first, bp = (const unsigned char *)second; *ap && *bp;
+       ap++, bp++)
+  {
     unsigned char a, b;
     if ((a = *ap) != (b = *bp)) {
       /* try lowercasing and try again */
@@ -498,7 +500,8 @@ void XmCopyISOLatin1Lowered(char *dst, const char *src)
 {
   unsigned char *dest;
   const unsigned char *source;
-  for (dest = (unsigned char *)dst, source = (const unsigned char *)src; *source; source++, dest++) {
+  for (dest = (unsigned char *)dst, source = (const unsigned char *)src; *source; source++, dest++)
+  {
     if ((*source >= XK_A) && (*source <= XK_Z))
       *dest = *source + (XK_a - XK_A);
     else if ((*source >= XK_Agrave) && (*source <= XK_Odiaeresis))

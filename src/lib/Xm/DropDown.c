@@ -2215,7 +2215,8 @@ extern WidgetClass xmCombinationBox2WidgetClass XM_ALIAS(xmDropDownWidgetClass);
 String XmCombinationBox2GetValue(Widget) XM_ALIAS(XmDropDownGetValue);
 Widget XmCreateCombinationBox2(Widget, char *, ArgList, Cardinal) XM_ALIAS(XmCreateDropDown);
 Widget XmVaCreateCombinationBox2(Widget, const char *, ...) XM_ALIAS(XmVaCreateDropDown);
-Widget XmVaCreateManagedCombinationBox2(Widget, const char *, ...) XM_ALIAS(XmVaCreateManagedDropDown);
+Widget XmVaCreateManagedCombinationBox2(Widget, const char *, ...)
+    XM_ALIAS(XmVaCreateManagedDropDown);
 Widget XmCombinationBox2GetLabel(Widget) XM_ALIAS(XmDropDownGetLabel);
 Widget XmCombinationBox2GetArrow(Widget) XM_ALIAS(XmDropDownGetArrow);
 Widget XmCombinationBox2GetText(Widget) XM_ALIAS(XmDropDownGetText);

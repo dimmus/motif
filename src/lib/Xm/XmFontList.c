@@ -93,7 +93,10 @@ XmFontListEntry XmFontListEntryCreate(const char *tag, XmFontType type, XtPointe
  *
  *  Fonts can not be shared among displays in an MT environment
  */
-XmFontListEntry XmFontListEntryCreate_r(const char *tag, XmFontType type, XtPointer font, Widget wid)
+XmFontListEntry XmFontListEntryCreate_r(const char *tag,
+                                        XmFontType type,
+                                        XtPointer font,
+                                        Widget wid)
 {
   const char *derived_tag;
   Cardinal n;
@@ -419,7 +422,6 @@ void XmFontListFree(XmFontList fontlist)
 XmFontList XmFontListAdd(XmFontList old, XFontStruct *font, const char *charset)
 {
   const char *curcharset;
-
   Cardinal n;
   Arg args[4];
   XmRendition rends[1];

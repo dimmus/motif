@@ -1129,7 +1129,6 @@ static char **cvtCTsegment(ct_context *ctx, const_OctetPtr item, unsigned int le
   }
   XtFree((char *)copy);
   return strings;
-
 }
 
 /* outputXmString */

@@ -1386,7 +1386,6 @@ Pixmap XmGetPixmap(Screen *screen, const char *image_name, Pixel foreground, Pix
  *
  ************************************************************************/
 Pixmap XmeGetMask(Screen *screen, const char *image_name)
-
 {
   char mask_name[256];
   Pixmap ret_val;

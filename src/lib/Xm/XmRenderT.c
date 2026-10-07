@@ -1786,7 +1786,6 @@ XmRendition _XmRenditionCreate(Display *display,
                                String resname,
                                String resclass,
                                const char *tag,
-
                                ArgList arglist,
                                Cardinal argcount,
                                Boolean *in_db)

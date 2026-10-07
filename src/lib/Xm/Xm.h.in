@@ -1685,7 +1685,6 @@ extern XmRendition *XmRenderTableGetRenditions(XmRenderTable table,
                                                XmStringTag *tags,
                                                Cardinal tag_count);
 extern XmRendition XmRenderTableGetRendition(XmRenderTable table, const char *tag);
-
 extern int XmRenderTableGetTags(XmRenderTable table, XmStringTag **tag_list);
 extern void XmRenderTableFree(XmRenderTable table);
 extern XmRenderTable XmRenderTableCopy(XmRenderTable table, XmStringTag *tags, int tag_count);

@@ -110,8 +110,11 @@ static int BufferLength(int len, long needed, int char_size)
  * This routine assumes that a BITS16 is two-bytes;
  * the routine must be modified if these assumptions are incorrect.
  */
-int _XmTextBytesToCharacters(
-    char *characters, const char *bytes, int num_chars, Boolean add_null_terminator, int max_char_size)
+int _XmTextBytesToCharacters(char *characters,
+                             const char *bytes,
+                             int num_chars,
+                             Boolean add_null_terminator,
+                             int max_char_size)
 {
   const unsigned char *tmp_bytes;
   int num_bytes;

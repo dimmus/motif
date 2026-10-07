@@ -481,7 +481,6 @@ String XmGetIconFileName(Screen *screen,
     testFileFunc = NULL;
   names[0] = (String)imageInstanceName;
   names[1] = (String)imageClassName;
-
   names_w_size[0] = names_w_size[1] = (String)NULL;
   /** loop over the two names */
   for (i = 0; i < 2; i++) {
