@@ -516,8 +516,11 @@ static Boolean GetResources(XmRendition rend,
       }
       /* Copy if needed */
       if (!copied) {
+        /* Keep no pointer into the database, which can change or */
+        /* go away while the rendition is still in use. */
         if (res->xrm_type == QString)
-          *((String *)((char *)GetPtr(rend) + res->xrm_offset)) = value.addr;
+          *((String *)((char *)GetPtr(rend) + res->xrm_offset)) =
+              (value.addr != NULL) ? XrmQuarkToString(XrmStringToQuark(value.addr)) : NULL;
         else if (value.addr != NULL)
           memcpy(((char *)GetPtr(rend) + res->xrm_offset), value.addr, res->xrm_size);
         else
