@@ -15,8 +15,10 @@ here is registered with CTest or built by default.
   `list`, `listscroll`.
 - `ab.sh OLD_LIBDIR NEW_LIBDIR MODE FIRST LAST [SIZE]` runs a range of
   seeds against both libraries and reports seeds whose output differs.
-- `xm_layoutbench form|container|list N` times the phases of a layout
-  with N children or items.
+- `xm_layoutbench MODE N` times the phases of a layout with N children
+  or items.  Modes: `form`, `formgrid`, `outline`, `spatial`, `detail`,
+  `fillhead` and `fillrandom` (a Container filled by inserting each icon
+  at the front or at a random place), `list`.
 
 ## Usage
 

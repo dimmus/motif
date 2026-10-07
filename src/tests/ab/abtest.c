@@ -599,7 +599,7 @@ static void container_test(int nitems)
   checkpoint("realize", top);
   dump_container(c);
   for (round = 0; round < 8; round++) {
-    int what = rn(7);
+    int what = rn(9);
     switch (what) {
       case 0: {
         char name[32];
@@ -676,6 +676,26 @@ static void container_test(int nitems)
           xdo("key %s", (const char *[]){"Down", "Up", "space", "shift+Down", "ctrl+slash",
                                          "Next", "Home"}[rn(7)]);
         checkpoint("input", top);
+        break;
+      }
+      case 7: {
+        Widget list[4];
+        int m = 0;
+        for (i = 0; i < 4; i++) {
+          int k = rn(nmade);
+          if (items[k])
+            list[m++] = items[k];
+        }
+        if (m > 0)
+          XmContainerReorder(c, list, m);
+        checkpoint("reorder", top);
+        break;
+      }
+      case 8: {
+        int k = rn(nmade), p = rn(nmade);
+        if (items[k])
+          XtVaSetValues(items[k], XmNentryParent, rn(3) && items[p] ? items[p] : NULL, NULL);
+        checkpoint("reparent", top);
         break;
       }
     }

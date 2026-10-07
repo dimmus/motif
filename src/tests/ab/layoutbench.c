@@ -7,7 +7,7 @@
  * xm_layoutbench: wall-clock timings of the Form, Container and List
  * layout code with many children or items.
  *
- *   xm_layoutbench form|container|list N
+ *   xm_layoutbench form|formgrid|outline|spatial|detail|fillhead|fillrandom|list N
  *
  * Prints the time of each phase (create, manage, resize, destroy, ...)
  * to stdout.  With PROF=FILE it also samples the stack on SIGPROF and
@@ -187,6 +187,44 @@ static void container_bench(int n, unsigned char layout)
   lap("destroy");
 }
 
+/* Fill a Container with n icons, each inserted at the front or at a
+ * random place among those already in, then read their positions. */
+static void container_fill_bench(int n, int random_places)
+{
+  Widget sw, c;
+  Widget *items = calloc(n, sizeof(Widget));
+  unsigned int r = 12345;
+  long sum = 0;
+  int i, pos;
+  sw = XmCreateScrolledWindow(top, "sw", NULL, 0);
+  c = XtVaCreateWidget("c", xmContainerWidgetClass, sw, XmNlayoutType, XmOUTLINE, NULL);
+  printf("container fill %s n=%d\n", random_places ? "random" : "head", n);
+  start();
+  for (i = 0; i < n; i++) {
+    r ^= r << 13;
+    r ^= r >> 17;
+    r ^= r << 5;
+    items[i] = XtVaCreateWidget("i", xmIconGadgetClass, c, XmNpositionIndex,
+                                random_places ? (int)(r % (unsigned)(i + 1)) : 0, NULL);
+  }
+  lap(random_places ? "create children (random places)" : "create children (at the front)");
+  XtManageChildren(items, n);
+  XtManageChild(c);
+  XtManageChild(sw);
+  XtRealizeWidget(top);
+  lap("manage and realize");
+  for (i = 0; i < n; i++) {
+    XtVaGetValues(items[i], XmNpositionIndex, &pos, NULL);
+    sum += pos;
+  }
+  lap("read every XmNpositionIndex");
+  if (sum != (long)n * (n - 1) / 2)
+    printf("bad positions: sum %ld\n", sum);
+  XtDestroyWidget(sw);
+  lap("destroy");
+  free(items);
+}
+
 static void list_bench(int n)
 {
   Widget list;
@@ -279,6 +317,10 @@ int main(int argc, char **argv)
     container_bench(n, XmSPATIAL);
   else if (!strcmp(mode, "detail"))
     container_bench(n, XmDETAIL);
+  else if (!strcmp(mode, "fillhead"))
+    container_fill_bench(n, 0);
+  else if (!strcmp(mode, "fillrandom"))
+    container_fill_bench(n, 1);
   else if (!strcmp(mode, "list"))
     list_bench(n);
   return 0;
