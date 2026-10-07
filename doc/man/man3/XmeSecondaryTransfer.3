@@ -1,0 +1,48 @@
+.TH "XmeSecondaryTransfer" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeSecondaryTransfer\fP \(em A widget writer function that sends the secondary selection to its destination
+.iX "XmeSecondaryTransfer"
+.iX "Xme transfer functions" "XmeSecondaryTransfer"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/TransferP\&.h>
+\fBvoid \fBXmeSecondaryTransfer\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBAtom \fBtarget\fR\fR,
+\fBXtEnum \fBop\fR\fR,
+\fBTime \fBtime\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeSecondaryTransfer\fP is called by the widget \fIw\fP that owns
+the
+\fB\%SECONDARY\fP selection (see \fB\%XmeSecondarySource\fP) to have it
+pasted
+into the widget that owns \fB\%_MOTIF_DESTINATION\fP (see
+\fB\%XmeSecondarySink\fP)\&.  It asks that widget to convert
+\fB\%INSERT_SELECTION\fP, or \fB\%LINK_SELECTION\fP for \fB\%XmLINK\fP,
+with the
+selection \fB\%SECONDARY\fP and \fItarget\fP as parameters; that widget
+then
+requests \fB\%SECONDARY\fP from \fIw\fP\&.  When the transfer is done,
+\fIw\fP is
+asked to convert \fB\%DELETE\fP if \fIop\fP is \fB\%XmMOVE\fP, and it
+loses the
+secondary selection\&.
+.IP "\fIw\fP" 10
+Specifies the widget that owns the secondary selection\&.
+.IP "\fItarget\fP" 10
+Specifies the target the destination is to request, for instance
+\fB\%COMPOUND_TEXT\fP\&.
+.IP "\fIop\fP" 10
+Specifies the operation: \fB\%XmCOPY\fP, \fB\%XmMOVE\fP or
+\fB\%XmLINK\fP\&.
+.IP "\fItime\fP" 10
+Specifies the time of the event that caused the call\&.
+.SH "RELATED"
+.PP
+\fB\%XmeSecondarySink\fP(3), \fB\%XmeSecondarySource\fP(3) and
+\fB\%XmTransferValue\fP(3), \fB\%XmTransferDone\fP(3) and
+\fB\%XmeStandardConvert\fP(3)\&.

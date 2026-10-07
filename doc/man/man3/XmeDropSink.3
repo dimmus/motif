@@ -1,0 +1,42 @@
+.TH "XmeDropSink" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeDropSink\fP \(em A widget writer function that makes a widget a drop site
+.iX "XmeDropSink"
+.iX "Xme transfer functions" "XmeDropSink"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/TransferP\&.h>
+\fBvoid \fBXmeDropSink\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBArgList \fBin_args\fR\fR,
+\fBCardinal \fBin_arg_count\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeDropSink\fP registers \fIw\fP as a drop site, with
+\fB\%XmDropSiteRegister\fP and the arguments \fIin_args\fP, and with a
+drop
+procedure that transfers the dropped data into \fIw\fP: the
+\fB\%XmNdestinationCallback\fP callbacks of \fIw\fP are called with the
+\fB\%XmDropProcCallbackStruct\fP of the drop as their
+\fB\%destination_data\fP,
+and then the destination procedure of the \fB\%XmQTtransfer\fP trait of
+its
+class\&.  A drop that makes no transfer fails\&.  \fB\%XmNdropProc\fP is
+set
+by \fB\%XmeDropSink\fP; the other drop site resources, such as
+\fB\%XmNimportTargets\fP, come from \fIin_args\fP\&.
+.IP "\fIw\fP" 10
+Specifies the widget\&.
+.IP "\fIin_args\fP" 10
+Specifies resources of the drop site\&.
+.IP "\fIin_arg_count\fP" 10
+Specifies the number of arguments in \fIin_args\fP\&.
+.SH "RELATED"
+.PP
+\fB\%XmDropSite\fP(3), \fB\%XmDropSiteRegister\fP(3),
+\fB\%XmeDragSource\fP(3) and \fB\%XmTransferValue\fP(3),
+\fB\%XmTransferDone\fP(3) and
+\fB\%XmeStandardConvert\fP(3)\&.

@@ -1,0 +1,41 @@
+.TH "XmeSecondarySink" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeSecondarySink\fP \(em A widget writer function that makes a widget the destination of a secondary transfer
+.iX "XmeSecondarySink"
+.iX "Xme transfer functions" "XmeSecondarySink"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/TransferP\&.h>
+\fBBoolean \fBXmeSecondarySink\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBTime \fBtime\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeSecondarySink\fP makes \fIw\fP the owner of the
+\fB\%_MOTIF_DESTINATION\fP selection, the first step of a secondary
+selection transfer (quick paste) into \fIw\fP\&.  The widget that holds
+the
+secondary selection then calls \fB\%XmeSecondaryTransfer\fP, which asks
+the owner of \fB\%_MOTIF_DESTINATION\fP to convert
+\fB\%INSERT_SELECTION\fP or
+\fB\%LINK_SELECTION\fP; \fIw\fP answers by transferring the secondary
+selection
+into itself, through its destination callbacks and its
+\fB\%XmQTtransfer\fP
+trait\&.  The widget gives up the selection when it is destroyed\&.
+.IP "\fIw\fP" 10
+Specifies the destination widget\&.
+.IP "\fItime\fP" 10
+Specifies the time of the event that caused the call, or 0 for the time
+of the last event processed\&.
+.SH "RETURN"
+.PP
+Returns True if \fIw\fP got the selection, and False otherwise\&.
+.SH "RELATED"
+.PP
+\fB\%XmeSecondaryTransfer\fP(3), \fB\%XmeSecondarySource\fP(3) and
+\fB\%XmTransferValue\fP(3), \fB\%XmTransferDone\fP(3) and
+\fB\%XmeStandardConvert\fP(3)\&.

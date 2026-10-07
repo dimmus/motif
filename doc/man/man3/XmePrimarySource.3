@@ -1,0 +1,61 @@
+.TH "XmePrimarySource" "library call"
+.nh
+.SH "NAME"
+\fB\%XmePrimarySource\fP,
+\fB\%XmeSecondarySource\fP,
+\fB\%XmeNamedSource\fP \(em Widget writer functions that make a widget the owner of a selection
+.iX "XmePrimarySource"
+.iX "Xme transfer functions" "XmePrimarySource"
+.iX "Xme transfer functions" "XmeSecondarySource"
+.iX "Xme transfer functions" "XmeNamedSource"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/TransferP\&.h>
+.PP
+\fBBoolean \fBXmePrimarySource\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBTime \fBtime\fR\fR);
+\fBBoolean \fBXmeSecondarySource\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBTime \fBtime\fR\fR);
+.PP
+\fBBoolean \fBXmeNamedSource\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBAtom \fBsel\fR\fR,
+\fBTime \fBtime\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeNamedSource\fP makes \fIw\fP the owner of the selection
+\fIsel\fP, with
+\fB\%XtOwnSelection\fP; \fB\%XmePrimarySource\fP and
+\fB\%XmeSecondarySource\fP do
+the same for \fB\%PRIMARY\fP and \fB\%SECONDARY\fP\&.  A text widget,
+for instance,
+calls \fB\%XmePrimarySource\fP when the user selects text\&.  The widget
+gives up the selection when it is destroyed\&.
+.PP
+Data is then sent the way of the Uniform Transfer Model: when a
+target is asked for, the \fB\%XmNconvertCallback\fP callbacks of \fIw\fP
+are
+called and then, unless one of them set the status to
+\fB\%XmCONVERT_DONE\fP or \fB\%XmCONVERT_REFUSE\fP, the convert
+procedure of the
+\fB\%XmQTtransfer\fP trait of its class\&.
+.IP "\fIw\fP" 10
+Specifies the widget that owns the selection\&.
+.IP "\fIsel\fP" 10
+Specifies the selection\&.
+.IP "\fItime\fP" 10
+Specifies the time of the event that caused the call, or 0 for the time
+of the last event processed\&.
+.SH "RETURN"
+.PP
+Returns True if \fIw\fP got the selection, and False otherwise\&.
+.SH "RELATED"
+.PP
+\fB\%XmePrimarySink\fP(3), \fB\%XmeClipboardSource\fP(3),
+\fB\%XmeSecondaryTransfer\fP(3) and \fB\%XmTransferValue\fP(3),
+\fB\%XmTransferDone\fP(3) and
+\fB\%XmeStandardConvert\fP(3)\&.

@@ -1,0 +1,26 @@
+.TH "XmeFlushIconFileCache" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeFlushIconFileCache\fP \(em A widget writer function that forgets the cached icon directories
+.iX "XmeFlushIconFileCache"
+.iX "Icon file functions" "XmeFlushIconFileCache"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/IconFileP\&.h>
+\fBvoid \fBXmeFlushIconFileCache\fP\fR(
+\fBString \fBpath\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+When the icon file cache is enabled, \fB\%XmGetIconFileName\fP reads
+each
+directory it searches once and keeps its list of files\&.
+\fB\%XmeFlushIconFileCache\fP forgets the directory \fIpath\fP, or all
+of them
+if \fIpath\fP is NULL, so that new icon files in it are found\&.
+.IP "\fIpath\fP" 10
+Specifies the directory, or NULL\&.
+.SH "RELATED"
+.PP
+\fB\%XmGetIconFileName\fP(3)\&.
