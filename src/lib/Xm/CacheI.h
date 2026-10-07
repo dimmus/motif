@@ -32,10 +32,26 @@
 #  ifdef __cplusplus
 extern "C" {
 #  endif
+/*
+ * A hash of a cache part, for _XmCacheSetHashProc.  Parts that the
+ * class's compare proc finds equal must have the same hash: hash only
+ * fields the compare proc compares, and leave out the ones that are
+ * changed in place in a cached part (PushButtonGadget's timer).
+ */
+typedef unsigned int (*XmCacheHashProc)(XtPointer cpart);
+
+/* Mix one field into a hash that an XmCacheHashProc builds. */
+static inline unsigned int _XmCacheHashAdd(unsigned int hash, unsigned long value)
+{
+  hash ^= (unsigned int)value ^ (unsigned int)((value >> 16) >> 16);
+  return hash * 0x01000193u;
+}
+
 /********    Private Function Declarations    ********/
 extern void _XmCacheDelete(XtPointer data);
 extern void _XmCacheCopy(XtPointer src, XtPointer dest, size_t size);
 extern XtPointer _XmCachePart(XmCacheClassPartPtr cp, XtPointer cpart, size_t size);
+extern void _XmCacheSetHashProc(XmCacheClassPartPtr cp, XmCacheHashProc hash);
 /********    End Private Function Declarations    ********/
 #  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

@@ -86,6 +86,7 @@ static void GetValuesPosthook(Widget new_w, ArgList args, Cardinal *num_args);
 static Boolean SetValuesPosthook(
     Widget current, Widget req, Widget new_w, ArgList args, Cardinal *num_args);
 static int IconGCacheCompare(XtPointer A, XtPointer B);
+static unsigned int IconGCacheHash(XtPointer cpart);
 static Cardinal GetIconGClassSecResData(WidgetClass w_class, XmSecondaryResourceData **data_rtn);
 static XtPointer GetIconGClassSecResBase(Widget widget, XtPointer client_data);
 /* RectObj methods */
@@ -900,6 +901,7 @@ static Boolean SetValuesPosthook(
 static void ClassInitialize(void)
 {
   iconGBaseClassExtRec.record_type = XmQmotif;
+  _XmCacheSetHashProc(&IconGClassCachePart, IconGCacheHash);
   /* Install the special converters for pixmap/mask */
   XtSetTypeConverter(XmRString,
                      XmRLargeIconPixmap,
@@ -2304,6 +2306,40 @@ static int IconGCacheCompare(XtPointer A, XtPointer B)
     return 1;
   else
     return 0;
+}
+
+/*
+ * A hash of the fields that IconGCacheCompare compares, for the cache
+ * index.  That compares the top shadow pixmap of one part with the
+ * background pixmap of the other and the other way round, so only the
+ * sum of the two goes into the hash.
+ */
+static unsigned int IconGCacheHash(XtPointer cpart)
+{
+  XmIconGCacheObjPart *p = (XmIconGCacheObjPart *)cpart;
+  unsigned int h = 0;
+  h = _XmCacheHashAdd(h, (unsigned long)p->render_table);
+  h = _XmCacheHashAdd(h, (unsigned long)p->selected_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->inverse_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->normal_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->background_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->insensitive_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->top_shadow_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->bottom_shadow_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->highlight_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->background);
+  h = _XmCacheHashAdd(h, (unsigned long)p->foreground);
+  h = _XmCacheHashAdd(h, (unsigned long)p->top_shadow_color);
+  h = _XmCacheHashAdd(h, (unsigned long)p->highlight_color);
+  h = _XmCacheHashAdd(h, (unsigned long)(p->top_shadow_pixmap + p->background_pixmap));
+  h = _XmCacheHashAdd(h, (unsigned long)p->highlight_pixmap);
+  h = _XmCacheHashAdd(h, (unsigned long)p->bottom_shadow_color);
+  h = _XmCacheHashAdd(h, (unsigned long)p->bottom_shadow_pixmap);
+  h = _XmCacheHashAdd(h, (unsigned long)p->alignment);
+  h = _XmCacheHashAdd(h, (unsigned long)p->spacing);
+  h = _XmCacheHashAdd(h, (unsigned long)p->margin_width);
+  h = _XmCacheHashAdd(h, (unsigned long)p->margin_height);
+  return h;
 }
 
 /****************************************************

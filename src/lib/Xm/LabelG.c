@@ -715,6 +715,40 @@ int _XmLabelCacheCompare(XtPointer A, XtPointer B)
     return 0;
 }
 
+/*
+ * A hash of the fields that _XmLabelCacheCompare compares, for the cache index.
+ */
+static unsigned int LabelCacheHash(XtPointer cpart)
+{
+  XmLabelGCacheObjPart *p = (XmLabelGCacheObjPart *)cpart;
+  unsigned int h = 0;
+  h = _XmCacheHashAdd(h, (unsigned long)p->label_type);
+  h = _XmCacheHashAdd(h, (unsigned long)p->alignment);
+  h = _XmCacheHashAdd(h, (unsigned long)p->string_direction);
+  h = _XmCacheHashAdd(h, (unsigned long)p->margin_height);
+  h = _XmCacheHashAdd(h, (unsigned long)p->margin_width);
+  h = _XmCacheHashAdd(h, (unsigned long)p->margin_left);
+  h = _XmCacheHashAdd(h, (unsigned long)p->margin_right);
+  h = _XmCacheHashAdd(h, (unsigned long)p->margin_top);
+  h = _XmCacheHashAdd(h, (unsigned long)p->margin_bottom);
+  h = _XmCacheHashAdd(h, (unsigned long)p->recompute_size);
+  h = _XmCacheHashAdd(h, (unsigned long)p->skipCallback);
+  h = _XmCacheHashAdd(h, (unsigned long)p->menu_type);
+  h = _XmCacheHashAdd(h, (unsigned long)p->background_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->top_shadow_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->bottom_shadow_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->highlight_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->foreground);
+  h = _XmCacheHashAdd(h, (unsigned long)p->background);
+  h = _XmCacheHashAdd(h, (unsigned long)p->top_shadow_color);
+  h = _XmCacheHashAdd(h, (unsigned long)p->top_shadow_pixmap);
+  h = _XmCacheHashAdd(h, (unsigned long)p->bottom_shadow_color);
+  h = _XmCacheHashAdd(h, (unsigned long)p->bottom_shadow_pixmap);
+  h = _XmCacheHashAdd(h, (unsigned long)p->highlight_color);
+  h = _XmCacheHashAdd(h, (unsigned long)p->highlight_pixmap);
+  return h;
+}
+
 /***********************************************************
  *
  *  ClassInitialize
@@ -723,6 +757,7 @@ int _XmLabelCacheCompare(XtPointer A, XtPointer B)
 static void ClassInitialize(void)
 {
   labelBaseClassExtRec.record_type = XmQmotif;
+  _XmCacheSetHashProc(&LabelClassCachePart, LabelCacheHash);
   /* Install menu savvy on just this class */
   XmeTraitSet((XtPointer)&xmLabelGadgetClassRec, XmQTmenuSavvy, (XtPointer)&MenuSavvyGadgetRecord);
 }

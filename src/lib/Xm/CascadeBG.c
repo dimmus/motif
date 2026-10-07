@@ -77,6 +77,7 @@ static void SecondaryObjectCreate(Widget req, Widget new_w, ArgList args, Cardin
 static void InitializePrehook(Widget req, Widget new_w, ArgList args, Cardinal *num_args);
 static void InitializePosthook(Widget req, Widget new_w, ArgList args, Cardinal *num_args);
 static int _XmCascadeBCacheCompare(XtPointer A, XtPointer B);
+static unsigned int CascadeBCacheHash(XtPointer cpart);
 static void BorderHighlight(Widget wid);
 static void BorderUnhighlight(Widget wid);
 static void DrawShadow(XmCascadeButtonGadget cb);
@@ -381,6 +382,7 @@ static void ClassInitialize(void)
   xmCascadeButtonGCacheObjClassRec.object_class.num_resources = wc_num_res + sc_num_res;
   _XmProcessUnlock();
   CascadeBGClassExtensionRec.record_type = XmQmotif;
+  _XmCacheSetHashProc(&CascadeButtonClassCachePart, CascadeBCacheHash);
 }
 
 /*
@@ -505,6 +507,21 @@ static int _XmCascadeBCacheCompare(XtPointer A, XtPointer B)
     return 1;
   else
     return 0;
+}
+
+/*
+ * A hash of the fields that _XmCascadeBCacheCompare compares, for the cache index.
+ */
+static unsigned int CascadeBCacheHash(XtPointer cpart)
+{
+  XmCascadeButtonGCacheObjPart *p = (XmCascadeButtonGCacheObjPart *)cpart;
+  unsigned int h = 0;
+  h = _XmCacheHashAdd(h, (unsigned long)p->cascade_pixmap);
+  h = _XmCacheHashAdd(h, (unsigned long)p->map_delay);
+  h = _XmCacheHashAdd(h, (unsigned long)p->armed_pixmap);
+  h = _XmCacheHashAdd(h, (unsigned long)p->arm_gc);
+  h = _XmCacheHashAdd(h, (unsigned long)p->background_gc);
+  return h;
 }
 
 /*******************************************************************

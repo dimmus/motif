@@ -87,6 +87,7 @@ static void SecondaryObjectCreate(Widget req, Widget new_w, ArgList args, Cardin
 static void InitializePrehook(Widget req, Widget new_w, ArgList args, Cardinal *num_args);
 static void InitializePosthook(Widget req, Widget new_w, ArgList args, Cardinal *num_args);
 int _XmToggleBCacheCompare(XtPointer A, XtPointer B);
+static unsigned int ToggleBCacheHash(XtPointer cpart);
 static void InputDispatch(Widget wid, XEvent *event, Mask event_mask);
 static void SetAndDisplayPixmap(XmToggleButtonGadget w, XEvent *event, Region region);
 static void Help(XmToggleButtonGadget tb, XEvent *event);
@@ -520,6 +521,7 @@ static void ClassInitialize(void)
   xmToggleButtonGCacheObjClassRec.object_class.resources = merged_list;
   xmToggleButtonGCacheObjClassRec.object_class.num_resources = wc_num_res + sc_num_res;
   ToggleBGClassExtensionRec.record_type = XmQmotif;
+  _XmCacheSetHashProc(&ToggleButtonClassCachePart, ToggleBCacheHash);
 }
 
 /************************************************************************
@@ -573,6 +575,39 @@ int _XmToggleBCacheCompare(XtPointer A, XtPointer B)
     return 1;
   else
     return 0;
+}
+
+/*
+ * A hash of the fields that _XmToggleBCacheCompare compares, for the cache index.
+ */
+static unsigned int ToggleBCacheHash(XtPointer cpart)
+{
+  XmToggleButtonGCacheObjPart *p = (XmToggleButtonGCacheObjPart *)cpart;
+  unsigned int h = 0;
+  h = _XmCacheHashAdd(h, (unsigned long)p->ind_type);
+  h = _XmCacheHashAdd(h, (unsigned long)p->visible);
+  h = _XmCacheHashAdd(h, (unsigned long)p->spacing);
+  h = _XmCacheHashAdd(h, (unsigned long)p->indicator_dim);
+  h = _XmCacheHashAdd(h, (unsigned long)p->on_pixmap);
+  h = _XmCacheHashAdd(h, (unsigned long)p->insen_pixmap);
+  h = _XmCacheHashAdd(h, (unsigned long)p->ind_on);
+  h = _XmCacheHashAdd(h, (unsigned long)p->fill_on_select);
+  h = _XmCacheHashAdd(h, (unsigned long)p->select_color);
+  h = _XmCacheHashAdd(h, (unsigned long)p->select_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->unselect_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->unselect_color);
+  h = _XmCacheHashAdd(h, (unsigned long)p->indeterminate_pixmap);
+  h = _XmCacheHashAdd(h, (unsigned long)p->indeterminate_insensitive_pixmap);
+  h = _XmCacheHashAdd(h, (unsigned long)p->indeterminate_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->indeterminate_box_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->toggle_mode);
+  h = _XmCacheHashAdd(h, (unsigned long)p->reversed_select);
+  h = _XmCacheHashAdd(h, (unsigned long)p->background_gc);
+  h = _XmCacheHashAdd(h, (unsigned long)p->ind_left_delta);
+  h = _XmCacheHashAdd(h, (unsigned long)p->ind_right_delta);
+  h = _XmCacheHashAdd(h, (unsigned long)p->ind_top_delta);
+  h = _XmCacheHashAdd(h, (unsigned long)p->ind_bottom_delta);
+  return h;
 }
 
 /************************************************************************

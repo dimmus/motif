@@ -440,6 +440,26 @@ static int _XmPushBCacheCompare(XtPointer A, XtPointer B)
     return 0;
 }
 
+/*
+ * A hash of the fields that _XmPushBCacheCompare compares, for the cache
+ * index, but the timer and its widget: the gadgets change those in the
+ * cached part itself.
+ */
+static unsigned int PushBCacheHash(XtPointer cpart)
+{
+  XmPushButtonGCacheObjPart *p = (XmPushButtonGCacheObjPart *)cpart;
+  unsigned int h = 0;
+  h = _XmCacheHashAdd(h, (unsigned long)p->fill_on_arm);
+  h = _XmCacheHashAdd(h, (unsigned long)p->arm_color);
+  h = _XmCacheHashAdd(h, (unsigned long)p->arm_pixmap);
+  h = _XmCacheHashAdd(h, (unsigned long)p->unarm_pixmap);
+  h = _XmCacheHashAdd(h, (unsigned long)p->fill_gc);
+  h = _XmCacheHashAdd(h, (unsigned long)p->background_gc);
+  h = _XmCacheHashAdd(h, (unsigned long)p->multiClick);
+  h = _XmCacheHashAdd(h, (unsigned long)p->default_button_shadow_thickness);
+  return h;
+}
+
 /************************************************************************
  *
  *  InputDispatch
@@ -1248,6 +1268,7 @@ static void ClassInitialize(void)
   xmPushButtonGCacheObjClassRec.object_class.resources = merged_list;
   xmPushButtonGCacheObjClassRec.object_class.num_resources = wc_num_res + sc_num_res;
   PushBGClassExtensionRec.record_type = XmQmotif;
+  _XmCacheSetHashProc(&PushButtonClassCachePart, PushBCacheHash);
 }
 
 /************************************************************************

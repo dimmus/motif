@@ -41,6 +41,8 @@ static const struct suite_entry {
 	{ "Text",          text_suite,            1 },
 	{ "I18n",          i18n_suite,            0 },
 	{ "Layout",        layout_suite,          1 },
+	{ "Cache",         cache_suite,           0 },
+	{ "GadgetCache",   gadget_cache_suite,    1 },
 };
 
 #define N_SUITES (sizeof suite_table / sizeof suite_table[0])
