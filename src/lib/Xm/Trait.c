@@ -37,6 +37,7 @@
 #include <Xm/VendorSP.h>
 #include <Xm/XmP.h>
 #include <stdatomic.h>
+#include <string.h>
 /*
  * Internal data structures
  *
@@ -63,8 +64,9 @@
  * Growing the table copies the traits into a new array before it is
  * published, but a reader may still be probing the old one, which is
  * therefore never freed: it is kept on the new table's retired list
- * (which also keeps leak checkers from reporting it).  Since the table only ever doubles, the retired arrays together are
- * smaller than the current one.
+ * (which also keeps leak checkers from reporting it).  Since the table
+ * only ever doubles, the retired arrays together are smaller than the
+ * current one.
  */
 typedef struct _XmTraitSlot {
   _Atomic(XtPointer) obj;
@@ -324,7 +326,11 @@ static XmTraitTable TraitGrow(XmTraitTable old)
 {
   Cardinal size = old ? (old->mask + 1) * 2 : TRAIT_INITIAL_SIZE;
   Cardinal i;
-  XmTraitTable table = (XmTraitTable)XtCalloc(1, sizeof(XmTraitTableRec) + size * sizeof(XmTraitSlotRec));
+  size_t bytes = sizeof(XmTraitTableRec) + (size_t)size * sizeof(XmTraitSlotRec);
+  /* XtMalloc takes a Cardinal: _XmMallocArray fails rather than
+   * truncate, long before size itself could overflow. */
+  XmTraitTable table = (XmTraitTable)_XmMallocArray(1, bytes);
+  memset(table, 0, bytes);
   table->retired = old;
   table->mask = size - 1;
   for (i = 0; old && i <= old->mask; i++) {
