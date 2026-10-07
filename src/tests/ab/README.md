@@ -12,7 +12,9 @@ here is registered with CTest or built by default.
   prints child geometry, selection and scroll state, callbacks and a hash
   of the window pixels after every step.  Modes: `form`, `formcyc`
   (attachment cycles), `formgrid`, `formcolumn`, `formwide`, `container`,
-  `list`, `listscroll`.
+  `containertree` (the Container entry tree and XmNpositionIndex through
+  the API only, no input; SIZE is the number of steps), `list`,
+  `listscroll`.
 - `ab.sh OLD_LIBDIR NEW_LIBDIR MODE FIRST LAST [SIZE]` runs a range of
   seeds against both libraries and reports seeds whose output differs.
 - `xm_layoutbench MODE N` times the phases of a layout with N children
