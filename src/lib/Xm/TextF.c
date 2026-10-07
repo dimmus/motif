@@ -3254,8 +3254,9 @@ static void ProcessCancel(Widget w, XEvent *event, char **params, Cardinal *num_
   _XmTextFieldDrawInsertionPoint(tf, False);
   if (tf->text.has_secondary) {
     tf->text.cancel = True;
-    /* This will mark the has_secondary field to False. */
-    _XmTextFieldSetSel2(w, 1, 0, False, event->xkey.time);
+    /* Drop the secondary selection, and SECONDARY with it: no transfer
+     * follows that would disown it. */
+    _XmTextFieldSetSel2(w, 1, 0, True, event->xkey.time);
     XtUngrabKeyboard(w, CurrentTime);
   }
   if (tf->text.has_primary && tf->text.extending) {
@@ -4656,8 +4657,9 @@ static void SecondaryNotify(Widget w, XEvent *event, char **params, Cardinal *nu
       TextF_CursorPosition(tf) >= tf->text.sec_pos_left &&
       TextF_CursorPosition(tf) <= tf->text.sec_pos_right)
   {
-    /* This will mark the has_secondary field to False. */
-    (void)_XmTextFieldSetSel2(w, 1, 0, False, event->xbutton.time);
+    /* Moving text into itself: drop the secondary selection, and
+     * SECONDARY with it. */
+    (void)_XmTextFieldSetSel2(w, 1, 0, True, event->xbutton.time);
     return;
   }
   /*
@@ -4712,8 +4714,9 @@ static void ProcessBDragRelease(Widget w, XEvent *event, String *params, Cardina
       if ((Dimension)ev->x > tf->core.width || ev->x < 0 || (Dimension)ev->y > tf->core.height ||
           ev->y < 0)
       {
-        /* This will mark the has_secondary field to False. */
-        _XmTextFieldSetSel2(w, 1, 0, False, event->xkey.time);
+        /* Released outside: drop the secondary selection, and
+         * SECONDARY with it. */
+        _XmTextFieldSetSel2(w, 1, 0, True, event->xkey.time);
       }
       else {
         SecondaryNotify(w, event, params, num_params);

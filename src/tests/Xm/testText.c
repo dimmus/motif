@@ -770,6 +770,7 @@ START_TEST(secondary_same_widget)
 	click(w, cases[_i >> 1].dest);
 	secondary_drag(w, 4, 7, cases[_i >> 1].release);
 	assert_text(w, cases[_i >> 1].expect);
+	ck_assert_int_eq(XGetSelectionOwner(XtDisplay(w), XA_SECONDARY), None);
 }
 END_TEST
 
@@ -783,10 +784,12 @@ START_TEST(secondary_cancel)
 {
 	Widget src = create_text_widget("src", _i & 1, 0);
 	Widget dst = create_text_widget("dst", False, 100);
+	Display *dpy;
 	Time t;
 
 	XtRealizeWidget(top);
 	pump();
+	dpy = XtDisplay(top);
 	XmTextSetString(src, "abc def ghi");
 	XmTextSetString(dst, "dest");
 	click(dst, 4);
@@ -808,6 +811,7 @@ START_TEST(secondary_cancel)
 	pump();
 	assert_text(src, "abc def ghi");
 	assert_text(dst, "dest");
+	ck_assert_int_eq(XGetSelectionOwner(dpy, XA_SECONDARY), None);
 
 	/* The next quick transfer works */
 	secondary_drag(src, 0, 3, "copy-to");
