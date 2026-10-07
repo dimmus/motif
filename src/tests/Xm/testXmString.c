@@ -481,6 +481,86 @@ START_TEST(build_many_pieces)
 }
 END_TEST
 
+/* Count the components of s of each type, walking it with a context */
+static void walk_comps(XmString s, int *texts, int *seps, int *tabs)
+{
+	XmStringContext ctx;
+	XmStringComponentType t;
+	unsigned int len;
+	XtPointer val;
+
+	*texts = *seps = *tabs = 0;
+	ck_assert(XmStringInitContext(&ctx, s));
+	while ((t = XmStringGetNextTriple(ctx, &len, &val)) !=
+	       XmSTRING_COMPONENT_END) {
+		if (t == XmSTRING_COMPONENT_TEXT ||
+		    t == XmSTRING_COMPONENT_LOCALE_TEXT)
+			(*texts)++;
+		else if (t == XmSTRING_COMPONENT_SEPARATOR)
+			(*seps)++;
+		else if (t == XmSTRING_COMPONENT_TAB)
+			(*tabs)++;
+		XtFree((char *)val);
+	}
+	XmStringFreeContext(ctx);
+}
+
+/*
+ * A string context counted lines in a short and segments in an unsigned
+ * short: walking a string of more than 32767 lines read before its
+ * entry array and crashed, and the walk of a line of more than 65535
+ * segments wrapped back to its start and never ended.  Strings that
+ * size are quick to build now (XmStringGenerate of 1 MB of short lines
+ * makes 85000).
+ */
+START_TEST(context_many_lines_and_segments)
+{
+	enum { LINES = 40000, SEGS = 70000 };
+	char *text = XtMalloc(LINES * 2), *got;
+	XmString s, nl;
+	XmParseMapping map;
+	Arg args[3];
+	int i, texts, seps, tabs;
+
+	for (i = 0; i < LINES; i++) {
+		text[2 * i] = 'a' + i % 26;
+		text[2 * i + 1] = i + 1 < LINES ? '\n' : '\0';
+	}
+	s = XmStringGenerate(text, NULL, XmCHARSET_TEXT, NULL);
+	ck_assert_int_eq(XmStringLineCount(s), LINES);
+	walk_comps(s, &texts, &seps, &tabs);
+	ck_assert_int_eq(texts, LINES);
+	ck_assert_int_eq(seps, LINES - 1);
+
+	/* XmStringUnparse walks it with a context too */
+	nl = sep();
+	XtSetArg(args[0], XmNpattern, "\n");
+	XtSetArg(args[1], XmNsubstitute, nl);
+	XtSetArg(args[2], XmNincludeStatus, XmINSERT);
+	map = XmParseMappingCreate(args, 3);
+	got = (char *)XmStringUnparse(s, NULL, XmCHARSET_TEXT, XmCHARSET_TEXT,
+				      &map, 1, XmOUTPUT_ALL);
+	ck_assert_str_eq(got, text);
+	XtFree(got);
+	XmParseMappingFree(map);
+	XmStringFree(nl);
+	XmStringFree(s);
+	XtFree(text);
+
+	/* One line of tabbed segments: a tab cannot follow text */
+	s = NULL;
+	for (i = 0; i < SEGS; i++)
+		s = XmStringConcatAndFree(s,
+			cat(tab(), XmStringCreate("x", "tagA"), NULL));
+	ck_assert_int_eq(XmStringLineCount(s), 1);
+	walk_comps(s, &texts, &seps, &tabs);
+	ck_assert_int_eq(texts, SEGS);
+	ck_assert_int_eq(tabs, SEGS);
+	ck_assert_int_eq(seps, 0);
+	XmStringFree(s);
+}
+END_TEST
+
 /*
  * XmStringCopy shares the string.  The reference counts were 6 bits
  * (optimized strings) and 8 bits wide, so every 64th or 256th copy was
@@ -1341,6 +1421,7 @@ void xmstring_suite(SRunner *runner)
 	tcase_add_test(t, copy_shares);
 	tcase_add_test(t, concat_last_direction);
 	tcase_add_test(t, build_many_pieces);
+	tcase_add_test(t, context_many_lines_and_segments);
 	tcase_add_test(t, line_count);
 	tcase_add_test(t, concat_keeps_tab_after_text);
 	tcase_add_test(t, empty_text_component);

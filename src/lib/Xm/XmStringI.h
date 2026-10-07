@@ -82,8 +82,8 @@ enum {
 
 typedef struct __XmStringContextRec {
   _XmString string;              /* pointer to internal string	*/
-  short current_line;            /* index of current line	*/
-  unsigned short current_seg;    /* index of current segment	*/
+  int current_line;              /* index of current line	*/
+  int current_seg;               /* index of current segment	*/
   Boolean optimized;             /* is string optimized		*/
   Boolean error;                 /* something wrong		*/
   short tab_count;               /* tabs processed		*/

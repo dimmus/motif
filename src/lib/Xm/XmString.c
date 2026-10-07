@@ -7670,7 +7670,7 @@ XmStringComponentType XmeStringGetComponent(_XmStringContext context,
         /* Try the next segment of this line recursively. */
         XmStringComponentType answer;
         char saved_state = _XmStrContState(context);
-        unsigned short saved_seg = _XmStrContCurrSeg(context);
+        int saved_seg = _XmStrContCurrSeg(context);
         _XmStrContState(context) = PUSH_STATE;
         _XmStrContCurrSeg(context)++;
         answer = XmeStringGetComponent(context, update_context, copy_data, length, value);
