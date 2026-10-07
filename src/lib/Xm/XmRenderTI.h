@@ -139,14 +139,13 @@ typedef struct __XmFontRenditionRec {
 #  define RENDITIONS_IN_STRUCT 1
 
 /*
- * stamp and epoch belong to _XmRenderTableStamp: a new table record
- * starts with epoch 0.
+ * stamp belongs to _XmRenderTableStamp: a new table record starts with
+ * stamp 0.
  */
 typedef struct __XmRenderTableRec {
   unsigned int mark : REND_MARK_BITS;
   unsigned int refcount : REND_REFCOUNT_BITS;
   unsigned short count;
-  unsigned int epoch;
   unsigned long long stamp;
   Display *display;
   XmRendition renditions[RENDITIONS_IN_STRUCT];

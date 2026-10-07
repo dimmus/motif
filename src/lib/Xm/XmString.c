@@ -1871,23 +1871,35 @@ static void OptLineExtent(XmRenderTable r,
                           Dimension *descent)
 {
   _XmStringOpt str = (_XmStringOpt)opt;
-  unsigned long long stamp = _XmRenderTableStamp(r);
+  unsigned long long stamp;
+  Boolean cached;
   /* OptLineMetrics leaves them alone when there is no font */
   Dimension w = 0, h = 0, asc = 0, dsc = 0;
-  if (str->extent_stamp == stamp) {
+  /*
+   * The caller may hold only an application lock, and a string can be
+   * shared between application contexts: the cache is read and written
+   * under the process lock.
+   */
+  _XmProcessLock();
+  stamp = _XmRenderTableStamp(r);
+  cached = (str->extent_stamp == stamp);
+  if (cached) {
     w = str->width;
     h = str->height;
     asc = str->ascent;
     dsc = str->descent;
   }
-  else if (OptLineMetrics(r, opt, NULL, NULL, &w, &h, &asc, &dsc) &&
-           _XmRenderTableStamp(r) == stamp)
-  {
-    str->width = w;
-    str->height = h;
-    str->ascent = asc;
-    str->descent = dsc;
-    str->extent_stamp = stamp;
+  _XmProcessUnlock();
+  if (!cached && OptLineMetrics(r, opt, NULL, NULL, &w, &h, &asc, &dsc)) {
+    _XmProcessLock();
+    if (_XmRenderTableStamp(r) == stamp) {
+      str->width = w;
+      str->height = h;
+      str->ascent = asc;
+      str->descent = dsc;
+      str->extent_stamp = stamp;
+    }
+    _XmProcessUnlock();
   }
   if (width != NULL)
     *width = w;

@@ -584,20 +584,19 @@ static void SetDefault(XmRendition rend)
 }
 
 /*
- * Render table stamps.  A table record keeps its stamp while its epoch is
- * the current one; _XmRenderTableChanged starts a new epoch, after which
- * every table gets a fresh stamp when next asked.  Stamps are never
- * reused (64 bits do not wrap), and a new record starts in epoch 0,
- * which is never current.
+ * Render table stamps, drawn from one 64-bit counter that does not
+ * wrap.  A table record keeps its stamp while it is newer than the last
+ * change; _XmRenderTableChanged makes every stamp handed out so far
+ * stale, so each table gets a fresh one when next asked.  A new record
+ * starts with stamp 0, which is always stale.
  */
-static unsigned int render_epoch = 1;
-static unsigned long long render_stamp = 0;
+static unsigned long long render_stamp = 0;  /* last stamp handed out */
+static unsigned long long render_change = 0; /* stamps up to it are stale */
 
 void _XmRenderTableChanged(void)
 {
   _XmProcessLock();
-  if (++render_epoch == 0)
-    render_epoch = 1;
+  render_change = render_stamp;
   _XmProcessUnlock();
 }
 
@@ -606,10 +605,8 @@ unsigned long long _XmRenderTableStamp(XmRenderTable table)
   _XmRenderTable t = GetPtr(table);
   unsigned long long stamp;
   _XmProcessLock();
-  if (t->epoch != render_epoch) {
-    t->epoch = render_epoch;
+  if (t->stamp <= render_change)
     t->stamp = ++render_stamp;
-  }
   stamp = t->stamp;
   _XmProcessUnlock();
   return stamp;
@@ -1124,7 +1121,7 @@ XmRenderTable XmRenderTableAddRenditions(XmRenderTable oldtable,
     table = (_XmRenderTable)XtMalloc(
         sizeof(_XmRenderTableRec) +
         (sizeof(XmRendition) * (rendition_count - RENDITIONS_IN_STRUCT)));
-    table->epoch = 0;
+    table->stamp = 0;
     oldtable = GetHandle(_XmRenderTable);
     SetPtr(oldtable, table);
     _XmRTCount(oldtable) = rendition_count;
@@ -1148,7 +1145,7 @@ XmRenderTable XmRenderTableAddRenditions(XmRenderTable oldtable,
       table = (_XmRenderTable)XtMalloc(
           sizeof(_XmRenderTableRec) +
           (sizeof(XmRendition) * (_XmRTCount(oldtable) - RENDITIONS_IN_STRUCT)));
-      table->epoch = 0;
+      table->stamp = 0;
       newtable = GetHandle(_XmRenderTable);
       SetPtr(newtable, table);
       _XmRTDisplay(newtable) = _XmRTDisplay(oldtable);
@@ -1202,7 +1199,7 @@ XmRenderTable XmRenderTableAddRenditions(XmRenderTable oldtable,
       table = (_XmRenderTable)XtMalloc(
           sizeof(_XmRenderTableRec) +
           (sizeof(XmRendition) * (_XmRTCount(oldtable) + count - RENDITIONS_IN_STRUCT)));
-      table->epoch = 0;
+      table->stamp = 0;
       newtable = GetHandle(_XmRenderTable);
       SetPtr(newtable, table);
       _XmRTDisplay(newtable) = _XmRTDisplay(oldtable);
@@ -1295,7 +1292,7 @@ XmRenderTable _XmRenderTableRemoveRenditions(XmRenderTable oldtable,
     table = (_XmRenderTable)XtMalloc(
         sizeof(_XmRenderTableRec) +
         (sizeof(XmRendition) * (_XmRTCount(oldtable) - RENDITIONS_IN_STRUCT)));
-    table->epoch = 0;
+    table->stamp = 0;
     newtable = GetHandle(_XmRenderTable);
     SetPtr(newtable, table);
     _XmRTDisplay(newtable) = _XmRTDisplay(oldtable);
@@ -1459,7 +1456,7 @@ XmRenderTable XmRenderTableCopy(XmRenderTable table, XmStringTag *tags, int tag_
       size = (sizeof(_XmRendition) * (_XmRTCount(table) - RENDITIONS_IN_STRUCT));
     size = (size < 0) ? 0 : size;
     t = (_XmRenderTable)XtMalloc(sizeof(_XmRenderTableRec) + size);
-    t->epoch = 0;
+    t->stamp = 0;
     rt = GetHandle(_XmRenderTable);
     SetPtr(rt, t);
     _XmRTRefcount(rt) = 1;
@@ -1480,7 +1477,7 @@ XmRenderTable XmRenderTableCopy(XmRenderTable table, XmStringTag *tags, int tag_
         t = (_XmRenderTable)XtMalloc(
             sizeof(_XmRenderTableRec) +
             (sizeof(_XmRendition) * (_XmRTCount(table) - RENDITIONS_IN_STRUCT)));
-        t->epoch = 0;
+        t->stamp = 0;
         rt = GetHandle(_XmRenderTable);
         SetPtr(rt, t);
         _XmRTRefcount(rt) = 1;
@@ -1877,7 +1874,7 @@ Widget _XmCreateRenderTable(Widget parent,
   _XmRenderTable table;
   /* Malloc new table */
   table = (_XmRenderTable)XtMalloc(sizeof(_XmRenderTableRec));
-  table->epoch = 0;
+  table->stamp = 0;
   newtable = GetHandle(_XmRenderTable);
   SetPtr(newtable, table);
   _XmRTCount(newtable) = 0;
