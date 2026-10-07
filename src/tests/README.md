@@ -15,12 +15,13 @@ relative path, so CTest runs them from a copy of those directories in the
 build tree (`<build>/src/tests/fixtures`).
 
 Suites labelled `X11` (`FontList`, `FontListEntry`, `XmStringCT`,
-`Widgets`, `Text`, `Layout`) need an X server, as do the `Uil.load*`
-tests, those in `interactive/` and `visual/` and some in `fuzz/`.  When
-`xvfb-run` is found at configure time, CTest starts each of them under
-its own Xvfb (with `-noreset`, see `XVFB_RUN_ARGS`); configure with
-`-DXVFB_RUN_EXECUTABLE=OFF` to use `$DISPLAY` instead.  Without `DISPLAY`
-these tests exit with status 77 and CTest reports them as skipped.
+`Widgets`, `Text`, `Layout`, `XmIm`) need an X server, as do the
+`Uil.load*` tests, those in `interactive/` and `visual/` and some in
+`fuzz/`.  When `xvfb-run` is found at configure time, CTest starts each
+of them under its own Xvfb (with `-noreset`, see `XVFB_RUN_ARGS`);
+configure with `-DXVFB_RUN_EXECUTABLE=OFF` to use `$DISPLAY` instead.
+Without `DISPLAY` these tests exit with status 77 and CTest reports them
+as skipped.
 
 Test cases tagged `xfail` document known library bugs.  They are left out
 of normal runs and checked by `Xm.<suite>.xfail` (`motif_tests --xfail
