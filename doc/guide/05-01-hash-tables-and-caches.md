@@ -113,7 +113,7 @@ the read is safe in practice, but it is a use-after-free in principle
 and would break if the pool were ever changed to use `free()`.  The
 callers in libXm ignore the return value.
 
-## 5.1.2 The trait table: open addressing with tombstones
+## 5.1.2 The trait table: open addressing, read without a lock
 
 Chapter 1.2 reproduced the code; the comparison with `Hash.c` is the
 point here.
@@ -124,11 +124,12 @@ point here.
 | Key | opaque pointer plus caller's compare | (pointer, quark) pair compared inline |
 | Hash | caller's | pointer mixing with two multiplicative constants |
 | Collision | chain | linear probing, step 1 |
-| Deletion | unlink | tombstone; dropped at the next rebuild |
-| Growth | manual `_XmResizeHashTable` | automatic at 75 % filled, doubling when more than half the slots hold live traits |
+| Deletion | unlink | backward shift of the probe chain, no tombstones |
+| Growth | manual `_XmResizeHashTable` | automatic doubling at 75 % filled; the old array is kept for readers still probing it |
 | Memory per entry | 32 bytes (bucket) + 8 (head slot share) | 24 bytes, no pointers |
-| Cache behaviour | two or three dependent loads per lookup | one load for the common hit in the first probe |
+| Cache behaviour | two or three dependent loads per lookup | the table pointer, then one slot for the common hit in the first probe |
 | Iteration | `_XmMapHashTable` | none needed |
+| Locking | process lock | writers only; readers validate with a sequence count |
 
 The trait table is read on hot paths (`XmeTraitGet` from traversal,
 default-button handling, every container item access) and written
@@ -214,14 +215,15 @@ loop.
   resize when count exceeds size (the Xft code's `AddHashEntry` is the
   template).
 - **Open addressing** (`Trait.c`) when keys are small and the table is
-  read far more than written.  Keep the load under 75 % counting
-  tombstones; rebuild to drop them.
+  read far more than written.  Keep the load under 75 %; delete by
+  shifting the probe chain back rather than with tombstones.
 - **Move-to-front list** (`Cache.c`) when the number of distinct
   entries is small and accesses come in runs.
 - **Throwaway probing map** (`Form.c`) for a per-call index over a
   known set of pointers.
 
-All four are guarded by `_XmProcessLock` where they are shared, and
+All four are guarded by `_XmProcessLock` where they are shared (the
+trait table only for writers, chapter 1.2), and
 all four are internal (`*I.h` headers, not exported since the version
 scripts), so any of them can be replaced without an ABI change, which
 is more than can be said for the arrays inside `XmListPart` and
