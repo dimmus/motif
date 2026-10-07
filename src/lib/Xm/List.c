@@ -1997,7 +1997,7 @@ static void FinishDrawList(XmListWidget lw, int top, int num)
  *	A row is drawn as a band, from one pixel above its text area to	*
  *	its bottom, filled and then written; the bands do not overlap	*
  *	when the spacing is not 0.  Between the bands there is only the	*
- *	location cursor, which SliderMove has just erased, and it can	*
+ *	location cursor, which the caller has just erased, and it can	*
  *	reach the top pixel line of the band below when listSpacing is	*
  *	0.  So the kept rows are copied from the text area of the first	*
  *	one down, and the top lines of their bands are filled again.	*
@@ -5488,7 +5488,7 @@ static void ListFocusOut(Widget wid, XEvent *event, String *params, Cardinal *nu
 static void BrowseScroll(XtPointer closure, XtIntervalId *id)
 {
   XmListWidget lw = (XmListWidget)closure;
-  int item, newitem;
+  int item, newitem, old_top;
   Boolean vLeave = TRUE;
   Boolean hLeave = TRUE;
   int interval = 100;
@@ -5518,6 +5518,7 @@ static void BrowseScroll(XtPointer closure, XtIntervalId *id)
     return;
   }
   item = lw->list.LastHLItem;
+  old_top = lw->list.top_position;
   /* See if the user moved out the top of the list and there's another
    * element to go to. */
   if (lw->list.LeaveDir & TOPLEAVE) {
@@ -5580,7 +5581,7 @@ static void BrowseScroll(XtPointer closure, XtIntervalId *id)
     SetVerticalScrollbar(lw);
   if (!hLeave)
     SetHorizontalScrollbar(lw);
-  DrawList(lw, NULL, TRUE);
+  ScrollList(lw, old_top);
   if (lw->list.vScrollBar)
     XtVaGetValues((Widget)lw->list.vScrollBar, XmNrepeatDelay, &interval, NULL);
   /* Ok, we have a new item. */
@@ -5687,11 +5688,12 @@ static void ListEnter(Widget wid, XEvent *event, String *params, Cardinal *num_p
  ************************************************************************/
 static void MakeItemVisible(XmListWidget lw, int item)
 {
+  int old_top = lw->list.top_position;
   if (item < lw->list.top_position) {
     if (lw->list.vScrollBar) {
       DrawHighlight(lw, lw->list.CurrentKbdItem, FALSE);
       lw->list.top_position = item;
-      DrawList(lw, NULL, TRUE);
+      ScrollList(lw, old_top);
       SetVerticalScrollbar(lw);
     }
   }
@@ -5699,8 +5701,9 @@ static void MakeItemVisible(XmListWidget lw, int item)
     if (!(lw->list.vScrollBar))
       return;
     DrawHighlight(lw, lw->list.CurrentKbdItem, FALSE);
+    old_top = lw->list.top_position;
     lw->list.top_position = item - (lw->list.visibleItemCount - 1);
-    DrawList(lw, NULL, TRUE);
+    ScrollList(lw, old_top);
     SetVerticalScrollbar(lw);
   }
 }
@@ -7921,11 +7924,12 @@ void XmListSetPos(Widget w, int pos)
   if (pos == 0)
     pos = lw->list.itemCount;
   if (pos > 0 && pos <= lw->list.itemCount) {
+    int old_top = lw->list.top_position;
     pos--;
     if (lw->list.Traversing)
       DrawHighlight(lw, lw->list.CurrentKbdItem, FALSE);
     lw->list.top_position = pos;
-    DrawList(lw, NULL, TRUE);
+    ScrollList(lw, old_top);
     SetVerticalScrollbar(lw);
   }
   _XmAppUnlock(app);
@@ -7940,7 +7944,7 @@ void XmListSetPos(Widget w, int pos)
 void XmListSetBottomPos(Widget w, int pos)
 {
   XmListWidget lw = (XmListWidget)w;
-  int top;
+  int top, old_top;
   _XmWidgetToAppContext(w);
   _XmAppLock(app);
   if (lw->list.itemCount < 1) {
@@ -7958,8 +7962,9 @@ void XmListSetBottomPos(Widget w, int pos)
     }
     if (lw->list.Traversing)
       DrawHighlight(lw, lw->list.CurrentKbdItem, FALSE);
+    old_top = lw->list.top_position;
     lw->list.top_position = top;
-    DrawList(lw, NULL, TRUE);
+    ScrollList(lw, old_top);
     SetVerticalScrollbar(lw);
   }
   _XmAppUnlock(app);
@@ -7974,7 +7979,7 @@ void XmListSetBottomPos(Widget w, int pos)
 void XmListSetItem(Widget w, XmString item)
 {
   XmListWidget lw = (XmListWidget)w;
-  int i;
+  int i, old_top;
   _XmWidgetToAppContext(w);
   _XmAppLock(app);
   if (lw->list.itemCount < 1) {
@@ -7989,8 +7994,9 @@ void XmListSetItem(Widget w, XmString item)
     }
     if (lw->list.Traversing)
       DrawHighlight(lw, lw->list.CurrentKbdItem, FALSE);
+    old_top = lw->list.top_position;
     lw->list.top_position = i;
-    DrawList(lw, NULL, TRUE);
+    ScrollList(lw, old_top);
     SetVerticalScrollbar(lw);
   }
   _XmAppUnlock(app);
@@ -8005,7 +8011,7 @@ void XmListSetItem(Widget w, XmString item)
 void XmListSetBottomItem(Widget w, XmString item)
 {
   XmListWidget lw = (XmListWidget)w;
-  int i, top;
+  int i, top, old_top;
   _XmWidgetToAppContext(w);
   _XmAppLock(app);
   if (lw->list.itemCount < 1) {
@@ -8021,8 +8027,9 @@ void XmListSetBottomItem(Widget w, XmString item)
     }
     if (lw->list.Traversing)
       DrawHighlight(lw, lw->list.CurrentKbdItem, FALSE);
+    old_top = lw->list.top_position;
     lw->list.top_position = top;
-    DrawList(lw, NULL, TRUE);
+    ScrollList(lw, old_top);
     SetVerticalScrollbar(lw);
   }
   _XmAppUnlock(app);

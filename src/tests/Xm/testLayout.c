@@ -231,15 +231,52 @@ static Widget make_list(int count, int spacing, int highlight)
 	return list;
 }
 
+/* How check_scrolling scrolls the list. */
+enum { BY_SCROLLBAR, BY_API, BY_KEYBOARD };
+
+static void scroll_list(Widget list, Widget vsb, int how, int move)
+{
+	int value, size, inc, page, top = 1, k;
+	XKeyEvent ev;
+
+	switch (how) {
+	case BY_SCROLLBAR:
+		XmScrollBarGetValues(vsb, &value, &size, &inc, &page);
+		XmScrollBarSetValues(vsb, value + move, size, inc, page, True);
+		break;
+	case BY_API:
+		XtVaGetValues(list, XmNtopItemPosition, &top, NULL);
+		top = (top + move < 1) ? 1 : top + move;
+		if (move % 2)
+			XmListSetPos(list, top);
+		else
+			XmListSetBottomPos(list, top + 9);
+		break;
+	default:
+		/* the location cursor moves to the edge, then the list scrolls */
+		memset(&ev, 0, sizeof(ev));
+		ev.type = KeyPress;
+		ev.display = XtDisplay(list);
+		ev.window = XtWindow(list);
+		for (k = 0; k < (move < 0 ? -move : move); k++) {
+			ev.time += 1000;
+			XtCallActionProc(list, move < 0 ? "ListPrevItem" : "ListNextItem",
+					 (XEvent *)&ev, NULL, 0);
+		}
+		break;
+	}
+}
+
 /*
- * Scrolling with the scrollbar copies the rows that stay visible: the
- * result must be what a full redraw gives.
+ * Scrolling with the scrollbar, with the API or with the keyboard copies
+ * the rows that stay visible: the result must be what a full redraw
+ * gives.
  */
-static void check_scrolling(int spacing, int highlight, Boolean tiled)
+static void check_scrolling_by(int spacing, int highlight, Boolean tiled, int how)
 {
 	static const int moves[] = { 1, 1, 3, -2, 9, -1, -9, 5, 2, -4, 30, -12 };
 	Widget list, vsb = NULL;
-	int value, size, inc, page, i;
+	int i;
 	XImage *scrolled, *redrawn;
 
 	list = make_list(200, spacing, highlight);
@@ -259,13 +296,21 @@ static void check_scrolling(int spacing, int highlight, Boolean tiled)
 	settle();
 	for (i = 1; i <= 200; i += 13)
 		XmListSelectPos(list, i, False);
+	if (how == BY_KEYBOARD) {
+		/* the selection follows the location cursor */
+		XtVaSetValues(list, XmNselectionPolicy, XmBROWSE_SELECT, NULL);
+		XSetInputFocus(XtDisplay(shell), XtWindow(shell), RevertToParent, CurrentTime);
+		XmProcessTraversal(list, XmTRAVERSE_CURRENT);
+		settle();
+	}
 	XtVaGetValues(XtParent(list), XmNverticalScrollBar, &vsb, NULL);
 	ck_assert_ptr_nonnull(vsb);
 	settle();
 	for (i = 0; i < (int)(sizeof(moves) / sizeof(moves[0])); i++) {
-		XmScrollBarGetValues(vsb, &value, &size, &inc, &page);
-		XmScrollBarSetValues(vsb, value + moves[i], size, inc, page, True);
+		scroll_list(list, vsb, how, moves[i]);
 		settle();
+		if (how == BY_KEYBOARD)
+			ck_assert_int_gt(XmListGetKbdItemPos(list), 1);
 		scrolled = grab(list);
 		XClearArea(XtDisplay(list), XtWindow(list), 0, 0, 0, 0, True);
 		settle();
@@ -274,6 +319,11 @@ static void check_scrolling(int spacing, int highlight, Boolean tiled)
 		XDestroyImage(scrolled);
 		XDestroyImage(redrawn);
 	}
+}
+
+static void check_scrolling(int spacing, int highlight, Boolean tiled)
+{
+	check_scrolling_by(spacing, highlight, tiled, BY_SCROLLBAR);
 }
 
 START_TEST(list_scroll_by_copy)
@@ -297,6 +347,22 @@ END_TEST
 START_TEST(list_scroll_no_spacing)
 {
 	check_scrolling(0, 0, False);
+}
+END_TEST
+
+START_TEST(list_scroll_api)
+{
+	check_scrolling_by(0, 2, False, BY_API);
+	XtDestroyWidget(XtParent(XtNameToWidget(shell, "*list")));
+	check_scrolling_by(3, 1, False, BY_API);
+}
+END_TEST
+
+START_TEST(list_scroll_keyboard)
+{
+	check_scrolling_by(0, 2, False, BY_KEYBOARD);
+	XtDestroyWidget(XtParent(XtNameToWidget(shell, "*list")));
+	check_scrolling_by(3, 1, False, BY_KEYBOARD);
 }
 END_TEST
 
@@ -415,6 +481,8 @@ void layout_suite(SRunner *runner)
 	tcase_add_test(t, list_scroll_by_copy_spaced);
 	tcase_add_test(t, list_scroll_tiled_background);
 	tcase_add_test(t, list_scroll_no_spacing);
+	tcase_add_test(t, list_scroll_api);
+	tcase_add_test(t, list_scroll_keyboard);
 	tcase_add_test(t, list_selected_items_missing);
 	tcase_add_test(t, list_select_and_find);
 	tcase_add_checked_fixture(t, _init_xt, uninit_xt);

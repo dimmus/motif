@@ -225,6 +225,30 @@ static void list_bench(int n)
   for (i = 0; i < 1000; i++)
     XmListSetPos(list, 1 + (n / 2) + (i % 2));
   lap("1000 one-line scrolls");
+  /* the same, waiting for the X server to draw each one */
+  for (i = 0; i < 1000; i++) {
+    XmListSetPos(list, 1 + (n / 2) + (i % 2));
+    XSync(dpy, False);
+  }
+  lap("1000 one-line scrolls, synced");
+  {
+    /* the location cursor at the bottom row, then down and up a line */
+    XKeyEvent ev;
+    memset(&ev, 0, sizeof(ev));
+    ev.type = KeyPress;
+    ev.display = dpy;
+    ev.window = None; /* as from an accelerator: without the focus */
+    XmListSetPos(list, 1);
+    XmListSetKbdItemPos(list, 20);
+    settle();
+    start();
+    for (i = 0; i < 1000; i++) {
+      ev.time += 100;
+      XtCallActionProc(list, "ListNextItem", (XEvent *)&ev, NULL, 0);
+      XSync(dpy, False);
+    }
+    lap("1000 keyboard line scrolls, synced");
+  }
   {
     Widget vsb = NULL;
     int value, size, inc, page;
