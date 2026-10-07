@@ -912,6 +912,49 @@ START_TEST(primary_quick_move_refused)
 }
 END_TEST
 
+/*
+ * The quick transfer actions called without an event, as through
+ * XtCallActionProc(): the insertion cursor stands for the pointer.  They
+ * used to dereference the event and crash.  _i: bit 0, the source is a
+ * TextField; bit 1, the destination is one.
+ */
+START_TEST(secondary_no_event)
+{
+	static const char *actions[] = {
+		"secondary-start", "secondary-adjust", "copy-to",
+		"secondary-start", "secondary-adjust", "move-to",
+		"secondary-start", "secondary-adjust", "link-to",
+		"secondary-start", "process-cancel", "copy-to",
+		"process-bdrag", "process-cancel", "move-to",
+		"copy-to", "move-to", "link-to",
+	};
+	Widget src = create_text_widget("src", _i & 1, 0);
+	Widget dst = create_text_widget("dst", (_i & 2) != 0, 100);
+	size_t i;
+
+	XtRealizeWidget(top);
+	pump();
+	XmTextSetString(src, "abc def ghi");
+	XmTextSetString(dst, "dest");
+	for (i = 0; i < XtNumber(actions); i++) {
+		XtCallActionProc(src, actions[i], NULL, NULL, 0);
+		pump();
+	}
+	/* Nothing selected, nothing transferred */
+	assert_text(src, "abc def ghi");
+	assert_text(dst, "dest");
+
+	/* A Button2 click without a drag pastes the primary selection
+	 * at the cursor. */
+	click(dst, 4);
+	XmTextSetSelection(src, 4, 7, server_time(src));
+	XtCallActionProc(dst, "process-bdrag", NULL, NULL, 0);
+	XtCallActionProc(dst, "copy-to", NULL, NULL, 0);
+	pump();
+	assert_text(dst, "destdef");
+}
+END_TEST
+
 void text_suite(SRunner *runner)
 {
 	Suite *s = suite_create("Text");
@@ -954,6 +997,7 @@ void text_suite(SRunner *runner)
 	tcase_add_loop_test(t, primary_quick_copy_move, 0, 4);
 	tcase_add_loop_test(t, secondary_move_refused, 0, 8);
 	tcase_add_loop_test(t, primary_quick_move_refused, 0, 8);
+	tcase_add_loop_test(t, secondary_no_event, 0, 4);
 	tcase_set_timeout(t, 60);
 	suite_add_tcase(s, t);
 

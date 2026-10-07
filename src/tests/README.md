@@ -30,11 +30,12 @@ makes one pass, remove its tag.
 The `Text` suite drives the actions of the secondary selection and of
 the other quick transfers of XmText and XmTextField (`secondary-start`,
 `secondary-adjust`, `copy-to`, `move-to`, `process-bdrag`) through
-`XtCallActionProc`, with synthetic events.  The widgets have no undo:
-no action undoes an edit, and the `osfUndo` virtual key is not bound in
-their translations (upstream Motif has none either; only CDE's DtEditor,
-which is not part of this tree, has one).  The suite tests the one undo
-nearby, `XmClipboardUndoCopy`, with a Text's copies to the clipboard.
+`XtCallActionProc`, with synthetic events and without one.  The widgets
+have no undo: no action undoes an edit, and the `osfUndo` virtual key
+is not bound in their translations (upstream Motif has none either;
+only CDE's DtEditor, which is not part of this tree, has one).  The
+suite tests the one undo nearby, `XmClipboardUndoCopy`, with a Text's
+copies to the clipboard.
 
 The other directories:
 
