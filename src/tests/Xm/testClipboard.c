@@ -15,6 +15,10 @@
  * fuzz/crashes/clipboard/corrupt-record-exit).  ClipboardError() now
  * warns and the operation fails cleanly, so this test, which libcheck
  * runs in its own forked process, completes instead of the child exiting.
+ *
+ * Failing cleanly includes giving the clipboard lock back: the entry
+ * points that meet a corrupt record must not return with the lock (a
+ * selection every other client then waits on) still held.
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -144,6 +148,70 @@ static void clear_records(Display *dpy, Window root)
 	XSync(dpy, False);
 }
 
+static Window lock_owner(Display *dpy)
+{
+	return XGetSelectionOwner(dpy, XInternAtom(dpy, "_MOTIF_CLIP_LOCK",
+						   False));
+}
+
+/* Remove one clipboard record, the way a hostile client (or one that
+ * died half way) leaves the record set inconsistent. */
+static void drop_item(Display *dpy, Window root, long id)
+{
+	char name[64];
+
+	snprintf(name, sizeof name, "_MOTIF_CLIP_ITEM_%ld", id);
+	XDeleteProperty(dpy, root, XInternAtom(dpy, name, False));
+	XSync(dpy, False);
+}
+
+/* Remove the format data records: they are the only _MOTIF_CLIP_ITEM_*
+ * properties that are not of type INTEGER. */
+static void drop_format_data(Display *dpy, Window root)
+{
+	int i, n = 0;
+	Atom *props = XListProperties(dpy, root, &n);
+
+	for (i = 0; props && i < n; i++) {
+		char *name = XGetAtomName(dpy, props[i]);
+		Atom type = None;
+		int format;
+		unsigned long nitems, after;
+		unsigned char *data = NULL;
+
+		if (name && !strncmp(name, "_MOTIF_CLIP_ITEM_", 17) &&
+		    XGetWindowProperty(dpy, root, props[i], 0, 0, False,
+				       AnyPropertyType, &type, &format,
+				       &nitems, &after, &data) == Success &&
+		    type != XA_INTEGER)
+			XDeleteProperty(dpy, root, props[i]);
+		if (data)
+			XFree(data);
+		if (name)
+			XFree(name);
+	}
+	if (props)
+		XFree(props);
+	XSync(dpy, False);
+}
+
+/* A complete, valid copy of a string; returns the item id. */
+static long copy_string(Display *dpy, Window w, const char *str)
+{
+	long item_id = 0, data_id = 0;
+
+	ck_assert_int_eq(XmClipboardStartCopy(dpy, w, NULL, CurrentTime,
+					      NULL, NULL, &item_id),
+			 ClipboardSuccess);
+	ck_assert_int_eq(XmClipboardCopy(dpy, w, item_id, "STRING",
+					 (XtPointer)str, strlen(str), 0,
+					 &data_id),
+			 ClipboardSuccess);
+	ck_assert_int_eq(XmClipboardEndCopy(dpy, w, item_id),
+			 ClipboardSuccess);
+	return item_id;
+}
+
 /*
  * The whole point: reaching the assertion means the clipboard calls
  * returned instead of exiting the process.  libcheck runs this in a
@@ -182,10 +250,84 @@ START_TEST(corrupt_records_do_not_exit)
 					   &nitems) == ClipboardSuccess)
 		XtFree((char *)list);
 
+	/* We are still here: the corrupt records did not terminate us.
+	 * They were reported, and the clipboard lock was given back. */
+	ck_assert_int_gt(saw_warning, 0);
+	ck_assert(lock_owner(dpy) == None);
 	clear_records(dpy, root);
+}
+END_TEST
 
-	/* We are still here: the corrupt records did not terminate us. */
-	ck_assert(1);
+/* XmClipboardEndCopy() on an item whose record vanished mid copy. */
+START_TEST(end_copy_corrupt_releases_lock)
+{
+	Display *dpy = XtDisplay(top);
+	Window root = RootWindow(dpy, 0);
+	long item_id = 0, data_id = 0;
+
+	clear_records(dpy, root);
+	ck_assert_int_eq(XmClipboardStartCopy(dpy, win, NULL, CurrentTime,
+					      NULL, NULL, &item_id),
+			 ClipboardSuccess);
+	XmClipboardCopy(dpy, win, item_id, "STRING", "x", 1, 0, &data_id);
+	drop_item(dpy, root, item_id);
+	ck_assert_int_eq(XmClipboardEndCopy(dpy, win, item_id),
+			 ClipboardFail);
+	ck_assert_int_gt(saw_warning, 0);
+	ck_assert(lock_owner(dpy) == None);
+	clear_records(dpy, root);
+}
+END_TEST
+
+/* XmClipboardUndoCopy() when the last copied item is gone. */
+START_TEST(undo_copy_corrupt_releases_lock)
+{
+	Display *dpy = XtDisplay(top);
+	Window root = RootWindow(dpy, 0);
+
+	clear_records(dpy, root);
+	drop_item(dpy, root, copy_string(dpy, win, "hello"));
+	ck_assert_int_eq(XmClipboardUndoCopy(dpy, win), ClipboardFail);
+	ck_assert_int_gt(saw_warning, 0);
+	ck_assert(lock_owner(dpy) == None);
+	clear_records(dpy, root);
+}
+END_TEST
+
+/* XmClipboardCopyByName() for a format record that does not exist. */
+START_TEST(copy_by_name_corrupt_releases_lock)
+{
+	Display *dpy = XtDisplay(top);
+	Window root = RootWindow(dpy, 0);
+
+	clear_records(dpy, root);
+	ck_assert_int_eq(XmClipboardCopyByName(dpy, win, 4242, "x", 1, 0),
+			 ClipboardFail);
+	ck_assert_int_gt(saw_warning, 0);
+	ck_assert(lock_owner(dpy) == None);
+	clear_records(dpy, root);
+}
+END_TEST
+
+/* XmClipboardRetrieve() of our own copy whose format data is gone. */
+START_TEST(retrieve_corrupt_releases_lock)
+{
+	Display *dpy = XtDisplay(top);
+	Window root = RootWindow(dpy, 0);
+	char buf[64];
+	unsigned long outlen = 0;
+	long private_id = 0;
+
+	clear_records(dpy, root);
+	copy_string(dpy, win, "hello");
+	drop_format_data(dpy, root);
+	ck_assert_int_eq(XmClipboardRetrieve(dpy, win, "STRING", buf,
+					     sizeof buf, &outlen,
+					     &private_id),
+			 ClipboardFail);
+	ck_assert_int_gt(saw_warning, 0);
+	ck_assert(lock_owner(dpy) == None);
+	clear_records(dpy, root);
 }
 END_TEST
 
@@ -196,6 +338,10 @@ void clipboard_suite(SRunner *runner)
 
 	tcase_add_checked_fixture(t, setup, teardown);
 	tcase_add_test(t, corrupt_records_do_not_exit);
+	tcase_add_test(t, end_copy_corrupt_releases_lock);
+	tcase_add_test(t, undo_copy_corrupt_releases_lock);
+	tcase_add_test(t, copy_by_name_corrupt_releases_lock);
+	tcase_add_test(t, retrieve_corrupt_releases_lock);
 	tcase_set_timeout(t, 60);
 	suite_add_tcase(s, t);
 	srunner_add_suite(runner, s);

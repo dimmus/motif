@@ -42,8 +42,9 @@ static char rcsid[] = "$TOG: CutPaste.c /main/27 1999/05/26 17:42:48 samborn $"
    code reads.  Report it as a warning, which returns, rather than with
    XtErrorMsg, whose default handler calls exit() and lets any such
    client terminate every Motif application that touches the clipboard.
-   Every ClipboardError() call site already bails out with a failure
-   return, so the operation fails cleanly instead. */
+   Every ClipboardError() call site bails out with a failure return, and
+   one in a public entry point first frees what it holds and releases
+   the clipboard lock, so the operation fails cleanly instead. */
 #define XMERROR(key, message) \
   XtWarningMsg(key, "xmClipboardError", "XmToolkitError", message, NULL, NULL)
 #define XMRETRY 3
@@ -1342,6 +1343,11 @@ static ClipboardFormatItem ClipboardFindFormat(
                         sizeof(ClipboardFormatItemRec),
                         XM_FORMAT_HEADER_TYPE);
     if (currformat == 0) {
+      XtFree((char *)matchformat);
+      XtFree((char *)queryitem);
+      *count = 0;
+      *maxnamelength = 0;
+      *matchlength = 0;
       CleanupHeader(display);
       ClipboardError(CLIPBOARD_CORRUPT, CORRUPT_DATA_STRUCTURE);
       return 0;
@@ -1410,6 +1416,7 @@ static void ClipboardDeleteFormat(Display *display, itemId formatitemid)
                       sizeof(ClipboardDataItemRec),
                       XM_DATA_ITEM_RECORD_TYPE);
   if (dataitem == 0) {
+    XtFree((char *)formatitem);
     CleanupHeader(display);
     ClipboardError(CLIPBOARD_CORRUPT, CORRUPT_DATA_STRUCTURE);
     return;
@@ -1464,6 +1471,7 @@ static void ClipboardDeleteFormats(Display *display, Window window, itemId datai
                         sizeof(ClipboardFormatItemRec),
                         XM_FORMAT_HEADER_TYPE);
     if (formatdata == 0) {
+      XtFree((char *)datalist);
       CleanupHeader(display);
       ClipboardError(CLIPBOARD_CORRUPT, CORRUPT_DATA_STRUCTURE);
       return;
@@ -2596,8 +2604,11 @@ int XmClipboardEndCopy(Display *display, Window window, long itemid)
                       sizeof(ClipboardDataItemRec),
                       XM_DATA_ITEM_RECORD_TYPE);
   if (itemheader == 0) {
+    XtFree((char *)header);
     CleanupHeader(display);
     ClipboardError(CLIPBOARD_CORRUPT, CORRUPT_DATA_STRUCTURE);
+    ClipboardUnlock(display, window, 0);
+    _XmAppUnlock(app);
     return ClipboardFail;
   }
   if (itemheader->cutByNameWindow != 0) {
@@ -2788,8 +2799,12 @@ int XmClipboardCopyByName(Display *display, /* Display id of application passing
                          XA_INTEGER);
   }
   else {
+    XtFree((char *)root_clipboard_header);
     CleanupHeader(display);
     ClipboardError(CLIPBOARD_CORRUPT, CORRUPT_DATA_STRUCTURE);
+    if (locked)
+      ClipboardUnlock(display, window, 0);
+    _XmAppUnlock(app);
     return ClipboardFail;
   }
   if (locked) {
@@ -2832,8 +2847,11 @@ int XmClipboardUndoCopy(Display *display, Window window)
                         sizeof(ClipboardDataItemRec),
                         XM_DATA_ITEM_RECORD_TYPE);
     if (itemheader == 0) {
+      XtFree((char *)header);
       CleanupHeader(display);
       ClipboardError(CLIPBOARD_CORRUPT, CORRUPT_DATA_STRUCTURE);
+      ClipboardUnlock(display, window, 0);
+      _XmAppUnlock(app);
       return ClipboardFail;
     }
     /* if no last copy item
@@ -3010,8 +3028,10 @@ static int ClipboardRetrieve(Display *display,
                               sizeof(ClipboardFormatItemRec),
                               XM_FORMAT_HEADER_TYPE);
           if (matchformat == 0) {
+            XtFree((char *)header);
             CleanupHeader(display);
             ClipboardError(CLIPBOARD_CORRUPT, CORRUPT_DATA_STRUCTURE);
+            ClipboardUnlock(display, window, 0);
             return ClipboardFail;
           }
         }
@@ -3024,8 +3044,11 @@ static int ClipboardRetrieve(Display *display,
                           outtype,
                           0);
         if (formatdata == 0) {
+          XtFree((char *)matchformat);
+          XtFree((char *)header);
           CleanupHeader(display);
           ClipboardError(CLIPBOARD_CORRUPT, CORRUPT_DATA_STRUCTURE);
+          ClipboardUnlock(display, window, 0);
           return ClipboardFail;
         }
         copiedlength = matchformat->copiedLength;
