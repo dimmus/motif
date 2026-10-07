@@ -156,10 +156,42 @@ endfunction()
 
 # A C++ program that passes string literals to the functions that take
 # const strings: C++ does not convert a string literal to char *.
+#
+# It has to be built by the C compiler's own C++ driver: the sanitizer,
+# LTO and linker options are global and are the C compiler's, and the
+# libraries instrumented by one compiler do not link with the sanitizer
+# runtime of another.  Without CXX or CMAKE_CXX_COMPILER CMake takes
+# c++, which is GCC even with CC=clang, so look next to the C compiler
+# first (clang -> clang++, gcc-14 -> g++-14, cc -> c++).
+if(NOT DEFINED CMAKE_CXX_COMPILER AND NOT DEFINED ENV{CXX})
+    get_filename_component(_c_dir "${CMAKE_C_COMPILER}" DIRECTORY)
+    get_filename_component(_c_name "${CMAKE_C_COMPILER}" NAME)
+    set(_cxx_name "")
+    if(_c_name MATCHES "clang")
+        string(REPLACE "clang" "clang++" _cxx_name "${_c_name}")
+    elseif(_c_name MATCHES "gcc")
+        string(REPLACE "gcc" "g++" _cxx_name "${_c_name}")
+    elseif(_c_name MATCHES "^cc")
+        string(REGEX REPLACE "^cc" "c++" _cxx_name "${_c_name}")
+    endif()
+    if(_cxx_name AND EXISTS "${_c_dir}/${_cxx_name}")
+        set(CMAKE_CXX_COMPILER "${_c_dir}/${_cxx_name}" CACHE FILEPATH "C++ compiler")
+    endif()
+endif()
 include(CheckLanguage)
 check_language(CXX)
 if(CMAKE_CXX_COMPILER)
     enable_language(CXX)
+endif()
+if(NOT CMAKE_CXX_COMPILER)
+    message(STATUS "Tests: no C++ compiler, Xm.cxx_const_api not built")
+elseif(NOT CMAKE_CXX_COMPILER_ID STREQUAL CMAKE_C_COMPILER_ID OR
+       NOT CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL CMAKE_C_COMPILER_VERSION)
+    message(STATUS "Tests: the C++ compiler (${CMAKE_CXX_COMPILER_ID} "
+        "${CMAKE_CXX_COMPILER_VERSION}) is not the C compiler's "
+        "(${CMAKE_C_COMPILER_ID} ${CMAKE_C_COMPILER_VERSION}), "
+        "Xm.cxx_const_api not built")
+else()
     include(CheckCXXCompilerFlag)
     add_executable(cxx_const_api cxx/const_api.cpp)
     set_target_properties(cxx_const_api PROPERTIES
@@ -170,8 +202,6 @@ if(CMAKE_CXX_COMPILER)
     endif()
     target_link_libraries(cxx_const_api PRIVATE Mrm Xm)
     motif_x_test(Xm.cxx_const_api $<TARGET_FILE:cxx_const_api>)
-else()
-    message(STATUS "Tests: no C++ compiler, Xm.cxx_const_api not built")
 endif()
 
 add_subdirectory(uil)
