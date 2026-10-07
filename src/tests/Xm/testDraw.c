@@ -22,9 +22,11 @@
 
 #define PW 72
 #define PH 56
-#define BG 0x101010
-#define TOP 0xe0e0e0
-#define BOT 0x606060
+/* Pixel values, not colors: they fit any depth from 2 up, and a pixmap
+ * keeps them as they are, whatever the visual. */
+#define BG 1
+#define TOP 2
+#define BOT 3
 
 static Widget shell;
 
@@ -110,10 +112,11 @@ START_TEST(shadows)
 	Pixmap pm;
 	GC top, bot, clear;
 	int ti, si, t, x, y;
+	int depth = DefaultDepth(dpy, DefaultScreen(dpy));
+	unsigned long mask = depth < 32 ? (1UL << depth) - 1 : 0xffffffffUL;
 
-	if (DefaultDepth(dpy, DefaultScreen(dpy)) != 24)
-		return; /* the colors below are 24-bit pixels */
-	pm = XCreatePixmap(dpy, root, PW, PH, 24);
+	ck_assert_int_ge(depth, 2);
+	pm = XCreatePixmap(dpy, root, PW, PH, depth);
 	clear = XCreateGC(dpy, pm, 0, NULL);
 	top = XCreateGC(dpy, pm, 0, NULL);
 	bot = XCreateGC(dpy, pm, 0, NULL);
@@ -137,10 +140,10 @@ START_TEST(shadows)
 				model_shadow(5, 4, sizes[si][0], sizes[si][1], t, types[ti]);
 				for (y = 0; y < PH; y++)
 					for (x = 0; x < PW; x++)
-						ck_assert_msg((XGetPixel(img, x, y) & 0xffffff) ==
+						ck_assert_msg((XGetPixel(img, x, y) & mask) ==
 							      model[y][x],
 							      "type %u, %dx%d, thickness %d: "
-							      "pixel %d,%d is %06lx, not %06lx",
+							      "pixel %d,%d is %lu, not %lu",
 							      types[ti], sizes[si][0], sizes[si][1],
 							      t, x, y, XGetPixel(img, x, y),
 							      model[y][x]);
