@@ -20,6 +20,7 @@
 #include <X11/Intrinsic.h>
 #include <Xm/Xm.h>
 #include <Xm/XmStringI.h>
+#include <Xm/XmTabListI.h>
 #include <check.h>
 
 #include "leak.h"
@@ -1764,6 +1765,41 @@ START_TEST(extent_cache_skips_tab_units)
 }
 END_TEST
 
+/*
+ * Mrm builds a rendition's tab list in place after the rendition is in
+ * its render table (_XmCreateRendition, then _XmCreateTabList and
+ * _XmCreateTab): an extent cached before must not survive it.
+ */
+START_TEST(extent_cache_follows_mrm_tabs)
+{
+	XmRenderTable rt = make_rt(XmFONTLIST_DEFAULT_TAG, "fixed",
+				   XmFONT_IS_FONT);
+	XmString s = XmStringConcatAndFree(tab(),
+					   XmStringCreateLocalized("abc"));
+	XmRendition rend;
+	Widget tl;
+	Dimension w0, w1, h;
+	Arg args[1];
+
+	ck_assert(_XmStrOptimized(s));
+	XmStringExtent(rt, s, &w0, &h);
+	ck_assert(((_XmStringOpt)s)->extent_stamp != 0);
+
+	/* A handle that shares the table's rendition record */
+	rend = XmRenderTableGetRendition(rt, XmFONTLIST_DEFAULT_TAG);
+	tl = _XmCreateTabList((Widget)rend, NULL, NULL, 0);
+	ck_assert_ptr_nonnull(tl);
+	XtSetArg(args[0], XmNtabValue, 100);
+	(void)_XmCreateTab(tl, NULL, args, 1);
+
+	XmStringExtent(rt, s, &w1, &h);
+	ck_assert_uint_eq(w1, w0 + 100);
+	XmRenditionFree(rend);
+	XmRenderTableFree(rt);
+	XmStringFree(s);
+}
+END_TEST
+
 void xmstring_extent_suite(SRunner *runner)
 {
 	TCase *t;
@@ -1775,6 +1811,7 @@ void xmstring_extent_suite(SRunner *runner)
 	tcase_add_test(t, extent_cache_follows_table);
 	tcase_add_test(t, extent_cache_string_changed);
 	tcase_add_test(t, extent_cache_skips_tab_units);
+	tcase_add_test(t, extent_cache_follows_mrm_tabs);
 #ifdef HAVE_LSAN
 	tcase_add_test(t, baseline_rendition_leak);
 #endif
