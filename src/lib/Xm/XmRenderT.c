@@ -1999,15 +1999,17 @@ void XmRenditionFree(XmRendition rendition)
  * resources take no other argument from the widget).  A key holds all
  * of that, with the string, the resource name and the locale; a table
  * converted for one widget is kept under its key, and a widget whose key
- * is the same gets a table of its own that shares the renditions of the
- * kept one, instead of a new table.
+ * is the same gets a copy of it (CopyConvertedTable) instead of a new
+ * table.
  *
- * The table and the handles of its renditions must be the widget's own,
- * as they were when each widget had a new table: XmString calls the
- * XmNnoFontCallback of a widget with no font with the first rendition of
- * its table, and a callback that gives that rendition a font (with
- * XmRenditionUpdate) changes it in every copy of the table that holds the
- * handle, but in no other table.
+ * The copy is a table of the widget's own, as a new one would be, not a
+ * table sharing the kept one's data or renditions: the renditions of a
+ * table are handed out (XmString calls the XmNnoFontCallback of a widget
+ * with no font with the first rendition of its table, and the callback
+ * may give that rendition a font with XmRenditionUpdate), and what is
+ * done to them must not reach the tables of other widgets.  The copy
+ * shares only what a new conversion shares too: the fonts, which Xt and
+ * the Xft font cache keep per display, and the quark strings.
  *
  * A string that names no rendition is a font list, whose entries look
  * up their resources for the display rather than for the widget: the
@@ -2017,8 +2019,9 @@ void XmRenditionFree(XmRendition rendition)
  * A table is only kept when making it gave no warning, no failed
  * conversion and no XmNnoFontCallback call, and when all its fonts are
  * loaded, so that a copy behaves as a new table would.  The tables are
- * kept per display: a table is dropped once nothing else holds its
- * renditions, and all of them when the display is closed.
+ * kept per display: a table that was not used since the cache last grew
+ * is dropped when it grows again, and all of them when the display is
+ * closed.
  */
 typedef struct {
   char *data;
@@ -2032,6 +2035,7 @@ typedef struct _XmRTCacheEntryRec {
   XmRTKeyRec check;       /* display lookups of a font list, by tag */
   XmRenderTable table;    /* NULL until the entry is cached */
   unsigned long failures; /* rendition_failures when the key was made */
+  Boolean used;           /* since the last sweep */
 } XmRTCacheEntryRec, *XmRTCacheEntry;
 
 typedef struct _XmRTCacheRec {
@@ -2205,10 +2209,38 @@ static Boolean FreeRTCacheMapProc(XmHashKey k, XtPointer value, XtPointer data)
   return False;
 }
 
-/* A new table, holding new handles to the renditions of table: what */
-/* is done to the table or to a handle of the copy is not seen through */
-/* table. */
-static XmRenderTable ShareRenditions(XmRenderTable table)
+/* A copy of rend, a rendition of a converted table, that shares none */
+/* of its data: the same rendition as a new conversion makes when the */
+/* fonts are loaded already. */
+static XmRendition CopyConvertedRendition(XmRendition rend)
+{
+  XmRendition copy;
+  _XmRendition data;
+  data = (_XmRendition)XtMalloc(sizeof(_XmRenditionRec));
+  memcpy((char *)data, (char *)GetPtr(rend), sizeof(_XmRenditionRec));
+  copy = GetHandle(_XmRendition);
+  SetPtr(copy, data);
+  _XmRendRefcount(copy) = 1;
+  if (NameIsString(_XmRendFontName(rend)))
+    _XmRendFontName(copy) = XtNewString(_XmRendFontName(rend));
+  if (ListIsList(_XmRendTabs(rend)))
+    _XmRendTabs(copy) = XmTabListCopy(_XmRendTabs(rend), 0, 0);
+  _XmRendGC(copy) = NULL;
+  _XmRendTags(copy) = NULL;
+  _XmRendTagCount(copy) = 0;
+  _XmRendHadEnds(copy) = FALSE;
+#if USE_XFT
+  /* FreeRendition closes the font: take a reference.  The pattern is */
+  /* only kept by the rendition that opened the font. */
+  if (_XmRendXftFont(rend) != NULL)
+    _XmRendXftFont(copy) = XftFontCopy(_XmRendDisplay(rend), _XmRendXftFont(rend));
+  _XmRendPattern(copy) = NULL;
+#endif
+  return (copy);
+}
+
+/* A copy of table, a converted table, that shares none of its data. */
+static XmRenderTable CopyConvertedTable(XmRenderTable table)
 {
   XmRenderTable rt;
   _XmRenderTable t;
@@ -2223,20 +2255,20 @@ static XmRenderTable ShareRenditions(XmRenderTable table)
   _XmRTCount(rt) = _XmRTCount(table);
   _XmRTDisplay(rt) = _XmRTDisplay(table);
   for (i = 0; i < _XmRTCount(table); i++)
-    _XmRTRenditions(rt)[i] = CopyRendition(_XmRTRenditions(table)[i]);
+    _XmRTRenditions(rt)[i] = CopyConvertedRendition(_XmRTRenditions(table)[i]);
   return (rt);
 }
 
-/* Drop a table whose renditions only the cache holds. */
+/* Drop a table that was not used since the last sweep. */
 static Boolean SweepRTCacheMapProc(XmHashKey k, XtPointer value, XtPointer data)
 {
   XmRTCacheEntry entry = (XmRTCacheEntry)value;
-  int i;
-  for (i = 0; i < _XmRTCount(entry->table); i++)
-    if (_XmRendRefcount(_XmRTRenditions(entry->table)[i]) > 1)
-      return False;
-  (void)_XmRemoveHashEntry((XmHashTable)data, k);
-  FreeRTCacheEntry(entry);
+  if (entry->used)
+    entry->used = False;
+  else {
+    (void)_XmRemoveHashEntry((XmHashTable)data, k);
+    FreeRTCacheEntry(entry);
+  }
   return False;
 }
 
@@ -2279,10 +2311,9 @@ static XmRTCacheRec *FindRTCache(Display *display, Boolean create)
 
 /*
  * The String to RenderTable converter for resource resname of wid calls
- * this before converting spec.  It returns a new table sharing the
- * renditions of the one cached for the same key, or NULL with a pending
- * key in *pending, which the converter passes to
- * _XmRenderTableCvtCachePut with the table it makes.
+ * this before converting spec.  It returns a copy of the table cached
+ * for the same key, or NULL with a pending key in *pending, which the
+ * converter passes to _XmRenderTableCvtCachePut with the table it makes.
  */
 XmRenderTable _XmRenderTableCvtCacheGet(
     Widget wid, String resname, String resclass, char *spec, XtPointer *pending)
@@ -2311,6 +2342,7 @@ XmRenderTable _XmRenderTableCvtCacheGet(
   key.check.size = 0;
   key.table = NULL;
   key.failures = rendition_failures;
+  key.used = False;
   /* The screen and the colormap that the values are converted for. */
   screen = XtScreenOfObject(wid);
   KeyAdd(&key.key, &screen, sizeof(screen));
@@ -2341,8 +2373,10 @@ XmRenderTable _XmRenderTableCvtCacheGet(
     XtFree(s);
   if ((rec = FindRTCache(XtDisplayOfObject(wid), False)) != NULL &&
       (cached = (XmRTCacheEntry)_XmGetHashEntry(rec->entries, (XmHashKey)&key)) != NULL &&
-      RTCacheEntryValid(cached, XtDisplayOfObject(wid)))
-    table = ShareRenditions(cached->table);
+      RTCacheEntryValid(cached, XtDisplayOfObject(wid))) {
+    cached->used = True;
+    table = CopyConvertedTable(cached->table);
+  }
   if (table == NULL) {
     entry = XtNew(XmRTCacheEntryRec);
     *entry = key;
@@ -2413,7 +2447,8 @@ void _XmRenderTableCvtCachePut(Widget wid,
       _XmMapHashTable(rec->entries, SweepRTCacheMapProc, (XtPointer)rec->entries);
       rec->sweep = MAX(16, 2 * _XmHashTableCount(rec->entries));
     }
-    entry->table = ShareRenditions(table);
+    entry->table = CopyConvertedTable(table);
+    entry->used = True;
     _XmAddHashEntry(rec->entries, (XmHashKey)entry, (XtPointer)entry);
     if (_XmHashTableCount(rec->entries) > _XmHashTableSize(rec->entries))
       _XmResizeHashTable(rec->entries, 2 * _XmHashTableSize(rec->entries));

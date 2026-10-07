@@ -14,10 +14,10 @@
  *
  * The first conversion of a string is always made by the converter
  * itself, so comparing the tables of a first and a later widget compares
- * a converted table with a cached one.  Whether two tables share their
- * renditions (the cache handed out the renditions of one table) is
- * checked through the handles: an XmRendition points to the shared
- * rendition data.
+ * a converted table with a cached one.  A widget gets a table of its own
+ * either way, so whether its table came from the cache is seen through
+ * the conversions of the rendition resources: the tests count those of
+ * fontType and underlineType, which only a new conversion makes.
  */
 #include <stdio.h>
 #include <string.h>
@@ -65,9 +65,87 @@ static void put_font(const char *rendition, const char *font)
 	put(line);
 }
 
+/* Conversions of rendition resources (fontType, underlineType). */
+static int conversions, conversions_seen;
+
+/* The conversions made since the last call. */
+static int converted(void)
+{
+	int n = conversions - conversions_seen;
+
+	conversions_seen = conversions;
+	return n;
+}
+
+static Boolean store(XrmValue *to, XtPointer value, Cardinal size)
+{
+	if (to->addr == NULL)
+		to->addr = (XPointer)value;
+	else if (to->size < size) {
+		to->size = size;
+		return False;
+	}
+	else
+		memcpy(to->addr, value, size);
+	to->size = size;
+	return True;
+}
+
+/* Index of the name (with or without "Xm") in names, or -1 after a */
+/* warning. */
+static int lookup(Display *dpy, XrmValue *from, const char *type,
+		  const char *const *names, int n)
+{
+	const char *s = (const char *)from->addr;
+	int i;
+
+	conversions++;
+	if (strncasecmp(s, "Xm", 2) == 0)
+		s += 2;
+	for (i = 0; i < n; i++)
+		if (strcasecmp(s, names[i]) == 0)
+			return i;
+	XtDisplayStringConversionWarning(dpy, (char *)from->addr, (char *)type);
+	return -1;
+}
+
+/* String to XmRFontType (an int) and XmRLineType (an unsigned char), */
+/* as libXm converts them, counting the conversions.  Not cached by Xt. */
+static Boolean cvt_font_type(Display *dpy, XrmValue *args, Cardinal *num_args,
+			     XrmValue *from, XrmValue *to, XtPointer *data)
+{
+	static const char *const names[] = { "FONT_IS_FONT", "FONT_IS_FONTSET" };
+	static int value;
+	int i = lookup(dpy, from, XmRFontType, names, XtNumber(names));
+
+	if (i < 0)
+		return False;
+	value = i == 0 ? XmFONT_IS_FONT : XmFONT_IS_FONTSET;
+	return store(to, &value, sizeof value);
+}
+
+static Boolean cvt_line_type(Display *dpy, XrmValue *args, Cardinal *num_args,
+			     XrmValue *from, XrmValue *to, XtPointer *data)
+{
+	static const char *const names[] = { "NO_LINE", "SINGLE_LINE", "DOUBLE_LINE" };
+	static const unsigned char values[] = { XmNO_LINE, XmSINGLE_LINE, XmDOUBLE_LINE };
+	static unsigned char value;
+	int i = lookup(dpy, from, XmRLineType, names, XtNumber(names));
+
+	if (i < 0)
+		return False;
+	value = values[i];
+	return store(to, &value, sizeof value);
+}
+
 static void _init_xt(void)
 {
 	shell = init_xt("check_RenderTable");
+	XtAppSetTypeConverter(app, XmRString, XmRFontType, cvt_font_type, NULL, 0,
+			      XtCacheNone, NULL);
+	XtAppSetTypeConverter(app, XmRString, XmRLineType, cvt_line_type, NULL, 0,
+			      XtCacheNone, NULL);
+	conversions = conversions_seen = 0;
 }
 
 static int warnings;
@@ -76,41 +154,6 @@ static void count_warning(String name, String type, String class, String default
 			  String *params, Cardinal *num_params)
 {
 	warnings++;
-}
-
-static int rendition_count(XmRenderTable rt)
-{
-	XmStringTag *tags = NULL;
-	int n = XmRenderTableGetTags(rt, &tags), i;
-
-	for (i = 0; i < n; i++)
-		XtFree(tags[i]);
-	XtFree((char *)tags);
-	return n;
-}
-
-/* Two tables share all their renditions. */
-static int shared(XmRenderTable a, XmRenderTable b)
-{
-	XmStringTag *tags = NULL;
-	int i, n, same;
-
-	if (a == NULL || b == NULL)
-		return 0;
-	n = XmRenderTableGetTags(a, &tags);
-	same = n > 0 && n == rendition_count(b);
-	for (i = 0; i < n; i++) {
-		XmRendition ra = XmRenderTableGetRendition(a, tags[i]);
-		XmRendition rb = XmRenderTableGetRendition(b, tags[i]);
-
-		if (ra == NULL || rb == NULL || *(XtPointer *)ra != *(XtPointer *)rb)
-			same = 0;
-		XmRenditionFree(ra);
-		XmRenditionFree(rb);
-		XtFree(tags[i]);
-	}
-	XtFree((char *)tags);
-	return same;
 }
 
 static XmRenderTable table_of(Widget w)
@@ -222,20 +265,22 @@ START_TEST(same_string_same_table)
 	put("*renderTable.red.renditionForeground: red");
 	put("*renderTable.red.underlineType: SINGLE_LINE");
 	rc = XmCreateRowColumn(shell, "rc", NULL, 0);
+	converted();
 	l1 = label(rc, "l", "core bold red");
+	ck_assert_int_gt(converted(), 0);
 	l2 = label(rc, "l", "core bold red");
+	ck_assert_msg(converted() == 0, "the second table was not cached");
+	/* Another string with the same renditions is another key. */
 	l3 = label(rc, "l", "core, bold red");
+	ck_assert_int_gt(converted(), 0);
 	describe(table_of(l1), d1, sizeof d1);
 	describe(table_of(l2), d2, sizeof d2);
 	ck_assert_str_eq(d1, d2);
 	ck_assert_msg(strstr(d1, "tag=core name=fixed") != NULL, "%s", d1);
 	ck_assert_msg(strstr(d1, "tag=bold name=8x13bold") != NULL, "%s", d1);
 	ck_assert_msg(strstr(d1, "tag=red name=AS_IS") != NULL, "%s", d1);
-	ck_assert_msg(shared(table_of(l1), table_of(l2)), "the second table was not cached");
-	/* Another string with the same renditions is another key. */
 	describe(table_of(l3), d2, sizeof d2);
 	ck_assert_str_eq(d1, d2);
-	ck_assert(!shared(table_of(l1), table_of(l3)));
 	/* The widgets do not depend on each other. */
 	XtDestroyWidget(l1);
 	describe(table_of(l2), d2, sizeof d2);
@@ -255,21 +300,23 @@ START_TEST(resources_of_the_widget_path)
 	put_font("*rc1.XmLabelGadget.renderTable.t", "8x13");
 	rc1 = XmCreateRowColumn(shell, "rc1", NULL, 0);
 	rc2 = XmCreateRowColumn(shell, "rc2", NULL, 0);
+	converted();
 	a = label(rc1, "l", "t");
+	ck_assert_int_gt(converted(), 0);
 	b = label(rc2, "l", "t");
+	ck_assert_int_gt(converted(), 0);
 	c = label(rc1, "l", "t");
+	ck_assert_int_eq(converted(), 0);
 	special = label(rc1, "special", "t");
+	ck_assert_int_gt(converted(), 0);
 	gadget = XtVaCreateWidget("g", xmLabelGadgetClass, rc1, XtVaTypedArg, XmNrenderTable,
 				  XmRString, "t", 2, NULL);
+	ck_assert_int_gt(converted(), 0);
 	ck_assert_str_eq(font_name_of(table_of(a), "t"), "9x15");
 	ck_assert_str_eq(font_name_of(table_of(b), "t"), "8x13bold");
 	ck_assert_str_eq(font_name_of(table_of(c), "t"), "9x15");
 	ck_assert_str_eq(font_name_of(table_of(special), "t"), "6x13");
 	ck_assert_str_eq(font_name_of(table_of(gadget), "t"), "8x13");
-	ck_assert(shared(table_of(a), table_of(c)));
-	ck_assert(!shared(table_of(a), table_of(b)));
-	ck_assert(!shared(table_of(a), table_of(special)));
-	ck_assert(!shared(table_of(a), table_of(gadget)));
 }
 END_TEST
 
@@ -323,7 +370,7 @@ static Pixel foreground_of(XmRenderTable rt, const char *tag)
 }
 
 /* The colors of renditions are allocated in the colormap of the */
-/* widget: widgets in another colormap do not share its table. */
+/* widget: a widget in another colormap does not get its table. */
 START_TEST(colormap)
 {
 	Display *dpy = XtDisplay(shell);
@@ -341,16 +388,18 @@ START_TEST(colormap)
 	other = XtVaCreatePopupShell("other", topLevelShellWidgetClass, shell, NULL);
 	rc1 = XmCreateRowColumn(shell, "rc", NULL, 0);
 	rc2 = XtVaCreateWidget("rc", xmRowColumnWidgetClass, other, XmNcolormap, cmap, NULL);
+	converted();
 	a = XtVaCreateWidget("l", xmLabelWidgetClass, rc1, NULL);
+	ck_assert_int_gt(converted(), 0);
 	b = XtVaCreateWidget("l", xmLabelWidgetClass, rc2, NULL);
+	ck_assert_int_gt(converted(), 0);
 	c = XtVaCreateWidget("l", xmLabelGadgetClass, rc2, NULL);
+	ck_assert_int_eq(converted(), 0);
 	ck_assert(XAllocNamedColor(dpy, cmap, "red", &color, &exact));
 	ck_assert_uint_eq(foreground_of(table_of(b), "t"), color.pixel);
 	ck_assert_uint_eq(foreground_of(table_of(c), "t"), color.pixel);
 	ck_assert(XAllocNamedColor(dpy, DefaultColormapOfScreen(screen), "red", &color, &exact));
 	ck_assert_uint_eq(foreground_of(table_of(a), "t"), color.pixel);
-	ck_assert(!shared(table_of(a), table_of(b)));
-	ck_assert(shared(table_of(b), table_of(c)));
 	/* The colormap goes with the display: Xt frees the colors */
 	/* allocated in it when the application context goes. */
 }
@@ -374,7 +423,6 @@ START_TEST(font_list_string)
 	ck_assert_msg(strstr(d1, "name=fixed") && strstr(d1, "tag=bold name=8x13bold"), "%s", d1);
 	ck_assert_str_eq(d1, d2);
 	ck_assert_str_eq(d1, d3);
-	ck_assert(shared(table_of(l1), table_of(l2)));
 }
 END_TEST
 
@@ -408,8 +456,6 @@ START_TEST(font_list_display_resources)
 	ck_assert_str_eq(font_style_of(table_of(a), XmFONTLIST_DEFAULT_TAG), "Bold");
 	ck_assert_str_eq(font_style_of(table_of(b), XmFONTLIST_DEFAULT_TAG), "Thin");
 	ck_assert_str_eq(font_style_of(table_of(c), XmFONTLIST_DEFAULT_TAG), "Thin");
-	ck_assert(!shared(table_of(a), table_of(b)));
-	ck_assert(shared(table_of(b), table_of(c)));
 }
 END_TEST
 
@@ -422,7 +468,9 @@ START_TEST(unspecified_resources)
 	put_font("*renderTable.t", "fixed");
 	rc = XmCreateRowColumn(shell, "rc", NULL, 0);
 	l[0] = label(rc, "l", "t");
+	converted();
 	l[1] = label(rc, "l", "t");
+	ck_assert_int_eq(converted(), 0);
 	for (i = 0; i < 2; i++) {
 		XmRendition r = XmRenderTableGetRendition(table_of(l[i]), "t");
 		Pixel fg = 0, bg = 0;
@@ -457,7 +505,6 @@ START_TEST(unspecified_resources)
 		ck_assert(style == NULL);
 		XmRenditionFree(r);
 	}
-	ck_assert(shared(table_of(l[0]), table_of(l[1])));
 }
 END_TEST
 
@@ -506,13 +553,16 @@ START_TEST(database_change)
 	rc = XmCreateRowColumn(shell, "rc", NULL, 0);
 	a = label(rc, "l", "t");
 	put_font("*renderTable.t", "9x15");
+	converted();
 	b = label(rc, "l", "t");
+	ck_assert_int_gt(converted(), 0);
+	/* The database finds what it found for a again. */
 	put_font("*renderTable.t", "fixed");
 	c = label(rc, "l", "t");
+	ck_assert_int_eq(converted(), 0);
 	ck_assert_str_eq(font_name_of(table_of(a), "t"), "fixed");
 	ck_assert_str_eq(font_name_of(table_of(b), "t"), "9x15");
 	ck_assert_str_eq(font_name_of(table_of(c), "t"), "fixed");
-	ck_assert(!shared(table_of(a), table_of(b)));
 }
 END_TEST
 
@@ -543,7 +593,7 @@ END_TEST
 /* without Xt falling back to a default font.) */
 START_TEST(font_failure_each_time)
 {
-	Widget rc, l[3];
+	Widget rc;
 	int i;
 
 	put("*renderTable.t.fontName:");
@@ -551,15 +601,17 @@ START_TEST(font_failure_each_time)
 	rc = XmCreateRowColumn(shell, "rc", NULL, 0);
 	XtAppSetWarningMsgHandler(app, count_warning);
 	warnings = 0;
-	for (i = 0; i < 3; i++)
-		l[i] = label(rc, "l", "t");
+	for (i = 0; i < 3; i++) {
+		converted();
+		label(rc, "l", "t");
+		ck_assert_int_gt(converted(), 0);
+	}
 	ck_assert_int_eq(warnings, 3);
-	ck_assert(!shared(table_of(l[0]), table_of(l[1])));
 	XtAddCallback(XmGetXmDisplay(XtDisplay(shell)), XmNnoFontCallback, no_font, NULL);
 	no_font_calls = 0;
 	warnings = 0;
 	for (i = 0; i < 3; i++)
-		l[i] = label(rc, "l", "t");
+		label(rc, "l", "t");
 	ck_assert_int_eq(no_font_calls, 3);
 	ck_assert_int_eq(warnings, 0);
 }
@@ -597,10 +649,12 @@ START_TEST(conversion_failure_each_time)
 	rc = XmCreateRowColumn(shell, "rc", NULL, 0);
 	XtAppSetWarningMsgHandler(app, count_warning);
 	warnings = 0;
-	for (i = 0; i < 3; i++)
+	for (i = 0; i < 3; i++) {
+		converted();
 		l[i] = label(rc, "l", "t");
+		ck_assert_int_gt(converted(), 0);
+	}
 	ck_assert_int_eq(warnings, 3);
-	ck_assert(!shared(table_of(l[0]), table_of(l[1])));
 	ck_assert_str_eq(font_name_of(table_of(l[2]), "t"), "fixed");
 }
 END_TEST
@@ -615,9 +669,12 @@ START_TEST(deferred_font)
 	rc = XmCreateRowColumn(shell, "rc", NULL, 0);
 	a = XtVaCreateWidget("l", xmLabelWidgetClass, rc, XtVaTypedArg, XmNrenderTable,
 			     XmRString, "t", 2, XmNlabelString, NULL, NULL);
+	converted();
 	b = XtVaCreateWidget("l", xmLabelWidgetClass, rc, XtVaTypedArg, XmNrenderTable,
 			     XmRString, "t", 2, XmNlabelString, NULL, NULL);
-	ck_assert(!shared(table_of(a), table_of(b)));
+	ck_assert_int_gt(converted(), 0);
+	ck_assert_str_eq(font_name_of(table_of(a), "t"), "fixed");
+	ck_assert_str_eq(font_name_of(table_of(b), "t"), "fixed");
 }
 END_TEST
 
@@ -636,54 +693,63 @@ static void give_font(Widget w, XtPointer client_data, XtPointer call_data)
 
 /* A label whose table has no font calls XmNnoFontCallback with the */
 /* first rendition of its table when it measures its string, and a font */
-/* given to that rendition is for its table only: each label calls it. */
+/* given to that rendition is for its table only: each label calls it, */
+/* and the table cached for the others keeps no font. */
 START_TEST(no_font_callback_when_drawn)
 {
 	static const char tag[] = "FONTLIST_DEFAULT_TAG_STRING";
-	Widget rc, l[3], a, b;
+	Widget rc, l[3], a;
 	XmString empty;
 	int i;
 
 	put("*renderTable.FONTLIST_DEFAULT_TAG_STRING.renditionForeground: red");
+	put("*renderTable.FONTLIST_DEFAULT_TAG_STRING.underlineType: SINGLE_LINE");
 	XtAddCallback(XmGetXmDisplay(XtDisplay(shell)), XmNnoFontCallback, give_font, NULL);
 	rc = XmCreateRowColumn(shell, "rc", NULL, 0);
+	converted();
 	for (i = 0; i < 3; i++) {
 		no_font_calls = 0;
 		l[i] = label(rc, "l", tag);
+		ck_assert_int_eq(converted(), i == 0);
 		ck_assert_int_eq(no_font_calls, 1);
 		ck_assert_str_eq(font_name_of(table_of(l[i]), tag), "fixed");
 	}
-	/* Labels with nothing to measure share the renditions converted */
-	/* for the first label, which the callbacks above left alone. */
+	/* A label with nothing to measure. */
 	empty = XmStringCreateLocalized("");
 	no_font_calls = 0;
 	a = XtVaCreateWidget("l", xmLabelWidgetClass, rc, XmNlabelString, empty,
 			     XtVaTypedArg, XmNrenderTable, XmRString, tag, (int)sizeof tag, NULL);
-	b = XtVaCreateWidget("l", xmLabelWidgetClass, rc, XmNlabelString, empty,
-			     XtVaTypedArg, XmNrenderTable, XmRString, tag, (int)sizeof tag, NULL);
+	ck_assert_int_eq(converted(), 0);
 	ck_assert_int_eq(no_font_calls, 0);
-	ck_assert(shared(table_of(a), table_of(b)));
 	ck_assert_str_eq(font_name_of(table_of(a), tag), "");
 	XmStringFree(empty);
 }
 END_TEST
 
-/* A table in use stays cached while many other strings are converted. */
-START_TEST(table_in_use_stays_cached)
+/* A table used again stays cached while many other strings are */
+/* converted once, and those are dropped. */
+START_TEST(table_used_again_stays_cached)
 {
-	Widget rc, a, b;
+	Widget rc;
 	char spec[32];
 	int i;
 
 	put_font("*renderTable.t", "fixed");
 	rc = XmCreateRowColumn(shell, "rc", NULL, 0);
-	a = label(rc, "l", "t");
+	XtDestroyWidget(label(rc, "l", "t"));
+	XtDestroyWidget(label(rc, "l", "t once"));
 	for (i = 0; i < 200; i++) {
 		snprintf(spec, sizeof spec, "t u%d", i);
 		XtDestroyWidget(label(rc, "l", spec));
+		if (i % 8 == 0) {
+			converted();
+			XtDestroyWidget(label(rc, "l", "t"));
+			ck_assert_int_eq(converted(), 0);
+		}
 	}
-	b = label(rc, "l", "t");
-	ck_assert(shared(table_of(a), table_of(b)));
+	converted();
+	XtDestroyWidget(label(rc, "l", "t once"));
+	ck_assert_int_gt(converted(), 0);
 }
 END_TEST
 
@@ -783,7 +849,7 @@ void rendertable_suite(SRunner *runner)
 	tcase_add_test(t, conversion_failure_each_time);
 	tcase_add_test(t, deferred_font);
 	tcase_add_test(t, no_font_callback_when_drawn);
-	tcase_add_test(t, table_in_use_stays_cached);
+	tcase_add_test(t, table_used_again_stays_cached);
 	tcase_add_test(t, display_close);
 	tcase_add_test(t, default_render_table_display_close);
 	tcase_add_checked_fixture(t, _init_xt, uninit_xt);
