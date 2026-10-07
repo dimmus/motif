@@ -279,6 +279,53 @@ START_TEST(resource_names_and_inheritance)
 }
 END_TEST
 
+static Pixel foreground_of(XmRenderTable rt, const char *tag)
+{
+	XmRendition r = XmRenderTableGetRendition(rt, (XmStringTag)tag);
+	Pixel fg = 0;
+	Arg a[1];
+
+	ck_assert(r != NULL);
+	XtSetArg(a[0], XmNrenditionForeground, &fg);
+	XmRenditionRetrieve(r, a, 1);
+	XmRenditionFree(r);
+	return fg;
+}
+
+/* The colors of renditions are allocated in the colormap of the */
+/* widget: widgets in another colormap do not share its table. */
+START_TEST(colormap)
+{
+	Display *dpy = XtDisplay(shell);
+	Screen *screen = XtScreen(shell);
+	Colormap cmap = XCreateColormap(dpy, RootWindowOfScreen(screen),
+					DefaultVisualOfScreen(screen), AllocNone);
+	Widget other, rc1, rc2, a, b, c;
+	XColor color, exact;
+
+	put_font("*renderTable.t", "fixed");
+	put("*renderTable.t.renditionForeground: red");
+	/* From the database, so that the colormap of the widget is set */
+	/* when its render table is converted. */
+	put("*l.renderTable: t");
+	other = XtVaCreatePopupShell("other", topLevelShellWidgetClass, shell, NULL);
+	rc1 = XmCreateRowColumn(shell, "rc", NULL, 0);
+	rc2 = XtVaCreateWidget("rc", xmRowColumnWidgetClass, other, XmNcolormap, cmap, NULL);
+	a = XtVaCreateWidget("l", xmLabelWidgetClass, rc1, NULL);
+	b = XtVaCreateWidget("l", xmLabelWidgetClass, rc2, NULL);
+	c = XtVaCreateWidget("l", xmLabelGadgetClass, rc2, NULL);
+	ck_assert(XAllocNamedColor(dpy, cmap, "red", &color, &exact));
+	ck_assert_uint_eq(foreground_of(table_of(b), "t"), color.pixel);
+	ck_assert_uint_eq(foreground_of(table_of(c), "t"), color.pixel);
+	ck_assert(XAllocNamedColor(dpy, DefaultColormapOfScreen(screen), "red", &color, &exact));
+	ck_assert_uint_eq(foreground_of(table_of(a), "t"), color.pixel);
+	ck_assert(!shared(table_of(a), table_of(b)));
+	ck_assert(shared(table_of(b), table_of(c)));
+	/* The colormap goes with the display: Xt frees the colors */
+	/* allocated in it when the application context goes. */
+}
+END_TEST
+
 /* A string that is a font list: XmNrenderTable and XmNfontList agree. */
 START_TEST(font_list_string)
 {
@@ -647,6 +694,7 @@ void rendertable_suite(SRunner *runner)
 	tcase_add_test(t, same_string_same_table);
 	tcase_add_test(t, resources_of_the_widget_path);
 	tcase_add_test(t, resource_names_and_inheritance);
+	tcase_add_test(t, colormap);
 	tcase_add_test(t, font_list_string);
 	tcase_add_test(t, font_list_display_resources);
 	tcase_add_test(t, unspecified_resources);
