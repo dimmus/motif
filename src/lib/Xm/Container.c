@@ -2544,7 +2544,19 @@ static Boolean ConstraintSetValues(Widget ccwid,
       ((nc->position_index != cc->position_index) &&
        ((nc->node_ptr->prev_ptr) || (nc->node_ptr->next_ptr))))
   {
+    CwidNode first;
     SeverNode(nc->node_ptr);
+    /*
+     * A lone entry may hold any XmNpositionIndex (see InsertNode).  An
+     * entry moved next to it has always renumbered it to 0 first, so
+     * that it goes before it only when asked for index 0.
+     */
+    if (nc->entry_parent)
+      first = GetContainerConstraint(nc->entry_parent)->node_ptr->child_ptr;
+    else
+      first = cw->container.first_node;
+    if ((first) && (first->next_ptr == NULL))
+      GetContainerConstraint(first->widget_ptr)->position_index = 0;
     InsertNode(nc->node_ptr);
   }
   if (nc->entry_parent != cc->entry_parent) {

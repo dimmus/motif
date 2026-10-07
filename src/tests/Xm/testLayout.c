@@ -506,6 +506,55 @@ START_TEST(container_positions_destroy_parent)
 END_TEST
 
 /*
+ * A lone entry keeps the XmNpositionIndex it is given, but an entry
+ * moved next to it counts it as the first one: it goes before it only
+ * when asked for index 0.
+ */
+START_TEST(container_positions_lone)
+{
+	Widget c, a, b, d, e, f, g, l, m, n;
+
+	c = XtVaCreateManagedWidget("c", xmContainerWidgetClass, shell, XmNlayoutType, XmOUTLINE,
+				    NULL);
+	a = icon(c, "a", NULL, -2);
+	b = icon(c, "b", NULL, -2);
+	d = icon(c, "d", NULL, -2);
+	e = icon(c, "e", NULL, -2);
+	f = icon(c, "f", NULL, -2);
+	g = icon(c, "g", NULL, -2);
+	l = icon(c, "l", a, -2);
+	m = icon(c, "m", b, -2);
+	n = icon(c, "n", d, -2);
+	XtVaSetValues(l, XmNpositionIndex, 5, NULL);
+	XtVaSetValues(m, XmNpositionIndex, 5, NULL);
+	XtVaSetValues(n, XmNpositionIndex, 5, NULL);
+	ck_assert_int_eq(position_of(l), 5);
+	/* keeping its index (3 here) */
+	XtVaSetValues(e, XmNentryParent, a, NULL);
+	{
+		Widget want[] = {l, e};
+
+		check_level(c, a, want, 2);
+	}
+	/* asking for one below the lone entry's */
+	XtVaSetValues(f, XmNentryParent, b, XmNpositionIndex, 2, NULL);
+	{
+		Widget want[] = {m, f};
+
+		check_level(c, b, want, 2);
+	}
+	/* asking for 0 */
+	XtVaSetValues(g, XmNentryParent, d, XmNpositionIndex, 0, NULL);
+	{
+		Widget want[] = {g, n};
+
+		check_level(c, d, want, 2);
+	}
+	XtDestroyWidget(c);
+}
+END_TEST
+
+/*
  * Random inserts, removals, moves and reorders, checked against a
  * model of the levels: the entries of each item, in order.
  */
@@ -777,6 +826,7 @@ void layout_suite(SRunner *runner)
 	tcase_add_test(t, container_positions_head);
 	tcase_add_test(t, container_positions_reorder);
 	tcase_add_test(t, container_positions_destroy_parent);
+	tcase_add_test(t, container_positions_lone);
 	tcase_add_loop_test(t, container_positions_random, 0, 6);
 	tcase_add_checked_fixture(t, _init_xt, uninit_xt);
 	tcase_set_timeout(t, 30);
