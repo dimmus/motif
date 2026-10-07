@@ -5,10 +5,14 @@
  * Licensed under the LGPL 2.1 license.
  *
  * XmIm: what reaches the input context.  The suite interposes the Xlib
- * input method calls XmIm makes (XSetICValues, XCreateIC) to count the
- * XSetICValues requests (each one is a round trip with an input method
- * server) and to see the spot location they carry.  They forward to
- * Xlib's local input method (XMODIFIERS=@im=none).
+ * input method calls XmIm makes (XSetICValues, XCreateIC, XGetIMValues)
+ * to count the XSetICValues requests (each one is a round trip with an
+ * input method server) and to see the spot location and area they
+ * carry.  They forward to Xlib's local input method
+ * (XMODIFIERS=@im=none), except in the "over the spot" cases: the local
+ * input method has no XIMPreeditPosition style, which is the one that
+ * takes an area, so there XGetIMValues reports that style, XCreateIC
+ * creates a plain context and XSetICValues only records its arguments.
  */
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
@@ -44,10 +48,13 @@ typedef struct {
 
 static struct {
 	int active;		/* record the calls */
+	int fake;		/* over the spot, see above */
 	unsigned long set_calls;	/* XSetICValues calls */
 	unsigned long creates;	/* XCreateIC calls */
 	unsigned long spots;	/* XNSpotLocation values passed */
+	unsigned long areas;	/* preedit XNArea values passed */
 	XPoint spot;		/* the last of them */
+	XRectangle area;
 } im;
 
 static void record(const ImArg *a, int preedit)
@@ -60,6 +67,9 @@ static void record(const ImArg *a, int preedit)
 		else if (preedit && !strcmp(a->name, XNSpotLocation)) {
 			im.spot = *(XPoint *)a->value;
 			im.spots++;
+		} else if (preedit && !strcmp(a->name, XNArea)) {
+			im.area = *(XRectangle *)a->value;
+			im.areas++;
 		}
 	}
 }
@@ -87,6 +97,7 @@ static void collect(va_list ap, ImArg *a)
 	       a[14].name, a[14].value, a[15].name, a[15].value, NULL)
 
 typedef char *(*set_ic_fn)(XIC, ...);
+typedef char *(*get_im_fn)(XIM, ...);
 typedef XIC (*create_ic_fn)(XIM, ...);
 
 char *XSetICValues(XIC ic, ...)
@@ -102,9 +113,43 @@ char *XSetICValues(XIC ic, ...)
 		im.set_calls++;
 		record(a, 0);
 	}
+	if (im.fake)
+		return NULL;
 	if (!real)
 		real = (set_ic_fn)dlsym(RTLD_NEXT, "XSetICValues");
 	return IM_FORWARD(real, ic, a);
+}
+
+char *XGetIMValues(XIM xim, ...)
+{
+	static get_im_fn real;
+	ImArg a[IM_MAX_ARGS + 1] = { { NULL, NULL } };
+	va_list ap;
+	char *ret;
+	int i;
+
+	va_start(ap, xim);
+	collect(ap, a);
+	va_end(ap);
+	if (!real)
+		real = (get_im_fn)dlsym(RTLD_NEXT, "XGetIMValues");
+	ret = IM_FORWARD(real, xim, a);
+	for (i = 0; im.fake && !ret && a[i].name; i++) {
+		if (!strcmp(a[i].name, XNQueryInputStyle)) {
+			/* One block, as Xlib allocates it: XmIm XFrees it. */
+			XIMStyles *styles = malloc(sizeof(XIMStyles) +
+						   sizeof(XIMStyle));
+
+			ck_assert_ptr_nonnull(styles);
+			styles->count_styles = 1;
+			styles->supported_styles = (XIMStyle *)(styles + 1);
+			styles->supported_styles[0] =
+				XIMPreeditPosition | XIMStatusNothing;
+			XFree(*(XIMStyles **)a[i].value);
+			*(XIMStyles **)a[i].value = styles;
+		}
+	}
+	return ret;
 }
 
 XIC XCreateIC(XIM xim, ...)
@@ -122,6 +167,10 @@ XIC XCreateIC(XIM xim, ...)
 	}
 	if (!real)
 		real = (create_ic_fn)dlsym(RTLD_NEXT, "XCreateIC");
+	if (im.fake)
+		return real(xim, XNInputStyle,
+			    (XIMStyle)(XIMPreeditNothing | XIMStatusNothing),
+			    NULL);
 	return IM_FORWARD(real, xim, a);
 }
 
@@ -129,7 +178,7 @@ XIC XCreateIC(XIM xim, ...)
 /* Fixture                                                             */
 /* ------------------------------------------------------------------ */
 
-static Widget top, rc, text;
+static Widget top, rc, text, text2;
 
 static void pump(void)
 {
@@ -150,21 +199,30 @@ static void pump(void)
 
 static void reset_counts(void)
 {
-	im.set_calls = im.creates = im.spots = 0;
+	im.set_calls = im.creates = im.spots = im.areas = 0;
 	im.spot.x = im.spot.y = -1;
 }
 
-static void setup(void)
+static void setup_im(int fake)
 {
+	char value[2000];
+	size_t i;
+
 	/* Xlib's local input method, which needs no server. */
 	setenv("XMODIFIERS", "@im=none", 1);
+	im.fake = fake;
 	im.active = 1;
 	top = init_xt("check_XmIm");
 	rc = XtVaCreateManagedWidget("rc", xmRowColumnWidgetClass, top, NULL);
+	for (i = 0; i < sizeof value - 1; i++)
+		value[i] = (i % 40 == 39) ? '\n' : 'a' + i % 26;
+	value[sizeof value - 1] = '\0';
 	text = XtVaCreateManagedWidget("text", xmTextWidgetClass, rc,
 				       XmNeditMode, XmMULTI_LINE_EDIT,
 				       XmNrows, 20, XmNcolumns, 50,
-				       XmNvalue, "some text", NULL);
+				       XmNvalue, value, NULL);
+	text2 = XtVaCreateManagedWidget("text2", xmTextWidgetClass, rc,
+					XmNvalue, "second", NULL);
 	XtRealizeWidget(top);
 	pump();
 	ck_assert_msg(XmImGetXIC(text, XmINHERIT_POLICY, NULL, 0) != NULL,
@@ -175,12 +233,33 @@ static void setup(void)
 	reset_counts();
 }
 
+static void setup(void)
+{
+	setup_im(0);
+}
+
+static void setup_fake(void)
+{
+	setup_im(1);
+}
+
 static void teardown(void)
 {
 	uninit_xt();
 }
 
-/* The spot location the input context has. */
+static XPoint spot_of(XmTextPosition pos)
+{
+	Position x, y;
+	XPoint pt;
+
+	ck_assert(XmTextPosToXY(text, pos, &x, &y));
+	pt.x = x;
+	pt.y = y;
+	return pt;
+}
+
+/* The spot location the (real, local) input context has. */
 static XPoint ic_spot(void)
 {
 	XIC xic = XmImSetXIC(text, NULL);
@@ -205,6 +284,9 @@ static void set_spot(Widget w, short x, short y)
 	pt.y = y;
 	XmImVaSetValues(w, XmNspotLocation, &pt, NULL);
 }
+
+/* Positions in the visible lines, all but the last one different. */
+#define CURSOR_POS(i) (1 + (i) % 500)
 
 #define ck_assert_spot(pt, ex, ey) do { \
 	ck_assert_int_eq((pt).x, (ex)); \
@@ -232,6 +314,37 @@ START_TEST(recreate_after_refused_value)
 }
 END_TEST
 
+/* Over the spot, Text passes its unchanged display area with every spot. */
+START_TEST(over_the_spot_area_sent_once)
+{
+	XPoint last = spot_of(CURSOR_POS(999));
+	XRectangle area;
+	int i;
+
+	/* Make the context have the current area. */
+	XmTextSetInsertionPosition(text, 0);
+	pump();
+	ck_assert_uint_ge(im.areas, 1);
+	area = im.area;
+	reset_counts();
+
+	for (i = 0; i < 1000; i++)
+		XmTextSetInsertionPosition(text, CURSOR_POS(i));
+	pump();
+	ck_assert_uint_eq(im.areas, 0);
+	ck_assert_uint_eq(im.spots, 1000);
+	ck_assert_spot(im.spot, last.x, last.y);
+
+	/* A new area is sent. */
+	area.width -= 10;
+	last.x += 3;
+	XmImVaSetValues(text, XmNspotLocation, &last, XmNarea, &area, NULL);
+	ck_assert_uint_eq(im.areas, 1);
+	ck_assert_uint_eq(im.area.width, area.width);
+	ck_assert_spot(im.spot, last.x, last.y);
+}
+END_TEST
+
 void xmim_suite(SRunner *runner)
 {
 	Suite *s = suite_create("XmIm");
@@ -240,6 +353,12 @@ void xmim_suite(SRunner *runner)
 	t = tcase_create("Input context");
 	tcase_add_checked_fixture(t, setup, teardown);
 	tcase_add_test(t, recreate_after_refused_value);
+	tcase_set_timeout(t, 60);
+	suite_add_tcase(s, t);
+
+	t = tcase_create("Over the spot");
+	tcase_add_checked_fixture(t, setup_fake, teardown);
+	tcase_add_test(t, over_the_spot_area_sent_once);
 	tcase_set_timeout(t, 60);
 	suite_add_tcase(s, t);
 

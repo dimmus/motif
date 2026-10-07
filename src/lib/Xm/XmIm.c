@@ -88,6 +88,8 @@ typedef struct _XmImXICRec {
   PreeditBuffer preedit_buffer;
   XPoint spot;                 /* Last XNSpotLocation given to the XIC, */
   Boolean spot_valid;          /* ...if this is set. */
+  XRectangle area;             /* Last preedit XNArea given to the XIC, */
+  Boolean area_valid;          /* ...if this is set. */
 } XmImXICRec, *XmImXICInfo;
 
 typedef struct _XmImShellRec {
@@ -310,9 +312,11 @@ void XmImSetFocusValues(Widget w, ArgList args, Cardinal num_args)
   }
   wind = xic_info->focus_window;
   xic_info->focus_window = XtWindow(w);
-  /* The spot location is relative to the focus window. */
-  if (wind != XtWindow(w))
+  /* The spot location and the area are relative to the focus window. */
+  if (wind != XtWindow(w)) {
     xic_info->spot_valid = False;
+    xic_info->area_valid = False;
+  }
   set_values(w, args, num_args, XmINHERIT_POLICY);
   if (wind != XtWindow(w)) {
     /* Safe, since we have a window - so it's no gadget */
@@ -702,9 +706,11 @@ void _XmImRealize(Widget vw)
     if (!icp->xic)
       continue;
     XSetICValues(icp->xic, XNClientWindow, XtWindow(vw), NULL);
-    /* Without a focus window the spot is relative to this one. */
-    if (!icp->focus_window)
+    /* Without a focus window the spot and area are relative to this one. */
+    if (!icp->focus_window) {
       icp->spot_valid = False;
+      icp->area_valid = False;
+    }
   }
   extData = _XmGetWidgetExtData((Widget)vw, XmSHELL_EXTENSION);
   if (extData)
@@ -895,6 +901,8 @@ static void set_values(Widget w, ArgList args, Cardinal num_args, XmInputPolicy 
   XrmName spot_name = XrmStringToName(XmNspotLocation);
   XPoint spot = {0, 0};
   Boolean spot_set = False;
+  XRectangle area = {0, 0, 0, 0};
+  Boolean area_set = False;
   Widget p;
   XmImShellInfo im_info;
   int flags = 0;
@@ -925,6 +933,16 @@ static void set_values(Widget w, ArgList args, Cardinal num_args, XmInputPolicy 
     name = XrmStringToName(argp->name);
     if (name == area_name && !(icp->input_style & XIMPreeditPosition))
       continue;
+    if (name == area_name && argp->value) {
+      /* Text widgets pass their unchanged display area with the spot. */
+      XRectangle *new_area = (XRectangle *)argp->value;
+      if (icp->xic && icp->area_valid && icp->area.x == new_area->x &&
+          icp->area.y == new_area->y && icp->area.width == new_area->width &&
+          icp->area.height == new_area->height)
+        continue;
+      area = *new_area;
+      area_set = True;
+    }
     if (name == spot_name && argp->value) {
       /*
        * Text widgets set the spot on every cursor move, and with an
@@ -1015,6 +1033,8 @@ static void set_values(Widget w, ArgList args, Cardinal num_args, XmInputPolicy 
     }
     icp->spot = spot;
     icp->spot_valid = spot_set;
+    icp->area = area;
+    icp->area_valid = area_set;
     XGetICValues(icp->xic, XNFilterEvents, &mask, NULL);
     if (mask) {
       XtAddEventHandler(p, (EventMask)mask, False, null_proc, NULL);
@@ -1045,7 +1065,7 @@ static void set_values(Widget w, ArgList args, Cardinal num_args, XmInputPolicy 
     }
   }
   else if (preedit_vlist.count == 0 && status_vlist.count == 0 && xic_vlist.count == 0) {
-    /* Nothing to change, e.g. only a spot location the XIC already has. */
+    /* Nothing to change, e.g. a spot location and area the XIC has. */
   }
   else {
     /* The values given, without the nested lists added below. */
@@ -1068,10 +1088,14 @@ static void set_values(Widget w, ArgList args, Cardinal num_args, XmInputPolicy 
       XFree(va_plist);
     if (va_slist)
       XFree(va_slist);
+    /* If any value was refused, the spot and area may not have been set. */
     if (spot_set) {
-      /* If any value was refused, the spot may not have been set. */
       icp->spot = spot;
       icp->spot_valid = (ret == NULL);
+    }
+    if (area_set) {
+      icp->area = area;
+      icp->area_valid = (ret == NULL);
     }
     /* ??? Both a write-once and an unrecognized arg might be present. */
     if ((ret != NULL) && unrecognized) {
@@ -1148,8 +1172,9 @@ static void set_values(Widget w, ArgList args, Cardinal num_args, XmInputPolicy 
         unset_current_xic(icp, im_info, xim_info, w);
         return;
       }
-      /* The new XIC has the spot only if it was passed this time. */
+      /* The new XIC has the spot and area only if passed this time. */
       icp->spot_valid = spot_set;
+      icp->area_valid = area_set;
       ImGeoReq(p);
       if (icp->has_focus)
         XSetICFocus(icp->xic);
@@ -1664,6 +1689,8 @@ static void ImSetGeo(Widget vw, XmImXICInfo this_icp)
     }
     else if ((use_plist = (icp->input_style & XIMPreeditPosition)) != 0) {
       unsigned int margin;
+      /* This replaces the area set_values gave the XIC. */
+      icp->area_valid = False;
       /*
        * im_info->current_widget can contains NULL,
        * for example, when widget having XIC focus is disposed.
