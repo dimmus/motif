@@ -360,6 +360,27 @@ static XrmResourceList CompileResourceTable(XtResourceList resources, Cardinal n
   return (table);
 }
 
+/*
+ * Convert value, of type from_type, to to_type for a rendition of wid,
+ * like XtConvertAndStore.  But XtConvertAndStore holds a reference to a
+ * value whose converter counts them (that of XmRTabList) until wid is
+ * destroyed, in a destroy callback of wid, and wid can be a widget whose
+ * resources Xt is still fetching: Xt then takes its destroy callbacks
+ * for a list given as a resource, and corrupts it.  A rendition copies
+ * such a value (CleanupResources), so it takes no reference.
+ */
+static Boolean ConvertResource(
+    Widget wid, XrmQuark from_type, XrmValue *value, String to_type, XrmValue *to)
+{
+  XrmValue result;
+  XtConvert(wid, XrmQuarkToString(from_type), value, to_type, &result);
+  if ((result.addr == NULL) || (result.size > to->size))
+    return (False);
+  memcpy(to->addr, result.addr, result.size);
+  to->size = result.size;
+  return (True);
+}
+
 /* Does resource database lookup for arglist, filling in defaults from */
 /* resource list as necessary. */
 static Boolean GetResources(XmRendition rend,
@@ -483,14 +504,10 @@ static Boolean GetResources(XmRendition rend,
              * to a FontSet, else to a FontStruct.
              */
             if ((res->xrm_name == Qfont) && (_XmRendFontType(rend) == XmFONT_IS_FONTSET))
-              copied = have_value = XtConvertAndStore(
-                  wid, XrmQuarkToString(rawType), &value, "FontSet", &convValue);
+              copied = have_value = ConvertResource(wid, rawType, &value, "FontSet", &convValue);
             else
-              copied = have_value = XtConvertAndStore(wid,
-                                                      XrmQuarkToString(rawType),
-                                                      &value,
-                                                      XrmQuarkToString(res->xrm_type),
-                                                      &convValue);
+              copied = have_value = ConvertResource(
+                  wid, rawType, &value, XrmQuarkToString(res->xrm_type), &convValue);
           }
           else
             have_value = False;
