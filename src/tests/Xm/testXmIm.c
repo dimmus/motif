@@ -261,6 +261,9 @@ static void setup_fake(void)
 static void teardown(void)
 {
 	uninit_xt();
+	/* Without fork (CK_FORK=no) the next suites share this process. */
+	im.active = im.fake = 0;
+	unsetenv("XMODIFIERS");
 }
 
 static XPoint spot_of(XmTextPosition pos)
@@ -496,6 +499,21 @@ START_TEST(spot_with_widget_destroyed)
 }
 END_TEST
 
+/* Closing the input method frees the contexts: no timeout is left. */
+START_TEST(spot_with_xim_closed)
+{
+	set_spot(text, 33, 34);
+	ck_assert_uint_eq(im.set_calls, 0);
+	XmImCloseXIM(text);
+	/* The shared context had another reference: it got the spot first. */
+	ck_assert_uint_le(im.spots, 1);
+	reset_counts();
+	pump();
+	ck_assert_uint_eq(im.set_calls, 0);
+	ck_assert_ptr_null(XmImSetXIC(text, NULL));
+}
+END_TEST
+
 /*
  * A value the input method refuses makes XmIm recreate the context;
  * this reused the argument lists after freeing them.
@@ -565,6 +583,7 @@ void xmim_suite(SRunner *runner)
 	tcase_add_test(t, spot_focus_window_change);
 	tcase_add_test(t, spot_flushed_for_xic_users);
 	tcase_add_test(t, spot_with_widget_destroyed);
+	tcase_add_test(t, spot_with_xim_closed);
 	tcase_add_test(t, recreate_after_refused_value);
 	tcase_set_timeout(t, 60);
 	suite_add_tcase(s, t);
