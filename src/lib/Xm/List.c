@@ -1483,6 +1483,9 @@ static Boolean SetValues(
       reset_select = TRUE;
       newlw->list.LastItem = 0;
       newlw->list.LastHLItem = 0;
+      /* The selection range was in the old items. */
+      newlw->list.StartItem = newlw->list.EndItem = 0;
+      newlw->list.OldStartItem = newlw->list.OldEndItem = 0;
       newlw->list.InternalList = NULL;
       if ((newlw->list.top_position + newlw->list.visibleItemCount) > newlw->list.itemCount)
         newlw->list.top_position = MAX(newlw->list.itemCount - newlw->list.visibleItemCount, 0);
@@ -1500,6 +1503,8 @@ static Boolean SetValues(
         ClearItemList(oldlw);
         newlw->list.LastItem = 0;
         newlw->list.LastHLItem = 0;
+        newlw->list.StartItem = newlw->list.EndItem = 0;
+        newlw->list.OldStartItem = newlw->list.OldEndItem = 0;
         newlw->list.InternalList = NULL;
         newlw->list.items = NULL;
         reset_select = TRUE;

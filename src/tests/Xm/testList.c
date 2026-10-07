@@ -977,6 +977,7 @@ END_TEST
 
 static void button(Widget list, int type, const char *action, int pos)
 {
+	static Time time;
 	XButtonEvent ev;
 	Position x = 0, y = 0;
 	Dimension w = 0, h = 0;
@@ -989,7 +990,7 @@ static void button(Widget list, int type, const char *action, int pos)
 	ev.x = x + 2;
 	ev.y = y + h / 2;
 	ev.button = Button1;
-	ev.time = 1000 * pos; /* far apart: no double click */
+	ev.time = (time += 1000); /* far apart: no double click */
 	XtCallActionProc(list, (String)action, (XEvent *)&ev, NULL, 0);
 }
 
@@ -1019,6 +1020,38 @@ START_TEST(list_api_during_button_selection)
 	XmListDeselectPos(list, 3);
 	XmListSelectPos(list, 3, False);
 	expect_selected(list, 3, e2);
+}
+END_TEST
+
+/*
+ * New items through XmNitems drop the range of the selection in the old
+ * ones, from which a Shift click extends.
+ */
+START_TEST(list_items_resource_resets_range)
+{
+	Widget list = make_list(XmEXTENDED_SELECT, 300, "item %d", 0);
+	XmString items[3];
+	int e[] = { 1, 2 };
+	int i;
+
+	XtRealizeWidget(shell);
+	XmListSelectPos(list, 250, False);
+	for (i = 0; i < 3; i++)
+		items[i] = item("new %d", i);
+	XtVaSetValues(list, XmNitems, items, XmNitemCount, 3, NULL);
+	for (i = 0; i < 3; i++)
+		XmStringFree(items[i]);
+	for (i = 1; i <= 3; i++)
+		ck_assert(!XmListPosSelected(list, i));
+	button(list, ButtonPress, "ListBeginExtend", 2);
+	button(list, ButtonRelease, "ListEndExtend", 2);
+	/* The range extends from the unselected first item. */
+	expect_selected(list, 0, NULL);
+	button(list, ButtonPress, "ListBeginSelect", 1);
+	button(list, ButtonRelease, "ListEndSelect", 1);
+	button(list, ButtonPress, "ListBeginExtend", 2);
+	button(list, ButtonRelease, "ListEndExtend", 2);
+	expect_selected(list, 2, e);
 }
 END_TEST
 
@@ -1054,6 +1087,7 @@ void list_suite(SRunner *runner)
 	tcase_add_test(t, list_selected_positions_replace_selection);
 	tcase_add_test(t, list_replace_unselected_duplicates);
 	tcase_add_test(t, list_api_during_button_selection);
+	tcase_add_test(t, list_items_resource_resets_range);
 	tcase_add_checked_fixture(t, _init_xt, uninit_xt);
 	tcase_set_timeout(t, 60);
 	suite_add_tcase(s, t);
