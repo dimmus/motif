@@ -3200,7 +3200,7 @@ static void ThrottleRepeat(XmScrollBarWidget sbw)
   XClientMessageEvent marker;
   XEvent event;
   XPointer data;
-  unsigned long serial = NextRequest(display);
+  unsigned long serial;
   if (!XtIsRealized((Widget)sbw))
     return;
   _XmProcessLock();
@@ -3215,6 +3215,8 @@ static void ThrottleRepeat(XmScrollBarWidget sbw)
   marker.window = XtWindow(sbw);
   marker.message_type = XInternAtom(display, "_MOTIF_SCROLLBAR_REPEAT", False);
   marker.format = 32;
+  /* After XInternAtom, which makes a request the first time. */
+  serial = NextRequest(display);
   XSendEvent(display, XtWindow(sbw), False, NoEventMask, (XEvent *)&marker);
   if (XFindContext(display, (XID)sbw, repeat_context, &data) == 0) {
     unsigned long previous = (unsigned long)data;

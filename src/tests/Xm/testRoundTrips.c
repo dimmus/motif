@@ -53,6 +53,21 @@ Status XQueryTree(Display *display, Window w, Window *root, Window *parent, Wind
 	return real(display, w, root, parent, children, n);
 }
 
+/* The serials of the markers that the ScrollBar autorepeat sends. */
+static unsigned long markers[64];
+static int n_markers;
+
+Status XSendEvent(Display *display, Window w, Bool propagate, long mask, XEvent *event)
+{
+	static Status (*real)(Display *, Window, Bool, long, XEvent *);
+
+	if (!real)
+		*(void **)&real = dlsym(RTLD_NEXT, "XSendEvent");
+	if (event->type == ClientMessage && n_markers < 64)
+		markers[n_markers++] = NextRequest(display);
+	return real(display, w, propagate, mask, event);
+}
+
 static void _init_xt(void)
 {
 	shell = init_xt("check_RoundTrips");
@@ -81,6 +96,8 @@ static struct {
 	unsigned long last_request;
 	unsigned long most_requests; /* requests made in one repeat */
 	unsigned long most_ahead;    /* requests the server had not done */
+	int behind;                  /* repeats whose marker before last was
+	                                not known to be done */
 } rep;
 
 static void increment(Widget w, XtPointer client, XtPointer call)
@@ -95,6 +112,10 @@ static void increment(Widget w, XtPointer client, XtPointer call)
 	rep.last_request = next;
 	if (ahead > rep.most_ahead)
 		rep.most_ahead = ahead;
+	/* Each repeat waits for the marker of the one before it. */
+	if (n_markers >= 2 && n_markers <= 64 &&
+	    (long)(LastKnownRequestProcessed(display) - markers[n_markers - 2]) < 0)
+		rep.behind++;
 	/* drawing for the server, as a scrolled view would */
 	for (i = 0; i < rep.work; i++)
 		XCopyArea(display, rep.pixmap, rep.pixmap, rep.gc, i & 1, 0, 511, 512, !(i & 1), 0);
@@ -105,6 +126,7 @@ static Widget repeat_scroll_bar(int work)
 	Widget sb;
 
 	memset(&rep, 0, sizeof(rep));
+	n_markers = 0;
 	rep.work = work;
 	sb = XtVaCreateManagedWidget("sb", xmScrollBarWidgetClass, shell, XmNorientation,
 				     XmVERTICAL, XmNwidth, 20, XmNheight, 200, XmNminimum, 0,
@@ -195,6 +217,8 @@ START_TEST(scrollbar_repeat_keeps_pace_with_server)
 	ck_assert_msg(rep.most_ahead <= 2 * rep.most_requests,
 		      "%lu requests ahead of the server, %lu per repeat", rep.most_ahead,
 		      rep.most_requests);
+	ck_assert_int_ge(n_markers, 2);
+	ck_assert_int_eq(rep.behind, 0);
 	free_scroll_bar(sb);
 }
 END_TEST
