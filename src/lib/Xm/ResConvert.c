@@ -2261,7 +2261,7 @@ static XmRenderTable ParseRenderTable(Display *dpy,
  * The table depends on widget only through the rendition resources
  * found for it in the resource database (see _XmRenderTableCvtCacheGet),
  * so a widget whose lookups find the same values as an earlier one gets
- * a copy of the table made for that one.
+ * a table sharing the renditions of the one made for that one.
  */
 static Boolean cvtStringToXmRenderTable(
     Display *dpy, Widget widget, String resname, String resclass, XrmValue *from, XrmValue *to)

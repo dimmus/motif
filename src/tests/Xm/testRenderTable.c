@@ -15,8 +15,9 @@
  * The first conversion of a string is always made by the converter
  * itself, so comparing the tables of a first and a later widget compares
  * a converted table with a cached one.  Whether two tables share their
- * data (the cache handed out the same table) is checked through the
- * handle: an XmRenderTable points to the shared table data.
+ * renditions (the cache handed out the renditions of one table) is
+ * checked through the handles: an XmRendition points to the shared
+ * rendition data.
  */
 #include <stdio.h>
 #include <string.h>
@@ -77,10 +78,39 @@ static void count_warning(String name, String type, String class, String default
 	warnings++;
 }
 
-/* Two tables share their data: the second is a copy of the first. */
+static int rendition_count(XmRenderTable rt)
+{
+	XmStringTag *tags = NULL;
+	int n = XmRenderTableGetTags(rt, &tags), i;
+
+	for (i = 0; i < n; i++)
+		XtFree(tags[i]);
+	XtFree((char *)tags);
+	return n;
+}
+
+/* Two tables share all their renditions. */
 static int shared(XmRenderTable a, XmRenderTable b)
 {
-	return a != NULL && b != NULL && *(XtPointer *)a == *(XtPointer *)b;
+	XmStringTag *tags = NULL;
+	int i, n, same;
+
+	if (a == NULL || b == NULL)
+		return 0;
+	n = XmRenderTableGetTags(a, &tags);
+	same = n > 0 && n == rendition_count(b);
+	for (i = 0; i < n; i++) {
+		XmRendition ra = XmRenderTableGetRendition(a, tags[i]);
+		XmRendition rb = XmRenderTableGetRendition(b, tags[i]);
+
+		if (ra == NULL || rb == NULL || *(XtPointer *)ra != *(XtPointer *)rb)
+			same = 0;
+		XmRenditionFree(ra);
+		XmRenditionFree(rb);
+		XtFree(tags[i]);
+	}
+	XtFree((char *)tags);
+	return same;
 }
 
 static XmRenderTable table_of(Widget w)
@@ -591,6 +621,53 @@ START_TEST(deferred_font)
 }
 END_TEST
 
+/* XmNnoFontCallback that gives the rendition a font, as documented. */
+static void give_font(Widget w, XtPointer client_data, XtPointer call_data)
+{
+	XmDisplayCallbackStruct *cb = (XmDisplayCallbackStruct *)call_data;
+	Arg a[3];
+
+	no_font_calls++;
+	XtSetArg(a[0], XmNfontName, "fixed");
+	XtSetArg(a[1], XmNfontType, XmFONT_IS_FONT);
+	XtSetArg(a[2], XmNloadModel, XmLOAD_IMMEDIATE);
+	XmRenditionUpdate(cb->rendition, a, 3);
+}
+
+/* A label whose table has no font calls XmNnoFontCallback with the */
+/* first rendition of its table when it measures its string, and a font */
+/* given to that rendition is for its table only: each label calls it. */
+START_TEST(no_font_callback_when_drawn)
+{
+	static const char tag[] = "FONTLIST_DEFAULT_TAG_STRING";
+	Widget rc, l[3], a, b;
+	XmString empty;
+	int i;
+
+	put("*renderTable.FONTLIST_DEFAULT_TAG_STRING.renditionForeground: red");
+	XtAddCallback(XmGetXmDisplay(XtDisplay(shell)), XmNnoFontCallback, give_font, NULL);
+	rc = XmCreateRowColumn(shell, "rc", NULL, 0);
+	for (i = 0; i < 3; i++) {
+		no_font_calls = 0;
+		l[i] = label(rc, "l", tag);
+		ck_assert_int_eq(no_font_calls, 1);
+		ck_assert_str_eq(font_name_of(table_of(l[i]), tag), "fixed");
+	}
+	/* Labels with nothing to measure share the renditions converted */
+	/* for the first label, which the callbacks above left alone. */
+	empty = XmStringCreateLocalized("");
+	no_font_calls = 0;
+	a = XtVaCreateWidget("l", xmLabelWidgetClass, rc, XmNlabelString, empty,
+			     XtVaTypedArg, XmNrenderTable, XmRString, tag, (int)sizeof tag, NULL);
+	b = XtVaCreateWidget("l", xmLabelWidgetClass, rc, XmNlabelString, empty,
+			     XtVaTypedArg, XmNrenderTable, XmRString, tag, (int)sizeof tag, NULL);
+	ck_assert_int_eq(no_font_calls, 0);
+	ck_assert(shared(table_of(a), table_of(b)));
+	ck_assert_str_eq(font_name_of(table_of(a), tag), "");
+	XmStringFree(empty);
+}
+END_TEST
+
 /* A table in use stays cached while many other strings are converted. */
 START_TEST(table_in_use_stays_cached)
 {
@@ -705,6 +782,7 @@ void rendertable_suite(SRunner *runner)
 	tcase_add_test(t, font_fallback);
 	tcase_add_test(t, conversion_failure_each_time);
 	tcase_add_test(t, deferred_font);
+	tcase_add_test(t, no_font_callback_when_drawn);
 	tcase_add_test(t, table_in_use_stays_cached);
 	tcase_add_test(t, display_close);
 	tcase_add_test(t, default_render_table_display_close);
