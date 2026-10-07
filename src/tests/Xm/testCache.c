@@ -269,6 +269,78 @@ START_TEST(label_random)
 }
 END_TEST
 
+/* Each record of <cp> is used by as many of the <n> gadgets as it says. */
+static void check_counts(Widget *w, int n, XtPointer (*get)(Widget), XmCacheClassPartPtr cp)
+{
+	XmGadgetCachePtr p;
+	int i, users, records = 0;
+
+	for (p = ClassCacheHead(cp).next; p; p = p->next) {
+		users = 0;
+		for (i = 0; i < n; i++)
+			if (get(w[i]) == CacheDataPtr(p))
+				users++;
+		ck_assert_int_eq(p->ref_count, users);
+		records++;
+	}
+	ck_assert_int_eq(records, list_length(cp));
+}
+
+static XtPointer toggle_part(Widget w)
+{
+	return (XtPointer)TBG_Cache(w);
+}
+
+/*
+ * ToggleButtonGadget's SetValues writes label resources into the cached
+ * label part in place, which leaves that record under the hash of its
+ * old contents.  Random changes and destructions must still keep every
+ * record counted, and free it (ASan) with its last gadget.
+ */
+START_TEST(toggle_random)
+{
+	enum { N = 40, STEPS = 2000 };
+	Widget w[N];
+	unsigned int seed = 54321;
+	int i, step;
+
+	for (i = 0; i < N; i++)
+		w[i] = XtVaCreateWidget("t", xmToggleButtonGadgetClass, rc,
+					XmNspacing, (Dimension)(i % 5), NULL);
+	for (step = 0; step < STEPS; step++) {
+		int k = rand_r(&seed) % N, look = rand_r(&seed) % 6;
+
+		switch (rand_r(&seed) % 4) {
+		case 0:
+			XtDestroyWidget(w[k]);
+			w[k] = XtVaCreateWidget("t", xmToggleButtonGadgetClass, rc,
+						XmNspacing, (Dimension)look, NULL);
+			break;
+		case 1:
+			XtVaSetValues(w[k], XmNmarginWidth, (Dimension)look, NULL);
+			break;
+		case 2:
+			XtVaSetValues(w[k], XmNspacing, (Dimension)look, NULL);
+			break;
+		default:
+			XtVaSetValues(w[k], XmNforeground, (Pixel)(look & 3),
+				      XmNmarginHeight, (Dimension)(look >> 1), NULL);
+			break;
+		}
+		if (step % 100 == 0) {
+			check_counts(w, N, label_part, LabG_ClassCachePart(NULL));
+			check_counts(w, N, toggle_part, TBG_ClassCachePart(NULL));
+		}
+	}
+	check_counts(w, N, label_part, LabG_ClassCachePart(NULL));
+	check_shared(w, N, toggle_part, TBG_ClassCachePart(NULL));
+	for (i = 0; i < N; i++)
+		XtDestroyWidget(w[i]);
+	ck_assert_int_eq(list_length(LabG_ClassCachePart(NULL)), 0);
+	ck_assert_int_eq(list_length(TBG_ClassCachePart(NULL)), 0);
+}
+END_TEST
+
 static XtPointer push_part(Widget w)
 {
 	return (XtPointer)PBG_Cache(w);
@@ -419,6 +491,7 @@ void gadget_cache_suite(SRunner *runner)
 
 	tcase_add_test(t, label_sharing);
 	tcase_add_test(t, label_random);
+	tcase_add_test(t, toggle_random);
 	tcase_add_test(t, push_timer);
 	tcase_add_test(t, other_classes);
 	tcase_add_checked_fixture(t, _init_xt, uninit_xt);
