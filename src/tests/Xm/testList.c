@@ -1080,6 +1080,31 @@ START_TEST(list_delete_positions_keeps_cursor)
 }
 END_TEST
 
+/*
+ * Deleting the last items, among them the anchor of the selection range,
+ * drops the range, from which a Shift click extends.
+ */
+START_TEST(list_delete_end_drops_range)
+{
+	Widget list = make_list(XmEXTENDED_SELECT, 140, "item %d", 0);
+	int e[] = { 1, 2 };
+
+	XtRealizeWidget(shell);
+	XmListSelectPos(list, 136, False);
+	XmListDeleteItemsPos(list, 10, 131);
+	ck_assert_int_eq(item_count(list), 130);
+	button(list, ButtonPress, "ListBeginExtend", 2);
+	button(list, ButtonRelease, "ListEndExtend", 2);
+	/* The range extends from the unselected first item. */
+	expect_selected(list, 0, NULL);
+	button(list, ButtonPress, "ListBeginSelect", 1);
+	button(list, ButtonRelease, "ListEndSelect", 1);
+	button(list, ButtonPress, "ListBeginExtend", 2);
+	button(list, ButtonRelease, "ListEndExtend", 2);
+	expect_selected(list, 2, e);
+}
+END_TEST
+
 void list_suite(SRunner *runner)
 {
 	Suite *s = suite_create("List");
@@ -1114,6 +1139,7 @@ void list_suite(SRunner *runner)
 	tcase_add_test(t, list_api_during_button_selection);
 	tcase_add_test(t, list_items_resource_resets_range);
 	tcase_add_test(t, list_delete_positions_keeps_cursor);
+	tcase_add_test(t, list_delete_end_drops_range);
 	tcase_add_checked_fixture(t, _init_xt, uninit_xt);
 	tcase_set_timeout(t, 60);
 	suite_add_tcase(s, t);

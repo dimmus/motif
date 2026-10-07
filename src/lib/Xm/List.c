@@ -3288,25 +3288,30 @@ static void FixStartEnd(XmListWidget lw, int pos, int count, int *start, int *en
     *start = 0;
   if (*end >= lw->list.itemCount)
     *end = lw->list.itemCount - 1;
-  /* No overlap, before the deleted range. */
-  if (*end < pos)
-    return;
-  /* No overlap, after the deleted range. */
-  if (*start >= (pos + count)) {
+  if (*end < pos) {
+    /* No overlap, before the deleted range. */
+  }
+  else if (*start >= (pos + count)) {
+    /* No overlap, after the deleted range. */
     (*start) -= count;
     (*end) -= count;
-    return;
   }
-  /* Fixup the starting position. */
-  if (*start > pos)
-    *start = pos;
-  /* Fixup the end position. */
-  if (*end < (pos + count))
-    *end = pos - 1;
-  else
-    *end -= count;
-  /* Normalize empty selections. */
-  if (*start > *end)
+  else {
+    /* Fixup the starting position. */
+    if (*start > pos)
+      *start = pos;
+    /* Fixup the end position. */
+    if (*end < (pos + count))
+      *end = pos - 1;
+    else
+      *end -= count;
+    /* Normalize empty selections. */
+    if (*start > *end)
+      *start = *end = 0;
+  }
+  /* The end was cut to the items that are left, the start was not: a
+   * range that started in the deleted items at the end is gone. */
+  if ((*start >= lw->list.itemCount) || (*end >= lw->list.itemCount))
     *start = *end = 0;
 }
 
