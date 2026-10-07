@@ -16,3 +16,11 @@
 # known to be Motif's fault.
 leak:XtOwnSelection
 leak:XtDisownSelection
+
+# XmText and XmTextField keep one record per display for the secondary
+# selection's destination (GetTextDestData, GetTextFDestData) and free
+# it from the XmDisplay's destroy callback; closing the display does not
+# destroy the XmDisplay, so the record is lost then.  One per display,
+# like Xt's own per-display records.
+leak:GetTextDestData
+leak:GetTextFDestData

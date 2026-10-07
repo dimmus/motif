@@ -144,6 +144,7 @@ Boolean _XmConvertHandler(Widget wid,
   Atom atoms[XtNumber(atom_names)];
   Atom real_selection_atom = None; /* DND hides the selection atom from us */
   int my_local_convert_flag;
+  Boolean converted;
   assert(XtNumber(atom_names) == NUM_ATOMS);
   XInternAtoms(XtDisplay(wid), atom_names, XtNumber(atom_names), False, atoms);
   _XmProcessLock();
@@ -253,21 +254,25 @@ Boolean _XmConvertHandler(Widget wid,
     SecondaryConvertHandler(wid, NULL, &cbstruct);
   /* Copy out the flags value for CLIPBOARD to use */
   cc->flags = cbstruct.flags;
-  if (cbstruct.status == XmCONVERT_DONE || cbstruct.status == XmCONVERT_DEFAULT) {
+  /* The parameters that XtGetSelectionParameters() returned are ours to
+     free; the local ones are not allocated. */
+  if (my_local_convert_flag == 0)
+    XtFree((char *)cbstruct.parm);
+  converted = (cbstruct.status == XmCONVERT_DONE || cbstruct.status == XmCONVERT_DEFAULT);
+  if (converted) {
     /* Copy out the data */
     *value = cbstruct.value;
     *size = cbstruct.length;
     *fmt = cbstruct.format;
     *type = cbstruct.type;
-    return True;
   }
   else {
     *value = NULL;
     *size = 0;
     *fmt = 8;
     *type = None;
-    return False;
   }
+  return converted;
 }
 
 /****************************************************************/
@@ -660,6 +665,10 @@ static void SecondaryDone(Widget wid,
     success = False;
   else
     success = True;
+  /* The reply to INSERT_SELECTION carries no data, but Xt allocates it
+     (one byte for an owner in this process) for the requestor to free. */
+  XtFree((char *)value);
+  value = NULL;
   convert_selection = XA_SECONDARY;
   /* Call the convertCallback with target DELETE if successful */
   if (success && cc->op == XmMOVE) {
@@ -1543,10 +1552,17 @@ static void SelectionCallbackWrapper(Widget wid,
       cbstruct.value = value;
       cbstruct.length = *length;
       cbstruct.format = *format;
-      if (tb->selection_proc != NULL)
+      if (tb->selection_proc != NULL) {
+        /* The procedure frees the value */
         tb->selection_proc(wid, tb->client_data, &cbstruct);
+        value = NULL;
+      }
     }
   }
+  /* A value that no procedure took (a DELETE, an ignored or flushed
+     request) is the requestor's to free, as Xt allocates one even for
+     an empty reply from an owner in this process. */
+  XtFree((char *)value);
   /* Free this transfer block */
   if (tb != NULL) {
     XtFree((char *)tb);

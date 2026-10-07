@@ -936,6 +936,12 @@ START_TEST(secondary_no_event)
 	pump();
 	XmTextSetString(src, "abc def ghi");
 	XmTextSetString(dst, "dest");
+	/* Leave PRIMARY without an owner, but owned once: Xt's record for
+	 * a selection, which it never frees, is then allocated by
+	 * XtOwnSelection(), whose leak lsan.supp suppresses, rather than by
+	 * the XtGetSelectionValue() of copy-to. */
+	XmTextSetSelection(dst, 0, 4, server_time(dst));
+	XmTextClearSelection(dst, server_time(dst));
 	for (i = 0; i < XtNumber(actions); i++) {
 		XtCallActionProc(src, actions[i], NULL, NULL, 0);
 		pump();
@@ -1006,6 +1012,8 @@ START_TEST(secondary_focus_grab)
 	assert_text(dst, "destdef");
 	assert_text(focus, "focus");
 	ck_assert_int_eq(XGetSelectionOwner(dpy, destination), XtWindow(dst));
+	XtDestroyWidget(shell2);
+	pump();
 }
 END_TEST
 
