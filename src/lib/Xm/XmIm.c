@@ -1048,6 +1048,8 @@ static void set_values(Widget w, ArgList args, Cardinal num_args, XmInputPolicy 
     /* Nothing to change, e.g. only a spot location the XIC already has. */
   }
   else {
+    /* The values given, without the nested lists added below. */
+    Cardinal xic_count = xic_vlist.count;
     /* Try to modify the existing XIC. */
     va_plist = VaCopy(&preedit_vlist);
     if (va_plist)
@@ -1066,12 +1068,6 @@ static void set_values(Widget w, ArgList args, Cardinal num_args, XmInputPolicy 
       XFree(va_plist);
     if (va_slist)
       XFree(va_slist);
-    if (preedit_vlist.args)
-      XtFree((char *)preedit_vlist.args);
-    if (status_vlist.args)
-      XtFree((char *)status_vlist.args);
-    if (xic_vlist.args)
-      XtFree((char *)xic_vlist.args);
     if (spot_set) {
       /* If any value was refused, the spot may not have been set. */
       icp->spot = spot;
@@ -1099,6 +1095,8 @@ static void set_values(Widget w, ArgList args, Cardinal num_args, XmInputPolicy 
         XDestroyIC(icp->xic);
       icp->anonymous = TRUE;
       icp->xic = NULL;
+      /* Drop the nested lists freed above; they are rebuilt below. */
+      xic_vlist.count = xic_count;
       VaSetArg(&status_vlist, XNBackground, (XPointer)status_bg);
       VaSetArg(&status_vlist, XNForeground, (XPointer)status_fg);
       VaSetArg(&preedit_vlist, XNBackground, (XPointer)preedit_bg);
@@ -1157,6 +1155,12 @@ static void set_values(Widget w, ArgList args, Cardinal num_args, XmInputPolicy 
         XSetICFocus(icp->xic);
       return;
     }
+    if (preedit_vlist.args)
+      XtFree((char *)preedit_vlist.args);
+    if (status_vlist.args)
+      XtFree((char *)status_vlist.args);
+    if (xic_vlist.args)
+      XtFree((char *)xic_vlist.args);
     if (flags & GEO_CHG) {
       ImGeoReq(p);
       if (icp->has_focus)
