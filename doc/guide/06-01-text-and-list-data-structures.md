@@ -116,8 +116,9 @@ buffer boundary") does not thrash.
 (`widgets[numwidgets]`, each told to invalidate and update its line
 table after an edit), and the *gap position policy*: the gap is moved
 to the edit position lazily, so a sequence of edits at one place costs
-one move.  Undo is not part of the source; the TODO lists it as
-untested.
+one move.  There is no undo, in the source or in the widget: XmText
+and XmTextField have no action that undoes an edit (see
+`src/tests/README.md`).
 
 ## 6.1.2 The List: scrolling by copying
 
