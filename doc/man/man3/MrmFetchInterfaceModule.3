@@ -1,0 +1,50 @@
+.TH "MrmFetchInterfaceModule" "library call"
+.nh
+.SH "NAME"
+\fB\%MrmFetchInterfaceModule\fP \(em Fetches and creates the topmost widgets of a UIL module
+.iX "MrmFetchInterfaceModule"
+.iX "uil functions" "MrmFetchInterfaceModule"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Mrm/MrmPublic\&.h>
+\fBCardinal \fBMrmFetchInterfaceModule\fP\fR(
+\fBMrmHierarchy \fBhierarchy_id\fR\fR,
+\fBchar *\fBmodule_name\fR\fR,
+\fBWidget \fBparent\fR\fR,
+\fBWidget *\fBw_return\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%MrmFetchInterfaceModule\fP fetches and creates, as
+\fB\%MrmFetchWidget\fP
+does, every topmost widget of the module \fImodule_name\fP of the UID
+hierarchy: the exported widgets that no other widget of the module
+references, with their subtrees\&.  The widgets are created as children
+of \fIparent\fP, are not managed unless the UIL says so, and are not
+realized; their identifiers are obtained through creation callbacks\&.
+.IP "\fIhierarchy_id\fP" 10
+Specifies the ID of the UID hierarchy, as
+\fB\%MrmOpenHierarchyPerDisplay\fP returned it\&.
+.IP "\fImodule_name\fP" 10
+Specifies the name of the UIL module (the name given in its module
+clause)\&.
+.IP "\fIparent\fP" 10
+Specifies the parent of the widgets\&.
+.IP "\fIw_return\fP" 10
+Is not used; it is not set\&.
+.SH "RETURN"
+.IP "\fB\%MrmSUCCESS\fP" 10
+The widgets were created\&.
+.IP "\fB\%MrmBAD_HIERARCHY\fP" 10
+The hierarchy is not valid\&.
+.IP "\fB\%MrmNOT_FOUND\fP" 10
+The module is not in the hierarchy\&.
+.IP "\fB\%MrmBAD_IF_MODULE\fP" 10
+The module record is not valid\&.
+.IP "\fB\%MrmFAILURE\fP" 10
+Another failure, or the status of the failing \fB\%MrmFetchWidget\fP\&.
+.SH "RELATED"
+.PP
+\fB\%MrmFetchWidget\fP(3), \fB\%MrmOpenHierarchyPerDisplay\fP(3) and
+\fB\%MrmCloseHierarchy\fP(3)\&.
