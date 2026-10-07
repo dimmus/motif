@@ -849,6 +849,65 @@ START_TEST(primary_quick_copy_move)
 }
 END_TEST
 
+/* A modifyVerifyCallback that refuses every change */
+static void refuse_change(Widget w, XtPointer client, XtPointer call)
+{
+	((XmTextVerifyCallbackStruct *)call)->doit = False;
+}
+
+/* Make dst refuse to change: _i bit 2 set, by XmNmodifyVerifyCallback,
+ * otherwise by not being editable. */
+static void refuse_changes(Widget dst, int how)
+{
+	if (how)
+		XtAddCallback(dst, XmNmodifyVerifyCallback, refuse_change, NULL);
+	else
+		XtVaSetValues(dst, XmNeditable, False, NULL);
+}
+
+/*
+ * Moving text to a destination that refuses it leaves the source alone:
+ * the destination used to answer the request as if it had inserted the
+ * text, and the source then deleted it.  _i: bit 0, the source is a
+ * TextField; bit 1, the destination is one; bit 2, see refuse_changes().
+ */
+START_TEST(secondary_move_refused)
+{
+	Widget src = create_text_widget("src", _i & 1, 0);
+	Widget dst = create_text_widget("dst", (_i & 2) != 0, 100);
+
+	XtRealizeWidget(top);
+	pump();
+	XmTextSetString(src, "abc def ghi");
+	XmTextSetString(dst, "dest");
+	click(dst, 4);
+	refuse_changes(dst, _i & 4);
+
+	secondary_drag(src, 4, 7, "move-to");
+	assert_text(src, "abc def ghi");
+	assert_text(dst, "dest");
+	ck_assert_int_eq(XGetSelectionOwner(XtDisplay(top), XA_SECONDARY),
+			 None);
+}
+END_TEST
+
+/* As secondary_move_refused, for the primary selection */
+START_TEST(primary_quick_move_refused)
+{
+	Widget src = create_text_widget("src", _i & 1, 0);
+	Widget dst = create_text_widget("dst", (_i & 2) != 0, 100);
+
+	XtRealizeWidget(top);
+	pump();
+	XmTextSetString(src, "abc def ghi");
+	XmTextSetString(dst, "dest");
+	refuse_changes(dst, _i & 4);
+	quick_primary(src, dst, "move-to");
+	assert_text(src, "abc def ghi");
+	assert_text(dst, "dest");
+}
+END_TEST
+
 void text_suite(SRunner *runner)
 {
 	Suite *s = suite_create("Text");
@@ -889,6 +948,8 @@ void text_suite(SRunner *runner)
 	tcase_add_loop_test(t, secondary_same_widget, 0, 12);
 	tcase_add_loop_test(t, secondary_cancel, 0, 4);
 	tcase_add_loop_test(t, primary_quick_copy_move, 0, 4);
+	tcase_add_loop_test(t, secondary_move_refused, 0, 8);
+	tcase_add_loop_test(t, primary_quick_move_refused, 0, 8);
 	tcase_set_timeout(t, 60);
 	suite_add_tcase(s, t);
 

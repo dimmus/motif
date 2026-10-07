@@ -295,6 +295,8 @@ static int secondary_lock = 0;
 /* Copy of the request event of the transfer holding secondary_lock; the
    transfer may outlive the convert proc, and with it Xt's copy. */
 static XSelectionRequestEvent *secondary_event = NULL;
+/* Whether the transfer that released secondary_lock last failed */
+static Boolean secondary_failed = False;
 
 /* Bound on the nested event loop of SecondaryConvertHandler(), in units
    of the selection timeout.  Xt times out each request of the transfer
@@ -426,6 +428,11 @@ static void SecondaryConvertHandler(Widget w,
      proc releases the lock. */
   _XmProcessLock();
   done = (secondary_event != event_copy);
+  /* A transfer that failed (the destination did not insert the text)
+     is refused too, so that the requestor does not delete the text it
+     was moving. */
+  if (done && secondary_failed)
+    done = False;
   _XmProcessUnlock();
   cs->value = NULL;
   cs->type = atoms[XmANULL];
@@ -445,6 +452,7 @@ static void ReleaseSecondaryLock(Widget w,                         /* unused */
   if (event != NULL && event == (XEvent *)secondary_event) {
     secondary_lock = 0;
     secondary_event = NULL;
+    secondary_failed = (ts->status == XmTRANSFER_DONE_FAIL);
   }
   _XmProcessUnlock();
   /* The event is the copy made by SecondaryConvertHandler(); later done
