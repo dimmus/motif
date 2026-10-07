@@ -46,6 +46,7 @@
 #include <X11/Shell.h>
 #include <Xm/Xm.h>
 #include <Xm/BulletinB.h>
+#include <Xm/CascadeBG.h>
 #include <Xm/Container.h>
 #include <Xm/DrawP.h>
 #include <Xm/Form.h>
@@ -57,6 +58,7 @@
 #include <Xm/PushBG.h>
 #include <Xm/RowColumn.h>
 #include <Xm/ScrollBarP.h>
+#include <Xm/SeparatoG.h>
 #include <Xm/Separator.h>
 #include <Xm/Text.h>
 #include <Xm/ToggleBG.h>
@@ -321,6 +323,35 @@ static void toggle_init(long n)
 	gadget_new(xmToggleButtonGadgetClass);
 }
 
+static void pushbg_init(long n)
+{
+	(void)n;
+	gadget_new(xmPushButtonGadgetClass);
+}
+
+static void separatorg_init(long n)
+{
+	(void)n;
+	gadget_new(xmSeparatorGadgetClass);
+}
+
+static void icong_init(long n)
+{
+	(void)n;
+	gadget_new(xmIconGadgetClass);
+}
+
+/* A CascadeButtonGadget wants a menu for a parent. */
+static void cascadebg_init(long n)
+{
+	(void)n;
+	work = XmCreateMenuBar(root, "bar", NULL, 0);
+	XtManageChild(work);
+	gadget = XtVaCreateManagedWidget("gadget", xmCascadeButtonGadgetClass,
+					 work, NULL);
+	drain();
+}
+
 /* 1000 shells, each with its extension data, as in a big application. */
 #define N_SHELLS 1000
 static Widget shells[N_SHELLS];
@@ -364,6 +395,41 @@ static long gadget_set_run(long n)
 	for (i = 0; i < n; i++)
 		XtVaSetValues(gadget, XmNmarginWidth, (Dimension)(2 + (i & 1)),
 			      NULL);
+	return n;
+}
+
+/* The Separator cache has no margin width or alignment. */
+static long separatorg_get_run(long n)
+{
+	Dimension margin = 0;
+	unsigned char type = 0;
+	long i;
+
+	for (i = 0; i < n; i++)
+		XtVaGetValues(gadget, XmNmargin, &margin, XmNseparatorType,
+			      &type, NULL);
+	sink = margin + type;
+	return n;
+}
+
+static long separatorg_set_run(long n)
+{
+	long i;
+
+	for (i = 0; i < n; i++)
+		XtVaSetValues(gadget, XmNmargin, (Dimension)(2 + (i & 1)), NULL);
+	return n;
+}
+
+/* A shell resource that its VendorShell extension object holds. */
+static long shell_get_run(long n)
+{
+	unsigned char response = 0;
+	long i;
+
+	for (i = 0; i < n; i++)
+		XtVaGetValues(top, XmNdeleteResponse, &response, NULL);
+	sink = response;
 	return n;
 }
 
@@ -1110,6 +1176,24 @@ static const struct bench_case cases[] = {
 	  1, 100000, toggle_init, NULL, gadget_get_run, NULL, destroy_work },
 	{ "toggle-set", "micro", "XtSetValues of a cached ToggleButtonGadget resource",
 	  1, 10000, toggle_init, NULL, gadget_set_run, NULL, destroy_work },
+	{ "pushbg-get", "micro", "XtGetValues on a PushButtonGadget",
+	  1, 100000, pushbg_init, NULL, gadget_get_run, NULL, destroy_work },
+	{ "pushbg-set", "micro", "XtSetValues of a cached PushButtonGadget resource",
+	  1, 10000, pushbg_init, NULL, gadget_set_run, NULL, destroy_work },
+	{ "cascadebg-get", "micro", "XtGetValues on a CascadeButtonGadget",
+	  1, 100000, cascadebg_init, NULL, gadget_get_run, NULL, destroy_work },
+	{ "cascadebg-set", "micro", "XtSetValues of a cached CascadeButtonGadget resource",
+	  1, 10000, cascadebg_init, NULL, gadget_set_run, NULL, destroy_work },
+	{ "separatorg-get", "micro", "XtGetValues on a SeparatorGadget",
+	  1, 100000, separatorg_init, NULL, separatorg_get_run, NULL, destroy_work },
+	{ "separatorg-set", "micro", "XtSetValues of a cached SeparatorGadget resource",
+	  1, 10000, separatorg_init, NULL, separatorg_set_run, NULL, destroy_work },
+	{ "icong-get", "micro", "XtGetValues on an IconGadget",
+	  1, 100000, icong_init, NULL, gadget_get_run, NULL, destroy_work },
+	{ "icong-set", "micro", "XtSetValues of a cached IconGadget resource",
+	  1, 10000, icong_init, NULL, gadget_set_run, NULL, destroy_work },
+	{ "shell-get", "micro", "XtGetValues of a VendorShell extension resource",
+	  1, 100000, NULL, NULL, shell_get_run, NULL, NULL },
 	{ "gadget-cache", "micro", "create LabelGadgets, 200 distinct cache parts",
 	  1, 10000, NULL, cache_setup, cache_run, destroy_work, NULL },
 	{ "xmstring-create", "micro", "XmStringCreateLocalized + XmStringFree",
