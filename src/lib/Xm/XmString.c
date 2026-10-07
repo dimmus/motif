@@ -6823,8 +6823,13 @@ static void check_unparse_models(XmStringContext context,
 
 /*
  * unparse_text: A helper for XmStringUnparse.  Output a matched text
- *	component.
+ *	component.  The result grows by powers of two, as it gets a piece
+ *	per text component: it always has room for
+ *	_XmStringArrayRoom(*length) bytes.
  */
+#define UnparseGrow(result, length, add) \
+  ((char *)_XmStringGrowArray((XtPointer)(result), (result) != NULL, (length), (length) + (add), 1))
+
 static void unparse_text(char **result,
                          int *length,
                          XmTextType output_type,
@@ -6840,7 +6845,7 @@ static void unparse_text(char **result,
     /* No conversion is necessary. */
     if (c_length == 0)
       return;
-    *result = XtRealloc(*result, *length + c_length);
+    *result = UnparseGrow(*result, *length, c_length);
     memcpy(*result + *length, c_value, c_length);
     *length += c_length;
   }
@@ -6851,7 +6856,7 @@ static void unparse_text(char **result,
     wchar_t *null_text = (wchar_t *)XtMalloc(c_length + sizeof(wchar_t));
     memcpy(null_text, c_value, c_length);
     null_text[c_length / sizeof(wchar_t)] = (wchar_t)'\0';
-    *result = XtRealloc(*result, *length + max_bytes);
+    *result = UnparseGrow(*result, *length, max_bytes);
     len = wcstombs(*result + *length, null_text, max_bytes);
     if (len > 0)
       *length += len;
@@ -6863,7 +6868,7 @@ static void unparse_text(char **result,
     char *null_text = XtMalloc(c_length + 1);
     memcpy(null_text, c_value, c_length);
     null_text[c_length] = '\0';
-    *result = XtRealloc(*result, *length + c_length * sizeof(wchar_t));
+    *result = UnparseGrow(*result, *length, c_length * sizeof(wchar_t));
     len = mbstowcs((wchar_t *)(*result + *length), null_text, c_length);
     if (len > 0)
       *length += len * sizeof(wchar_t);
