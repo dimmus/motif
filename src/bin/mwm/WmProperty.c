@@ -116,7 +116,6 @@ GetNormalHints(
      *     ICCC_CURRENT version: nitems = PROP_SIZE_HINTS_ELEMENTS
      */
 
-#ifdef WSM
     if ((!HasProperty (pCD, XA_WM_NORMAL_HINTS)) ||
 	((Success != XGetWindowProperty (DISPLAY, pCD->client,
 			XA_WM_NORMAL_HINTS, 0L, (long)PROP_SIZE_HINTS_ELEMENTS,
@@ -125,15 +124,6 @@ GetNormalHints(
 	  (actualType != XA_WM_SIZE_HINTS) ||
 	  (nitems < (PROP_SIZE_HINTS_ELEMENTS - 3)) ||
 	  (actualFormat != 32)))
-#else /* WSM */
-    if ((Success != XGetWindowProperty (DISPLAY, pCD->client,
-			XA_WM_NORMAL_HINTS, 0L, (long)PROP_SIZE_HINTS_ELEMENTS,
-			False, XA_WM_SIZE_HINTS, &actualType, &actualFormat,
-			&nitems, &leftover, (unsigned char **)&property)) ||
-	 (actualType != XA_WM_SIZE_HINTS) ||
-	 (nitems < (PROP_SIZE_HINTS_ELEMENTS - 3)) ||
-	 (actualFormat != 32))
-#endif /* WSM */
     {
 	/*
 	 * Indicate no property values were retrieved:
@@ -265,11 +255,9 @@ void ProcessWmProtocols (ClientData *pCD)
      */
 
 #ifndef ICCC_COMPLIANT
-#ifdef WSM
     if (!HasProperty (pCD, wmGD.xa_WM_PROTOCOLS))
 	rValue = -1;
     else
-#endif /* WSM */
     rValue = XGetWindowProperty (DISPLAY, pCD->client, wmGD.xa_WM_PROTOCOLS, 0L,
 		 (long)MAX_CLIENT_PROTOCOL_COUNT, False, AnyPropertyType,
 		 &actualType, &actualFormat, &nitems, &leftover,
@@ -278,11 +266,9 @@ void ProcessWmProtocols (ClientData *pCD)
 
     if ((rValue != Success) || (actualType == None) || (actualFormat != 32))
 #else
-#ifdef WSM
     if (!HasProperty (pCD, wmGD.xa_WM_PROTOCOLS))
 	rValue = -1;
     else
-#endif /* WSM */
     rValue = XGetWMProtocols (DISPLAY, pCD->client,
 		 (Atom **)&property, &nitems);
 
@@ -390,11 +376,9 @@ void ProcessMwmMessages (ClientData *pCD)
      * Read the _MWM_MESSAGES property.
      */
 
-#ifdef WSM
     if (!HasProperty (pCD, wmGD.xa_MWM_MESSAGES))
         rValue = ~Success;
     else
-#endif /* WSM */
     rValue = XGetWindowProperty (DISPLAY, pCD->client, wmGD.xa_MWM_MESSAGES, 0L,
 		 (long)MAX_MWM_MESSAGES_COUNT, False, AnyPropertyType,
 		 &actualType, &actualFormat, &nitems, &leftover,
@@ -673,11 +657,9 @@ GetMwmHints(
     unsigned long leftover;
 
 
-#ifdef WSM
     if (!HasProperty(pCD, wmGD.xa_MWM_HINTS))
 	ret_val = ~Success;
     else
-#endif /* WSM */
     ret_val = XGetWindowProperty (DISPLAY, pCD->client, wmGD.xa_MWM_HINTS,
 		  0L, PROP_MWM_HINTS_ELEMENTS,
 		  False, wmGD.xa_MWM_HINTS,
@@ -851,6 +833,9 @@ void ProcessWmColormapWindows (ClientData *pCD)
      * Read the WM_COLORMAP_WINDOWS property.
      */
 
+    if (!HasProperty (pCD, wmGD.xa_WM_COLORMAP_WINDOWS))
+	rValue = ~Success;
+    else
     rValue = XGetWindowProperty (DISPLAY, pCD->client,
 		 wmGD.xa_WM_COLORMAP_WINDOWS, 0L,
 		 (long)MAX_COLORMAP_WINDOWS_COUNT, False, AnyPropertyType,
@@ -1095,6 +1080,9 @@ GetMwmMenuItems(
      */
 
     textProperty.value = (unsigned char *)NULL;
+    if (!HasProperty (pCD, wmGD.xa_MWM_MENU))
+	rValue = 0;
+    else
     rValue = XGetTextProperty(DISPLAY, pCD->client, &textProperty,
 			      wmGD.xa_MWM_MENU);
     if ((rValue == 0) || (textProperty.value == (unsigned char *)NULL))
@@ -1833,6 +1821,7 @@ GetDtWmRequest (
     *pszReq = chRequest;
 
 } /* END OF FUNCTION GetDtWmRequest */
+#endif /* WSM */
 
 
 /*************************************<->*************************************
@@ -1986,7 +1975,6 @@ HasProperty (
     return (bFound);
 
 } /* END OF FUNCTION HasProperty */
-#endif /* WSM */
 
 /*************************************<->*************************************
  *

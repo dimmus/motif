@@ -817,6 +817,7 @@ ManageWindow (WmScreenData *pSD, Window clientWindow, long manageFlags)
 		      (long) wmGD.xa_DT_WM_WINDOW_ACK,
 		      CurrentTime, NULL, 0);
     }
+#endif /* WSM */
 
     /*
      * Free the initial property list. This will force
@@ -825,7 +826,6 @@ ManageWindow (WmScreenData *pSD, Window clientWindow, long manageFlags)
      */
     DiscardInitialPropertyList (pCD);
 
-#endif /* WSM */
 #ifdef PANELIST
     CheckPushRecallClient (pCD);
 #endif /* PANELIST */
@@ -1298,12 +1298,12 @@ void WithdrawWindow (ClientData *pCD)
 #endif
     }
 
-#ifdef WSM
     /*
      * Insure list of initial properties has been freed.
      */
     DiscardInitialPropertyList (pCD);
 
+#ifdef WSM
     /*
      * free up list of workspace specific data
      */

@@ -1729,10 +1729,8 @@ typedef struct _ClientData
     struct _WmFpEmbeddedClientData  *pECD; /* embedded client data */
     struct _WmFpPushRecallClientData  *pPRCD; /* embedded client data */
 #endif /* PANELIST */
-#ifdef WSM
     Atom *	paInitialProperties;	/* initial window properties */
     int		numInitialProperties;	/* number of initial properties */
-#endif /* WSM */
 
     /* client supported protocols: */
 
