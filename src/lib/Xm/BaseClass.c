@@ -421,6 +421,44 @@ XmWidgetExtData _XmGetWidgetExtData(Widget widget, unsigned char extType)
   return data;
 }
 
+/*
+ * The records that gadgets push for the length of an Initialize, Get or
+ * SetValues: keep a few rather than a calloc and a free for each call.
+ * They are cleared XtCalloc'ed blocks either way, so it does not matter
+ * whether a record is freed here or with XtFree (as subclass hooks
+ * written for older versions do), or whether one given back here came
+ * from XtCalloc.
+ */
+#define MAX_FREE_EXT_DATA 8
+static XmWidgetExtData freeExtData[MAX_FREE_EXT_DATA];
+static Cardinal numFreeExtData = 0;
+
+XmWidgetExtData _XmExtDataAlloc(void)
+{
+  XmWidgetExtData data = NULL;
+  _XmProcessLock();
+  if (numFreeExtData > 0)
+    data = freeExtData[--numFreeExtData];
+  _XmProcessUnlock();
+  if (data == NULL)
+    return (XmWidgetExtData)XtCalloc(1, sizeof(XmWidgetExtDataRec));
+  memset(data, 0, sizeof(XmWidgetExtDataRec));
+  return data;
+}
+
+void _XmExtDataFree(XmWidgetExtData data)
+{
+  if (data == NULL)
+    return;
+  _XmProcessLock();
+  if (numFreeExtData < MAX_FREE_EXT_DATA) {
+    freeExtData[numFreeExtData++] = data;
+    data = NULL;
+  }
+  _XmProcessUnlock();
+  XtFree((char *)data);
+}
+
 Boolean _XmIsSubclassOf(WidgetClass wc, WidgetClass sc)
 {
   WidgetClass p = wc;

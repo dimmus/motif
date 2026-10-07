@@ -1608,8 +1608,8 @@ static Boolean SetValuesPrehook(
   extSize = ec->core_class.widget_size;
   _XmProcessUnlock();
   oldExtData = _XmGetWidgetExtData(new_w, XmSHELL_EXTENSION);
-  newExtData = (XmWidgetExtData)XtCalloc(1, sizeof(XmWidgetExtDataRec));
-  if (oldExtData && newExtData) {
+  if (oldExtData) {
+    newExtData = _XmExtDataAlloc();
     _XmPushWidgetExtData(new_w, newExtData, XmSHELL_EXTENSION);
     newExtData->widget = oldExtData->widget;
     _XmProcessLock();
@@ -1781,7 +1781,7 @@ static Boolean SetValuesPosthook(Widget current, /* unused */
     _XmExtObjFree((XtPointer)ext->reqWidget);
     _XmExtObjFree((XtPointer)ext->oldWidget);
     _XmProcessUnlock();
-    XtFree((char *)ext);
+    _XmExtDataFree(ext);
   }
   return (FALSE);
 }
@@ -1798,7 +1798,7 @@ static void GetValuesPrehook(Widget w,
 {
   XmWidgetExtData oldExtData, newExtData;
   if ((oldExtData = _XmGetWidgetExtData(w, XmSHELL_EXTENSION)) != NULL) {
-    newExtData = (XmWidgetExtData)XtCalloc(1, sizeof(XmWidgetExtDataRec));
+    newExtData = _XmExtDataAlloc();
     newExtData->widget = oldExtData->widget;
     _XmPushWidgetExtData(w, newExtData, XmSHELL_EXTENSION);
   }
@@ -1851,7 +1851,7 @@ static void GetValuesPosthook(Widget w,
   XmWidgetExtData ext = NULL;
   _XmPopWidgetExtData(w, &ext, XmSHELL_EXTENSION);
   if (ext)
-    XtFree((char *)ext);
+    _XmExtDataFree(ext);
 }
 
 /*

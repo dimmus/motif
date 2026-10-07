@@ -808,7 +808,7 @@ static void SecondaryObjectCreate(Widget req, Widget new_w, ArgList args, Cardin
                     wc->core_class.num_resources,
                     args,
                     *num_args);
-  extData = (XmWidgetExtData)XtCalloc(1, sizeof(XmWidgetExtDataRec));
+  extData = _XmExtDataAlloc();
   extData->widget = (Widget)newSec;
   extData->reqWidget = (Widget)reqSec;
   ((XmLabelGCacheObject)newSec)->ext.extensionType = XmCACHE_EXTENSION;
@@ -846,36 +846,7 @@ static void InitializePosthook(Widget req, Widget new_w, ArgList args, Cardinal 
   _XmExtObjFree((XtPointer)ext->widget);
   _XmExtObjFree((XtPointer)ext->reqWidget);
   _XmProcessUnlock();
-  XtFree((char *)ext);
-}
-
-/*
- * Every Get/SetValues on a gadget pushes extension data for the length
- * of the call.  Keep a few of those records rather than a calloc/free
- * pair each time.  The records come from XtCalloc and a cached one is
- * cleared on reuse, so it does not matter which code frees one.  Call
- * these with the process lock held.
- */
-#define MAX_FREE_EXT_DATA 4
-static XmWidgetExtData freeExtData[MAX_FREE_EXT_DATA];
-static Cardinal numFreeExtData = 0;
-
-static XmWidgetExtData NewExtData(void)
-{
-  XmWidgetExtData extData;
-  if (numFreeExtData == 0)
-    return (XmWidgetExtData)XtCalloc(1, sizeof(XmWidgetExtDataRec));
-  extData = freeExtData[--numFreeExtData];
-  bzero((char *)extData, sizeof(XmWidgetExtDataRec));
-  return extData;
-}
-
-static void FreeExtData(XmWidgetExtData extData)
-{
-  if (numFreeExtData < MAX_FREE_EXT_DATA)
-    freeExtData[numFreeExtData++] = extData;
-  else
-    XtFree((char *)extData);
+  _XmExtDataFree(ext);
 }
 
 /************************************************************************
@@ -897,7 +868,7 @@ static Boolean SetValuesPrehook(
   size = ec->core_class.widget_size;
   newSec = (XmLabelGCacheObject)_XmExtObjAlloc(size);
   reqSec = (XmLabelGCacheObject)_XmExtObjAlloc(size);
-  extData = NewExtData();
+  extData = _XmExtDataAlloc();
   _XmProcessUnlock();
   newSec->object.self = (Widget)newSec;
   newSec->object.widget_class = ec;
@@ -938,7 +909,7 @@ static void GetValuesPrehook(Widget newParent, ArgList args, Cardinal *num_args)
   ec = (*cePtr)->secondaryObjectClass;
   size = ec->core_class.widget_size;
   newSec = (XmLabelGCacheObject)_XmExtObjAlloc(size);
-  extData = NewExtData();
+  extData = _XmExtDataAlloc();
   _XmProcessUnlock();
   newSec->object.self = (Widget)newSec;
   newSec->object.widget_class = ec;
@@ -968,7 +939,7 @@ static void GetValuesPosthook(Widget new_w, ArgList args, Cardinal *num_args)
   _XmPopWidgetExtData(new_w, &ext, XmCACHE_EXTENSION);
   _XmProcessLock();
   _XmExtObjFree((XtPointer)ext->widget);
-  FreeExtData(ext);
+  _XmExtDataFree(ext);
   _XmProcessUnlock();
 }
 
@@ -999,7 +970,7 @@ static Boolean SetValuesPosthook(
   _XmPopWidgetExtData(new_w, &ext, XmCACHE_EXTENSION);
   _XmExtObjFree((XtPointer)ext->widget);
   _XmExtObjFree((XtPointer)ext->reqWidget);
-  FreeExtData(ext);
+  _XmExtDataFree(ext);
   _XmProcessUnlock();
   return FALSE;
 }

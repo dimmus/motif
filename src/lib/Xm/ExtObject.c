@@ -274,7 +274,7 @@ static void Initialize(Widget req, Widget new_w, ArgList args, Cardinal *num_arg
   XmBaseClassExt *wcePtr = _XmGetBaseClassExtPtr(ec, XmQmotif);
   if (!(*wcePtr)->use_sub_resources) {
     if (resParent) {
-      extData = (XmWidgetExtData)XtCalloc(1, sizeof(XmWidgetExtDataRec));
+      extData = _XmExtDataAlloc();
       _XmPushWidgetExtData(resParent, extData, ne->ext.extensionType);
       extData->widget = new_w;
       _XmProcessLock();
@@ -385,7 +385,7 @@ static void Destroy(Widget wid)
   if (resParent) {
     XmWidgetExtData extData;
     _XmPopWidgetExtData(resParent, &extData, extObj->ext.extensionType);
-    XtFree((char *)extData);
+    _XmExtDataFree(extData);
   }
 }
 
