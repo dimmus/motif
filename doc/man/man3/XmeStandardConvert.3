@@ -19,13 +19,7 @@
 can
 supply, for the convert procedure of an \fB\%XmQTtransfer\fP trait,
 which
-calls it for the targets it does not handle itself:
-.IP "\fIw\fP" 10
-Specifies the widget\&.
-.IP "\fIignore\fP" 10
-Is not used\&.
-.IP "\fIcs\fP" 10
-Specifies the conversion request, and returns the result\&.
+calls it for the targets it does not handle itself\&.
 .IP "\fB\%TARGETS\fP" 10
 the targets of \fB\%XmeStandardTargets\fP\&.
 .IP "\fB\%FOREGROUND\fP, \fB\%BACKGROUND\fP, \fB\%COLORMAP\fP" 10
@@ -43,8 +37,13 @@ the encoding registry of Motif\&.
 The result is stored in the \fB\%value\fP, \fB\%length\fP,
 \fB\%format\fP and
 \fB\%type\fP members of \fIcs\fP; other targets are left alone\&.
+.IP "\fIw\fP" 10
+Specifies the widget\&.
+.IP "\fIignore\fP" 10
+Is not used\&.
+.IP "\fIcs\fP" 10
+Specifies the conversion request, and returns the result\&.
 .SH "RELATED"
 .PP
-\fB\%XmeStandardTargets\fP(3), \fB\%XmeConvertMerge\fP(3) and
-\fB\%XmTransferValue\fP(3), \fB\%XmTransferDone\fP(3) and
-\fB\%XmeStandardConvert\fP(3)\&.
+\fB\%XmeStandardTargets\fP(3), \fB\%XmeConvertMerge\fP(3),
+\fB\%XmTransferValue\fP(3) and \fB\%XmTransferDone\fP(3)\&.

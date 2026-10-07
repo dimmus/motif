@@ -22,11 +22,6 @@ uses it
 to free what it allocated for the transfer, or to do the work that
 needs all the data, for instance deleting the source of a move\&.  It is
 called as:
-.IP "\fItransfer_id\fP" 10
-Specifies the transfer, the \fB\%transfer_id\fP of the
-\fB\%XmDestinationCallbackStruct\fP\&.
-.IP "\fIdone_proc\fP" 10
-Specifies the procedure\&.
 .PP
 .nf
 void (*done_proc)(Widget w, XtEnum op,
@@ -35,6 +30,11 @@ void (*done_proc)(Widget w, XtEnum op,
 .PP
 where \fIw\fP is the destination widget, \fIop\fP the operation of the
 transfer and \fIts\fP gives its status\&.
+.IP "\fItransfer_id\fP" 10
+Specifies the transfer, the \fB\%transfer_id\fP of the
+\fB\%XmDestinationCallbackStruct\fP\&.
+.IP "\fIdone_proc\fP" 10
+Specifies the procedure\&.
 .SH "RELATED"
 .PP
 \fB\%XmTransferValue\fP(3), \fB\%XmTransferDone\fP(3) and
