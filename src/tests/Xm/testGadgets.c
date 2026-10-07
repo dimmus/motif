@@ -15,6 +15,10 @@
  * that go through them for every gadget class, and (under LeakSanitizer)
  * that the recycled records do not leak.
  */
+#include <stdint.h>
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
 #include <X11/Intrinsic.h>
 #include <Xm/XmP.h>
 #include <Xm/ExtObjectP.h>
@@ -213,7 +217,7 @@ START_TEST(gadget_values)
 	ck_assert_ptr_eq(got, &mine);
 	ck_assert_msg(d == 9, "%s: %s is %u, not 9", gc->name, gc->resource, d);
 
-	/* A gadget with the same values shares the cache records. */
+	/* And back again, with nothing left on the stack. */
 	XtVaSetValues(w, gc->resource, 5, NULL);
 	ck_assert_uint_eq(get_dimension(w, gc->resource), 5);
 	ck_assert_ptr_null(_XmGetWidgetExtData(w, XmCACHE_EXTENSION));
@@ -282,6 +286,73 @@ START_TEST(shell_ext_data)
 }
 END_TEST
 
+/* Write a 2x2 bitmap file NAME in the current directory, its path to PATH. */
+static void write_xbm(const char *name, char *path, size_t size)
+{
+	char dir[1024];
+	FILE *fp;
+
+	ck_assert_ptr_nonnull(getcwd(dir, sizeof dir));
+	ck_assert_int_lt(snprintf(path, size, "%s/%s", dir, name), (int)size);
+	ck_assert_ptr_nonnull(fp = fopen(path, "w"));
+	fputs("#define t_width 2\n#define t_height 2\n"
+	      "static unsigned char t_bits[] = {\n   0x01, 0x02};\n", fp);
+	fclose(fp);
+}
+
+#define N_TRIES 64
+
+/*
+ * IconG.c: an IconGadget whose icon pixmap comes from the converter
+ * fetches the mask that goes with it, and records in an XContext keyed
+ * by the gadget's address that it must free that mask.  Destroy freed
+ * the mask but left the record, so a later IconGadget at the same
+ * address took a mask that it was given for its own and released it
+ * when it was destroyed.  Look for a gadget at the address of the first
+ * (malloc usually hands the block straight back; under ASan it does not,
+ * and then there is nothing to check).
+ */
+START_TEST(icon_gadget_mask_owner)
+{
+	char icon[1100], icon_mask[1100];
+	Widget rc, w[N_TRIES];
+	Pixmap mask = XmUNSPECIFIED_PIXMAP, shared;
+	uintptr_t first;
+	int i, n, reused = 0;
+
+	write_xbm("check_gadgets_icon.xbm", icon, sizeof icon);
+	write_xbm("check_gadgets_icon_m.xbm", icon_mask, sizeof icon_mask);
+	rc = XmCreateRowColumn(top, "rc", NULL, 0);
+	w[0] = XtVaCreateWidget("icon", xmIconGadgetClass, rc,
+				XtVaTypedArg, XmNlargeIconPixmap, XmRString,
+				icon, (int)strlen(icon) + 1, NULL);
+	XtVaGetValues(w[0], XmNlargeIconMask, &mask, NULL);
+	unlink(icon);
+	first = (uintptr_t)w[0];
+	XtDestroyWidget(w[0]);
+	ck_assert_msg(mask != XmUNSPECIFIED_PIXMAP, "no mask was fetched");
+
+	/* A mask from the pixmap cache, which the test holds a reference to. */
+	shared = XmGetPixmapByDepth(XtScreen(top), icon_mask, 1, 0, 1);
+	unlink(icon_mask);
+	ck_assert(shared != XmUNSPECIFIED_PIXMAP);
+	for (n = 0; n < N_TRIES && !reused; n++) {
+		w[n] = XtVaCreateWidget("icon", xmIconGadgetClass, rc,
+					XmNlargeIconMask, shared, NULL);
+		reused = (uintptr_t)w[n] == first;
+	}
+	for (i = 0; i < n; i++)
+		XtDestroyWidget(w[i]);
+
+	/* The gadgets did not own it, so the test's reference is still there. */
+	if (reused)
+		ck_assert_msg(XmDestroyPixmap(XtScreen(top), shared),
+			      "an IconGadget released a mask it did not own");
+	else
+		XmDestroyPixmap(XtScreen(top), shared);
+}
+END_TEST
+
 void gadgets_suite(SRunner *runner)
 {
 	Suite *s = suite_create("Gadgets");
@@ -298,6 +369,7 @@ void gadgets_suite(SRunner *runner)
 	tcase_add_checked_fixture(t, setup, teardown);
 	tcase_add_loop_test(t, gadget_values, 0, N_GADGET_CLASSES);
 	tcase_add_test(t, gadget_life_cycle);
+	tcase_add_test(t, icon_gadget_mask_owner);
 	tcase_set_timeout(t, 60);
 	suite_add_tcase(s, t);
 

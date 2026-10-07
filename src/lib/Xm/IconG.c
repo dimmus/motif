@@ -54,6 +54,7 @@
 #include <Xm/VaSimpleP.h>
 #include <Xm/XmP.h>
 #include <Xm/XmosP.h>
+#include <limits.h>
 /* spacing between the line and the detail string.
    Those could be moved as plain resources later. */
 #define DEFAULT_LABEL_MARGIN_WIDTH 2
@@ -159,10 +160,17 @@ static Boolean PointIn(Widget widget, Position x, Position y);
 static XContext largeIconContext = 0;
 static XContext smallIconContext = 0;
 static XPointer dummy;
+/* XContext hashes an id as ((id << 1) + context) & mask, so gadget
+   addresses, which share their alignment, would crowd into a few of
+   its buckets: rotate the alignment bits out of the low end (a
+   bijection, so every gadget keeps an id of its own). */
+#define MaskId(widget) \
+  ((XID)(((unsigned long)(widget) >> 4) | \
+         ((unsigned long)(widget) << (sizeof(unsigned long) * CHAR_BIT - 4))))
 #define OwnLargeMask(widget) \
-  (XFindContext(XtDisplay(widget), (Window)widget, largeIconContext, &dummy) == 0)
+  (XFindContext(XtDisplay(widget), MaskId(widget), largeIconContext, &dummy) == 0)
 #define OwnSmallMask(widget) \
-  (XFindContext(XtDisplay(widget), (Window)widget, smallIconContext, &dummy) == 0)
+  (XFindContext(XtDisplay(widget), MaskId(widget), smallIconContext, &dummy) == 0)
 #define MESSAGE0 _XmMMsgPixConv_0000
 /***** The resources of this class */
 static XtResource resources[] = {
@@ -604,10 +612,10 @@ static void FetchPixmap(Widget widget, String image_name, unsigned char res_type
     /* mark that we have to destroy the mask */
     if (*(Pixmap *)mask_addr != XmUNSPECIFIED_PIXMAP) {
       if (res_type == XmLARGE_ICON) {
-        XSaveContext(XtDisplay(widget), (Window)widget, largeIconContext, (XPointer)True);
+        XSaveContext(XtDisplay(widget), MaskId(widget), largeIconContext, (XPointer)True);
       }
       else {
-        XSaveContext(XtDisplay(widget), (Window)widget, smallIconContext, (XPointer)True);
+        XSaveContext(XtDisplay(widget), MaskId(widget), smallIconContext, (XPointer)True);
       }
     }
   }
@@ -1091,11 +1099,15 @@ static void Destroy(Widget wid)
       XmStringFree(IG_Detail(wid)[i]);
     XtFree((char *)IG_Detail(wid));
   }
+  /* Forget the masks too, or a later gadget at this address would think
+     it owns its own. */
   if (OwnLargeMask(wid)) {
+    XDeleteContext(XtDisplay(wid), MaskId(wid), largeIconContext);
     if (PIXMAP_VALID(IG_LargeIconMask(wid)))
       XmDestroyPixmap(XtScreen(wid), IG_LargeIconMask(wid));
   }
   if (OwnSmallMask(wid)) {
+    XDeleteContext(XtDisplay(wid), MaskId(wid), smallIconContext);
     if (PIXMAP_VALID(IG_SmallIconMask(wid)))
       XmDestroyPixmap(XtScreen(wid), IG_SmallIconMask(wid));
   }
@@ -1994,7 +2006,7 @@ static Boolean SetValues(Widget cw,
   }
   if (IG_LargeIconMask(nw) != IG_LargeIconMask(cw)) {
     if (OwnLargeMask(cw)) {
-      XDeleteContext(XtDisplay(nw), (Window)nw, largeIconContext);
+      XDeleteContext(XtDisplay(nw), MaskId(nw), largeIconContext);
       if (PIXMAP_VALID(IG_LargeIconMask(cw)))
         XmDestroyPixmap(XtScreen(cw), IG_LargeIconMask(cw));
     }
@@ -2016,7 +2028,7 @@ static Boolean SetValues(Widget cw,
   }
   if (IG_SmallIconMask(nw) != IG_SmallIconMask(cw)) {
     if (OwnSmallMask(cw)) {
-      XDeleteContext(XtDisplay(nw), (Window)nw, smallIconContext);
+      XDeleteContext(XtDisplay(nw), MaskId(nw), smallIconContext);
       if (PIXMAP_VALID(IG_SmallIconMask(cw)))
         XmDestroyPixmap(XtScreen(cw), IG_SmallIconMask(cw));
     }
