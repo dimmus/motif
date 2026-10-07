@@ -7178,7 +7178,7 @@ static void APIDeletePositions(XmListWidget lw, int *positions, int count, Boole
   DeleteItemPositions(lw, positions, count, track_kbd);
   rebuild_selection = DeleteInternalElementPositions(lw, positions, count, oldItemCount);
   if (lw->list.CurrentKbdItem >= lw->list.LastItem) {
-    lw->list.CurrentKbdItem = lw->list.LastItem;
+    lw->list.CurrentKbdItem = lw->list.LastItem - 1;
     ASSIGN_MAX(lw->list.CurrentKbdItem, 0);
     if (UpdateLastHL)
       lw->list.LastHLItem = lw->list.CurrentKbdItem;

@@ -1055,6 +1055,31 @@ START_TEST(list_items_resource_resets_range)
 }
 END_TEST
 
+/*
+ * XmListDeletePositions keeps the location cursor on a remaining item
+ * when it was on one of the last items, deleted.
+ */
+START_TEST(list_delete_positions_keeps_cursor)
+{
+	Widget list = make_list(XmBROWSE_SELECT, 10, "item %d", 0);
+	int positions[] = { 10, 9 };
+	XKeyEvent ev;
+	int e[] = { 8 };
+
+	XtRealizeWidget(shell);
+	ck_assert(XmListSetKbdItemPos(list, 10));
+	XmListDeletePositions(list, positions, 2);
+	ck_assert_int_eq(XmListGetKbdItemPos(list), 8);
+	/* the browse selection goes to the location cursor */
+	memset(&ev, 0, sizeof(ev));
+	ev.type = KeyPress;
+	ev.display = XtDisplay(list);
+	ev.window = XtWindow(list);
+	XtCallActionProc(list, "ListKbdSelectAll", (XEvent *)&ev, NULL, 0);
+	expect_selected(list, 1, e);
+}
+END_TEST
+
 void list_suite(SRunner *runner)
 {
 	Suite *s = suite_create("List");
@@ -1088,6 +1113,7 @@ void list_suite(SRunner *runner)
 	tcase_add_test(t, list_replace_unselected_duplicates);
 	tcase_add_test(t, list_api_during_button_selection);
 	tcase_add_test(t, list_items_resource_resets_range);
+	tcase_add_test(t, list_delete_positions_keeps_cursor);
 	tcase_add_checked_fixture(t, _init_xt, uninit_xt);
 	tcase_set_timeout(t, 60);
 	suite_add_tcase(s, t);
