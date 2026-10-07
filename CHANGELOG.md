@@ -36,6 +36,18 @@ upstream release (December 2017).  The git history has the details.
   build tools had no profile, and with Clang their many `main()`
   functions shared one profile record.
 
+### Code
+
+- `XmTextField` and `XmText` crashed when their render table had no
+  loaded font, as with a rendition that names a font but leaves
+  `XmNfontType` at `XmAS_IS`.  They fell back to the default text render
+  table, which inside a BulletinBoard is its `XmNtextRenderTable` and so
+  often the same fontless table, and kept a NULL font.  They now fall
+  back further to the system default render table (`XmDEFAULT_FONT`),
+  still warning that the table has no font.  `XmText` no longer leaks
+  the font context on that path, and setting its render table to NULL
+  no longer stores the parent's table without a copy and frees it later.
+
 ### Documentation
 
 - `doc/guide` rewritten as a technical architecture guide of sixteen

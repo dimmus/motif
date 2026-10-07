@@ -115,6 +115,7 @@ static void OutputInvalidate(XmTextWidget tw,
 static void RefigureDependentInfo(XmTextWidget tw);
 static void SizeFromRowsCols(XmTextWidget tw, Dimension *width, Dimension *height);
 static Boolean LoadFontMetrics(XmTextWidget tw);
+static void LoadFontMetricsOrDefault(XmTextWidget tw, Boolean is_default);
 static void LoadGCs(XmTextWidget tw, Pixel background, Pixel foreground);
 static void MakeIBeamOffArea(XmTextWidget tw, Dimension width, Dimension height);
 static Pixmap FindPixmap(
@@ -3373,7 +3374,7 @@ static void SizeFromRowsCols(XmTextWidget tw, Dimension *width, Dimension *heigh
 static Boolean LoadFontMetrics(XmTextWidget tw)
 {
   OutputData data = tw->text.output->data;
-  XmFontContext context;
+  XmFontContext context = NULL;
   XmFontListEntry next_entry;
   XmFontType type_return = XmFONT_IS_FONT;
   XtPointer tmp_font;
@@ -3440,6 +3441,7 @@ static Boolean LoadFontMetrics(XmTextWidget tw)
       }
     }
   } while (next_entry != NULL);
+  XmFontListFreeFontContext(context);
 #if USE_XFT
   if (!have_font_struct && !have_font_set && !have_xft_font) {
 #else
@@ -3449,7 +3451,6 @@ static Boolean LoadFontMetrics(XmTextWidget tw)
                                   core dump */
     return False;
   }
-  XmFontListFreeFontContext(context);
   if (data->use_fontset) {
     fs_extents = XExtentsOfFontSet((XFontSet)data->font);
     if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
@@ -3511,6 +3512,26 @@ static Boolean LoadFontMetrics(XmTextWidget tw)
     }
   }
   return True;
+}
+
+/* Load the metrics of data->fontlist and, when it has no loaded font (a
+ * rendition whose XmNfontType is XmAS_IS loads none), replace it with a copy
+ * of the default text render table and then of the system default render
+ * table (XmDEFAULT_FONT), so that data->font is never left NULL.  The default
+ * text render table is usually an ancestor's XmNtextRenderTable, so it is
+ * skipped when data->fontlist already is a copy of it (is_default).  The
+ * caller keeps data->rendertable in step with data->fontlist. */
+static void LoadFontMetricsOrDefault(XmTextWidget tw, Boolean is_default)
+{
+  static const unsigned char fallback[] = {XmTEXT_FONTLIST, 0};
+  OutputData data = tw->text.output->data;
+  Cardinal i;
+  for (i = is_default ? 1 : 0; !LoadFontMetrics(tw) && i < XtNumber(fallback); i++) {
+    if (data->fontlist != NULL)
+      XmRenderTableFree(data->fontlist);
+    data->fontlist =
+        XmRenderTableCopy(XmeGetDefaultRenderTable((Widget)tw, fallback[i]), NULL, 0);
+  }
 }
 
 static Boolean SetXOCOrientation(XmTextWidget tw, XOC oc, XOrientation orientation)
@@ -3864,30 +3885,29 @@ static Boolean OutputSetValues(
     needgcs = True;
   }
   if (CK(fontlist) || CK(rendertable)) {
-    XmRenderTableFree(data->fontlist);
+    Boolean is_default = False;
+    if (data->fontlist != NULL)
+      XmRenderTableFree(data->fontlist);
+    /* Copy the default render table too: data->fontlist is freed when it is
+     * replaced and in Destroy. */
     if (CK(rendertable)) {
-      if (newdata->rendertable == NULL)
-        newdata->fontlist = XmeGetDefaultRenderTable(new_w, XmTEXT_FONTLIST);
+      if ((is_default = (newdata->rendertable == NULL)))
+        newdata->fontlist =
+            XmRenderTableCopy(XmeGetDefaultRenderTable(new_w, XmTEXT_FONTLIST), NULL, 0);
       else
         newdata->fontlist = XmRenderTableCopy(newdata->rendertable, NULL, 0);
     }
     else if (CK(fontlist)) {
-      if (newdata->fontlist == NULL)
-        newdata->fontlist = XmeGetDefaultRenderTable(new_w, XmTEXT_FONTLIST);
+      if ((is_default = (newdata->fontlist == NULL)))
+        newdata->fontlist =
+            XmRenderTableCopy(XmeGetDefaultRenderTable(new_w, XmTEXT_FONTLIST), NULL, 0);
       else
         newdata->fontlist = XmRenderTableCopy(newdata->fontlist, NULL, 0);
     }
-    newdata->rendertable = newdata->fontlist;
     CP(fontlist);
+    LoadFontMetricsOrDefault(newtw, is_default);
+    newdata->fontlist = newdata->rendertable = data->fontlist;
     CP(rendertable);
-    if (!LoadFontMetrics(newtw)) {
-      XmRenderTableFree(newdata->fontlist);
-      newdata->fontlist = XmeGetDefaultRenderTable(new_w, XmTEXT_FONTLIST);
-      newdata->rendertable = newdata->fontlist;
-      CP(fontlist);
-      CP(rendertable);
-      (void)LoadFontMetrics(newtw);
-    }
     /* We want to be able to connect to an IM if XmNfontList has changed. */
     if (newtw->text.editable) {
       newtw->text.editable = False;
@@ -4566,7 +4586,8 @@ static void OutputDestroy(Widget w)
   XtReleaseGC(w, data->gc);
   XtReleaseGC(w, data->save_gc);
   XtReleaseGC(w, data->cursor_gc);
-  XmFontListFree(data->fontlist);
+  if (data->fontlist != NULL)
+    XmFontListFree(data->fontlist);
   if (data->add_mode_cursor != XmUNSPECIFIED_PIXMAP)
     (void)XmDestroyPixmap(XtScreen(tw), data->add_mode_cursor);
   if (data->cursor != XmUNSPECIFIED_PIXMAP)
@@ -4875,6 +4896,7 @@ void _XmTextOutputCreate(Widget wid, ArgList args, Cardinal num_args)
   OutputData data;
   Dimension width, height;
   XmScrollFrameTrait scrollFrameTrait;
+  Boolean is_default;
   tw->text.output = output = (Output)XtMalloc((unsigned)sizeof(OutputRec));
   output->data = data = (OutputData)XtMalloc((unsigned)sizeof(OutputDataRec));
   XtGetSubresources(wid,
@@ -4925,18 +4947,15 @@ void _XmTextOutputCreate(Widget wid, ArgList args, Cardinal num_args)
    * code is expecting, but rendertable takes precedence since that's the
    * model for 2.0.
    */
-  if ((data->fontlist == NULL) && (data->rendertable == NULL)) {
+  is_default = (data->fontlist == NULL) && (data->rendertable == NULL);
+  if (is_default) {
     data->fontlist = XmRenderTableCopy(XmeGetDefaultRenderTable(wid, XmTEXT_FONTLIST), NULL, 0);
   }
   else if (data->rendertable != NULL)
     data->fontlist = XmRenderTableCopy(data->rendertable, NULL, 0);
   else
     data->fontlist = XmRenderTableCopy(data->fontlist, NULL, 0);
-  if (!LoadFontMetrics(tw)) {
-    XmFontListFree(data->fontlist);
-    data->fontlist = XmRenderTableCopy(XmeGetDefaultRenderTable(wid, XmTEXT_FONTLIST), NULL, 0);
-    (void)!LoadFontMetrics(tw);
-  }
+  LoadFontMetricsOrDefault(tw, is_default);
   data->rendertable = data->fontlist;
   data->cursorwidth = 5;
   data->cursorheight = data->font_ascent + data->font_descent;
