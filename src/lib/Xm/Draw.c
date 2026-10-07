@@ -64,12 +64,13 @@ static void DrawSimpleShadow(Display *display,
 /* Segment has been faster than Rectangles in all my benches, either
    on Hp, Sun or Pmax. Lines has been slower, that I don't understand... */
 /* Still true: on Xvfb, XFillRectangles of the same rows and columns
-   (the same pixels, and the same request bytes) takes 20-40% longer,
-   and a polygon per GC, which only saves bytes from a thickness of 4,
-   takes 1.4 to 7 times as long and misses or adds pixels along its
-   slanted edges (src/tests/ab/shadowbench.c measures both).  The
-   segments also keep the line attributes of the caller's GCs, which
-   XmeDrawShadows has always honoured. */
+   (the same request bytes, and the same pixels with zero-width GCs)
+   is no faster, and up to 40% slower from a thickness of 2; a polygon
+   per GC, which only saves bytes from a thickness of 2, takes 1.4 to
+   7 times as long and misses or adds pixels along its slanted edges
+   (src/tests/ab/shadowbench.c measures both).  The segments also keep
+   the line attributes of the caller's GCs, which XmeDrawShadows has
+   always honoured and rectangles would ignore. */
 {
   static XSegment *segms = NULL;
   static int segm_count = 0;
