@@ -35,10 +35,12 @@ set(MOTIF_TEST_SRCS
     Xm/testText.c
     Xm/testI18n.c
     Xm/testLayout.c
+    Xm/testRoundTrips.c
 )
 
 # Suites that open a display, and suites that do not.
-set(MOTIF_TEST_X_SUITES FontListEntry FontList XmStringCT XmStringExtent Widgets Text Layout)
+set(MOTIF_TEST_X_SUITES FontListEntry FontList XmStringCT XmStringExtent Widgets Text Layout
+    RoundTrips)
 set(MOTIF_TEST_SUITES Svg Log LogConfig XmString I18n)
 set(MOTIF_TEST_DEFS "")
 
@@ -88,7 +90,7 @@ target_include_directories(motif_tests PRIVATE
     ${CMAKE_SOURCE_DIR}/src/lib/Xm
     ${CMAKE_BINARY_DIR}/include
 )
-target_link_libraries(motif_tests PRIVATE Xm PkgConfig::CHECK Threads::Threads)
+target_link_libraries(motif_tests PRIVATE Xm PkgConfig::CHECK Threads::Threads ${CMAKE_DL_LIBS})
 
 # The suites open their fixtures by relative path and some write log files
 # into the current directory, so run them from a build-tree copy of the
