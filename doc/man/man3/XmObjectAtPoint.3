@@ -50,6 +50,7 @@
 .SH "NAME"
 \fBXmObjectAtPoint\fP \(em A toolkit function that determines which child intersects or comes closest to a specified point
 .iX "XmObjectAtPoint"
+.iX "XmObjectAtPoint" "_XmInputInGadget"
 .SH "SYNOPSIS"
 .PP
 .nf
@@ -82,6 +83,12 @@ The preceding rules are only general\&. In fact, each manager
 as it desires\&.
 For example, if no child intersects \fIx,y\fP, a manager
 might return the child closest to \fIx,y\fP\&.
+.PP
+Motif 1\&.2 had \fB_XmInputInGadget\fP, which returned the gadget
+child at a point\&.
+The library still exports that name for old binaries, and
+\fB<Xm/XmP\&.h>\fP defines it as a macro for \fBXmObjectAtPoint\fP
+unless \fBNO_XM_1_2_BC\fP is defined\&.
 .IP "\fIwidget\fP" 10
 Specifies a manager widget\&.
 .IP "\fIx\fP" 10

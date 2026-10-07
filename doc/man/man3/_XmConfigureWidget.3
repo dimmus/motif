@@ -1,0 +1,164 @@
+.TH "_XmConfigureWidget" "library call"
+.nh
+.SH "NAME"
+\fB\%_XmConfigureWidget\fP,
+\fB\%_XmMoveWidget\fP,
+\fB\%_XmResizeWidget\fP,
+\fB\%_XmRequestNewSize\fP,
+\fB\%_XmHWQuery\fP,
+\fB\%_XmSetValuesOnChildren\fP,
+\fB\%_XmFilterArgs\fP,
+\fB\%_XmGetFocus\fP,
+\fB\%_XmGetMBStringFromXmString\fP,
+\fB\%_XmGadgetWarning\fP,
+\fB\%_XmUtilIsSubclassByNameQ\fP,
+\fB\%_XmExtHighlightBorder\fP,
+\fB\%_XmExtUnhighlightBorder\fP,
+\fB\%XmResolveAllPartOffsets64\fP \(em Utility functions of the Motif extension widgets
+.iX "_XmConfigureWidget"
+.iX "Motif internal functions" "_XmConfigureWidget"
+.iX "Motif internal functions" "_XmMoveWidget"
+.iX "Motif internal functions" "_XmResizeWidget"
+.iX "Motif internal functions" "_XmRequestNewSize"
+.iX "Motif internal functions" "_XmHWQuery"
+.iX "Motif internal functions" "_XmSetValuesOnChildren"
+.iX "Motif internal functions" "_XmFilterArgs"
+.iX "Motif internal functions" "_XmGetFocus"
+.iX "Motif internal functions" "_XmGetMBStringFromXmString"
+.iX "Motif internal functions" "_XmGadgetWarning"
+.iX "Motif internal functions" "_XmUtilIsSubclassByNameQ"
+.iX "Motif internal functions" "_XmExtHighlightBorder"
+.iX "Motif internal functions" "_XmExtUnhighlightBorder"
+.iX "Motif internal functions" "XmResolveAllPartOffsets64"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/ExtP\&.h>
+.PP
+\fBvoid \fB_XmConfigureWidget\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBPosition \fBx\fR\fR,
+\fBPosition \fBy\fR\fR,
+\fBDimension \fBwidth\fR\fR,
+\fBDimension \fBheight\fR\fR,
+\fBDimension \fBborder_width\fR\fR);
+\fBvoid \fB_XmMoveWidget\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBPosition \fBx\fR\fR,
+\fBPosition \fBy\fR\fR);
+\fBvoid \fB_XmResizeWidget\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBDimension \fBwidth\fR\fR,
+\fBDimension \fBheight\fR\fR,
+\fBDimension \fBborder_width\fR\fR);
+\fBXtGeometryResult \fB_XmRequestNewSize\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBBoolean \fBquery_only\fR\fR,
+\fBDimension \fBwidth\fR\fR,
+\fBDimension \fBheight\fR\fR,
+\fBDimension *\fBr_width\fR\fR,
+\fBDimension *\fBr_height\fR\fR);
+\fBXtGeometryResult \fB_XmHWQuery\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBXtWidgetGeometry *\fBintended\fR\fR,
+\fBXtWidgetGeometry *\fBpreferred\fR\fR);
+.PP
+\fBvoid \fB_XmSetValuesOnChildren\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBArgList \fBargs\fR\fR,
+\fBCardinal \fBnum_args\fR\fR);
+\fBvoid \fB_XmFilterArgs\fP\fR(
+\fBArgList \fBargs\fR\fR,
+\fBCardinal \fBnum_args\fR\fR,
+\fBString *\fBfilter\fR\fR,
+\fBArgList *\fBfiltered_args\fR\fR,
+\fBCardinal *\fBnum_filtered_args\fR\fR);
+\fBvoid \fB_XmGetFocus\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBXEvent *\fBevent\fR\fR,
+\fBString *\fBparams\fR\fR,
+\fBCardinal *\fBnum_params\fR\fR);
+\fBString \fB_XmGetMBStringFromXmString\fP\fR(
+\fBXmString \fBxmstr\fR\fR);
+\fBBoolean \fB_XmGadgetWarning\fP\fR(
+\fBWidget \fBw\fR\fR);
+\fBBoolean \fB_XmUtilIsSubclassByNameQ\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBXrmQuark \fBnameq\fR\fR);
+\fBvoid \fB_XmExtHighlightBorder\fP\fR(
+\fBWidget \fBw\fR\fR);
+\fBvoid \fB_XmExtUnhighlightBorder\fP\fR(
+\fBWidget \fBw\fR\fR);
+.PP
+\fBvoid \fBXmResolveAllPartOffsets64\fP\fR(
+\fBWidgetClass \fBw_class\fR\fR,
+\fBXmOffsetPtr *\fBoffset\fR\fR,
+\fBXmOffsetPtr *\fBconstraint_offset\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%<Xm/ExtP\&.h>\fP declares the helpers that the widgets of the Motif
+extension library (ColorSelector, FontSelector, Tree, Outline, TabBox,
+ComboBox2 and others) share\&.  They are exported for these widgets and
+their subclasses, and are not meant for applications\&.
+.PP
+\fB\%_XmConfigureWidget\fP, \fB\%_XmMoveWidget\fP and
+\fB\%_XmResizeWidget\fP call
+\fB\%XtConfigureWidget\fP, \fB\%XtMoveWidget\fP and
+\fB\%XtResizeWidget\fP between
+\fB\%XmDropSiteStartUpdate\fP and \fB\%XmDropSiteEndUpdate\fP, so that
+the drop
+sites follow; \fB\%_XmConfigureWidget\fP makes a width or height of 0
+into 1\&.
+.PP
+\fB\%_XmRequestNewSize\fP asks the parent of \fIw\fP for the size
+\fIwidth\fP by
+\fIheight\fP (only asks, if \fIquery_only\fP), accepts a compromise, and
+returns in \fIr_width\fP and \fIr_height\fP the size that is or would be
+allowed\&.  \fB\%_XmHWQuery\fP is the end of a query_geometry method
+that
+cares only about width and height: \fIpreferred\fP holds the preferred
+size, and the result is \fB\%XtGeometryYes\fP if \fIintended\fP gives
+exactly
+that size, \fB\%XtGeometryNo\fP if it gives another size or, when
+\fIintended\fP is NULL, if the preferred size is the current one, and
+\fB\%XtGeometryAlmost\fP otherwise\&.
+.PP
+\fB\%_XmSetValuesOnChildren\fP calls \fB\%XtSetValues\fP with \fIargs\fP
+on every
+descendant of \fIw\fP\&.  \fB\%_XmFilterArgs\fP copies \fIargs\fP
+without the
+resources named in the NULL-terminated list \fIfilter\fP, into a new
+list
+that the caller frees with \fB\%XtFree\fP\&.  \fB\%_XmGetFocus\fP is an
+action
+procedure that gives the focus to \fIw\fP (\fB\%XmProcessTraversal\fP
+with
+\fB\%XmTRAVERSE_CURRENT\fP)\&.  \fB\%_XmGetMBStringFromXmString\fP
+returns the text
+of an XmString, with a newline for each separator, in a new string
+that the caller frees with \fB\%XtFree\fP, or NULL\&.
+\fB\%_XmGadgetWarning\fP prints a warning and returns True if \fIw\fP is
+a
+gadget, for widgets that do not support gadget children\&.
+\fB\%_XmUtilIsSubclassByNameQ\fP tells whether the class of \fIw\fP, or
+one of
+its superclasses, is named by the quark \fInameq\fP\&.
+\fB\%_XmExtHighlightBorder\fP and \fB\%_XmExtUnhighlightBorder\fP call
+the
+border highlight or unhighlight method of Primitive or Gadget on
+\fIw\fP\&.
+.PP
+\fB\%XmResolveAllPartOffsets64\fP is \fB\%XmResolveAllPartOffsets\fP for
+classes whose parts must be aligned on 8 bytes: on a system where
+pointers are larger than int (all 64-bit systems), all parts are
+aligned on 8 bytes; otherwise the part of the class is\&.
+.SH "BUGS"
+.PP
+\fB\%_XmGetMBStringFromXmString\fP frees \fIxmstr\fP with
+\fB\%XmStringFree\fP
+when it holds no component it can read\&.
+.SH "RELATED"
+.PP
+\fB\%XmResolveAllPartOffsets\fP(3), \fB\%XmeResolvePartOffsets\fP(3) and
+\fB\%XmeConfigureObject\fP(3)\&.

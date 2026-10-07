@@ -1,0 +1,34 @@
+.TH "_XmDestroyParentCallback" "library call"
+.nh
+.SH "NAME"
+\fB\%_XmDestroyParentCallback\fP \(em A callback that destroys the parent of a widget
+.iX "_XmDestroyParentCallback"
+.iX "Motif internal functions" "_XmDestroyParentCallback"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/XmP\&.h>
+\fBvoid \fB_XmDestroyParentCallback\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBXtPointer \fBclient_data\fR\fR,
+\fBXtPointer \fBcall_data\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%_XmDestroyParentCallback\fP destroys the parent of \fIw\fP\&.
+Motif adds it
+to the \fB\%XmNdestroyCallback\fP of the child of a dialog (see
+\fB\%XmeCreateClassDialog\fP) and of a scrolled widget, so that the
+shell
+or ScrolledWindow made for it goes away with it\&.  \fB\%<Xm/XmP\&.h>\fP
+keeps
+it for source compatibility\&.
+.IP "\fIw\fP" 10
+Specifies the widget\&.
+.IP "\fIclient_data\fP" 10
+Is not used\&.
+.IP "\fIcall_data\fP" 10
+Is not used\&.
+.SH "RELATED"
+.PP
+\fB\%XmeCreateClassDialog\fP(3)\&.
