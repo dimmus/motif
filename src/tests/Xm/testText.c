@@ -411,6 +411,125 @@ static void check_alignment(Widget w)
 	ck_assert_int_eq(pos_x(w, 2), right);
 }
 
+/*
+ * A render table whose only rendition names a font but has XmNfontType
+ * XmAS_IS loads no font.  TextField and Text used to fall back from such a
+ * table to the default text render table, which is the XmNtextRenderTable
+ * of the BulletinBoard they are in, the same fontless table, and kept a
+ * NULL font that the first XTextWidth crashed on.  They now fall back to
+ * the system default render table.
+ */
+static XmRenderTable fontless_table(Widget w)
+{
+	Arg args[2];
+	XmRendition rend;
+	XmRenderTable rt;
+
+	XtSetArg(args[0], XmNfontName, "6x13");
+	XtSetArg(args[1], XmNfontType, XmAS_IS);
+	rend = XmRenditionCreate(w, XmFONTLIST_DEFAULT_TAG, args, 2);
+	rt = XmRenderTableAddRenditions(NULL, &rend, 1, XmMERGE_REPLACE);
+	XmRenditionFree(rend);
+	return rt;
+}
+
+static Widget fontless_bulletin_board(XmRenderTable rt)
+{
+	Arg args[1];
+	Widget w;
+
+	XtSetArg(args[0], XmNtextRenderTable, rt);
+	w = XmCreateBulletinBoard(bb, "fontless", args, 1);
+	XtManageChild(w);
+	return w;
+}
+
+/* Type a character into w as a key press would */
+static void type_key(Widget w, KeySym sym)
+{
+	XKeyEvent key;
+
+	memset(&key, 0, sizeof(key));
+	key.type = KeyPress;
+	key.display = XtDisplay(w);
+	key.window = XtWindow(w);
+	key.root = RootWindowOfScreen(XtScreen(w));
+	key.time = server_time(w);
+	key.keycode = XKeysymToKeycode(key.display, sym);
+	key.same_screen = True;
+	XtDispatchEvent((XEvent *)&key);
+}
+
+START_TEST(textfield_fontless_render_table)
+{
+	XmRenderTable rt = fontless_table(top);
+	Widget fbb = fontless_bulletin_board(rt);
+	Widget tf[2];
+	Position x0, x1, y;
+	int i;
+
+	/* The default render table, then its own one */
+	tf[0] = XtVaCreateManagedWidget("tf0", xmTextFieldWidgetClass, fbb,
+					NULL);
+	tf[1] = XtVaCreateManagedWidget("tf1", xmTextFieldWidgetClass, fbb,
+					XmNrenderTable, rt, XmNy, 40, NULL);
+	XtRealizeWidget(top);
+	for (i = 0; i < 2; i++) {
+		XmTextFieldSetString(tf[i], "hello");
+		XmTextFieldSetInsertionPosition(tf[i], 5);
+		type_key(tf[i], XK_x);
+		assert_tf(tf[i], "hellox");
+		ck_assert(XmTextFieldPosToXY(tf[i], 0, &x0, &y));
+		ck_assert(XmTextFieldPosToXY(tf[i], 6, &x1, &y));
+		ck_assert_int_gt(x1, x0);
+	}
+	/* A fontless table set later keeps the font in use */
+	XtVaSetValues(tf[0], XmNrenderTable, rt, NULL);
+	type_key(tf[0], XK_y);
+	assert_tf(tf[0], "helloxy");
+	pump();
+	XmRenderTableFree(rt);
+}
+END_TEST
+
+START_TEST(text_fontless_render_table)
+{
+	XmRenderTable rt = fontless_table(top);
+	Widget fbb = fontless_bulletin_board(rt);
+	Widget t[2];
+	Position x0, x1, y;
+	int i;
+
+	t[0] = XtVaCreateManagedWidget("t0", xmTextWidgetClass, fbb, NULL);
+	t[1] = XtVaCreateManagedWidget("t1", xmTextWidgetClass, fbb,
+				       XmNrenderTable, rt, XmNy, 40, NULL);
+	XtRealizeWidget(top);
+	for (i = 0; i < 2; i++) {
+		XmTextSetString(t[i], "hello");
+		XmTextSetInsertionPosition(t[i], 5);
+		type_key(t[i], XK_x);
+		assert_text(t[i], "hellox");
+		ck_assert(XmTextPosToXY(t[i], 0, &x0, &y));
+		ck_assert(XmTextPosToXY(t[i], 6, &x1, &y));
+		ck_assert_int_gt(x1, x0);
+	}
+	/* Text falls back to the default render table on XtSetValues too */
+	XtVaSetValues(t[0], XmNrenderTable, rt, NULL);
+	type_key(t[0], XK_y);
+	assert_text(t[0], "helloxy");
+	ck_assert(XmTextPosToXY(t[0], 7, &x1, &y));
+	ck_assert_int_gt(x1, x0);
+	/* NULL selects the default render table, which Text used to keep
+	   without a copy and free on the next change */
+	XtVaSetValues(t[1], XmNrenderTable, NULL, NULL);
+	XtVaSetValues(t[1], XmNrenderTable, NULL, NULL);
+	type_key(t[1], XK_z);
+	assert_text(t[1], "helloxz");
+	pump();
+	XmRenderTableFree(rt);
+}
+END_TEST
+
 START_TEST(textfield_alignment)
 {
 	Arg args[1];
@@ -575,6 +694,7 @@ void text_suite(SRunner *runner)
 	tcase_add_test(t, textfield_selection_and_clipboard);
 	tcase_add_test(t, textfield_unconvertible_wcs);
 	tcase_add_test(t, textfield_alignment);
+	tcase_add_test(t, textfield_fontless_render_table);
 	tcase_set_timeout(t, 60);
 	suite_add_tcase(s, t);
 
@@ -593,6 +713,7 @@ void text_suite(SRunner *runner)
 	tcase_add_test(t, text_substring_bad_size);
 	tcase_add_test(t, text_selection_and_clipboard);
 	tcase_add_test(t, copy_text_to_textfield);
+	tcase_add_test(t, text_fontless_render_table);
 	tcase_set_timeout(t, 60);
 	suite_add_tcase(s, t);
 

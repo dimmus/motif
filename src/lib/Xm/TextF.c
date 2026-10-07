@@ -287,6 +287,7 @@ static void ClassInitialize(void);
 static void ClassPartInitialize(WidgetClass w_class);
 static void Validates(XmTextFieldWidget tf);
 static Boolean LoadFontMetrics(XmTextFieldWidget tf);
+static void LoadFontMetricsOrDefault(XmTextFieldWidget tf, Boolean is_default);
 static void ValidateString(XmTextFieldWidget tf, char *value, Boolean is_wchar);
 static void InitializeTextStruct(XmTextFieldWidget tf);
 static void LoadGCs(XmTextFieldWidget tf, Pixel background, Pixel foreground);
@@ -5250,7 +5251,7 @@ static void Validates(XmTextFieldWidget tf)
 
 static Boolean LoadFontMetrics(XmTextFieldWidget tf)
 {
-  XmFontContext context;
+  XmFontContext context = NULL;
   XmFontListEntry next_entry;
   XmFontType type_return = XmFONT_IS_FONT;
   XtPointer tmp_font;
@@ -5356,6 +5357,23 @@ static Boolean LoadFontMetrics(XmTextFieldWidget tf)
   }
   tf->text.average_char_width = (Dimension)charwidth;
   return True;
+}
+
+/* Load the metrics of TextF_FontList and, when it has no loaded font (a
+ * rendition whose XmNfontType is XmAS_IS loads none), replace it with a copy
+ * of the default text render table and then of the system default render
+ * table (XmDEFAULT_FONT), so that TextF_Font is never left NULL.  The default
+ * text render table is usually an ancestor's XmNtextRenderTable, so it is
+ * skipped when TextF_FontList already is a copy of it (is_default). */
+static void LoadFontMetricsOrDefault(XmTextFieldWidget tf, Boolean is_default)
+{
+  static const unsigned char fallback[] = {XmTEXT_FONTLIST, 0};
+  Cardinal i;
+  for (i = is_default ? 1 : 0; !LoadFontMetrics(tf) && i < XtNumber(fallback); i++) {
+    if (TextF_FontList(tf) != NULL)
+      XmFontListFree(TextF_FontList(tf));
+    TextF_FontList(tf) = XmFontListCopy(XmeGetDefaultRenderTable((Widget)tf, fallback[i]));
+  }
 }
 
 /* "\ooo" for each of the n bytes of s, for the warnings of ValidateString */
@@ -5601,16 +5619,11 @@ static void InitializeTextStruct(XmTextFieldWidget tf)
   if (TextF_FontList(tf) == NULL) {
     TextF_FontList(tf) = XmeGetDefaultRenderTable((Widget)tf, (unsigned char)XmTEXT_FONTLIST);
     TextF_FontList(tf) = (XmFontList)XmFontListCopy(TextF_FontList(tf));
-    (void)LoadFontMetrics(tf);
+    LoadFontMetricsOrDefault(tf, True);
   }
   else {
     TextF_FontList(tf) = (XmFontList)XmFontListCopy(TextF_FontList(tf));
-    if (!LoadFontMetrics(tf)) { /*if failed use default */
-      XmFontListFree(TextF_FontList(tf));
-      TextF_FontList(tf) = XmeGetDefaultRenderTable((Widget)tf, (unsigned char)XmTEXT_FONTLIST);
-      TextF_FontList(tf) = (XmFontList)XmFontListCopy(TextF_FontList(tf));
-      (void)LoadFontMetrics(tf);
-    }
+    LoadFontMetricsOrDefault(tf, False);
   }
   tf->text.gc = NULL;
   tf->text.image_gc = NULL;
@@ -6125,7 +6138,8 @@ static void Destroy(Widget wid)
   XtReleaseGC(wid, tf->text.save_gc);
   XtReleaseGC(wid, tf->text.cursor_gc);
   XtFree((char *)tf->text.highlight.list);
-  XmFontListFree((XmFontList)TextF_FontList(tf));
+  if (TextF_FontList(tf) != NULL)
+    XmFontListFree((XmFontList)TextF_FontList(tf));
   if (tf->text.add_mode_cursor != XmUNSPECIFIED_PIXMAP)
     (void)XmDestroyPixmap(XtScreen(tf), tf->text.add_mode_cursor);
   if (tf->text.cursor != XmUNSPECIFIED_PIXMAP)
@@ -6348,7 +6362,8 @@ static Boolean SetValues(
     TextF_FontList(new_tf) = (XmFontList)XmFontListCopy(TextF_FontList(new_tf));
     if (!LoadFontMetrics(new_tf)) { /* Fails if font set required but not
                                      * available. */
-      XmFontListFree((XmFontList)TextF_FontList(new_tf));
+      if (TextF_FontList(new_tf) != NULL)
+        XmFontListFree((XmFontList)TextF_FontList(new_tf));
       TextF_FontList(new_tf) = TextF_FontList(old_tf);
       (void)LoadFontMetrics(new_tf); /* it *was* correct, so re-use it */
       new_font = False;
