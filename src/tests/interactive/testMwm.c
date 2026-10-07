@@ -53,7 +53,7 @@ static Time clock_time;
 static int clock_ticks;
 
 /* What we have seen happen to our windows. */
-#define MAX_WINS 256
+#define MAX_WINS 512
 static struct seen {
 	Window w;
 	int reparented, mapped, unmapped, configured, fenced;
@@ -534,6 +534,53 @@ START_TEST(test_client_list)
 }
 END_TEST
 
+/*
+ * A window destroyed while mwm manages it is dropped: mwm notices it
+ * with the round trip it makes once it has reparented the window, and
+ * neither lists it nor gives it the focus.  The windows go away at
+ * different points of their management, depending on how far the
+ * MapRequest got before the destroy.
+ */
+START_TEST(test_destroyed_while_managed)
+{
+	enum { N = 120 };
+	Window w, focus, *list;
+	unsigned long n;
+	int i, revert, status;
+
+	for (i = 0; i < N; i++) {
+		char title[32];
+
+		snprintf(title, sizeof title, "mwmtest gone %d", i);
+		w = make_client(title, 20 + (i % 40) * 5, 300, 80, 40, 1);
+		XMapWindow(dpy, w);
+		if (i % 4 == 1) {
+			XFlush(dpy);
+		} else if (i % 4 >= 2) {
+			XSync(dpy, False);
+			usleep(25 * (i / 2));	/* up to 1.5 ms */
+		}
+		destroy(w);
+	}
+	sync_mwm();
+	ck_assert_msg(waitpid(mwm_pid, &status, WNOHANG) == 0, "mwm exited");
+	list = client_list(&n);
+	ck_assert_int_eq(n, 1);
+	ck_assert(list[0] == fence);
+	XFree(list);
+
+	/* and the next window is managed, and has the focus */
+	w = make_client("mwmtest after gone", 600, 300, 120, 60, 1);
+	manage(w);
+	sync_mwm();
+	XGetInputFocus(dpy, &focus, &revert);
+	ck_assert_msg(focus == w, "focus is 0x%lx, not the new window 0x%lx",
+		      focus, w);
+	destroy(w);
+	sync_mwm();
+}
+END_TEST
+
 /* The pixels of the decoration above a managed window. */
 static XImage *title_image(Window w)
 {
@@ -664,6 +711,7 @@ int main(int argc, char **argv)
 	tcase_add_test(tc, test_initial_iconic);
 	tcase_add_test(tc, test_properties);
 	tcase_add_test(tc, test_client_list);
+	tcase_add_test(tc, test_destroyed_while_managed);
 	tcase_add_test(tc, test_title_changes);
 	suite_add_tcase(s, tc);
 	sr = srunner_create(s);

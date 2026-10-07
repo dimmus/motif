@@ -326,6 +326,7 @@ ManageWindow (WmScreenData *pSD, Window clientWindow, long manageFlags)
     int initialState;
     int i;
     Boolean sendConfigNotify;
+    Time focusTime = CurrentTime;
 #ifdef WSM
     WmWorkspaceData *pwsi;
 #endif /* WSM */
@@ -728,12 +729,15 @@ ManageWindow (WmScreenData *pSD, Window clientWindow, long manageFlags)
 
 
     /*
-     * Make sure the client window has been reparented ...
+     * Make sure the client window has been reparented ...  Reading the
+     * server time is a round trip, like XSync, after which an error that
+     * says the window is gone has been handled; the time serves to give
+     * the window the focus below.
      */
 
     if (!(manageFlags & MANAGEW_WM_CLIENTS))
     {
-        XSync (DISPLAY, False);
+        focusTime = GetTimestamp ();
 
         if (pCD->clientFlags & CLIENT_DESTROYED)
         {
@@ -802,12 +806,14 @@ ManageWindow (WmScreenData *pSD, Window clientWindow, long manageFlags)
 	  (pCD->inputFocusModel ||
 	   (pCD->protocolFlags & PROTOCOL_WM_TAKE_FOCUS)))))
     {
-	Do_Focus_Key (pCD, GetTimestamp() , ALWAYS_SET_FOCUS);
+	Do_Focus_Key (pCD, (focusTime != CurrentTime) ? focusTime :
+		      GetTimestamp (), ALWAYS_SET_FOCUS);
     }
     else if ((pCD->inputMode == MWM_INPUT_SYSTEM_MODAL) ||
 	     (wmGD.keyboardFocus && IS_APP_MODALIZED(wmGD.keyboardFocus)))
     {
-	Do_Focus_Key ((ClientData *)NULL, GetTimestamp() , ALWAYS_SET_FOCUS);
+	Do_Focus_Key ((ClientData *)NULL, (focusTime != CurrentTime) ?
+		      focusTime : GetTimestamp (), ALWAYS_SET_FOCUS);
     }
 
 #ifdef WSM
