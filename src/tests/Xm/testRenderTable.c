@@ -20,6 +20,9 @@
 
 #include "suites.h"
 
+/* libXm's, not declared by an installed header. */
+extern Display *_XmRenderTableDisplay(XmRenderTable table);
+
 static Widget shell;
 
 static void put(const char *line)
@@ -118,6 +121,56 @@ START_TEST(no_pointer_into_database)
 }
 END_TEST
 
+/* The font of the rendition tagged tag of rt. */
+static XFontStruct *font_of(XmRenderTable rt, const char *tag)
+{
+	XmRendition r = XmRenderTableGetRendition(rt, (XmStringTag)tag);
+	XFontStruct *font = NULL;
+	Arg a[1];
+
+	ck_assert(r != NULL);
+	XtSetArg(a[0], XmNfont, &font);
+	XmRenditionRetrieve(r, a, 1);
+	XmRenditionFree(r);
+	return font;
+}
+
+/* The font that display has for name now. */
+static XFontStruct *loaded_font(Display *dpy, const char *name)
+{
+	XmFontListEntry e = XmFontListEntryLoad(dpy, (char *)name, XmFONT_IS_FONT, "x");
+	XmFontType type;
+	XFontStruct *font = (XFontStruct *)XmFontListEntryGetFont(e, &type);
+
+	XmFontListEntryFree(&e);
+	return font;
+}
+
+/* The default render table (XmeGetDefaultRenderTable) of a display goes */
+/* away with it: a display opened later, even at the same address, gets */
+/* one of its own, with its fonts. */
+START_TEST(default_render_table_display_close)
+{
+	int i;
+
+	for (i = 0; i < 3; i++) {
+		int argc = 0;
+		Display *dpy = XtOpenDisplay(app, NULL, "second", "Second", NULL, 0, &argc, NULL);
+		Widget top, rc, l;
+
+		ck_assert(dpy != NULL);
+		top = XtVaAppCreateShell("second", "Second", applicationShellWidgetClass, dpy, NULL);
+		rc = XmCreateRowColumn(top, "rc", NULL, 0);
+		l = XtVaCreateWidget("l", xmLabelWidgetClass, rc, NULL);
+		ck_assert(_XmRenderTableDisplay(table_of(l)) == dpy);
+		/* XmDEFAULT_FONT is "fixed". */
+		ck_assert(font_of(table_of(l), XmFONTLIST_DEFAULT_TAG) == loaded_font(dpy, "fixed"));
+		XtDestroyWidget(top);
+		XtCloseDisplay(dpy);
+	}
+}
+END_TEST
+
 void rendertable_suite(SRunner *runner)
 {
 	Suite *s = suite_create("RenderTable");
@@ -125,6 +178,7 @@ void rendertable_suite(SRunner *runner)
 
 	tcase_add_test(t, tab_list_resource);
 	tcase_add_test(t, no_pointer_into_database);
+	tcase_add_test(t, default_render_table_display_close);
 	tcase_add_checked_fixture(t, _init_xt, uninit_xt);
 	tcase_set_timeout(t, 30);
 	suite_add_tcase(s, t);

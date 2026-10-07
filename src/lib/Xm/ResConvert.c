@@ -1365,33 +1365,47 @@ typedef struct _system_font_list {
   XmFontList fontlist;
 } SystemFontList;
 
+static SystemFontList *sFontLists = NULL;
+static int nsFontLists = 0;
+static int maxnsFontLists = 0;
+
+/* Destroy callback of the hook object of a display, which */
+/* XtCloseDisplay destroys while the display is still open: forget */
+/* the default font list of the display, whose fonts go with it. */
+static void SystemFontListDisplayClosed(Widget w, XtPointer client_data, XtPointer call_data)
+{
+  int i;
+  _XmProcessLock();
+  for (i = 0; i < nsFontLists; i++)
+    if (sFontLists[i].display == (Display *)client_data) {
+      XmFontListFree(sFontLists[i].fontlist);
+      sFontLists[i] = sFontLists[--nsFontLists];
+      break;
+    }
+  _XmProcessUnlock();
+}
+
+/* With fontlist NULL, the default font list of display, if any; */
+/* otherwise, make fontlist that of display.  Call with the process */
+/* lock held. */
 static XmFontList DefaultSystemFontList(Display *display, XmFontList fontlist)
 {
-  static SystemFontList *sFontLists = NULL;
-  static int nsFontLists = 0;
-  static int maxnsFontLists = 0;
+  int i;
   if (fontlist) {
     if (nsFontLists >= maxnsFontLists) {
-      Cardinal nbytes;
       maxnsFontLists += 8;
-      nbytes = (Cardinal)sizeof(SystemFontList) * maxnsFontLists;
-      if (NULL == sFontLists) {
-        sFontLists = (SystemFontList *)XtMalloc(nbytes);
-        memset((void *)sFontLists, 0, nbytes);
-      }
-      else {
-        sFontLists = (SystemFontList *)XtRealloc((char *)sFontLists, nbytes);
-        memset((void *)&sFontLists[nsFontLists], 0, nbytes);
-      }
-      sFontLists[nsFontLists].display = display;
-      sFontLists[nsFontLists].fontlist = fontlist;
-      nsFontLists++;
+      sFontLists = (SystemFontList *)_XmReallocArray(
+          (char *)sFontLists, maxnsFontLists, sizeof(SystemFontList));
     }
+    sFontLists[nsFontLists].display = display;
+    sFontLists[nsFontLists].fontlist = fontlist;
+    nsFontLists++;
+    XtAddCallback(XtHooksOfDisplay(display),
+                  XtNdestroyCallback,
+                  SystemFontListDisplayClosed,
+                  (XtPointer)display);
   }
   else {
-    int i;
-    if (NULL == sFontLists)
-      return NULL;
     for (i = 0; i < nsFontLists; i++) {
       if (sFontLists[i].display == display)
         return sFontLists[i].fontlist;
