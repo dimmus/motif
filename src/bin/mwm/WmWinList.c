@@ -2863,29 +2863,41 @@ LeaderOnTop (
 void UpdateScreenClientList (
     WmScreenData *pSD)
 {
-    Window *windows;
+    /*
+     * The list is rebuilt each time a client is added or removed; keep
+     * the array between calls rather than growing a new one window by
+     * window.
+     */
+    static Window *windows;
+    static int size;
     int count = 0;
     ClientListEntry *pEntry;
 
-    windows = malloc (sizeof (Window));
-    pEntry = pSD->clientList;
-
-    while (pEntry)
+    for (pEntry = pSD->clientList; pEntry; pEntry = pEntry->nextSibling)
     {
         /*
          * Filter out entries for icons
          */
-        if (pEntry->type != MINIMIZED_STATE)
+        if (pEntry->type == MINIMIZED_STATE)
         {
-            windows = realloc (windows, (count + 1) * sizeof (Window));
-            windows[count] = (XID) pEntry->pCD->client;
-            count++;
+            continue;
         }
-        pEntry = pEntry->nextSibling;
+        if (count == size)
+        {
+            int newSize = size ? 2 * size : 64;
+            Window *newWindows;
+
+            newWindows = realloc (windows, newSize * sizeof (Window));
+            if (!newWindows)
+            {
+                return;
+            }
+            windows = newWindows;
+            size = newSize;
+        }
+        windows[count++] = (XID) pEntry->pCD->client;
     }
 
     SetMwmClientList (pSD->rootWindow, windows, count);
-
-    free (windows);
 
 }  /* END OF FUNCTION UpdateScreenClientList */
