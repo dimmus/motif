@@ -2746,17 +2746,18 @@ void DetermineActiveScreen (XEvent *pEvent)
 WmScreenData * GetScreenForWindow(Window win)
 
 {
-    XWindowAttributes attribs;
     WmScreenData *pSD = NULL;
 
 
     /*
-     * Get the screen that the event occurred on.
+     * Get the screen that the event occurred on.  The attributes stay
+     * cached for this pass through the event loop: a window that is
+     * mapped is managed next, which reads them again.
      */
-    if (XGetWindowAttributes (DISPLAY, win, &attribs))
+    if (WmGetWindowAttributes (win))
     {
-	if (!XFindContext (DISPLAY, attribs.root, wmGD.screenContextType,
-			                                (char **)&pSD))
+	if (!XFindContext (DISPLAY, wmGD.windowAttributes.root,
+			   wmGD.screenContextType, (char **)&pSD))
 	{
 	    if (pSD && !pSD->screenTopLevelW)
 	    {
