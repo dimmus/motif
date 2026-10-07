@@ -43,6 +43,7 @@ static const struct suite_entry {
 	{ "Layout",        layout_suite,          1 },
 	{ "Cache",         cache_suite,           0 },
 	{ "GadgetCache",   gadget_cache_suite,    1 },
+	{ "Draw",          draw_suite,            1 },
 };
 
 #define N_SUITES (sizeof suite_table / sizeof suite_table[0])

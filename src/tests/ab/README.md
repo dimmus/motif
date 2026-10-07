@@ -17,6 +17,11 @@ here is registered with CTest or built by default.
   seeds against both libraries and reports seeds whose output differs.
 - `xm_layoutbench form|container|list N` times the phases of a layout
   with N children or items.
+- `xm_shadowbench check|time [N]` compares XmeDrawShadows (one line
+  segment per pixel row and column) with XFillRectangles of the same
+  rows and with polygons: `check` counts the pixels that differ for
+  every shadow type, thicknesses 0 to 10 and several GCs, `time` gives
+  the time and request bytes per shadow.  It needs only one library.
 
 ## Usage
 

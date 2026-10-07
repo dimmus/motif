@@ -36,11 +36,12 @@ set(MOTIF_TEST_SRCS
     Xm/testI18n.c
     Xm/testLayout.c
     Xm/testCache.c
+    Xm/testDraw.c
 )
 
 # Suites that open a display, and suites that do not.
 set(MOTIF_TEST_X_SUITES FontListEntry FontList XmStringCT XmStringExtent Widgets Text Layout
-    GadgetCache)
+    GadgetCache Draw)
 set(MOTIF_TEST_SUITES Svg Log LogConfig XmString I18n Cache)
 set(MOTIF_TEST_DEFS "")
 
