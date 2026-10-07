@@ -139,9 +139,7 @@ motif_fuzzer(ct X SOURCES fuzz_ct.c)
 motif_fuzzer(xbm X SOURCES fuzz_xbm.c)
 motif_fuzzer(motifbind X SOURCES fuzz_motifbind.c)
 motif_fuzzer(dnd X SOURCES fuzz_dnd.c)
-# Corrupt records are reported as a warning now, not a fatal error, so
-# the clipboard code no longer exits on them (the former reproducer,
+# Corrupt records are reported as a warning, not a fatal error, so the
+# clipboard code no longer exits on them (the former reproducer,
 # crashes/clipboard/corrupt-record-exit, is now a clean corpus seed).
-# FUZZ_CLIPBOARD_EXIT still forces the old fatal behaviour if anything
-# regresses to XtErrorMsg.
-motif_fuzzer(clipboard X NO_LEAKS SOURCES fuzz_clipboard.c)
+motif_fuzzer(clipboard X SOURCES fuzz_clipboard.c)

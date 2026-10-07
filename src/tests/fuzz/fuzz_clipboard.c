@@ -14,15 +14,14 @@
  * Input: records of [kind][id (2 bytes)][length (2 bytes)][data], where
  * kind 0 is the header, 1 the next id record and anything else item id.
  *
- * A record it finds corrupt is reported with a warning now and the
- * clipboard operation fails cleanly, so a hostile client can no longer
- * make the application exit (it used to: ClipboardError() called
- * XtErrorMsg(), whose default handler exits).  The former reproducer is
- * now the clean corpus seed corpus/clipboard/corrupt-record-exit.  The
- * fatal error handler below, and FUZZ_CLIPBOARD_EXIT, are kept so the
- * old behaviour reappears if anything regresses to XtErrorMsg.
+ * A record it finds corrupt is reported with a warning and the clipboard
+ * operation fails cleanly, so a hostile client can no longer make the
+ * application exit (it used to: ClipboardError() called XtErrorMsg(),
+ * whose default handler exits; the reproducer is now the corpus seed
+ * corpus/clipboard/corrupt-record-exit).  A fatal Xt error is therefore
+ * a bug and aborts, and so does an input after which the clipboard lock
+ * is still held: failing cleanly includes giving the lock back.
  */
-#include <setjmp.h>
 #include <X11/Xatom.h>
 #include <Xm/Xm.h>
 #include <Xm/CutPaste.h>
@@ -30,17 +29,13 @@
 #include "fuzz_common.h"
 
 static Window window;
-static jmp_buf on_error;
-static int in_input;
 
 static _X_NORETURN void error_msg(String name, String type, String klass,
 				  String defaultp, String *params,
 				  Cardinal *num_params)
 {
-	(void)name; (void)type; (void)klass; (void)defaultp;
-	(void)params; (void)num_params;
-	if (in_input)
-		longjmp(on_error, 1);
+	(void)name; (void)type; (void)klass; (void)params; (void)num_params;
+	fprintf(stderr, "fuzz_clipboard: fatal Xt error: %s\n", defaultp);
 	abort();
 }
 
@@ -53,8 +48,7 @@ int LLVMFuzzerInitialize(int *argc, char ***argv)
 	XtVaSetValues(top, XmNwidth, 10, XmNheight, 10, NULL);
 	XtRealizeWidget(top);
 	window = XtWindow(top);
-	if (!getenv("FUZZ_CLIPBOARD_EXIT"))
-		XtAppSetErrorMsgHandler(fuzz_app, error_msg);
+	XtAppSetErrorMsgHandler(fuzz_app, error_msg);
 	return 0;
 }
 
@@ -86,12 +80,6 @@ int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
 	if (size > 16 * 1024)
 		return 0;
 	clear_records(dpy, root);
-	if (setjmp(on_error)) {
-		in_input = 0;
-		XSync(dpy, False);
-		return 0;
-	}
-	in_input = 1;
 
 	while (pos + 5 <= size) {
 		unsigned kind = data[pos];
@@ -152,7 +140,11 @@ int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
 				&data_id);
 		XmClipboardEndCopy(dpy, window, item_id);
 	}
-	in_input = 0;
+	if (XGetSelectionOwner(dpy, XInternAtom(dpy, "_MOTIF_CLIP_LOCK",
+						False)) != None) {
+		fprintf(stderr, "fuzz_clipboard: clipboard lock left held\n");
+		abort();
+	}
 	XSync(dpy, False);
 	return 0;
 }
