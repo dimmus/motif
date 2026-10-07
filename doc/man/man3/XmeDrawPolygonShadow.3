@@ -1,0 +1,52 @@
+.TH "XmeDrawPolygonShadow" "library call"
+.nh
+.SH "NAME"
+\fBXmeDrawPolygonShadow\fP \(em A widget writer function that draws the shadow of a polygon
+.iX "XmeDrawPolygonShadow"
+.iX "Xme draw functions" "XmeDrawPolygonShadow"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/DrawP\&.h>
+\fBvoid \fBXmeDrawPolygonShadow\fP\fR(
+\fBDisplay *\fBdpy\fR\fR,
+\fBDrawable \fBd\fR\fR,
+\fBGC \fBtopGC\fR\fR,
+\fBGC \fBbottomGC\fR\fR,
+\fBXPoint *\fBpoints\fR\fR,
+\fBint \fBn_points\fR\fR,
+\fBDimension \fBshadowThickness\fR\fR,
+\fBunsigned char \fBshadowType\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fBXmeDrawPolygonShadow\fP draws a shadow of thickness
+\fIshadowThickness\fP
+along the inside of the polygon given by \fIpoints\fP, as
+\fBXmeDrawShadows\fP does for a rectangle\&.  The polygon is filled with
+the winding rule\&.  Edges that face up or left are drawn with
+\fItopGC\fP
+and the others with \fIbottomGC\fP; the two GCs are exchanged for
+\fBXmSHADOW_IN\fP\&.  The etched types are drawn as
+\fBXmSHADOW_OUT\fP\&.
+Nothing is drawn if \fId\fP is None, the polygon is empty or the
+thickness is 0\&.
+.IP "\fIdpy\fP" 11
+Specifies the display\&.
+.IP "\fId\fP" 11
+Specifies the drawable to draw into\&.
+.IP "\fItopGC\fP" 11
+Specifies the GC of the edges that face up or left\&.
+.IP "\fIbottomGC\fP" 11
+Specifies the GC of the other edges\&.
+.IP "\fIpoints\fP" 11
+Specifies the vertices of the polygon\&.
+.IP "\fIn_points\fP" 11
+Specifies the number of vertices\&.
+.IP "\fIshadowThickness\fP" 11
+Specifies the thickness of the shadow, in pixels\&.
+.IP "\fIshadowType\fP" 11
+Specifies \fBXmSHADOW_IN\fP or \fBXmSHADOW_OUT\fP\&.
+.SH "RELATED"
+.PP
+\fBXmeDrawShadows\fP(3) and \fBXPolygonRegion\fP(3)\&.

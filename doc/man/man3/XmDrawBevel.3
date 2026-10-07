@@ -1,0 +1,56 @@
+.TH "XmDrawBevel" "library call"
+.nh
+.SH "NAME"
+\fBXmDrawBevel\fP \(em Draws a beveled shadow corner
+.iX "XmDrawBevel"
+.iX "Drawing functions" "XmDrawBevel"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/DrawUtils\&.h>
+\fBvoid \fBXmDrawBevel\fP\fR(
+\fBDisplay *\fBdpy\fR\fR,
+\fBDrawable \fBd\fR\fR,
+\fBGC \fBtop_gc\fR\fR,
+\fBGC \fBbottom_gc\fR\fR,
+\fBint \fBx\fR\fR,
+\fBint \fBy\fR\fR,
+\fBunsigned int \fBsize\fR\fR,
+\fBXmBevelOption \fBoption\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fBXmDrawBevel\fP draws the square corner of side \fIsize\fP at \fIx\fP,
+\fIy\fP of
+the drawable \fId\fP, where a top shadow meets a bottom shadow, split
+along the diagonal from its lower left to its upper right corner\&.
+The Motif extension widgets (for instance the TabBox) use it to join
+shadows of different colours\&.
+.IP "\fIdpy\fP" 10
+Specifies the display\&.
+.IP "\fId\fP" 10
+Specifies the drawable to draw into\&.
+.IP "\fItop_gc\fP" 10
+Specifies the GC of the upper left half\&.
+.IP "\fIbottom_gc\fP" 10
+Specifies the GC of the lower right half\&.
+.IP "\fIx\fP" 10
+Specifies the x coordinate of the corner\&.
+.IP "\fIy\fP" 10
+Specifies the y coordinate of the corner\&.
+.IP "\fIsize\fP" 10
+Specifies the side of the corner, in pixels\&.
+.IP "\fIoption\fP" 10
+Specifies what to draw:
+.RS
+.IP "\fBXmBEVEL_TOP\fP" 10
+the upper left half, with \fItop_gc\fP\&.
+.IP "\fBXmBEVEL_BOTTOM\fP" 10
+the lower right half, with \fIbottom_gc\fP\&.
+.IP "\fBXmBEVEL_BOTH\fP" 10
+the whole square with \fItop_gc\fP, then the lower right half with
+\fIbottom_gc\fP\&.
+.RE
+.SH "RELATED"
+.PP
+\fBXmeDrawShadows\fP(3)\&.

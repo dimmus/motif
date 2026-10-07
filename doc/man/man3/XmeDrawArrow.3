@@ -1,0 +1,72 @@
+.TH "XmeDrawArrow" "library call"
+.nh
+.SH "NAME"
+\fBXmeDrawArrow\fP \(em A widget writer function that draws a three-dimensional arrow
+.iX "XmeDrawArrow"
+.iX "Xme draw functions" "XmeDrawArrow"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/DrawP\&.h>
+\fBvoid \fBXmeDrawArrow\fP\fR(
+\fBDisplay *\fBdisplay\fR\fR,
+\fBDrawable \fBd\fR\fR,
+\fBGC \fBtop_gc\fR\fR,
+\fBGC \fBbot_gc\fR\fR,
+\fBGC \fBcent_gc\fR\fR,
+\fBPosition \fBx\fR\fR,
+\fBPosition \fBy\fR\fR,
+\fBDimension \fBwidth\fR\fR,
+\fBDimension \fBheight\fR\fR,
+\fBDimension \fBshadow_thick\fR\fR,
+\fBunsigned char \fBdirection\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fBXmeDrawArrow\fP draws an arrow, as the ArrowButton does, centered in
+the rectangle \fIx\fP, \fIy\fP, \fIwidth\fP, \fIheight\fP of the
+drawable \fId\fP\&.  The
+arrow is a square triangle whose side is the smaller of \fIwidth\fP and
+\fIheight\fP, less 2 pixels; nothing is drawn if that is less than 1 or
+if \fId\fP is None\&.
+.PP
+The lit edges of the arrow are drawn with \fItop_gc\fP, the dark edges
+with
+\fIbot_gc\fP and the inside with \fIcent_gc\fP\&.  The shadow is 1 pixel
+thick
+when \fIshadow_thick\fP is 1 and 2 pixels thick for larger values; with
+a
+\fIshadow_thick\fP of 0 the whole arrow is filled with \fIcent_gc\fP\&.
+If
+\fIcent_gc\fP is NULL the inside is not drawn\&.
+.IP "\fIdisplay\fP" 10
+Specifies the display\&.
+.IP "\fId\fP" 10
+Specifies the drawable to draw into\&.
+.IP "\fItop_gc\fP" 10
+Specifies the GC of the lit edges\&.
+.IP "\fIbot_gc\fP" 10
+Specifies the GC of the dark edges\&.
+.IP "\fIcent_gc\fP" 10
+Specifies the GC of the inside of the arrow, or NULL\&.
+.IP "\fIx\fP" 10
+Specifies the x coordinate of the rectangle\&.
+.IP "\fIy\fP" 10
+Specifies the y coordinate of the rectangle\&.
+.IP "\fIwidth\fP" 10
+Specifies the width of the rectangle\&.
+.IP "\fIheight\fP" 10
+Specifies the height of the rectangle\&.
+.IP "\fIshadow_thick\fP" 10
+Specifies the thickness of the shadow: 0, 1, or 2 and more\&.
+.IP "\fIdirection\fP" 10
+Specifies where the arrow points: \fBXmARROW_UP\fP,
+\fBXmARROW_DOWN\fP, \fBXmARROW_LEFT\fP or \fBXmARROW_RIGHT\fP\&.
+.PP
+Motif 1\&.2 called this function \fB_XmDrawArrow\fP\&.  The library
+still exports that name for old binaries, and \fB<Xm/XmP\&.h>\fP defines
+it as a macro for \fBXmeDrawArrow\fP unless \fBNO_XM_1_2_BC\fP is
+defined; new code should use \fBXmeDrawArrow\fP\&.
+.SH "RELATED"
+.PP
+\fBXmArrowButton\fP(3) and \fBXmeDrawShadows\fP(3)\&.

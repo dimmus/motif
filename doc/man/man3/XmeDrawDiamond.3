@@ -1,0 +1,71 @@
+.TH "XmeDrawDiamond" "library call"
+.nh
+.SH "NAME"
+\fBXmeDrawDiamond\fP \(em A widget writer function that draws a three-dimensional diamond
+.iX "XmeDrawDiamond"
+.iX "Xme draw functions" "XmeDrawDiamond"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/DrawP\&.h>
+\fBvoid \fBXmeDrawDiamond\fP\fR(
+\fBDisplay *\fBdisplay\fR\fR,
+\fBDrawable \fBd\fR\fR,
+\fBGC \fBtop_gc\fR\fR,
+\fBGC \fBbottom_gc\fR\fR,
+\fBGC \fBcenter_gc\fR\fR,
+\fBPosition \fBx\fR\fR,
+\fBPosition \fBy\fR\fR,
+\fBDimension \fBwidth\fR\fR,
+\fBDimension \fBheight\fR\fR,
+\fBDimension \fBshadow_thick\fR\fR,
+\fBDimension \fBmargin\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fBXmeDrawDiamond\fP draws the diamond-shaped indicator of a
+ToggleButton whose \fBXmNindicatorType\fP is
+\fBXmONE_OF_MANY_DIAMOND\fP\&.
+The diamond fits in the square of side \fIwidth\fP at \fIx\fP, \fIy\fP;
+\fIheight\fP is not used\&.  An even \fIwidth\fP is reduced by one\&.
+The upper
+edges are drawn with \fItop_gc\fP and the lower edges with
+\fIbottom_gc\fP,
+each 3 pixels thick\&.  If \fIcenter_gc\fP is not NULL and \fIwidth\fP
+is more
+than 5, the inside is filled with it, \fImargin\fP pixels inside the
+shadow (the margin is ignored when \fIshadow_thick\fP is 0 or 1, for
+which the fill covers the shadow)\&.  Nothing is drawn if \fId\fP is
+None
+or \fIwidth\fP is 0\&.
+.IP "\fIdisplay\fP" 10
+Specifies the display\&.
+.IP "\fId\fP" 10
+Specifies the drawable to draw into\&.
+.IP "\fItop_gc\fP" 10
+Specifies the GC of the upper edges\&.
+.IP "\fIbottom_gc\fP" 10
+Specifies the GC of the lower edges\&.
+.IP "\fIcenter_gc\fP" 10
+Specifies the GC of the inside, or NULL\&.
+.IP "\fIx\fP" 10
+Specifies the x coordinate of the square\&.
+.IP "\fIy\fP" 10
+Specifies the y coordinate of the square\&.
+.IP "\fIwidth\fP" 10
+Specifies the side of the square\&.
+.IP "\fIheight\fP" 10
+Is not used\&.
+.IP "\fIshadow_thick\fP" 10
+Specifies the shadow thickness of the toggle\&.
+.IP "\fImargin\fP" 10
+Specifies the space between the shadow and the filled inside\&.
+.PP
+Motif 1\&.2 called this function \fB_XmDrawDiamond\fP\&.  The library
+still exports that name for old binaries, and \fB<Xm/XmP\&.h>\fP defines
+it as a macro for \fBXmeDrawDiamond\fP unless \fBNO_XM_1_2_BC\fP is
+defined; new code should use \fBXmeDrawDiamond\fP\&.
+.SH "RELATED"
+.PP
+\fBXmeDrawCircle\fP(3), \fBXmeDrawIndicator\fP(3) and
+\fBXmToggleButton\fP(3)\&.

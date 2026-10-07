@@ -1,0 +1,76 @@
+.TH "XmeDrawShadows" "library call"
+.nh
+.SH "NAME"
+\fBXmeDrawShadows\fP \(em A widget writer function that draws the shadow of a rectangle
+.iX "XmeDrawShadows"
+.iX "Xme draw functions" "XmeDrawShadows"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/DrawP\&.h>
+\fBvoid \fBXmeDrawShadows\fP\fR(
+\fBDisplay *\fBdisplay\fR\fR,
+\fBDrawable \fBd\fR\fR,
+\fBGC \fBtop_gc\fR\fR,
+\fBGC \fBbottom_gc\fR\fR,
+\fBPosition \fBx\fR\fR,
+\fBPosition \fBy\fR\fR,
+\fBDimension \fBwidth\fR\fR,
+\fBDimension \fBheight\fR\fR,
+\fBDimension \fBshad_thick\fR\fR,
+\fBunsigned int \fBshad_type\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fBXmeDrawShadows\fP draws a three-dimensional shadow of thickness
+\fIshad_thick\fP along the inside of the rectangle \fIx\fP, \fIy\fP,
+\fIwidth\fP,
+\fIheight\fP of the drawable \fId\fP\&.  The top and left sides are
+drawn with
+\fItop_gc\fP and the bottom and right sides with \fIbottom_gc\fP; for
+\fBXmSHADOW_IN\fP and \fBXmSHADOW_ETCHED_IN\fP the two GCs are
+exchanged, so
+that the rectangle looks pressed in\&.
+.PP
+An etched shadow is drawn as two shadows of half the thickness, the
+inner one with the GCs exchanged\&.  An etched shadow of thickness 1 is
+drawn as a plain shadow\&.  The thickness is limited to half the width
+and half the height of the rectangle\&.  Nothing is drawn if \fId\fP is
+None or the thickness is 0\&.  The interior of the rectangle is not
+touched\&.
+.PP
+Primitive and Manager subclasses usually call it from their expose
+method, with the GCs of the \fBXmNtopShadowColor\fP and
+\fBXmNbottomShadowColor\fP resources, inside the highlight border\&.
+.IP "\fIdisplay\fP" 11
+Specifies the display\&.
+.IP "\fId\fP" 11
+Specifies the drawable to draw into\&.
+.IP "\fItop_gc\fP" 11
+Specifies the GC of the top and left sides\&.
+.IP "\fIbottom_gc\fP" 11
+Specifies the GC of the bottom and right sides\&.
+.IP "\fIx\fP" 11
+Specifies the x coordinate of the rectangle\&.
+.IP "\fIy\fP" 11
+Specifies the y coordinate of the rectangle\&.
+.IP "\fIwidth\fP" 11
+Specifies the width of the rectangle\&.
+.IP "\fIheight\fP" 11
+Specifies the height of the rectangle\&.
+.IP "\fIshad_thick\fP" 11
+Specifies the thickness of the shadow, in pixels\&.
+.IP "\fIshad_type\fP" 11
+Specifies the type of the shadow:
+\fBXmSHADOW_IN\fP, \fBXmSHADOW_OUT\fP, \fBXmSHADOW_ETCHED_IN\fP or
+\fBXmSHADOW_ETCHED_OUT\fP\&.
+.PP
+Motif 1\&.2 called this function \fB_XmDrawShadows\fP\&.  The library
+still exports that name for old binaries, and \fB<Xm/XmP\&.h>\fP defines
+it as a macro for \fBXmeDrawShadows\fP unless \fBNO_XM_1_2_BC\fP is
+defined; new code should use \fBXmeDrawShadows\fP\&.
+.SH "RELATED"
+.PP
+\fBXmeClearBorder\fP(3), \fBXmeDrawHighlight\fP(3),
+\fBXmeDrawPolygonShadow\fP(3), \fBXmPrimitive\fP(3) and
+\fBXmManager\fP(3)\&.
