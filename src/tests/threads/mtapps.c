@@ -102,11 +102,13 @@ static int iterations = 3;
 static char *uid_file = NULL;
 
 /*
- * The clipboard is shared by the clients of a server, and its protocol
- * (a lock property on the root window) is not atomic between clients:
- * the threads take turns with it, so that the test checks the library
- * and not that protocol.  The rest of the threads' work is not
- * serialized.
+ * The clipboard and the PRIMARY selection are shared by the clients of
+ * a server.  The clipboard protocol (a lock property on the root
+ * window) is not atomic between clients, and a client that takes a
+ * selection loses it when another one takes it right after (Xt then
+ * finds the other owner and reports failure): the threads take turns
+ * with them, so that the test checks the library and not the
+ * protocol.  The rest of the threads' work is not serialized.
  */
 static pthread_mutex_t clipboard_turn = PTHREAD_MUTEX_INITIALIZER;
 
@@ -240,19 +242,20 @@ static void exercise_text(struct worker *w, Widget text, Widget tf)
 	XmTextShowPosition(text, XmTextGetLastPosition(text));
 	CHECK(w, XmTextGetSubstring(text, 0, 5, sizeof(buf), buf) == XmCOPY_SUCCEEDED);
 	CHECK(w, strncmp(buf, "START", 5) == 0);
+	/* The primary selection, then the clipboard (TextSel, Transfer,
+	 * CutPaste).  The copy is not checked: taking the CLIPBOARD
+	 * selection fails, by the X protocol, when the other client took
+	 * it at a later server time. */
+	pthread_mutex_lock(&clipboard_turn);
 	XmTextSetSelection(text, 0, 5, CurrentTime);
 	CHECK(w, XmTextGetSelectionPosition(text, &left, &right));
 	s = XmTextGetSelection(text);
 	CHECK(w, s && strcmp(s, "START") == 0);
 	XtFree(s);
-	/* Through the clipboard (TextSel, Transfer, CutPaste).  Not checked:
-	 * taking the CLIPBOARD selection fails, by the X protocol, when the
-	 * other client took it at a later server time. */
-	pthread_mutex_lock(&clipboard_turn);
 	(void)XmTextCopy(text, CurrentTime);
 	(void)XmTextPaste(text);
-	pthread_mutex_unlock(&clipboard_turn);
 	XmTextClearSelection(text, CurrentTime);
+	pthread_mutex_unlock(&clipboard_turn);
 	(void)XmTextFindString(text, 0, "two", XmTEXT_FORWARD, &left);
 
 	XmTextFieldSetString(tf, "field text");
@@ -260,8 +263,10 @@ static void exercise_text(struct worker *w, Widget text, Widget tf)
 	s = XmTextFieldGetString(tf);
 	CHECK(w, s && strcmp(s, ">field text") == 0);
 	XtFree(s);
+	pthread_mutex_lock(&clipboard_turn);
 	XmTextFieldSetSelection(tf, 1, 6, CurrentTime);
 	XmTextFieldClearSelection(tf, CurrentTime);
+	pthread_mutex_unlock(&clipboard_turn);
 }
 
 static void exercise_list(struct worker *w, Widget list)
