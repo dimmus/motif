@@ -10,7 +10,8 @@
 # clang LTO and sanitizer reports, ccache, libcheck and an Xvfb with
 # xauth and the core fonts, which the X11 test suites use, plus xdotool
 # and Xephyr for the tests that drive real input (Text.xdotool,
-# Mwm.xdotool), which CI must not skip.
+# Mwm.xdotool), which CI must not skip, and on glibc the locale sources
+# the i18n tests compile their locales from (src/tests/i18n.cmake).
 
 set -eu
 
@@ -43,7 +44,7 @@ case "$os:$id" in
       libx11-dev libxt-dev libxmu-dev libxext-dev libxft-dev libxpm-dev \
       libxrender-dev libfontconfig-dev libfreetype-dev libpng-dev libjpeg-dev \
       x11proto-dev xbitmaps check \
-      xvfb xauth xfonts-base xdotool xserver-xephyr \
+      xvfb xauth xfonts-base xdotool xserver-xephyr locales \
       "$@"
     ;;
   Linux:fedora)
@@ -58,7 +59,7 @@ case "$os:$id" in
       'pkgconfig(libjpeg)' 'pkgconfig(xproto)' 'pkgconfig(xbitmaps)' \
       'pkgconfig(check)' \
       xorg-x11-server-Xvfb xorg-x11-xauth xorg-x11-fonts-misc \
-      xdotool xorg-x11-server-Xephyr \
+      xdotool xorg-x11-server-Xephyr glibc-locale-source \
       "$@"
     ;;
   Linux:alpine)

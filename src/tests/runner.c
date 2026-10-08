@@ -40,9 +40,13 @@ static const struct suite_entry {
 	{ "Widgets",       widgets_suite,         1 },
 	{ "Text",          text_suite,            1 },
 	{ "I18n",          i18n_suite,            0 },
+	{ "I18nLocale",    i18n_locale_suite,     1 },
 	{ "Layout",        layout_suite,          1 },
 	{ "XErrors",       xerrors_suite,         1 },
 	{ "List",          list_suite,            1 },
+	{ "MsgCat",        msgcat_suite,          1 },
+	{ "Rtl",           rtl_suite,             1 },
+	{ "Xim",           xim_suite,             1 },
 };
 
 #define N_SUITES (sizeof suite_table / sizeof suite_table[0])

@@ -6771,6 +6771,45 @@ static void TextFieldMarginsProc(Widget w, XmBaselineMargins *margins_rec)
 }
 
 /*
+ * Keep the highlight records at the characters they belong to when
+ * [prev, next) is replaced by text delta characters longer: records in
+ * the replaced range move to prev, the ones after it by delta.  The
+ * preedit renditions are highlights, and a record left past the end of
+ * the text made RedisplayText measure a negative length.
+ */
+static void ShiftHighlights(XmTextFieldWidget tf,
+                            XmTextPosition prev,
+                            XmTextPosition next,
+                            int delta)
+{
+  _XmHighlightRec *l = tf->text.highlight.list;
+  Cardinal i, n = 1;
+  for (i = 1; i < tf->text.highlight.number; i++) {
+    XmTextPosition position = l[i].position;
+    XmHighlightMode mode = l[i].mode;
+    if (position >= next)
+      position += delta;
+    else if (position > prev)
+      position = prev;
+    /* A record at the position of the one before replaces it, */
+    if (position == l[n - 1].position) {
+      if (n == 1) {
+        l[0].mode = mode;
+        continue;
+      }
+      n--;
+    }
+    /* and is not needed if it does not change the mode */
+    if (mode == l[n - 1].mode)
+      continue;
+    l[n].position = position;
+    l[n].mode = mode;
+    n++;
+  }
+  tf->text.highlight.number = n;
+}
+
+/*
  * This procedure and _XmTextFieldReplaceText are almost same.
  * The difference is that this function doesn't call user's callbacks,
  * like XmNmodifyVerifyCallback.
@@ -6894,6 +6933,7 @@ static Boolean _XmTextFieldReplaceTextForPreedit(XmTextFieldWidget tf,
     }
   }
   tf->text.string_length += insert_length - replace_length;
+  ShiftHighlights(tf, replace_prev, replace_next, insert_length - replace_length);
   if (move_cursor) {
     if (TextF_CursorPosition(tf) != newInsert) {
       if (newInsert > tf->text.string_length) {
@@ -7113,7 +7153,8 @@ static void PreeditDone(XIC xic, XPointer client_data, XPointer call_data)
   XmTextFieldWidget tf = (XmTextFieldWidget)client_data;
   Widget p = (Widget)tf;
   Boolean need_verify, end_preedit = False;
-  if (!TextF_Editable(tf))
+  /* Not after TextFieldResetIC, which has committed the preedit */
+  if (!TextF_Editable(tf) || !tf->text.onthespot->under_preedit)
     return;
   while (!XtIsShell(p))
     p = XtParent(p);
@@ -7177,7 +7218,7 @@ static void PreeditDraw(XIC xic, XPointer client_data, XIMPreeditDrawCallbackStr
   char *ptr = NULL;
   Widget p = w;
   Boolean need_verify, end_preedit = False;
-  if (!TextF_Editable(tf))
+  if (!TextF_Editable(tf) || !tf->text.onthespot->under_preedit)
     return;
   if (call_data->text && (insert_length = call_data->text->length) > TEXT_MAX_INSERT_SIZE)
     return;
@@ -7430,7 +7471,7 @@ static void PreeditCaret(XIC xic, XPointer client_data, XIMPreeditCaretCallbackS
   XmTextFieldWidget tf = (XmTextFieldWidget)client_data;
   Widget p = (Widget)tf;
   Boolean need_verify;
-  if (!TextF_Editable(tf))
+  if (!TextF_Editable(tf) || !tf->text.onthespot->under_preedit)
     return;
   while (!XtIsShell(p))
     p = XtParent(p);
@@ -7542,6 +7583,12 @@ static void TextFieldResetIC(Widget w)
   if (tf->text.overstrike) {
     if (nextPos != tf->text.string_length)
       nextPos++;
+  }
+  else if (PreStart(tf) < PreEnd(tf)) {
+    /* The preedit is in the text: the committed string replaces it */
+    cursorPos = PreStart(tf);
+    nextPos = PreEnd(tf);
+    doSetHighlight(w, cursorPos, nextPos, XmHIGHLIGHT_NORMAL);
   }
   if (tf->text.max_char_size == 1) {
     replace_res = _XmTextFieldReplaceText(tf, NULL, cursorPos, nextPos, mb, insert_length, True);

@@ -52,6 +52,8 @@ jobs:
           MOTIF_CI_NO_SKIP: "1"
           # The runner user is not root, so read-only really means it.
           MOTIF_CI_READONLY_SRC: "1"
+          # The release builds use the message catalogs (Xm.MsgCat.*).
+          CMAKE_ARGS: ${{ matrix.profile == 'release-lto' && '-DWITH_MESSAGE_CATALOG=ON' || '' }}
         run: tools/dev/env/ci/build.sh
       - name: Upload test logs
         if: always()

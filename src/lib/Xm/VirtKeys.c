@@ -401,13 +401,23 @@ static void FindVirtKey(Display *dpy,
   XmDisplay xmDisplay = (XmDisplay)XmGetXmDisplay(dpy);
   XmVKeyBinding keyBindings = xmDisplay->display.bindings;
   KeyCode min_kcode;
-  int ks_per_kc;
+  int ks_per_kc, min_keycode, max_keycode;
   KeySym *ks_table = XtGetKeysymTable(dpy, &min_kcode, &ks_per_kc);
-  KeySym *kc_map = &ks_table[(keycode - min_kcode) * ks_per_kc];
-  Modifiers EffectiveSMMask = EffectiveStdModMask(dpy, kc_map, ks_per_kc);
+  KeySym *kc_map;
+  Modifiers EffectiveSMMask;
   /* Get the modifiers from the actual event */
   Modifiers VirtualStdMods = 0;
   Modifiers StdModMask;
+  /*
+   * A keycode outside the keyboard map has no keysyms, and so no
+   * virtual key: input methods send the strings they commit in key
+   * events with keycode 0.
+   */
+  XDisplayKeycodes(dpy, &min_keycode, &max_keycode);
+  if (keycode < min_keycode || keycode > max_keycode)
+    return;
+  kc_map = &ks_table[(keycode - min_kcode) * ks_per_kc];
+  EffectiveSMMask = EffectiveStdModMask(dpy, kc_map, ks_per_kc);
   for (i = 0; i < xmDisplay->display.num_bindings; i++) {
     unsigned j = ks_per_kc;
     KeySym vks = keyBindings[i].keysym;

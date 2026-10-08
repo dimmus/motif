@@ -34,13 +34,19 @@ set(MOTIF_TEST_SRCS
     Xm/testWidgets.c
     Xm/testText.c
     Xm/testI18n.c
+    Xm/testI18nLocale.c
     Xm/testLayout.c
     Xm/testXErrors.c
     Xm/testList.c
+    Xm/testMsgCat.c
+    Xm/testRtl.c
+    Xm/testXim.c
+    i18n_util.c
 )
 
 # Suites that open a display, and suites that do not.
-set(MOTIF_TEST_X_SUITES FontListEntry FontList XmStringCT XmStringExtent Widgets Text Layout XErrors List)
+set(MOTIF_TEST_X_SUITES FontListEntry FontList XmStringCT XmStringExtent Widgets Text Layout
+    XErrors List I18nLocale MsgCat Rtl Xim)
 set(MOTIF_TEST_SUITES Svg Log LogConfig XmString I18n)
 set(MOTIF_TEST_DEFS "")
 
@@ -92,6 +98,21 @@ target_include_directories(motif_tests PRIVATE
 )
 target_link_libraries(motif_tests PRIVATE Xm PkgConfig::CHECK Threads::Threads)
 
+# The input method server the Xim suite types through.
+add_executable(stubxim xim/stubxim.c)
+target_link_libraries(stubxim PRIVATE PkgConfig::MOTIF_XT)
+target_compile_definitions(motif_tests PRIVATE
+    STUBXIM_PATH="$<TARGET_FILE:stubxim>")
+add_dependencies(motif_tests stubxim)
+
+# The i18n suites use iconv, a library of its own where it is not in the
+# C library (found already when WITH_UTF8 is on, for libXm).
+find_library(ICONV_LIBRARY iconv)
+mark_as_advanced(ICONV_LIBRARY)
+if(ICONV_LIBRARY)
+    target_link_libraries(motif_tests PRIVATE ${ICONV_LIBRARY})
+endif()
+
 # The suites open their fixtures by relative path and some write log files
 # into the current directory, so run them from a build-tree copy of the
 # fixtures rather than from the source tree.
@@ -121,11 +142,12 @@ if(WITH_COMPILER_ASAN)
     endif()
 endif()
 
-# Apply MOTIF_TEST_ENV to every test of the current directory.
+# Add MOTIF_TEST_ENV to the environment of every test of the current
+# directory.
 function(motif_test_set_env)
     get_property(_tests DIRECTORY PROPERTY TESTS)
     if(_tests AND MOTIF_TEST_ENV)
-        set_tests_properties(${_tests} PROPERTIES ENVIRONMENT "${MOTIF_TEST_ENV}")
+        set_property(TEST ${_tests} APPEND PROPERTY ENVIRONMENT "${MOTIF_TEST_ENV}")
     endif()
 endfunction()
 
@@ -179,6 +201,9 @@ foreach(suite IN LISTS MOTIF_TEST_X_XFAIL_SUITES)
 endforeach()
 
 set_tests_properties(${MOTIF_TESTS} PROPERTIES SKIP_RETURN_CODE 77)
+
+include(i18n.cmake)
+
 motif_test_set_env()
 
 if(XVFB_RUN_EXECUTABLE)

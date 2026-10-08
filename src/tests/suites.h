@@ -31,8 +31,12 @@ void xmstring_extent_suite(SRunner *runner);
 void widgets_suite(SRunner *runner);
 void text_suite(SRunner *runner);
 void i18n_suite(SRunner *runner);
+void i18n_locale_suite(SRunner *runner);
 void layout_suite(SRunner *runner);
 void xerrors_suite(SRunner *runner);
 void list_suite(SRunner *runner);
+void msgcat_suite(SRunner *runner);
+void rtl_suite(SRunner *runner);
+void xim_suite(SRunner *runner);
 
 #endif /* SUITES_H */

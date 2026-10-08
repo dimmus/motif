@@ -238,6 +238,9 @@ static XmConst char UTF8_R_TO_L[] = "\342\200\217";
   (ctx)->flags.dircs = True
 #define _PopDir(ctx) ((ctx)->dirsp)--
 #define _CurDir(ctx) (ctx)->dirstack[(ctx)->dirsp]
+/* ESC 02/05 04/07, just read: UTF-8 follows (ISO 2022 other coding system) */
+#define _IsUTF8Start(ctx, final) \
+  ((ctx)->itemlen == 3 && (ctx)->item[1] == 0x25 && (final) == 0x47)
 /* this should probably be the other way around, (XmFONTLIST_DEFAULT_TAG map to
    _MOTIF_DEFAULT_LOCALE) but this is the smallest code change, and the code
    will not work any differently */
@@ -308,6 +311,7 @@ static XmString concatStringToXmString(XmString compoundstring,
                                        XmStringDirection direction,
                                        Boolean separator);
 static Boolean processESC(ct_context *ctx, Octet final);
+static Boolean processUTF8Segment(ct_context *ctx);
 static Boolean processCSI(ct_context *ctx, Octet final);
 static Boolean processExtendedSegments(ct_context *ctx, Octet final);
 static Boolean process94n(ct_context *ctx, Octet final);
@@ -482,6 +486,7 @@ XmString XmCvtCTToXmString(char *text)
   ctx = (ct_context *)XtMalloc(sizeof(ct_context));
   /* initialize the context block */
   ctx->octet = (OctetPtr)text;
+  ctx->lastoctet = ctx->octet + strlen(text);
   ctx->flags.dircs = False;
   ctx->flags.gchar = False;
   ctx->flags.ignext = False;
@@ -560,6 +565,10 @@ XmString XmCvtCTToXmString(char *text)
         c = *ctx->octet; /* get next char in seq */
         ctx->octet++;
         ctx->itemlen++; /* advance ptr to next char */
+        if (_IsUTF8Start(ctx, c)) {
+          ok = processUTF8Segment(ctx);
+          break;
+        }
         if (_IsValidESCFinal(c)) {
           /* we have a valid ESC sequence - handle it */
           ok = processESCHack(ctx, c);
@@ -950,6 +959,10 @@ static Boolean cvtTextToXmString(XrmValue *from, XrmValue *to)
         c = *ctx->octet; /* get next char in seq */
         ctx->octet++;
         ctx->itemlen++; /* advance ptr to next char */
+        if (_IsUTF8Start(ctx, c)) {
+          ok = processUTF8Segment(ctx);
+          break;
+        }
         if (_IsValidESCFinal(c)) {
           /* we have a valid ESC sequence - handle it */
           ok = processESC(ctx, c);
@@ -1283,6 +1296,54 @@ static XmString concatStringToXmString(XmString compoundstring,
     tempxm1 = XmStringConcatAndFree(tempxm1, XmStringSeparatorCreate());
   compoundstring = XmStringConcatAndFree(compoundstring, tempxm1);
   return (compoundstring);
+}
+
+/*
+ * processUTF8Segment - the text after ESC 02/05 04/07 (ctx->item) is
+ * UTF-8, up to ESC 02/05 04/00 or the end.  Xlib writes so whatever has
+ * no compound text charset (Hebrew, Arabic, most of Unicode).  Make it
+ * one segment, in the locale's encoding when Xlib can convert it to
+ * that, else tagged "UTF-8".
+ */
+static Boolean processUTF8Segment(ct_context *ctx)
+{
+  OctetPtr text = ctx->octet, p = text;
+  OctetPtr encoding = ctx->encoding;
+  unsigned int encodinglen = ctx->encodinglen;
+  XmStringDirection direction =
+      (_CurDir(ctx) == ct_Dir_LeftToRight) ?
+          XmSTRING_DIRECTION_L_TO_R :
+          ((_CurDir(ctx) == ct_Dir_RightToLeft) ? XmSTRING_DIRECTION_R_TO_L :
+                                                  XmSTRING_DIRECTION_UNSET);
+  char **strings;
+  int len;
+  while (p < ctx->lastoctet && *p &&
+         !(ctx->lastoctet - p >= 3 && p[0] == ESC && p[1] == 0x25 && p[2] == 0x40))
+    p++;
+  len = (int)(p - text);
+  if (ctx->lastoctet - p >= 3 && p[0] == ESC)
+    p += 3;
+  ctx->itemlen += (unsigned int)(p - text);
+  ctx->octet = p;
+  /* Convert the segment on its own: it does not use the designations */
+  ctx->encoding = NULL;
+  ctx->encodinglen = 0;
+  strings = cvtCTsegment(ctx, ctx->item, ctx->itemlen);
+  ctx->encoding = encoding;
+  ctx->encodinglen = encodinglen;
+  if (strings) {
+    ctx->xmstring = concatStringToXmString(
+        ctx->xmstring, strings[0], strlen(strings[0]), XmFONTLIST_DEFAULT_TAG, direction, False);
+    XFreeStringList(strings);
+    return True;
+  }
+#if XM_UTF8
+  ctx->xmstring =
+      concatStringToXmString(ctx->xmstring, (char *)text, len, "UTF-8", direction, False);
+  return True;
+#else
+  return (len == 0);
+#endif
 }
 
 /* processESC - handle valid ESC sequences */
