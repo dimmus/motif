@@ -199,8 +199,14 @@ static void InsertSelection(Widget w,
   Atom UTF8_STRING = XInternAtom(XtDisplay(w), XmSUTF8_STRING, False);
   char *total_value = NULL;
   XmAnyCallbackStruct cb;
+  /*
+   * Whenever the text is not inserted, the transfer fails: the requestor
+   * of INSERT_SELECTION is then refused, and does not delete the text
+   * it was moving.
+   */
   if (!value) {
     _insert_select->done_status = True;
+    XmTransferDone(tid, XmTRANSFER_DONE_FAIL);
     return;
   }
   /* Don't do replace if there is not text to add */
@@ -215,6 +221,7 @@ static void InsertSelection(Widget w,
       XtFree((char *)value);
       _insert_select->done_status = True;
       _insert_select->success_status = False;
+      XmTransferDone(tid, XmTRANSFER_DONE_FAIL);
       return;
     }
   }
@@ -285,6 +292,7 @@ static void InsertSelection(Widget w,
   }
   if (!replace_res) {
     _insert_select->success_status = False;
+    XmTransferDone(tid, XmTRANSFER_DONE_FAIL);
   }
   else {
     _insert_select->success_status = True;
@@ -337,6 +345,7 @@ static void HandleInsertTargets(Widget w,
   if (0 == *length || *type != XA_ATOM || *format != 32) {
     XtFree((char *)value);
     _insert_select->done_status = True;
+    XmTransferDone(tid, XmTRANSFER_DONE_FAIL);
     return; /* Supports no targets, so don't bother sending anything */
   }
   assert(XtNumber(atom_names) == NUM_ATOMS);
@@ -1189,6 +1198,8 @@ static void DoStuff(Widget w, XtPointer closure, XmSelectionCallbackStruct *ds)
       _prim_select->num_chars = 0; /* Stop SetPrimarySelection from doing
                                      anything */
       _XmProcessUnlock();
+      /* Not inserted: no DELETE for a move */
+      XmTransferDone(ds->transfer_id, XmTRANSFER_DONE_FAIL);
     }
     if (tf->text.selection_move && local) {
       TextF_MaxLength(tf) = max_length;

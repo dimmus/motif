@@ -30,3 +30,11 @@ leak:libfontconfig.so
 # The RenderTable suite's no_font_callback_when_drawn makes that happen
 # on purpose; the library before the render table cache leaks the same.
 leak:no_font_callback_when_drawn_fn
+
+# XmText and XmTextField keep one record per display for the secondary
+# selection's destination (GetTextDestData, GetTextFDestData) and free
+# it from the XmDisplay's destroy callback; closing the display does not
+# destroy the XmDisplay, so the record is lost then.  One per display,
+# like Xt's own per-display records.
+leak:GetTextDestData
+leak:GetTextFDestData

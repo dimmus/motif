@@ -58,6 +58,16 @@ The i18n suites:
   `-DWITH_MESSAGE_CATALOG=ON` and `gencat`; `Xm.MsgCat` checks the
   built-in message.
 
+The `Text` suite drives the actions of the secondary selection and of
+the other quick transfers of XmText and XmTextField (`secondary-start`,
+`secondary-adjust`, `copy-to`, `move-to`, `process-bdrag`) through
+`XtCallActionProc`, with synthetic events and without one.  The widgets
+have no undo: no action undoes an edit, and the `osfUndo` virtual key
+is not bound in their translations (upstream Motif has none either;
+only CDE's DtEditor, which is not part of this tree, has one).  The
+suite tests the one undo nearby, `XmClipboardUndoCopy`, with a Text's
+copies to the clipboard.
+
 The other directories:
 
 - `uil/` compiles every `.uil` file in the tree with `uil` and loads the
@@ -65,6 +75,8 @@ The other directories:
 - `interactive/` drives a Text/TextField program and mwm (in a nested
   Xephyr) with real input through `xdotool` (`Text.xdotool`,
   `Mwm.xdotool`); they are skipped without `xdotool` or `Xephyr`.
+  `Text.xdotool` also makes secondary selections (Alt+Button2 drags)
+  within one process and between two.
   `Mwm.manage` (`mwm_tests`, libcheck) runs mwm as the window manager
   of its display and checks the focus timestamps, the properties it
   reads when it manages a window and later, `_NET_CLIENT_LIST`, and the

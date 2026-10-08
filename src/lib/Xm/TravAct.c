@@ -163,6 +163,9 @@ void _XmTrackShellFocus(Widget widget, XtPointer client_data, XEvent *event, Boo
       }
       break;
     case FocusIn:
+      /* A keyboard grab, such as a text widget's during a secondary
+       * selection, moves the focus here only until it ends. */
+      focusData->focus_from_grab = (event->xfocus.mode == NotifyGrab);
       switch (event->xfocus.detail) {
         case NotifyNonlinear:
         case NotifyAncestor:
@@ -179,6 +182,7 @@ void _XmTrackShellFocus(Widget widget, XtPointer client_data, XEvent *event, Boo
       }
       break;
     case FocusOut:
+      focusData->focus_from_grab = False;
       switch (event->xfocus.detail) {
         case NotifyPointer:
         case NotifyNonlinear:

@@ -3389,11 +3389,10 @@ static void ProcessBDragRelease(Widget w, XEvent *event, String *params, Cardina
 {
   XmTextWidget tw = (XmTextWidget)w;
   InputData data = tw->text.input->data;
-  XButtonEvent *ev = (XButtonEvent *)event;
   if (data->extending)
     return; /* For Btn2up when Btn1 is down */
   /* Work around for intrinsic bug.  Remove once bug is fixed. */
-  XtUngrabPointer(w, ev->time);
+  XtUngrabPointer(w, event ? event->xbutton.time : XtLastTimestampProcessed(XtDisplay(w)));
   EraseInsertionPoint(tw);
   if (data->sel_start) {
     if (dragged(data->Sel2Hint, event, data->threshold)) {
@@ -3587,8 +3586,10 @@ static void TextFocusIn(Widget w, XEvent *event, String *params, Cardinal *num_p
   XmTextWidget tw = (XmTextWidget)w;
   if (!event || !event->xfocus.send_event)
     return;
+  /* Not when a widget of this application grabbed the keyboard for a
+   * secondary selection: the destination may be in another one. */
   if (_XmGetFocusPolicy(w) == XmEXPLICIT && !_XmTextHasDestination(w) &&
-      !tw->text.input->data->sel_start)
+      !tw->text.input->data->sel_start && !_XmFocusFromGrab(w))
     _XmTextSetDestinationSelection(
         w, tw->text.cursor_position, False, XtLastTimestampProcessed(XtDisplay(w)));
   _XmPrimitiveFocusIn(w, event, params, num_params);

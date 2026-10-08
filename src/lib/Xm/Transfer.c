@@ -147,6 +147,7 @@ Boolean _XmConvertHandler(Widget wid,
   Atom atoms[XtNumber(atom_names)];
   Atom real_selection_atom = None; /* DND hides the selection atom from us */
   int my_local_convert_flag;
+  Boolean converted;
   assert(XtNumber(atom_names) == NUM_ATOMS);
   XInternAtoms(XtDisplay(wid), atom_names, XtNumber(atom_names), False, atoms);
   my_local_convert_flag = local_convert_flag;
@@ -252,21 +253,25 @@ Boolean _XmConvertHandler(Widget wid,
     SecondaryConvertHandler(wid, NULL, &cbstruct);
   /* Copy out the flags value for CLIPBOARD to use */
   cc->flags = cbstruct.flags;
-  if (cbstruct.status == XmCONVERT_DONE || cbstruct.status == XmCONVERT_DEFAULT) {
+  /* The parameters that XtGetSelectionParameters() returned are ours to
+     free; the local ones are not allocated. */
+  if (my_local_convert_flag == 0)
+    XtFree((char *)cbstruct.parm);
+  converted = (cbstruct.status == XmCONVERT_DONE || cbstruct.status == XmCONVERT_DEFAULT);
+  if (converted) {
     /* Copy out the data */
     *value = cbstruct.value;
     *size = cbstruct.length;
     *fmt = cbstruct.format;
     *type = cbstruct.type;
-    return True;
   }
   else {
     *value = NULL;
     *size = 0;
     *fmt = 8;
     *type = None;
-    return False;
   }
+  return converted;
 }
 
 /****************************************************************/
@@ -294,6 +299,8 @@ static int secondary_lock = 0;
 /* Copy of the request event of the transfer holding secondary_lock; the
    transfer may outlive the convert proc, and with it Xt's copy. */
 static XSelectionRequestEvent *secondary_event = NULL;
+/* Whether the transfer that released secondary_lock last failed */
+static Boolean secondary_failed = False;
 
 /* Bound on the nested event loop of SecondaryConvertHandler(), in units
    of the selection timeout.  Xt times out each request of the transfer
@@ -429,6 +436,11 @@ static void SecondaryConvertHandler(Widget w,
      proc releases the lock. */
   _XmProcessLock();
   done = (secondary_event != event_copy);
+  /* A transfer that failed (the destination did not insert the text)
+     is refused too, so that the requestor does not delete the text it
+     was moving. */
+  if (done && secondary_failed)
+    done = False;
   _XmProcessUnlock();
   cs->value = NULL;
   cs->type = atoms[XmANULL];
@@ -448,6 +460,7 @@ static void ReleaseSecondaryLock(Widget w,                         /* unused */
   if (event != NULL && event == (XEvent *)secondary_event) {
     secondary_lock = 0;
     secondary_event = NULL;
+    secondary_failed = (ts->status == XmTRANSFER_DONE_FAIL);
   }
   _XmProcessUnlock();
   /* The event is the copy made by SecondaryConvertHandler(); later done
@@ -655,6 +668,10 @@ static void SecondaryDone(Widget wid,
     success = False;
   else
     success = True;
+  /* The reply to INSERT_SELECTION carries no data, but Xt allocates it
+     (one byte for an owner in this process) for the requestor to free. */
+  XtFree((char *)value);
+  value = NULL;
   convert_selection = XA_SECONDARY;
   /* Call the convertCallback with target DELETE if successful */
   if (success && cc->op == XmMOVE) {
@@ -1535,10 +1552,17 @@ static void SelectionCallbackWrapper(Widget wid,
       cbstruct.value = value;
       cbstruct.length = *length;
       cbstruct.format = *format;
-      if (tb->selection_proc != NULL)
+      if (tb->selection_proc != NULL) {
+        /* The procedure frees the value */
         tb->selection_proc(wid, tb->client_data, &cbstruct);
+        value = NULL;
+      }
     }
   }
+  /* A value that no procedure took (a DELETE, an ignored or flushed
+     request) is the requestor's to free, as Xt allocates one even for
+     an empty reply from an owner in this process. */
+  XtFree((char *)value);
   /* Free this transfer block */
   if (tb != NULL) {
     XtFree((char *)tb);

@@ -203,8 +203,14 @@ static void InsertSelection(Widget w,
   XmTextBlockRec block, newblock;
   XmTextPosition cursorPos;
   Boolean freeBlock;
+  /*
+   * Whenever the text is not inserted, the transfer fails: the requestor
+   * of INSERT_SELECTION is then refused, and does not delete the text
+   * it was moving.
+   */
   if (!value) {
     _insert_select->done_status = True;
+    XmTransferDone(tid, XmTRANSFER_DONE_FAIL);
     return;
   }
   /* Don't do replace if there is no text to add */
@@ -221,6 +227,7 @@ static void InsertSelection(Widget w,
       value = NULL;
       _insert_select->done_status = True;
       _insert_select->success_status = False;
+      XmTransferDone(tid, XmTRANSFER_DONE_FAIL);
       return;
     }
   }
@@ -251,6 +258,7 @@ static void InsertSelection(Widget w,
     else {
       _insert_select->done_status = True;
       _insert_select->success_status = False;
+      XmTransferDone(tid, XmTRANSFER_DONE_FAIL);
       (*tw->text.output->DrawInsertionPoint)(tw, tw->text.cursor_position, on);
       return;
     }
@@ -304,6 +312,8 @@ static void InsertSelection(Widget w,
       XtFree(newblock.ptr);
   }
   (*tw->text.output->DrawInsertionPoint)(tw, tw->text.cursor_position, on);
+  if (!_insert_select->success_status)
+    XmTransferDone(tid, XmTRANSFER_DONE_FAIL);
   if (total_value)
     XtFree(total_value);
   XtFree((char *)value);
@@ -349,6 +359,7 @@ static void HandleInsertTargets(Widget w,
   if (0 == *length || *type != XA_ATOM || *format != 32) {
     XtFree((char *)value);
     _insert_select->done_status = True;
+    XmTransferDone(tid, XmTRANSFER_DONE_FAIL);
     return; /* Supports no targets, so don't bother sending anything */
   }
   assert(XtNumber(atom_names) == NUM_ATOMS);
@@ -1061,6 +1072,8 @@ static void DoStuff(Widget w, XtPointer closure, XmSelectionCallbackStruct *ds)
                                        anything */
         _XmProcessUnlock();
         _XmStringSourceSetPending(tw, pendingoff);
+        /* Not inserted: no DELETE for a move */
+        XmTransferDone(ds->transfer_id, XmTRANSFER_DONE_FAIL);
       }
       else {
         if ((newblock.length > 0 && !data->selectionMove) || ds->selection == atoms[XmACLIPBOARD])
@@ -1112,6 +1125,7 @@ static void DoStuff(Widget w, XtPointer closure, XmSelectionCallbackStruct *ds)
                                      anything */
       _XmProcessUnlock();
       _XmStringSourceSetPending(tw, pendingoff);
+      XmTransferDone(ds->transfer_id, XmTRANSFER_DONE_FAIL);
     }
     if (data->selectionMove && local) {
       _XmStringSourceSetMaxLength(source, max_length);

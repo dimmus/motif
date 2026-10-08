@@ -65,6 +65,18 @@ XmFocusData _XmCreateFocusData(void)
   return (XmFocusData)XtCalloc(1, sizeof(XmFocusDataRec));
 }
 
+/*
+ * Whether the shell of w has the keyboard focus only for a keyboard grab
+ * of the application (XtGrabKeyboard), rather than because the user gave
+ * it the focus.  Xt passes the grab's FocusIn on to the focus widget like
+ * any other.
+ */
+Boolean _XmFocusFromGrab(Widget w)
+{
+  XmFocusData focusData = _XmGetFocusData(w);
+  return focusData != NULL && focusData->focus_from_grab;
+}
+
 void _XmDestroyFocusData(XmFocusData focusData)
 {
   _XmFreeTravGraph(&(focusData->trav_graph));
