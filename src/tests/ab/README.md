@@ -15,7 +15,9 @@ here is registered with CTest or built by default.
   prints child geometry, selection and scroll state, callbacks and a hash
   of the window pixels after every step.  Modes: `form`, `formcyc`
   (attachment cycles), `formgrid`, `formcolumn`, `formwide`, `container`,
-  `list`, `listscroll`, `listapi` (the List API alone, without input:
+  `containertree` (the Container entry tree and XmNpositionIndex through
+  the API only, no input; SIZE is the number of steps), `list`,
+  `listscroll`, `listapi` (the List API alone, without input:
   lookups, selection and replacement by value with many duplicates, and
   the item and selection resources), `listmix` (the same with keyboard
   and button actions of the List, called with synthetic events,
@@ -30,13 +32,15 @@ here is registered with CTest or built by default.
   prints every table and every warning (no input there).
 - `ab.sh OLD_LIBDIR NEW_LIBDIR MODE FIRST LAST [SIZE]` runs a range of
   seeds against both libraries and reports seeds whose output differs.
-- `xm_layoutbench form|container|list|listops N` times the phases of a
-  layout with N children or items; `listops` times the List item and
-  selection operations (adds at both ends, lookups, selection and
-  deletion by value and by position, replacements);
-  `xm_layoutbench rendertable N` times the creation of N Labels whose
-  XmNrenderTable comes from the same resource (a font list, one and
-  three renditions from the database, an Xft rendition).
+- `xm_layoutbench MODE N` times the phases of a layout with N children
+  or items.  Modes: `form`, `formgrid`, `outline`, `spatial`, `detail`,
+  `fillhead` and `fillrandom` (a Container filled by inserting each icon
+  at the front or at a random place), `list`, `listops` (the List item
+  and selection operations: adds at both ends, lookups, selection and
+  deletion by value and by position, replacements) and `rendertable`
+  (the creation of N Labels whose XmNrenderTable comes from the same
+  resource: a font list, one and three renditions from the database, an
+  Xft rendition).
 
 ## Usage
 

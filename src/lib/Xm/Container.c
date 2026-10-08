@@ -223,6 +223,9 @@ static CwidNode NewNode(Widget cwid);
 static CwidNode FindLevelTail(XmContainerWidget cw, CwidNode node, CwidNode parent_node);
 static void InsertNode(CwidNode node);
 static void SeverNode(CwidNode node);
+static void RenumberPositions(XmContainerWidget cw);
+static Boolean HasPositionIndexArg(ArgList args, Cardinal num_args);
+static void ConstraintGetValuesHook(Widget cwid, ArgList args, Cardinal *num_args);
 static void DeleteNode(Widget cwid);
 static CwidNode GetFirstNode(XmContainerWidget cw);
 static CwidNode GetNextNode(CwidNode start_item);
@@ -296,7 +299,6 @@ static void ScrollProc(XtPointer closure, XtIntervalId *id);
 static void ContainerResetDepths(XmContainerConstraint c);
 static void FindMaxDepths(XmContainerConstraint c, Widget cw);
 static Boolean ContainerIsDescendant(Widget containerChild, Widget newEntryParent);
-static void ContainerResequenceNodes(XmContainerWidget cw, Widget entryParent);
 /********    End Static Function Declarations    ********/
 static XtActionsRec actionsList[] = {
     {"ContainerBeginSelect", (XtActionProc)ContainerBeginSelect},
@@ -677,6 +679,13 @@ static XtResource constraints[] = {
      XmRImmediate,
      (XtPointer)XmLAST_POSITION},
 };
+static ConstraintClassExtensionRec constraintClassExtRec = {
+    NULL,                                /* next_extension  */
+    NULLQUARK,                           /* record_type     */
+    XtConstraintExtensionVersion,        /* version         */
+    sizeof(ConstraintClassExtensionRec), /* record_size     */
+    ConstraintGetValuesHook,             /* get_values_hook */
+};
 static XmManagerClassExtRec managerClassExtRec = {
     NULL,
     NULLQUARK,
@@ -731,13 +740,13 @@ externaldef(xmcontainerclassrec) XmContainerClassRec xmContainerClassRec = {
     },
     /* Constraint class fields                              */
     {
-        constraints,                      /* resource list        */
-        XtNumber(constraints),            /* num resources 	*/
-        sizeof(XmContainerConstraintRec), /* constraint size 	*/
-        ConstraintInitialize,             /* init proc            */
-        ConstraintDestroy,                /* destroy proc         */
-        ConstraintSetValues,              /* set values proc      */
-        NULL,                             /* extension            */
+        constraints,                       /* resource list        */
+        XtNumber(constraints),             /* num resources 	*/
+        sizeof(XmContainerConstraintRec),  /* constraint size 	*/
+        ConstraintInitialize,              /* init proc            */
+        ConstraintDestroy,                 /* destroy proc         */
+        ConstraintSetValues,               /* set values proc      */
+        (XtPointer)&constraintClassExtRec, /* extension           */
     },
     /*  XmManager class fields                              */
     {
@@ -2432,7 +2441,6 @@ static void ConstraintDestroy(Widget cwid)
     }
   }
   DeleteNode(cwid);
-  ContainerResequenceNodes(cw, c->entry_parent);
   if (c->selection_state == XmSELECTED) {
     unsigned char save_state = cw->container.selection_state;
     cw->container.selection_state = XmNOT_SELECTED;
@@ -2449,8 +2457,8 @@ static void ConstraintDestroy(Widget cwid)
 static Boolean ConstraintSetValues(Widget ccwid,
                                    Widget rcwid, /* unused */
                                    Widget ncwid,
-                                   ArgList args,       /* unused */
-                                   Cardinal *num_args) /* unused */
+                                   ArgList args,
+                                   Cardinal *num_args)
 {
   XmContainerWidget cw = (XmContainerWidget)XtParent(ncwid);
   XmContainerConstraint cc = GetContainerConstraint(ccwid);
@@ -2463,13 +2471,33 @@ static Boolean ConstraintSetValues(Widget ccwid,
    */
   if (cw->container.self) {
     /* The node stays where it is, so its index may not match its
-     * position any more: InsertNode cannot trust the indices. */
-    if (nc->position_index != cc->position_index)
+     * position any more: renumber its level when an index is read. */
+    if ((nc->position_index != cc->position_index) && CtrICON(ncwid) && (nc->node_ptr) &&
+        ((nc->node_ptr->prev_ptr) || (nc->node_ptr->next_ptr)))
       cw->container.dynamic_resource |= STALE_POSITIONS;
     return (False);
   }
   if (!CtrICON(ncwid))
     return (False);
+  /*
+   * The stored indices may be out of date (see InsertNode), and so is
+   * the old one then.  When it matters, use the node's real place:
+   * the number of nodes before it, unless it is alone.
+   */
+  if (CtrIsDynamic(cw, STALE_POSITIONS) && (nc->node_ptr) &&
+      ((nc->node_ptr->prev_ptr) || (nc->node_ptr->next_ptr)))
+  {
+    Boolean asked = HasPositionIndexArg(args, *num_args);
+    if (asked || (nc->entry_parent != cc->entry_parent)) {
+      CwidNode node;
+      int position = 0;
+      for (node = nc->node_ptr->prev_ptr; node != NULL; node = node->prev_ptr)
+        position++;
+      if (!asked)
+        nc->position_index = position;
+      cc->position_index = position;
+    }
+  }
   /*
    * Validate resource values
    */
@@ -2516,9 +2544,19 @@ static Boolean ConstraintSetValues(Widget ccwid,
       ((nc->position_index != cc->position_index) &&
        ((nc->node_ptr->prev_ptr) || (nc->node_ptr->next_ptr))))
   {
+    CwidNode first;
     SeverNode(nc->node_ptr);
-    ContainerResequenceNodes(cw, cc->entry_parent);
-    ContainerResequenceNodes(cw, nc->entry_parent);
+    /*
+     * A lone entry may hold any XmNpositionIndex (see InsertNode).  An
+     * entry moved next to it has always renumbered it to 0 first, so
+     * that it goes before it only when asked for index 0.
+     */
+    if (nc->entry_parent)
+      first = GetContainerConstraint(nc->entry_parent)->node_ptr->child_ptr;
+    else
+      first = cw->container.first_node;
+    if ((first) && (first->next_ptr == NULL))
+      GetContainerConstraint(first->widget_ptr)->position_index = 0;
     InsertNode(nc->node_ptr);
   }
   if (nc->entry_parent != cc->entry_parent) {
@@ -5544,25 +5582,22 @@ static CwidNode FindLevelTail(XmContainerWidget cw, CwidNode node, CwidNode pare
 
 /************************************************************************
  * InsertNode (Private Function)
+ *	Link node into the level of its XmNentryParent, after as many
+ *	nodes as its XmNpositionIndex says, and set that index to its
+ *	place.  The indices of the nodes after it are not renumbered
+ *	here, so that filling a level is not quadratic: STALE_POSITIONS
+ *	is set instead and RenumberPositions does it when one is read.
  ************************************************************************/
 static void InsertNode(CwidNode node)
 {
   XmContainerWidget cw;
   XmContainerConstraint c;
-  XmContainerConstraint pc; /* parent's constraints */
   XmContainerConstraint sc; /* sibling's constraints */
   Widget cwid;
-  CwidNode prev_node;
+  CwidNode prev_node = NULL;
   CwidNode next_node;
   CwidNode parent_node;
-  int count = 0; /* resequence as we go along so that
-                  ** XmNpositionIndex always reflects the child's
-                  ** position within all widgets which name the
-                  ** same widget as their XmNentryParent; no
-                  ** widgets have the same value for
-                  ** XmNpositionIndex; XmNpositionIndex has no
-                  ** gaps
-                  */
+  int count = 0;
   cwid = node->widget_ptr;
   cw = (XmContainerWidget)XtParent(cwid);
   c = GetContainerConstraint(cwid);
@@ -5571,75 +5606,74 @@ static void InsertNode(CwidNode node)
    */
   if (c->entry_parent == NULL) {
     parent_node = NULL;
-    prev_node = cw->container.first_node;
+    next_node = cw->container.first_node;
   }
   else {
-    pc = GetContainerConstraint(c->entry_parent);
-    parent_node = pc->node_ptr;
-    prev_node = parent_node->child_ptr;
+    parent_node = GetContainerConstraint(c->entry_parent)->node_ptr;
+    next_node = parent_node->child_ptr;
   }
-  /*
-   * Appending: link the node after the last one of its level directly.
-   * The loop below would also leave the indices of the others as they
-   * are, since they are already 0, 1, 2...; except that a lone node
-   * may have been given any XmNpositionIndex (see ConstraintSetValues).
-   */
-  if ((prev_node != NULL) && !CtrIsDynamic(cw, STALE_POSITIONS) &&
-      ((next_node = FindLevelTail(cw, node, parent_node)) != NULL))
-  {
+  if (next_node == NULL) {
+    /*
+     * This is the first and only cwid within XmNentryParent.
+     */
+  }
+  else if (next_node->next_ptr == NULL) {
+    /*
+     * A lone node keeps whatever XmNpositionIndex it is given (see
+     * ConstraintSetValues): go before it only when asked for that index
+     * or a lower one.  The two are then numbered 0 and 1.
+     */
     sc = GetContainerConstraint(next_node->widget_ptr);
     if ((c->position_index == XmLAST_POSITION) || (c->position_index > sc->position_index)) {
-      if (next_node->prev_ptr == NULL)
-        sc->position_index = 0;
-      c->position_index = sc->position_index + 1;
-      node->parent_ptr = parent_node;
-      node->prev_ptr = next_node;
-      node->next_ptr = NULL;
-      next_node->next_ptr = node;
-      if (node->next_ptr == cw->container.first_node)
-        cw->container.first_node = node;
-      return;
+      sc->position_index = 0;
+      prev_node = next_node;
+      next_node = NULL;
+      count = 1;
     }
+    else
+      sc->position_index = 1;
   }
-  if (prev_node == NULL) {
+  else if (((c->position_index == XmLAST_POSITION) ||
+            (!CtrIsDynamic(cw, STALE_POSITIONS) && (c->position_index > 0))) &&
+           ((prev_node = FindLevelTail(cw, node, parent_node)) != NULL) &&
+           ((c->position_index == XmLAST_POSITION) ||
+            (c->position_index > GetContainerConstraint(prev_node->widget_ptr)->position_index)))
+  {
     /*
-     * Assume this is the first and only cwid within XmNentryParent.
+     * Appending: link the node after the last one of its level
+     * directly.  Unless they are stale, the indices of the level are
+     * 0, 1, 2..., so the new one is the last one's plus one.
      */
     next_node = NULL;
+    count = GetContainerConstraint(prev_node->widget_ptr)->position_index + 1;
   }
   else {
     /*
      * Chain through this level until we find the correct position.
+     * The nodes after it move down one place.
      */
-    next_node = prev_node;
     prev_node = NULL;
-    while (next_node) {
-      sc = GetContainerConstraint(next_node->widget_ptr);
-      if ((c->position_index != XmLAST_POSITION) && (c->position_index <= sc->position_index))
-        break;
-      sc->position_index = count++;
+    while ((next_node != NULL) &&
+           ((c->position_index == XmLAST_POSITION) || (count < c->position_index)))
+    {
       prev_node = next_node;
       next_node = next_node->next_ptr;
+      count++;
     }
+    if (next_node != NULL)
+      cw->container.dynamic_resource |= STALE_POSITIONS;
   }
-  c->position_index = count++;
+  c->position_index = count;
   /*
    * Insert the node into the linked list.
    */
   node->parent_ptr = parent_node;
   if ((node->prev_ptr = prev_node) != NULL)
     prev_node->next_ptr = node;
+  else if (parent_node)
+    parent_node->child_ptr = node;
   if ((node->next_ptr = next_node) != NULL)
     next_node->prev_ptr = node;
-  if ((parent_node) && (node->prev_ptr == NULL))
-    parent_node->child_ptr = node;
-  /* if we've done other parts right, we shouldn't need to do this part */
-  next_node = node->next_ptr;
-  while (next_node) {
-    sc = GetContainerConstraint(next_node->widget_ptr);
-    sc->position_index = count++;
-    next_node = next_node->next_ptr;
-  }
   /*
    * Update cw->container.first_node, if we're now the first node.
    */
@@ -5649,6 +5683,8 @@ static void InsertNode(CwidNode node)
 
 /************************************************************************
  * SeverNode (Private Function)
+ *	Unlink node from its level.  The nodes after it move up one place,
+ *	which sets STALE_POSITIONS; one left alone is numbered 0.
  ************************************************************************/
 static void SeverNode(CwidNode node)
 {
@@ -5678,13 +5714,79 @@ static void SeverNode(CwidNode node)
   /*
    * Unlink node from the linked list.
    */
-  if (node->prev_ptr) {
-    prev_node = node->prev_ptr;
-    prev_node->next_ptr = node->next_ptr;
+  prev_node = node->prev_ptr;
+  next_node = node->next_ptr;
+  if (prev_node)
+    prev_node->next_ptr = next_node;
+  if (next_node) {
+    next_node->prev_ptr = prev_node;
+    cw->container.dynamic_resource |= STALE_POSITIONS;
   }
-  if (node->next_ptr) {
-    next_node = node->next_ptr;
-    next_node->prev_ptr = node->prev_ptr;
+  if ((prev_node) && (prev_node->prev_ptr == NULL) && (next_node == NULL))
+    GetContainerConstraint(prev_node->widget_ptr)->position_index = 0;
+  else if ((next_node) && (next_node->next_ptr == NULL) && (prev_node == NULL))
+    GetContainerConstraint(next_node->widget_ptr)->position_index = 0;
+}
+
+/************************************************************************
+ * RenumberPositions (Private Function)
+ *	Set XmNpositionIndex of every node to its place in its level, if
+ *	insertions or removals have left them stale.  A lone node keeps
+ *	its own (see InsertNode).
+ ************************************************************************/
+static void RenumberPositions(XmContainerWidget cw)
+{
+  CwidNode node = cw->container.first_node;
+  if (!CtrIsDynamic(cw, STALE_POSITIONS))
+    return;
+  /* Depth first, without recursion: a node's index is its previous
+   * sibling's plus one, and that one has been numbered already. */
+  while (node) {
+    if (node->prev_ptr)
+      GetContainerConstraint(node->widget_ptr)->position_index =
+          GetContainerConstraint(node->prev_ptr->widget_ptr)->position_index + 1;
+    else if (node->next_ptr)
+      GetContainerConstraint(node->widget_ptr)->position_index = 0;
+    if (node->child_ptr)
+      node = node->child_ptr;
+    else {
+      while ((node) && (node->next_ptr == NULL))
+        node = node->parent_ptr;
+      if (node)
+        node = node->next_ptr;
+    }
+  }
+  cw->container.dynamic_resource &= ~STALE_POSITIONS;
+}
+
+/************************************************************************
+ * HasPositionIndexArg (Private Function)
+ ************************************************************************/
+static Boolean HasPositionIndexArg(ArgList args, Cardinal num_args)
+{
+  Cardinal i;
+  for (i = 0; i < num_args; i++)
+    if (strcmp(args[i].name, XmNpositionIndex) == 0)
+      return True;
+  return False;
+}
+
+/************************************************************************
+ * ConstraintGetValuesHook (Constraint Extension Method)
+ *	XmNpositionIndex is renumbered lazily (see InsertNode): bring it
+ *	up to date before it is returned.
+ ************************************************************************/
+static void ConstraintGetValuesHook(Widget cwid, ArgList args, Cardinal *num_args)
+{
+  XmContainerWidget cw = (XmContainerWidget)XtParent(cwid);
+  Cardinal i;
+  if (!CtrIsDynamic(cw, STALE_POSITIONS) || !CtrICON(cwid))
+    return;
+  for (i = 0; i < *num_args; i++) {
+    if ((strcmp(args[i].name, XmNpositionIndex) == 0) && (args[i].value != 0)) {
+      RenumberPositions(cw);
+      *(int *)args[i].value = GetContainerConstraint(cwid)->position_index;
+    }
   }
 }
 
@@ -5837,25 +5939,6 @@ static Boolean ContainerIsDescendant(Widget containerChild, Widget newEntryParen
     node = node->parent_ptr;
   }
   return False;
-}
-
-static void ContainerResequenceNodes(XmContainerWidget cw, Widget entryParent)
-{
-  XmContainerConstraint c;
-  CwidNode node;
-  int count = 0;
-  if (entryParent) {
-    c = GetContainerConstraint(entryParent);
-    node = c->node_ptr->child_ptr;
-  }
-  else {
-    node = cw->container.first_node;
-  }
-  while (node) {
-    c = GetContainerConstraint(node->widget_ptr);
-    c->position_index = count++;
-    node = node->next_ptr;
-  }
 }
 
 /************************************************************************
@@ -7861,6 +7944,7 @@ void XmContainerReorder(Widget wid, WidgetList cwid_list, int cwid_count)
   if (cwid_count <= 1)
     return;
   _XmAppLock(app);
+  RenumberPositions(cw);
   c = GetContainerConstraint(cwid_list[0]);
   pcwid = c->entry_parent;
   pi_list = (int *)_XmMallocArray(cwid_count, sizeof(int));
@@ -7880,7 +7964,6 @@ void XmContainerReorder(Widget wid, WidgetList cwid_list, int cwid_count)
       c->position_index = pi_list[pi_count];
       pi_count++;
       SeverNode(c->node_ptr);
-      ContainerResequenceNodes(cw, c->entry_parent);
       InsertNode(c->node_ptr);
     }
   }

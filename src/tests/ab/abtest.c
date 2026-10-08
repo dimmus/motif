@@ -14,8 +14,9 @@
  *   xm_abtest MODE SEED [SIZE]
  *
  * MODE is form, formcyc, formgrid, formcolumn, formwide, container,
- * list, listapi, listmix, listscroll, xmstring or rendertable.  SIZE 0
- * (the default) lets the seed choose.
+ * containertree, list, listapi, listmix, listscroll, xmstring or
+ * rendertable.  SIZE 0 (the default) lets the seed choose
+ * (containertree: the number of steps, 300).
  * Setting ABT_DESTROY_UNMANAGED also destroys unmanaged Form children.
  */
 #include <Xm/XmP.h>
@@ -607,7 +608,7 @@ static void container_test(int nitems)
   checkpoint("realize", top);
   dump_container(c);
   for (round = 0; round < 8; round++) {
-    int what = rn(7);
+    int what = rn(9);
     switch (what) {
       case 0: {
         char name[32];
@@ -686,12 +687,158 @@ static void container_test(int nitems)
         checkpoint("input", top);
         break;
       }
+      case 7: {
+        Widget list[4];
+        int m = 0;
+        for (i = 0; i < 4; i++) {
+          int k = rn(nmade);
+          if (items[k])
+            list[m++] = items[k];
+        }
+        if (m > 0)
+          XmContainerReorder(c, list, m);
+        checkpoint("reorder", top);
+        break;
+      }
+      case 8: {
+        int k = rn(nmade), p = rn(nmade);
+        if (items[k])
+          XtVaSetValues(items[k], XmNentryParent, rn(3) && items[p] ? items[p] : NULL, NULL);
+        checkpoint("reparent", top);
+        break;
+      }
     }
     dump_container(c);
   }
   XtDestroyWidget(sw);
   settle();
   printf("destroyed\n");
+}
+
+/* The entries of parent and below, in order, with XmNpositionIndex
+ * when with_pos (reading it may renumber them). */
+static void dump_entries(Widget c, Widget parent, int depth, Boolean with_pos)
+{
+  WidgetList k = NULL;
+  int i, pos, n = XmContainerGetItemChildren(c, parent, &k);
+  for (i = 0; i < n; i++) {
+    pos = -100;
+    if (with_pos)
+      XtVaGetValues(k[i], XmNpositionIndex, &pos, NULL);
+    printf(" %*s%s/%d", depth, "", XtName(k[i]), pos);
+    dump_entries(c, k[i], depth + 1, with_pos);
+  }
+  XtFree((char *)k);
+}
+
+/* A live entry of items[0..nmade-1], or NULL. */
+static Widget live_entry(Widget *items, int nmade)
+{
+  int i, k = rn(nmade);
+  for (i = 0; i < nmade; i++)
+    if (items[(k + i) % nmade])
+      return items[(k + i) % nmade];
+  return NULL;
+}
+
+/*
+ * The entry tree of a Container through the API only: creates, destroys,
+ * XmNpositionIndex changes (also of lone entries), reparenting with and
+ * without an index, XmContainerReorder (with repeats and entries of other
+ * levels) and reads.  The order is printed after every step, the indices
+ * only now and then, so that several steps run between two reads.
+ */
+static void container_tree_test(int steps)
+{
+  enum { MAXE = 120 };
+  Widget items[MAXE] = {NULL};
+  int nmade = 0, s;
+  Widget c = XtVaCreateManagedWidget("cont", xmContainerWidgetClass, top, XmNlayoutType,
+                                     rn(2) ? XmOUTLINE : XmSPATIAL, NULL);
+  if (rn(2))
+    XtRealizeWidget(top);
+  for (s = 0; s < steps; s++) {
+    Widget w = live_entry(items, nmade), p = live_entry(items, nmade);
+    int what = rn(10);
+    printf("%d:%d", s, what);
+    switch (what) {
+      case 0:
+      case 1: {
+        char name[16];
+        Arg a[2];
+        Cardinal m = 0;
+        if (nmade == MAXE)
+          break;
+        snprintf(name, sizeof(name), "i%d", nmade);
+        if (p && rn(3))
+          XtSetArg(a[m], XmNentryParent, p), m++;
+        if (rn(3))
+          XtSetArg(a[m], XmNpositionIndex, rn(5) ? rn(12) : XmLAST_POSITION), m++;
+        items[nmade++] = XtCreateManagedWidget(name, xmIconGadgetClass, c, a, m);
+        break;
+      }
+      case 2:
+        if (w && rn(2)) {
+          int i;
+          printf(" %s", XtName(w));
+          /* its entries move to the top level */
+          for (i = 0; i < nmade; i++)
+            if (items[i] == w)
+              items[i] = NULL;
+          XtDestroyWidget(w);
+        }
+        break;
+      case 3:
+      case 4:
+        if (w) {
+          int v = rn(4) ? rn(12) : rn(2) ? XmLAST_POSITION : -3;
+          printf(" %s=%d", XtName(w), v);
+          XtVaSetValues(w, XmNpositionIndex, v, NULL);
+        }
+        break;
+      case 5:
+      case 6:
+        if (w) {
+          Widget np = (rn(3) && p != w) ? p : NULL;
+          printf(" %s->%s", XtName(w), np ? XtName(np) : "-");
+          if (rn(2))
+            XtVaSetValues(w, XmNentryParent, np, NULL);
+          else
+            XtVaSetValues(w, XmNentryParent, np, XmNpositionIndex, rn(10), NULL);
+        }
+        break;
+      case 7: {
+        Widget list[5];
+        int m = 0, k, n = 1 + rn(5);
+        for (k = 0; k < n; k++)
+          if ((list[m] = live_entry(items, nmade)) != NULL)
+            m++;
+        if (m)
+          XmContainerReorder(c, list, m);
+        break;
+      }
+      case 8:
+        if (w) {
+          int pos = -100;
+          XtVaGetValues(w, XmNpositionIndex, &pos, NULL);
+          printf(" %s:%d", XtName(w), pos);
+        }
+        break;
+      default:
+        if (rn(3) == 0) {
+          printf("\n  pos");
+          dump_entries(c, NULL, 0, True);
+        }
+        break;
+    }
+    printf("\n  tree");
+    dump_entries(c, NULL, 0, False);
+    printf("\n");
+  }
+  printf("final");
+  dump_entries(c, NULL, 0, True);
+  printf("\n");
+  XtDestroyWidget(c);
 }
 
 /* ---------------------------------------------------------------- List */
@@ -1989,6 +2136,8 @@ int main(int argc, char **argv)
     form_grid_test(size / 20, 20);
   else if (!strcmp(mode, "container"))
     container_test(size ? size : 1 + rn(40));
+  else if (!strcmp(mode, "containertree"))
+    container_tree_test(size ? size : 300);
   else if (!strcmp(mode, "list"))
     list_test(size ? size : rn(4) == 0 ? rn(3) : rn(300));
   else if (!strcmp(mode, "listapi"))
