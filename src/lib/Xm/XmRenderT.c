@@ -108,6 +108,18 @@ static char rcsid[] = "$TOG: XmRenderT.c /main/14 1998/10/26 20:14:42 samborn $"
  *
  *	I will use these terms as a short hand in describing the
  *	functions below.
+ *
+ *	A rendertable record owns the rendition handles in it: no two
+ *	rendertable records hold the same rendition handle, though their
+ *	handles may point to the same rendition structure.  Each
+ *	reference to a rendertable record (its refcount) holds a
+ *	reference to each of its renditions, so the handles of a shared
+ *	record are shared by all of its rendertable handles.  Releasing
+ *	a reference to the record decrements the renditions, and the
+ *	handles are freed with the record when its refcount reaches zero
+ *	(ReleaseTable).  A function that changes a shared record works on
+ *	a new record with handles of its own (TakeRenditions), and frees
+ *	the handles it takes out of a record whatever their refcount.
  **********************************************************************/
 /********    Static Function Declarations    ********/
 static void CopyInto(XmRendition toRend, XmRendition fromRend);
@@ -115,8 +127,9 @@ static void MergeInto(XmRendition toRend, XmRendition fromRend);
 static XmRendition CloneRendition(XmRendition rend);
 static XmRendition CopyRendition(XmRendition rend);
 static XmRendition RenewRendition(XmRendition rend);
-static XmRendition DuplicateRendition(XmRendition rend);
 static Boolean FreeRendition(XmRendition rend);
+static void ReleaseTable(XmRenderTable table);
+static void TakeRenditions(XmRenderTable to, XmRenderTable from);
 static void RenditionWarning(char *tag, char *type, char *message, Display *dpy);
 static void CleanupResources(XmRendition rend, Boolean copy);
 static void ValidateTag(XmRendition rend, XmStringTag dflt);
@@ -700,7 +713,7 @@ XmRendition _XmRenderTableFindRendition(XmRenderTable table,
                                         Boolean call,
                                         short *index)
 {
-  int i, j;
+  int i;
   XmRendition rend;
   Boolean hit = FALSE;
   XmDisplayCallbackStruct cb;
@@ -747,17 +760,16 @@ XmRendition _XmRenderTableFindRendition(XmRenderTable table,
         if (cb.render_table != copy) {
           /* Callback mutated table.  Update table with */
           /* substitution and search again. */
-          for (j = 0; j < _XmRTCount(table); j++)
-            if (FreeRendition(_XmRTRenditions(table)[j]))
-              FreeHandle(_XmRTRenditions(table)[j]);
-          if (_XmRTRefcountDec(table) == 0)
-            XtFree((char *)GetPtr(table));
+          ReleaseTable(table);
           SetPtr(table, GetPtr(cb.render_table));
           FreeHandle(cb.render_table);
           _XmRenderTableChanged();
         }
-        else
+        else {
+          /* The callback did not use the copy. */
+          XmRenderTableFree(copy);
           break;
+        }
       }
       else
         break;
@@ -1123,20 +1135,6 @@ static XmRendition CopyRendition(XmRendition rend)
   }
 }
 
-/* Increment the refcount.  Clone if overflow. */
-static XmRendition DuplicateRendition(XmRendition rend)
-{
-  if (rend == NULL)
-    return (NULL);
-  if (_XmRendRefcountInc(rend) == 0) {
-    _XmRendRefcountDec(rend);
-    return (CloneRendition(rend));
-  }
-  else {
-    return (rend);
-  }
-}
-
 /* Make a copy of a rendition, *including* the "scratch" info (tags,
  * GC, hadEnds).
  * Shared indicates whether or not this is a shared copy.
@@ -1222,10 +1220,7 @@ XmRenderTable XmRenderTableAddRenditions(XmRenderTable oldtable,
       SetPtr(newtable, table);
       _XmRTDisplay(newtable) = _XmRTDisplay(oldtable);
       _XmRTRefcount(newtable) = 1;
-      /* Move old Renditions. */
-      for (i = 0; i < _XmRTCount(oldtable); i++)
-        _XmRTRenditions(newtable)[i] = _XmRTRenditions(oldtable)[i];
-      _XmRTCount(newtable) = _XmRTCount(oldtable);
+      TakeRenditions(newtable, oldtable);
       _XmRTRefcountDec(oldtable);
       /* Free at end so we don't get same memory from malloc. */
       tmptable = oldtable;
@@ -1239,16 +1234,19 @@ XmRenderTable XmRenderTableAddRenditions(XmRenderTable oldtable,
         /* Merge renditions. */
         switch (merge_mode) {
           case XmMERGE_REPLACE:
-            if (FreeRendition(match))
-              FreeHandle(match);
+            /* oldtable is not shared: match is its own handle. */
+            FreeRendition(match);
+            FreeHandle(match);
             _XmRTRenditions(oldtable)[idx] = CopyRendition(rend);
             break;
           case XmSKIP:
             break;
           case XmMERGE_OLD:
             if (_XmRendRefcount(match) > 1) {
-              match = CloneRendition(match);
-              _XmRTRenditions(oldtable)[idx] = match;
+              _XmRTRenditions(oldtable)[idx] = CloneRendition(match);
+              FreeRendition(match);
+              FreeHandle(match);
+              match = _XmRTRenditions(oldtable)[idx];
             }
             MergeInto(match, rend);
             break;
@@ -1256,8 +1254,8 @@ XmRenderTable XmRenderTableAddRenditions(XmRenderTable oldtable,
             rend = CloneRendition(rend);
             MergeInto(rend, match);
             _XmRTRenditions(oldtable)[idx] = rend;
-            if (FreeRendition(match))
-              FreeHandle(match);
+            FreeRendition(match);
+            FreeHandle(match);
             break;
           default:
             printf("NYI");
@@ -1365,12 +1363,8 @@ XmRenderTable _XmRenderTableRemoveRenditions(XmRenderTable oldtable,
     SetPtr(newtable, table);
     _XmRTDisplay(newtable) = _XmRTDisplay(oldtable);
     _XmRTRefcount(newtable) = 1;
-    /* Move old Renditions. */
-    for (i = 0; i < _XmRTCount(oldtable); i++)
-      _XmRTRenditions(newtable)[i] = _XmRTRenditions(oldtable)[i];
-    _XmRTCount(newtable) = _XmRTCount(oldtable);
-    if (_XmRTRefcountDec(oldtable) == 0)
-      XtFree((char *)GetPtr(oldtable));
+    TakeRenditions(newtable, oldtable);
+    _XmRTRefcountDec(oldtable);
     FreeHandle(oldtable);
     oldtable = newtable;
   }
@@ -1382,8 +1376,9 @@ XmRenderTable _XmRenderTableRemoveRenditions(XmRenderTable oldtable,
           (!chk_font || ((font == _XmRendFont(_XmRTRenditions(oldtable)[i])) &&
                          (type == _XmRendFontType(_XmRTRenditions(oldtable)[i])))))
       {
-        if (FreeRendition(_XmRTRenditions(oldtable)[i]))
-          FreeHandle(_XmRTRenditions(oldtable)[i]);
+        /* oldtable is not shared: the handle is its own. */
+        FreeRendition(_XmRTRenditions(oldtable)[i]);
+        FreeHandle(_XmRTRenditions(oldtable)[i]);
         _XmRTRenditions(oldtable)[i] = NULL;
         break;
       }
@@ -1495,14 +1490,13 @@ static void CopyToArg(char *src, XtArgVal *dst, unsigned int size)
 
 /* Copies renditions matching tags to a new table. */
 /* If all renditions copied then duplicate rendertable, duplicate */
-/* renditions.  Otherwise, mutate rendertable, duplicate renditions. */
+/* renditions.  Otherwise, mutate rendertable, copy renditions. */
 XmRenderTable XmRenderTableCopy(XmRenderTable table, XmStringTag *tags, int tag_count)
 {
   XmRenderTable rt = NULL;
   _XmRenderTable t = NULL;
   int i, j, count;
   int size;
-  XmRendition rend = NULL;
   XtAppContext app = NULL;
   if (table == NULL)
     return ((XmRenderTable)NULL);
@@ -1514,10 +1508,29 @@ XmRenderTable XmRenderTableCopy(XmRenderTable table, XmStringTag *tags, int tag_
   /* and the process lock: the reference counts are shared with
      XmRenderTableFree and XmRenditionFree, which hold only that */
   _XmProcessLock();
-  count = 0;
-  if ((_XmRTRefcountInc(table) == 0) || (tags != NULL)) {
-    /* Malloc new table */
+  if ((tags == NULL) && (_XmRTRefcountInc(table) != 0)) {
+    /* Share the record: the new reference to it holds a reference */
+    /* to each of its renditions. */
+    for (i = 0; i < _XmRTCount(table); i++)
+      if (_XmRendRefcountInc(_XmRTRenditions(table)[i]) == 0)
+        break;
+    if (i == _XmRTCount(table)) {
+      rt = GetHandle(_XmRenderTable);
+      SetPtr(rt, GetPtr(table));
+    }
+    else {
+      /* A rendition refcount overflowed: give the references back. */
+      for (j = 0; j <= i; j++)
+        _XmRendRefcountDec(_XmRTRenditions(table)[j]);
+      _XmRTRefcountDec(table);
+    }
+  }
+  else if (tags == NULL) {
+    /* The table refcount overflowed. */
     _XmRTRefcountDec(table);
+  }
+  if (rt == NULL) {
+    /* Malloc new table */
     if ((tags != NULL) && (tag_count > 0))
       size = (sizeof(_XmRendition) * (tag_count - RENDITIONS_IN_STRUCT));
     else
@@ -1528,58 +1541,27 @@ XmRenderTable XmRenderTableCopy(XmRenderTable table, XmStringTag *tags, int tag_
     rt = GetHandle(_XmRenderTable);
     SetPtr(rt, t);
     _XmRTRefcount(rt) = 1;
-  }
-  if (tags == NULL) {
-    /* Increment renditions. */
-    for (i = 0; i < _XmRTCount(table); i++) {
-      rend = DuplicateRendition(_XmRTRenditions(table)[i]);
-      /* Check for overflow. */
-      if (rend != _XmRTRenditions(table)[i])
-        break;
-    }
-    if ((i < _XmRTCount(table)) || (rt != NULL)) /* Overflow! */ {
-      /* Either a rendition or the table refcount overflowed. */
-      if (rt == NULL) {
-        /* Malloc new table, giving back the reference taken above. */
-        _XmRTRefcountDec(table);
-        t = (_XmRenderTable)XtMalloc(
-            sizeof(_XmRenderTableRec) +
-            (sizeof(_XmRendition) * (_XmRTCount(table) - RENDITIONS_IN_STRUCT)));
-        t->stamp = 0;
-        rt = GetHandle(_XmRenderTable);
-        SetPtr(rt, t);
-        _XmRTRefcount(rt) = 1;
-      }
-      _XmRTCount(rt) = _XmRTCount(table);
-      /* Move renditions done already. */
-      for (j = 0; j < i; j++)
-        _XmRTRenditions(rt)[j] = _XmRTRenditions(table)[j];
-      if (i < _XmRTCount(rt)) {
-        _XmRTRenditions(rt)[i] = rend;
-        /* Copy rest */
-        for (j = i + 1; j < _XmRTCount(rt); j++)
-          _XmRTRenditions(rt)[j] = DuplicateRendition(_XmRTRenditions(table)[j]);
-      }
+    count = 0;
+    if (tags == NULL) {
+      /* Copy all renditions; CopyRendition clones on overflow. */
+      for (i = 0; i < _XmRTCount(table); i++)
+        _XmRTRenditions(rt)[count++] = CopyRendition(_XmRTRenditions(table)[i]);
     }
     else {
-      rt = GetHandle(_XmRenderTable);
-      SetPtr(rt, GetPtr(table));
+      /* Copy matching renditions. */
+      for (i = 0; i < tag_count; i++) {
+        XmRendition match;
+        match = XmRenderTableGetRendition(table, tags[i]);
+        if (match != NULL)
+          _XmRTRenditions(rt)[count++] = match;
+      }
+      /* Realloc table */
+      t = (_XmRenderTable)XtRealloc(
+          (char *)t,
+          sizeof(_XmRenderTableRec) +
+              (sizeof(XmRendition) * (MAX(count, RENDITIONS_IN_STRUCT) - RENDITIONS_IN_STRUCT)));
+      SetPtr(rt, t);
     }
-  }
-  else {
-    /* Copy matching renditions. */
-    for (i = 0; i < tag_count; i++) {
-      XmRendition match;
-      match = XmRenderTableGetRendition(table, tags[i]);
-      if (match != NULL)
-        _XmRTRenditions(rt)[count++] = match;
-    }
-    /* Realloc table */
-    t = (_XmRenderTable)XtRealloc((char *)t,
-                                  sizeof(_XmRenderTableRec) +
-                                      (sizeof(XmRendition) *
-                                       (MAX(count, RENDITIONS_IN_STRUCT) - RENDITIONS_IN_STRUCT)));
-    SetPtr(rt, t);
     _XmRTCount(rt) = count;
   }
   _XmRTDisplay(rt) = _XmRTDisplay(table);
@@ -1594,13 +1576,8 @@ XmRenderTable XmRenderTableCopy(XmRenderTable table, XmStringTag *tags, int tag_
 /* renditions. */
 void XmRenderTableFree(XmRenderTable table)
 {
-  int i;
   _XmProcessLock();
-  for (i = 0; i < _XmRTCount(table); i++)
-    if (FreeRendition(_XmRTRenditions(table)[i]))
-      FreeHandle(_XmRTRenditions(table)[i]);
-  if (_XmRTRefcountDec(table) == 0)
-    XtFree((char *)GetPtr(table));
+  ReleaseTable(table);
   FreeHandle(table);
   _XmProcessUnlock();
 }
@@ -2015,6 +1992,37 @@ static Boolean FreeRendition(XmRendition rendition)
     return (TRUE);
   }
   return (FALSE);
+}
+
+/* Give up the reference of table to its rendertable record and the */
+/* references that it holds to the renditions.  The record and its */
+/* rendition handles are freed when its refcount reaches zero.  The */
+/* table handle is left to the caller. */
+static void ReleaseTable(XmRenderTable table)
+{
+  int i;
+  for (i = 0; i < _XmRTCount(table); i++)
+    FreeRendition(_XmRTRenditions(table)[i]);
+  if (_XmRTRefcountDec(table) == 0) {
+    for (i = 0; i < _XmRTCount(table); i++)
+      FreeHandle(_XmRTRenditions(table)[i]);
+    XtFree((char *)GetPtr(table));
+  }
+}
+
+/* Fill the new record of to, which is taking over one reference to */
+/* the shared record of from, with handles of its own to the renditions */
+/* of from.  The references to the renditions go with the reference to */
+/* the record, so no refcount changes; the caller decrements the */
+/* refcount of from. */
+static void TakeRenditions(XmRenderTable to, XmRenderTable from)
+{
+  int i;
+  for (i = 0; i < _XmRTCount(from); i++) {
+    _XmRTRenditions(to)[i] = GetHandle(_XmRendition);
+    SetPtr(_XmRTRenditions(to)[i], GetPtr(_XmRTRenditions(from)[i]));
+  }
+  _XmRTCount(to) = _XmRTCount(from);
 }
 
 void XmRenditionFree(XmRendition rendition)

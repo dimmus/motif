@@ -38,19 +38,6 @@ static int same_tag(XmFontListEntry a, XmFontListEntry b)
 	return same;
 }
 
-/*
- * The entries are freed before the font lists that hold them.
- * XmRenderTableFree and XmFontListRemoveEntry free a rendition's handle
- * only when they drop the last reference to the rendition, so freeing a
- * list, or removing an entry from it, while the entry it was built from
- * is still alive leaks the list's 8-byte handle.  This is a library bug:
- * a table slot cannot tell whether its handle is its own (CopyRendition)
- * or shared with a copy of the table (DuplicateRendition).
- * XmRenditionFree always frees its handle, so this order frees
- * everything; where the entry has to outlive the list, the leaking
- * allocation is excluded from leak checking with KNOWN_LEAK_BEGIN/END.
- */
-
 START_TEST(create_from_invalid_entry)
 {
 	XmFontList fl;
@@ -214,9 +201,7 @@ START_TEST(remove_entry)
 	e  = XmFontListEntryLoad(display, "fixed", XmFONT_IS_FONT, XmSTRING_DEFAULT_CHARSET);
 	fl = XmFontListAppendEntry(NULL, e);
 	e2 = XmFontListEntryLoad(display, "8x13bold", XmFONT_IS_FONT, XmSTRING_DEFAULT_CHARSET);
-	KNOWN_LEAK_BEGIN();
 	fl = XmFontListAppendEntry(fl, e2);
-	KNOWN_LEAK_END();
 	ck_assert_msg((fx = XmFontListRemoveEntry(fl, e2)) != fl,
 	              "Unexpected return value");
 	XmFontListEntryFree(&e);
@@ -231,9 +216,7 @@ START_TEST(remove_sole_entry)
 	XmFontListEntry e;
 
 	e  = XmFontListEntryLoad(display, "fixed", XmFONT_IS_FONT, XmSTRING_DEFAULT_CHARSET);
-	KNOWN_LEAK_BEGIN();
 	fl = XmFontListAppendEntry(NULL, e);
-	KNOWN_LEAK_END();
 	ck_assert_msg((fx = XmFontListRemoveEntry(fl, e)) != fl,
 	              "Unexpected return value");
 	XmFontListEntryFree(&e);

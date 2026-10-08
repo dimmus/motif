@@ -18,6 +18,9 @@
  * either way, so whether its table came from the cache is seen through
  * the conversions of the rendition resources: the tests count those of
  * fontType and underlineType, which only a new conversion makes.
+ *
+ * The "Rendition handles" tests check that the render table functions
+ * free what they hold when renditions are shared between tables.
  */
 #include <stdio.h>
 #include <string.h>
@@ -33,6 +36,7 @@
 #include <Xm/TextF.h>
 #include <check.h>
 
+#include "leak.h"
 #include "suites.h"
 
 /* libXm's, not declared by an installed header. */
@@ -829,6 +833,231 @@ START_TEST(display_close)
 }
 END_TEST
 
+/*
+ * Rendition handles.
+ *
+ * A table holds a handle of its own to each of its renditions, whose
+ * data it may share with other tables and with the renditions the
+ * program holds.  XmRenderTableFree, a merge that replaces a rendition
+ * and XmRenderTableRemoveRenditions free the table's handle whoever
+ * else still holds the rendition.  Tables copied with XmRenderTableCopy
+ * share one record, and with it the handles: those are freed with the
+ * last of the tables, and a table that changes gets handles of its own.
+ */
+
+static XmRendition font_rendition(const char *tag, const char *font)
+{
+	Arg a[2];
+
+	XtSetArg(a[0], XmNfontName, (XtArgVal)font);
+	XtSetArg(a[1], XmNfontType, XmFONT_IS_FONT);
+	return XmRenditionCreate(shell, tag, a, 2);
+}
+
+static XmRenderTable table_with(XmRendition r)
+{
+	return XmRenderTableAddRenditions(NULL, &r, 1, XmMERGE_NEW);
+}
+
+static int tag_count(XmRenderTable rt)
+{
+	XmStringTag *tags = NULL;
+	int i, n = XmRenderTableGetTags(rt, &tags);
+
+	for (i = 0; i < n; i++)
+		XtFree(tags[i]);
+	XtFree((char *)tags);
+	return n;
+}
+
+/* A table freed while another table and the program hold its rendition. */
+START_TEST(free_table_of_held_rendition)
+{
+	XmRendition a = font_rendition("A", "fixed");
+	XmRendition b = font_rendition("A", "8x13");
+	XmRenderTable rt1 = table_with(a), rt2 = table_with(b);
+	XmRendition r = XmRenderTableGetRendition(rt1, "A");
+
+	rt2 = XmRenderTableAddRenditions(rt2, &r, 1, XmMERGE_REPLACE);
+	XmRenditionFree(r);
+	XmRenderTableFree(rt1);
+	ck_assert_str_eq(font_name_of(rt2, "A"), "fixed");
+	XmRenderTableFree(rt2);
+	XmRenditionFree(a);
+	XmRenditionFree(b);
+#ifdef HAVE_LSAN
+	ck_assert_msg(!leaks_found(), "XmRenderTableFree leaked a rendition handle");
+#endif
+}
+END_TEST
+
+/*
+ * Each merge mode, on a rendition that another table holds too.  The
+ * program's renditions are freed first, so that the tables free the
+ * renditions that only they hold.
+ */
+static const struct {
+	XmMergeMode mode;
+	const char *font;
+	int count;
+} merges[] = {
+	{ XmMERGE_REPLACE, "8x13", 1 },
+	{ XmMERGE_NEW, "8x13", 1 },
+	{ XmMERGE_OLD, "fixed", 1 },
+	{ XmSKIP, "fixed", 1 },
+	{ XmDUPLICATE, "fixed", 2 },
+};
+
+START_TEST(merge_held_rendition)
+{
+	XmRendition a = font_rendition("A", "fixed");
+	XmRendition b = font_rendition("A", "8x13");
+	XmRenderTable other = table_with(a), rt = table_with(a);
+
+	rt = XmRenderTableAddRenditions(rt, &b, 1, merges[_i].mode);
+	ck_assert_int_eq(tag_count(rt), merges[_i].count);
+	ck_assert_str_eq(font_name_of(rt, "A"), merges[_i].font);
+	ck_assert_str_eq(font_name_of(other, "A"), "fixed");
+	XmRenditionFree(a);
+	XmRenditionFree(b);
+	XmRenderTableFree(rt);
+	ck_assert_str_eq(font_name_of(other, "A"), "fixed");
+	XmRenderTableFree(other);
+#ifdef HAVE_LSAN
+	ck_assert_msg(!leaks_found(), "XmRenderTableAddRenditions leaked (merge mode %d)",
+		      (int)merges[_i].mode);
+#endif
+}
+END_TEST
+
+/* A rendition removed from a table while another table holds it. */
+START_TEST(remove_held_rendition)
+{
+	XmRendition r[2];
+	XmRenderTable other, rt;
+	XmStringTag tag = "A";
+
+	r[0] = font_rendition("A", "fixed");
+	r[1] = font_rendition("B", "8x13");
+	other = table_with(r[0]);
+	rt = XmRenderTableAddRenditions(NULL, r, 2, XmMERGE_NEW);
+	rt = XmRenderTableRemoveRenditions(rt, &tag, 1);
+	ck_assert_int_eq(tag_count(rt), 1);
+	ck_assert_str_eq(font_name_of(rt, "B"), "8x13");
+	XmRenderTableFree(rt);
+	ck_assert_str_eq(font_name_of(other, "A"), "fixed");
+	XmRenderTableFree(other);
+	XmRenditionFree(r[0]);
+	XmRenditionFree(r[1]);
+#ifdef HAVE_LSAN
+	ck_assert_msg(!leaks_found(), "XmRenderTableRemoveRenditions leaked a rendition handle");
+#endif
+}
+END_TEST
+
+/*
+ * Copies of one table changed in every way while the others live; the
+ * original is freed first, so a handle that a changed copy still shared
+ * with it would be used after it is freed.
+ */
+START_TEST(change_shared_table)
+{
+	XmRendition r[2], c, b2;
+	XmRenderTable rt, added, replaced, removed, some, same;
+	XmStringTag tag = "A";
+
+	r[0] = font_rendition("A", "fixed");
+	r[1] = font_rendition("B", "8x13");
+	c = font_rendition("C", "fixed");
+	b2 = font_rendition("B", "fixed");
+	rt = XmRenderTableAddRenditions(NULL, r, 2, XmMERGE_NEW);
+	added = XmRenderTableCopy(rt, NULL, 0);
+	replaced = XmRenderTableCopy(rt, NULL, 0);
+	removed = XmRenderTableCopy(rt, NULL, 0);
+	same = XmRenderTableCopy(rt, NULL, 0);
+	some = XmRenderTableCopy(rt, &tag, 1);
+	added = XmRenderTableAddRenditions(added, &c, 1, XmMERGE_NEW);
+	replaced = XmRenderTableAddRenditions(replaced, &b2, 1, XmMERGE_REPLACE);
+	removed = XmRenderTableRemoveRenditions(removed, &tag, 1);
+	XmRenditionFree(r[0]);
+	XmRenditionFree(r[1]);
+	XmRenditionFree(c);
+	XmRenditionFree(b2);
+	XmRenderTableFree(rt);
+
+	ck_assert_int_eq(tag_count(added), 3);
+	ck_assert_str_eq(font_name_of(added, "B"), "8x13");
+	ck_assert_str_eq(font_name_of(added, "C"), "fixed");
+	ck_assert_int_eq(tag_count(replaced), 2);
+	ck_assert_str_eq(font_name_of(replaced, "A"), "fixed");
+	ck_assert_str_eq(font_name_of(replaced, "B"), "fixed");
+	ck_assert_int_eq(tag_count(removed), 1);
+	ck_assert_str_eq(font_name_of(removed, "B"), "8x13");
+	ck_assert_int_eq(tag_count(some), 1);
+	ck_assert_str_eq(font_name_of(some, "A"), "fixed");
+	ck_assert_int_eq(tag_count(same), 2);
+	ck_assert_str_eq(font_name_of(same, "B"), "8x13");
+	XmRenderTableFree(added);
+	XmRenderTableFree(replaced);
+	XmRenderTableFree(removed);
+	XmRenderTableFree(some);
+	ck_assert_str_eq(font_name_of(same, "A"), "fixed");
+	XmRenderTableFree(same);
+#ifdef HAVE_LSAN
+	ck_assert_msg(!leaks_found(), "copies of a render table leaked");
+#endif
+}
+END_TEST
+
+static XmRendition substitute;
+static int no_rendition_calls;
+
+/* Adds substitute to the table, or leaves it alone if there is none. */
+static void no_rendition(Widget w, XtPointer client_data, XtPointer call_data)
+{
+	XmDisplayCallbackStruct *cb = (XmDisplayCallbackStruct *)call_data;
+
+	no_rendition_calls++;
+	if (substitute != NULL)
+		cb->render_table = XmRenderTableAddRenditions(cb->render_table,
+							      &substitute, 1, XmMERGE_NEW);
+}
+
+/*
+ * The XmNnoRenditionCallback is given a copy of the table being
+ * searched; a table it returns instead takes the searched table's
+ * place, and the copy is freed if it returns that.  Loop 0 adds the
+ * missing rendition, loop 1 leaves the copy alone.
+ */
+START_TEST(no_rendition_callback_table)
+{
+	Widget dsp = XmGetXmDisplay(XtDisplay(shell));
+	XmRendition a = font_rendition("A", "fixed");
+	XmRenderTable rt = table_with(a);
+	XmString s = XmStringCreate("x", "Z");
+	Dimension w = 0, h = 0;
+
+	substitute = _i == 0 ? font_rendition("Z", "8x13") : NULL;
+	no_rendition_calls = 0;
+	XtAddCallback(dsp, XmNnoRenditionCallback, no_rendition, NULL);
+	XmStringExtent(rt, s, &w, &h);
+	XtRemoveCallback(dsp, XmNnoRenditionCallback, no_rendition, NULL);
+	ck_assert_int_eq(no_rendition_calls, 1);
+	ck_assert_int_eq(tag_count(rt), _i == 0 ? 2 : 1);
+	if (_i == 0) {
+		ck_assert_uint_gt(w, 0);
+		ck_assert_str_eq(font_name_of(rt, "Z"), "8x13");
+		XmRenditionFree(substitute);
+	}
+	XmRenderTableFree(rt);
+	XmRenditionFree(a);
+	XmStringFree(s);
+#ifdef HAVE_LSAN
+	ck_assert_msg(!leaks_found(), "the XmNnoRenditionCallback table leaked");
+#endif
+}
+END_TEST
+
 void rendertable_suite(SRunner *runner)
 {
 	Suite *s = suite_create("RenderTable");
@@ -854,6 +1083,15 @@ void rendertable_suite(SRunner *runner)
 	tcase_add_test(t, default_render_table_display_close);
 	tcase_add_checked_fixture(t, _init_xt, uninit_xt);
 	tcase_set_timeout(t, 30);
+	suite_add_tcase(s, t);
+
+	t = tcase_create("Rendition handles");
+	tcase_add_test(t, free_table_of_held_rendition);
+	tcase_add_loop_test(t, merge_held_rendition, 0, (int)XtNumber(merges));
+	tcase_add_test(t, remove_held_rendition);
+	tcase_add_test(t, change_shared_table);
+	tcase_add_loop_test(t, no_rendition_callback_table, 0, 2);
+	tcase_add_checked_fixture(t, _init_xt, uninit_xt);
 	suite_add_tcase(s, t);
 	srunner_add_suite(runner, s);
 }
