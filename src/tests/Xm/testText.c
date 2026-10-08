@@ -16,6 +16,7 @@
  * text_clipboard_undo_copy for XmClipboardUndoCopy().
  */
 #include <stdlib.h>
+#include <stdint.h>
 #include <string.h>
 #include <X11/Intrinsic.h>
 #include <X11/Xatom.h>
@@ -424,14 +425,14 @@ static unsigned int walk_table_index(XmTextWidget tw, XmTextPosition pos)
 	return cur_index;
 }
 
-static unsigned long lcg(unsigned long *state)
+static unsigned long lcg(uint64_t *state)
 {
-	*state = *state * 6364136223846793005UL + 1442695040888963407UL;
-	return *state >> 33;
+	*state = *state * 6364136223846793005ULL + 1442695040888963407ULL;
+	return (unsigned long)(*state >> 33);
 }
 
 /* Check _XmTextGetTableIndex against the walk, from several cursors. */
-static void check_line_table(Widget w, unsigned long *rnd)
+static void check_line_table(Widget w, uint64_t *rnd)
 {
 	XmTextWidget tw = (XmTextWidget)w;
 	XmTextLineTable lt = tw->text.line_table;
@@ -478,7 +479,7 @@ START_TEST(text_line_table_lookup)
 {
 	static const char words[] = "lorem ipsum dolor sit amet consectetur "
 				    "adipiscing elit sed do eiusmod tempor ";
-	unsigned long rnd = 12345;
+	uint64_t rnd = 12345;
 	Arg args[4];
 	char *doc, ins[64];
 	int wrap, i, j, len;

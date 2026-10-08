@@ -60,12 +60,12 @@ check_sane() {
 	fi
 }
 
-# wait_line <file> <pattern> <what>
+# wait_line <file> <pattern> <what> [<tenths of a second, default 150>]
 wait_line() {
 	_i=0
 	until grep -q "$2" "$1" 2>/dev/null; do
 		_i=$((_i + 1))
-		[ $_i -lt 150 ] || return 1
+		[ $_i -lt "${4:-150}" ] || return 1
 		sleep 0.1
 	done
 	return 0
@@ -197,11 +197,13 @@ xdotool key d    # re-read the hostile root drag tables
 settle
 victim_alive "after hostile clipboard"
 check_sane victim
-wait_line "$work/victim.out" '^clip-done' "clip-done" ||
+# The clipboard calls meet the hostile owner's replies, which takes much
+# longer on a slow machine (the FreeBSD CI virtual machine): allow 60 s.
+wait_line "$work/victim.out" '^clip-done' "clip-done" 600 ||
 	fail "the clipboard inquire/retrieve action did not run (no clip-done)"
-wait_line "$work/victim.out" '^paste-done' "paste-done" ||
+wait_line "$work/victim.out" '^paste-done' "paste-done" 600 ||
 	fail "the paste action did not run (no paste-done)"
-wait_line "$work/victim.out" '^drag-done' "drag-done" ||
+wait_line "$work/victim.out" '^drag-done' "drag-done" 600 ||
 	fail "the root-table drag action did not run (no drag-done)"
 echo "phase 4: survived the hostile clipboard"
 stop_victim
