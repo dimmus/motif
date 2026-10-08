@@ -130,7 +130,9 @@ check_client_list() {
 	shift
 	_i=0
 	while :; do
-		_l=$(DISPLAY=$nested "$wmclient" --client-list)
+		_l=$(DISPLAY=$nested "$wmclient" --client-list \
+			2> "$work/clientlist.err")
+		_rc=$?
 		_ok=1
 		case $_l in
 		"clientlist $_n" | "clientlist $_n "*) ;;
@@ -144,7 +146,7 @@ check_client_list() {
 		done
 		[ $_ok = 1 ] && return 0
 		_i=$((_i + 1))
-		[ $_i -lt 30 ] || fail "_NET_CLIENT_LIST: expected $_n windows ($*), got '$_l'"
+		[ $_i -lt 30 ] || fail "_NET_CLIENT_LIST: expected $_n windows ($*), got '$_l' (wmclient exit $_rc) $(cat "$work/clientlist.err")"
 		sleep 0.1
 	done
 }

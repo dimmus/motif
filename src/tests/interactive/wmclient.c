@@ -63,11 +63,18 @@ static void set_hostile(Display *dpy, Window w)
 	}
 }
 
-/* Print the windows that _NET_CLIENT_LIST on the root lists. */
+/*
+ * Print the windows that _NET_CLIENT_LIST on the root lists, and close
+ * the display.  The driver reads the line through a pipe, where stdout
+ * is fully buffered: flush it here rather than at exit.  In an ASan
+ * build LeakSanitizer runs from an atexit handler and, when it finds a
+ * leak (an unclosed display is one), ends the process with _exit()
+ * before stdio flushes, and the driver would read nothing.
+ */
 static int client_list(Display *dpy)
 {
 	Atom type;
-	int format;
+	int format, ret = 0;
 	unsigned long n, after, i;
 	unsigned char *data = NULL;
 
@@ -77,16 +84,18 @@ static int client_list(Display *dpy)
 			       &data) != Success || type != XA_WINDOW ||
 	    format != 32) {
 		printf("clientlist none\n");
-		if (data)
-			XFree(data);
-		return 1;
+		ret = 1;
+	} else {
+		printf("clientlist %lu", n);
+		for (i = 0; i < n; i++)
+			printf(" 0x%lx", (unsigned long)((Window *)data)[i]);
+		printf("\n");
 	}
-	printf("clientlist %lu", n);
-	for (i = 0; i < n; i++)
-		printf(" 0x%lx", (unsigned long)((Window *)data)[i]);
-	printf("\n");
-	XFree(data);
-	return 0;
+	fflush(stdout);
+	if (data)
+		XFree(data);
+	XCloseDisplay(dpy);
+	return ret;
 }
 
 int main(int argc, char **argv)
@@ -131,6 +140,7 @@ int main(int argc, char **argv)
 	hints.min_width = 40;
 	hints.min_height = 30;
 	XSetWMProperties(dpy, w, &name, &name, argv, argc, &hints, NULL, NULL);
+	XFree(name.value);
 
 	if (hostile)
 		set_hostile(dpy, w);
@@ -160,6 +170,7 @@ int main(int argc, char **argv)
 		case DestroyNotify:
 			printf("destroy\n");
 			fflush(stdout);
+			XCloseDisplay(dpy);
 			return 0;
 		default:
 			break;
