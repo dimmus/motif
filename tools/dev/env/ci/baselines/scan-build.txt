@@ -14,7 +14,6 @@
 1	src/bin/mwm/WmIconBox.c	Logic error: Result of operation is garbage or undefined
 1	src/bin/mwm/WmInitWs.c	API: Argument with 'nonnull' attribute passed null
 3	src/bin/mwm/WmKeyFocus.c	Logic error: Dereference of null pointer
-1	src/bin/mwm/WmMenu.c	API: Argument with 'nonnull' attribute passed null
 5	src/bin/mwm/WmMenu.c	Logic error: Dereference of null pointer
 1	src/bin/mwm/WmResParse.c	Logic error: Dereference of null pointer
 1	src/bin/mwm/WmResource.c	Logic error: Dereference of null pointer
@@ -73,7 +72,6 @@
 1	src/lib/Xm/FontS.c	API: Argument with 'nonnull' attribute passed null
 1	src/lib/Xm/FontS.c	Unused code: Dead initialization
 1	src/lib/Xm/GrabShell.c	Unused code: Dead assignment
-1	src/lib/Xm/I18List.c	Unused code: Dead assignment
 1	src/lib/Xm/I18List.c	Unused code: Dead nested assignment
 1	src/lib/Xm/IconFile.c	API: Argument with 'nonnull' attribute passed null
 2	src/lib/Xm/ImageCache.c	Error handling: Value of 'errno' was not checked
@@ -114,7 +112,7 @@
 1	src/lib/Xm/Text.c	Unused code: Dead assignment
 2	src/lib/Xm/Text.c	Unused code: Dead nested assignment
 2	src/lib/Xm/TextF.c	API: Argument with 'nonnull' attribute passed null
-4	src/lib/Xm/TextF.c	Logic error: Dereference of null pointer
+1	src/lib/Xm/TextF.c	Logic error: Dereference of null pointer
 1	src/lib/Xm/TextF.c	Logic error: Dereference of undefined pointer value
 1	src/lib/Xm/TextF.c	Logic error: Garbage return value
 2	src/lib/Xm/TextF.c	Unused code: Dead assignment
@@ -124,9 +122,7 @@
 2	src/lib/Xm/TextIn.c	Logic error: Result of operation is garbage or undefined
 1	src/lib/Xm/TextIn.c	Unused code: Dead assignment
 1	src/lib/Xm/TextIn.c	Unused code: Dead nested assignment
-2	src/lib/Xm/TextOut.c	Logic error: Assigned value is uninitialized
 3	src/lib/Xm/TextOut.c	Logic error: Dereference of null pointer
-1	src/lib/Xm/TextOut.c	Logic error: Result of operation is garbage or undefined
 7	src/lib/Xm/TextOut.c	Unused code: Dead assignment
 2	src/lib/Xm/TextOut.c	Unused code: Dead nested assignment
 1	src/lib/Xm/TextSel.c	Unused code: Dead assignment
@@ -140,11 +136,9 @@
 3	src/lib/Xm/Tree.c	Logic error: Dereference of null pointer
 1	src/lib/Xm/Tree.c	Unused code: Dead assignment
 3	src/lib/Xm/TxtPropCv.c	API: Argument with 'nonnull' attribute passed null
-1	src/lib/Xm/VendorS.c	API: Argument with 'nonnull' attribute passed null
 4	src/lib/Xm/VendorS.c	Logic error: Dereference of null pointer
 1	src/lib/Xm/VendorS.c	Unused code: Dead nested assignment
 1	src/lib/Xm/XmExtUtil.c	Logic error: Dereference of null pointer
-1	src/lib/Xm/XmIm.c	Unused code: Dead initialization
 1	src/lib/Xm/XmRenderT.c	Logic error: Assigned value is uninitialized
 2	src/lib/Xm/XmString.c	API: Argument with 'nonnull' attribute passed null
 2	src/lib/Xm/XmString.c	Logic error: Assigned value is uninitialized

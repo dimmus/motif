@@ -72,6 +72,23 @@ static void mapped(Widget w, XtPointer client, XEvent *ev, Boolean *cont)
 	}
 }
 
+/* Every key that reaches the Text, so that a failing run shows whether
+ * the keys of the test arrived. */
+static void log_key(Widget w, XtPointer client, XEvent *ev, Boolean *cont)
+{
+	char buf[8];
+	KeySym sym = NoSymbol;
+	const char *name;
+
+	(void)w;
+	(void)client;
+	(void)cont;
+	(void)XLookupString(&ev->xkey, buf, sizeof buf, &sym, NULL);
+	name = XKeysymToString(sym);
+	printf("key %s\n", name ? name : "?");
+	fflush(stdout);
+}
+
 /* drop proc: accept nothing, just make sure we are a live drop site so
  * the hostile source's messages are routed through the drop site manager */
 static void drop_proc(Widget w, XtPointer client, XtPointer call)
@@ -283,6 +300,7 @@ int main(int argc, char **argv)
 			       XtParseTranslationTable(drag_translations));
 	XtOverrideTranslations(text,
 			       XtParseTranslationTable(key_translations));
+	XtAddEventHandler(text, KeyPressMask, False, log_key, NULL);
 
 	term_id = XtAppAddSignal(app, report_and_exit, NULL);
 	signal(SIGTERM, on_term);

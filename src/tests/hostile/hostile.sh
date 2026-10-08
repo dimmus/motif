@@ -37,6 +37,10 @@ trap cleanup EXIT
 
 fail() {
 	echo "FAIL: $*"
+	# Where the pointer and the input focus are: the keys of phase 4
+	# go to the window under the pointer.
+	echo "--- pointer: $(xdotool getmouselocation 2>&1)"
+	echo "--- focus: $(xdotool getwindowfocus 2>&1)"
 	for f in "$work"/*.err "$work"/*.out; do
 		[ -f "$f" ] && { echo "--- $f"; cat "$f"; }
 	done
