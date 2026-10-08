@@ -33,6 +33,7 @@ set(MOTIF_TEST_SRCS
     Xm/testXmString.c
     Xm/testWidgets.c
     Xm/testText.c
+    Xm/testClipboard.c
     Xm/testI18n.c
     Xm/testI18nLocale.c
     Xm/testLayout.c
@@ -45,8 +46,8 @@ set(MOTIF_TEST_SRCS
 )
 
 # Suites that open a display, and suites that do not.
-set(MOTIF_TEST_X_SUITES FontListEntry FontList XmStringCT XmStringExtent Widgets Text Layout
-    XErrors List I18nLocale MsgCat Rtl Xim)
+set(MOTIF_TEST_X_SUITES FontListEntry FontList XmStringCT XmStringExtent Widgets Text
+    Clipboard Layout XErrors List I18nLocale MsgCat Rtl Xim)
 set(MOTIF_TEST_SUITES Svg Log LogConfig XmString I18n)
 set(MOTIF_TEST_DEFS "")
 
@@ -172,6 +173,7 @@ endfunction()
 
 add_subdirectory(uil)
 add_subdirectory(interactive)
+add_subdirectory(hostile)
 add_subdirectory(visual)
 add_subdirectory(threads)
 if(WITH_FUZZERS)

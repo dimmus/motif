@@ -139,8 +139,7 @@ motif_fuzzer(ct X SOURCES fuzz_ct.c)
 motif_fuzzer(xbm X SOURCES fuzz_xbm.c)
 motif_fuzzer(motifbind X SOURCES fuzz_motifbind.c)
 motif_fuzzer(dnd X SOURCES fuzz_dnd.c)
-# The library exits on corrupt records (CutPaste.c, ClipboardError);
-# the fuzzer longjmps out of that unless FUZZ_CLIPBOARD_EXIT is set,
-# which the crash replay does to show the exit.  The longjmp leaks.
-motif_fuzzer(clipboard X NO_LEAKS SOURCES fuzz_clipboard.c
-    CRASH_ENV FUZZ_CLIPBOARD_EXIT=1)
+# Corrupt records are reported as a warning, not a fatal error, so the
+# clipboard code no longer exits on them (the former reproducer,
+# crashes/clipboard/corrupt-record-exit, is now a clean corpus seed).
+motif_fuzzer(clipboard X SOURCES fuzz_clipboard.c)

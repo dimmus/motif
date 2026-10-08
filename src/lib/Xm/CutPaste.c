@@ -37,8 +37,16 @@ static char rcsid[] = "$TOG: CutPaste.c /main/27 1999/05/26 17:42:48 samborn $"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+/* A corrupt clipboard record is almost always another client's doing:
+   any client can rewrite the _MOTIF_CLIP_* root-window properties this
+   code reads.  Report it as a warning, which returns, rather than with
+   XtErrorMsg, whose default handler calls exit() and lets any such
+   client terminate every Motif application that touches the clipboard.
+   Every ClipboardError() call site bails out with a failure return, and
+   one in a public entry point first frees what it holds and releases
+   the clipboard lock, so the operation fails cleanly instead. */
 #define XMERROR(key, message) \
-  XtErrorMsg(key, "xmClipboardError", "XmToolkitError", message, NULL, NULL)
+  XtWarningMsg(key, "xmClipboardError", "XmToolkitError", message, NULL, NULL)
 #define XMRETRY 3
 #define XM_APPEND 0
 #define XM_REPLACE 1
@@ -348,6 +356,14 @@ static void ClipboardTimeout(XtPointer, XtIntervalId *);
 static XmCutPasteProc *cbProcTable = NULL;
 static long *cbIdTable = NULL;
 static int maxCbProcs = 0;
+
+/* CleanupHeader() resets a clipboard found corrupt, but the operation
+   that found it carries on and normally writes its own copy of the
+   header back, dangling item ids and all, which would leave every later
+   operation meeting (and warning about) the same corruption.  So the
+   display whose clipboard was reset is remembered, and the header is
+   deleted again when the operation gives the clipboard lock back. */
+static Display *clipboard_reset_display = NULL;
 
 /*---------------------------------------------*/
 /* internal routines			       */
@@ -679,13 +695,15 @@ static void CleanupHeader(Display *display)
   XDeleteProperty(
       display, RootWindow(display, 0), XInternAtom(display, XmS_MOTIF_CLIP_HEADER, False));
   XFlush(display);
+  _XmProcessLock();
+  clipboard_reset_display = display;
+  _XmProcessUnlock();
 }
 
 /*---------------------------------------------*/
 static void ClipboardError(char *key, char *message)
 {
   XMERROR(key, message);
-  exit(1);
 }
 
 /*---------------------------------------------*/
@@ -1336,6 +1354,11 @@ static ClipboardFormatItem ClipboardFindFormat(
                         sizeof(ClipboardFormatItemRec),
                         XM_FORMAT_HEADER_TYPE);
     if (currformat == 0) {
+      XtFree((char *)matchformat);
+      XtFree((char *)queryitem);
+      *count = 0;
+      *maxnamelength = 0;
+      *matchlength = 0;
       CleanupHeader(display);
       ClipboardError(CLIPBOARD_CORRUPT, CORRUPT_DATA_STRUCTURE);
       return 0;
@@ -1404,6 +1427,7 @@ static void ClipboardDeleteFormat(Display *display, itemId formatitemid)
                       sizeof(ClipboardDataItemRec),
                       XM_DATA_ITEM_RECORD_TYPE);
   if (dataitem == 0) {
+    XtFree((char *)formatitem);
     CleanupHeader(display);
     ClipboardError(CLIPBOARD_CORRUPT, CORRUPT_DATA_STRUCTURE);
     return;
@@ -1458,6 +1482,7 @@ static void ClipboardDeleteFormats(Display *display, Window window, itemId datai
                         sizeof(ClipboardFormatItemRec),
                         XM_FORMAT_HEADER_TYPE);
     if (formatdata == 0) {
+      XtFree((char *)datalist);
       CleanupHeader(display);
       ClipboardError(CLIPBOARD_CORRUPT, CORRUPT_DATA_STRUCTURE);
       return;
@@ -2105,6 +2130,11 @@ static int ClipboardLock(Display *display, Window window)
         _XmAppUnlock(app);
         return (ClipboardLocked);
       }
+      /* a new outermost operation: any earlier reset is complete */
+      _XmProcessLock();
+      if (clipboard_reset_display == display)
+        clipboard_reset_display = NULL;
+      _XmProcessUnlock();
     }
     else {
       XtFree((char *)lockptr);
@@ -2163,6 +2193,17 @@ static int ClipboardUnlock(Display *display, Window window, Boolean all_levels)
       display, XM_LOCK_ID, (XtPointer)lockptr, length, PropModeReplace, 32, False, XA_INTEGER);
   XtFree((char *)lockptr);
   if (release_lock == True) {
+    Boolean reset;
+    _XmProcessLock();
+    reset = (clipboard_reset_display == display);
+    if (reset)
+      clipboard_reset_display = NULL;
+    _XmProcessUnlock();
+    /* the clipboard was found corrupt during this operation: drop the
+       header it may have written back since (see CleanupHeader) */
+    if (reset)
+      XDeleteProperty(
+          display, RootWindow(display, 0), XInternAtom(display, XmS_MOTIF_CLIP_HEADER, False));
     XSetSelectionOwner(display, _MOTIF_CLIP_LOCK, None, ClipboardGetCurrentTime(display));
   }
   return (ClipboardSuccess);
@@ -2593,8 +2634,11 @@ int XmClipboardEndCopy(Display *display, Window window, long itemid)
                       sizeof(ClipboardDataItemRec),
                       XM_DATA_ITEM_RECORD_TYPE);
   if (itemheader == 0) {
+    XtFree((char *)header);
     CleanupHeader(display);
     ClipboardError(CLIPBOARD_CORRUPT, CORRUPT_DATA_STRUCTURE);
+    ClipboardUnlock(display, window, 0);
+    _XmAppUnlock(app);
     return ClipboardFail;
   }
   if (itemheader->cutByNameWindow != 0) {
@@ -2783,8 +2827,12 @@ int XmClipboardCopyByName(Display *display, /* Display id of application passing
                          XA_INTEGER);
   }
   else {
+    XtFree((char *)root_clipboard_header);
     CleanupHeader(display);
     ClipboardError(CLIPBOARD_CORRUPT, CORRUPT_DATA_STRUCTURE);
+    if (locked)
+      ClipboardUnlock(display, window, 0);
+    _XmAppUnlock(app);
     return ClipboardFail;
   }
   if (locked) {
@@ -2827,8 +2875,11 @@ int XmClipboardUndoCopy(Display *display, Window window)
                         sizeof(ClipboardDataItemRec),
                         XM_DATA_ITEM_RECORD_TYPE);
     if (itemheader == 0) {
+      XtFree((char *)header);
       CleanupHeader(display);
       ClipboardError(CLIPBOARD_CORRUPT, CORRUPT_DATA_STRUCTURE);
+      ClipboardUnlock(display, window, 0);
+      _XmAppUnlock(app);
       return ClipboardFail;
     }
     /* if no last copy item
@@ -3005,8 +3056,10 @@ static int ClipboardRetrieve(Display *display,
                               sizeof(ClipboardFormatItemRec),
                               XM_FORMAT_HEADER_TYPE);
           if (matchformat == 0) {
+            XtFree((char *)header);
             CleanupHeader(display);
             ClipboardError(CLIPBOARD_CORRUPT, CORRUPT_DATA_STRUCTURE);
+            ClipboardUnlock(display, window, 0);
             return ClipboardFail;
           }
         }
@@ -3019,8 +3072,11 @@ static int ClipboardRetrieve(Display *display,
                           outtype,
                           0);
         if (formatdata == 0) {
+          XtFree((char *)matchformat);
+          XtFree((char *)header);
           CleanupHeader(display);
           ClipboardError(CLIPBOARD_CORRUPT, CORRUPT_DATA_STRUCTURE);
+          ClipboardUnlock(display, window, 0);
           return ClipboardFail;
         }
         copiedlength = matchformat->copiedLength;
