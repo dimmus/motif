@@ -1,0 +1,52 @@
+.TH "XmeDragSource" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeDragSource\fP \(em A widget writer function that starts a drag from a widget
+.iX "XmeDragSource"
+.iX "Xme transfer functions" "XmeDragSource"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/TransferP\&.h>
+\fBWidget \fBXmeDragSource\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBXtPointer \fBlocation_data\fR\fR,
+\fBXEvent *\fBevent\fR\fR,
+\fBArgList \fBin_args\fR\fR,
+\fBCardinal \fBin_arg_count\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeDragSource\fP starts a drag and drop operation from \fIw\fP,
+with
+\fB\%XmDragStart\fP\&.  The export targets of the drag are those \fIw\fP
+lists
+when asked to convert \fB\%_MOTIF_EXPORT_TARGETS\fP (with the selection
+\fB\%_MOTIF_DROP\fP); when the drop site asks for data, \fIw\fP converts
+it like
+a selection, through its \fB\%XmNconvertCallback\fP callbacks and the
+convert procedure of its \fB\%XmQTtransfer\fP trait, with
+\fIlocation_data\fP
+in the callback structure\&.  The arguments \fIin_args\fP are passed on
+to
+the DragContext; \fB\%XmNconvertProc\fP, \fB\%XmNexportTargets\fP,
+\fB\%XmNnumExportTargets\fP and \fB\%XmNclientData\fP are set by
+\fB\%XmeDragSource\fP\&.
+.IP "\fIw\fP" 10
+Specifies the source widget\&.
+.IP "\fIlocation_data\fP" 10
+Specifies what is dragged, in a form the widget defines\&.
+.IP "\fIevent\fP" 10
+Specifies the event that started the drag\&.
+.IP "\fIin_args\fP" 10
+Specifies resources of the DragContext\&.
+.IP "\fIin_arg_count\fP" 10
+Specifies the number of arguments in \fIin_args\fP\&.
+.SH "RETURN"
+.PP
+Returns the DragContext, or NULL if \fIw\fP exports no targets\&.
+.SH "RELATED"
+.PP
+\fB\%XmDragStart\fP(3), \fB\%XmDragContext\fP(3),
+\fB\%XmeDropSink\fP(3), \fB\%XmTransferValue\fP(3),
+\fB\%XmTransferDone\fP(3) and \fB\%XmeStandardConvert\fP(3)\&.

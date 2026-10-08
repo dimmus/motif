@@ -43,10 +43,16 @@
 #define WARNING1 _XmMMsgColObj_0001
 #define WARNING2 _XmMMsgColObj_0002
 static int trap_XCloseDisplay(Display *disp, XExtCodes *codes);
-/** default should not be killed unless application is dying **/
+/*
+ * The ColorObj of each display is saved in that display's own context
+ * table (resource id None, context _XmColorObjCache), so that it goes
+ * away with the display.  _XmDefaultColorObj is the first one created,
+ * for the obsolete interfaces that take no display; it is reset when it
+ * is destroyed or its display is closed.  Both are guarded by the
+ * process lock.
+ */
 externaldef(colorobj) XmColorObj _XmDefaultColorObj = NULL;
 externaldef(colorobj) XContext _XmColorObjCache = 0;
-externaldef(colorobj) Display *_XmColorObjCacheDisplay = NULL;
 /********    Static Function Declarations    ********/
 static void Destroy(Widget wid);
 static void DisplayDestroy(Widget wid, XtPointer clientData, XtPointer callData);
@@ -250,11 +256,13 @@ void _XmColorObjCreate(Widget w, ArgList al, Cardinal *acPtr)
       return;
     }
   /** this is really gross but it makes the resources work right **/
+  /* Hold the lock until the shell has its resources: another display's
+   * application class must not replace the class name in between. */
   XtGetApplicationNameAndClass(XtDisplay(w), &name, &obj_class);
   _XmProcessLock();
   xmColorObjClass->core_class.class_name = obj_class;
-  _XmProcessUnlock();
   XtAppCreateShell(name, obj_class, xmColorObjClass, XtDisplay(w), NULL, 0);
+  _XmProcessUnlock();
   /** set up destroy callback on display object for this ColorObj **/
   XtAddCallback(w, XmNdestroyCallback, DisplayDestroy, NULL);
 }
@@ -273,14 +281,11 @@ static void DisplayDestroy(Widget wid, XtPointer clientData, XtPointer callData)
   _XmProcessLock();
   context = _XmColorObjCache;
   _XmProcessUnlock();
-  if (_XmColorObjCacheDisplay)
-    if (XFindContext(
-            _XmColorObjCacheDisplay, (XID)XtDisplay(wid), context, (XPointer *)&tmpColorObj) == 0)
-    {
-      if (tmpColorObj) {
-        XtDestroyWidget((Widget)tmpColorObj);
-      }
+  if (context && XFindContext(XtDisplay(wid), None, context, (XPointer *)&tmpColorObj) == 0) {
+    if (tmpColorObj) {
+      XtDestroyWidget((Widget)tmpColorObj);
     }
+  }
 }
 
 /**********************************************************************/
@@ -293,27 +298,24 @@ static void Destroy(Widget wid)
 {
   XmColorObj tmpColorObj = (XmColorObj)wid;
   XContext context;
+  /* Unpublish the object before freeing its data: the obsolete
+     interfaces read the default one from any thread. */
   _XmProcessLock();
   context = _XmColorObjCache;
+  /* we're destory the "default" color obj, which shouldn't
+       be use anyway, set it to null. A better solution would be
+       to look for a new default, but XmeGetPixelData is obsolete
+       API anyway */
+  if (tmpColorObj == _XmDefaultColorObj)
+    _XmDefaultColorObj = NULL;
   _XmProcessUnlock();
+  XDeleteContext(tmpColorObj->color_obj.display, None, context);
   if (tmpColorObj->color_obj.colors)
     XtFree((char *)tmpColorObj->color_obj.colors);
   if (tmpColorObj->color_obj.atoms)
     XtFree((char *)tmpColorObj->color_obj.atoms);
   if (tmpColorObj->color_obj.colorUse)
     XtFree((char *)tmpColorObj->color_obj.colorUse);
-  if (_XmColorObjCacheDisplay)
-    XDeleteContext(_XmColorObjCacheDisplay, (XID)tmpColorObj->color_obj.display, context);
-  _XmProcessLock();
-  /* we're destory the "default" color obj, which shouldn't
-       be use anyway, set it to null. A better solution would be
-       to look for a new default, but XmeGetPixelData is obsolete
-       API anyway */
-  if (tmpColorObj == _XmDefaultColorObj) {
-    _XmDefaultColorObj = NULL;
-    _XmColorObjCacheDisplay = NULL;
-  }
-  _XmProcessUnlock();
 }
 
 /**********************************************************************/
@@ -354,18 +356,13 @@ static void Initialize(Widget rq, /* unused */
   _XmProcessLock();
   if (!_XmColorObjCache)
     _XmColorObjCache = XUniqueContext();
-  if (_XmColorObjCacheDisplay == NULL) {
-    _XmColorObjCacheDisplay = new_obj->color_obj.display;
-    xExt = XAddExtension(_XmColorObjCacheDisplay);
-    XESetCloseDisplay(_XmColorObjCacheDisplay, xExt->extension, trap_XCloseDisplay);
-  }
-  if (_XmDefaultColorObj == NULL)
+  if (_XmDefaultColorObj == NULL) {
     _XmDefaultColorObj = new_obj;
+    xExt = XAddExtension(new_obj->color_obj.display);
+    XESetCloseDisplay(new_obj->color_obj.display, xExt->extension, trap_XCloseDisplay);
+  }
   /** add new colorObj to the cache **/
-  XSaveContext(_XmColorObjCacheDisplay,
-               (XID)new_obj->color_obj.display,
-               _XmColorObjCache,
-               (XPointer)new_obj);
+  XSaveContext(new_obj->color_obj.display, None, _XmColorObjCache, (XPointer)new_obj);
   _XmProcessUnlock();
   /** if useColorObj = False, don't initialize or allocate color data **/
   if (new_obj->color_obj.useColorObj) {
@@ -936,8 +933,9 @@ Boolean XmeGetIconControlInfo(Screen *screen, /* unused */
                               Boolean *useMultiColorIconsRtn,
                               Boolean *useIconFileCacheRtn)
 {
-  XmColorObj tmpColorObj = _XmDefaultColorObj;
+  XmColorObj tmpColorObj;
   _XmProcessLock();
+  tmpColorObj = _XmDefaultColorObj;
   /* return False if color srv is not running, or color obj not used */
   if (!tmpColorObj || !tmpColorObj->color_obj.colorIsRunning ||
       !tmpColorObj->color_obj.useColorObj)
@@ -972,12 +970,14 @@ Boolean XmeGetColorObjData(Screen *screen,
                            short *text_id)
 {
   XmColorObj tmpColorObj;
+  XContext context;
   int screen_num, k;
+  _XmProcessLock();
+  context = _XmColorObjCache;
+  _XmProcessUnlock();
   /* find the color obj for this screen's display */
-  if ((!_XmColorObjCacheDisplay) || (XFindContext(_XmColorObjCacheDisplay,
-                                                  (XID)XDisplayOfScreen(screen),
-                                                  _XmColorObjCache,
-                                                  (XPointer *)&tmpColorObj) != 0))
+  if (!context ||
+      XFindContext(XDisplayOfScreen(screen), None, context, (XPointer *)&tmpColorObj) != 0)
   {
     /* no color obj for this display */
     return False;
@@ -1031,24 +1031,24 @@ Boolean XmeGetColorObjData(Screen *screen,
 Boolean XmeGetPixelData(
     int screen_number, int *colorUse, XmPixelSet *pixelSet, short *a, short *i, short *p, short *s)
 {
-  Display *display;
+  Boolean ret;
+  /* Keep the default ColorObj, and so its display, while using it. */
   _XmProcessLock();
-  if (_XmDefaultColorObj)
-    display = XtDisplay(_XmDefaultColorObj);
-  else {
+  if (!_XmDefaultColorObj) {
     _XmProcessUnlock();
     return False;
   }
+  ret = XmeGetColorObjData(XScreenOfDisplay(XtDisplay(_XmDefaultColorObj), screen_number),
+                           colorUse,
+                           pixelSet,
+                           XmCO_NUM_COLORS,
+                           a,
+                           i,
+                           p,
+                           s,
+                           NULL);
   _XmProcessUnlock();
-  return XmeGetColorObjData(XScreenOfDisplay(display, screen_number),
-                            colorUse,
-                            pixelSet,
-                            XmCO_NUM_COLORS,
-                            a,
-                            i,
-                            p,
-                            s,
-                            NULL);
+  return ret;
 }
 
 static Boolean NotBW(Screen *screen, Pixel pixel)
@@ -1209,7 +1209,9 @@ Boolean XmeGetDesktopColorCells(Screen *screen,
 
 static int trap_XCloseDisplay(Display *disp, XExtCodes *codes)
 {
-  if (disp == _XmColorObjCacheDisplay)
-    _XmColorObjCacheDisplay = NULL;
+  _XmProcessLock();
+  if (_XmDefaultColorObj && _XmDefaultColorObj->color_obj.display == disp)
+    _XmDefaultColorObj = NULL;
+  _XmProcessUnlock();
   return 0;
 }

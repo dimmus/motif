@@ -98,8 +98,8 @@ typedef Widget (*XmWidgetFunc)(Widget);
 /************************************************************
  *	EXTERNAL DECLARATIONS
  *************************************************************/
-void XmCopyISOLatin1Lowered(char *, char *);
-int XmCompareISOLatin1(char *, char *);
+void XmCopyISOLatin1Lowered(char *, const char *);
+int XmCompareISOLatin1(const char *, const char *);
 Boolean XmCompareXtWidgetGeometryToWidget(XtWidgetGeometry *, Widget);
 Boolean XmCompareXtWidgetGeometry(XtWidgetGeometry *, XtWidgetGeometry *);
 #if defined(__cplusplus)

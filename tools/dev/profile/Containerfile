@@ -1,0 +1,36 @@
+# Profiling image for Motif: perf, valgrind (callgrind), heaptrack and
+# the xtrace X11 protocol tracer, with what is needed to build this tree
+# (CMake) and the older releases (autotools), and the debug symbols of
+# the X libraries (from Ubuntu's ddebs archive) so that the profiles name
+# their functions.
+#
+#   podman build -t motif-profile -f tools/dev/profile/Containerfile .
+#
+# or, where "podman build" cannot mount its build context,
+# tools/dev/profile/mkimage.sh.  See doc/profiling.md.
+FROM docker.io/library/ubuntu:24.04
+
+ENV DEBIAN_FRONTEND=noninteractive LANG=C.UTF-8 LC_ALL=C.UTF-8
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        build-essential cmake ninja-build pkg-config flex libfl-dev bison \
+        autoconf autoconf-archive automake autopoint libtool m4 \
+        gettext ca-certificates curl \
+        libx11-dev libxt-dev libxmu-dev libxext-dev libxpm-dev \
+        libxft-dev libfontconfig-dev libfreetype-dev libjpeg-dev \
+        libpng-dev check \
+        xvfb xauth xfonts-base fonts-dejavu-core x11-utils xdotool \
+        valgrind heaptrack xtrace \
+        linux-tools-common linux-tools-generic \
+        libc6-dbg ubuntu-dbgsym-keyring \
+        xbitmaps python3 time \
+    && echo "deb http://ddebs.ubuntu.com noble main universe" \
+            >/etc/apt/sources.list.d/ddebs.list \
+    && echo "deb http://ddebs.ubuntu.com noble-updates main universe" \
+            >>/etc/apt/sources.list.d/ddebs.list \
+    && apt-get update && apt-get install -y --no-install-recommends \
+        libx11-6-dbgsym libxt6t64-dbgsym libxcb1-dbgsym libxft2-dbgsym \
+        libxrender1-dbgsym libxext6-dbgsym \
+    && rm -rf /var/lib/apt/lists/* \
+    && ln -sf "$(ls -d /usr/lib/linux-tools/*/perf | head -n 1)" \
+              /usr/local/bin/perf

@@ -54,6 +54,7 @@
 #include <Xm/VaSimpleP.h>
 #include <Xm/XmP.h>
 #include <Xm/XmosP.h>
+#include <limits.h>
 /* spacing between the line and the detail string.
    Those could be moved as plain resources later. */
 #define DEFAULT_LABEL_MARGIN_WIDTH 2
@@ -86,6 +87,7 @@ static void GetValuesPosthook(Widget new_w, ArgList args, Cardinal *num_args);
 static Boolean SetValuesPosthook(
     Widget current, Widget req, Widget new_w, ArgList args, Cardinal *num_args);
 static int IconGCacheCompare(XtPointer A, XtPointer B);
+static unsigned int IconGCacheHash(XtPointer cpart);
 static Cardinal GetIconGClassSecResData(WidgetClass w_class, XmSecondaryResourceData **data_rtn);
 static XtPointer GetIconGClassSecResBase(Widget widget, XtPointer client_data);
 /* RectObj methods */
@@ -158,11 +160,18 @@ static Boolean PointIn(Widget widget, Position x, Position y);
    IconConverter. */
 static XContext largeIconContext = 0;
 static XContext smallIconContext = 0;
-static XPointer dummy;
+static _Thread_local XPointer dummy; /* XFindContext output only */
+/* XContext hashes an id as ((id << 1) + context) & mask, so gadget
+   addresses, which share their alignment, would crowd into a few of
+   its buckets: rotate the alignment bits out of the low end (a
+   bijection, so every gadget keeps an id of its own). */
+#define MaskId(widget) \
+  ((XID)(((unsigned long)(widget) >> 4) | \
+         ((unsigned long)(widget) << (sizeof(unsigned long) * CHAR_BIT - 4))))
 #define OwnLargeMask(widget) \
-  (XFindContext(XtDisplay(widget), (Window)widget, largeIconContext, &dummy) == 0)
+  (XFindContext(XtDisplay(widget), MaskId(widget), largeIconContext, &dummy) == 0)
 #define OwnSmallMask(widget) \
-  (XFindContext(XtDisplay(widget), (Window)widget, smallIconContext, &dummy) == 0)
+  (XFindContext(XtDisplay(widget), MaskId(widget), smallIconContext, &dummy) == 0)
 #define MESSAGE0 _XmMMsgPixConv_0000
 /***** The resources of this class */
 static XtResource resources[] = {
@@ -604,10 +613,10 @@ static void FetchPixmap(Widget widget, String image_name, unsigned char res_type
     /* mark that we have to destroy the mask */
     if (*(Pixmap *)mask_addr != XmUNSPECIFIED_PIXMAP) {
       if (res_type == XmLARGE_ICON) {
-        XSaveContext(XtDisplay(widget), (Window)widget, largeIconContext, (XPointer)True);
+        XSaveContext(XtDisplay(widget), MaskId(widget), largeIconContext, (XPointer)True);
       }
       else {
-        XSaveContext(XtDisplay(widget), (Window)widget, smallIconContext, (XPointer)True);
+        XSaveContext(XtDisplay(widget), MaskId(widget), smallIconContext, (XPointer)True);
       }
     }
   }
@@ -715,15 +724,15 @@ static void SecondaryObjectCreate(Widget req, Widget new_w, ArgList args, Cardin
   /*
    * fetch the resources in superclass to subclass order
    */
-  XtGetSubresources(new_w,
-                    newSec,
-                    NULL,
-                    NULL,
-                    wc->core_class.resources,
-                    wc->core_class.num_resources,
-                    args,
-                    *num_args);
-  extData = (XmWidgetExtData)XtCalloc(1, sizeof(XmWidgetExtDataRec));
+  _XmGetSubresources(new_w,
+                     newSec,
+                     NULL,
+                     NULL,
+                     wc->core_class.resources,
+                     wc->core_class.num_resources,
+                     args,
+                     *num_args);
+  extData = _XmExtDataAlloc();
   extData->widget = (Widget)newSec;
   extData->reqWidget = (Widget)reqSec;
   ((XmIconGCacheObject)newSec)->ext.extensionType = XmCACHE_EXTENSION;
@@ -761,7 +770,7 @@ static void InitializePosthook(Widget req, Widget new_w, ArgList args, Cardinal 
   _XmExtObjFree((XtPointer)ext->widget);
   _XmExtObjFree((XtPointer)ext->reqWidget);
   _XmProcessUnlock();
-  XtFree((char *)ext);
+  _XmExtDataFree(ext);
 }
 
 /************************************************************************
@@ -794,7 +803,7 @@ static Boolean SetValuesPrehook(
   newSec->ext.logicalParent = newParent;
   newSec->ext.extensionType = XmCACHE_EXTENSION;
   memcpy(&(newSec->icon_cache), IG_Cache(newParent), sizeof(XmIconGCacheObjPart));
-  extData = (XmWidgetExtData)XtCalloc(1, sizeof(XmWidgetExtDataRec));
+  extData = _XmExtDataAlloc();
   extData->widget = (Widget)newSec;
   extData->reqWidget = (Widget)reqSec;
   _XmPushWidgetExtData(newParent, extData, XmCACHE_EXTENSION);
@@ -835,7 +844,7 @@ static void GetValuesPrehook(Widget newParent, ArgList args, Cardinal *num_args)
   newSec->ext.logicalParent = newParent;
   newSec->ext.extensionType = XmCACHE_EXTENSION;
   memcpy(&(newSec->icon_cache), IG_Cache(newParent), sizeof(XmIconGCacheObjPart));
-  extData = (XmWidgetExtData)XtCalloc(1, sizeof(XmWidgetExtDataRec));
+  extData = _XmExtDataAlloc();
   extData->widget = (Widget)newSec;
   _XmPushWidgetExtData(newParent, extData, XmCACHE_EXTENSION);
   XtGetSubvalues(
@@ -855,7 +864,7 @@ static void GetValuesPosthook(Widget new_w, ArgList args, Cardinal *num_args)
   _XmProcessLock();
   _XmExtObjFree((XtPointer)ext->widget);
   _XmProcessUnlock();
-  XtFree((char *)ext);
+  _XmExtDataFree(ext);
 }
 
 /************************************************************************
@@ -886,7 +895,7 @@ static Boolean SetValuesPosthook(
   _XmExtObjFree((XtPointer)ext->widget);
   _XmExtObjFree((XtPointer)ext->reqWidget);
   _XmProcessUnlock();
-  XtFree((char *)ext);
+  _XmExtDataFree(ext);
   return FALSE;
 }
 
@@ -900,6 +909,7 @@ static Boolean SetValuesPosthook(
 static void ClassInitialize(void)
 {
   iconGBaseClassExtRec.record_type = XmQmotif;
+  _XmCacheSetHashProc(&IconGClassCachePart, IconGCacheHash);
   /* Install the special converters for pixmap/mask */
   XtSetTypeConverter(XmRString,
                      XmRLargeIconPixmap,
@@ -1091,11 +1101,15 @@ static void Destroy(Widget wid)
       XmStringFree(IG_Detail(wid)[i]);
     XtFree((char *)IG_Detail(wid));
   }
+  /* Forget the masks too, or a later gadget at this address would think
+     it owns its own. */
   if (OwnLargeMask(wid)) {
+    XDeleteContext(XtDisplay(wid), MaskId(wid), largeIconContext);
     if (PIXMAP_VALID(IG_LargeIconMask(wid)))
       XmDestroyPixmap(XtScreen(wid), IG_LargeIconMask(wid));
   }
   if (OwnSmallMask(wid)) {
+    XDeleteContext(XtDisplay(wid), MaskId(wid), smallIconContext);
     if (PIXMAP_VALID(IG_SmallIconMask(wid)))
       XmDestroyPixmap(XtScreen(wid), IG_SmallIconMask(wid));
   }
@@ -1993,8 +2007,8 @@ static Boolean SetValues(Widget cw,
     Relayout = Redraw = True;
   }
   if (IG_LargeIconMask(nw) != IG_LargeIconMask(cw)) {
-    if (OwnLargeMask(cw)) {
-      XDeleteContext(XtDisplay(nw), (Window)nw, largeIconContext);
+    if (OwnLargeMask(nw)) {
+      XDeleteContext(XtDisplay(nw), MaskId(nw), largeIconContext);
       if (PIXMAP_VALID(IG_LargeIconMask(cw)))
         XmDestroyPixmap(XtScreen(cw), IG_LargeIconMask(cw));
     }
@@ -2015,8 +2029,8 @@ static Boolean SetValues(Widget cw,
     IG_LargeIconRectHeight(nw) = (unsigned short)h;
   }
   if (IG_SmallIconMask(nw) != IG_SmallIconMask(cw)) {
-    if (OwnSmallMask(cw)) {
-      XDeleteContext(XtDisplay(nw), (Window)nw, smallIconContext);
+    if (OwnSmallMask(nw)) {
+      XDeleteContext(XtDisplay(nw), MaskId(nw), smallIconContext);
       if (PIXMAP_VALID(IG_SmallIconMask(cw)))
         XmDestroyPixmap(XtScreen(cw), IG_SmallIconMask(cw));
     }
@@ -2304,6 +2318,40 @@ static int IconGCacheCompare(XtPointer A, XtPointer B)
     return 1;
   else
     return 0;
+}
+
+/*
+ * A hash of the fields that IconGCacheCompare compares, for the cache
+ * index.  That compares the top shadow pixmap of one part with the
+ * background pixmap of the other and the other way round, so only the
+ * sum of the two goes into the hash.
+ */
+static unsigned int IconGCacheHash(XtPointer cpart)
+{
+  XmIconGCacheObjPart *p = (XmIconGCacheObjPart *)cpart;
+  unsigned int h = 0;
+  h = _XmCacheHashAdd(h, (unsigned long)p->render_table);
+  h = _XmCacheHashAdd(h, (unsigned long)p->selected_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->inverse_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->normal_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->background_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->insensitive_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->top_shadow_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->bottom_shadow_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->highlight_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->background);
+  h = _XmCacheHashAdd(h, (unsigned long)p->foreground);
+  h = _XmCacheHashAdd(h, (unsigned long)p->top_shadow_color);
+  h = _XmCacheHashAdd(h, (unsigned long)p->highlight_color);
+  h = _XmCacheHashAdd(h, (unsigned long)(p->top_shadow_pixmap + p->background_pixmap));
+  h = _XmCacheHashAdd(h, (unsigned long)p->highlight_pixmap);
+  h = _XmCacheHashAdd(h, (unsigned long)p->bottom_shadow_color);
+  h = _XmCacheHashAdd(h, (unsigned long)p->bottom_shadow_pixmap);
+  h = _XmCacheHashAdd(h, (unsigned long)p->alignment);
+  h = _XmCacheHashAdd(h, (unsigned long)p->spacing);
+  h = _XmCacheHashAdd(h, (unsigned long)p->margin_width);
+  h = _XmCacheHashAdd(h, (unsigned long)p->margin_height);
+  return h;
 }
 
 /****************************************************
@@ -2980,7 +3028,7 @@ Widget XmCreateIconGadget(Widget parent, char *name, ArgList arglist, Cardinal a
   return (XtCreateWidget(name, xmIconGadgetClass, parent, arglist, argcount));
 }
 
-Widget XmVaCreateIconGadget(Widget parent, char *name, ...)
+Widget XmVaCreateIconGadget(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -2994,7 +3042,7 @@ Widget XmVaCreateIconGadget(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedIconGadget(Widget parent, char *name, ...)
+Widget XmVaCreateManagedIconGadget(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

@@ -138,15 +138,29 @@ typedef struct __XmFontRenditionRec {
 #  define _XmRTRefcountDec(rt) --(((_XmRenderTable) * (rt))->refcount)
 #  define RENDITIONS_IN_STRUCT 1
 
+/*
+ * stamp belongs to _XmRenderTableStamp: a new table record starts with
+ * stamp 0.
+ */
 typedef struct __XmRenderTableRec {
   unsigned int mark : REND_MARK_BITS;
   unsigned int refcount : REND_REFCOUNT_BITS;
   unsigned short count;
+  unsigned long long stamp;
   Display *display;
   XmRendition renditions[RENDITIONS_IN_STRUCT];
 } _XmRenderTableRec, *_XmRenderTable;
 
 /********    Private Function Declarations for XmRenderTable.c    ********/
+/*
+ * What is computed from a render table can be cached under its stamp:
+ * _XmRenderTableStamp returns the same nonzero number for two calls
+ * only if the table and its renditions did not change in between.
+ * Whatever changes a table record or a rendition in place calls
+ * _XmRenderTableChanged.
+ */
+extern unsigned long long _XmRenderTableStamp(XmRenderTable table);
+extern void _XmRenderTableChanged(void);
 extern XmRendition _XmRenderTableFindRendition(XmRenderTable table,
                                                XmStringTag tag,
                                                Boolean cached_tag,
@@ -157,7 +171,7 @@ extern XmRendition _XmRenditionCreate(Display *display,
                                       Widget widget,
                                       String resname,
                                       String resclass,
-                                      XmStringTag tag,
+                                      const char *tag,
                                       ArgList arglist,
                                       Cardinal argcount,
                                       Boolean *in_db);
@@ -182,6 +196,14 @@ extern Boolean _XmRenderTableFindFallback(
 extern Boolean _XmRenderTableFindFirstFont(XmRenderTable rendertable,
                                            short *indx,
                                            XmRendition *rend_ptr);
+/* What separates the tags of the renditions in a render table string. */
+#  define _XmRENDITION_TAG_DELIMITERS " \t\r\n\v\f,"
+extern XmRenderTable _XmRenderTableCvtCacheGet(
+    Widget wid, String resname, String resclass, char *spec, XtPointer *pending);
+extern void _XmRenderTableCvtCachePut(Widget wid,
+                                      XtPointer pending,
+                                      XmRenderTable table,
+                                      Boolean font_list);
 extern XmRenderTable _XmRenderTableRemoveRenditions(XmRenderTable oldtable,
                                                     XmStringTag *tags,
                                                     int tag_count,

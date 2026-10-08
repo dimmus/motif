@@ -1,0 +1,80 @@
+.TH "XmeToHorizontalPixels" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeToHorizontalPixels\fP,
+\fB\%XmeToVerticalPixels\fP,
+\fB\%XmeFromHorizontalPixels\fP,
+\fB\%XmeFromVerticalPixels\fP \(em Widget writer functions that convert resource values between pixels and the unit type of a widget
+.iX "XmeToHorizontalPixels"
+.iX "Xme functions" "XmeToHorizontalPixels"
+.iX "Xme functions" "XmeToVerticalPixels"
+.iX "Xme functions" "XmeFromHorizontalPixels"
+.iX "Xme functions" "XmeFromVerticalPixels"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/XmP\&.h>
+.PP
+\fBXmImportOperator \fBXmeToHorizontalPixels\fP\fR(
+\fBWidget \fBwidget\fR\fR,
+\fBint \fBoffset\fR\fR,
+\fBXtArgVal *\fBvalue\fR\fR);
+\fBXmImportOperator \fBXmeToVerticalPixels\fP\fR(
+\fBWidget \fBwidget\fR\fR,
+\fBint \fBoffset\fR\fR,
+\fBXtArgVal *\fBvalue\fR\fR);
+.PP
+\fBvoid \fBXmeFromHorizontalPixels\fP\fR(
+\fBWidget \fBwidget\fR\fR,
+\fBint \fBoffset\fR\fR,
+\fBXtArgVal *\fBvalue\fR\fR);
+\fBvoid \fBXmeFromVerticalPixels\fP\fR(
+\fBWidget \fBwidget\fR\fR,
+\fBint \fBoffset\fR\fR,
+\fBXtArgVal *\fBvalue\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+These functions are the import and export procedures of the synthetic
+resources whose values are distances: a widget lists them in the
+synthetic resource tables of its class (\fB\%XmSyntheticResource\fP), so
+that the resources are set and read in the unit type of the widget
+(\fB\%XmNunitType\fP, or what its class gives through the
+\fB\%XmQTspecifyUnitType\fP trait), while the widget stores them in
+pixels\&.
+.PP
+\fB\%XmeToHorizontalPixels\fP and \fB\%XmeToVerticalPixels\fP convert
+\fIvalue\fP
+in place from the unit type of \fIwidget\fP to pixels, using the
+horizontal or vertical resolution of the screen; they are import
+procedures, called by \fB\%XtSetValues\fP and at creation\&.
+\fB\%XmeFromHorizontalPixels\fP and \fB\%XmeFromVerticalPixels\fP
+convert
+\fIvalue\fP from pixels to the unit type of the widget; they are export
+procedures, called by \fB\%XtGetValues\fP\&.  Nothing is converted when
+the
+unit type is \fB\%XmPIXELS\fP\&.
+.IP "\fIwidget\fP" 10
+Specifies the widget whose unit type is used\&.
+.IP "\fIoffset\fP" 10
+Specifies the offset of the resource in the widget; it is not used\&.
+.IP "\fIvalue\fP" 10
+Specifies the value to convert, and returns the converted value\&.
+.PP
+Motif 1\&.2 called these functions \fB\%_XmToHorizontalPixels\fP,
+\fB\%_XmToVerticalPixels\fP, \fB\%_XmFromHorizontalPixels\fP and
+\fB\%_XmFromVerticalPixels\fP\&.  The library still exports those names
+for
+old binaries, and \fB\%<Xm/XmP\&.h>\fP defines them as macros for the
+Xme
+functions unless \fB\%NO_XM_1_2_BC\fP is defined\&.
+.SH "RETURN"
+.PP
+\fB\%XmeToHorizontalPixels\fP and \fB\%XmeToVerticalPixels\fP return
+\fB\%XmSYNTHETIC_LOAD\fP, which tells the caller to store \fIvalue\fP in
+the
+widget\&.
+.SH "RELATED"
+.PP
+\fB\%XmConvertUnits\fP(3), \fB\%XmCvtToHorizontalPixels\fP(3) and
+\fB\%XmPrimitive\fP(3)\&.

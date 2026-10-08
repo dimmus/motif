@@ -149,7 +149,7 @@ static int GetOverrideColors(Screen *screen,
                              XmAccessColorData acc_color,
                              XpmColorSymbol *override_colors);
 static XtEnum GetXpmImage(Screen *screen,
-                          char *image_name,
+                          const char *image_name,
                           char *file_name,
                           XmAccessColorData acc_color,
                           XImage **image,
@@ -157,7 +157,7 @@ static XtEnum GetXpmImage(Screen *screen,
                           Pixel **pixels,
                           int *npixels);
 static XtEnum GetImage(Screen *screen,
-                       char *image_name,
+                       const char *image_name,
                        XmAccessColorData acc_color,
                        XImage **image,
                        unsigned short *pixmap_resolution,
@@ -202,9 +202,12 @@ static XmHashValue HashString(XmHashKey key)
 static void InitializeImageSet(void)
 {
   int i;
-  /* Allocate the hash table. */
-  assert(image_set == NULL);
+  /* Allocate the hash table, once: any thread may get here first. */
   _XmProcessLock();
+  if (image_set != NULL) {
+    _XmProcessUnlock();
+    return;
+  }
   image_set = _XmAllocHashTable(MAX_BUILTIN_IMAGES + 100, CompareStrings, HashString);
   /* Load the built-in image data.
      Builtins have a non NULL builtin data.
@@ -228,18 +231,18 @@ static void InitializeImageSet(void)
  *		Allow a hot_spot to be specified
  *
  ************************************************************************/
-Boolean _XmInstallImage(XImage *image, char *image_name, int hot_x, int hot_y)
+Boolean _XmInstallImage(XImage *image, const char *image_name, int hot_x, int hot_y)
 {
   ImageData *entry;
   /*  Error checking  */
   if (image == NULL || image_name == NULL)
     return (False);
   /*  Check for the initial allocation of the image set array  */
-  if (image_set == NULL)
-    InitializeImageSet();
+  InitializeImageSet();
   /*  Verify that the image_name is not already in the image set.  */
   _XmProcessLock();
-  if (_XmGetHashEntry(image_set, image_name) != NULL) {
+  /* CompareStrings and HashString only read the key */
+  if (_XmGetHashEntry(image_set, (XmHashKey)image_name) != NULL) {
     _XmProcessUnlock();
     return (False);
   }
@@ -262,7 +265,7 @@ Boolean _XmInstallImage(XImage *image, char *image_name, int hot_x, int hot_y)
  *	id to be used for further referencing.
  *
  ************************************************************************/
-Boolean XmInstallImage(XImage *image, char *image_name)
+Boolean XmInstallImage(XImage *image, const char *image_name)
 {
   Boolean ret_val;
   _XmProcessLock();
@@ -305,9 +308,13 @@ Boolean XmUninstallImage(XImage *image)
   Cardinal old_count;
   Boolean ret_val;
   /*  Check for invalid conditions  */
-  if ((image == NULL) || (image_set == NULL))
+  if (image == NULL)
     return (False);
   _XmProcessLock();
+  if (image_set == NULL) {
+    _XmProcessUnlock();
+    return (False);
+  }
   /*  Since we can't index based on the image, search the hash table */
   /*  until the desired entry is found and then remove it.	      */
   old_count = _XmHashTableCount(image_set);
@@ -516,7 +523,7 @@ static int GetOverrideColors(Screen *screen,
 }
 
 static XtEnum GetXpmImage(Screen *screen,
-                          char *image_name, /* original image file name */
+                          const char *image_name, /* original image file name */
                           char *file_name,
                           XmAccessColorData acc_color,
                           XImage **image,
@@ -655,7 +662,7 @@ static XtEnum GetXpmImage(Screen *screen,
  * Load an image from a file
  */
 static XtEnum LoadImage(Screen *screen,
-                        char *image_name,
+                        const char *image_name,
                         XmAccessColorData acc_color,
                         XImage **image,
                         unsigned short *pixmap_res,
@@ -719,7 +726,7 @@ static XtEnum LoadImage(Screen *screen,
  *
  ************************************************************************/
 static XtEnum GetImage(Screen *screen,
-                       char *image_name,
+                       const char *image_name,
                        XmAccessColorData acc_color,
                        XImage **image,
                        unsigned short *pixmap_resolution,
@@ -737,13 +744,13 @@ static XtEnum GetImage(Screen *screen,
   if (npixels)
     *npixels = 0;
   /***  Check for the initial allocation of the image set array  */
-  if (image_set == NULL)
-    InitializeImageSet();
+  InitializeImageSet();
   if (!image_name)
     return FALSE;
   /*** look in the XImage cache first */
   _XmProcessLock();
-  entry = (ImageData *)_XmGetHashEntry(image_set, image_name);
+  /* CompareStrings and HashString only read the key */
+  entry = (ImageData *)_XmGetHashEntry(image_set, (XmHashKey)image_name);
   _XmProcessUnlock();
   if (entry) {
     /*  If the image is a builtin image then get it.  */
@@ -791,13 +798,13 @@ Boolean _XmGetImage(Screen *screen, char *image_name, XImage **image)
  *       Used by IconFile.c
  *
  ************************************************************************/
-Boolean _XmInImageCache(String image_name)
+Boolean _XmInImageCache(const char *image_name)
 {
-  XtPointer ret_val;
-  if (!image_set)
-    return False;
+  XtPointer ret_val = NULL;
   _XmProcessLock();
-  ret_val = _XmGetHashEntry(image_set, image_name);
+  /* CompareStrings and HashString only read the key */
+  if (image_set)
+    ret_val = _XmGetHashEntry(image_set, (XmHashKey)image_name);
   _XmProcessUnlock();
   return (ret_val != NULL);
 }
@@ -883,8 +890,11 @@ static void InitializePixmapSets(void)
   /* Allocate the pixmap hash tables.
      One for the regular XmGetPixmap lookup, one for the
      XmeGetPixmapData lookup */
-  assert(pixmap_data_set == NULL && pixmap_set == NULL);
   _XmProcessLock();
+  if (pixmap_data_set != NULL) {
+    _XmProcessUnlock();
+    return;
+  }
   pixmap_data_set = _XmAllocHashTable(100, ComparePixmapDatas, HashPixmapData);
   pixmap_set = _XmAllocHashTable(100, ComparePixmaps, HashPixmap);
   _XmProcessUnlock();
@@ -915,8 +925,7 @@ Boolean _XmCachePixmap(Pixmap pixmap,
   /*  Error checking  */
   if (image_name == NULL)
     return (False);
-  if (!pixmap_data_set)
-    InitializePixmapSets();
+  InitializePixmapSets();
   /* if no information was given, get it from the server */
   if (!(width && height && depth))
     XGetGeometry(DisplayOfScreen(screen),
@@ -977,8 +986,7 @@ Boolean _XmGetPixmapData(Screen *screen,
 {
   PixmapData pix_data, *pix_entry;
   ImageData *entry;
-  if (!pixmap_data_set)
-    InitializePixmapSets();
+  InitializePixmapSets();
   /*  checks for a matching screen and pixmap.            */
   pix_data.screen = screen;
   pix_data.pixmap = pixmap;
@@ -1006,16 +1014,17 @@ Boolean _XmGetPixmapData(Screen *screen,
 }
 
 /*******************************************************************/
-/* the real one, used by PixConv and locally too */
-Pixmap _XmGetScaledPixmap(Screen *screen,
-                          Widget widget,
-                          char *image_name,
-                          XmAccessColorData acc_color,
-                          int depth,
-                          Boolean only_if_exists,
-                          double scaling_ratio,
-                          int desired_w,
-                          int desired_h)
+/* the real one, used by PixConv and locally too; the process lock is
+   held, for the caches and the shared XImages */
+static Pixmap GetScaledPixmap(Screen *screen,
+                              Widget widget,
+                              const char *image_name,
+                              XmAccessColorData acc_color,
+                              int depth,
+                              Boolean only_if_exists,
+                              double scaling_ratio,
+                              int desired_w,
+                              int desired_h)
 {
   Display *display = DisplayOfScreen(screen);
   XImage *image;
@@ -1031,8 +1040,7 @@ Pixmap _XmGetScaledPixmap(Screen *screen,
   /*  Error checking  */
   if (image_name == NULL)
     return (XmUNSPECIFIED_PIXMAP);
-  if (!pixmap_data_set)
-    InitializePixmapSets();
+  InitializePixmapSets();
   /* if screen not provided, widget has to be! */
   if (!screen)
     screen = XtScreen(widget);
@@ -1041,7 +1049,7 @@ Pixmap _XmGetScaledPixmap(Screen *screen,
   /* since resolution can be dynamic for a printer, we need
        to use the resolution too, when scaling is 0 */
   pix_data.screen = screen;
-  pix_data.image_name = image_name;
+  pix_data.image_name = (char *)image_name; /* only a lookup key */
   pix_data.depth = depth;
   pix_data.acc_color = acc_color;
   pix_data.print_resolution = 100; /* default */
@@ -1249,6 +1257,34 @@ Pixmap _XmGetScaledPixmap(Screen *screen,
   return (pixmap);
 }
 
+Pixmap _XmGetScaledPixmap(Screen *screen,
+                          Widget widget,
+                          const char *image_name,
+                          XmAccessColorData acc_color,
+                          int depth,
+                          Boolean only_if_exists,
+                          double scaling_ratio,
+                          int desired_w,
+                          int desired_h)
+{
+  Pixmap pixmap;
+  /* Look up, or create and enter, the pixmap under one lock: several
+     threads may want the same one, and the XPM colour cache and the
+     built-in XImages are shared too. */
+  _XmProcessLock();
+  pixmap = GetScaledPixmap(screen,
+                           widget,
+                           image_name,
+                           acc_color,
+                           depth,
+                           only_if_exists,
+                           scaling_ratio,
+                           desired_w,
+                           desired_h);
+  _XmProcessUnlock();
+  return pixmap;
+}
+
 /*******************************************************************
  *
  * _XmGetColoredPixmap
@@ -1279,7 +1315,7 @@ Pixmap _XmGetColoredPixmap(Screen *screen,
  * the given dimension and that of the image.
  */
 Pixmap XmGetSizedPixmap(Widget widget,
-                        char *image_name,
+                        const char *image_name,
                         Pixel foreground,
                         Pixel background,
                         int depth,
@@ -1306,7 +1342,7 @@ Pixmap XmGetSizedPixmap(Widget widget,
 }
 
 Pixmap XmGetScaledPixmap(Widget widget,
-                         char *image_name,
+                         const char *image_name,
                          Pixel foreground,
                          Pixel background,
                          int depth,
@@ -1340,7 +1376,7 @@ Pixmap XmGetScaledPixmap(Widget widget,
  *
  *******************************************************************/
 Pixmap XmGetPixmapByDepth(
-    Screen *screen, char *image_name, Pixel foreground, Pixel background, int depth)
+    Screen *screen, const char *image_name, Pixel foreground, Pixel background, int depth)
 {
   XmAccessColorDataRec acc_color_rec;
   Pixmap ret_val;
@@ -1365,7 +1401,7 @@ Pixmap XmGetPixmapByDepth(
  *  This one is deprecated, but keep it in here, it was public.
  *
  ************************************************************************/
-Pixmap XmGetPixmap(Screen *screen, char *image_name, Pixel foreground, Pixel background)
+Pixmap XmGetPixmap(Screen *screen, const char *image_name, Pixel foreground, Pixel background)
 {
   Pixmap ret_val;
   XtAppContext app = XtDisplayToApplicationContext(DisplayOfScreen(screen));
@@ -1382,7 +1418,7 @@ Pixmap XmGetPixmap(Screen *screen, char *image_name, Pixel foreground, Pixel bac
  *  XmeGetMask
  *
  ************************************************************************/
-Pixmap XmeGetMask(Screen *screen, char *image_name)
+Pixmap XmeGetMask(Screen *screen, const char *image_name)
 {
   char mask_name[256];
   Pixmap ret_val;
@@ -1404,12 +1440,32 @@ Pixmap XmeGetMask(Screen *screen, char *image_name)
  *      then remove it from both pixmap and pixmap_data tables.
  *
  ************************************************************************/
+/* Remove a pixmap from the cache and free it; the process lock is held */
+static void FreePixmapEntry(PixmapData *pix_entry)
+{
+  _XmRemoveHashEntry(pixmap_data_set, pix_entry);
+  _XmRemoveHashEntry(pixmap_set, pix_entry);
+  if (0 != strcmp(pix_entry->image_name, DIRECT_PIXMAP_CACHED))
+    XFreePixmap(DisplayOfScreen(pix_entry->screen), pix_entry->pixmap);
+  XtFree(pix_entry->image_name);
+  XtFree((char *)pix_entry->acc_color);
+  if (pix_entry->pixels) {
+    FreeCacheColors(DisplayOfScreen(pix_entry->screen),
+                    DefaultColormapOfScreen(pix_entry->screen),
+                    pix_entry->pixels,
+                    pix_entry->npixels,
+                    NULL);
+    XmeXpmFree(pix_entry->pixels);
+  }
+  XtFree((char *)pix_entry);
+}
+
 Boolean XmDestroyPixmap(Screen *screen, Pixmap pixmap)
 {
   PixmapData pix_data, *pix_entry;
   XtAppContext app;
   /*  Check for invalid conditions  */
-  if (screen == NULL || pixmap == 0 || pixmap_set == NULL)
+  if (screen == NULL || pixmap == 0)
     return (False);
   app = XtDisplayToApplicationContext(DisplayOfScreen(screen));
   (void)app; /* may be unused in non-threaded builds */
@@ -1417,25 +1473,12 @@ Boolean XmDestroyPixmap(Screen *screen, Pixmap pixmap)
   _XmProcessLock();
   pix_data.screen = screen;
   pix_data.pixmap = pixmap;
-  if ((pix_entry = (PixmapData *)_XmGetHashEntry(pixmap_set, (XmHashKey)&pix_data)) != NULL) {
+  if (pixmap_set != NULL &&
+      (pix_entry = (PixmapData *)_XmGetHashEntry(pixmap_set, (XmHashKey)&pix_data)) != NULL)
+  {
     pix_entry->reference_count--;
-    if (pix_entry->reference_count == 0) {
-      _XmRemoveHashEntry(pixmap_data_set, pix_entry);
-      _XmRemoveHashEntry(pixmap_set, pix_entry);
-      if (0 != strcmp(pix_entry->image_name, DIRECT_PIXMAP_CACHED))
-        XFreePixmap(DisplayOfScreen(pix_entry->screen), pix_entry->pixmap);
-      XtFree(pix_entry->image_name);
-      XtFree((char *)pix_entry->acc_color);
-      if (pix_entry->pixels) {
-        FreeCacheColors(DisplayOfScreen(pix_entry->screen),
-                        DefaultColormapOfScreen(pix_entry->screen),
-                        pix_entry->pixels,
-                        pix_entry->npixels,
-                        NULL);
-        XmeXpmFree(pix_entry->pixels);
-      }
-      XtFree((char *)pix_entry);
-    }
+    if (pix_entry->reference_count == 0)
+      FreePixmapEntry(pix_entry);
     _XmProcessUnlock();
     _XmAppUnlock(app);
     return True;
@@ -1513,28 +1556,25 @@ static GC GetGCForPutImage(Screen *screen,
   gc_data.image_depth = image->depth;
   gc_data.foreground = foreground;
   gc_data.background = background;
-  /* look if we have a match and return it */
+  /* look if we have a match and return it; else create a new GC, cache
+     it and return it.  The lookup and the insertion are done under one
+     lock, and the entry is complete when it is added. */
   _XmProcessLock();
-  if ((gc_entry = (GCData *)_XmGetHashEntry(gc_set, (XmHashKey)&gc_data)) != NULL) {
-    _XmProcessUnlock();
-    return gc_entry->gc;
+  if ((gc_entry = (GCData *)_XmGetHashEntry(gc_set, (XmHashKey)&gc_data)) == NULL) {
+    gc_entry = XtNew(GCData);
+    gc_entry->screen = screen;
+    gc_entry->print_shell = print_shell;
+    gc_entry->depth = depth;
+    gc_entry->image_depth = image->depth;
+    gc_entry->foreground = foreground;
+    gc_entry->background = background;
+    gcValues.foreground = foreground;
+    gcValues.background = background;
+    gc_entry->gc = XCreateGC(
+        DisplayOfScreen(screen), pixmap, GCForeground | GCBackground, &gcValues);
+    _XmAddHashEntry(gc_set, (XmHashKey)gc_entry, (XtPointer)gc_entry);
   }
   _XmProcessUnlock();
-  /* create a new GC, cache it and return it */
-  gc_entry = XtNew(GCData);
-  gc_entry->screen = screen;
-  gc_entry->print_shell = print_shell;
-  gc_entry->depth = depth;
-  gc_entry->image_depth = image->depth;
-  gc_entry->foreground = foreground;
-  gc_entry->background = background;
-  _XmProcessLock();
-  _XmAddHashEntry(gc_set, (XmHashKey)gc_entry, (XtPointer)gc_entry);
-  _XmProcessUnlock();
-  gcValues.foreground = foreground;
-  gcValues.background = background;
-  gc_entry->gc = XCreateGC(
-      DisplayOfScreen(screen), pixmap, GCForeground | GCBackground, &gcValues);
   return gc_entry->gc;
 }
 
@@ -1550,9 +1590,7 @@ static Boolean CleanGCMapProc(XmHashKey key, /* unused */
   CleanKey *ck = (CleanKey *)data;
   /* shell should be NULL for non printing screen */
   if (entry->print_shell == ck->shell && entry->screen == ck->screen) {
-    _XmProcessLock();
     _XmRemoveHashEntry(gc_set, entry);
-    _XmProcessUnlock();
     XFreeGC(DisplayOfScreen(entry->screen), entry->gc);
     XtFree((char *)entry);
   }
@@ -1568,8 +1606,13 @@ static Boolean CleanPixmapMapProc(XmHashKey key, /* unused */
   CleanKey *ck = (CleanKey *)data;
   /* shell should be NULL for non printing screen */
   if (entry->print_shell == ck->shell && entry->screen == ck->screen) {
-    /* this should take care of everything */
-    XmDestroyPixmap(entry->screen, entry->pixmap);
+    /* When the screen goes away, so do its pixmaps, however many
+       references are left: a later display may get the same Screen
+       address, and must not find them. */
+    if (ck->shell == NULL)
+      FreePixmapEntry(entry);
+    else
+      XmDestroyPixmap(entry->screen, entry->pixmap);
   }
   /* never return True: remove all pixmap keyed on this print shell */
   return False;
@@ -1613,8 +1656,22 @@ void _XmCleanPixmapCache(Screen *screen, Widget shell)
   CleanKey ck;
   ck.screen = screen;
   ck.shell = shell;
-  _XmMapHashTable(gc_set, CleanGCMapProc, &ck);
-  _XmMapHashTable(pixmap_set, CleanPixmapMapProc, &ck);
+  /* The caches are shared by all displays */
+  _XmProcessLock();
+  if (gc_set != NULL)
+    _XmMapHashTable(gc_set, CleanGCMapProc, &ck);
+  if (pixmap_set != NULL)
+    _XmMapHashTable(pixmap_set, CleanPixmapMapProc, &ck);
+  if (shell == NULL) {
+    /* and forget the XPM colours still cached for its display */
+    Display *display = DisplayOfScreen(screen);
+    int i, j;
+    for (i = j = 0; i < colorCacheList.numEntries; i++)
+      if (colorCacheList.cache[i].display != display)
+        colorCacheList.cache[j++] = colorCacheList.cache[i];
+    colorCacheList.numEntries = j;
+  }
+  _XmProcessUnlock();
 }
 
 /************************************************************************

@@ -16,14 +16,17 @@
  *              which other load on the machine disturbs less
  *   - mallocs  calls to malloc/calloc/realloc
  *   - requests X requests (XNextRequest delta)
- *   - rtrips   round trips (calls to _XReply, which XSync also uses)
+ *   - rtrips   round trips (waits for a reply in libxcb, which every Xlib
+ *              call with a reply makes, XSync included)
  *   - icvalues calls to XSetICValues
  * The counters come from libxmbench_preload.so, which xmbench preloads by
  * re-executing itself; set XMBENCH_NO_PRELOAD=1 to run without it.
  *
  * The X requests and round trips of a case are counted before the final
  * XSync that each timed run ends with (the time includes it, so that the
- * server's share of the work is measured too).
+ * server's share of the work is measured too).  The JSON output also
+ * has their exact totals per timed run (the median over REPEAT runs),
+ * which the per-op figures round away when they are rare.
  *
  * Cases that need an X server are skipped when DISPLAY is unset; xmbench
  * exits with 77 when every selected case was skipped.  Results are
@@ -46,6 +49,7 @@
 #include <X11/Shell.h>
 #include <Xm/Xm.h>
 #include <Xm/BulletinB.h>
+#include <Xm/CascadeBG.h>
 #include <Xm/Container.h>
 #include <Xm/DrawP.h>
 #include <Xm/Form.h>
@@ -57,6 +61,7 @@
 #include <Xm/PushBG.h>
 #include <Xm/RowColumn.h>
 #include <Xm/ScrollBarP.h>
+#include <Xm/SeparatoG.h>
 #include <Xm/Separator.h>
 #include <Xm/Text.h>
 #include <Xm/ToggleBG.h>
@@ -89,6 +94,7 @@ struct counters {
 
 struct result {
 	double ns, cpu, mallocs, requests, rtrips, icvalues;
+	double run_requests, run_rtrips;   /* per timed run, not per op */
 };
 
 static XtAppContext app;
@@ -152,7 +158,8 @@ static void run_case(const struct bench_case *bc, long n, int repeat,
 		     struct result *res)
 {
 	double ns[MAX_REPEAT], cpu[MAX_REPEAT], ma[MAX_REPEAT], rq[MAX_REPEAT];
-	double rt[MAX_REPEAT], ic[MAX_REPEAT];
+	double rt[MAX_REPEAT], ic[MAX_REPEAT], rq_run[MAX_REPEAT];
+	double rt_run[MAX_REPEAT];
 	int r;
 
 	if (bc->init)
@@ -182,6 +189,8 @@ static void run_case(const struct bench_case *bc, long n, int repeat,
 		rq[r] = (double)(after.requests - before.requests) / ops;
 		rt[r] = (double)(after.replies - before.replies) / ops;
 		ic[r] = (double)(after.icvalues - before.icvalues) / ops;
+		rq_run[r] = after.requests - before.requests;
+		rt_run[r] = after.replies - before.replies;
 		if (bc->teardown)
 			bc->teardown();
 		drain();
@@ -195,6 +204,8 @@ static void run_case(const struct bench_case *bc, long n, int repeat,
 	res->requests = median(rq, repeat);
 	res->rtrips = median(rt, repeat);
 	res->icvalues = median(ic, repeat);
+	res->run_requests = median(rq_run, repeat);
+	res->run_rtrips = median(rt_run, repeat);
 }
 
 /* Re-execute with the counting library preloaded, unless already done. */
@@ -244,20 +255,6 @@ static void destroy_work(void)
 	if (work) {
 		XtDestroyWidget(work);
 		work = NULL;
-	}
-}
-
-static void pump_ms(int ms)
-{
-	double end = now_ns() + ms * 1e6;
-
-	while (now_ns() < end) {
-		XtInputMask mask = XtAppPending(app);
-
-		if (mask)
-			XtAppProcessEvent(app, mask);
-		else
-			usleep(100);
 	}
 }
 
@@ -321,6 +318,35 @@ static void toggle_init(long n)
 	gadget_new(xmToggleButtonGadgetClass);
 }
 
+static void pushbg_init(long n)
+{
+	(void)n;
+	gadget_new(xmPushButtonGadgetClass);
+}
+
+static void separatorg_init(long n)
+{
+	(void)n;
+	gadget_new(xmSeparatorGadgetClass);
+}
+
+static void icong_init(long n)
+{
+	(void)n;
+	gadget_new(xmIconGadgetClass);
+}
+
+/* A CascadeButtonGadget wants a menu for a parent. */
+static void cascadebg_init(long n)
+{
+	(void)n;
+	work = XmCreateMenuBar(root, "bar", NULL, 0);
+	XtManageChild(work);
+	gadget = XtVaCreateManagedWidget("gadget", xmCascadeButtonGadgetClass,
+					 work, NULL);
+	drain();
+}
+
 /* 1000 shells, each with its extension data, as in a big application. */
 #define N_SHELLS 1000
 static Widget shells[N_SHELLS];
@@ -367,6 +393,41 @@ static long gadget_set_run(long n)
 	return n;
 }
 
+/* The Separator cache has no margin width or alignment. */
+static long separatorg_get_run(long n)
+{
+	Dimension margin = 0;
+	unsigned char type = 0;
+	long i;
+
+	for (i = 0; i < n; i++)
+		XtVaGetValues(gadget, XmNmargin, &margin, XmNseparatorType,
+			      &type, NULL);
+	sink = margin + type;
+	return n;
+}
+
+static long separatorg_set_run(long n)
+{
+	long i;
+
+	for (i = 0; i < n; i++)
+		XtVaSetValues(gadget, XmNmargin, (Dimension)(2 + (i & 1)), NULL);
+	return n;
+}
+
+/* A shell resource that its VendorShell extension object holds. */
+static long shell_get_run(long n)
+{
+	unsigned char response = 0;
+	long i;
+
+	for (i = 0; i < n; i++)
+		XtVaGetValues(top, XmNdeleteResponse, &response, NULL);
+	sink = response;
+	return n;
+}
+
 static void cache_setup(long n)
 {
 	(void)n;
@@ -381,6 +442,35 @@ static long cache_run(long n)
 	for (i = 0; i < n; i++)
 		XtVaCreateWidget("g", xmLabelGadgetClass, work,
 				 XmNmarginWidth, (Dimension)((i / 10) % 200),
+				 NULL);
+	return n;
+}
+
+/* Every gadget with a look of its own: n distinct cache parts. */
+static long cache_distinct_run(long n)
+{
+	long i;
+
+	for (i = 0; i < n; i++)
+		XtVaCreateWidget("g", xmLabelGadgetClass, work,
+				 XmNmarginWidth, (Dimension)(i % 100),
+				 XmNmarginHeight, (Dimension)(i / 100 % 100),
+				 NULL);
+	return n;
+}
+
+/*
+ * The same with colors: each gadget its own foreground and select color.
+ * Most of the time goes to Xt's GC cache, which is a list too.
+ */
+static long cache_colors_run(long n)
+{
+	long i;
+
+	for (i = 0; i < n; i++)
+		XtVaCreateWidget("g", xmToggleButtonGadgetClass, work,
+				 XmNforeground, (Pixel)i,
+				 XmNselectColor, (Pixel)(n - i),
 				 NULL);
 	return n;
 }
@@ -1110,8 +1200,30 @@ static const struct bench_case cases[] = {
 	  1, 100000, toggle_init, NULL, gadget_get_run, NULL, destroy_work },
 	{ "toggle-set", "micro", "XtSetValues of a cached ToggleButtonGadget resource",
 	  1, 10000, toggle_init, NULL, gadget_set_run, NULL, destroy_work },
+	{ "pushbg-get", "micro", "XtGetValues on a PushButtonGadget",
+	  1, 100000, pushbg_init, NULL, gadget_get_run, NULL, destroy_work },
+	{ "pushbg-set", "micro", "XtSetValues of a cached PushButtonGadget resource",
+	  1, 10000, pushbg_init, NULL, gadget_set_run, NULL, destroy_work },
+	{ "cascadebg-get", "micro", "XtGetValues on a CascadeButtonGadget",
+	  1, 100000, cascadebg_init, NULL, gadget_get_run, NULL, destroy_work },
+	{ "cascadebg-set", "micro", "XtSetValues of a cached CascadeButtonGadget resource",
+	  1, 10000, cascadebg_init, NULL, gadget_set_run, NULL, destroy_work },
+	{ "separatorg-get", "micro", "XtGetValues on a SeparatorGadget",
+	  1, 100000, separatorg_init, NULL, separatorg_get_run, NULL, destroy_work },
+	{ "separatorg-set", "micro", "XtSetValues of a cached SeparatorGadget resource",
+	  1, 10000, separatorg_init, NULL, separatorg_set_run, NULL, destroy_work },
+	{ "icong-get", "micro", "XtGetValues on an IconGadget",
+	  1, 100000, icong_init, NULL, gadget_get_run, NULL, destroy_work },
+	{ "icong-set", "micro", "XtSetValues of a cached IconGadget resource",
+	  1, 10000, icong_init, NULL, gadget_set_run, NULL, destroy_work },
+	{ "shell-get", "micro", "XtGetValues of a VendorShell extension resource",
+	  1, 100000, NULL, NULL, shell_get_run, NULL, NULL },
 	{ "gadget-cache", "micro", "create LabelGadgets, 200 distinct cache parts",
 	  1, 10000, NULL, cache_setup, cache_run, destroy_work, NULL },
+	{ "gadget-cache-distinct", "micro", "create LabelGadgets, all distinct cache parts",
+	  1, 10000, NULL, cache_setup, cache_distinct_run, destroy_work, NULL },
+	{ "gadget-cache-colors", "micro", "create ToggleButtonGadgets, all distinct colors",
+	  1, 2000, NULL, cache_setup, cache_colors_run, destroy_work, NULL },
 	{ "xmstring-create", "micro", "XmStringCreateLocalized + XmStringFree",
 	  0, 200000, NULL, NULL, xs_create_run, NULL, NULL },
 	{ "xmstring-concat", "micro", "XmStringConcatAndFree, one segment at a time",
@@ -1308,9 +1420,11 @@ int main(int argc, char **argv)
 		fprintf(jf, "{\n  \"bench\": \"xmbench\",\n  \"version\": 1,\n"
 			"  \"repeat\": %d,\n  \"scale\": %g,\n"
 			"  \"threads\": %s,\n"
-			"  \"counters\": %s,\n  \"cases\": [", repeat, scale,
+			"  \"counters\": %s,\n  \"display\": %s,\n"
+			"  \"cases\": [", repeat, scale,
 			threads ? "true" : "false",
-			c_mallocs ? "true" : "false");
+			c_mallocs ? "true" : "false",
+			dpy ? "true" : "false");
 	}
 	printf("%-24s %9s %12s %12s %9s %9s %8s %8s\n", "case", "n", "ns/op",
 	       "cpu-ns/op", "mallocs", "requests", "rtrips", "icvalues");
@@ -1341,11 +1455,13 @@ int main(int argc, char **argv)
 				"\"mallocs_per_op\": %.4f, "
 				"\"requests_per_op\": %.4f, "
 				"\"round_trips_per_op\": %.4f, "
-				"\"icvalues_per_op\": %.4f}",
+				"\"icvalues_per_op\": %.4f, "
+				"\"requests_per_run\": %g, "
+				"\"round_trips_per_run\": %g}",
 				ran ? "," : "", bc->name, bc->group, n, res.ns,
 				res.cpu,
 				res.mallocs, res.requests, res.rtrips,
-				res.icvalues);
+				res.icvalues, res.run_requests, res.run_rtrips);
 		ran++;
 	}
 	if (jf) {

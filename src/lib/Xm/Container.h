@@ -40,8 +40,8 @@ typedef struct _XmContainerRec *XmContainerWidget;
 #  endif /* XmIsContainer */
 /********    Public Function Declarations    ********/
 extern Widget XmCreateContainer(Widget parent, String name, ArgList arglist, Cardinal argcount);
-extern Widget XmVaCreateContainer(Widget parent, char *name, ...);
-extern Widget XmVaCreateManagedContainer(Widget parent, char *name, ...);
+extern Widget XmVaCreateContainer(Widget parent, const char *name, ...);
+extern Widget XmVaCreateManagedContainer(Widget parent, const char *name, ...);
 extern int XmContainerGetItemChildren(Widget wid, Widget item, WidgetList *item_children);
 extern void XmContainerRelayout(Widget wid);
 extern void XmContainerReorder(Widget wid, WidgetList cwid_list, int cwid_count);

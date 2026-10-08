@@ -381,7 +381,7 @@ XmTab XmTabCreate(float value,
                   unsigned char units,
                   XmOffsetModel offset_model,
                   unsigned char alignment,
-                  char *decimal)
+                  const char *decimal)
 {
   XmTab tab;
   _XmProcessLock();
@@ -407,7 +407,7 @@ Widget _XmCreateTab(Widget parent,
                     ArgList arglist,
                     Cardinal argcount)
 {
-  static XrmQuark quarks[] = {0, 0, 0, 0, 0};
+  XrmQuark quarks[5];
   XmTabList tl = (XmTabList)parent;
   XrmQuark qarg;
   float value = 0.0;
@@ -417,14 +417,12 @@ Widget _XmCreateTab(Widget parent,
   char *decimal = ".";
   XmTab tab, start;
   int i;
-  /* Init quark list */
-  if (quarks[0] == 0) {
-    quarks[0] = XrmPermStringToQuark(XmNtabValue);
-    quarks[1] = XrmPermStringToQuark(XmNunitType);
-    quarks[2] = XrmPermStringToQuark(XmNoffsetModel);
-    quarks[3] = XrmPermStringToQuark(XmNalignment);
-    quarks[4] = XrmPermStringToQuark(XmNdecimal);
-  }
+  /* Init quark list (Xlib looks up quarks under its own lock) */
+  quarks[0] = XrmPermStringToQuark(XmNtabValue);
+  quarks[1] = XrmPermStringToQuark(XmNunitType);
+  quarks[2] = XrmPermStringToQuark(XmNoffsetModel);
+  quarks[3] = XrmPermStringToQuark(XmNalignment);
+  quarks[4] = XrmPermStringToQuark(XmNdecimal);
   /* Get arguments from arglist */
   for (i = 0; (Cardinal)i < argcount; i++) {
     qarg = XrmStringToQuark(arglist[i].name);
@@ -453,6 +451,8 @@ Widget _XmCreateTab(Widget parent,
     _XmTabPrev(start) = tab;
   }
   _XmTabLCount(tl)++;
+  /* tl may belong to a rendition already in a render table */
+  _XmRenderTableChanged();
   return ((Widget)NULL);
 }
 

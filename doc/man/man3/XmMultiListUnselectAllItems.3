@@ -1,13 +1,19 @@
 .TH "XmMultiListUnselectAllItems" "library call"
 .SH "NAME"
-\fBXmMultiListUnselectAllItems\fP \(em an MultiList function that deselects all rows of the list
+\fBXmMultiListUnselectAllItems\fP,
+\fBXmExt18ListUnselectAllItems\fP \(em MultiList functions that deselect all rows of the list
 .iX "XmMultiListUnselectAllItems"
+.iX "XmExt18ListUnselectAllItems"
 .iX "MultiList functions" "XmMultiListUnselectAllItems"
 .SH "SYNOPSIS"
 .PP
 .nf
 #include <Xm/MultiList\&.h>
 \fBvoid \fBXmMultiListUnselectAllItems\fP\fR(
+\fBWidget \fBwidget\fR\fR);
+.PP
+#include <Xm/Ext18List\&.h>
+\fBvoid \fBXmExt18ListUnselectAllItems\fP\fR(
 \fBWidget \fBwidget\fR\fR);
 .fi
 .SH "DESCRIPTION"
@@ -18,6 +24,10 @@ Specifies the ID of the MultiList widget from whose list items is deselected\&.
 .PP
 For a complete definition of MultiList and its associated resources, see
 \fBXmMultiList\fP(3)\&.
+.PP
+\fBXmExt18ListUnselectAllItems\fP is the obsolete name of \fBXmMultiListUnselectAllItems\fP, from the time
+the MultiList was called the Ext18List; \fB<Xm/Ext18List\&.h>\fP
+declares it deprecated\&.
 .SH "RELATED"
 .PP
 \fBXmMultiList\fP(3)\&.

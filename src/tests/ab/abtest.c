@@ -3,7 +3,8 @@
  *
  * Licensed under the LGPL 2.1 license.
  *
- * xm_abtest: A/B harness for the Form, Container and List layout code.
+ * xm_abtest: A/B harness for the Form, Container and List layout code,
+ * for XmString and for the String to RenderTable conversion.
  * Builds pseudo-random configurations, drives them through the API and
  * through real input (xdotool), and prints child geometry, selection
  * state, scroll state, callbacks and a hash of the window pixels after
@@ -13,12 +14,16 @@
  *   xm_abtest MODE SEED [SIZE]
  *
  * MODE is form, formcyc, formgrid, formcolumn, formwide, container,
- * list or listscroll.  SIZE 0 (the default) lets the seed choose.
+ * containertree, list, listapi, listmix, listscroll, xmstring or
+ * rendertable.  SIZE 0 (the default) lets the seed choose
+ * (containertree: the number of steps, 300).
  * Setting ABT_DESTROY_UNMANAGED also destroys unmanaged Form children.
  */
 #include <Xm/XmP.h>
 #include <X11/CompositeP.h>
+#include <Xm/BulletinB.h>
 #include <Xm/Container.h>
+#include <Xm/Display.h>
 #include <Xm/DrawingA.h>
 #include <Xm/Form.h>
 #include <Xm/IconG.h>
@@ -26,9 +31,13 @@
 #include <Xm/LabelG.h>
 #include <Xm/List.h>
 #include <Xm/PushB.h>
+#include <Xm/RowColumn.h>
 #include <Xm/ScrollBar.h>
 #include <Xm/ScrolledW.h>
 #include <X11/Xutil.h>
+#ifdef USE_XFT
+#include <X11/Xft/Xft.h>
+#endif
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -599,7 +608,7 @@ static void container_test(int nitems)
   checkpoint("realize", top);
   dump_container(c);
   for (round = 0; round < 8; round++) {
-    int what = rn(7);
+    int what = rn(9);
     switch (what) {
       case 0: {
         char name[32];
@@ -678,12 +687,158 @@ static void container_test(int nitems)
         checkpoint("input", top);
         break;
       }
+      case 7: {
+        Widget list[4];
+        int m = 0;
+        for (i = 0; i < 4; i++) {
+          int k = rn(nmade);
+          if (items[k])
+            list[m++] = items[k];
+        }
+        if (m > 0)
+          XmContainerReorder(c, list, m);
+        checkpoint("reorder", top);
+        break;
+      }
+      case 8: {
+        int k = rn(nmade), p = rn(nmade);
+        if (items[k])
+          XtVaSetValues(items[k], XmNentryParent, rn(3) && items[p] ? items[p] : NULL, NULL);
+        checkpoint("reparent", top);
+        break;
+      }
     }
     dump_container(c);
   }
   XtDestroyWidget(sw);
   settle();
   printf("destroyed\n");
+}
+
+/* The entries of parent and below, in order, with XmNpositionIndex
+ * when with_pos (reading it may renumber them). */
+static void dump_entries(Widget c, Widget parent, int depth, Boolean with_pos)
+{
+  WidgetList k = NULL;
+  int i, pos, n = XmContainerGetItemChildren(c, parent, &k);
+  for (i = 0; i < n; i++) {
+    pos = -100;
+    if (with_pos)
+      XtVaGetValues(k[i], XmNpositionIndex, &pos, NULL);
+    printf(" %*s%s/%d", depth, "", XtName(k[i]), pos);
+    dump_entries(c, k[i], depth + 1, with_pos);
+  }
+  XtFree((char *)k);
+}
+
+/* A live entry of items[0..nmade-1], or NULL. */
+static Widget live_entry(Widget *items, int nmade)
+{
+  int i, k = rn(nmade);
+  for (i = 0; i < nmade; i++)
+    if (items[(k + i) % nmade])
+      return items[(k + i) % nmade];
+  return NULL;
+}
+
+/*
+ * The entry tree of a Container through the API only: creates, destroys,
+ * XmNpositionIndex changes (also of lone entries), reparenting with and
+ * without an index, XmContainerReorder (with repeats and entries of other
+ * levels) and reads.  The order is printed after every step, the indices
+ * only now and then, so that several steps run between two reads.
+ */
+static void container_tree_test(int steps)
+{
+  enum { MAXE = 120 };
+  Widget items[MAXE] = {NULL};
+  int nmade = 0, s;
+  Widget c = XtVaCreateManagedWidget("cont", xmContainerWidgetClass, top, XmNlayoutType,
+                                     rn(2) ? XmOUTLINE : XmSPATIAL, NULL);
+  if (rn(2))
+    XtRealizeWidget(top);
+  for (s = 0; s < steps; s++) {
+    Widget w = live_entry(items, nmade), p = live_entry(items, nmade);
+    int what = rn(10);
+    printf("%d:%d", s, what);
+    switch (what) {
+      case 0:
+      case 1: {
+        char name[16];
+        Arg a[2];
+        Cardinal m = 0;
+        if (nmade == MAXE)
+          break;
+        snprintf(name, sizeof(name), "i%d", nmade);
+        if (p && rn(3))
+          XtSetArg(a[m], XmNentryParent, p), m++;
+        if (rn(3))
+          XtSetArg(a[m], XmNpositionIndex, rn(5) ? rn(12) : XmLAST_POSITION), m++;
+        items[nmade++] = XtCreateManagedWidget(name, xmIconGadgetClass, c, a, m);
+        break;
+      }
+      case 2:
+        if (w && rn(2)) {
+          int i;
+          printf(" %s", XtName(w));
+          /* its entries move to the top level */
+          for (i = 0; i < nmade; i++)
+            if (items[i] == w)
+              items[i] = NULL;
+          XtDestroyWidget(w);
+        }
+        break;
+      case 3:
+      case 4:
+        if (w) {
+          int v = rn(4) ? rn(12) : rn(2) ? XmLAST_POSITION : -3;
+          printf(" %s=%d", XtName(w), v);
+          XtVaSetValues(w, XmNpositionIndex, v, NULL);
+        }
+        break;
+      case 5:
+      case 6:
+        if (w) {
+          Widget np = (rn(3) && p != w) ? p : NULL;
+          printf(" %s->%s", XtName(w), np ? XtName(np) : "-");
+          if (rn(2))
+            XtVaSetValues(w, XmNentryParent, np, NULL);
+          else
+            XtVaSetValues(w, XmNentryParent, np, XmNpositionIndex, rn(10), NULL);
+        }
+        break;
+      case 7: {
+        Widget list[5];
+        int m = 0, k, n = 1 + rn(5);
+        for (k = 0; k < n; k++)
+          if ((list[m] = live_entry(items, nmade)) != NULL)
+            m++;
+        if (m)
+          XmContainerReorder(c, list, m);
+        break;
+      }
+      case 8:
+        if (w) {
+          int pos = -100;
+          XtVaGetValues(w, XmNpositionIndex, &pos, NULL);
+          printf(" %s:%d", XtName(w), pos);
+        }
+        break;
+      default:
+        if (rn(3) == 0) {
+          printf("\n  pos");
+          dump_entries(c, NULL, 0, True);
+        }
+        break;
+    }
+    printf("\n  tree");
+    dump_entries(c, NULL, 0, False);
+    printf("\n");
+  }
+  printf("final");
+  dump_entries(c, NULL, 0, True);
+  printf("\n");
+  XtDestroyWidget(c);
 }
 
 /* ---------------------------------------------------------------- List */
@@ -1003,6 +1158,949 @@ static void list_test(int nitems)
   }
 }
 
+/* ------------------------------------------------------------ XmString */
+
+/*
+ * Builds strings from random pieces with XmStringConcatAndFree (append
+ * and prepend), XmStringConcat, XmStringCopy, XmStringGenerate and
+ * XmStringParseText, and prints what the API says of them: the byte
+ * stream, the text, the line count and the extents with a core font, a
+ * font set and an Xft render table, the last also after the render
+ * tables change.  No line gets more than 250 bytes of text until a long
+ * piece makes the string unoptimized: older libraries truncated text
+ * merged past 255 bytes into an optimized segment.
+ */
+#define STR_RTS 3
+static XmRenderTable str_rt[STR_RTS];
+static XmParseTable str_table;
+static int str_last_bytes, str_first_bytes, str_one_line = 1, str_long;
+
+static unsigned long long fnv(unsigned long long h, const void *p, size_t n)
+{
+  const unsigned char *c = p;
+  while (n--) {
+    h ^= *c++;
+    h *= 1099511628211ULL;
+  }
+  return h;
+}
+
+static XmRenderTable str_make_rt(const char *font, XmFontType type, const char *tag, int tabs)
+{
+  XmRendition rend;
+  XmRenderTable rt;
+  Arg args[3];
+  Cardinal n = 0;
+  XmTabList tl = NULL;
+  XtSetArg(args[n], XmNfontName, font), n++;
+  XtSetArg(args[n], XmNfontType, type), n++;
+  if (tabs) {
+    XmTab tab[2];
+    tab[0] = XmTabCreate(40.0, XmPIXELS, XmABSOLUTE, XmALIGNMENT_BEGINNING, NULL);
+    tab[1] = XmTabCreate(1.5, XmCENTIMETERS, XmRELATIVE, XmALIGNMENT_BEGINNING, NULL);
+    tl = XmTabListInsertTabs(NULL, tab, 2, 0);
+    XmTabFree(tab[0]);
+    XmTabFree(tab[1]);
+    XtSetArg(args[n], XmNtabList, tl), n++;
+  }
+  rend = XmRenditionCreate(top, (XmStringTag)tag, args, n);
+  rt = XmRenderTableAddRenditions(NULL, &rend, 1, XmMERGE_NEW);
+  XmRenditionFree(rend);
+  if (tl)
+    XmTabListFree(tl);
+  return rt;
+}
+
+/* Replace or add the rendition for tag in str_rt[i] */
+static void str_add_rend(int i, const char *font, XmFontType type, const char *tag,
+                         XmMergeMode mode)
+{
+  XmRenderTable one = str_make_rt(font, type, tag, 0);
+  XmRendition rend = XmRenderTableGetRendition(one, (XmStringTag)tag);
+  str_rt[i] = XmRenderTableAddRenditions(str_rt[i], &rend, 1, mode);
+  XmRenditionFree(rend);
+  XmRenderTableFree(one);
+}
+
+static const char *str_tag(void)
+{
+  return pick(3, 0, 1, 2) == 0 ? XmFONTLIST_DEFAULT_TAG : rn(2) ? "tagA" : "tagB";
+}
+
+/* Random text of 0..max bytes */
+static char *str_text(int max, int specials)
+{
+  static const char chars[] = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJ0123456789.,";
+  int len = rn(max + 1), i;
+  char *t = XtMalloc(len + 1);
+  for (i = 0; i < len; i++) {
+    int r = rn(40);
+    t[i] = specials && r == 0 ? '\t' : specials && r == 1 ? '\n' : specials && r == 2 ? '|' :
+                                                                       chars[rn(sizeof chars - 1)];
+  }
+  t[len] = '\0';
+  return t;
+}
+
+/* A random piece; *bytes is how much text it has, *seps whether it has
+ * separators */
+static XmString str_piece(int *bytes)
+{
+  XmString s = NULL;
+  char *t = NULL;
+  XmStringDirection dir;
+  XmDirection ldir;
+  *bytes = 0;
+  switch (rn(13)) {
+  case 0:
+  case 1:
+    t = str_text(12, 0);
+    s = XmStringCreateLocalized(t);
+    break;
+  case 2:
+  case 3:
+    t = str_text(12, 0);
+    s = XmStringCreate(t, (XmStringTag)str_tag());
+    break;
+  case 4:
+    t = str_text(12, 0);
+    s = XmStringComponentCreate(pick(2, XmSTRING_COMPONENT_TEXT, XmSTRING_COMPONENT_LOCALE_TEXT),
+                                strlen(t), t);
+    break;
+  case 5:
+    s = XmStringSeparatorCreate();
+    break;
+  case 6:
+    s = XmStringComponentCreate(XmSTRING_COMPONENT_TAB, 0, NULL);
+    break;
+  case 7:
+    dir = pick(3, XmSTRING_DIRECTION_L_TO_R, XmSTRING_DIRECTION_R_TO_L, XmSTRING_DIRECTION_UNSET);
+    s = rn(2) ? XmStringDirectionCreate(dir) :
+                XmStringComponentCreate(XmSTRING_COMPONENT_DIRECTION, sizeof dir, &dir);
+    break;
+  case 8:
+    s = XmStringComponentCreate(rn(2) ? XmSTRING_COMPONENT_RENDITION_BEGIN :
+                                        XmSTRING_COMPONENT_RENDITION_END,
+                                2, rn(2) ? "r1" : "r2");
+    break;
+  case 9:
+    /* Balanced: XmStringExtent loops forever on some unbalanced
+     * pushes ("text push text push"), old and new libraries alike */
+    ldir = rn(2) ? XmLEFT_TO_RIGHT : XmRIGHT_TO_LEFT;
+    t = str_text(12, 0);
+    s = XmStringConcatAndFree(
+        XmStringConcatAndFree(
+            XmStringComponentCreate(XmSTRING_COMPONENT_LAYOUT_PUSH, sizeof ldir, &ldir),
+            XmStringCreateLocalized(t)),
+        XmStringComponentCreate(XmSTRING_COMPONENT_LAYOUT_POP, 0, NULL));
+    break;
+  case 10:
+    t = str_text(40, 1);
+    s = XmStringGenerate(t, rn(2) ? NULL : (XmStringTag)str_tag(), XmCHARSET_TEXT,
+                         rn(3) ? NULL : "r1");
+    break;
+  case 11:
+    t = str_text(40, 1);
+    s = XmStringParseText(t, NULL, NULL, XmCHARSET_TEXT, str_table, 3, NULL);
+    *bytes = 3 * strlen(t); /* "|" becomes "BAR" */
+    break;
+  case 12:
+    if (rn(4) == 0) {
+      /* Unoptimized from the start; makes the whole string so */
+      t = str_text(400, 0);
+      while (strlen(t) < 256) {
+        XtFree(t);
+        t = str_text(400, 0);
+      }
+      s = XmStringComponentCreate(XmSTRING_COMPONENT_TEXT, strlen(t), t);
+      str_long = 1;
+    }
+    else
+      s = XmStringComponentCreate(XmSTRING_COMPONENT_TAG, 4, rn(2) ? "tagA" : "tagB");
+    break;
+  }
+  if (t) {
+    if (*bytes == 0)
+      *bytes = strlen(t);
+    XtFree(t);
+  }
+  return s;
+}
+
+static void str_measure(const char *what, XmString s)
+{
+  Dimension w, h;
+  int i;
+  printf("  %s:", what);
+  for (i = 0; i < STR_RTS; i++) {
+    XmStringExtent(str_rt[i], s, &w, &h);
+    printf(" %ux%u/%u", w, h, XmStringBaseline(str_rt[i], s));
+  }
+  printf("\n");
+}
+
+static void str_dump(const char *what, XmString s)
+{
+  unsigned char *stream = NULL;
+  unsigned int len = XmCvtXmStringToByteStream(s, &stream);
+  char *text = XmStringUnparse(s, NULL, XmCHARSET_TEXT, XmCHARSET_TEXT, NULL, 0, XmOUTPUT_ALL);
+  char *parsed = XmStringUnparse(s, NULL, XmCHARSET_TEXT, XmCHARSET_TEXT, str_table, 3,
+                                 XmOUTPUT_ALL);
+  printf("=== step %d: %s\n", step++, what);
+  printf("  stream %u %016llx lines %d empty %d void %d\n", len,
+         stream ? fnv(1469598103934665603ULL, stream, len) : 0ULL, XmStringLineCount(s),
+         XmStringEmpty(s), XmStringIsVoid(s));
+  printf("  text %zu %016llx parsed %016llx\n", text ? strlen(text) : 0,
+         text ? fnv(1469598103934665603ULL, text, strlen(text)) : 0ULL,
+         parsed ? fnv(1469598103934665603ULL, parsed, strlen(parsed)) : 0ULL);
+  if (stream) {
+    XmString back = XmCvtByteStreamToXmString(stream);
+    printf("  back compare %d\n", XmStringCompare(s, back));
+    XmStringFree(back);
+  }
+  if (len < 2000 && text)
+    printf("  \"%s\"\n", text);
+  str_measure("extent", s);
+  XtFree((char *)stream);
+  XtFree(text);
+  XtFree(parsed);
+}
+
+static XmString str_cat(XmString a, XmString b) { return XmStringConcatAndFree(a, b); }
+
+/* Append a piece to s, or prepend it, keeping lines under 250 bytes */
+static XmString str_step(XmString s, int i)
+{
+  /* Copying the whole string at each step would make long runs
+   * quadratic: after 300 pieces, only append and prepend */
+  int bytes, op = i < 300 ? rn(20) : pick(2, 0, 10);
+  XmString piece = str_piece(&bytes), t;
+  /* Bytes on the first and last lines, counted as if a piece's text
+   * were all on one line and the string had one line until we add a
+   * separator here */
+  if (op < 3) {
+    /* Prepend */
+    if (!str_long && str_first_bytes + bytes > 250) {
+      piece = str_cat(piece, XmStringSeparatorCreate());
+      str_first_bytes = 0;
+      str_one_line = 0;
+    }
+    str_first_bytes += bytes;
+    if (str_one_line)
+      str_last_bytes += bytes;
+    return str_cat(piece, s);
+  }
+  if (!str_long && str_last_bytes + bytes > 250) {
+    s = str_cat(s, XmStringSeparatorCreate());
+    str_last_bytes = 0;
+    str_one_line = 0;
+  }
+  str_last_bytes += bytes;
+  if (str_one_line)
+    str_first_bytes += bytes;
+  if (op < 6) {
+    /* Concat, which copies both */
+    t = XmStringConcat(s, piece);
+    XmStringFree(s);
+    XmStringFree(piece);
+    return t;
+  }
+  if (op < 8) {
+    /* Append to a shared string */
+    XmString copy = XmStringCopy(s);
+    unsigned char *before = NULL, *after = NULL;
+    unsigned int len = XmCvtXmStringToByteStream(copy, &before);
+    s = str_cat(s, piece);
+    printf("  copy unchanged %d\n", XmCvtXmStringToByteStream(copy, &after) == len &&
+                                         (len == 0 || !memcmp(before, after, len)));
+    XtFree((char *)before);
+    XtFree((char *)after);
+    XmStringFree(copy);
+    return s;
+  }
+  return str_cat(s, piece);
+}
+
+static void xmstring_test(int pieces)
+{
+  XmString s = NULL, small[8];
+  XmParseMapping map[3];
+  XmString sub;
+  Arg args[4];
+  Cardinal n;
+  int i;
+  str_rt[0] = str_make_rt("fixed", XmFONT_IS_FONT, XmFONTLIST_DEFAULT_TAG, 1);
+  str_rt[1] = str_make_rt("fixed", XmFONT_IS_FONTSET, XmFONTLIST_DEFAULT_TAG, 0);
+  str_rt[2] = str_make_rt("Sans-10", XmFONT_IS_XFT, XmFONTLIST_DEFAULT_TAG, 1);
+  sub = XmStringComponentCreate(XmSTRING_COMPONENT_TAB, 0, NULL);
+  n = 0;
+  XtSetArg(args[n], XmNpattern, "\t"), n++;
+  XtSetArg(args[n], XmNsubstitute, sub), n++;
+  XtSetArg(args[n], XmNincludeStatus, XmINSERT), n++;
+  map[0] = XmParseMappingCreate(args, n);
+  XmStringFree(sub);
+  sub = XmStringSeparatorCreate();
+  n = 0;
+  XtSetArg(args[n], XmNpattern, "\n"), n++;
+  XtSetArg(args[n], XmNsubstitute, sub), n++;
+  XtSetArg(args[n], XmNincludeStatus, XmINSERT), n++;
+  map[1] = XmParseMappingCreate(args, n);
+  XmStringFree(sub);
+  sub = XmStringCreate("BAR", "tagA");
+  n = 0;
+  XtSetArg(args[n], XmNpattern, "|"), n++;
+  XtSetArg(args[n], XmNsubstitute, sub), n++;
+  XtSetArg(args[n], XmNincludeStatus, XmINSERT), n++;
+  map[2] = XmParseMappingCreate(args, n);
+  XmStringFree(sub);
+  str_table = map;
+
+  for (i = 0; i < pieces; i++) {
+    s = str_step(s, i);
+    if (rn(pieces / 4 + 1) == 0)
+      str_dump("build", s);
+  }
+  str_dump("built", s);
+
+  /* Optimized strings, measured twice, then after render table changes */
+  for (i = 0; i < 8; i++) {
+    char *t = str_text(20, 0);
+    small[i] = i < 3   ? XmStringCreateLocalized(t) :
+               i < 6   ? XmStringCreate(t, (XmStringTag)str_tag()) :
+               i == 6 ? str_cat(XmStringComponentCreate(XmSTRING_COMPONENT_TAB, 0, NULL),
+                                 XmStringCreateLocalized(t)) :
+                         XmStringGenerate(t, NULL, XmCHARSET_TEXT, "r1");
+    XtFree(t);
+  }
+  for (i = 0; i < 6; i++) {
+    int j;
+    printf("=== step %d: render tables %d\n", step++, i);
+    switch (i) {
+    case 1:
+      str_add_rend(0, "9x15", XmFONT_IS_FONT, XmFONTLIST_DEFAULT_TAG, XmMERGE_REPLACE);
+      str_add_rend(1, "6x13", XmFONT_IS_FONTSET, XmFONTLIST_DEFAULT_TAG, XmMERGE_REPLACE);
+      str_add_rend(2, "Sans-14", XmFONT_IS_XFT, XmFONTLIST_DEFAULT_TAG, XmMERGE_REPLACE);
+      break;
+    case 2:
+      str_add_rend(0, "6x13", XmFONT_IS_FONT, "tagA", XmMERGE_NEW);
+      str_add_rend(2, "Sans-8", XmFONT_IS_XFT, "tagB", XmMERGE_NEW);
+      str_add_rend(1, "9x15", XmFONT_IS_FONTSET, "r1", XmMERGE_NEW);
+      break;
+    case 3: {
+      XmStringTag tags[1] = {"tagA"};
+      str_rt[0] = XmRenderTableRemoveRenditions(str_rt[0], tags, 1);
+      break;
+    }
+    case 4:
+      /* A new table, likely at the address of the old one */
+      XmRenderTableFree(str_rt[0]);
+      str_rt[0] = str_make_rt("9x15", XmFONT_IS_FONT, XmFONTLIST_DEFAULT_TAG, 0);
+      XmRenderTableFree(str_rt[2]);
+      str_rt[2] = str_make_rt("Sans-12", XmFONT_IS_XFT, XmFONTLIST_DEFAULT_TAG, 0);
+      break;
+    case 5: {
+      XmRenderTable copy = XmRenderTableCopy(str_rt[1], NULL, 0);
+      XmRenderTableFree(str_rt[1]);
+      str_rt[1] = copy;
+      str_add_rend(1, "fixed", XmFONT_IS_FONTSET, XmFONTLIST_DEFAULT_TAG, XmMERGE_REPLACE);
+      break;
+    }
+    }
+    for (j = 0; j < 8; j++) {
+      char what[16];
+      snprintf(what, sizeof what, "small %d", j);
+      str_measure(what, small[j]);
+      str_measure(what, small[j]);
+    }
+    str_measure("built", s);
+  }
+  for (i = 0; i < 8; i++)
+    XmStringFree(small[i]);
+  XmStringFree(s);
+  for (i = 0; i < 3; i++)
+    XmParseMappingFree(map[i]);
+  for (i = 0; i < STR_RTS; i++)
+    XmRenderTableFree(str_rt[i]);
+}
+
+/* Items with many duplicates, and some multi-segment ones that compare
+ * equal to single-segment items. */
+static XmString mkapiitem(int range)
+{
+  char text[64];
+  int v = rn(range);
+  XmString a, b, s;
+  snprintf(text, sizeof(text), "it %d%.*s", v, v % 7 * 3, "=====================");
+  if (rn(8))
+    return XmStringCreateLocalized(text);
+  /* "it " followed by the rest as a second segment */
+  a = XmStringCreateLocalized("it ");
+  b = XmStringCreateLocalized(text + 3);
+  s = XmStringConcat(a, b);
+  XmStringFree(a);
+  XmStringFree(b);
+  return s;
+}
+
+static void dump_list_api(Widget list)
+{
+  int count, i, kbd, *pos = NULL, npos = 0;
+  unsigned int h = 2166136261u;
+  XmStringTable items = NULL;
+  XtVaGetValues(list, XmNitemCount, &count, XmNitems, &items, NULL);
+  for (i = 0; i < count; i++) {
+    char *t = (char *)XmStringUnparse(items[i], NULL, XmCHARSET_TEXT, XmCHARSET_TEXT, NULL, 0,
+                                      XmOUTPUT_ALL);
+    const char *c;
+    for (c = t ? t : "?"; *c; c++)
+      h = (h ^ (unsigned char)*c) * 16777619u;
+    h = (h ^ '|') * 16777619u;
+    XtFree(t);
+  }
+  kbd = XmListGetKbdItemPos(list);
+  printf("  items=%08x kbd=%d size=%dx%d", h, kbd, XtWidth(list), XtHeight(list));
+  if (XmListGetSelectedPos(list, &pos, &npos)) {
+    printf(" getsel=[");
+    for (i = 0; i < npos; i++)
+      printf(" %d", pos[i]);
+    printf(" ]");
+    XtFree((char *)pos);
+  }
+  printf("\n");
+  dump_list(list);
+}
+
+/* listmix: actions of the List interleaved with the API, through
+ * XtCallActionProc with synthetic events (no xdotool). */
+static int api_mix;
+static Time mix_time = 1000;
+
+static void mix_key(Widget list, const char *action)
+{
+  XKeyEvent ev;
+  memset(&ev, 0, sizeof(ev));
+  ev.type = KeyPress;
+  ev.display = dpy;
+  ev.window = XtWindow(list);
+  ev.time = (mix_time += 1000);
+  printf("  action %s\n", action);
+  XtCallActionProc(list, (String)action, (XEvent *)&ev, NULL, 0);
+}
+
+/* A button event over position pos (1-based), or below the items. */
+static void mix_button(Widget list, int type, const char *action, int pos)
+{
+  XButtonEvent ev;
+  Position x = 4, y = 4;
+  Dimension w, h;
+  memset(&ev, 0, sizeof(ev));
+  if (!XmListPosToBounds(list, pos, &x, &y, &w, &h))
+    y = (Position)(XtHeight(list) - 2);
+  ev.type = type;
+  ev.display = dpy;
+  ev.window = XtWindow(list);
+  ev.x = x + 2;
+  ev.y = y + 1;
+  ev.button = Button1;
+  ev.time = (mix_time += (type == ButtonPress ? 1000 : 10));
+  printf("  action %s %d\n", action, pos);
+  XtCallActionProc(list, (String)action, (XEvent *)&ev, NULL, 0);
+}
+
+/* A visible position, for the button actions. */
+static int mix_pos(Widget list)
+{
+  int top_pos = 1, vis = 1;
+  XtVaGetValues(list, XmNtopItemPosition, &top_pos, XmNvisibleItemCount, &vis, NULL);
+  return top_pos + rn(vis + 1);
+}
+
+static const char *const mix_keys[] = {
+    "ListKbdSelectAll",  "ListKbdDeSelectAll", "ListKbdActivate",   "ListNextItem",
+    "ListPrevItem",      "ListShiftNextItem",  "ListShiftPrevItem", "ListCtrlNextItem",
+    "ListAddMode",       "ListBeginData",      "ListEndData",       "ListEndDataExtend",
+    "ListKbdBeginSelect", "ListKbdEndSelect",  "ListKbdCtrlSelect", "ListKbdCtrlUnSelect",
+    "ListKbdShiftSelect", "ListKbdShiftUnSelect", "ListKbdCancel",  "ListNextPage",
+};
+
+static const char *const mix_begin[] = {"ListBeginSelect", "ListBeginToggle", "ListBeginExtend"};
+static const char *const mix_end[] = {"ListEndSelect", "ListEndToggle", "ListEndExtend"};
+
+/* The List API only, with many duplicate items: lookups, selection and
+ * replacement by value, and the item and selection resources. */
+static void list_api_test(int nitems)
+{
+  Arg args[16];
+  int n = 0, i, round, range = 1 + nitems / (1 + rn(4));
+  Widget list;
+  XmString *tab;
+  unsigned char policy =
+      pick(4, XmSINGLE_SELECT, XmBROWSE_SELECT, XmMULTIPLE_SELECT, XmEXTENDED_SELECT);
+  XtSetArg(args[n], XmNselectionPolicy, policy), n++;
+  XtSetArg(args[n], XmNvisibleItemCount, 3 + rn(15)), n++;
+  XtSetArg(args[n], XmNlistSizePolicy, pick(3, XmCONSTANT, XmVARIABLE, XmRESIZE_IF_POSSIBLE)),
+      n++;
+  if (rn(2))
+    XtSetArg(args[n], XmNlistSpacing, rn(4)), n++;
+  tab = calloc(nitems + 1, sizeof(XmString));
+  for (i = 0; i < nitems; i++)
+    tab[i] = mkapiitem(range);
+  XtSetArg(args[n], XmNitems, tab), n++;
+  XtSetArg(args[n], XmNitemCount, nitems), n++;
+  if (nitems && rn(3) == 0) {
+    XtSetArg(args[n], XmNselectedItems, tab + rn(nitems)), n++;
+    XtSetArg(args[n], XmNselectedItemCount, 1), n++;
+  }
+  list = XmCreateScrolledList(top, "list", args, n);
+  for (i = 0; i < nitems; i++)
+    XmStringFree(tab[i]);
+  free(tab);
+  XtAddCallback(list, XmNsingleSelectionCallback, list_cb, NULL);
+  XtAddCallback(list, XmNbrowseSelectionCallback, list_cb, NULL);
+  XtAddCallback(list, XmNmultipleSelectionCallback, list_cb, NULL);
+  XtAddCallback(list, XmNextendedSelectionCallback, list_cb, NULL);
+  XtManageChild(list);
+  printf("listapi policy=%d n=%d range=%d\n", policy, nitems, range);
+  XtRealizeWidget(top);
+  checkpoint("realize", top);
+  dump_list_api(list);
+  for (round = 0; round < 120; round++) {
+    int count, what = rn(api_mix ? 32 : 22), k, m;
+    XmString s, *t;
+    int *p;
+    XtVaGetValues(list, XmNitemCount, &count, NULL);
+    m = 1 + rn(rn(4) ? 4 : 60);
+    t = calloc(m, sizeof(XmString));
+    p = calloc(m, sizeof(int));
+    for (k = 0; k < m; k++) {
+      t[k] = mkapiitem(range + 2);
+      p[k] = rn(count + 2);
+    }
+    s = t[0];
+    printf("op %d m=%d\n", what, m);
+    switch (what) {
+      case 0:
+        XmListAddItem(list, s, rn(count + 2));
+        break;
+      case 1:
+        XmListAddItems(list, t, m, rn(count + 2));
+        break;
+      case 2:
+        XmListAddItemsUnselected(list, t, m, rn(count + 2));
+        break;
+      case 3:
+        XmListDeleteItem(list, s);
+        break;
+      case 4:
+        XmListDeleteItems(list, t, m);
+        break;
+      case 5:
+        XmListDeletePositions(list, p, m);
+        break;
+      case 6:
+        if (count)
+          XmListDeleteItemsPos(list, m, 1 + rn(count));
+        break;
+      case 7:
+        XmListDeletePos(list, rn(count + 1));
+        break;
+      case 8:
+      case 9:
+        for (k = 0; k < m; k++)
+          XmListSelectItem(list, t[k], rn(4) == 0);
+        break;
+      case 10:
+        for (k = 0; k < m; k++)
+          XmListSelectPos(list, p[k], rn(4) == 0);
+        break;
+      case 11:
+        for (k = 0; k < m; k++)
+          XmListDeselectItem(list, t[k]);
+        break;
+      case 12:
+        for (k = 0; k < m; k++)
+          XmListDeselectPos(list, p[k]);
+        break;
+      case 13: {
+        XmString *u = calloc(m, sizeof(XmString));
+        for (k = 0; k < m; k++)
+          u[k] = mkapiitem(range + 2);
+        if (rn(2))
+          XmListReplaceItems(list, t, m, u);
+        else
+          XmListReplaceItemsUnselected(list, t, m, u);
+        for (k = 0; k < m; k++)
+          XmStringFree(u[k]);
+        free(u);
+        break;
+      }
+      case 14:
+        for (k = 0; k < m; k++)
+          if (p[k] < 1 || p[k] > count)
+            p[k] = count ? 1 + rn(count) : 1;
+        XmListReplacePositions(list, p, t, m);
+        break;
+      case 15: {
+        int *mp = NULL, mc = 0;
+        for (k = 0; k < m; k++) {
+          printf("  exists=%d pos=%d", XmListItemExists(list, t[k]), XmListItemPos(list, t[k]));
+          if (XmListGetMatchPos(list, t[k], &mp, &mc)) {
+            int j;
+            printf(" match:");
+            for (j = 0; j < mc; j++)
+              printf(" %d", mp[j]);
+            XtFree((char *)mp);
+          }
+          printf(" possel=%d\n", XmListPosSelected(list, p[k]));
+        }
+        break;
+      }
+      case 16: {
+        XmString *all = NULL;
+        XmString *sel = calloc(m, sizeof(XmString));
+        XtVaGetValues(list, XmNitems, &all, NULL);
+        for (k = 0; k < m; k++)
+          sel[k] = (count && rn(3)) ? XmStringCopy(all[rn(count)]) : XmStringCopy(t[k]);
+        XtVaSetValues(list, XmNselectedItems, sel, XmNselectedItemCount, rn(3) ? m : 0, NULL);
+        for (k = 0; k < m; k++)
+          XmStringFree(sel[k]);
+        free(sel);
+        break;
+      }
+      case 17:
+        for (k = 0; k < m; k++)
+          if (p[k] < 1 || p[k] > count)
+            p[k] = count ? 1 + rn(count) : 1;
+        /* Without a selection: the old code reads the freed selected
+         * items when the positions replace them. */
+        XmListDeselectAllItems(list);
+        if (count)
+          XtVaSetValues(list, XmNselectedPositions, p, XmNselectedPositionCount, m, NULL);
+        break;
+      case 18: {
+        /* a new item list, or part of the current one */
+        XmString *all = NULL;
+        XtVaGetValues(list, XmNitems, &all, NULL);
+        if (rn(2) && count)
+          XtVaSetValues(list, XmNitems, all + rn(count), XmNitemCount, 1 + rn(1), NULL);
+        else
+          XtVaSetValues(list, XmNitems, t, XmNitemCount, rn(m + 1), NULL);
+        break;
+      }
+      case 19:
+        if (rn(3) == 0)
+          XmListDeleteAllItems(list);
+        else if (rn(2))
+          XmListDeselectAllItems(list);
+        else
+          XmListUpdateSelectedList(list);
+        break;
+      case 20:
+        if (rn(2))
+          XmListSetItem(list, s);
+        else
+          XmListSetBottomItem(list, s);
+        break;
+      case 21:
+        XmListReplaceItemsPos(list, t, m, 1 + rn(count + 1));
+        break;
+      case 22:
+      case 23:
+      case 24:
+        for (k = 0; k < m && k < 6; k++)
+          mix_key(list, mix_keys[rn(sizeof(mix_keys) / sizeof(mix_keys[0]))]);
+        break;
+      case 25:
+      case 26: {
+        /* a click, or a drag over a few items */
+        int b = rn(3), from = mix_pos(list);
+        mix_button(list, ButtonPress, mix_begin[b], from);
+        if (rn(2))
+          mix_button(list, MotionNotify, "ListButtonMotion", mix_pos(list));
+        mix_button(list, ButtonRelease, mix_end[b], mix_pos(list));
+        break;
+      }
+      case 27: {
+        /* the API between a press and its release */
+        int b = rn(3);
+        mix_button(list, ButtonPress, mix_begin[b], mix_pos(list));
+        switch (rn(5)) {
+          case 0:
+            XmListSelectPos(list, p[0], False);
+            break;
+          case 1:
+            XmListDeselectPos(list, p[0]);
+            break;
+          case 2:
+            XmListDeletePos(list, p[0]);
+            break;
+          case 3:
+            XmListAddItem(list, s, p[0]);
+            break;
+          default:
+            XmListSelectItem(list, s, rn(2));
+            break;
+        }
+        if (rn(2))
+          mix_button(list, MotionNotify, "ListButtonMotion", mix_pos(list));
+        mix_button(list, ButtonRelease, mix_end[b], mix_pos(list));
+        break;
+      }
+      case 28:
+        XtVaSetValues(list, XmNselectionPolicy,
+                      pick(4, XmSINGLE_SELECT, XmBROWSE_SELECT, XmMULTIPLE_SELECT,
+                           XmEXTENDED_SELECT),
+                      NULL);
+        break;
+      case 29:
+        XmListSetAddMode(list, rn(2));
+        break;
+      default:
+        for (k = 0; k < m && k < 8; k++)
+          XmListSelectPos(list, p[k], rn(2));
+        break;
+    }
+    for (k = 0; k < m; k++)
+      XmStringFree(t[k]);
+    free(t);
+    free(p);
+    if (round % 10 == 9)
+      checkpoint("ops", top);
+    dump_list_api(list);
+  }
+}
+
+/* ---------------------------------------------------------- RenderTable */
+
+/*
+ * Render tables converted from strings, for random resource databases
+ * and widget trees: the rendition resources come from database entries
+ * with tight and loose bindings to widget names and classes, and change
+ * while widgets are created.  Prints every table of every widget and,
+ * through quiet(), every warning, so that the conversion and its side
+ * effects can be compared between two builds.
+ */
+static const char *rt_names[] = {"a", "b", "c"};
+static const char *rt_tags[] = {"t1", "t2", "t3", "t4"};
+static const char *rt_resnames[] = {"renderTable", "buttonRenderTable", "labelRenderTable",
+                                    "textRenderTable"};
+static int no_font_calls;
+
+static void rt_no_font(Widget w, XtPointer cd, XtPointer call)
+{
+  XmDisplayCallbackStruct *cb = (XmDisplayCallbackStruct *)call;
+  printf("  noFontCallback %s\n", cb->font_name ? cb->font_name : "(null)");
+  no_font_calls++;
+}
+
+/* A random database entry for a rendition resource. */
+static void rt_entry(void)
+{
+  XrmDatabase db = XtScreenDatabase(XtScreen(top));
+  char line[512];
+  int n = 0, i, depth = rn(3);
+  static const char *values[][8] = {
+      {"fontName", "fixed", "9x15", "8x13bold", "6x13", "-no-such-font-*", "Sans", "Monospace"},
+      {"fontType", "FONT_IS_FONT", "FONT_IS_FONT", "FONT_IS_FONTSET", "FONT_IS_XFT",
+       "FONT_IS_FONT", "NO_SUCH_TYPE", "FONT_IS_XFT"},
+      {"renditionForeground", "red", "blue", "#123456", "no-such-color", "unspecified_pixel",
+       "black", "white"},
+      {"underlineType", "SINGLE_LINE", "DOUBLE_LINE", "NO_LINE", "AS_IS", "NO_SUCH_LINE",
+       "SINGLE_DASHED_LINE", "DOUBLE_DASHED_LINE"},
+      {"tabList", "1in", "1in, +2in", "10, 20, 30", "bogus", "2cm", "+1.5in", "0"},
+      {"fontSize", "8", "10", "12", "14", "x", "16", "9"},
+      {"fontStyle", "Bold", "Italic", "Regular", "Bold Italic", "Thin", "Oblique", "Medium"},
+      {"loadModel", "LOAD_IMMEDIATE", "LOAD_IMMEDIATE", "LOAD_DEFERRED", "LOAD_IMMEDIATE",
+       "NO_SUCH_MODEL", "LOAD_IMMEDIATE", "LOAD_IMMEDIATE"},
+  };
+  int which = rn(16);
+  if (which >= 8)
+    which = which < 12 ? 0 : 1; /* mostly fonts */
+  n += snprintf(line + n, sizeof(line) - n, "*");
+  for (i = 0; i < depth; i++)
+    n += snprintf(line + n, sizeof(line) - n, "%s%s", rn(3) ? rt_names[rn(3)] : "XmRowColumn",
+                  rn(2) ? "*" : ".");
+  if (rn(4))
+    n += snprintf(line + n, sizeof(line) - n, "%s.", rt_resnames[rn(5) == 0 ? 1 + rn(3) : 0]);
+  if (rn(5))
+    n += snprintf(line + n, sizeof(line) - n, "%s.", rt_tags[rn(4)]);
+  else if (rn(2))
+    n += snprintf(line + n, sizeof(line) - n, "?.");
+  snprintf(line + n, sizeof(line) - n, "%s: %s", values[which][0], values[which][1 + rn(7)]);
+  printf("  db %s\n", line);
+  XrmPutLineResource(&db, line);
+}
+
+static void rt_spec(char *spec, size_t size)
+{
+  int i, n = 0, k = rn(6);
+  if (k == 0) {
+    static const char *lists[] = {"fixed", "fixed,9x15=bold", "8x13bold=t1, fixed",
+                                  "-misc-fixed-*-*-*-*-13-*-*-*-*-*-*-*", "fixed;9x15:fs"};
+    snprintf(spec, size, "%s", lists[rn(5)]);
+    return;
+  }
+  for (i = 0; i < k; i++)
+    n += snprintf(spec + n, size - n, "%s%s", i ? (rn(2) ? " " : ", ") : "", rt_tags[rn(4)]);
+}
+
+static void rt_dump(const char *what, XmRenderTable rt)
+{
+  XmStringTag *tags = NULL;
+  int i, n;
+  printf("  %s:", what);
+  if (rt == NULL) {
+    printf(" none\n");
+    return;
+  }
+  n = XmRenderTableGetTags(rt, &tags);
+  for (i = 0; i < n; i++) {
+    XmRendition r = XmRenderTableGetRendition(rt, tags[i]);
+    XmStringTag tag = NULL;
+    String font_name = NULL, style = NULL;
+    XmFontType type = 0;
+    XtPointer font = NULL;
+    unsigned char load = 0, ul = 0, st = 0;
+    XmTabList tabs = NULL;
+    Pixel fg = 0, bg = 0;
+    int size = 0;
+    Arg a[12];
+    Cardinal m = 0;
+    XtSetArg(a[m], XmNtag, &tag), m++;
+    XtSetArg(a[m], XmNfontName, &font_name), m++;
+    XtSetArg(a[m], XmNfontType, &type), m++;
+    XtSetArg(a[m], XmNloadModel, &load), m++;
+    XtSetArg(a[m], XmNtabList, &tabs), m++;
+    XtSetArg(a[m], XmNrenditionForeground, &fg), m++;
+    XtSetArg(a[m], XmNrenditionBackground, &bg), m++;
+    XtSetArg(a[m], XmNunderlineType, &ul), m++;
+    XtSetArg(a[m], XmNstrikethruType, &st), m++;
+    XtSetArg(a[m], XmNfontStyle, &style), m++;
+    XtSetArg(a[m], XmNfontSize, &size), m++;
+    XmRenditionRetrieve(r, a, m);
+    printf(" [%s name=%s type=%d load=%d tabs=%d fg=%lx bg=%lx ul=%d st=%d style=%s size=%d",
+           tag, font_name == (String)XmAS_IS ? "AS_IS" : font_name ? font_name : "-", (int)type,
+           load, tabs == (XmTabList)XmAS_IS ? -1 : tabs ? (int)XmTabListTabCount(tabs) : 0, fg,
+           bg, ul, st, style ? style : "-", size);
+    /* The font, without loading a deferred one. */
+    if (load != XmLOAD_DEFERRED) {
+      XtSetArg(a[0], XmNfont, &font);
+      XmRenditionRetrieve(r, a, 1);
+      if (font != NULL && font != (XtPointer)XmAS_IS && type == XmFONT_IS_FONT) {
+        XFontStruct *fs = (XFontStruct *)font;
+        printf(" font=%d/%d/%d", fs->ascent, fs->descent, fs->max_bounds.width);
+      }
+      else if (font != NULL && font != (XtPointer)XmAS_IS && type == XmFONT_IS_FONTSET) {
+        XFontStruct **fonts;
+        char **names;
+        int nf = XFontsOfFontSet((XFontSet)font, &fonts, &names);
+        printf(" fontset=%d/%s", nf, nf ? names[0] : "-");
+      }
+#ifdef USE_XFT
+      if (type == XmFONT_IS_XFT) {
+        XftFont *xf = NULL;
+        XtSetArg(a[0], XmNxftFont, &xf);
+        XmRenditionRetrieve(r, a, 1);
+        if (xf != NULL && xf != (XftFont *)XmAS_IS)
+          printf(" xft=%d/%d/%d", xf->ascent, xf->descent, xf->max_advance_width);
+      }
+#endif
+    }
+    printf("]");
+    XmRenditionFree(r);
+    XtFree(tags[i]);
+  }
+  XtFree((char *)tags);
+  printf("\n");
+}
+
+static void rt_dump_widget(Widget w)
+{
+  XmRenderTable rt = NULL;
+  printf(" %s %s\n", XtClass(w)->core_class.class_name, XtName(w));
+  if (XtIsSubclass(w, xmBulletinBoardWidgetClass)) {
+    XtVaGetValues(w, XmNbuttonRenderTable, &rt, NULL);
+    rt_dump("button", rt);
+    XtVaGetValues(w, XmNlabelRenderTable, &rt, NULL);
+    rt_dump("label", rt);
+    XtVaGetValues(w, XmNtextRenderTable, &rt, NULL);
+    rt_dump("text", rt);
+  }
+  else if (!XtIsSubclass(w, xmRowColumnWidgetClass)) {
+    XtVaGetValues(w, XmNrenderTable, &rt, NULL);
+    rt_dump("render", rt);
+  }
+}
+
+static void rendertable_test(int nwidgets)
+{
+  Widget parents[64];
+  int nparents = 1, i, j;
+  char spec[128];
+  if (rn(3) == 0)
+    XtAddCallback(XmGetXmDisplay(dpy), XmNnoFontCallback, rt_no_font, NULL);
+  for (i = 0, j = 4 + rn(30); i < j; i++)
+    rt_entry();
+  parents[0] = XtVaCreateWidget("a", xmRowColumnWidgetClass, top, NULL);
+  for (i = 0; i < nwidgets; i++) {
+    Widget parent = parents[rn(nparents)], w;
+    const char *name = rt_names[rn(3)];
+    Arg args[4];
+    Cardinal n = 0;
+    if (rn(12) == 0)
+      rt_entry();
+    rt_spec(spec, sizeof spec);
+    switch (rn(8)) {
+      case 0:
+        if (nparents < 64) {
+          w = parents[nparents++] =
+              XtVaCreateWidget(name, xmRowColumnWidgetClass, parent, NULL);
+          break;
+        }
+        /* FALLTHROUGH */
+      case 1:
+        if (nparents < 64) {
+          char spec2[128], spec3[128];
+          rt_spec(spec2, sizeof spec2);
+          rt_spec(spec3, sizeof spec3);
+          w = parents[nparents++] = XtVaCreateWidget(
+              name, xmBulletinBoardWidgetClass, parent, XtVaTypedArg, XmNbuttonRenderTable,
+              XmRString, spec, (int)strlen(spec) + 1, XtVaTypedArg, XmNlabelRenderTable,
+              XmRString, spec2, (int)strlen(spec2) + 1, XtVaTypedArg,
+              rn(2) ? XmNtextRenderTable : XmNtextFontList, XmRString, spec3,
+              (int)strlen(spec3) + 1, NULL);
+          break;
+        }
+        /* FALLTHROUGH */
+      case 2:
+        w = XtVaCreateWidget(name, xmLabelGadgetClass, parent, XtVaTypedArg, XmNrenderTable,
+                             XmRString, spec, (int)strlen(spec) + 1, NULL);
+        break;
+      case 3:
+        w = XtVaCreateWidget(name, xmPushButtonWidgetClass, parent, NULL);
+        break;
+      case 4:
+        w = XtVaCreateWidget(name, xmLabelWidgetClass, parent, XtVaTypedArg, XmNfontList,
+                             XmRString, spec, (int)strlen(spec) + 1, NULL);
+        break;
+      default:
+        XtSetArg(args[n], XmNlabelString, NULL), n++;
+        w = XtCreateWidget(name, xmLabelWidgetClass, parent, args, n);
+        XtVaSetValues(w, XtVaTypedArg, XmNrenderTable, XmRString, spec, (int)strlen(spec) + 1,
+                      NULL);
+        break;
+    }
+    printf("widget %d (%s) spec \"%s\"\n", i, XtName(parent), spec);
+    rt_dump_widget(w);
+    if (rn(10) == 0 && w != parents[nparents - 1]) {
+      printf("destroy %s\n", XtName(w));
+      fflush(stdout);
+      XtDestroyWidget(w);
+    }
+  }
+  printf("noFontCallback calls %d\n", no_font_calls);
+}
+
 static void quiet(String msg) { printf("  warning: %s\n", msg); }
 static int xerr(Display *d, XErrorEvent *e)
 {
@@ -1038,12 +2136,24 @@ int main(int argc, char **argv)
     form_grid_test(size / 20, 20);
   else if (!strcmp(mode, "container"))
     container_test(size ? size : 1 + rn(40));
+  else if (!strcmp(mode, "containertree"))
+    container_tree_test(size ? size : 300);
   else if (!strcmp(mode, "list"))
     list_test(size ? size : rn(4) == 0 ? rn(3) : rn(300));
+  else if (!strcmp(mode, "listapi"))
+    list_api_test(size ? size : rn(4) == 0 ? rn(10) : rn(400));
+  else if (!strcmp(mode, "listmix")) {
+    api_mix = 1;
+    list_api_test(size ? size : rn(4) == 0 ? rn(10) : rn(400));
+  }
   else if (!strcmp(mode, "listscroll")) {
     scroll_mode = 1;
     list_test(size ? size : 20 + rn(400));
   }
+  else if (!strcmp(mode, "xmstring"))
+    xmstring_test(size ? size : 1 + rn(rn(8) ? 60 : 3000));
+  else if (!strcmp(mode, "rendertable"))
+    rendertable_test(size ? size : 10 + rn(60));
   printf("done\n");
   return 0;
 }

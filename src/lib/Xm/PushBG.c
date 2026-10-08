@@ -440,6 +440,26 @@ static int _XmPushBCacheCompare(XtPointer A, XtPointer B)
     return 0;
 }
 
+/*
+ * A hash of the fields that _XmPushBCacheCompare compares, for the cache
+ * index, but the timer and its widget: the gadgets change those in the
+ * cached part itself.
+ */
+static unsigned int PushBCacheHash(XtPointer cpart)
+{
+  XmPushButtonGCacheObjPart *p = (XmPushButtonGCacheObjPart *)cpart;
+  unsigned int h = 0;
+  h = _XmCacheHashAdd(h, (unsigned long)p->fill_on_arm);
+  h = _XmCacheHashAdd(h, (unsigned long)p->arm_color);
+  h = _XmCacheHashAdd(h, (unsigned long)p->arm_pixmap);
+  h = _XmCacheHashAdd(h, (unsigned long)p->unarm_pixmap);
+  h = _XmCacheHashAdd(h, (unsigned long)p->fill_gc);
+  h = _XmCacheHashAdd(h, (unsigned long)p->background_gc);
+  h = _XmCacheHashAdd(h, (unsigned long)p->multiClick);
+  h = _XmCacheHashAdd(h, (unsigned long)p->default_button_shadow_thickness);
+  return h;
+}
+
 /************************************************************************
  *
  *  InputDispatch
@@ -1248,6 +1268,7 @@ static void ClassInitialize(void)
   xmPushButtonGCacheObjClassRec.object_class.resources = merged_list;
   xmPushButtonGCacheObjClassRec.object_class.num_resources = wc_num_res + sc_num_res;
   PushBGClassExtensionRec.record_type = XmQmotif;
+  _XmCacheSetHashProc(&PushButtonClassCachePart, PushBCacheHash);
 }
 
 /************************************************************************
@@ -1301,15 +1322,15 @@ static void SecondaryObjectCreate(Widget req, Widget new_w, ArgList args, Cardin
    * ClassInitialize time we need to make only one call to
    * XtGetSubresources()
    */
-  XtGetSubresources(new_w,
-                    newSec,
-                    NULL,
-                    NULL,
-                    wc->core_class.resources,
-                    wc->core_class.num_resources,
-                    args,
-                    *num_args);
-  extData = (XmWidgetExtData)XtCalloc(1, sizeof(XmWidgetExtDataRec));
+  _XmGetSubresources(new_w,
+                     newSec,
+                     NULL,
+                     NULL,
+                     wc->core_class.resources,
+                     wc->core_class.num_resources,
+                     args,
+                     *num_args);
+  extData = _XmExtDataAlloc();
   extData->widget = (Widget)newSec;
   extData->reqWidget = (Widget)reqSec;
   ((XmPushButtonGCacheObject)newSec)->ext.extensionType = XmCACHE_EXTENSION;
@@ -1363,7 +1384,7 @@ static void InitializePosthook(Widget req, Widget new_w, ArgList args, Cardinal 
   _XmExtObjFree((XtPointer)ext->widget);
   _XmExtObjFree((XtPointer)ext->reqWidget);
   _XmProcessUnlock();
-  XtFree((char *)ext);
+  _XmExtDataFree(ext);
 }
 
 /*************************************<->*************************************
@@ -1542,7 +1563,7 @@ static Boolean SetValuesPrehook(
   newSec->ext.extensionType = XmCACHE_EXTENSION;
   memcpy(&(newSec->label_cache), LabG_Cache(newParent), sizeof(XmLabelGCacheObjPart));
   memcpy(&(newSec->pushbutton_cache), PBG_Cache(newParent), sizeof(XmPushButtonGCacheObjPart));
-  extData = (XmWidgetExtData)XtCalloc(1, sizeof(XmWidgetExtDataRec));
+  extData = _XmExtDataAlloc();
   extData->widget = (Widget)newSec;
   extData->reqWidget = (Widget)reqSec;
   _XmPushWidgetExtData(newParent, extData, XmCACHE_EXTENSION);
@@ -1595,7 +1616,7 @@ static void GetValuesPrehook(Widget newParent, ArgList args, Cardinal *num_args)
   newSec->ext.extensionType = XmCACHE_EXTENSION;
   memcpy(&(newSec->label_cache), LabG_Cache(newParent), sizeof(XmLabelGCacheObjPart));
   memcpy(&(newSec->pushbutton_cache), PBG_Cache(newParent), sizeof(XmPushButtonGCacheObjPart));
-  extData = (XmWidgetExtData)XtCalloc(1, sizeof(XmWidgetExtDataRec));
+  extData = _XmExtDataAlloc();
   extData->widget = (Widget)newSec;
   _XmPushWidgetExtData(newParent, extData, XmCACHE_EXTENSION);
   /* Note that if a resource is defined in the superclass's as well as a
@@ -1631,7 +1652,7 @@ static void GetValuesPosthook(Widget new_w, ArgList args, Cardinal *num_args)
   _XmProcessLock();
   _XmExtObjFree((XtPointer)ext->widget);
   _XmProcessUnlock();
-  XtFree((char *)ext);
+  _XmExtDataFree(ext);
 }
 
 /************************************************************************
@@ -1670,7 +1691,7 @@ static Boolean SetValuesPosthook(
   _XmExtObjFree((XtPointer)ext->widget);
   _XmExtObjFree((XtPointer)ext->reqWidget);
   _XmProcessUnlock();
-  XtFree((char *)ext);
+  _XmExtDataFree(ext);
   return FALSE;
 }
 
@@ -2585,7 +2606,7 @@ Widget XmCreatePushButtonGadget(Widget parent, char *name, ArgList arglist, Card
   return XtCreateWidget(name, xmPushButtonGadgetClass, parent, arglist, argcount);
 }
 
-Widget XmVaCreatePushButtonGadget(Widget parent, char *name, ...)
+Widget XmVaCreatePushButtonGadget(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;
@@ -2599,7 +2620,7 @@ Widget XmVaCreatePushButtonGadget(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedPushButtonGadget(Widget parent, char *name, ...)
+Widget XmVaCreateManagedPushButtonGadget(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

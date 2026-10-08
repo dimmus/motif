@@ -535,7 +535,7 @@ void _XmRegisterConverters(void)
  *	responsibility to ensure that test_str is already lower cased.
  *
  ************************************************************************/
-Boolean XmeNamesAreEqual(char *in_str, char *test_str)
+Boolean XmeNamesAreEqual(const char *in_str, const char *test_str)
 {
   char i;
   if (((in_str[0] == 'X') || (in_str[0] == 'x')) && ((in_str[1] == 'M') || (in_str[1] == 'm'))) {
@@ -1365,39 +1365,59 @@ typedef struct _system_font_list {
   XmFontList fontlist;
 } SystemFontList;
 
+/*
+ * The default render table of each display, loaded on first use.  An
+ * entry is dropped when the display's XmDisplay is destroyed, before
+ * XtCloseDisplay: a later display may get the same address.  Callers
+ * hold the process lock.
+ */
+static SystemFontList *sFontLists = NULL;
+static int nsFontLists = 0;
+static int maxnsFontLists = 0;
+
+/* With fontlist NULL, the default font list of display, if any; */
+/* otherwise, make fontlist that of display.  Call with the process */
+/* lock held. */
 static XmFontList DefaultSystemFontList(Display *display, XmFontList fontlist)
 {
-  static SystemFontList *sFontLists = NULL;
-  static int nsFontLists = 0;
-  static int maxnsFontLists = 0;
+  int i;
   if (fontlist) {
     if (nsFontLists >= maxnsFontLists) {
-      Cardinal nbytes;
       maxnsFontLists += 8;
-      nbytes = (Cardinal)sizeof(SystemFontList) * maxnsFontLists;
-      if (NULL == sFontLists) {
-        sFontLists = (SystemFontList *)XtMalloc(nbytes);
-        memset((void *)sFontLists, 0, nbytes);
-      }
-      else {
-        sFontLists = (SystemFontList *)XtRealloc((char *)sFontLists, nbytes);
-        memset((void *)&sFontLists[nsFontLists], 0, nbytes);
-      }
-      sFontLists[nsFontLists].display = display;
-      sFontLists[nsFontLists].fontlist = fontlist;
-      nsFontLists++;
+      sFontLists = (SystemFontList *)_XmReallocArray(
+          (char *)sFontLists, (size_t)maxnsFontLists, sizeof(SystemFontList));
     }
+    sFontLists[nsFontLists].display = display;
+    sFontLists[nsFontLists].fontlist = fontlist;
+    nsFontLists++;
+    return fontlist;
   }
-  else {
-    int i;
-    if (NULL == sFontLists)
-      return NULL;
-    for (i = 0; i < nsFontLists; i++) {
-      if (sFontLists[i].display == display)
-        return sFontLists[i].fontlist;
-    }
+  for (i = 0; i < nsFontLists; i++) {
+    if (sFontLists[i].display == display)
+      return sFontLists[i].fontlist;
   }
   return NULL;
+}
+
+/*
+ * Forget, and release, the default render table of a display; called
+ * when its XmDisplay is destroyed.
+ */
+void _XmFreeDefaultRenderTable(Display *display)
+{
+  XmFontList fontlist = NULL;
+  int i;
+  _XmProcessLock();
+  for (i = 0; i < nsFontLists; i++) {
+    if (sFontLists[i].display == display) {
+      fontlist = sFontLists[i].fontlist;
+      sFontLists[i] = sFontLists[--nsFontLists];
+      break;
+    }
+  }
+  _XmProcessUnlock();
+  if (fontlist)
+    XmFontListFree(fontlist);
 }
 
 XmFontList XmeGetDefaultRenderTable(Widget w, unsigned char fontListType)
@@ -2180,8 +2200,14 @@ static Boolean CvtStringToXmTabList(Display *dpy,
   return (FALSE);
 }
 
-static Boolean cvtStringToXmRenderTable(
-    Display *dpy, Widget widget, String resname, String resclass, XrmValue *from, XrmValue *to)
+/* Make the render table of string from for resource resname of widget. */
+/* *font_list is set if the string is converted as a font list. */
+static XmRenderTable ParseRenderTable(Display *dpy,
+                                      Widget widget,
+                                      String resname,
+                                      String resclass,
+                                      XrmValue *from,
+                                      Boolean *font_list)
 {
   char *s;
   XmRendition rend[1];
@@ -2189,49 +2215,76 @@ static Boolean cvtStringToXmRenderTable(
   char *tag;
   Boolean has_default = FALSE, in_db = FALSE;
   char *strtok_buf;
-  if (from->addr) {
-    s = XtNewString((char *)from->addr);
-    rt = NULL;
-    has_default = FALSE;
-    /* Try for default rendition */
-    rend[0] = _XmRenditionCreate(NULL, widget, resname, resclass, NULL, NULL, 0, NULL);
-    if (rend[0] != NULL) {
-      rt = XmRenderTableAddRenditions(NULL, rend, 1, XmMERGE_REPLACE);
-      has_default = TRUE;
-    }
-    /* Try to get first tag. */
-    if ((tag = strtok_r(s, " \t\r\n\v\f,", &strtok_buf)) != NULL) {
+  XrmValue to;
+  s = XtNewString((char *)from->addr);
+  rt = NULL;
+  *font_list = FALSE;
+  /* Try for default rendition */
+  rend[0] = _XmRenditionCreate(NULL, widget, resname, resclass, NULL, NULL, 0, NULL);
+  if (rend[0] != NULL) {
+    rt = XmRenderTableAddRenditions(NULL, rend, 1, XmMERGE_REPLACE);
+    has_default = TRUE;
+  }
+  /* Try to get first tag. */
+  if ((tag = strtok_r(s, _XmRENDITION_TAG_DELIMITERS, &strtok_buf)) != NULL) {
+    XmRenditionFree(rend[0]);
+    rend[0] = _XmRenditionCreate(NULL, widget, resname, resclass, tag, NULL, 0, &in_db);
+    if (!has_default && !in_db) {
+      /* Call the fontlist converter */
       XmRenditionFree(rend[0]);
-      rend[0] = _XmRenditionCreate(NULL, widget, resname, resclass, tag, NULL, 0, &in_db);
-      if (!has_default && !in_db) {
-        /* Call the fontlist converter */
-        XmRenditionFree(rend[0]);
-        XtFree(s);
-        return CvtStringToXmFontList(dpy, NULL, 0, from, to, NULL);
-      }
-      rt = XmRenderTableAddRenditions(rt, rend, 1, XmMERGE_REPLACE);
-    }
-    else if (rend[0] == NULL) {
-      /* warning */
       XtFree(s);
-      return FALSE;
+      *font_list = TRUE;
+      to.addr = (XPointer)&rt;
+      to.size = sizeof(rt);
+      if (!CvtStringToXmFontList(dpy, NULL, 0, from, &to, NULL))
+        rt = NULL;
+      return rt;
     }
-    else {
-      /* only a default rendition */
-      XtFree(s);
-      XmRenditionFree(rend[0]);
-      _XM_CONVERTER_DONE(to, XmRenderTable, rt, XmRenderTableFree(rt);)
-    }
-    while ((tag = strtok_r(NULL, " \t\r\n\v\f,", &strtok_buf)) != NULL) {
-      XmRenditionFree(rend[0]);
-      rend[0] = _XmRenditionCreate(NULL, widget, resname, resclass, tag, NULL, 0, NULL);
-      rt = XmRenderTableAddRenditions(rt, rend, 1, XmMERGE_REPLACE);
-    }
+    rt = XmRenderTableAddRenditions(rt, rend, 1, XmMERGE_REPLACE);
+  }
+  else if (rend[0] == NULL) {
+    /* warning */
+    XtFree(s);
+    return NULL;
+  }
+  else {
+    /* only a default rendition */
     XtFree(s);
     XmRenditionFree(rend[0]);
-    _XM_CONVERTER_DONE(to, XmRenderTable, rt, XmRenderTableFree(rt);)
+    return rt;
   }
-  return FALSE;
+  while ((tag = strtok_r(NULL, _XmRENDITION_TAG_DELIMITERS, &strtok_buf)) != NULL) {
+    XmRenditionFree(rend[0]);
+    rend[0] = _XmRenditionCreate(NULL, widget, resname, resclass, tag, NULL, 0, NULL);
+    rt = XmRenderTableAddRenditions(rt, rend, 1, XmMERGE_REPLACE);
+  }
+  XtFree(s);
+  XmRenditionFree(rend[0]);
+  return rt;
+}
+
+/*
+ * The table depends on widget only through the rendition resources
+ * found for it in the resource database (see _XmRenderTableCvtCacheGet),
+ * so a widget whose lookups find the same values as an earlier one gets
+ * a copy of the table made for that one.
+ */
+static Boolean cvtStringToXmRenderTable(
+    Display *dpy, Widget widget, String resname, String resclass, XrmValue *from, XrmValue *to)
+{
+  XmRenderTable rt;
+  XtPointer pending;
+  Boolean font_list;
+  if (from->addr == NULL)
+    return FALSE;
+  rt = _XmRenderTableCvtCacheGet(widget, resname, resclass, (char *)from->addr, &pending);
+  if (rt == NULL) {
+    rt = ParseRenderTable(dpy, widget, resname, resclass, from, &font_list);
+    _XmRenderTableCvtCachePut(widget, pending, rt, font_list);
+  }
+  if (rt == NULL)
+    return FALSE;
+  _XM_CONVERTER_DONE(to, XmRenderTable, rt, XmRenderTableFree(rt);)
 }
 
 static Boolean CvtStringToRenderTable(Display *dpy,

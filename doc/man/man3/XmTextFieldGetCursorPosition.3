@@ -1,0 +1,37 @@
+.TH "XmTextFieldGetCursorPosition" "library call"
+.nh
+.SH "NAME"
+\fB\%XmTextFieldGetCursorPosition\fP,
+\fB\%XmTextFieldSetCursorPosition\fP \(em Obsolete TextField functions that access the position of the insertion cursor
+.iX "XmTextFieldGetCursorPosition"
+.iX "TextField functions" "XmTextFieldGetCursorPosition"
+.iX "TextField functions" "XmTextFieldSetCursorPosition"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/TextF\&.h>
+.PP
+\fBXmTextPosition \fBXmTextFieldGetCursorPosition\fP\fR(
+\fBWidget \fBw\fR\fR);
+.PP
+\fBvoid \fBXmTextFieldSetCursorPosition\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBXmTextPosition \fBposition\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+These functions are obsolete; use
+\fB\%XmTextFieldGetInsertionPosition\fP
+and \fB\%XmTextFieldSetInsertionPosition\fP, which they call\&.
+.IP "\fIw\fP" 10
+Specifies the TextField widget\&.
+.IP "\fIposition\fP" 10
+Specifies the new position of the insertion cursor\&.
+.SH "RETURN"
+.PP
+\fB\%XmTextFieldGetCursorPosition\fP returns the position of the
+insertion cursor\&.
+.SH "RELATED"
+.PP
+\fB\%XmTextFieldGetInsertionPosition\fP(3) and
+\fB\%XmTextFieldSetInsertionPosition\fP(3)\&.

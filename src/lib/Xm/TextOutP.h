@@ -34,7 +34,8 @@ extern "C" {
  ****************************************************************/
 #  define ShouldWordWrap(data, widget) \
     (data->wordwrap && \
-     (!(((XmDirectionMatch(XmPrim_layout_direction(widget), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) ? \
+     (!((((XmPrim_layout_direction(widget) & XmPRECEDENCE_MASK) == XmPRECEDENCE_VERT_MASK && \
+           XmDirectionMatch(XmPrim_layout_direction(widget), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) ? \
              data->scrollvertical : \
              data->scrollhorizontal) && \
         XmIsScrolledWindow(widget->core.parent))) && \

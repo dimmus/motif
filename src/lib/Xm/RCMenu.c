@@ -653,12 +653,6 @@ static void MenuBarCleanup(XmRowColumnWidget rc)
   _XmMenuSetInPMMode((Widget)rc, False);
 }
 
-static int SIF_ErrorHandler(Display *display, /* unused */
-                            XErrorEvent *event)
-{
-  return 0;
-}
-
 /*
  * Set the input focus, ignoring the BadMatch error that a window which is
  * no longer viewable gets.  The handler has to stay in place until the
@@ -672,16 +666,13 @@ static void SetInputFocus(Display *display,
                           Window *focus_return,
                           int *revert_return)
 {
-  XErrorHandler old_Handler;
-  /* Setup error proc and reset error flag */
-  old_Handler = XSetErrorHandler((XErrorHandler)SIF_ErrorHandler);
+  XmErrorTrapRec trap;
+  _XmStartErrorTrap(&trap, display, 0, 0);
   /* Set the input focus */
   XSetInputFocus(display, focus, revert_to, time);
   if (focus_return)
     XGetInputFocus(display, focus_return, revert_return);
-  else
-    XSync(display, False);
-  XSetErrorHandler(old_Handler);
+  (void)_XmEndErrorTrap(&trap, focus_return == NULL);
 }
 
 void _XmMenuFocus(Widget w, int operation, Time _time)

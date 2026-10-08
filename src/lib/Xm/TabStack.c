@@ -2761,7 +2761,7 @@ Widget XmCreateTabStack(Widget parent, String name, ArgList arg_list, Cardinal a
   return (XtCreateWidget(name, xmTabStackWidgetClass, parent, arg_list, arg_cnt));
 }
 
-Widget XmVaCreateTabStack(Widget parent, char *name, ...)
+Widget XmVaCreateTabStack(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -2775,7 +2775,7 @@ Widget XmVaCreateTabStack(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedTabStack(Widget parent, char *name, ...)
+Widget XmVaCreateManagedTabStack(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

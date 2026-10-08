@@ -1,0 +1,59 @@
+.TH "XmeGetNextCharacter" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeGetNextCharacter\fP \(em A parse procedure that inserts the character after its pattern
+.iX "XmeGetNextCharacter"
+.iX "Xme functions" "XmeGetNextCharacter"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/XmP\&.h>
+\fBXmIncludeStatus \fBXmeGetNextCharacter\fP\fR(
+\fBXtPointer *\fBin_out\fR\fR,
+\fBXtPointer \fBtext_end\fR\fR,
+\fBXmTextType \fBtype\fR\fR,
+\fBXmStringTag \fBlocale_tag\fR\fR,
+\fBXmParseMapping \fBentry\fR\fR,
+\fBint \fBpattern_length\fR\fR,
+\fBXmString *\fBstr_include\fR\fR,
+\fBXtPointer \fBcall_data\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeGetNextCharacter\fP is an \fB\%XmParseProc\fP that makes the
+pattern of
+its parse mapping an escape character: it consumes the
+\fIpattern_length\fP bytes of the pattern and returns in
+\fIstr_include\fP an
+XmString that holds the next character of the text, which is consumed
+too\&.  The text component is a locale text component for
+\fB\%XmMULTIBYTE_TEXT\fP, and for \fB\%XmCHARSET_TEXT\fP tagged
+\fB\%XmFONTLIST_DEFAULT_TAG\fP; a wide character component for
+\fB\%XmWIDECHAR_TEXT\fP; and a text component otherwise\&.  If there is
+no
+next character, \fIstr_include\fP is NULL\&.
+.IP "\fIin_out\fP" 12
+Specifies the position of the pattern in the text, and returns the
+position after the character\&.
+.IP "\fItext_end\fP" 12
+Specifies the end of the text, or NULL if the text ends with a null
+character\&.
+.IP "\fItype\fP" 12
+Specifies the type of the text\&.
+.IP "\fIlocale_tag\fP" 12
+Specifies the tag of the text\&.
+.IP "\fIentry\fP" 12
+Is not used\&.
+.IP "\fIpattern_length\fP" 12
+Specifies the length of the pattern, in bytes\&.
+.IP "\fIstr_include\fP" 12
+Returns the XmString to insert\&.
+.IP "\fIcall_data\fP" 12
+Is not used\&.
+.SH "RETURN"
+.PP
+Returns \fB\%XmINSERT\fP\&.
+.SH "RELATED"
+.PP
+\fB\%XmeGetDirection\fP(3), \fB\%XmParseMapping\fP(3) and
+\fB\%XmStringParseText\fP(3)\&.

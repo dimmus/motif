@@ -254,7 +254,7 @@ MrmOpenHierarchyPerDisplay (Display		*display,
  */
 
 Cardinal
-MrmOpenHierarchyFromBuffer (unsigned char	*uid_buffer,
+MrmOpenHierarchyFromBuffer (const unsigned char	*uid_buffer,
 			    MrmHierarchy	*hierarchy_id_return)
 {
 
@@ -301,7 +301,7 @@ MrmOpenHierarchyFromBuffer (unsigned char	*uid_buffer,
  */
 
 Cardinal
-MrmOpenHierarchyFromBufferWithSize (unsigned char	*uid_buffer,
+MrmOpenHierarchyFromBufferWithSize (const unsigned char	*uid_buffer,
 				    size_t		uid_buffer_size,
 				    MrmHierarchy	*hierarchy_id_return)
 {
@@ -564,7 +564,7 @@ MrmRegisterNamesInHierarchy (MrmHierarchy		hierarchy_id,
 /*ARGSUSED*/
 Cardinal
 MrmFetchInterfaceModule (MrmHierarchy		hierarchy_id,
-			 char			*module_name,
+			 const char		*module_name,
 			 Widget			parent,
 			 Widget			*w_return) /* unused */
 
@@ -737,7 +737,7 @@ MrmFetchInterfaceModule (MrmHierarchy		hierarchy_id,
 
 Cardinal
 MrmFetchWidget (MrmHierarchy                hierarchy_id,
-		String                      index,
+		const char                  *index,
 		Widget                      parent,
 		Widget                      *w_return,
 		MrmType                     *class_return)
@@ -801,7 +801,7 @@ MrmFetchWidget (MrmHierarchy                hierarchy_id,
 
 Cardinal
 MrmFetchWidgetOverride (MrmHierarchy		hierarchy_id,
-			String			index,
+			const char		*index,
 			Widget			parent,
 			String			ov_name,
 			ArgList			ov_args,

@@ -1,0 +1,51 @@
+.TH "XmCompareXtWidgetGeometry" "library call"
+.nh
+.SH "NAME"
+\fB\%XmCompareXtWidgetGeometry\fP,
+\fB\%XmCompareXtWidgetGeometryToWidget\fP \(em Compare widget geometries
+.iX "XmCompareXtWidgetGeometry"
+.iX "geometry functions" "XmCompareXtWidgetGeometry"
+.iX "geometry functions" "XmCompareXtWidgetGeometryToWidget"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/Ext\&.h>
+.PP
+\fBBoolean \fBXmCompareXtWidgetGeometry\fP\fR(
+\fBXtWidgetGeometry *\fBgeom1\fR\fR,
+\fBXtWidgetGeometry *\fBgeom2\fR\fR);
+.PP
+\fBBoolean \fBXmCompareXtWidgetGeometryToWidget\fP\fR(
+\fBXtWidgetGeometry *\fBgeom\fR\fR,
+\fBWidget \fBwidget\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmCompareXtWidgetGeometry\fP tells whether two geometries are the
+same: they must have the same request mode and the same values in the
+fields that the mode selects\&.
+.PP
+\fB\%XmCompareXtWidgetGeometryToWidget\fP tells whether the geometry
+\fIwidget\fP has matches \fIgeom\fP in the position, size and border
+width
+fields that the request mode of \fIgeom\fP selects\&.
+.IP "\fIgeom1\fP" 10
+Specifies a geometry\&.
+.IP "\fIgeom2\fP" 10
+Specifies the other geometry\&.
+.IP "\fIgeom\fP" 10
+Specifies the geometry\&.
+.IP "\fIwidget\fP" 10
+Specifies the widget\&.
+.SH "RETURN"
+.PP
+The functions return True if the geometries match, and False
+otherwise\&.
+.SH "BUGS"
+.PP
+\fB\%XmCompareXtWidgetGeometryToWidget\fP compares the width of
+\fIgeom\fP
+with the height of the widget, not its width\&.
+.SH "RELATED"
+.PP
+\fB\%XtQueryGeometry\fP(3) and \fB\%XtMakeGeometryRequest\fP(3)\&.

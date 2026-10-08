@@ -37,12 +37,12 @@ typedef struct _XmPrintShellRec *XmPrintShellWidget;
 /********    Public Function Declarations    ********/
 extern Widget XmPrintSetup(Widget video_widget,
                            Screen *print_screen,
-                           String print_shell_name,
+                           const char *print_shell_name,
                            ArgList args,
                            Cardinal num_args);
 extern void XmRedisplayWidget(Widget widget);
 extern XtEnum XmPrintToFile(Display *dpy,
-                            char *file_name,
+                            const char *file_name,
                             XPFinishProc finish_proc,
                             XPointer client_data);
 extern XtEnum XmPrintPopupPDM(Widget print_shell, Widget transient_for);

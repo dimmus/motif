@@ -2380,7 +2380,7 @@ Widget XmCreatePushButton(Widget parent, char *name, ArgList arglist, Cardinal a
   return XtCreateWidget(name, xmPushButtonWidgetClass, parent, arglist, argcount);
 }
 
-Widget XmVaCreatePushButton(Widget parent, char *name, ...)
+Widget XmVaCreatePushButton(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -2394,7 +2394,7 @@ Widget XmVaCreatePushButton(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedPushButton(Widget parent, char *name, ...)
+Widget XmVaCreateManagedPushButton(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

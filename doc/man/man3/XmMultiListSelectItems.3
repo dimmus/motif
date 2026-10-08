@@ -1,14 +1,23 @@
 .ta 8n 16n 24n 32n 40n 48n 56n 64n 72n
 .TH "XmMultiListSelectItems" "library call"
 .SH "NAME"
-\fBXmMultiListSelectItems\fP \(em A MultiList function that selects items in the list by matching column entries
+\fBXmMultiListSelectItems\fP,
+\fBXmExt18ListSelectItems\fP \(em MultiList functions that select items in the list by matching column entries
 .iX "XmMultiListSelectItems"
+.iX "XmExt18ListSelectItems"
 .iX "List functions" "XmMultiListSelectItems"
 .SH "SYNOPSIS"
 .PP
 .nf
 #include <Xm/MultiList\&.h>
 \fBvoid \fBXmMultiListSelectItems\fP\fR(
+\fBWidget \fBwidget\fR\fR,
+\fBXmString \fBitem\fR\fR,
+\fBint \fBcolumn\fR\fR,
+\fBBoolean \fBnotify\fR\fR);
+.PP
+#include <Xm/Ext18List\&.h>
+\fBvoid \fBXmExt18ListSelectItems\fP\fR(
 \fBWidget \fBwidget\fR\fR,
 \fBXmString \fBitem\fR\fR,
 \fBint \fBcolumn\fR\fR,
@@ -34,7 +43,11 @@ When \fInotify\fP is FALSE, no callbacks are called\&.
 .PP
 For a complete definition of MultiList and its associated resources, see
 \fBXmMultiList\fP(3)\&.
+.PP
+\fBXmExt18ListSelectItems\fP is the obsolete name of \fBXmMultiListSelectItems\fP, from the time
+the MultiList was called the Ext18List; \fB<Xm/Ext18List\&.h>\fP
+declares it deprecated\&.
 .SH "RELATED"
 .PP
 \fBXmMultiList\fP(3) and
-\fBXmMultiListGetSelectRows\fP(3)\&.
+\fBXmMultiListGetSelectedRows\fP(3)\&.

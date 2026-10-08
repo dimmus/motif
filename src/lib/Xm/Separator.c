@@ -448,7 +448,7 @@ Widget XmCreateSeparator(Widget parent, char *name, ArgList arglist, Cardinal ar
   return (XtCreateWidget(name, xmSeparatorWidgetClass, parent, arglist, argcount));
 }
 
-Widget XmVaCreateSeparator(Widget parent, char *name, ...)
+Widget XmVaCreateSeparator(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -462,7 +462,7 @@ Widget XmVaCreateSeparator(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedSeparator(Widget parent, char *name, ...)
+Widget XmVaCreateManagedSeparator(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

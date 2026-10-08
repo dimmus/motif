@@ -7,8 +7,13 @@
  * XmText, XmTextField and XmDataField through their API: editing,
  * positions, alignment, search, the primary selection, cut/copy/paste
  * through the clipboard, DataField pictures and validation, and a 10 MB
- * document.  Real keyboard and mouse input is driven by
- * text_xdotool.sh with xdotool.
+ * document; and through their actions, the quick transfers of the
+ * primary and the secondary selection.  Real keyboard and mouse input is
+ * driven by text_xdotool.sh with xdotool.
+ *
+ * Neither widget has an undo of edits (there is no undo action, and
+ * osfUndo is not bound), so there is none to test; see
+ * text_clipboard_undo_copy for XmClipboardUndoCopy().
  */
 #include <stdlib.h>
 #include <string.h>
@@ -18,14 +23,17 @@
 #include <Xm/Xm.h>
 #include <Xm/AccTextT.h>
 #include <Xm/BulletinB.h>
+#include <Xm/CutPaste.h>
 #include <Xm/DataF.h>
 #include <Xm/Text.h>
 #include <Xm/TextF.h>
 #include <Xm/TraitP.h>
 #include <Xm/TransferT.h>
+#include <Xm/TextP.h>
 #include <check.h>
 
 #include "suites.h"
+#include "TextI.h"
 
 static Widget top, bb;
 
@@ -62,17 +70,22 @@ static void teardown(void)
 	uninit_xt();
 }
 
-/* A server timestamp, for the calls that need one */
+/*
+ * A server timestamp, for the calls that need one.  The event goes
+ * through Xt too, so that XtLastTimestampProcessed() is as recent as it
+ * would be after real input.
+ */
 static Time server_time(Widget w)
 {
 	Display *dpy = XtDisplay(w);
 	Atom prop = XInternAtom(dpy, "_MOTIF_TEST_TIME", False);
 	XEvent ev;
 
-	XSelectInput(dpy, XtWindow(w), PropertyChangeMask);
+	XSelectInput(dpy, XtWindow(w), XtBuildEventMask(w) | PropertyChangeMask);
 	XChangeProperty(dpy, XtWindow(w), prop, XA_STRING, 8, PropModeAppend,
 			(unsigned char *)"", 0);
 	XWindowEvent(dpy, XtWindow(w), PropertyChangeMask, &ev);
+	XtDispatchEvent(&ev);
 	return ev.xproperty.time;
 }
 
@@ -291,6 +304,45 @@ START_TEST(text_selection_and_clipboard)
 }
 END_TEST
 
+/*
+ * XmText and XmTextField have no undo of edits; the only undo near them
+ * is XmClipboardUndoCopy(), which takes back the last copy to the
+ * clipboard made through a window, here the widget's own.  A second call
+ * undoes the first.
+ */
+START_TEST(text_clipboard_undo_copy)
+{
+	Widget t = XmCreateText(bb, "text", NULL, 0);
+	Display *dpy;
+
+	XtManageChild(t);
+	XtRealizeWidget(top);
+	pump();
+	dpy = XtDisplay(t);
+	XmTextSetString(t, "one two");
+	XmTextSetSelection(t, 0, 3, server_time(t));
+	ck_assert(XmTextCopy(t, server_time(t)));
+	XmTextSetSelection(t, 4, 7, server_time(t));
+	ck_assert(XmTextCopy(t, server_time(t)));
+	pump();
+
+	ck_assert_int_eq(XmClipboardUndoCopy(dpy, XtWindow(t)),
+			 ClipboardSuccess);
+	XmTextClearSelection(t, server_time(t));
+	XmTextSetInsertionPosition(t, XmTextGetLastPosition(t));
+	ck_assert(XmTextPaste(t));
+	pump();
+	assert_text(t, "one twoone");
+
+	ck_assert_int_eq(XmClipboardUndoCopy(dpy, XtWindow(t)),
+			 ClipboardSuccess);
+	XmTextSetInsertionPosition(t, XmTextGetLastPosition(t));
+	ck_assert(XmTextPaste(t));
+	pump();
+	assert_text(t, "one twoonetwo");
+}
+END_TEST
+
 /* Clipboard between two widgets of the same process */
 START_TEST(copy_text_to_textfield)
 {
@@ -345,6 +397,146 @@ START_TEST(large_document)
 	ck_assert(!memcmp(got, doc, SIZE));
 	XtFree(got);
 	free(doc);
+}
+END_TEST
+
+/*
+ * The line table lookup as it was before it bisected: a walk from
+ * table_index, forward or backward.
+ */
+static unsigned int walk_table_index(XmTextWidget tw, XmTextPosition pos)
+{
+	XmTextLineTable line_table = tw->text.line_table;
+	unsigned int cur_index = tw->text.table_index;
+	unsigned int max_index = tw->text.total_lines - 1;
+	unsigned int position = (unsigned int)pos;
+
+	if (line_table[cur_index].start_pos < position) {
+		while (cur_index < max_index &&
+		       line_table[cur_index].start_pos < position)
+			cur_index++;
+		if (position < line_table[cur_index].start_pos)
+			cur_index--;
+	} else {
+		while (cur_index && line_table[cur_index].start_pos > position)
+			cur_index--;
+	}
+	return cur_index;
+}
+
+static unsigned long lcg(unsigned long *state)
+{
+	*state = *state * 6364136223846793005UL + 1442695040888963407UL;
+	return *state >> 33;
+}
+
+/* Check _XmTextGetTableIndex against the walk, from several cursors. */
+static void check_line_table(Widget w, unsigned long *rnd)
+{
+	XmTextWidget tw = (XmTextWidget)w;
+	XmTextLineTable lt = tw->text.line_table;
+	unsigned int total = tw->text.total_lines, saved = tw->text.table_index;
+	XmTextPosition last = XmTextGetLastPosition(w);
+	unsigned int cursors[4], i, c, k;
+
+	ck_assert_uint_ge(total, 1);
+	/* The bisection relies on this. */
+	for (i = 1; i < total; i++)
+		ck_assert_uint_le(lt[i - 1].start_pos, lt[i].start_pos);
+
+	cursors[0] = 0;
+	cursors[1] = total / 2;
+	cursors[2] = total - 1;
+	cursors[3] = lcg(rnd) % total;
+	for (c = 0; c < 4; c++) {
+		tw->text.table_index = cursors[c];
+		for (k = 0; k < 64; k++) {
+			XmTextPosition pos;
+
+			if (k < 2)
+				pos = k ? last : 0;
+			else if (k < 32)
+				pos = lcg(rnd) % (last + 1);
+			else
+				pos = lt[lcg(rnd) % total].start_pos +
+				      (XmTextPosition)(k % 3) - 1;
+			if (pos < 0)
+				pos = 0;
+			ck_assert_uint_eq(_XmTextGetTableIndex(tw, pos),
+					  walk_table_index(tw, pos));
+		}
+	}
+	tw->text.table_index = saved;
+}
+
+/*
+ * The line table: lookups find the line the old walk found, while the
+ * text is edited, with and without word wrap (whose continuation lines
+ * are in the table too).
+ */
+START_TEST(text_line_table_lookup)
+{
+	static const char words[] = "lorem ipsum dolor sit amet consectetur "
+				    "adipiscing elit sed do eiusmod tempor ";
+	unsigned long rnd = 12345;
+	Arg args[4];
+	char *doc, ins[64];
+	int wrap, i, j, len;
+	Widget t;
+
+	for (wrap = 0; wrap < 2; wrap++) {
+		XtSetArg(args[0], XmNeditMode, XmMULTI_LINE_EDIT);
+		XtSetArg(args[1], XmNwordWrap, wrap);
+		XtSetArg(args[2], XmNscrollHorizontal, False);
+		XtSetArg(args[3], XmNcolumns, 20);
+		t = XmCreateScrolledText(bb, "text", args, 4);
+		XtManageChild(t);
+		XtRealizeWidget(top);
+
+		/* 400 lines of 0 to 79 characters. */
+		doc = malloc(400 * 81 + 1);
+		ck_assert_ptr_nonnull(doc);
+		for (i = len = 0; i < 400; i++) {
+			int n = lcg(&rnd) % 80;
+
+			for (j = 0; j < n; j++)
+				doc[len++] = words[(i * 7 + j) % (sizeof words - 1)];
+			doc[len++] = '\n';
+		}
+		doc[len] = '\0';
+		XmTextSetString(t, doc);
+		free(doc);
+		pump();
+		/* Word wrap adds continuation lines to the 400 lines. */
+		if (wrap)
+			ck_assert_int_gt(((XmTextWidget)t)->text.total_lines, 600);
+		else
+			ck_assert_int_eq(((XmTextWidget)t)->text.total_lines, 401);
+		check_line_table(t, &rnd);
+
+		for (i = 0; i < 200; i++) {
+			XmTextPosition last = XmTextGetLastPosition(t);
+			XmTextPosition pos = lcg(&rnd) % (last + 1);
+
+			if (lcg(&rnd) % 3) {
+				int n = 1 + lcg(&rnd) % 40;
+
+				for (j = 0; j < n; j++)
+					ins[j] = (lcg(&rnd) % 8) ? words[lcg(&rnd) % (sizeof words - 1)]
+								 : '\n';
+				ins[n] = '\0';
+				XmTextInsert(t, pos, ins);
+			} else {
+				XmTextPosition end = pos + lcg(&rnd) % 100;
+
+				XmTextReplace(t, pos, end > last ? last : end, "");
+			}
+			if (i % 10 == 0)
+				XmTextShowPosition(t, lcg(&rnd) % (XmTextGetLastPosition(t) + 1));
+			check_line_table(t, &rnd);
+		}
+		XtDestroyWidget(XtParent(t));
+	}
 }
 END_TEST
 
@@ -683,6 +875,409 @@ START_TEST(datafield_validate)
 }
 END_TEST
 
+/*
+ * The secondary selection ("quick transfer"): a Button2 drag with Alt
+ * or Meta in one text widget selects text there, and on release that
+ * text is copied (no Shift) or moved (Shift) to the insertion point of
+ * the widget that has the destination cursor (_MOTIF_DESTINATION), in
+ * this or another application.  These tests call the actions that the
+ * default translations bind to those events (secondary-start,
+ * secondary-adjust, copy-to, move-to) with synthetic events;
+ * text_xdotool.sh drives the same with real input, also between two
+ * processes.
+ */
+
+static Widget create_text_widget(const char *name, Boolean field, Position y)
+{
+	return XtVaCreateManagedWidget(name,
+				       field ? xmTextFieldWidgetClass
+					     : xmTextWidgetClass,
+				       bb, XmNy, y, XmNcolumns, 30, NULL);
+}
+
+/* Call action on w with a synthetic event at x, y */
+static void event_action(Widget w, const char *action, int type, int x, int y,
+			 unsigned int state, Time t)
+{
+	XEvent ev;
+
+	memset(&ev, 0, sizeof ev);
+	ev.xbutton.type = type;
+	ev.xbutton.display = XtDisplay(w);
+	ev.xbutton.window = XtWindow(w);
+	ev.xbutton.root = RootWindowOfScreen(XtScreen(w));
+	ev.xbutton.time = t;
+	ev.xbutton.x = x;
+	ev.xbutton.y = y;
+	ev.xbutton.same_screen = True;
+	ev.xbutton.state = state;
+	if (type == ButtonPress || type == ButtonRelease)
+		ev.xbutton.button = (state & Button1Mask) ? Button1 : Button2;
+	else if (type == KeyPress)
+		ev.xkey.keycode = XKeysymToKeycode(XtDisplay(w), XK_Escape);
+	XtCallActionProc(w, action, &ev, NULL, 0);
+}
+
+/* Call action on w with a synthetic pointer event over position pos */
+static void pointer_action(Widget w, const char *action, int type,
+			   XmTextPosition pos, unsigned int state, Time t)
+{
+	Position x, y;
+
+	/* XmTextPosToXY gives the baseline at the left of the character */
+	ck_assert(XmTextPosToXY(w, pos, &x, &y));
+	event_action(w, action, type, x + 1, y - 2, state, t);
+}
+
+/* Click Button1 at pos in w: w gets the focus and the destination cursor */
+static void click(Widget w, XmTextPosition pos)
+{
+	Time t = server_time(w);
+
+	pointer_action(w, "grab-focus", ButtonPress, pos, 0, t);
+	pointer_action(w, "extend-end", ButtonRelease, pos, Button1Mask, t);
+	pump();
+	ck_assert_ptr_eq(XmGetDestination(XtDisplay(w)), w);
+}
+
+/*
+ * Drag Button2 with Alt in w from left to right and release it there,
+ * calling release ("copy-to" or "move-to").
+ */
+static void secondary_drag(Widget w, XmTextPosition left, XmTextPosition right,
+			   const char *release)
+{
+	/* One timestamp for all: the selections are owned at the time of
+	 * the events, which must not be later than the server's time. */
+	Time t = server_time(w);
+
+	/* What the press and the motion cause (the focus events of the
+	 * keyboard grab) is handled before the release, as with real input. */
+	pointer_action(w, "secondary-start", ButtonPress, left, Mod1Mask, t);
+	pump();
+	pointer_action(w, "secondary-adjust", MotionNotify, (left + right) / 2,
+		       Mod1Mask | Button2Mask, t);
+	pointer_action(w, "secondary-adjust", MotionNotify, right,
+		       Mod1Mask | Button2Mask, t);
+	pump();
+	pointer_action(w, release, ButtonRelease, right,
+		       Mod1Mask | Button2Mask, t);
+	pump();
+}
+
+/* One quick transfer from a Text or TextField to a Text or TextField */
+static void check_secondary(Boolean src_field, Boolean dst_field,
+			    const char *release, const char *src_expect,
+			    const char *dst_expect)
+{
+	Widget src = create_text_widget("src", src_field, 0);
+	Widget dst = create_text_widget("dst", dst_field, 100);
+	Display *dpy;
+
+	XtRealizeWidget(top);
+	pump();
+	dpy = XtDisplay(top);
+	XmTextSetString(src, "abc def ghi");
+	XmTextSetString(dst, "dest");
+	click(dst, 4);
+
+	secondary_drag(src, 4, 7, release);
+	assert_text(src, src_expect);
+	assert_text(dst, dst_expect);
+	/* The transfer is over: nobody owns SECONDARY any more, and the
+	 * destination cursor has not moved to the source. */
+	ck_assert_int_eq(XGetSelectionOwner(dpy, XA_SECONDARY), None);
+	ck_assert_ptr_eq(XmGetDestination(dpy), dst);
+}
+
+/* _i: bit 0, the source is a TextField; bit 1, the destination is one */
+START_TEST(secondary_copy)
+{
+	check_secondary(_i & 1, (_i & 2) != 0, "copy-to", "abc def ghi",
+			"destdef");
+}
+END_TEST
+
+START_TEST(secondary_move)
+{
+	check_secondary(_i & 1, (_i & 2) != 0, "move-to", "abc  ghi",
+			"destdef");
+}
+END_TEST
+
+/*
+ * Within one widget, with the destination cursor before, after and in
+ * the secondary selection.  Moving text into itself does nothing.
+ * _i: bit 0, a TextField; the rest, the case.
+ */
+START_TEST(secondary_same_widget)
+{
+	static const struct {
+		XmTextPosition dest;
+		const char *release, *expect;
+	} cases[] = {
+		{ 0, "copy-to", "defabc def ghi" },
+		{ 11, "copy-to", "abc def ghidef" },
+		{ 5, "copy-to", "abc ddefef ghi" },
+		{ 0, "move-to", "defabc  ghi" },
+		{ 11, "move-to", "abc  ghidef" },
+		{ 5, "move-to", "abc def ghi" },
+	};
+	Widget w = create_text_widget("text", _i & 1, 0);
+
+	XtRealizeWidget(top);
+	pump();
+	XmTextSetString(w, "abc def ghi");
+	click(w, cases[_i >> 1].dest);
+	secondary_drag(w, 4, 7, cases[_i >> 1].release);
+	assert_text(w, cases[_i >> 1].expect);
+	ck_assert_int_eq(XGetSelectionOwner(XtDisplay(w), XA_SECONDARY), None);
+}
+END_TEST
+
+/*
+ * A secondary selection is dropped, and nothing transferred, when Escape
+ * (process-cancel) is pressed during the drag (_i bit 1 clear) or the
+ * button is released outside the widget (bit 1 set).  _i bit 0: the
+ * source is a TextField.
+ */
+START_TEST(secondary_cancel)
+{
+	Widget src = create_text_widget("src", _i & 1, 0);
+	Widget dst = create_text_widget("dst", False, 100);
+	Display *dpy;
+	Time t;
+
+	XtRealizeWidget(top);
+	pump();
+	dpy = XtDisplay(top);
+	XmTextSetString(src, "abc def ghi");
+	XmTextSetString(dst, "dest");
+	click(dst, 4);
+
+	t = server_time(src);
+	pointer_action(src, "secondary-start", ButtonPress, 4, Mod1Mask, t);
+	pointer_action(src, "secondary-adjust", MotionNotify, 7,
+		       Mod1Mask | Button2Mask, t);
+	if (_i & 2) {
+		event_action(src, "move-to", ButtonRelease,
+			     src->core.width + 10, 5,
+			     Mod1Mask | Button2Mask, t);
+	} else {
+		event_action(src, "process-cancel", KeyPress, 0, 0,
+			     Mod1Mask | Button2Mask, t);
+		pointer_action(src, "move-to", ButtonRelease, 7,
+			       Mod1Mask | Button2Mask, t);
+	}
+	pump();
+	assert_text(src, "abc def ghi");
+	assert_text(dst, "dest");
+	ck_assert_int_eq(XGetSelectionOwner(dpy, XA_SECONDARY), None);
+
+	/* The next quick transfer works */
+	secondary_drag(src, 0, 3, "copy-to");
+	assert_text(dst, "destabc");
+}
+END_TEST
+
+/*
+ * The same actions without a secondary selection: Button2 clicked (not
+ * dragged) in a widget copies the primary selection to the pointer
+ * (copy-to), or moves it there with Shift (move-to).
+ */
+static void quick_primary(Widget src, Widget dst, const char *release)
+{
+	Time t = server_time(src);
+
+	XmTextSetSelection(src, 4, 7, t);
+	pointer_action(dst, "process-bdrag", ButtonPress, 4, 0, t);
+	pointer_action(dst, release, ButtonRelease, 4, Button2Mask, t);
+	pump();
+}
+
+/* _i: bit 0, the source is a TextField; bit 1, the destination is one */
+START_TEST(primary_quick_copy_move)
+{
+	Widget src = create_text_widget("src", _i & 1, 0);
+	Widget dst = create_text_widget("dst", (_i & 2) != 0, 100);
+
+	XtRealizeWidget(top);
+	pump();
+	XmTextSetString(src, "abc def ghi");
+	XmTextSetString(dst, "dest");
+	quick_primary(src, dst, "copy-to");
+	assert_text(src, "abc def ghi");
+	assert_text(dst, "destdef");
+	quick_primary(src, dst, "move-to");
+	assert_text(src, "abc  ghi");
+	assert_text(dst, "destdefdef");
+}
+END_TEST
+
+/* A modifyVerifyCallback that refuses every change */
+static void refuse_change(Widget w, XtPointer client, XtPointer call)
+{
+	((XmTextVerifyCallbackStruct *)call)->doit = False;
+}
+
+/* Make dst refuse to change: _i bit 2 set, by XmNmodifyVerifyCallback,
+ * otherwise by not being editable. */
+static void refuse_changes(Widget dst, int how)
+{
+	if (how)
+		XtAddCallback(dst, XmNmodifyVerifyCallback, refuse_change, NULL);
+	else
+		XtVaSetValues(dst, XmNeditable, False, NULL);
+}
+
+/*
+ * Moving text to a destination that refuses it leaves the source alone:
+ * the destination used to answer the request as if it had inserted the
+ * text, and the source then deleted it.  _i: bit 0, the source is a
+ * TextField; bit 1, the destination is one; bit 2, see refuse_changes().
+ */
+START_TEST(secondary_move_refused)
+{
+	Widget src = create_text_widget("src", _i & 1, 0);
+	Widget dst = create_text_widget("dst", (_i & 2) != 0, 100);
+
+	XtRealizeWidget(top);
+	pump();
+	XmTextSetString(src, "abc def ghi");
+	XmTextSetString(dst, "dest");
+	click(dst, 4);
+	refuse_changes(dst, _i & 4);
+
+	secondary_drag(src, 4, 7, "move-to");
+	assert_text(src, "abc def ghi");
+	assert_text(dst, "dest");
+	ck_assert_int_eq(XGetSelectionOwner(XtDisplay(top), XA_SECONDARY),
+			 None);
+}
+END_TEST
+
+/* As secondary_move_refused, for the primary selection */
+START_TEST(primary_quick_move_refused)
+{
+	Widget src = create_text_widget("src", _i & 1, 0);
+	Widget dst = create_text_widget("dst", (_i & 2) != 0, 100);
+
+	XtRealizeWidget(top);
+	pump();
+	XmTextSetString(src, "abc def ghi");
+	XmTextSetString(dst, "dest");
+	refuse_changes(dst, _i & 4);
+	quick_primary(src, dst, "move-to");
+	assert_text(src, "abc def ghi");
+	assert_text(dst, "dest");
+}
+END_TEST
+
+/*
+ * The quick transfer actions called without an event, as through
+ * XtCallActionProc(): the insertion cursor stands for the pointer.  They
+ * used to dereference the event and crash.  _i: bit 0, the source is a
+ * TextField; bit 1, the destination is one.
+ */
+START_TEST(secondary_no_event)
+{
+	static const char *actions[] = {
+		"secondary-start", "secondary-adjust", "copy-to",
+		"secondary-start", "secondary-adjust", "move-to",
+		"secondary-start", "secondary-adjust", "link-to",
+		"secondary-start", "process-cancel", "copy-to",
+		"process-bdrag", "process-cancel", "move-to",
+		"copy-to", "move-to", "link-to",
+	};
+	Widget src = create_text_widget("src", _i & 1, 0);
+	Widget dst = create_text_widget("dst", (_i & 2) != 0, 100);
+	size_t i;
+
+	XtRealizeWidget(top);
+	pump();
+	XmTextSetString(src, "abc def ghi");
+	XmTextSetString(dst, "dest");
+	/* Leave PRIMARY without an owner, but owned once: Xt's record for
+	 * a selection, which it never frees, is then allocated by
+	 * XtOwnSelection(), whose leak lsan.supp suppresses, rather than by
+	 * the XtGetSelectionValue() of copy-to. */
+	XmTextSetSelection(dst, 0, 4, server_time(dst));
+	XmTextClearSelection(dst, server_time(dst));
+	for (i = 0; i < XtNumber(actions); i++) {
+		XtCallActionProc(src, actions[i], NULL, NULL, 0);
+		pump();
+	}
+	/* Nothing selected, nothing transferred */
+	assert_text(src, "abc def ghi");
+	assert_text(dst, "dest");
+
+	/* A Button2 click without a drag pastes the primary selection
+	 * at the cursor. */
+	click(dst, 4);
+	XmTextSetSelection(src, 4, 7, server_time(src));
+	XtCallActionProc(dst, "process-bdrag", NULL, NULL, 0);
+	XtCallActionProc(dst, "copy-to", NULL, NULL, 0);
+	pump();
+	assert_text(dst, "destdef");
+}
+END_TEST
+
+/*
+ * The secondary selection started in a widget that is not the focus
+ * widget of its shell, while the destination is in another shell, as
+ * in another application: the keyboard grab of the drag gives the
+ * source's shell the focus, and its focus widget used to take the
+ * destination, and the text with it.  _i: bit 0, the widgets of the
+ * second shell are TextFields; bit 1, the destination is one.
+ */
+START_TEST(secondary_focus_grab)
+{
+	Widget dst = create_text_widget("dst", (_i & 2) != 0, 0);
+	Widget shell2, bb2, focus, src;
+	Display *dpy;
+	Atom destination;
+
+	shell2 = XtVaAppCreateShell("second", "Second", topLevelShellWidgetClass,
+				    XtDisplay(top), XmNx, 0, XmNy, 400, NULL);
+	bb2 = XmCreateBulletinBoard(shell2, "bb", NULL, 0);
+	XtManageChild(bb2);
+	focus = XtVaCreateManagedWidget("focus",
+					(_i & 1) ? xmTextFieldWidgetClass
+						 : xmTextWidgetClass,
+					bb2, XmNcolumns, 30, NULL);
+	src = XtVaCreateManagedWidget("src",
+				      (_i & 1) ? xmTextFieldWidgetClass
+					       : xmTextWidgetClass,
+				      bb2, XmNy, 100, XmNcolumns, 30, NULL);
+	XtRealizeWidget(top);
+	XtRealizeWidget(shell2);
+	pump();
+	dpy = XtDisplay(top);
+	destination = XInternAtom(dpy, "_MOTIF_DESTINATION", False);
+	XmTextSetString(dst, "dest");
+	XmTextSetString(focus, "focus");
+	XmTextSetString(src, "abc def ghi");
+
+	/* The second shell had the focus, on "focus"; then the user
+	 * clicked in dst, in the first one. */
+	XSetInputFocus(dpy, XtWindow(shell2), RevertToParent, CurrentTime);
+	pump();
+	ck_assert(XmProcessTraversal(focus, XmTRAVERSE_CURRENT));
+	pump();
+	XSetInputFocus(dpy, XtWindow(top), RevertToParent, CurrentTime);
+	pump();
+	click(dst, 4);
+	ck_assert_int_eq(XGetSelectionOwner(dpy, destination), XtWindow(dst));
+
+	secondary_drag(src, 4, 7, "copy-to");
+	assert_text(dst, "destdef");
+	assert_text(focus, "focus");
+	ck_assert_int_eq(XGetSelectionOwner(dpy, destination), XtWindow(dst));
+	XtDestroyWidget(shell2);
+	pump();
+}
+END_TEST
+
 void text_suite(SRunner *runner)
 {
 	Suite *s = suite_create("Text");
@@ -714,6 +1309,22 @@ void text_suite(SRunner *runner)
 	tcase_add_test(t, text_selection_and_clipboard);
 	tcase_add_test(t, copy_text_to_textfield);
 	tcase_add_test(t, text_fontless_render_table);
+	tcase_add_test(t, text_line_table_lookup);
+	tcase_add_test(t, text_clipboard_undo_copy);
+	tcase_set_timeout(t, 60);
+	suite_add_tcase(s, t);
+
+	t = tcase_create("Secondary selection");
+	tcase_add_checked_fixture(t, setup, teardown);
+	tcase_add_loop_test(t, secondary_copy, 0, 4);
+	tcase_add_loop_test(t, secondary_move, 0, 4);
+	tcase_add_loop_test(t, secondary_same_widget, 0, 12);
+	tcase_add_loop_test(t, secondary_cancel, 0, 4);
+	tcase_add_loop_test(t, primary_quick_copy_move, 0, 4);
+	tcase_add_loop_test(t, secondary_move_refused, 0, 8);
+	tcase_add_loop_test(t, primary_quick_move_refused, 0, 8);
+	tcase_add_loop_test(t, secondary_no_event, 0, 4);
+	tcase_add_loop_test(t, secondary_focus_grab, 0, 4);
 	tcase_set_timeout(t, 60);
 	suite_add_tcase(s, t);
 

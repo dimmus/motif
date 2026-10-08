@@ -35,6 +35,8 @@ extern "C" {
 extern void _XmPushWidgetExtData(Widget widget, XmWidgetExtData data, unsigned char extType);
 extern void _XmPopWidgetExtData(Widget widget, XmWidgetExtData *dataRtn, unsigned char extType);
 extern XmWidgetExtData _XmGetWidgetExtData(Widget widget, unsigned char extType);
+extern XmWidgetExtData _XmExtDataAlloc(void);
+extern void _XmExtDataFree(XmWidgetExtData data);
 extern void _XmInitializeExtensions(void);
 extern void _XmTransformSubResources(XtResourceList comp_resources,
                                      Cardinal num_comp_resources,

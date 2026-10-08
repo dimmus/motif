@@ -1,0 +1,32 @@
+.TH "XmeStringIsValid" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeStringIsValid\fP \(em A widget writer function that tells whether a value is an XmString
+.iX "XmeStringIsValid"
+.iX "Xme functions" "XmeStringIsValid"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/XmP\&.h>
+\fBBoolean \fBXmeStringIsValid\fP\fR(
+\fBXmString \fBstring\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeStringIsValid\fP tells whether \fIstring\fP is an XmString\&.
+Only a NULL
+pointer is recognised as invalid\&.
+.IP "\fIstring\fP" 10
+Specifies the value to test\&.
+.PP
+Motif 1\&.2 called this function \fB\%_XmStringIsXmString\fP\&.  The
+library still exports that name for old binaries, and
+\fB\%<Xm/XmP\&.h>\fP defines it as a macro for \fB\%XmeStringIsValid\fP
+unless \fB\%NO_XM_1_2_BC\fP is defined; new code should use
+\fB\%XmeStringIsValid\fP\&.
+.SH "RETURN"
+.PP
+Returns False if \fIstring\fP is NULL, and True otherwise\&.
+.SH "RELATED"
+.PP
+\fB\%XmString\fP(3)\&.

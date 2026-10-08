@@ -1,0 +1,36 @@
+.TH "XmeGetMask" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeGetMask\fP \(em A widget writer function that returns the mask of an image
+.iX "XmeGetMask"
+.iX "Xme functions" "XmeGetMask"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/XmP\&.h>
+\fBPixmap \fBXmeGetMask\fP\fR(
+\fBScreen *\fBscreen\fR\fR,
+\fBconst char *\fBimage_name\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeGetMask\fP returns the mask of the image \fIimage_name\fP: the
+bitmap
+named like the image with \fB\%_m\fP inserted before its suffix
+(\fB\%/path/icon_m\&.xpm\fP for \fB\%/path/icon\&.xpm\fP), looked up as
+\fB\%XmGetPixmapByDepth\fP looks up images\&.  The mask is cached like
+the
+other pixmaps of Motif\&.
+.IP "\fIscreen\fP" 11
+Specifies the screen\&.
+.IP "\fIimage_name\fP" 11
+Specifies the name of the image\&.
+.SH "RETURN"
+.PP
+Returns the mask, a pixmap of depth 1, or \fB\%XmUNSPECIFIED_PIXMAP\fP
+if
+there is none\&.  Release it with \fB\%XmDestroyPixmap\fP\&.
+.SH "RELATED"
+.PP
+\fB\%XmGetPixmapByDepth\fP(3), \fB\%XmDestroyPixmap\fP(3) and
+\fB\%XmeGetPixmapData\fP(3)\&.

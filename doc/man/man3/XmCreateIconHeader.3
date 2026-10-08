@@ -1,0 +1,41 @@
+.TH "XmCreateIconHeader" "library call"
+.nh
+.SH "NAME"
+\fB\%XmCreateIconHeader\fP \(em The IconHeader widget creation function
+.iX "XmCreateIconHeader"
+.iX "creation functions" "XmCreateIconHeader"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/IconH\&.h>
+\fBWidget \fBXmCreateIconHeader\fP\fR(
+\fBWidget \fBparent\fR\fR,
+\fBString \fBname\fR\fR,
+\fBArgList \fBarglist\fR\fR,
+\fBCardinal \fBargcount\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmCreateIconHeader\fP creates an instance of an IconHeader and
+returns
+the associated widget ID\&.  An IconHeader is the IconGadget subclass
+that a Container in the detail layout uses for its column headings
+(\fB\%XmNdetailColumnHeading\fP), with an \fB\%XmNcontainerID\fP
+resource that
+names the Container; applications rarely need to create one\&.
+.IP "\fIparent\fP" 10
+Specifies the parent widget ID\&.
+.IP "\fIname\fP" 10
+Specifies the name of the created widget\&.
+.IP "\fIarglist\fP" 10
+Specifies the argument list\&.
+.IP "\fIargcount\fP" 10
+Specifies the number of attribute/value pairs in the argument list
+(\fIarglist\fP)\&.
+.SH "RETURN"
+.PP
+Returns the IconHeader widget ID\&.
+.SH "RELATED"
+.PP
+\fB\%XmContainer\fP(3), \fB\%XmIconGadget\fP(3) and
+\fB\%XtCreateWidget\fP(3)\&.

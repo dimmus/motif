@@ -1,0 +1,44 @@
+.TH "XmVaCreateSeparator" "library call"
+.nh
+.SH "NAME"
+\fB\%XmVaCreateSeparator\fP,
+\fB\%XmVaCreateManagedSeparator\fP \(em Separator widget convenience creation functions
+.iX "XmVaCreateSeparator"
+.iX "creation functions" "XmVaCreateSeparator"
+.iX "creation functions" "XmVaCreateManagedSeparator"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/Separator\&.h>
+.PP
+\fBWidget \fBXmVaCreateSeparator\fP\fR(
+\fBWidget \fBparent\fR\fR,
+\fBconst char *\fBname\fR\fR,
+\&.\&.\&.);
+.PP
+\fBWidget \fBXmVaCreateManagedSeparator\fP\fR(
+\fBWidget \fBparent\fR\fR,
+\fBconst char *\fBname\fR\fR,
+\&.\&.\&.);
+.fi
+.SH "DESCRIPTION"
+.PP
+These functions create an instance of a Separator widget and return
+its widget ID, from a NULL-terminated variable-length list of resource
+name and value pairs\&.  \fB\%XmVaCreateSeparator\fP creates the widget
+unmanaged, like \fB\%XtCreateWidget\fP, and
+\fB\%XmVaCreateManagedSeparator\fP creates it managed, like
+\fB\%XtCreateManagedWidget\fP\&.
+.IP "\fIparent\fP" 10
+Specifies the parent widget ID\&.
+.IP "\fIname\fP" 10
+Specifies the name of the created widget\&.
+.IP "\fI...\fP" 10
+Specifies the resource name and value pairs, ended by NULL\&.
+.SH "RETURN"
+.PP
+Returns the Separator widget ID\&.
+.SH "RELATED"
+.PP
+\fB\%XmSeparator\fP(3), \fB\%XmCreateSeparator\fP(3) and
+\fB\%XmVaCreateSeparatorGadget\fP(3)\&.

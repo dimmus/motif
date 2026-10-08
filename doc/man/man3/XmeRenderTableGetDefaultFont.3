@@ -1,0 +1,40 @@
+.TH "XmeRenderTableGetDefaultFont" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeRenderTableGetDefaultFont\fP \(em A widget writer function that returns the default font of a render table
+.iX "XmeRenderTableGetDefaultFont"
+.iX "Xme functions" "XmeRenderTableGetDefaultFont"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/XmP\&.h>
+\fBBoolean \fBXmeRenderTableGetDefaultFont\fP\fR(
+\fBXmFontList \fBfontlist\fR\fR,
+\fBXFontStruct **\fBfont_struct\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeRenderTableGetDefaultFont\fP returns in \fIfont_struct\fP the
+font of
+the rendition tagged \fB\%XmFONTLIST_DEFAULT_TAG\fP in \fIfontlist\fP
+or, if
+there is none, of its first rendition\&.  For a font set, the first
+font of the set is returned\&.  A widget uses it to compute its sizes
+from the font, for example the height of a line\&.
+.IP "\fIfontlist\fP" 10
+Specifies the render table\&.
+.IP "\fIfont_struct\fP" 10
+Returns the font\&.  It belongs to the render table\&.
+.PP
+Motif 1\&.2 called this function \fB\%_XmFontListGetDefaultFont\fP\&.
+The library still exports that name for old binaries, and
+\fB\%<Xm/XmP\&.h>\fP defines it as a macro for
+\fB\%XmeRenderTableGetDefaultFont\fP unless \fB\%NO_XM_1_2_BC\fP is
+defined; new code should use \fB\%XmeRenderTableGetDefaultFont\fP\&.
+.SH "RETURN"
+.PP
+Returns True if a font was found, and False otherwise\&.
+.SH "RELATED"
+.PP
+\fB\%XmRenderTableGetDefaultFontExtents\fP(3) and
+\fB\%XmRenderTable\fP(3)\&.

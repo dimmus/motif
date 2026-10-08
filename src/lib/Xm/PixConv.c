@@ -353,7 +353,7 @@ void _XmTopShadowPixmapDefault(Widget widget,
                                int offset, /* unused */
                                XrmValue *value)
 {
-  static Pixmap pixmap;
+  static _Thread_local Pixmap pixmap;
   XmAccessColorDataRec acc_color_rec;
   int depth;
   pixmap = XmUNSPECIFIED_PIXMAP;
@@ -384,7 +384,7 @@ void _XmHighlightPixmapDefault(Widget widget,
                                int offset, /* unused */
                                XrmValue *value)
 {
-  static Pixmap pixmap;
+  static _Thread_local Pixmap pixmap;
   XmAccessColorDataRec acc_color_rec;
   int depth;
   pixmap = XmUNSPECIFIED_PIXMAP;

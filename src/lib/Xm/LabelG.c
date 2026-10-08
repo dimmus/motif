@@ -715,6 +715,40 @@ int _XmLabelCacheCompare(XtPointer A, XtPointer B)
     return 0;
 }
 
+/*
+ * A hash of the fields that _XmLabelCacheCompare compares, for the cache index.
+ */
+static unsigned int LabelCacheHash(XtPointer cpart)
+{
+  XmLabelGCacheObjPart *p = (XmLabelGCacheObjPart *)cpart;
+  unsigned int h = 0;
+  h = _XmCacheHashAdd(h, (unsigned long)p->label_type);
+  h = _XmCacheHashAdd(h, (unsigned long)p->alignment);
+  h = _XmCacheHashAdd(h, (unsigned long)p->string_direction);
+  h = _XmCacheHashAdd(h, (unsigned long)p->margin_height);
+  h = _XmCacheHashAdd(h, (unsigned long)p->margin_width);
+  h = _XmCacheHashAdd(h, (unsigned long)p->margin_left);
+  h = _XmCacheHashAdd(h, (unsigned long)p->margin_right);
+  h = _XmCacheHashAdd(h, (unsigned long)p->margin_top);
+  h = _XmCacheHashAdd(h, (unsigned long)p->margin_bottom);
+  h = _XmCacheHashAdd(h, (unsigned long)p->recompute_size);
+  h = _XmCacheHashAdd(h, (unsigned long)p->skipCallback);
+  h = _XmCacheHashAdd(h, (unsigned long)p->menu_type);
+  h = _XmCacheHashAdd(h, (unsigned long)p->background_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->top_shadow_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->bottom_shadow_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->highlight_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->foreground);
+  h = _XmCacheHashAdd(h, (unsigned long)p->background);
+  h = _XmCacheHashAdd(h, (unsigned long)p->top_shadow_color);
+  h = _XmCacheHashAdd(h, (unsigned long)p->top_shadow_pixmap);
+  h = _XmCacheHashAdd(h, (unsigned long)p->bottom_shadow_color);
+  h = _XmCacheHashAdd(h, (unsigned long)p->bottom_shadow_pixmap);
+  h = _XmCacheHashAdd(h, (unsigned long)p->highlight_color);
+  h = _XmCacheHashAdd(h, (unsigned long)p->highlight_pixmap);
+  return h;
+}
+
 /***********************************************************
  *
  *  ClassInitialize
@@ -723,6 +757,7 @@ int _XmLabelCacheCompare(XtPointer A, XtPointer B)
 static void ClassInitialize(void)
 {
   labelBaseClassExtRec.record_type = XmQmotif;
+  _XmCacheSetHashProc(&LabelClassCachePart, LabelCacheHash);
   /* Install menu savvy on just this class */
   XmeTraitSet((XtPointer)&xmLabelGadgetClassRec, XmQTmenuSavvy, (XtPointer)&MenuSavvyGadgetRecord);
 }
@@ -800,15 +835,15 @@ static void SecondaryObjectCreate(Widget req, Widget new_w, ArgList args, Cardin
   /*
    * Fetch the resources in superclass to subclass order
    */
-  XtGetSubresources(new_w,
-                    newSec,
-                    NULL,
-                    NULL,
-                    wc->core_class.resources,
-                    wc->core_class.num_resources,
-                    args,
-                    *num_args);
-  extData = (XmWidgetExtData)XtCalloc(1, sizeof(XmWidgetExtDataRec));
+  _XmGetSubresources(new_w,
+                     newSec,
+                     NULL,
+                     NULL,
+                     wc->core_class.resources,
+                     wc->core_class.num_resources,
+                     args,
+                     *num_args);
+  extData = _XmExtDataAlloc();
   extData->widget = (Widget)newSec;
   extData->reqWidget = (Widget)reqSec;
   ((XmLabelGCacheObject)newSec)->ext.extensionType = XmCACHE_EXTENSION;
@@ -846,36 +881,7 @@ static void InitializePosthook(Widget req, Widget new_w, ArgList args, Cardinal 
   _XmExtObjFree((XtPointer)ext->widget);
   _XmExtObjFree((XtPointer)ext->reqWidget);
   _XmProcessUnlock();
-  XtFree((char *)ext);
-}
-
-/*
- * Every Get/SetValues on a gadget pushes extension data for the length
- * of the call.  Keep a few of those records rather than a calloc/free
- * pair each time.  The records come from XtCalloc and a cached one is
- * cleared on reuse, so it does not matter which code frees one.  Call
- * these with the process lock held.
- */
-#define MAX_FREE_EXT_DATA 4
-static XmWidgetExtData freeExtData[MAX_FREE_EXT_DATA];
-static Cardinal numFreeExtData = 0;
-
-static XmWidgetExtData NewExtData(void)
-{
-  XmWidgetExtData extData;
-  if (numFreeExtData == 0)
-    return (XmWidgetExtData)XtCalloc(1, sizeof(XmWidgetExtDataRec));
-  extData = freeExtData[--numFreeExtData];
-  bzero((char *)extData, sizeof(XmWidgetExtDataRec));
-  return extData;
-}
-
-static void FreeExtData(XmWidgetExtData extData)
-{
-  if (numFreeExtData < MAX_FREE_EXT_DATA)
-    freeExtData[numFreeExtData++] = extData;
-  else
-    XtFree((char *)extData);
+  _XmExtDataFree(ext);
 }
 
 /************************************************************************
@@ -897,7 +903,7 @@ static Boolean SetValuesPrehook(
   size = ec->core_class.widget_size;
   newSec = (XmLabelGCacheObject)_XmExtObjAlloc(size);
   reqSec = (XmLabelGCacheObject)_XmExtObjAlloc(size);
-  extData = NewExtData();
+  extData = _XmExtDataAlloc();
   _XmProcessUnlock();
   newSec->object.self = (Widget)newSec;
   newSec->object.widget_class = ec;
@@ -938,7 +944,7 @@ static void GetValuesPrehook(Widget newParent, ArgList args, Cardinal *num_args)
   ec = (*cePtr)->secondaryObjectClass;
   size = ec->core_class.widget_size;
   newSec = (XmLabelGCacheObject)_XmExtObjAlloc(size);
-  extData = NewExtData();
+  extData = _XmExtDataAlloc();
   _XmProcessUnlock();
   newSec->object.self = (Widget)newSec;
   newSec->object.widget_class = ec;
@@ -968,7 +974,7 @@ static void GetValuesPosthook(Widget new_w, ArgList args, Cardinal *num_args)
   _XmPopWidgetExtData(new_w, &ext, XmCACHE_EXTENSION);
   _XmProcessLock();
   _XmExtObjFree((XtPointer)ext->widget);
-  FreeExtData(ext);
+  _XmExtDataFree(ext);
   _XmProcessUnlock();
 }
 
@@ -999,7 +1005,7 @@ static Boolean SetValuesPosthook(
   _XmPopWidgetExtData(new_w, &ext, XmCACHE_EXTENSION);
   _XmExtObjFree((XtPointer)ext->widget);
   _XmExtObjFree((XtPointer)ext->reqWidget);
-  FreeExtData(ext);
+  _XmExtDataFree(ext);
   _XmProcessUnlock();
   return FALSE;
 }
@@ -1371,10 +1377,10 @@ static void Initialize(Widget req, Widget new_w, ArgList args, Cardinal *num_arg
      * but failed because the colors were not accessible
      * prior to Initialize, because the cache wasn't there yet.
      * We have to try again from here. */
-    XtGetSubresources(new_w, new_w, NULL, NULL, label_pixmap_resource, 1, args, *num_args);
+    _XmGetSubresources(new_w, new_w, NULL, NULL, label_pixmap_resource, 1, args, *num_args);
   }
   if (Pix_insen(new_w) == XmDELAYED_PIXMAP) {
-    XtGetSubresources(new_w, new_w, NULL, NULL, label_pixmap_insen_resource, 1, args, *num_args);
+    _XmGetSubresources(new_w, new_w, NULL, NULL, label_pixmap_insen_resource, 1, args, *num_args);
   }
   /* If menuProcs is not set up yet, try again */
   _XmProcessLock();
@@ -2278,6 +2284,7 @@ static Boolean SetValues(Widget cw,
     /* Recreate the GC's if the font has been changed */
     XtReleaseGC(XtParent(current), LabG_NormalGC(current));
     XtReleaseGC(XtParent(current), LabG_InsensitiveGC(current));
+    XtReleaseGC(XtParent(current), LabG_ShadowGC(current));
     SetNormalGC(new_w);
     flag = True;
   }
@@ -2431,6 +2438,7 @@ Boolean _XmLabelGCVTRedraw(Widget kid, Widget cur_parent, Widget new_parent, Mas
   if (do_normal) {
     XtReleaseGC(XtParent(lw), LabG_NormalGC(lw));
     XtReleaseGC(XtParent(lw), LabG_InsensitiveGC(lw));
+    XtReleaseGC(XtParent(lw), LabG_ShadowGC(lw));
     SetNormalGC((XmLabelGadget)lw);
   }
   if (visual_flag & (VisualTopShadowColor | VisualTopShadowPixmap)) {
@@ -2606,8 +2614,10 @@ static void GetMnemonicCharset(Widget wid,
  *     fields and set them, instead of doing a SetValues.
  *
  ************************************************************************/
-static XmLabelGCacheObjPart local_cache;
-static Boolean local_cache_inited = FALSE;
+/* The changes _XmAssignLabG_* collect for the next _XmReCacheLabG made by
+   the same thread */
+static _Thread_local XmLabelGCacheObjPart local_cache;
+static _Thread_local Boolean local_cache_inited = FALSE;
 
 /*
  * QualifyLabelLocalCache
@@ -2750,7 +2760,7 @@ Widget XmCreateLabelGadget(Widget parent, char *name, Arg *arglist, Cardinal arg
   return XtCreateWidget(name, xmLabelGadgetClass, parent, arglist, argCount);
 }
 
-Widget XmVaCreateLabelGadget(Widget parent, char *name, ...)
+Widget XmVaCreateLabelGadget(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -2764,7 +2774,7 @@ Widget XmVaCreateLabelGadget(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedLabelGadget(Widget parent, char *name, ...)
+Widget XmVaCreateManagedLabelGadget(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

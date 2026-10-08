@@ -203,7 +203,7 @@ static void HeightDefault(Widget widget,
                           int offset, /* unused */
                           XrmValue *value)
 {
-  static Dimension default_height = DEFAULT_HEIGHT;
+  static _Thread_local Dimension default_height = DEFAULT_HEIGHT;
   XmTearOffButtonWidget tob = (XmTearOffButtonWidget)widget;
   value->addr = (XPointer)&default_height;
   tob->tear_off_button.set_recompute_size = True;

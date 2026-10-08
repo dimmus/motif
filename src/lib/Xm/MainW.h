@@ -39,8 +39,8 @@ extern Widget XmMainWindowSep1(Widget w);
 extern Widget XmMainWindowSep2(Widget w);
 extern Widget XmMainWindowSep3(Widget w);
 extern Widget XmCreateMainWindow(Widget parent, char *name, ArgList args, Cardinal argCount);
-extern Widget XmVaCreateMainWindow(Widget parent, char *name, ...);
-extern Widget XmVaCreateManagedMainWindow(Widget parent, char *name, ...);
+extern Widget XmVaCreateMainWindow(Widget parent, const char *name, ...);
+extern Widget XmVaCreateManagedMainWindow(Widget parent, const char *name, ...);
 /********    End Public Function Declarations    ********/
 #  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

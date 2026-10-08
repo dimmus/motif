@@ -65,6 +65,18 @@ XmFocusData _XmCreateFocusData(void)
   return (XmFocusData)XtCalloc(1, sizeof(XmFocusDataRec));
 }
 
+/*
+ * Whether the shell of w has the keyboard focus only for a keyboard grab
+ * of the application (XtGrabKeyboard), rather than because the user gave
+ * it the focus.  Xt passes the grab's FocusIn on to the focus widget like
+ * any other.
+ */
+Boolean _XmFocusFromGrab(Widget w)
+{
+  XmFocusData focusData = _XmGetFocusData(w);
+  return focusData != NULL && focusData->focus_from_grab;
+}
+
 void _XmDestroyFocusData(XmFocusData focusData)
 {
   _XmFreeTravGraph(&(focusData->trav_graph));
@@ -1140,7 +1152,25 @@ XmVisibility XmGetVisibility(Widget wid)
     _XmAppUnlock(app);
     return (XmVISIBILITY_PARTIALLY_OBSCURED);
   }
-  /* Obscurity by siblings */
+  /*
+   * Obscurity by siblings.  The stacking order of the parent's child
+   * windows, and those of them that are not widgets (windows that the
+   * application created with Xlib, or that were reparented into the
+   * parent), are known only to the server.  Following them from events
+   * would mean selecting SubstructureNotify on the parent, and Xt passes
+   * those events about the children to the StructureNotify handlers of
+   * the parent too (it dispatches ConfigureNotify, MapNotify and the
+   * others to both masks), which the handlers of applications do not
+   * expect.  So ask the server, once per call.
+   *
+   * A gadget has no window of its own: XtWindow gives its parent's,
+   * which is not among the parent's children, so no sibling was ever
+   * found above it.  Skip the query.
+   */
+  if (!XtIsWidget(wid)) {
+    _XmAppUnlock(app);
+    return (XmVISIBILITY_UNOBSCURED);
+  }
   children = NULL;
   if (!(parent_window = XtWindow(XtParent(wid))) ||
       XQueryTree(XtDisplay(wid), parent_window, &rootwindow, &p_window, &children, &numchildren) ==

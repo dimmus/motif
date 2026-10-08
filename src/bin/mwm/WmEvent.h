@@ -33,6 +33,7 @@ extern int smAckState;
 extern Boolean CheckForButtonAction (XButtonEvent *buttonEvent,
 				     Context context, Context subContext,
 				     ClientData *pCD);
+extern void InitServerTimeCounter (void);
 extern Time GetTimestamp (void);
 #if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
 extern Time LastTime (void);

@@ -789,7 +789,7 @@ static void ProcessVerticalParams(Widget w, XEvent *event, String *params, Cardi
   int direction;
   XmTextWidget tw = (XmTextWidget)w;
   if (*num_params > 0) {
-    if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+    if (_XmTextIsVertical(tw)) {
       if (_XmConvertActionParamToRepTypeId((Widget)w,
                                            XmRID_TEXT_HORIZONTAL_DIRECTION_ACTION_PARAMS,
                                            params[0],
@@ -850,7 +850,7 @@ static void ProcessHorizontalParams(Widget w,
   }
   /* move text cursor in direction of cursor key */
   if (*num_params > 0) {
-    if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+    if (_XmTextIsVertical(tw)) {
       if (_XmConvertActionParamToRepTypeId((Widget)w,
                                            XmRID_TEXT_VERTICAL_DIRECTION_ACTION_PARAMS,
                                            params[0],
@@ -944,7 +944,7 @@ static void KeySelection(Widget w, XEvent *event, String *params, Cardinal *num_
     ProcessSelectParams(w, event, &left, &right, &position);
   }
   else if (*num_params > 0) {
-    if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+    if (_XmTextIsVertical(tw)) {
       if (_XmConvertActionParamToRepTypeId(
               (Widget)w, XmRID_TEXT_VERTICAL_DIRECTION_ACTION_PARAMS, params[0], False, &value) ==
           True)
@@ -1408,13 +1408,13 @@ static void _MoveNextLine(
       _XmTextShowPosition(w, start);
       /* This may cause a multi-line scroll.  We better reset line */
       line = _XmTextPosToLine(tw, start);
-      if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT))
+      if (_XmTextIsVertical(tw))
         newPos = YtoPosInLine(tw, cur_y, line);
       else
         newPos = XtoPosInLine(tw, savePosX, line);
     }
     else {
-      if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT))
+      if (_XmTextIsVertical(tw))
         newPos = YtoPosInLine(tw, cur_y, line + 1);
       else
         newPos = XtoPosInLine(tw, savePosX, line + 1);
@@ -1497,7 +1497,7 @@ static void _MovePreviousLine(
      * AABBCC...   Now move cursor up from beginning of II
      * cDDEEFF...  Should be at beginning of either EE or FF; up again
      * GGHHII...   Should now be at beginning of CC */
-    if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT))
+    if (_XmTextIsVertical(tw))
       newPos = YtoPosInLine(tw, cur_y, line - 1);
     else
       newPos = XtoPosInLine(tw, tw->text.cursor_position_x, line - 1);
@@ -2870,7 +2870,7 @@ static Boolean CheckTimerScrolling(Widget w, XEvent *event)
     }
   }
   else {
-    if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+    if (_XmTextIsVertical(tw)) {
       /* to the above of the text */
       if (event->xmotion.y <= (int)o_data->topmargin)
         data->select_pos_y = (Position)(o_data->topmargin -
@@ -3032,7 +3032,7 @@ static void DoGrabFocus(Widget w, XEvent *event, String *params, Cardinal *num_p
   _XmTextResetIC(w);
   data->cancel = False;
   if (event) {
-    if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+    if (_XmTextIsVertical(tw)) {
       /* to the top of the text */
       if (event->xbutton.y <= (int)o_data->topmargin)
         event->xbutton.y = (Position)(o_data->topmargin + 1);
@@ -3389,11 +3389,10 @@ static void ProcessBDragRelease(Widget w, XEvent *event, String *params, Cardina
 {
   XmTextWidget tw = (XmTextWidget)w;
   InputData data = tw->text.input->data;
-  XButtonEvent *ev = (XButtonEvent *)event;
   if (data->extending)
     return; /* For Btn2up when Btn1 is down */
   /* Work around for intrinsic bug.  Remove once bug is fixed. */
-  XtUngrabPointer(w, ev->time);
+  XtUngrabPointer(w, event ? event->xbutton.time : XtLastTimestampProcessed(XtDisplay(w)));
   EraseInsertionPoint(tw);
   if (data->sel_start) {
     if (dragged(data->Sel2Hint, event, data->threshold)) {
@@ -3587,8 +3586,10 @@ static void TextFocusIn(Widget w, XEvent *event, String *params, Cardinal *num_p
   XmTextWidget tw = (XmTextWidget)w;
   if (!event || !event->xfocus.send_event)
     return;
+  /* Not when a widget of this application grabbed the keyboard for a
+   * secondary selection: the destination may be in another one. */
   if (_XmGetFocusPolicy(w) == XmEXPLICIT && !_XmTextHasDestination(w) &&
-      !tw->text.input->data->sel_start)
+      !tw->text.input->data->sel_start && !_XmFocusFromGrab(w))
     _XmTextSetDestinationSelection(
         w, tw->text.cursor_position, False, XtLastTimestampProcessed(XtDisplay(w)));
   _XmPrimitiveFocusIn(w, event, params, num_params);
@@ -3832,7 +3833,7 @@ static void ProcessShiftLeft(Widget w, XEvent *event, String *params, Cardinal *
     char *dir = "extend";
     Cardinal num = 1;
     EraseInsertionPoint(tw);
-    if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT))
+    if (_XmTextIsVertical(tw))
       _MoveNextLine(w, event, &dir, &num, False);
     else
       _MovePreviousLine(w, event, &dir, &num, False);
@@ -3850,7 +3851,7 @@ static void ProcessShiftRight(Widget w, XEvent *event, String *params, Cardinal 
     char *dir = "extend";
     Cardinal num = 1;
     EraseInsertionPoint(tw);
-    if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT))
+    if (_XmTextIsVertical(tw))
       _MovePreviousLine(w, event, &dir, &num, False);
     else
       _MoveNextLine(w, event, &dir, &num, False);
@@ -4210,14 +4211,14 @@ void _XmTextInputCreate(Widget wid, ArgList args, Cardinal num_args)
   XtPointer temp_ptr;
   tw->text.input = input = (Input)XtMalloc((unsigned)sizeof(InputRec));
   input->data = data = (InputData)XtMalloc((unsigned)sizeof(InputDataRec));
-  XtGetSubresources(wid,
-                    (XtPointer)data,
-                    NULL,
-                    NULL,
-                    input_resources,
-                    XtNumber(input_resources),
-                    args,
-                    num_args);
+  _XmGetSubresources(wid,
+                     (XtPointer)data,
+                     NULL,
+                     NULL,
+                     input_resources,
+                     XtNumber(input_resources),
+                     args,
+                     num_args);
   data->widget = tw;
   if (data->sarray == NULL)
     data->sarray = (XmTextScanType *)sarray;

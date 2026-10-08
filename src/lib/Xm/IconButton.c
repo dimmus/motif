@@ -123,17 +123,13 @@ static Boolean CvtStringToIconPlacement(
  *
  * CDP - 5/11/91.
  */
-typedef struct _StippleInfo {
-  struct _StippleInfo *next;
-  Pixmap stipple;
-  Display *disp;
-  Screen *screen;
-} StippleInfo;
-
 /*
- * ||| It would be nice to put this in the widget class.
+ * The grey stipple of each screen, kept in the context table of its
+ * display (resource id: the root window): it goes away with the display,
+ * as the pixmap does, and a later display at the same address does not
+ * find it.
  */
-static StippleInfo *stipple_cache; /* Only one of these for each app. */
+static XContext stippleContext = 0;
 static char defaultTranslations[] =
     "<Btn1Down>,<Btn1Up>:		XiToggle() XmNotify() XiButtonUp()\n\
      <Btn1Down>:			XiGetFocus() XiToggle() \n\
@@ -1066,6 +1062,7 @@ static void ButtonUp(Widget w, XEvent *event, String *params, Cardinal *num_para
  *	Arguments: disp, pixmap - The keys into the cache.
  *	Returns: elem - The list elem for this element.
  */
+/* The cache is shared by all displays: the callers hold the process lock */
 static XmListElem *GetCacheElem(Display *disp, Pixmap pix)
 {
   XmListElem *elem;
@@ -1089,14 +1086,19 @@ static XmListElem *GetCacheElem(Display *disp, Pixmap pix)
 static Boolean CheckPixCache(
     Display *disp, Pixmap pixmap, unsigned int *width, unsigned int *height, unsigned int *depth)
 {
-  XmListElem *elem = GetCacheElem(disp, pixmap);
+  XmListElem *elem;
   PixCacheEntry *entry;
-  if (elem == NULL)
+  _XmProcessLock();
+  elem = GetCacheElem(disp, pixmap);
+  if (elem == NULL) {
+    _XmProcessUnlock();
     return (False);
+  }
   entry = (PixCacheEntry *)XmListElemData(elem);
   *width = entry->width;
   *height = entry->height;
   *depth = entry->depth;
+  _XmProcessUnlock();
   return (True);
 }
 
@@ -1109,8 +1111,10 @@ static Boolean CheckPixCache(
 static void AddPixCache(
     Display *disp, Pixmap pixmap, unsigned int width, unsigned int height, unsigned int depth)
 {
-  XmListElem *elem = GetCacheElem(disp, pixmap);
+  XmListElem *elem;
   PixCacheEntry *entry;
+  _XmProcessLock();
+  elem = GetCacheElem(disp, pixmap);
   if (elem == NULL) {
     entry = (PixCacheEntry *)XtCalloc(sizeof(PixCacheEntry), 1);
     entry->display = disp;
@@ -1124,6 +1128,7 @@ static void AddPixCache(
   entry->width = width;
   entry->height = height;
   entry->depth = depth;
+  _XmProcessUnlock();
 }
 
 /*	Function Name: IncPixCache
@@ -1134,9 +1139,12 @@ static void AddPixCache(
  */
 static void IncPixCache(Display *disp, Pixmap pix)
 {
-  XmListElem *elem = GetCacheElem(disp, pix);
+  XmListElem *elem;
+  _XmProcessLock();
+  elem = GetCacheElem(disp, pix);
   if (elem != NULL)
     (((PixCacheEntry *)XmListElemData(elem))->count)++;
+  _XmProcessUnlock();
 }
 
 /*	Function Name: DecPixCache
@@ -1147,10 +1155,14 @@ static void IncPixCache(Display *disp, Pixmap pix)
  */
 static void DecPixCache(Display *disp, Pixmap pix)
 {
-  XmListElem *elem = GetCacheElem(disp, pix);
+  XmListElem *elem;
   PixCacheEntry *entry;
-  if (elem == NULL)
+  _XmProcessLock();
+  elem = GetCacheElem(disp, pix);
+  if (elem == NULL) {
+    _XmProcessUnlock();
     return;
+  }
   entry = (PixCacheEntry *)XmListElemData(elem);
   if (entry->count > 0)
     (entry->count)--;
@@ -1158,6 +1170,7 @@ static void DecPixCache(Display *disp, Pixmap pix)
     _XmListRemove(pix_cache_list, elem);
     XtFree((char *)entry);
   }
+  _XmProcessUnlock();
 }
 
 /* ARGSUSED */
@@ -1556,38 +1569,29 @@ static void DrawTextAndImage(Widget w, GC text_gc, GC icon_gc, GC icon_stippled_
 }
 
 /*
- * There is almost always only 1 display, and certainly only a few, therefore
- * there is no need to be clever here, just make sure it works for one
- * fast, and doesn't break when using many.
- *
- * Would be nice to refocunt and remove...
+ * One stipple per screen, created on first use and freed with the
+ * display's connection.
  */
 static Pixmap GetGreyStipple(Widget w)
 {
-  StippleInfo *set, *ptr;
-  for (ptr = stipple_cache; ptr != NULL; ptr = ptr->next) {
-    /* Check for both screen and display, such that it displays */
-    /* correctly on multi-headed X-servers.                     */
-    /* Change Request #: CR03619                                */
-    if (ptr->disp == XtDisplay(w) && ptr->screen == XtScreen(w)) {
-      return (ptr->stipple);
-    }
+  Display *display = XtDisplay(w);
+  Window root = RootWindowOfScreen(XtScreen(w));
+  XContext context;
+  XPointer data;
+  Pixmap stipple;
+  _XmProcessLock();
+  if (stippleContext == 0)
+    stippleContext = XUniqueContext();
+  context = stippleContext;
+  if (XFindContext(display, root, context, &data) == 0) {
+    stipple = (Pixmap)data;
   }
-  set = (StippleInfo *)XtMalloc(sizeof(StippleInfo));
-  set->stipple = XCreateBitmapFromData(
-      XtDisplay(w), RootWindowOfScreen(XtScreen(w)), gray_bits, gray_width, gray_height);
-  set->disp = XtDisplay(w);
-  set->screen = XtScreen(w);
-  set->next = NULL;
-  if (stipple_cache == NULL)
-    stipple_cache = set;
-  else
-    for (ptr = stipple_cache; ptr != NULL; ptr = ptr->next)
-      if (ptr->next == NULL) {
-        ptr->next = set;
-        break;
-      }
-  return (set->stipple);
+  else {
+    stipple = XCreateBitmapFromData(display, root, gray_bits, gray_width, gray_height);
+    XSaveContext(display, root, context, (XPointer)stipple);
+  }
+  _XmProcessUnlock();
+  return (stipple);
 }
 
 /*	Function Name: CreateGCs

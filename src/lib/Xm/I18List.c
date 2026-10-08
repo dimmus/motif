@@ -74,7 +74,7 @@ static char gray_bits[] = {0x01, 0x02};
  *	GLOBAL DECLARATIONS
  *************************************************************/
 extern Boolean XmeRenderTableGetDefaultFont(XmFontList, XFontStruct **);
-static Widget global_current_widget; /* static global to hold
+static _Thread_local Widget global_current_widget; /* per thread, to hold
                                                  widget id for qsort. */
 /************************************************************
  *	STATIC FUNCTION DECLARATIONS
@@ -1087,13 +1087,8 @@ static void MoveListTimeout(XtPointer w_ptr, XtIntervalId *id)
 static void Notify(Widget w, Boolean dclick)
 {
   XmI18ListWidget ilist = (XmI18ListWidget)w;
-  Boolean first = True;
-  static XrmQuark elist_q;
+  XrmQuark elist_q = XrmStringToQuark(XM_EXT_18_LIST_CLASS_NAME);
   int row;
-  if (first) {
-    elist_q = XrmStringToQuark(XM_EXT_18_LIST_CLASS_NAME);
-    first = False;
-  }
   row = (int)XmI18List_working_row(ilist);
   /*
    * If we didn't click on a row, don't call the callbacks

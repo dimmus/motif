@@ -1,0 +1,35 @@
+.TH "XmToolTipGetLabel" "library call"
+.nh
+.SH "NAME"
+\fB\%XmToolTipGetLabel\fP \(em Returns the label that displays tool tips
+.iX "XmToolTipGetLabel"
+.iX "ToolTip functions" "XmToolTipGetLabel"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/VendorS\&.h>
+\fBWidget \fBXmToolTipGetLabel\fP\fR(
+\fBWidget \fBwid\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmToolTipGetLabel\fP returns the Label widget that displays the
+tool
+tips (\fB\%XmNtoolTipString\fP) of the widgets in the widget tree of
+\fIwid\fP\&.
+There is one per top-level VendorShell; it is named \fB\%TipLabel\fP, in
+an
+override-redirect TransientShell named \fB\%TipShell\fP, and is created
+the
+first time\&.  An application can set its resources to change how tool
+tips look\&.
+.IP "\fIwid\fP" 10
+Specifies a widget\&.
+.SH "RETURN"
+.PP
+Returns the Label, or NULL if the root of the widget tree of \fIwid\fP
+is
+not a VendorShell\&.
+.SH "RELATED"
+.PP
+\fB\%VendorShell\fP(3) and \fB\%XmLabel\fP(3)\&.

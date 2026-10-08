@@ -203,9 +203,9 @@ GetClientInfo (WmScreenData *pSD, Window clientWindow, long manageFlags)
     pCD->pWsList = NULL;
     pCD->dtwmFunctions = DtWM_FUNCTION_OCCUPY_WS;
     pCD->dtwmBehaviors = 0L;
+#endif /* WSM */
     pCD->paInitialProperties = NULL;
     pCD->numInitialProperties = 0;
-#endif /* WSM */
 
     pCD->decorFlags = 0L;
     pCD->pTitleGadgets = NULL;
@@ -298,13 +298,12 @@ GetClientInfo (WmScreenData *pSD, Window clientWindow, long manageFlags)
     }
     pCD->xBorderWidth = wmGD.windowAttributes.border_width;
 
-#ifdef WSM
     /*
      * Get the initial list of properties on this window.
-     * Save it to optimize subsequent property fetching.
+     * Save it to optimize subsequent property fetching: a property
+     * that is not there is not read (see HasProperty).
      */
     GetInitialPropertyList (pCD);
-#endif /* WSM */
 
     /*
      * Retrieve and process WM_CLASS hints client window property info:
@@ -899,12 +898,8 @@ ProcessWmClass (ClientData *pCD)
     classHint.res_name = "";
     XGetClassHint (DISPLAY, pCD->client, &classHint);
 #else
-#ifdef WSM
     if ((HasProperty (pCD, XA_WM_CLASS)) &&
 	(XGetClassHint (DISPLAY, pCD->client, &classHint)))
-#else /* WSM */
-    if (XGetClassHint (DISPLAY, pCD->client, &classHint))
-#endif /* WSM */
 #endif
     {
 	/* the WM_CLASS property exists for the client window */
@@ -1005,7 +1000,8 @@ ProcessSmClientID (ClientData *pCD)
 
     /* Read up to MAX_SM_CLIENT_ID_LEN bytes plus a terminating NUL. */
     clientID = NULL;
-    if ((XGetWindowProperty(DISPLAY, pCD->client, wmGD.xa_SM_CLIENT_ID,
+    if (HasProperty (pCD, wmGD.xa_SM_CLIENT_ID) &&
+	(XGetWindowProperty(DISPLAY, pCD->client, wmGD.xa_SM_CLIENT_ID,
 			    0L, (long)((MAX_SM_CLIENT_ID_LEN + 1 + 3) / 4), False,
 			    AnyPropertyType, &actualType, &actualFormat,
 			    &nitems, &leftover, (unsigned char **)&clientID)
@@ -1062,7 +1058,8 @@ ProcessWmSaveHint (ClientData *pCD)
      * the first element is used.
      */
 
-    if ((XGetWindowProperty(DISPLAY, pCD->client, wmGD.xa_WMSAVE_HINT,
+    if (HasProperty (pCD, wmGD.xa_WMSAVE_HINT) &&
+	(XGetWindowProperty(DISPLAY, pCD->client, wmGD.xa_WMSAVE_HINT,
 			    0L, 1L, False, AnyPropertyType,
 			    &actualType, &actualFormat, &nitems,
 			    &leftover, (unsigned char **)&saveHintFlags)
@@ -1129,11 +1126,9 @@ ProcessWmHints (ClientData *pCD, Boolean firstTime)
      * since they may be none.
      */
 
-#ifdef WSM
     if (firstTime && !HasProperty (pCD, XA_WM_HINTS))
 	pXWMHints = NULL;
     else
-#endif /* WSM */
     pXWMHints = XGetWMHints (DISPLAY, pCD->client);
 
     if (pXWMHints)
@@ -2369,9 +2364,7 @@ ProcessWmWindowTitle (ClientData *pCD, Boolean firstTime)
     XmString title_xms = NULL;
 
     if ((pCD->clientDecoration & MWM_DECOR_TITLE) &&
-#ifdef WSM
 	(!firstTime || HasProperty (pCD, XA_WM_NAME)) &&
-#endif /* WSM */
 	XGetWMName(DISPLAY, pCD->client, &wmNameProp))
     {
       title_xms = WmICCCMToXmString(&wmNameProp);
@@ -2600,9 +2593,7 @@ ProcessWmIconTitle (ClientData *pCD, Boolean firstTime)
 
   if ((pCD->clientFunctions & MWM_FUNC_MINIMIZE) &&
       (pCD->transientLeader == NULL) &&
-#ifdef WSM
       (!firstTime || HasProperty(pCD, XA_WM_ICON_NAME)) &&
-#endif /* WSM */
       XGetWMIconName (DISPLAY, pCD->client, &wmIconNameProp))
   {
     icon_xms = WmICCCMToXmString(&wmIconNameProp);
@@ -2677,12 +2668,8 @@ ProcessWmTransientFor (ClientData *pCD)
     ClientData *leader;
 
 
-#ifdef WSM
     if ((HasProperty (pCD, XA_WM_TRANSIENT_FOR)) &&
 	(XGetTransientForHint (DISPLAY, pCD->client, &window)))
-#else /* WSM */
-    if (XGetTransientForHint (DISPLAY, pCD->client, &window))
-#endif /* WSM */
     {
 	pCD->clientFlags |= CLIENT_TRANSIENT;
 

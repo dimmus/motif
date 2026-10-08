@@ -86,8 +86,8 @@ static char *confirm_mesg[4] = {"Switch to Default Behavior?",
                                 "QUIT Mwm?"};
 
 
-void
-initMesg()
+static void
+initMesg(void)
 {
 
     char * tmpString;

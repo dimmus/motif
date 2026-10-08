@@ -122,6 +122,33 @@ focus_client() {
 
 last_client() { tail -1 "$work/client.log"; }
 
+# check_client_list COUNT [WINDOW...]: mwm's _NET_CLIENT_LIST on the root
+# lists COUNT windows, among them each WINDOW (decimal, as xdotool prints
+# them).  Retries for a while: mwm updates it from its event loop.
+check_client_list() {
+	_n=$1
+	shift
+	_i=0
+	while :; do
+		_l=$(DISPLAY=$nested "$wmclient" --client-list)
+		_ok=1
+		case $_l in
+		"clientlist $_n" | "clientlist $_n "*) ;;
+		*) _ok=0 ;;
+		esac
+		for _w in "$@"; do
+			case "$_l " in
+			*" $(printf '0x%x' "$_w") "*) ;;
+			*) _ok=0 ;;
+			esac
+		done
+		[ $_ok = 1 ] && return 0
+		_i=$((_i + 1))
+		[ $_i -lt 30 ] || fail "_NET_CLIENT_LIST: expected $_n windows ($*), got '$_l'"
+		sleep 0.1
+	done
+}
+
 check_mwm_alive() {
 	kill -0 "$mwm_pid" 2>/dev/null || fail "$1: mwm died: $(cat "$work/mwm.log")"
 }
@@ -131,10 +158,29 @@ start_xephyr
 start_mwm "$here/test.mwmrc"
 start_client || fail "mwm did not reparent the client"
 echo "managed: client reparented by mwm"
+check_client_list 1 "$cid"
+
+# A second client is added to _NET_CLIENT_LIST, and removed when it goes.
+DISPLAY=$nested "$wmclient" --title probe2 > "$work/client2.log" 2>&1 &
+client2_pid=$!
+pids="$pids $!"
+i=0
+until grep -q '^reparent ' "$work/client2.log" 2>/dev/null; do
+	i=$((i + 1))
+	[ $i -lt 100 ] || fail "mwm did not reparent the second client"
+	sleep 0.1
+done
+cid2=$(DISPLAY=$nested xdotool search --name probe2 2>/dev/null | head -1)
+check_client_list 2 "$cid" "$cid2"
+stop "$client2_pid"
+check_client_list 1 "$cid"
+echo "client list: ok"
 
 focus_client
 key m		# f.minimize
 grep -q '^unmap' "$work/client.log" || fail "f.minimize did not unmap the client"
+# The icon is not a client of its own.
+check_client_list 1 "$cid"
 echo "f.minimize: ok"
 
 key n		# f.normalize from the icon

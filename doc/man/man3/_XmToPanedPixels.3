@@ -1,0 +1,44 @@
+.TH "_XmToPanedPixels" "library call"
+.nh
+.SH "NAME"
+\fB\%_XmToPanedPixels\fP,
+\fB\%_XmFromPanedPixels\fP \(em Internal Paned resolution independence functions
+.iX "_XmToPanedPixels"
+.iX "Motif internal functions" "_XmToPanedPixels"
+.iX "Motif internal functions" "_XmFromPanedPixels"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/PanedP\&.h>
+.PP
+\fBXmImportOperator \fB_XmToPanedPixels\fP\fR(
+\fBWidget \fBwidget\fR\fR,
+\fBint \fBoffset\fR\fR,
+\fBXtArgVal *\fBvalue\fR\fR);
+.PP
+\fBvoid \fB_XmFromPanedPixels\fP\fR(
+\fBWidget \fBwidget\fR\fR,
+\fBint \fBoffset\fR\fR,
+\fBXtArgVal *\fBvalue\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+These are the import and export procedures of the synthetic resources
+of the Paned widget whose direction follows its orientation: they call
+\fB\%XmeToVerticalPixels\fP and \fB\%XmeFromVerticalPixels\fP for a
+vertical
+Paned, and \fB\%XmeToHorizontalPixels\fP and
+\fB\%XmeFromHorizontalPixels\fP
+for a horizontal one\&.  They are exported for subclasses of Paned\&.
+.IP "\fIwidget\fP" 10
+Specifies the Paned widget\&.
+.IP "\fIoffset\fP" 10
+Is not used\&.
+.IP "\fIvalue\fP" 10
+Specifies the value to convert, and returns the converted value\&.
+.SH "RETURN"
+.PP
+\fB\%_XmToPanedPixels\fP returns \fB\%XmSYNTHETIC_LOAD\fP\&.
+.SH "RELATED"
+.PP
+\fB\%XmPaned\fP(3) and \fB\%XmeToHorizontalPixels\fP(3)\&.

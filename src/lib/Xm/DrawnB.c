@@ -1163,7 +1163,7 @@ Widget XmCreateDrawnButton(Widget parent, char *name, ArgList arglist, Cardinal 
   return (XtCreateWidget(name, xmDrawnButtonWidgetClass, parent, arglist, argcount));
 }
 
-Widget XmVaCreateDrawnButton(Widget parent, char *name, ...)
+Widget XmVaCreateDrawnButton(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -1177,7 +1177,7 @@ Widget XmVaCreateDrawnButton(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedDrawnButton(Widget parent, char *name, ...)
+Widget XmVaCreateManagedDrawnButton(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

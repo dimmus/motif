@@ -131,7 +131,7 @@ static int PreeditStart(XIC xic, XPointer client_data, XPointer call_data);
 static void PreeditDone(XIC xic, XPointer client_data, XPointer call_data);
 static void PreeditDraw(XIC xic, XPointer client_data, XIMPreeditDrawCallbackStruct *call_data);
 static void PreeditCaret(XIC xic, XPointer client_data, XIMPreeditCaretCallbackStruct *call_data);
-static void ResetUnder(XmTextWidget tw);
+static void ResetUnder(XmTextWidget tw, XIMResetState reset_state);
 /********    End Static Function Declarations    ********/
 /*
  * For resource list management.
@@ -817,7 +817,8 @@ static void RefigureLines(XmTextWidget tw)
   Line line = tw->text.line;
   LineNum i, j;
   Line oldline = NULL;
-  static XmTextPosition tell_output_force_display = -1;
+  /* Passed from a call to the recursive call it makes, so per thread */
+  static _Thread_local XmTextPosition tell_output_force_display = -1;
   LineNum oldNumLines = tw->text.number_lines;
   int startcopy, endcopy, destcopy, lastcopy; /* %%% Document! */
   if (tw->text.in_refigure_lines || !tw->text.needs_refigure_lines)
@@ -942,9 +943,7 @@ static void RefigureLines(XmTextWidget tw)
       tw->text.pending_scroll -= (tw->text.number_lines - 1);
     }
     tw->text.needs_refigure_lines = TRUE;
-    _XmProcessLock();
     tell_output_force_display = tw->text.force_display;
-    _XmProcessUnlock();
     tw->text.force_display = -1;
   }
   if (tw->text.needs_refigure_lines) {
@@ -955,12 +954,11 @@ static void RefigureLines(XmTextWidget tw)
   }
   AddRedraw(tw, tw->text.forget_past, tw->text.bottom_position);
   tw->text.forget_past = LONG_MAX;
-  _XmProcessLock();
   if (tell_output_force_display >= 0) {
-    (*tw->text.output->MakePositionVisible)(tw, tell_output_force_display);
+    XmTextPosition position = tell_output_force_display;
     tell_output_force_display = -1;
+    (*tw->text.output->MakePositionVisible)(tw, position);
   }
-  _XmProcessUnlock();
   if (XtIsRealized((Widget)tw))
     TextDrawInsertionPoint(tw);
 }
@@ -1122,28 +1120,56 @@ static void InitializeLineTable(XmTextWidget tw, int size)
   tw->text.table_size = size;
 }
 
+/*
+ * The line of the table that holds pos.  The start positions of the lines
+ * increase along the table, so this bisects the part of the table after
+ * table_index (or before it), where it used to walk it line by line: from
+ * table_index to the end of the table for every insertion at the end of a
+ * text, which made filling a text quadratic in its number of lines.  The
+ * result is the line the walk stopped at.
+ */
 unsigned int _XmTextGetTableIndex(XmTextWidget tw, XmTextPosition pos)
 {
   XmTextLineTable line_table;
   unsigned int cur_index;
   unsigned int max_index;
-  XmTextPosition position;
-  position = pos;
+  unsigned int position;
+  unsigned int lo, hi, mid;
+  position = (unsigned int)pos;
   max_index = tw->text.total_lines - 1;
   line_table = tw->text.line_table;
   cur_index = tw->text.table_index;
-  /* look forward to find the current record */
-  if (line_table[cur_index].start_pos < (unsigned int)position) {
-    while (cur_index < max_index && line_table[cur_index].start_pos < (unsigned int)position)
-      cur_index++;
+  /* look forward to find the current record: the first line after
+     cur_index that does not start before position, or the last line */
+  if (line_table[cur_index].start_pos < position) {
+    lo = cur_index;
+    hi = max_index;
+    while (lo < hi) {
+      mid = lo + (hi - lo) / 2;
+      if (line_table[mid].start_pos < position)
+        lo = mid + 1;
+      else
+        hi = mid;
+    }
+    cur_index = lo;
     /* if over shot it by one */
-    if ((unsigned int)position < line_table[cur_index].start_pos)
+    if (position < line_table[cur_index].start_pos)
       cur_index--;
   }
-  else
-    /* look backward to find the current record */
-    while (cur_index && line_table[cur_index].start_pos > (unsigned int)position)
-      cur_index--;
+  else {
+    /* look backward to find the current record: the last line up to
+       cur_index that does not start after position, or the first line */
+    lo = 0;
+    hi = cur_index;
+    while (lo < hi) {
+      mid = hi - (hi - lo) / 2;
+      if (line_table[mid].start_pos > position)
+        hi = mid - 1;
+      else
+        lo = mid;
+    }
+    cur_index = lo;
+  }
   return (cur_index);
 }
 
@@ -1913,7 +1939,7 @@ static void InitializeHook(Widget wid, ArgList args, Cardinal *num_args_ptr)
   tw->text.pendingoff = True;
   tw->text.forget_past = 0;
   /* Translation table overwrite */
-  if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+  if (_XmTextIsVertical(tw)) {
     char *vevent_bindings;
     vevent_bindings = XtNewString(_XmTextIn_XmTextVEventBindings);
     tw->text.tm_table = (XtTranslations)XtParseTranslationTable(vevent_bindings);
@@ -2416,7 +2442,7 @@ void _XmTextEnableRedisplay(XmTextWidget widget)
   /* If this is a scrolled widget, better update the scroll bars to reflect
    * any changes that have occured while redisplay has been disabled.  */
   if (widget->text.disable_depth == 0) {
-    if (XmDirectionMatch(XmPrim_layout_direction(widget), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+    if (_XmTextIsVertical(widget)) {
       if (widget->text.output->data->scrollvertical && XmIsScrolledWindow(XtParent(widget)))
         _XmRedisplayVBar(widget);
       if (widget->text.output->data->scrollhorizontal && XmIsScrolledWindow(XtParent(widget)) &&
@@ -2437,9 +2463,9 @@ void _XmTextEnableRedisplay(XmTextWidget widget)
 /* Count the number of characters represented in the char* str.  By
  * definition, if MB_CUR_MAX == 1 then num_count_bytes == number of characters.
  * Otherwise, use mblen to calculate. */
-int _XmTextCountCharacters(char *str, int num_count_bytes)
+int _XmTextCountCharacters(const char *str, int num_count_bytes)
 {
-  char *bptr;
+  const char *bptr;
   int count = 0;
   int char_size = 0;
   if (num_count_bytes <= 0)
@@ -2959,27 +2985,24 @@ static void PreeditDraw(XIC xic, XPointer client_data, XIMPreeditDrawCallbackStr
     }
   /* convert text data to char - it may be wchar or char */
   if (insert_length > 0) {
+    mb = _XmMallocArray(insert_length + 1, tw->text.char_size);
+    if (call_data->text->encoding_is_wchar) {
+      size_t n = wcstombs(mb, call_data->text->string.wide_char,
+                          (size_t)insert_length * tw->text.char_size);
+      mb[n == (size_t)-1 ? 0 : n] = '\0';
+    }
+    else {
+      strncpy(mb, call_data->text->string.multi_byte, insert_length * tw->text.char_size);
+      mb[insert_length * tw->text.char_size] = '\0';
+    }
+    /* set TextExtents for preedit data, if unable, punt */
     if (o_data->use_fontset) {
-      if (call_data->text->encoding_is_wchar) {
-        mb = _XmMallocArray(insert_length + 1, tw->text.char_size);
-        (void)wcstombs(mb, call_data->text->string.wide_char, insert_length);
-      }
-      else {
-        mb = _XmMallocArray(insert_length + 1, tw->text.char_size);
-        strncpy(mb, call_data->text->string.multi_byte, insert_length * tw->text.char_size);
-        mb[insert_length * tw->text.char_size] = '\0';
-      }
-      /* set TextExtents for preedit data, if unable, punt */
       escapement = XmbTextExtents((XFontSet)font, mb, strlen(mb), &overall_ink, NULL);
       if (escapement == 0 && overall_ink.width == 0 && strchr(mb, '\t') == 0) {
         XtFree(mb);
         (*tw->text.output->DrawInsertionPoint)(tw, tw->text.cursor_position, on);
         return;
       }
-    }
-    else {
-      (*tw->text.output->DrawInsertionPoint)(tw, tw->text.cursor_position, on);
-      return;
     }
   }
   else {
@@ -3085,6 +3108,8 @@ static void PreeditCaret(XIC xic, XPointer client_data, XIMPreeditCaretCallbackS
   XmTextPosition new_position, start = 0;
   Widget p = (Widget)tw;
   Boolean need_verify;
+  if (!PreUnder(tw))
+    return;
   (*tw->text.output->DrawInsertionPoint)(tw, tw->text.cursor_position, off);
   while (!XtIsShell(p))
     p = XtParent(p);
@@ -3114,9 +3139,9 @@ static void PreeditCaret(XIC xic, XPointer client_data, XIMPreeditCaretCallbackS
   (*tw->text.output->DrawInsertionPoint)(tw, tw->text.cursor_position, on);
 }
 
-static void ResetUnder(XmTextWidget tw)
+static void ResetUnder(XmTextWidget tw, XIMResetState reset_state)
 {
-  if (XmImGetXICResetState((Widget)tw) != XIMPreserveState)
+  if (reset_state != XIMPreserveState)
     PreUnder(tw) = False;
 }
 
@@ -3137,8 +3162,11 @@ void _XmTextResetIC(Widget widget)
   InputData data = tw->text.input->data;
   OutputData o_data = tw->text.output->data;
   XFontStruct *font = o_data->font;
+  XIMResetState reset_state;
   if (!PreUnder((XmTextWidget)widget))
     return;
+  /* Before the reset: see TextFieldResetIC in TextF.c. */
+  reset_state = XmImGetXICResetState(widget);
   if (VerifyCommitNeeded(tw)) {
     VerifyCommitNeeded(tw) = False;
     mb = _XmStringSourceGetString(tw, PreStartTW(tw), PreEndTW(tw), False);
@@ -3149,12 +3177,12 @@ void _XmTextResetIC(Widget widget)
   else
     XmImMbResetIC(widget, &mb);
   if (!mb) {
-    ResetUnder(tw);
+    ResetUnder(tw, reset_state);
     return;
   }
   n = strlen(mb);
   if (n > TEXT_MAX_INSERT_SIZE) {
-    ResetUnder(tw);
+    ResetUnder(tw, reset_state);
     return;
   }
   if (n > 0) {
@@ -3164,14 +3192,9 @@ void _XmTextResetIC(Widget widget)
       escapement = XmbTextExtents((XFontSet)font, mb, n, &overall_ink, NULL);
       if (escapement == 0 && overall_ink.width == 0 && strchr(mb, '\t') == 0) {
         (*tw->text.output->DrawInsertionPoint)(tw, tw->text.cursor_position, on);
-        ResetUnder(tw);
+        ResetUnder(tw, reset_state);
         return;
       }
-    }
-    else {
-      (*tw->text.output->DrawInsertionPoint)(tw, tw->text.cursor_position, on);
-      ResetUnder(tw);
-      return;
     }
     beginPos = nextPos = XmTextGetCursorPosition(widget);
     if (data->overstrike) {
@@ -3193,7 +3216,7 @@ void _XmTextResetIC(Widget widget)
     (*tw->text.output->DrawInsertionPoint)(tw, tw->text.cursor_position, on);
     XtFree(mb);
   }
-  ResetUnder(tw);
+  ResetUnder(tw, reset_state);
 }
 
 XmTextPosition _XmTextSetPreeditPosition(Widget w, XmTextPosition position)
@@ -3490,7 +3513,7 @@ Widget XmCreateText(Widget parent, char *name, ArgList arglist, Cardinal argcoun
   return XtCreateWidget(name, xmTextWidgetClass, parent, arglist, argcount);
 }
 
-Widget XmVaCreateText(Widget parent, char *name, ...)
+Widget XmVaCreateText(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -3504,7 +3527,7 @@ Widget XmVaCreateText(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedText(Widget parent, char *name, ...)
+Widget XmVaCreateManagedText(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

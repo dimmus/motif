@@ -1,0 +1,49 @@
+.TH "_MrmOSHostFloatToIEEE" "library call"
+.nh
+.SH "NAME"
+\fB\%_MrmOSHostFloatToIEEE\fP,
+\fB\%_MrmOSHostDoubleToIEEE\fP,
+\fB\%_MrmOSIEEEFloatToHost\fP,
+\fB\%_MrmOSIEEEDoubleToHost\fP,
+\fB\%_MrmOSSetLocale\fP \(em Operating system dependent functions of MRM and the UIL compiler
+.iX "_MrmOSHostFloatToIEEE"
+.iX "Mrm internal functions" "_MrmOSHostFloatToIEEE"
+.iX "Mrm internal functions" "_MrmOSHostDoubleToIEEE"
+.iX "Mrm internal functions" "_MrmOSIEEEFloatToHost"
+.iX "Mrm internal functions" "_MrmOSIEEEDoubleToHost"
+.iX "Mrm internal functions" "_MrmOSSetLocale"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Mrm/MrmosI\&.h>
+.PP
+\fBvoid \fB_MrmOSHostFloatToIEEE\fP\fR(
+\fBfloat *\fBval\fR\fR);
+\fBvoid \fB_MrmOSHostDoubleToIEEE\fP\fR(
+\fBdouble *\fBval\fR\fR);
+\fBvoid \fB_MrmOSIEEEFloatToHost\fP\fR(
+\fBfloat *\fBval\fR\fR);
+\fBvoid \fB_MrmOSIEEEDoubleToHost\fP\fR(
+\fBdouble *\fBval\fR\fR);
+.PP
+\fBString \fB_MrmOSSetLocale\fP\fR(
+\fBconst char *\fBlocale\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+These functions are exported for the UIL compiler, which shares them
+with MRM; they are not meant for applications\&.
+.PP
+UID files store single and double floats in IEEE format\&.  The
+conversion functions convert \fIval\fP in place between that format and
+the format of the host; on every system Motif supports the two are
+the same, and the functions do nothing\&.
+.PP
+\fB\%_MrmOSSetLocale\fP calls \fB\%setlocale\fP(\fB\%LC_ALL\fP,
+\fIlocale\fP)\&.
+.SH "RETURN"
+.PP
+\fB\%_MrmOSSetLocale\fP returns the result of \fB\%setlocale\fP\&.
+.SH "RELATED"
+.PP
+\fB\%uil\fP(1) and \fB\%setlocale\fP(3)\&.

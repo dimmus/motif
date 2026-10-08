@@ -1,0 +1,8 @@
+motif (2.5.0-1) unstable; urgency=medium
+
+  * Package Motif 2.5.0: libxm5, libmrm5, libuil5, libmotif-common,
+    libmotif-dev, mwm and uil.  The SONAMEs are libXm.so.5, libMrm.so.5
+    and libUil.so.5; programs built against Motif 2.3 (libXm.so.4) must
+    be rebuilt.
+
+ -- dimmus <dmitri.chudinov@gmail.com>  Sun, 04 Oct 2026 17:34:40 +0500

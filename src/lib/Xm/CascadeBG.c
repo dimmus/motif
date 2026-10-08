@@ -77,6 +77,7 @@ static void SecondaryObjectCreate(Widget req, Widget new_w, ArgList args, Cardin
 static void InitializePrehook(Widget req, Widget new_w, ArgList args, Cardinal *num_args);
 static void InitializePosthook(Widget req, Widget new_w, ArgList args, Cardinal *num_args);
 static int _XmCascadeBCacheCompare(XtPointer A, XtPointer B);
+static unsigned int CascadeBCacheHash(XtPointer cpart);
 static void BorderHighlight(Widget wid);
 static void BorderUnhighlight(Widget wid);
 static void DrawShadow(XmCascadeButtonGadget cb);
@@ -381,6 +382,7 @@ static void ClassInitialize(void)
   xmCascadeButtonGCacheObjClassRec.object_class.num_resources = wc_num_res + sc_num_res;
   _XmProcessUnlock();
   CascadeBGClassExtensionRec.record_type = XmQmotif;
+  _XmCacheSetHashProc(&CascadeButtonClassCachePart, CascadeBCacheHash);
 }
 
 /*
@@ -425,15 +427,15 @@ static void SecondaryObjectCreate(Widget req, Widget new_w, ArgList args, Cardin
   LabG_Cache(req) = &(((XmLabelGCacheObject)reqSec)->label_cache);
   CBG_Cache(new_w) = &(((XmCascadeButtonGCacheObject)newSec)->cascade_button_cache);
   CBG_Cache(req) = &(((XmCascadeButtonGCacheObject)reqSec)->cascade_button_cache);
-  XtGetSubresources(new_w,
-                    newSec,
-                    NULL,
-                    NULL,
-                    wc->core_class.resources,
-                    wc->core_class.num_resources,
-                    args,
-                    *num_args);
-  extData = (XmWidgetExtData)XtCalloc(1, sizeof(XmWidgetExtDataRec));
+  _XmGetSubresources(new_w,
+                     newSec,
+                     NULL,
+                     NULL,
+                     wc->core_class.resources,
+                     wc->core_class.num_resources,
+                     args,
+                     *num_args);
+  extData = _XmExtDataAlloc();
   extData->widget = (Widget)newSec;
   extData->reqWidget = (Widget)reqSec;
   ((XmCascadeButtonGCacheObject)newSec)->ext.extensionType = XmCACHE_EXTENSION;
@@ -484,7 +486,7 @@ static void InitializePosthook(Widget req, Widget new_w, ArgList args, Cardinal 
   _XmPopWidgetExtData((Widget)cbw, &ext, XmCACHE_EXTENSION);
   _XmExtObjFree((XtPointer)ext->widget);
   _XmExtObjFree((XtPointer)ext->reqWidget);
-  XtFree((char *)ext);
+  _XmExtDataFree(ext);
   _XmProcessUnlock();
 }
 
@@ -505,6 +507,21 @@ static int _XmCascadeBCacheCompare(XtPointer A, XtPointer B)
     return 1;
   else
     return 0;
+}
+
+/*
+ * A hash of the fields that _XmCascadeBCacheCompare compares, for the cache index.
+ */
+static unsigned int CascadeBCacheHash(XtPointer cpart)
+{
+  XmCascadeButtonGCacheObjPart *p = (XmCascadeButtonGCacheObjPart *)cpart;
+  unsigned int h = 0;
+  h = _XmCacheHashAdd(h, (unsigned long)p->cascade_pixmap);
+  h = _XmCacheHashAdd(h, (unsigned long)p->map_delay);
+  h = _XmCacheHashAdd(h, (unsigned long)p->armed_pixmap);
+  h = _XmCacheHashAdd(h, (unsigned long)p->arm_gc);
+  h = _XmCacheHashAdd(h, (unsigned long)p->background_gc);
+  return h;
 }
 
 /*******************************************************************
@@ -1732,7 +1749,7 @@ static Boolean SetValuesPrehook(
   memcpy(&(newSec->label_cache), LabG_Cache(newParent), sizeof(XmLabelGCacheObjPart));
   memcpy(
       &(newSec->cascade_button_cache), CBG_Cache(newParent), sizeof(XmCascadeButtonGCacheObjPart));
-  extData = (XmWidgetExtData)XtCalloc(1, sizeof(XmWidgetExtDataRec));
+  extData = _XmExtDataAlloc();
   extData->widget = (Widget)newSec;
   extData->reqWidget = (Widget)reqSec;
   _XmPushWidgetExtData(newParent, extData, XmCACHE_EXTENSION);
@@ -1786,7 +1803,7 @@ static void GetValuesPrehook(Widget newParent, ArgList args, Cardinal *num_args)
   memcpy(&(newSec->label_cache), LabG_Cache(newParent), sizeof(XmLabelGCacheObjPart));
   memcpy(
       &(newSec->cascade_button_cache), CBG_Cache(newParent), sizeof(XmCascadeButtonGCacheObjPart));
-  extData = (XmWidgetExtData)XtCalloc(1, sizeof(XmWidgetExtDataRec));
+  extData = _XmExtDataAlloc();
   extData->widget = (Widget)newSec;
   _XmPushWidgetExtData(newParent, extData, XmCACHE_EXTENSION);
   /* Note that if a resource is defined in the superclass's as well as a
@@ -1820,7 +1837,7 @@ static void GetValuesPosthook(Widget new_w, ArgList args, Cardinal *num_args)
   _XmProcessLock();
   _XmExtObjFree((XtPointer)ext->widget);
   _XmProcessUnlock();
-  XtFree((char *)ext);
+  _XmExtDataFree(ext);
 }
 
 /************************************************************************
@@ -1860,7 +1877,7 @@ static Boolean SetValuesPosthook(
   _XmExtObjFree((XtPointer)ext->widget);
   _XmExtObjFree((XtPointer)ext->reqWidget);
   _XmProcessUnlock();
-  XtFree((char *)ext);
+  _XmExtDataFree(ext);
   return FALSE;
 }
 
@@ -2073,14 +2090,14 @@ static void Initialize(Widget rw, Widget nw, ArgList args, Cardinal *num_args)
     request_resources.default_type = XmRImmediate;
     request_resources.resource_offset = 0;
     request_resources.default_addr = (XtPointer)XmINVALID_DIMENSION;
-    XtGetSubresources(XtParent(new_w),
-                      &requestedMarginWidth,
-                      XtName((Widget)new_w),
-                      new_w->object.widget_class->core_class.class_name,
-                      &request_resources,
-                      1,
-                      args,
-                      *num_args);
+    _XmGetSubresources(XtParent(new_w),
+                       &requestedMarginWidth,
+                       XtName((Widget)new_w),
+                       new_w->object.widget_class->core_class.class_name,
+                       &request_resources,
+                       1,
+                       args,
+                       *num_args);
     if (requestedMarginWidth == XmINVALID_DIMENSION) {
       LabG_MarginWidth(new_w) = 6;
     }
@@ -2147,7 +2164,7 @@ Widget XmCreateCascadeButtonGadget(Widget parent, char *name, ArgList al, Cardin
   return (cb);
 }
 
-Widget XmVaCreateCascadeButtonGadget(Widget parent, char *name, ...)
+Widget XmVaCreateCascadeButtonGadget(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -2161,7 +2178,7 @@ Widget XmVaCreateCascadeButtonGadget(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedCascadeButtonGadget(Widget parent, char *name, ...)
+Widget XmVaCreateManagedCascadeButtonGadget(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

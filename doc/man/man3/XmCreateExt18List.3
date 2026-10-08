@@ -48,9 +48,11 @@
 .ta 8n 16n 24n 32n 40n 48n 56n 64n 72n
 .TH "XmCreateExt18List" "library call"
 .SH "NAME"
-\fBXmCreateForm\fP \(em The Ext18List widget creation function
+\fBXmCreateExt18List\fP,
+\fBXmCreateExtended18List\fP \(em Obsolete MultiList widget creation functions
 .iX "XmCreateExt18List"
 .iX "creation functions" "XmCreateExt18List"
+.iX "creation functions" "XmCreateExtended18List"
 .SH "SYNOPSIS"
 .PP
 .nf
@@ -60,11 +62,20 @@
 \fBString \fBname\fR\fR,
 \fBArgList \fBarglist\fR\fR,
 \fBCardinal \fBargcount\fR\fR);
+.PP
+\fBWidget \fBXmCreateExtended18List\fP\fR(
+\fBWidget \fBparent\fR\fR,
+\fBString \fBname\fR\fR,
+\fBArgList \fBarglist\fR\fR,
+\fBCardinal \fBargcount\fR\fR);
 .fi
 .SH "DESCRIPTION"
 .PP
-\fBXmCreateExt18List\fP creates an instance of a Ext18List
-widget and returns the associated widget ID\&.
+\fBXmCreateExt18List\fP and \fBXmCreateExtended18List\fP create an
+instance of a MultiList widget, which used to be called Ext18List, and
+return the associated widget ID\&.
+They are the old names of \fBXmCreateMultiList\fP, which
+\fB<Xm/Ext18List\&.h>\fP declares deprecated\&.
 .IP "\fIparent\fP" 10
 Specifies the parent widget ID
 .IP "\fIname\fP" 10
@@ -75,11 +86,11 @@ Specifies the argument list
 Specifies the number of attribute/value pairs in the argument list
 (\fIarglist\fP)
 .PP
-For a complete definition of Form and its associated resources, see
-\fBXmExt18List\fP(3)\&.
+For a complete definition of MultiList and its associated resources, see
+\fBXmMultiList\fP(3)\&.
 .SH "RETURN"
 .PP
-Returns the Ext18List widget ID\&.
+Returns the MultiList widget ID\&.
 .SH "RELATED"
 .PP
-\fBXmExt18List\fP(3)\&.
+\fBXmCreateMultiList\fP(3), \fBXmMultiList\fP(3) and \fBXmExt18List\fP(3)\&.

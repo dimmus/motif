@@ -1,0 +1,87 @@
+.TH "_XmDataFieldReplaceText" "library call"
+.nh
+.SH "NAME"
+\fB\%_XmDataFieldReplaceText\fP,
+\fB\%_XmDataFieldSetClipRect\fP,
+\fB\%_XmDataFieldDrawInsertionPoint\fP,
+\fB\%_XmDataFieldSetSel2\fP,
+\fB\%_XmDataFieldConvert\fP,
+\fB\%_XmDataFieldLoseSelection\fP,
+\fB\%_XmDataFieldGetDropReciever\fP \(em Internal DataField functions
+.iX "_XmDataFieldReplaceText"
+.iX "Motif internal functions" "_XmDataFieldReplaceText"
+.iX "Motif internal functions" "_XmDataFieldSetClipRect"
+.iX "Motif internal functions" "_XmDataFieldDrawInsertionPoint"
+.iX "Motif internal functions" "_XmDataFieldSetSel2"
+.iX "Motif internal functions" "_XmDataFieldConvert"
+.iX "Motif internal functions" "_XmDataFieldLoseSelection"
+.iX "Motif internal functions" "_XmDataFieldGetDropReciever"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/DataF\&.h>
+#include <Xm/DataFSelP\&.h>
+.PP
+\fBBoolean \fB_XmDataFieldReplaceText\fP\fR(
+\fBXmDataFieldWidget \fBdf\fR\fR,
+\fBXEvent *\fBevent\fR\fR,
+\fBXmTextPosition \fBreplace_prev\fR\fR,
+\fBXmTextPosition \fBreplace_next\fR\fR,
+\fBchar *\fBinsert\fR\fR,
+\fBint \fBinsert_length\fR\fR,
+\fBBoolean \fBmove_cursor\fR\fR);
+\fBvoid \fB_XmDataFieldSetClipRect\fP\fR(
+\fBXmDataFieldWidget \fBdf\fR\fR);
+\fBvoid \fB_XmDataFieldDrawInsertionPoint\fP\fR(
+\fBXmDataFieldWidget \fBdf\fR\fR,
+\fBBoolean \fBturn_on\fR\fR);
+\fBvoid \fB_XmDataFieldSetSel2\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBXmTextPosition \fBleft\fR\fR,
+\fBXmTextPosition \fBright\fR\fR,
+\fBBoolean \fBdisown\fR\fR,
+\fBTime \fBsel_time\fR\fR);
+.PP
+\fBBoolean \fB_XmDataFieldConvert\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBAtom *\fBselection\fR\fR,
+\fBAtom *\fBtarget\fR\fR,
+\fBAtom *\fBtype\fR\fR,
+\fBXtPointer *\fBvalue\fR\fR,
+\fBunsigned long *\fBlength\fR\fR,
+\fBint *\fBformat\fR\fR);
+\fBvoid \fB_XmDataFieldLoseSelection\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBAtom *\fBselection\fR\fR);
+\fBWidget \fB_XmDataFieldGetDropReciever\fP\fR(
+\fBWidget \fBw\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+These functions are declared by the installed DataField headers and
+exported for compatibility; they are not meant for applications\&.
+DataField is a subclass of TextField, and each of them calls the
+TextField function of the same role:
+.IP "\(bu" 3
+\fB\%_XmDataFieldReplaceText\fP replaces the text from
+\fIreplace_prev\fP to \fIreplace_next\fP with \fIinsert_length\fP bytes
+of \fIinsert\fP, as typing does (the modify verify callbacks are
+called), and moves the cursor after it if \fImove_cursor\fP is True; it
+returns False if the change was refused\&.
+.IP "\(bu" 3
+\fB\%_XmDataFieldSetClipRect\fP sets the clip rectangle of the GCs of
+the widget to its text area\&.
+.IP "\(bu" 3
+\fB\%_XmDataFieldDrawInsertionPoint\fP shows or hides the insertion
+cursor\&.
+.IP "\(bu" 3
+\fB\%_XmDataFieldSetSel2\fP selects the text from \fIleft\fP to
+\fIright\fP, or gives up the selection if \fIdisown\fP is True\&.
+.IP "\(bu" 3
+\fB\%_XmDataFieldConvert\fP and \fB\%_XmDataFieldLoseSelection\fP are
+the convert and lose procedures of the selections of the widget, and
+\fB\%_XmDataFieldGetDropReciever\fP returns the widget that receives the
+current drop\&.
+.SH "RELATED"
+.PP
+\fB\%XmDataField\fP(3) and \fB\%XmTextField\fP(3)\&.

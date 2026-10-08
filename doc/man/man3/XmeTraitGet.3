@@ -1,0 +1,59 @@
+.TH "XmeTraitGet" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeTraitGet\fP,
+\fB\%XmeTraitSet\fP \(em Widget writer functions that look up and install traits
+.iX "XmeTraitGet"
+.iX "Xme trait functions" "XmeTraitGet"
+.iX "Xme trait functions" "XmeTraitSet"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/TraitP\&.h>
+.PP
+\fBXtPointer \fBXmeTraitGet\fP\fR(
+\fBXtPointer \fBobject\fR\fR,
+\fBXrmQuark \fBtrait\fR\fR);
+.PP
+\fBBoolean \fBXmeTraitSet\fP\fR(
+\fBXtPointer \fBobject\fR\fR,
+\fBXrmQuark \fBtrait\fR\fR,
+\fBXtPointer \fBrecord\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+A trait is a record of procedures, and sometimes data, through which
+widgets that do not know each other cooperate: a widget that holds the
+\fB\%XmQTactivatable\fP trait, for instance, can be the default button
+of a
+dialog\&.  The traits of Motif and their records are listed in
+\fB\%Traits\fP(5)\&.
+.PP
+\fB\%XmeTraitSet\fP installs \fIrecord\fP as the \fItrait\fP of
+\fIobject\fP, usually
+a widget class, from its class_initialize or class_part_initialize
+method; a NULL \fIrecord\fP removes the trait\&.  \fB\%XmeTraitGet\fP
+returns
+the record of \fItrait\fP that \fIobject\fP holds\&.
+.PP
+A trait is looked up on \fIobject\fP only, not on its superclasses\&.  A
+class that wants its subclasses to hold its trait installs it again on
+each of them from its class_part_initialize method, which Xt calls for
+every subclass; a subclass can then install its own record instead\&.
+The record is not copied and must stay valid as long as it is
+installed\&.
+.IP "\fIobject\fP" 10
+Specifies the object, usually a widget class
+(\fB\%XtClass\fP(\fIw\fP))\&.
+.IP "\fItrait\fP" 10
+Specifies the trait, for instance \fB\%XmQTactivatable\fP\&.
+.IP "\fIrecord\fP" 10
+Specifies the trait record, or NULL\&.
+.SH "RETURN"
+.PP
+\fB\%XmeTraitGet\fP returns the record, or NULL if \fIobject\fP does not
+hold
+the trait\&.  \fB\%XmeTraitSet\fP returns True\&.
+.SH "RELATED"
+.PP
+\fB\%Traits\fP(5)\&.

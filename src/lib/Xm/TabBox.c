@@ -1359,9 +1359,10 @@ static XtGeometryResult QueryGeometry(Widget widget,
 #define XmTAB_HIGHLIGHT_RECT 0
 #define XmTAB_TEXT_RECT 1
 
-static XRectangle *GetTabRectangle(XmTabBoxWidget tab, int type, XiTabRect *draw)
+/* The rectangle is returned in *rect, which the callers provide: tabs of
+   different displays are drawn by different threads. */
+static XRectangle *GetTabRectangle(XmTabBoxWidget tab, int type, XiTabRect *draw, XRectangle *rect)
 {
-  static XRectangle rect;
   int highlight = XmTabBox_highlight_thickness(tab), shadow = tab->manager.shadow_thickness,
       margin_height = XmTabBox_tab_margin_height(tab),
       margin_width = XmTabBox_tab_margin_width(tab), spacing = XmTabBox_tab_label_spacing(tab),
@@ -1371,8 +1372,9 @@ static XRectangle *GetTabRectangle(XmTabBoxWidget tab, int type, XiTabRect *draw
       draw = &(XmTabBox__actual(tab)[XmTabBox__keyboard(tab)]);
     }
     else {
-      rect.x = rect.y = 0;
-      rect.width = rect.height = 0;
+      rect->x = rect->y = 0;
+      rect->width = rect->height = 0;
+      return rect;
     }
   }
   size = XmTabBox__corner_size(tab);
@@ -1404,18 +1406,18 @@ static XRectangle *GetTabRectangle(XmTabBoxWidget tab, int type, XiTabRect *draw
       vert = tmp;
     } break;
   }
-  rect.x = draw->x + horiz;
-  rect.y = draw->y + vert;
-  rect.width = draw->width - (2 * horiz);
-  rect.height = draw->height - (2 * vert);
-  return (&rect);
+  rect->x = draw->x + horiz;
+  rect->y = draw->y + vert;
+  rect->width = draw->width - (2 * horiz);
+  rect->height = draw->height - (2 * vert);
+  return rect;
 }
 
 static void DrawBorder(XmTabBoxWidget tab, GC gc, int idx)
 {
   int highlight = XmTabBox_highlight_thickness(tab);
   XiTabRect *geometry;
-  XRectangle *draw, rect[4];
+  XRectangle *draw, rect[4], area;
   XmTabAttributes info;
   if (idx < 0) {
     if (XmTabBox__keyboard(tab) < 0)
@@ -1439,7 +1441,7 @@ static void DrawBorder(XmTabBoxWidget tab, GC gc, int idx)
       SetBackgroundGC(tab, info, gc);
     }
   }
-  draw = GetTabRectangle(tab, XmTAB_HIGHLIGHT_RECT, geometry);
+  draw = GetTabRectangle(tab, XmTAB_HIGHLIGHT_RECT, geometry, &area);
   rect[0].x = draw->x;
   rect[0].y = draw->y;
   rect[0].width = Max((int)draw->width, 1);
@@ -3141,7 +3143,7 @@ static void DrawTab(XmTabBoxWidget tab,
   Dimension shadow_thickness = tab->manager.shadow_thickness,
             margin_width = XmTabBox_tab_margin_width(tab),
             margin_height = XmTabBox_tab_margin_width(tab), size = XmTabBox__corner_size(tab);
-  XRectangle *clip;
+  XRectangle *clip, clip_area;
   int pix_width = 0, pix_height = 0, pix_depth = 0, label_width = 0, label_height = 0, row;
   Boolean have_pixmap = False, have_label = False;
   GC gc = XmTabBox__tab_GC(tab);
@@ -3417,7 +3419,7 @@ static void DrawTab(XmTabBoxWidget tab,
    * to draw is text and images lets assign this rectangle as the
    * cliping area for our drawing GC.
    */
-  clip = GetTabRectangle(tab, XmTAB_TEXT_RECT, geometry);
+  clip = GetTabRectangle(tab, XmTAB_TEXT_RECT, geometry, &clip_area);
   XSetClipRectangles(XtDisplay(tab), gc, 0, 0, clip, 1, YXBanded);
   switch (XmTabBox_tab_orientation(tab)) {
     case XmTABS_LEFT_TO_RIGHT:

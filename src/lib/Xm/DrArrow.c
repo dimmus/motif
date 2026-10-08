@@ -74,13 +74,13 @@ void XmeDrawArrow(Display *display,
     _XmAppUnlock(app);
     return;
   }
+  /* The rectangle lists are shared by all displays */
+  _XmProcessLock();
   if (allocated < (unsigned int)size) {
-    _XmProcessLock();
     top = (XRectangle *)_XmReallocArray((char *)top, size / 2 + 6, sizeof(XRectangle));
     cent = (XRectangle *)_XmReallocArray((char *)cent, size / 2 + 6, sizeof(XRectangle));
     bot = (XRectangle *)_XmReallocArray((char *)bot, size / 2 + 6, sizeof(XRectangle));
     allocated = size;
-    _XmProcessUnlock();
   }
 #define SWAP(x, y) \
   temp = x; \
@@ -93,7 +93,6 @@ void XmeDrawArrow(Display *display,
   wwidth = size;
   yy = size - 1 + yOffset;
   start = 1 + xOffset;
-  _XmProcessLock();
   while (wwidth > 0) {
     if (wwidth == 1) {
       top[t].x = start;

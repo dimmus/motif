@@ -1,0 +1,63 @@
+.TH "XmeDrawCircle" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeDrawCircle\fP \(em A widget writer function that draws a three-dimensional circle
+.iX "XmeDrawCircle"
+.iX "Xme draw functions" "XmeDrawCircle"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/DrawP\&.h>
+\fBvoid \fBXmeDrawCircle\fP\fR(
+\fBDisplay *\fBdisplay\fR\fR,
+\fBDrawable \fBd\fR\fR,
+\fBGC \fBtop_gc\fR\fR,
+\fBGC \fBbottom_gc\fR\fR,
+\fBGC \fBcenter_gc\fR\fR,
+\fBPosition \fBx\fR\fR,
+\fBPosition \fBy\fR\fR,
+\fBDimension \fBwidth\fR\fR,
+\fBDimension \fBheight\fR\fR,
+\fBDimension \fBshadow_thick\fR\fR,
+\fBDimension \fBmargin\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeDrawCircle\fP draws the round indicator of a ToggleButton whose
+\fB\%XmNindicatorType\fP is \fB\%XmONE_OF_MANY_ROUND\fP: an ellipse
+inscribed in
+the rectangle \fIx\fP, \fIy\fP, \fIwidth\fP, \fIheight\fP of the
+drawable \fId\fP\&.  The
+upper left half of the outline is drawn with \fItop_gc\fP and the lower
+right half with \fIbottom_gc\fP, with a line width of \fIshadow_thick\fP
+(at most half the smaller side); the line width of the two GCs is
+restored afterwards\&.  If \fIcenter_gc\fP is not NULL the inside is
+filled
+with it, \fImargin\fP pixels inside the outline\&.  Nothing is drawn if
+\fIwidth\fP or \fIheight\fP is 0\&.
+.IP "\fIdisplay\fP" 10
+Specifies the display\&.
+.IP "\fId\fP" 10
+Specifies the drawable to draw into\&.
+.IP "\fItop_gc\fP" 10
+Specifies the GC of the upper left half of the outline\&.
+.IP "\fIbottom_gc\fP" 10
+Specifies the GC of the lower right half of the outline\&.
+.IP "\fIcenter_gc\fP" 10
+Specifies the GC of the inside, or NULL\&.
+.IP "\fIx\fP" 10
+Specifies the x coordinate of the rectangle\&.
+.IP "\fIy\fP" 10
+Specifies the y coordinate of the rectangle\&.
+.IP "\fIwidth\fP" 10
+Specifies the width of the rectangle\&.
+.IP "\fIheight\fP" 10
+Specifies the height of the rectangle\&.
+.IP "\fIshadow_thick\fP" 10
+Specifies the width of the outline; with 0, only the inside is drawn\&.
+.IP "\fImargin\fP" 10
+Specifies the space between the outline and the filled inside\&.
+.SH "RELATED"
+.PP
+\fB\%XmeDrawDiamond\fP(3), \fB\%XmeDrawIndicator\fP(3) and
+\fB\%XmToggleButton\fP(3)\&.

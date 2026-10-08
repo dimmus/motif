@@ -1,0 +1,47 @@
+.TH "XmeGetDefaultRenderTable" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeGetDefaultRenderTable\fP \(em A widget writer function that returns the default render table of a widget
+.iX "XmeGetDefaultRenderTable"
+.iX "Xme functions" "XmeGetDefaultRenderTable"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/XmP\&.h>
+\fBXmFontList \fBXmeGetDefaultRenderTable\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBunsigned char \fBfontListType\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeGetDefaultRenderTable\fP returns the render table a widget uses
+when none is given to it\&.  If \fIfontListType\fP is not 0, the nearest
+ancestor of \fIw\fP whose class has the \fB\%XmQTspecifyRenderTable\fP
+trait
+(such as a BulletinBoard, a MenuShell or a VendorShell) is asked for its
+render
+table of that type\&.  Otherwise, or if there is no such ancestor, the
+default render table of the display is returned, which is made from
+\fB\%XmDEFAULT_FONT\fP the first time\&.
+.PP
+The render table belongs to Motif; the caller must not free it, and
+should copy it (\fB\%XmRenderTableCopy\fP) to keep it\&.
+.IP "\fIw\fP" 10
+Specifies the widget\&.
+.IP "\fIfontListType\fP" 10
+Specifies the kind of render table:
+\fB\%XmBUTTON_FONTLIST\fP, \fB\%XmLABEL_FONTLIST\fP,
+\fB\%XmTEXT_FONTLIST\fP, or 0 for
+the default of the display\&.
+.PP
+Motif 1\&.2 called this function \fB\%_XmGetDefaultFontList\fP\&.  The
+library still exports that name for old binaries, and
+\fB\%<Xm/XmP\&.h>\fP defines it as a macro for
+\fB\%XmeGetDefaultRenderTable\fP unless \fB\%NO_XM_1_2_BC\fP is defined;
+new code should use \fB\%XmeGetDefaultRenderTable\fP\&.
+.SH "RETURN"
+.PP
+Returns the render table\&.
+.SH "RELATED"
+.PP
+\fB\%XmRenderTable\fP(3) and \fB\%XmRenderTableCopy\fP(3)\&.

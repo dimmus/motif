@@ -1,0 +1,32 @@
+.TH "XmeGetEncodingAtom" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeGetEncodingAtom\fP \(em A widget writer function that returns the encoding of the current locale
+.iX "XmeGetEncodingAtom"
+.iX "Xme transfer functions" "XmeGetEncodingAtom"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/TransferP\&.h>
+\fBAtom \fBXmeGetEncodingAtom\fP\fR(
+\fBWidget \fBw\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeGetEncodingAtom\fP returns the atom of the encoding that the
+current locale uses for text in selections: the encoding that
+\fB\%XmbTextListToTextProperty\fP gives, in \fB\%XTextStyle\fP, to a
+text of
+portable characters: for instance \fB\%STRING\fP in the C locale, and
+\fB\%UTF-8\fP (not \fB\%UTF8_STRING\fP) in a UTF-8 locale\&.  Text
+widgets offer
+their text in this encoding as well as in \fB\%COMPOUND_TEXT\fP\&.
+.IP "\fIw\fP" 10
+Specifies a widget on the display\&.
+.SH "RETURN"
+.PP
+Returns the atom, or None if the locale cannot convert text\&.
+.SH "RELATED"
+.PP
+\fB\%XmbTextListToTextProperty\fP(3), \fB\%XmTransferValue\fP(3),
+\fB\%XmTransferDone\fP(3) and \fB\%XmeStandardConvert\fP(3)\&.

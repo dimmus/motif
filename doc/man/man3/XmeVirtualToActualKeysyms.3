@@ -1,0 +1,35 @@
+.TH "XmeVirtualToActualKeysyms" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeVirtualToActualKeysyms\fP \(em A widget writer function that returns the keys bound to a virtual key
+.iX "XmeVirtualToActualKeysyms"
+.iX "Xme functions" "XmeVirtualToActualKeysyms"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/XmP\&.h>
+\fBint \fBXmeVirtualToActualKeysyms\fP\fR(
+\fBDisplay *\fBdpy\fR\fR,
+\fBKeySym \fBvirtKeysym\fR\fR,
+\fBXmKeyBinding *\fBactualKeyData\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeVirtualToActualKeysyms\fP returns the actual keysyms, with their
+modifiers, that the virtual key bindings of the display bind to the
+virtual keysym \fIvirtKeysym\fP (for instance \fB\%osfXK_Help\fP)\&.
+.IP "\fIdpy\fP" 11
+Specifies the display\&.
+.IP "\fIvirtKeysym\fP" 11
+Specifies the virtual keysym\&.
+.IP "\fIactualKeyData\fP" 11
+Returns an array of \fB\%XmKeyBindingRec\fP, each with a \fB\%keysym\fP
+and
+its \fB\%modifiers\fP, or NULL if there is none\&.  Free it with
+\fB\%XtFree\fP\&.
+.SH "RETURN"
+.PP
+Returns the number of bindings\&.
+.SH "RELATED"
+.PP
+\fB\%VirtualBindings\fP(3) and \fB\%XmTranslateKey\fP(3)\&.

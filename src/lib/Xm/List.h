@@ -83,8 +83,8 @@ extern void XmListUpdateSelectedList(Widget w);
 extern Boolean XmListPosSelected(Widget w, int pos);
 extern Widget XmCreateList(Widget parent, char *name, ArgList args, Cardinal argCount);
 extern Widget XmCreateScrolledList(Widget parent, char *name, ArgList args, Cardinal argCount);
-extern Widget XmVaCreateList(Widget parent, char *name, ...);
-extern Widget XmVaCreateManagedList(Widget parent, char *name, ...);
+extern Widget XmVaCreateList(Widget parent, const char *name, ...);
+extern Widget XmVaCreateManagedList(Widget parent, const char *name, ...);
 XM_ALTERNATIVE(Use XtGetValues for XmNselectedPositions and XmNselectedPositionCount instead)
 extern Boolean XmListGetSelectedPos(Widget w, int **pos_list, int *pos_count);
 /********    End Public Function Declarations    ********/

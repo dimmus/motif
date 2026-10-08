@@ -140,15 +140,72 @@ working with a newer one.  So:
   `register` or other storage-class noise from prototypes, adding new
   functions, headers, resources or enumeration values at the end.
   Adding `const` is source compatible for callers; only code that
-  stores the function in a pointer of the old type has to adjust.
-  `XmStringCreate`, `XmStringCreateLocalized`, `XmStringLtoRCreate`,
-  `XmStringCreateSimple` and `XmStringCreateLtoR` take `const char *`
-  text for that reason.  The `XmText`/`XmTextField` setters do not: their
-  `modifyVerify` callbacks may change the caller's text in place.
+  stores the function in a pointer of the old type, or declares the
+  function itself with the old prototype, has to adjust.
+  [Const parameters](#const-parameters) lists the functions that take
+  `const` strings, and those that do not and why.
 
 A change that has to break one of these rules is an ABI break: bump
 `MOTIF_SOVERSION` (all three libraries), reset the version nodes, and
 record it in the release notes.
+
+### Const parameters
+
+Every string, tag, name and buffer parameter that a function only reads
+(or copies) is a pointer to `const`, so that string literals and
+`const` data can be passed without a cast; C++ does not convert a
+literal to `char *` (GCC and Clang accept it with a warning).  The C ABI does not change: abidiff counts
+these as harmless changes and reports them only with `--harmless`.
+The functions are:
+
+| Header | Functions (parameters) |
+|--------|------------------------|
+| `Xm.h` | `XmStringCreate`, `XmStringLtoRCreate` (text, tag); `XmStringCreateLocalized` (text); `XmStringGenerate` (text, tag, rendition); `XmStringPutRendition` (rendition); `XmStringComponentCreate` (value); `XmStringUnparse`, `XmStringTableUnparse` (tag); `XmCvtByteStreamToXmString`, `XmStringByteStreamLength` (stream); `XmCvtCTToXmString` (text); `XmRegisterSegmentEncoding`, `XmMapSegmentEncoding` (tag, encoding); `XmRenditionCreate`, `XmRenderTableGetRendition` (tag); `XmRenderTableCvtFromProp` (property); `XmTabCreate` (decimal); `XmFontListEntryCreate`, `XmFontListEntryCreate_r`, `XmFontListEntryLoad` (font name, tag); `XmInstallImage`, `XmGetPixmap`, `XmGetPixmapByDepth`, `XmGetSizedPixmap` (image name); `XmConvertStringToUnits` (spec); `XmVaCreateSimpleMenuBar`, `...PopupMenu`, `...PulldownMenu`, `...OptionMenu`, `...RadioBox`, `...CheckBox` (name) |
+| `obsolete.h` | `XmStringCreateSimple` (text); `XmStringCreateLtoR`, `XmStringSegmentCreate` (text, tag); `XmStringGetLtoR`, `XmFontListCreate`, `XmFontListCreate_r`, `XmStringCreateFontList`, `XmStringCreateFontList_r`, `XmFontListAdd` (tag) |
+| widget headers | `XmVaCreate<Class>`, `XmVaCreateManaged<Class>` of every widget (name) |
+| `AtomMgr.h` | `XmInternAtom` (name) |
+| `CutPaste.h` | `XmClipboardCopy` (format, data); `XmClipboardCopyByName` (data); `XmClipboardRetrieve`, `XmClipboardInquireLength`, `XmClipboardInquirePendingItems`, `XmClipboardRegisterFormat` (format) |
+| `Ext.h` | `XmCompareISOLatin1` (both); `XmCopyISOLatin1Lowered` (source) |
+| `IconFile.h`, `IconFileP.h` | `XmGetIconFileName` (names, host prefix); `XmeFlushIconFileCache` (path) |
+| `Picture.h` | `XmParsePicture` (picture) |
+| `Print.h` | `XmPrintSetup` (shell name); `XmPrintToFile` (file name) |
+| `RepType.h` | `XmRepTypeRegister` (type name, values); `XmRepTypeGetId` (type name) |
+| `Text.h` | `XmTextFindString`, `XmTextFindStringWcs` (search string) |
+| `XmP.h` | `XmeCreateClassDialog`, `XmeVLCreateWidget` (name); `XmeGetMask` (image name); `XmeNamesAreEqual` (both); `XmeParseUnits` (spec); `XmeWarning` (message); `XmeGetLocalizedString` (strings) |
+| `XmosP.h` | `XmOSGetMethod` (method name) |
+| `MrmDecls.h` | `MrmFetchWidget`, `MrmFetchWidgetOverride`, `MrmFetchLiteral`, `MrmFetchIconLiteral`, `MrmFetchBitmapLiteral`, `MrmFetchColorLiteral` (index); `MrmFetchInterfaceModule` (module name); `MrmOpenHierarchyFromBuffer`, `MrmOpenHierarchyFromBufferWithSize` (UID image); `MrmRegisterClass`, `MrmRegisterClassWithCleanup` (class and creation procedure names) |
+| `MrmosI.h` | `_MrmOSSetLocale` (locale) |
+
+`XmStringTag` and `XmStringCharSet` are typedefs for `char *`, to which a
+`const` cannot be added, so these parameters are spelled `const char *`.
+
+These are left as they are:
+
+- The `XmCreate<Class>` functions (and `XmCreateSimple...`) keep a
+  `String` name.  Their address is used as a creation procedure,
+  `Widget (*)(Widget, String, ArgList, Cardinal)`: `MrmRegisterClass`
+  takes one, and libMrm and applications register them so.  A `const`
+  name changes the function's type, which GCC 14 and later and Clang
+  reject as an incompatible pointer type, and C++ always.
+- The text of the `XmText`, `XmTextField` and `XmDataField` setters
+  (`SetString`, `Insert`, `Replace` and their `Wcs` forms).  The
+  `modifyVerify` callbacks get a copy, but the caller's buffer reaches
+  widget-writer hooks typed as writable without one: the text source's
+  `Replace` method (`XmTextBlock.ptr`) and the AccessTextual trait's
+  `setValue`.
+- Parameters handed to callbacks: the text and tag of
+  `XmStringParseText` and `XmStringTableParseStringArray` (to the
+  `XmParseProc`s), the override name of `MrmFetchWidgetOverride` (to the
+  creation procedure), the `message_data` and `status_data` of `Uil`.
+  `XmeGetDirection` and `XmeGetNextCharacter` are `XmParseProc`s, whose
+  type is fixed.
+- Arrays of strings (`String *`, `XmStringTag *`, XPM `char **` data):
+  C does not convert `char **` to `const char *const *` implicitly.
+- The XPM functions of `XpmP.h`, which keep the signatures of libXpm's
+  `<X11/xpm.h>`.
+- `XmString` itself: it is an opaque handle, and `const XmString` would
+  only make the pointer const.
+- Output parameters.
 
 ### Checking a change
 
@@ -164,6 +221,54 @@ abidiff --no-added-syms libXm-old.abi _build/src/lib/Xm/libXm.so.5
 types.  With `--no-added-syms` left out it also lists what was added,
 which should be what the new version node lists.  Run `ctest -L ABI`
 for the version scripts.
+
+`tools/dev/env/ci/abi-check.sh REF...` does this for libXm, libMrm and
+libUil (the CI "ABI check" job runs it against the previous tag and
+`upstream-2.3.8`).  It also compares the types that no exported function
+reaches, which is where the instance and class records of the `*P.h`
+headers are: it compiles every installed header into one object with
+all their types in its debug information
+(`-fno-eliminate-unused-debug-types`) and compares those objects with
+`abidiff --non-reachable-types`.  And it checks that every string of the
+`_XmStrings` tables is still at its offset.
+
+## Differences from Motif 2.3.8
+
+What `abi-check.sh upstream-2.3.8` finds between upstream 2.3.8, in its
+default configuration (which defines `OM22_COMPATIBILITY`), and this
+tree, on x86-64.  These are the differences that SONAME 5 stands for;
+the script and `tools/dev/env/ci/abi/upstream-2.3.8.suppr` suppress
+them, so that the CI job reports any other one.
+
+- The SONAMEs: `libXm.so.4`, `libMrm.so.4`, `libUil.so.4` upstream.
+- The exported symbols: of upstream's 3181 libXm, 329 libMrm and 434
+  libUil symbols, 1476, 112 and 384 are local here ("What is exported"
+  above), among them `_XmEditResCheckMessages`,
+  `XmDataFielddf_ClearSelection` and `XmDataFielddf_SetCursorPosition`.
+  The comparison only considers the symbols of the version scripts.
+- `XmPrimitivePart` and `XmGadgetPart` have no `tool_tip_string` member
+  (8 bytes), so every widget and gadget instance record is smaller, and
+  the offset of every part after them differs.  The comparison does not
+  compare the instance records and their parts with upstream (they are
+  compared with the previous release).
+- `XmMessageBoxPart` ends with a `Dimension baseline` (8 bytes more with
+  the padding).
+- `XmDragReceiverInfoStruct` (`DragCP.h`) has `Position xLast, yLast`
+  after `yOrigin`: 64 bytes instead of 56.
+- `XmTopLevelEnterCallbackStruct` (`DragC.h`) ends with `Atom
+  targets[3]` and `unsigned char n_targets`, the XDND targets: 88 bytes
+  instead of 56.  The widget passes it to the callbacks; a callback built
+  against 2.3.8 reads the members it knows.
+- The drag protocol styles of `Display.h` have `XmDRAG_XDND` (6) before
+  `XmDRAG_PREFER_RECEIVER`, which is 7 instead of 6.
+- `XmTextFieldPart` has an `unsigned char alignment` in what was padding
+  at its end (the size did not change).
+- The `getActivateCBName` method of the menu savvy trait has a
+  prototype, `char *(*)(void)`; the calling convention is the same.
+- The string tables: 1346 of the 1353 strings of `_XmStrings` and all
+  291 strings of `_XmStrings22` are at other offsets, so the `XmN*`,
+  `XmC*`, `XmR*` and `XmS*` names compiled into a 2.3.8 program are other
+  strings here.  `_XmStrings23` did not change.
 
 ## Toolchain settings
 
@@ -235,7 +340,16 @@ Label, a PushButton and a Text, realized, then exit) under Xvfb, from
 4688 to 4380 (Release) and from 5746 to 5167 (Debug).  The loader time
 (about 3 million cycles) and the wall time (about 100 ms, dominated by
 the X server round trips) did not change measurably on the shared test
-machine; `perf` was not available.
+machine.
+
+[profiling.md](profiling.md#startup-hello_motif) compares the startup of
+that program (`tools/dev/profile/hello_motif.c`) with upstream 2.3.8,
+the 2.4.1 tag and master, with `LD_DEBUG=statistics`, `perf stat` and
+callgrind.  With master the dynamic loader executes 2.4 million of the
+15.4 million instructions of the startup, against 2.1 million with
+2.3.8: `-z now` binds every imported function at startup (2836 symbol
+lookups, against 2358 bound lazily).  The rest of the startup is mostly
+libX11's locale and input method, and the round trips.
 
 Most of the remaining `R_X86_64_64` relocations of libXm are pointers in
 the resource and class tables to the exported string tables: 3114 to

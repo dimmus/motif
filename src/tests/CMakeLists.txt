@@ -33,13 +33,31 @@ set(MOTIF_TEST_SRCS
     Xm/testXmString.c
     Xm/testWidgets.c
     Xm/testText.c
+    Xm/testClipboard.c
     Xm/testI18n.c
+    Xm/testI18nLocale.c
     Xm/testLayout.c
+    Xm/testXErrors.c
+    Xm/testList.c
+    Xm/testMsgCat.c
+    Xm/testRtl.c
+    Xm/testXim.c
+    Xm/testRoundTrips.c
+    Xm/testConstApi.c
+    Xm/testRenderTable.c
+    Xm/testTraits.c
+    Xm/testGadgets.c
+    Xm/testXmIm.c
+    Xm/testCache.c
+    Xm/testDraw.c
+    i18n_util.c
 )
 
 # Suites that open a display, and suites that do not.
-set(MOTIF_TEST_X_SUITES FontListEntry FontList XmStringCT XmStringExtent Widgets Text Layout)
-set(MOTIF_TEST_SUITES Svg Log LogConfig XmString I18n)
+set(MOTIF_TEST_X_SUITES FontListEntry FontList XmStringCT XmStringExtent Widgets Text
+    Clipboard Layout XErrors List I18nLocale MsgCat Rtl Xim RoundTrips ConstApi
+    RenderTable Gadgets XmIm GadgetCache Draw)
+set(MOTIF_TEST_SUITES Svg Log LogConfig XmString I18n Traits Cache)
 set(MOTIF_TEST_DEFS "")
 
 # Suites with test cases tagged "xfail" (known library bugs); these get an
@@ -81,6 +99,12 @@ add_custom_command(
 list(APPEND MOTIF_TEST_SRCS ${CMAKE_CURRENT_BINARY_DIR}/widget_classes.h)
 
 add_executable(motif_tests ${MOTIF_TEST_SRCS})
+# The ConstApi suite passes string literals to the functions that take
+# const strings: it must not compile if one of them loses its const.
+set(_const_api_flags)
+motif_check_c_flags(_const_api_flags -Wwrite-strings -Werror=discarded-qualifiers
+    -Werror=incompatible-pointer-types-discards-qualifiers)
+set_property(SOURCE Xm/testConstApi.c APPEND PROPERTY COMPILE_OPTIONS ${_const_api_flags})
 target_compile_definitions(motif_tests PRIVATE ${MOTIF_TEST_DEFS})
 target_include_directories(motif_tests PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
@@ -88,7 +112,23 @@ target_include_directories(motif_tests PRIVATE
     ${CMAKE_SOURCE_DIR}/src/lib/Xm
     ${CMAKE_BINARY_DIR}/include
 )
-target_link_libraries(motif_tests PRIVATE Xm PkgConfig::CHECK Threads::Threads)
+# The XmIm suite interposes Xlib calls and forwards them with dlsym.
+target_link_libraries(motif_tests PRIVATE Xm PkgConfig::CHECK Threads::Threads ${CMAKE_DL_LIBS})
+
+# The input method server the Xim suite types through.
+add_executable(stubxim xim/stubxim.c)
+target_link_libraries(stubxim PRIVATE PkgConfig::MOTIF_XT)
+target_compile_definitions(motif_tests PRIVATE
+    STUBXIM_PATH="$<TARGET_FILE:stubxim>")
+add_dependencies(motif_tests stubxim)
+
+# The i18n suites use iconv, a library of its own where it is not in the
+# C library (found already when WITH_UTF8 is on, for libXm).
+find_library(ICONV_LIBRARY iconv)
+mark_as_advanced(ICONV_LIBRARY)
+if(ICONV_LIBRARY)
+    target_link_libraries(motif_tests PRIVATE ${ICONV_LIBRARY})
+endif()
 
 # The suites open their fixtures by relative path and some write log files
 # into the current directory, so run them from a build-tree copy of the
@@ -119,11 +159,12 @@ if(WITH_COMPILER_ASAN)
     endif()
 endif()
 
-# Apply MOTIF_TEST_ENV to every test of the current directory.
+# Add MOTIF_TEST_ENV to the environment of every test of the current
+# directory.
 function(motif_test_set_env)
     get_property(_tests DIRECTORY PROPERTY TESTS)
     if(_tests AND MOTIF_TEST_ENV)
-        set_tests_properties(${_tests} PROPERTIES ENVIRONMENT "${MOTIF_TEST_ENV}")
+        set_property(TEST ${_tests} APPEND PROPERTY ENVIRONMENT "${MOTIF_TEST_ENV}")
     endif()
 endfunction()
 
@@ -146,9 +187,61 @@ function(motif_x_test name)
         RESOURCE_LOCK xvfb)
 endfunction()
 
+# A C++ program that passes string literals to the functions that take
+# const strings: C++ does not convert a string literal to char *.
+#
+# It has to be built by the C compiler's own C++ driver: the sanitizer,
+# LTO and linker options are global and are the C compiler's, and the
+# libraries instrumented by one compiler do not link with the sanitizer
+# runtime of another.  Without CXX or CMAKE_CXX_COMPILER CMake takes
+# c++, which is GCC even with CC=clang, so look next to the C compiler
+# first (clang -> clang++, gcc-14 -> g++-14, cc -> c++).
+if(NOT DEFINED CMAKE_CXX_COMPILER AND NOT DEFINED ENV{CXX})
+    get_filename_component(_c_dir "${CMAKE_C_COMPILER}" DIRECTORY)
+    get_filename_component(_c_name "${CMAKE_C_COMPILER}" NAME)
+    set(_cxx_name "")
+    if(_c_name MATCHES "clang")
+        string(REPLACE "clang" "clang++" _cxx_name "${_c_name}")
+    elseif(_c_name MATCHES "gcc")
+        string(REPLACE "gcc" "g++" _cxx_name "${_c_name}")
+    elseif(_c_name MATCHES "^cc")
+        string(REGEX REPLACE "^cc" "c++" _cxx_name "${_c_name}")
+    endif()
+    if(_cxx_name AND EXISTS "${_c_dir}/${_cxx_name}")
+        set(CMAKE_CXX_COMPILER "${_c_dir}/${_cxx_name}" CACHE FILEPATH "C++ compiler")
+    endif()
+endif()
+include(CheckLanguage)
+check_language(CXX)
+if(CMAKE_CXX_COMPILER)
+    enable_language(CXX)
+endif()
+if(NOT CMAKE_CXX_COMPILER)
+    message(STATUS "Tests: no C++ compiler, Xm.cxx_const_api not built")
+elseif(NOT CMAKE_CXX_COMPILER_ID STREQUAL CMAKE_C_COMPILER_ID OR
+       NOT CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL CMAKE_C_COMPILER_VERSION)
+    message(STATUS "Tests: the C++ compiler (${CMAKE_CXX_COMPILER_ID} "
+        "${CMAKE_CXX_COMPILER_VERSION}) is not the C compiler's "
+        "(${CMAKE_C_COMPILER_ID} ${CMAKE_C_COMPILER_VERSION}), "
+        "Xm.cxx_const_api not built")
+else()
+    include(CheckCXXCompilerFlag)
+    add_executable(cxx_const_api cxx/const_api.cpp)
+    set_target_properties(cxx_const_api PROPERTIES
+        CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS OFF)
+    check_cxx_compiler_flag(-Werror=write-strings MOTIF_HAVE_CXXFLAG_WERROR_WRITE_STRINGS)
+    if(MOTIF_HAVE_CXXFLAG_WERROR_WRITE_STRINGS)
+        target_compile_options(cxx_const_api PRIVATE -Werror=write-strings)
+    endif()
+    target_link_libraries(cxx_const_api PRIVATE Mrm Xm)
+    motif_x_test(Xm.cxx_const_api $<TARGET_FILE:cxx_const_api>)
+endif()
+
 add_subdirectory(uil)
 add_subdirectory(interactive)
+add_subdirectory(hostile)
 add_subdirectory(visual)
+add_subdirectory(threads)
 if(WITH_FUZZERS)
     add_subdirectory(fuzz)
 endif()
@@ -176,6 +269,9 @@ foreach(suite IN LISTS MOTIF_TEST_X_XFAIL_SUITES)
 endforeach()
 
 set_tests_properties(${MOTIF_TESTS} PROPERTIES SKIP_RETURN_CODE 77)
+
+include(i18n.cmake)
+
 motif_test_set_env()
 
 if(XVFB_RUN_EXECUTABLE)

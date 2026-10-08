@@ -35,6 +35,7 @@ extern "C" {
 extern void _XmRegisterConverters(void);
 extern char *_XmConvertCSToString(XmString cs);
 extern Boolean _XmCvtXmStringToCT(XrmValue *from, XrmValue *to);
+extern void _XmFreeDefaultRenderTable(Display *display);
 #  if XM_UTF8
 extern Boolean _XmCvtXmStringToUTF8String(XrmValue *from, XrmValue *to);
 #  endif

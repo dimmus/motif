@@ -47,7 +47,7 @@ static char rcsid[] = "$XConsortium: XmStringObso.c /main/6 1995/09/19 23:13:52 
      * Latin1.  This imposes the semantic of \n meaning separator.
      */
     XmString
-    XmStringLtoRCreate(const char *text, XmStringTag tag)
+    XmStringLtoRCreate(const char *text, const char *tag)
 {
   const char *start, *end;
   Boolean done;
@@ -70,7 +70,7 @@ static char rcsid[] = "$XConsortium: XmStringObso.c /main/6 1995/09/19 23:13:52 
     /* Don't convert empty string unless it's an initial newline. */
     /* Done so StringHeight has clue to size of empty lines. */
     if ((start != end) || (start == text))
-      string = XmStringConcatAndFree(string, _XmStringNCreate((char *)start, tag, end - start));
+      string = XmStringConcatAndFree(string, _XmStringNCreate(start, tag, end - start));
     /* Make a separator if this isn't the last segment. */
     if (!done) {
       string = XmStringConcatAndFree(string, XmStringSeparatorCreate());
@@ -81,7 +81,7 @@ static char rcsid[] = "$XConsortium: XmStringObso.c /main/6 1995/09/19 23:13:52 
   return (string);
 }
 
-XmString XmStringCreateLtoR(const char *text, XmStringTag tag)
+XmString XmStringCreateLtoR(const char *text, const char *tag)
 {
   return (XmStringLtoRCreate(text, tag));
 }
@@ -89,8 +89,8 @@ XmString XmStringCreateLtoR(const char *text, XmStringTag tag)
 /*
  * build an external TCS 'segment', just a high level create
  */
-XmString XmStringSegmentCreate(char *text,
-                               XmStringTag tag,
+XmString XmStringSegmentCreate(const char *text,
+                               const char *tag,
                                XmStringDirection direction,
                                Boolean separator)
 {
@@ -231,11 +231,12 @@ XmStringComponentType XmStringPeekNextComponent(XmStringContext context)
  * fetch the first text 'segment' of the external TCS that matches the given
  * char set.
  */
-Boolean XmStringGetLtoR(XmString string, XmStringTag tag, char **text)
+Boolean XmStringGetLtoR(XmString string, const char *tag, char **text)
 {
   XmStringContext context;
   char *t;
-  XmStringTag c, curtag = NULL;
+  XmStringTag c;
+  const char *curtag = NULL;
   XmStringDirection d;
   Boolean s, is_local = FALSE, done = FALSE, is_default = FALSE;
   _XmProcessLock();

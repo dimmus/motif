@@ -687,9 +687,8 @@ static Boolean color_name_changed(XmColorSelectorWidget csw, char *name)
  */
 static void SetSliders(XmColorSelectorWidget csw)
 {
-  static Arg args[] = {
-      {XmNvalue, (XtArgVal)NULL},
-  };
+  Arg args[1];
+  args[0].name = XmNvalue;
   args[0].value = (XtArgVal)XmColorS_slider_red(csw);
   XtSetValues(XmColorS_sliders(csw)[0], args, XtNumber(args));
   args[0].value = (XtArgVal)XmColorS_slider_green(csw);
@@ -1536,7 +1535,7 @@ Widget XmCreateColorSelector(Widget parent, String name, ArgList args, Cardinal 
   return (XtCreateWidget(name, xmColorSelectorWidgetClass, parent, args, num_args));
 }
 
-Widget XmVaCreateColorSelector(Widget parent, char *name, ...)
+Widget XmVaCreateColorSelector(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -1550,7 +1549,7 @@ Widget XmVaCreateColorSelector(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedColorSelector(Widget parent, char *name, ...)
+Widget XmVaCreateManagedColorSelector(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

@@ -1,0 +1,59 @@
+.TH "XmGetIconFileName" "library call"
+.nh
+.SH "NAME"
+\fB\%XmGetIconFileName\fP \(em Finds the file of an icon
+.iX "XmGetIconFileName"
+.iX "Icon file functions" "XmGetIconFileName"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/IconFile\&.h>
+\fBString \fBXmGetIconFileName\fP\fR(
+\fBScreen *\fBscreen\fR\fR,
+\fBconst char *\fBimageInstanceName\fR\fR,
+\fBconst char *\fBimageClassName\fR\fR,
+\fBconst char *\fBhostPrefix\fR\fR,
+\fBunsigned int \fBsize\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmGetIconFileName\fP finds the file of the icon
+\fIimageInstanceName\fP
+or, if it is not found, of \fIimageClassName\fP, as the IconGadget and
+the other CDE-style widgets do\&.  An absolute name is looked up as it
+is\&.  A relative name, with a size suffix appended (\fB\%\&.t\fP,
+\fB\%\&.s\fP, \fB\%\&.m\fP
+or \fB\%\&.l\fP), is searched along the path of \fB\%XMICONSEARCHPATH\fP
+(or
+\fB\%XMICONBMSEARCHPATH\fP if the colour server says icons are not in
+colour), with \fB\%XtResolvePathname\fP, looking for an SVG file on
+TrueColor and DirectColor visuals, then an XPM file on colour visuals,
+then any file; and last along \fB\%XBMLANGPATH\fP\&.  In the paths,
+\fB\%%B\fP is
+replaced by the name, \fB\%%M\fP by the size suffix and \fB\%%H\fP by
+\fIhostPrefix\fP\&.
+.PP
+Names found are remembered, and so are the contents of the
+directories searched if the colour server enables the icon file
+cache; \fB\%XmeFlushIconFileCache\fP forgets the directories\&.
+.IP "\fIscreen\fP" 11
+Specifies the screen\&.
+.IP "\fIimageInstanceName\fP" 11
+Specifies the name of the icon, or NULL\&.
+.IP "\fIimageClassName\fP" 11
+Specifies the name to fall back on, or NULL\&.
+.IP "\fIhostPrefix\fP" 11
+Specifies the replacement of \fB\%%H\fP\&.
+.IP "\fIsize\fP" 11
+Specifies the size: \fB\%XmUNSPECIFIED_ICON_SIZE\fP (no suffix),
+\fB\%XmTINY_ICON_SIZE\fP, \fB\%XmSMALL_ICON_SIZE\fP,
+\fB\%XmMEDIUM_ICON_SIZE\fP or
+\fB\%XmLARGE_ICON_SIZE\fP\&.
+.SH "RETURN"
+.PP
+Returns the file name, which the caller frees with \fB\%XtFree\fP, or
+NULL if no file is found\&.
+.SH "RELATED"
+.PP
+\fB\%XmeFlushIconFileCache\fP(3), \fB\%XmGetPixmap\fP(3) and
+\fB\%XmIconGadget\fP(3)\&.

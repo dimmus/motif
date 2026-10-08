@@ -576,7 +576,7 @@ Widget XmCreateArrowButton(Widget parent, char *name, ArgList arglist, Cardinal 
   return XtCreateWidget(name, xmArrowButtonWidgetClass, parent, arglist, argcount);
 }
 
-Widget XmVaCreateArrowButton(Widget parent, char *name, ...)
+Widget XmVaCreateArrowButton(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -590,7 +590,7 @@ Widget XmVaCreateArrowButton(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedArrowButton(Widget parent, char *name, ...)
+Widget XmVaCreateManagedArrowButton(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

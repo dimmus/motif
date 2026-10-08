@@ -42,8 +42,8 @@ extern Widget XmCreatePromptDialog(Widget ds_p, String name, ArgList sb_args, Ca
 /*
  * Variable argument list functions
  */
-extern Widget XmVaCreateSelectionBox(Widget parent, char *name, ...);
-extern Widget XmVaCreateManagedSelectionBox(Widget parent, char *name, ...);
+extern Widget XmVaCreateSelectionBox(Widget parent, const char *name, ...);
+extern Widget XmVaCreateManagedSelectionBox(Widget parent, const char *name, ...);
 /********    End Public Function Declarations    ********/
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

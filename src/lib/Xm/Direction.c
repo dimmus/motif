@@ -47,7 +47,7 @@ void _XmDirectionDefault(Widget widget,
                          int offset, /* unused */
                          XrmValue *value)
 {
-  static XmDirection direction;
+  static _Thread_local XmDirection direction;
   value->addr = (XPointer)&direction;
   /* This is an ugly hack, but what to do when user sets stringDirection
      in resource file. Dependent on that stringDirection comes before

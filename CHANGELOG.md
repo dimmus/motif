@@ -47,6 +47,12 @@ upstream release (December 2017).  The git history has the details.
   still warning that the table has no font.  `XmText` no longer leaks
   the font context on that path, and setting its render table to NULL
   no longer stores the parent's table without a copy and frees it later.
+- `XmeTraitGet` no longer takes the process lock.  It checks a sequence
+  count that `XmeTraitSet` changes around its updates, and repeats the
+  lookup under the lock only when it raced with one.  With threads
+  initialised a lookup costs what it costs without them (7 ns against
+  37 in `xmbench -t trait-get`), and lookups from several threads no
+  longer contend (two threads: 8 ns against 240).
 
 ### Documentation
 
@@ -71,6 +77,38 @@ upstream release (December 2017).  The git history has the details.
   `XmStringDraw` loop forever or read past the string's segments, so a
   pasted or dropped compound string could hang a client.  Pops without
   a push no longer leave segments unmeasured.
+
+### Packaging and CI
+
+- Debian (`tools/packaging/debian`: libxm5, libmrm5, libuil5,
+  libmotif-common, libmotif-dev, mwm, uil) and RPM
+  (`tools/packaging/rpm/motif.spec`: motif, motif-devel) packaging.  CI
+  builds it with `dpkg-buildpackage` on Debian trixie and `rpmbuild` on
+  Fedora, runs the test suite, lintian and rpmlint, installs the
+  packages and builds a client against them.
+- The ABI job also compares with upstream Motif 2.3.8, with the
+  documented differences suppressed, and compares the types of the
+  installed headers and the offsets of the `_XmStrings` tables.
+
+### Performance
+
+- A small program's startup makes 43 round trips to the server instead
+  of 80: the virtual key bindings no longer fetch the keyboard mapping
+  of every binding (34 round trips), and reads of the drag window's
+  properties no longer end with an `XSync`.
+- XmText finds the line of a position by bisecting its line table:
+  appending to a long text was quadratic in its number of lines (10 MB
+  in 1 KB lines: 3.2 times fewer instructions).
+- mwm builds its client list (`_NET_CLIENT_LIST`) in an array it keeps
+  and doubles, instead of reallocating it once per client every time a
+  client comes or goes.
+- [doc/profiling.md](doc/profiling.md): how to profile Motif with perf,
+  callgrind, heaptrack and xtrace (`tools/dev/profile`), the hotspots of
+  the startup, of `xmbench`, of XmText, XmList and mwm, and the startup
+  cost compared with 2.3.8 and 2.4.1.  `libxmbench_preload` counts
+  round trips in libxcb, so that they are also counted where libX11 is
+  linked with `-Bsymbolic-functions`, and prints its counts at exit with
+  `XMBENCH_REPORT=1`.
 
 ## 2.5.0 (2026-10-04)
 

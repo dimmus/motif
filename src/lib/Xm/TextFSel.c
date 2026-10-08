@@ -77,8 +77,34 @@ static XmConst XmTransferTraitRec textFieldTT = {
     (XmDestinationCallbackProc)NULL,
 };
 static XContext _XmTextFDNDContext = 0;
+/* The secondary selection transfer; Transfer.c lets only one run at a
+   time in the process */
 static _XmInsertSelect insert_select;
-static _XmTextPrimSelect *prim_select;
+/*
+ * The record of the primary selection transfer to each widget, kept in
+ * a context of the widget's display: widgets of different displays,
+ * which different threads may serve, transfer at the same time.  Used
+ * with the process lock held.
+ */
+static XContext primSelectContext = 0;
+
+static _XmTextPrimSelect *GetPrimSelect(Widget w)
+{
+  XPointer data;
+  if (primSelectContext == 0 || XFindContext(XtDisplay(w), (XID)w, primSelectContext, &data))
+    return NULL;
+  return (_XmTextPrimSelect *)data;
+}
+
+static void SetPrimSelect(Widget w, _XmTextPrimSelect *prim_select)
+{
+  if (primSelectContext == 0)
+    primSelectContext = XUniqueContext();
+  if (prim_select)
+    XSaveContext(XtDisplay(w), (XID)w, primSelectContext, (XPointer)prim_select);
+  else
+    XDeleteContext(XtDisplay(w), (XID)w, primSelectContext);
+}
 
 /*ARGSUSED*/
 static void SetPrimarySelection(Widget w,
@@ -87,7 +113,9 @@ static void SetPrimarySelection(Widget w,
 {
   XmTextFieldWidget tf = (XmTextFieldWidget)w;
   XmTextPosition cursorPos = tf->text.cursor_position;
+  _XmTextPrimSelect *prim_select;
   _XmProcessLock();
+  prim_select = GetPrimSelect(w);
   if (!prim_select) {
     _XmProcessUnlock();
     return;
@@ -101,7 +129,7 @@ static void SetPrimarySelection(Widget w,
   }
   if (--prim_select->ref_count == 0) {
     XtFree((char *)prim_select);
-    prim_select = NULL;
+    SetPrimSelect(w, NULL);
   }
   _XmProcessUnlock();
 }
@@ -111,14 +139,16 @@ static void CleanPrimarySelection(Widget w,
                                   XtEnum op,                        /* unused */
                                   XmTransferDoneCallbackStruct *ts) /* unused */
 {
+  _XmTextPrimSelect *prim_select;
   _XmProcessLock();
+  prim_select = GetPrimSelect(w);
   if (!prim_select) {
     _XmProcessUnlock();
     return;
   }
   if (--prim_select->ref_count == 0) {
     XtFree((char *)prim_select);
-    prim_select = NULL;
+    SetPrimSelect(w, NULL);
   }
   _XmProcessUnlock();
 }
@@ -169,8 +199,14 @@ static void InsertSelection(Widget w,
   Atom UTF8_STRING = XInternAtom(XtDisplay(w), XmSUTF8_STRING, False);
   char *total_value = NULL;
   XmAnyCallbackStruct cb;
+  /*
+   * Whenever the text is not inserted, the transfer fails: the requestor
+   * of INSERT_SELECTION is then refused, and does not delete the text
+   * it was moving.
+   */
   if (!value) {
     _insert_select->done_status = True;
+    XmTransferDone(tid, XmTRANSFER_DONE_FAIL);
     return;
   }
   /* Don't do replace if there is not text to add */
@@ -185,6 +221,7 @@ static void InsertSelection(Widget w,
       XtFree((char *)value);
       _insert_select->done_status = True;
       _insert_select->success_status = False;
+      XmTransferDone(tid, XmTRANSFER_DONE_FAIL);
       return;
     }
   }
@@ -255,6 +292,7 @@ static void InsertSelection(Widget w,
   }
   if (!replace_res) {
     _insert_select->success_status = False;
+    XmTransferDone(tid, XmTRANSFER_DONE_FAIL);
   }
   else {
     _insert_select->success_status = True;
@@ -307,6 +345,7 @@ static void HandleInsertTargets(Widget w,
   if (0 == *length || *type != XA_ATOM || *format != 32) {
     XtFree((char *)value);
     _insert_select->done_status = True;
+    XmTransferDone(tid, XmTRANSFER_DONE_FAIL);
     return; /* Supports no targets, so don't bother sending anything */
   }
   assert(XtNumber(atom_names) == NUM_ATOMS);
@@ -1159,6 +1198,8 @@ static void DoStuff(Widget w, XtPointer closure, XmSelectionCallbackStruct *ds)
       _prim_select->num_chars = 0; /* Stop SetPrimarySelection from doing
                                      anything */
       _XmProcessUnlock();
+      /* Not inserted: no DELETE for a move */
+      XmTransferDone(ds->transfer_id, XmTRANSFER_DONE_FAIL);
     }
     if (tf->text.selection_move && local) {
       TextF_MaxLength(tf) = max_length;
@@ -1189,6 +1230,7 @@ static void HandleTargets(Widget w, XtPointer closure, XmSelectionCallbackStruct
   XmTextFieldWidget tf = (XmTextFieldWidget)w;
   Atom atoms[XtNumber(atom_names)];
   Atom CS_OF_ENCODING = XmeGetEncodingAtom(w);
+  _XmTextPrimSelect *prim_select;
   XmTextPosition left, right;
   Boolean supports_encoding_data = False;
   Boolean supports_CT = False;
@@ -1240,11 +1282,13 @@ static void HandleTargets(Widget w, XtPointer closure, XmSelectionCallbackStruct
     }
   }
   _XmProcessLock();
+  prim_select = GetPrimSelect(w);
   if (prim_select) {
     prim_select->ref_count++;
   }
   else {
     prim_select = (_XmTextPrimSelect *)XtMalloc((unsigned)sizeof(_XmTextPrimSelect));
+    SetPrimSelect(w, prim_select);
   }
   prim_select->position = select_pos;
   prim_select->time = XtLastTimestampProcessed(XtDisplay(w));

@@ -206,7 +206,7 @@ static Cardinal Urm__CW_CreateWidgetTree (URMResourceContextPtr	context_id,
 					  ArgList		ov_args,
 					  Cardinal		ov_num_args,
 					  MrmCode		keytype,
-					  String		kindex,
+					  const char		*kindex,
 					  MrmResource_id	krid,
 					  MrmManageFlag		manage,
 					  URMPointerListPtr	*svlist,
@@ -227,7 +227,7 @@ Urm__CW_CreateWidgetTreeBody (URMResourceContextPtr	context_id,
 			      ArgList			ov_args,
 			      Cardinal			ov_num_args,
 			      MrmCode			keytype,
-			      String			kindex,
+			      const char			*kindex,
 			      MrmResource_id		krid,
 			      MrmManageFlag		manage,
 			      URMPointerListPtr		*svlist,
@@ -363,7 +363,7 @@ Urm__CW_CreateWidgetTree (URMResourceContextPtr	context_id,
 			      ArgList			ov_args,
 			      Cardinal			ov_num_args,
 			      MrmCode			keytype,
-			      String			kindex,
+			      const char			*kindex,
 			      MrmResource_id		krid,
 			      MrmManageFlag		manage,
 			      URMPointerListPtr		*svlist,
@@ -470,7 +470,7 @@ UrmCreateWidgetTree (URMResourceContextPtr	context_id,
 		     ArgList			ov_args,
 		     Cardinal			ov_num_args,
 		     MrmCode			keytype,
-		     String			kindex,
+		     const char			*kindex,
 		     MrmResource_id		krid,
 		     MrmManageFlag		manage,
 		     URMPointerListPtr		*svlist,
@@ -568,7 +568,7 @@ UrmCreateOrSetWidgetInstance (URMResourceContextPtr	context_id,
 			      ArgList			ov_args,
 			      Cardinal			ov_num_args,
 			      MrmCode			keytype,
-			      String			kindex,
+			      const char			*kindex,
 			      MrmResource_id		krid,
 			      MrmManageFlag		manage,
 			      URMPointerListPtr		*svlist,
@@ -690,7 +690,7 @@ UrmCreateWidgetInstance (URMResourceContextPtr	context_id,
 			 ArgList		ov_args,
 			 Cardinal		ov_num_args,
 			 MrmCode		keytype, /* unused */
-			 String			kindex,	/* unused */
+			 const char			*kindex,	/* unused */
 			 MrmResource_id		krid, /* unused */
 			 MrmManageFlag		manage,
 			 URMPointerListPtr	*svlist,
@@ -965,7 +965,7 @@ UrmSetWidgetInstance (URMResourceContextPtr	context_id,
 		      ArgList			ov_args,
 		      Cardinal			ov_num_args,
 		      MrmCode			keytype, /* unused */
-		      String			kindex,	/* unused */
+		      const char			*kindex,	/* unused */
 		      MrmResource_id		krid, /* unused */
 		      MrmManageFlag		manage,
 		      URMPointerListPtr		*svlist,
@@ -2769,9 +2769,13 @@ DisplayDestroyCallback ( Widget w,
   String dpyandfontstr = (String) client_data;
   XtPointer	font ;
 
+  /* Called when the display goes, outside the Mrm calls that hold the
+     process lock: the registered names are shared by all threads */
+  _MrmProcessLock();
   if (MrmSUCCESS == Urm__WCI_LookupRegisteredName(dpyandfontstr, &font))
     XFreeFont(XtDisplay(w), (XFontStruct *)font);
   Urm__WCI_UnregisterName (dpyandfontstr);
+  _MrmProcessUnlock();
   XtFree(dpyandfontstr);
 }
 

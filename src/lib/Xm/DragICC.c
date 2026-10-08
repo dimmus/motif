@@ -946,13 +946,6 @@ static Window ReadXdndProxy(Display *display, Window window, Atom xdndProxy)
   return proxy;
 }
 
-static int IgnoreXErrors(Display *display, XErrorEvent *event)
-{
-  (void)display;
-  (void)event;
-  return 0;
-}
-
 /************************************************************************
  *
  *  GetXdndProxy()
@@ -966,18 +959,14 @@ static Window GetXdndProxy(Display *display, Window window)
 {
   Atom xdndProxy = XInternAtom(display, "XdndProxy", False);
   Window proxy, check;
-  XErrorHandler old_handler;
+  XmErrorTrapRec trap;
   proxy = ReadXdndProxy(display, window, xdndProxy);
   if (proxy == None || proxy == window)
     return window;
   /* the proxy window may be gone: don't let BadWindow be fatal */
-  _XmProcessLock();
-  XSync(display, False);
-  old_handler = XSetErrorHandler(IgnoreXErrors);
+  _XmStartErrorTrap(&trap, display, 0, 0);
   check = ReadXdndProxy(display, proxy, xdndProxy);
-  XSync(display, False);
-  (void)XSetErrorHandler(old_handler);
-  _XmProcessUnlock();
+  (void)_XmEndErrorTrap(&trap, False); /* the property request was a round trip */
   return (check == proxy) ? proxy : window;
 }
 

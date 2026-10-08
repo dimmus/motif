@@ -1,0 +1,47 @@
+.TH "XmeAddFocusChangeCallback" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeAddFocusChangeCallback\fP,
+\fB\%XmeRemoveFocusChangeCallback\fP \(em Widget writer functions that watch the keyboard focus of a shell
+.iX "XmeAddFocusChangeCallback"
+.iX "Xme functions" "XmeAddFocusChangeCallback"
+.iX "Xme functions" "XmeRemoveFocusChangeCallback"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/VendorSEP\&.h>
+.PP
+\fBvoid \fBXmeAddFocusChangeCallback\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBXtCallbackProc \fBproc\fR\fR,
+\fBXtPointer \fBdata\fR\fR);
+.PP
+\fBvoid \fBXmeRemoveFocusChangeCallback\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBXtCallbackProc \fBproc\fR\fR,
+\fBXtPointer \fBdata\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeAddFocusChangeCallback\fP adds \fIproc\fP to the callbacks that
+the
+VendorShell \fIw\fP calls whenever the keyboard focus moves from one of
+its descendants to another; \fB\%XmeRemoveFocusChangeCallback\fP removes
+it\&.  The callback receives an \fB\%XmFocusMovedCallbackStruct\fP, with
+the
+widgets that lose and get the focus, and can refuse the move by
+setting its \fB\%cont\fP member to False\&.  This is the
+\fB\%XmNfocusMovedCallback\fP of the VendorShell extension; widgets such
+as the ComboBox use these functions to follow the focus in their shell
+without taking the resource from the application\&.
+.PP
+A warning is printed if \fIw\fP is not a VendorShell\&.
+.IP "\fIw\fP" 10
+Specifies the VendorShell\&.
+.IP "\fIproc\fP" 10
+Specifies the callback procedure\&.
+.IP "\fIdata\fP" 10
+Specifies the client data of the callback\&.
+.SH "RELATED"
+.PP
+\fB\%VendorShell\fP(3) and \fB\%XmGetFocusWidget\fP(3)\&.

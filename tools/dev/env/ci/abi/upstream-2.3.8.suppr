@@ -1,0 +1,45 @@
+# libabigail suppressions for "abi-check.sh upstream-2.3.8": the documented
+# differences between upstream Motif 2.3.8 (default configuration) and this
+# tree, see doc/abi-policy.md, "Differences from Motif 2.3.8".
+#
+# abi-check.sh handles four more of them itself:
+#   - SONAME 5 (libXm.so.4 upstream): --ignore-soname;
+#   - the symbols that are local here on purpose (1476 of libXm's 3181,
+#     112 of libMrm's 329, 384 of libUil's 434): --kmi-whitelist with the
+#     symbols of the version scripts, src/lib/*/lib*.map;
+#   - OM22_COMPATIBILITY: XmPrimitivePart and XmGadgetPart have no
+#     tool_tip_string member here, so every widget and gadget instance
+#     record differs in size or layout from upstream, and every record or
+#     part that points to one is reported as changed with it.  A generated
+#     suppression (records_suppr) names the instance records that the *P.h
+#     headers define and the parts they are made of; their evolution is
+#     checked against the previous release instead.  The class records,
+#     trait records, callback structures, enumerations and the other types
+#     of the installed headers stay compared with upstream;
+#   - the re-ordered _XmStrings and _XmStrings22 tables (string_tables)
+#     are reported without failing the check.
+#
+# Everything else that abi-check.sh reports for upstream 2.3.8 is a new
+# difference: fix it, or document it there and here.
+
+# The text widget's input, output and source records point to the
+# instance record of the text widget.
+[suppress_type]
+  label = text widget records (tool_tip_string)
+  type_kind = struct
+  name_regexp = ^_(Input|InputData|Output|OutputData|XmSourceData|XmTextSource)Rec$
+
+# XDND: the XmDRAG_XDND drag protocol style was inserted before
+# XmDRAG_PREFER_RECEIVER (6 upstream, 7 here).
+[suppress_type]
+  label = XmDRAG_XDND
+  type_kind = enum
+  changed_enumerators = XmDRAG_PREFER_RECEIVER
+
+# XDND: the drop site receiver information (DragCP.h) records the last
+# pointer position, and the top-level enter callback carries the XDND
+# targets.
+[suppress_type]
+  label = XDND records
+  type_kind = struct
+  name_regexp = ^(XmDragReceiverInfoStruct|_XmTopLevelEnterCallbackStruct)$

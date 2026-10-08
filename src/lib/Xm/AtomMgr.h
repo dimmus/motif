@@ -28,7 +28,7 @@
 extern "C" {
 #endif
 /* X11r5' XInternAtom equivalent */
-extern Atom XmInternAtom(Display *display, String name, Boolean only_if_exists);
+extern Atom XmInternAtom(Display *display, const char *name, Boolean only_if_exists);
 /* X11r5's XGetAtomName equivalent */
 extern String XmGetAtomName(Display *display, Atom atom);
 #ifdef __cplusplus

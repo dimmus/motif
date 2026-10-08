@@ -31,6 +31,16 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+/*
+ * Whether a text widget lays its text out vertically, in columns from
+ * right to left (XmNlayoutDirection XmTOP_TO_BOTTOM_RIGHT_TO_LEFT).
+ * XmDirectionMatch() alone also accepts XmRIGHT_TO_LEFT, whose
+ * precedence is left open: a right to left text is not vertical.
+ */
+#define _XmTextIsVertical(w) \
+  ((XmPrim_layout_direction(w) & XmPRECEDENCE_MASK) == XmPRECEDENCE_VERT_MASK && \
+   XmDirectionMatch(XmPrim_layout_direction(w), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT))
+
 /********    Private Function Declarations    ********/
 extern XmTextPosition _XmTextFindScroll(XmTextWidget widget, XmTextPosition start, int delta);
 extern int _XmTextGetTotalLines(Widget widget);
@@ -56,7 +66,7 @@ extern void _XmTextInvalidate(XmTextWidget widget,
                               XmTextPosition topos,
                               long delta);
 extern void _XmTextSetTopCharacter(Widget widget, XmTextPosition top_character);
-extern int _XmTextCountCharacters(char *str, int num_count_bytes);
+extern int _XmTextCountCharacters(const char *str, int num_count_bytes);
 extern void _XmTextSetCursorPosition(Widget widget, XmTextPosition position);
 extern void _XmTextDisableRedisplay(XmTextWidget widget, Boolean losesbackingstore);
 extern void _XmTextEnableRedisplay(XmTextWidget widget);

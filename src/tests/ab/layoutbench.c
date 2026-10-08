@@ -5,9 +5,13 @@
  * Licensed under the LGPL 2.1 license.
  *
  * xm_layoutbench: wall-clock timings of the Form, Container and List
- * layout code with many children or items.
+ * layout code with many children or items, and of the creation of
+ * Labels whose render table is converted from a resource.
  *
- *   xm_layoutbench form|container|list N
+ *   xm_layoutbench MODE N
+ *
+ * MODE is form, formgrid, outline, spatial, detail, fillhead,
+ * fillrandom, list, listops or rendertable.
  *
  * Prints the time of each phase (create, manage, resize, destroy, ...)
  * to stdout.  With PROF=FILE it also samples the stack on SIGPROF and
@@ -19,9 +23,11 @@
 #include <Xm/Container.h>
 #include <Xm/Form.h>
 #include <Xm/IconG.h>
+#include <Xm/Label.h>
 #include <Xm/LabelG.h>
 #include <Xm/List.h>
 #include <Xm/PushB.h>
+#include <Xm/RowColumn.h>
 #include <Xm/ScrolledW.h>
 #include <Xm/ScrollBar.h>
 #include <stdio.h>
@@ -187,6 +193,44 @@ static void container_bench(int n, unsigned char layout)
   lap("destroy");
 }
 
+/* Fill a Container with n icons, each inserted at the front or at a
+ * random place among those already in, then read their positions. */
+static void container_fill_bench(int n, int random_places)
+{
+  Widget sw, c;
+  Widget *items = calloc(n, sizeof(Widget));
+  unsigned int r = 12345;
+  long sum = 0;
+  int i, pos;
+  sw = XmCreateScrolledWindow(top, "sw", NULL, 0);
+  c = XtVaCreateWidget("c", xmContainerWidgetClass, sw, XmNlayoutType, XmOUTLINE, NULL);
+  printf("container fill %s n=%d\n", random_places ? "random" : "head", n);
+  start();
+  for (i = 0; i < n; i++) {
+    r ^= r << 13;
+    r ^= r >> 17;
+    r ^= r << 5;
+    items[i] = XtVaCreateWidget("i", xmIconGadgetClass, c, XmNpositionIndex,
+                                random_places ? (int)(r % (unsigned)(i + 1)) : 0, NULL);
+  }
+  lap(random_places ? "create children (random places)" : "create children (at the front)");
+  XtManageChildren(items, n);
+  XtManageChild(c);
+  XtManageChild(sw);
+  XtRealizeWidget(top);
+  lap("manage and realize");
+  for (i = 0; i < n; i++) {
+    XtVaGetValues(items[i], XmNpositionIndex, &pos, NULL);
+    sum += pos;
+  }
+  lap("read every XmNpositionIndex");
+  if (sum != (long)n * (n - 1) / 2)
+    printf("bad positions: sum %ld\n", sum);
+  XtDestroyWidget(sw);
+  lap("destroy");
+  free(items);
+}
+
 static void list_bench(int n)
 {
   Widget list;
@@ -225,6 +269,30 @@ static void list_bench(int n)
   for (i = 0; i < 1000; i++)
     XmListSetPos(list, 1 + (n / 2) + (i % 2));
   lap("1000 one-line scrolls");
+  /* the same, waiting for the X server to draw each one */
+  for (i = 0; i < 1000; i++) {
+    XmListSetPos(list, 1 + (n / 2) + (i % 2));
+    XSync(dpy, False);
+  }
+  lap("1000 one-line scrolls, synced");
+  {
+    /* the location cursor at the bottom row, then down and up a line */
+    XKeyEvent ev;
+    memset(&ev, 0, sizeof(ev));
+    ev.type = KeyPress;
+    ev.display = dpy;
+    ev.window = None; /* as from an accelerator: without the focus */
+    XmListSetPos(list, 1);
+    XmListSetKbdItemPos(list, 20);
+    settle();
+    start();
+    for (i = 0; i < 1000; i++) {
+      ev.time += 100;
+      XtCallActionProc(list, "ListNextItem", (XEvent *)&ev, NULL, 0);
+      XSync(dpy, False);
+    }
+    lap("1000 keyboard line scrolls, synced");
+  }
   {
     Widget vsb = NULL;
     int value, size, inc, page;
@@ -258,6 +326,174 @@ static void list_bench(int n)
   lap("XmListAddItems all + delete all");
 }
 
+/* A pseudo-random sequence that does not depend on the C library. */
+static unsigned int lcg_state = 12345;
+static int rnd(int n)
+{
+  lcg_state = lcg_state * 1103515245u + 12345u;
+  return (int)((lcg_state >> 8) % (unsigned int)n);
+}
+
+/* The XmList operations on many items: adds, lookups, selection,
+ * deletes and replacements by value and by position. */
+static void listops_bench(int n)
+{
+  Widget list;
+  XmString *t = calloc(n, sizeof(XmString));
+  XmString *u = calloc(n, sizeof(XmString));
+  XmString *sel;
+  int *pos = calloc(1000, sizeof(int));
+  int i, k, count;
+  char buf[64];
+  XKeyEvent ev;
+  list = XmCreateScrolledList(top, "list", NULL, 0);
+  XtVaSetValues(list, XmNvisibleItemCount, 20, XmNselectionPolicy, XmMULTIPLE_SELECT, NULL);
+  XtManageChild(list);
+  XtRealizeWidget(top);
+  printf("listops n=%d\n", n);
+  for (i = 0; i < n; i++) {
+    snprintf(buf, sizeof(buf), "item number %d", i);
+    t[i] = XmStringCreateLocalized(buf);
+    snprintf(buf, sizeof(buf), "other item %d", i);
+    u[i] = XmStringCreateLocalized(buf);
+  }
+  memset(&ev, 0, sizeof(ev));
+  ev.type = KeyPress;
+  ev.display = dpy;
+  ev.window = XtWindow(list);
+  start();
+  for (i = 0; i < n; i++)
+    XmListAddItemUnselected(list, t[i], 0);
+  lap("append one by one");
+  XmListDeleteAllItems(list);
+  lap("delete all");
+  for (i = 0; i < n; i++)
+    XmListAddItemUnselected(list, t[n - 1 - i], 1);
+  lap("add one by one at the top");
+  for (i = 0; i < 10000; i++)
+    if (XmListItemPos(list, t[rnd(n)]) == 0)
+      printf("missing\n");
+  lap("10000 XmListItemPos");
+  for (i = 0; i < 10000; i++)
+    XmListSelectItem(list, t[rnd(n)], False);
+  lap("10000 select by value");
+  for (i = 0; i < 10000; i++)
+    XmListSelectPos(list, 1 + rnd(n), False);
+  lap("10000 select by position");
+  for (i = 0; i < 5000; i++)
+    XmListDeselectPos(list, 1 + rnd(n));
+  lap("5000 deselect by position");
+  for (i = 0; i < 1000; i++)
+    XtCallActionProc(list, "ListNextPage", (XEvent *)&ev, NULL, 0);
+  lap("1000 page-downs");
+  for (i = 0; i < 1000; i++)
+    XtCallActionProc(list, "ListPrevPage", (XEvent *)&ev, NULL, 0);
+  lap("1000 page-ups");
+  XmListAddItems(list, u, n / 10, n / 2);
+  lap("add n/10 checking the selection");
+  for (i = 0; i < 1000; i++)
+    XmListDeleteItem(list, t[rnd(n)]);
+  lap("1000 delete by value");
+  for (i = 0; i < 1000; i++) {
+    XtVaGetValues(list, XmNitemCount, &count, NULL);
+    XmListDeletePos(list, count / 2);
+  }
+  lap("1000 delete from the middle");
+  for (i = 0; i < 1000; i++) {
+    XtVaGetValues(list, XmNitemCount, &count, NULL);
+    pos[i] = 1 + rnd(count);
+  }
+  XmListDeletePositions(list, pos, 1000);
+  lap("XmListDeletePositions 1000");
+  for (i = 0; i < 1000; i++) {
+    k = rnd(n);
+    XmListReplaceItems(list, &t[k], 1, &u[k]);
+  }
+  lap("1000 XmListReplaceItems");
+  XtVaGetValues(list, XmNselectedItems, &sel, XmNselectedItemCount, &count, NULL);
+  printf("  (%d selected)\n", count);
+  start();
+  XmListDeleteItems(list, sel, count < 2000 ? count : 2000);
+  lap("XmListDeleteItems 2000 selected");
+  XtVaSetValues(list, XmNselectedItems, t, XmNselectedItemCount, n / 10, NULL);
+  lap("XmNselectedItems n/10");
+  for (i = 0; i < 1000; i++)
+    XmListDeselectItem(list, t[rnd(n / 10)]);
+  lap("1000 deselect by value");
+  {
+    /* 300 ever wider items, deleted from the widest: each time the
+     * list shrinks to the next one. */
+    char wide[400];
+    XmString s;
+    for (i = 0; i < 300; i++) {
+      memset(wide, '#', 40 + i);
+      wide[40 + i] = '\0';
+      s = XmStringCreateLocalized(wide);
+      XmListAddItemUnselected(list, s, 1 + rnd(1000));
+      XmStringFree(s);
+    }
+    start();
+    for (i = 299; i >= 0; i--) {
+      memset(wide, '#', 40 + i);
+      wide[40 + i] = '\0';
+      s = XmStringCreateLocalized(wide);
+      XmListDeleteItem(list, s);
+      XmStringFree(s);
+    }
+    lap("300 deletes of the widest by value");
+  }
+}
+
+/*
+ * N Labels whose XmNrenderTable comes from the same resource, for render
+ * tables of a font list, of one and three renditions from the resource
+ * database, and of an Xft rendition.
+ */
+static void rendertable_bench(int n)
+{
+  static const char *db[] = {
+      "*core.fontName: -*-fixed-medium-r-normal--13-*-*-*-*-*-*-*",
+      "*core.fontType: FONT_IS_FONT",
+      "*bold.fontName: -*-fixed-bold-r-normal--13-*-*-*-*-*-*-*",
+      "*bold.fontType: FONT_IS_FONT",
+      "*red.renditionForeground: red",
+      "*red.underlineType: SINGLE_LINE",
+      "*xft.fontName: Sans",
+      "*xft.fontType: FONT_IS_XFT",
+      "*xft.fontSize: 12",
+      "*fontlist*l.renderTable: -*-fixed-medium-r-normal--13-*-*-*-*-*-*-*",
+      "*one*l.renderTable: core",
+      "*three*l.renderTable: core bold red",
+      "*xft*l.renderTable: xft",
+  };
+  static const char *cases[] = {"fontlist", "one", "three", "xft"};
+  XrmDatabase rdb = XtScreenDatabase(XtScreen(top));
+  unsigned int i, c;
+  int j;
+  for (i = 0; i < XtNumber(db); i++)
+    XrmPutLineResource(&rdb, db[i]);
+  printf("rendertable n=%d\n", n);
+  for (c = 0; c < XtNumber(cases); c++) {
+    char what[64];
+    Widget rc = XtVaCreateWidget(cases[c], xmRowColumnWidgetClass, top, NULL), l = NULL;
+    XmRenderTable rt = NULL;
+    XmStringTag *tags = NULL;
+    int ntags;
+    start();
+    for (j = 0; j < n; j++)
+      l = XtVaCreateWidget("l", xmLabelWidgetClass, rc, NULL);
+    XtVaGetValues(l, XmNrenderTable, &rt, NULL);
+    ntags = XmRenderTableGetTags(rt, &tags);
+    snprintf(what, sizeof(what), "create labels (%s, %d renditions)", cases[c], ntags);
+    while (ntags > 0)
+      XtFree(tags[--ntags]);
+    XtFree((char *)tags);
+    lap(what);
+    XtDestroyWidget(rc);
+    lap("destroy");
+  }
+}
+
 int main(int argc, char **argv)
 {
   const char *mode = argc > 1 ? argv[1] : "form";
@@ -279,7 +515,15 @@ int main(int argc, char **argv)
     container_bench(n, XmSPATIAL);
   else if (!strcmp(mode, "detail"))
     container_bench(n, XmDETAIL);
+  else if (!strcmp(mode, "fillhead"))
+    container_fill_bench(n, 0);
+  else if (!strcmp(mode, "fillrandom"))
+    container_fill_bench(n, 1);
   else if (!strcmp(mode, "list"))
     list_bench(n);
+  else if (!strcmp(mode, "listops"))
+    listops_bench(n);
+  else if (!strcmp(mode, "rendertable"))
+    rendertable_bench(n);
   return 0;
 }

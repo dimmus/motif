@@ -38,8 +38,8 @@ extern Widget XmCreateColumn(Widget, String, ArgList, Cardinal);
 /*
  * Variable argument list functions
  */
-extern Widget XmVaCreateColumn(Widget parent, char *name, ...);
-extern Widget XmVaCreateManagedColumn(Widget parent, char *name, ...);
+extern Widget XmVaCreateColumn(Widget parent, const char *name, ...);
+extern Widget XmVaCreateManagedColumn(Widget parent, const char *name, ...);
 #ifdef __cplusplus
 }
 #endif

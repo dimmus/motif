@@ -38,16 +38,15 @@ extern PropMwmInfo * GetMwmInfo (Window rootWindowOfScreen);
 extern void ProcessWmColormapWindows (ClientData *pCD);
 extern Colormap FindColormap (ClientData *pCD, Window window);
 extern MenuItem * GetMwmMenuItems (ClientData *pCD);
-#ifdef WSM
 extern void GetInitialPropertyList (ClientData *pCD);
+extern void DiscardInitialPropertyList (ClientData *pCD);
+extern Boolean HasProperty(ClientData *pCD, Atom property);
+#ifdef WSM
 extern Status GetWorkspaceHints (Display *display, Window window, Atom **ppWsAtoms, unsigned int *pCount, Boolean *pbAll);
 #ifdef HP_VUE
 extern void SetWorkspaceInfo (Window propWindow, WorkspaceInfo *pWsInfo, unsigned long cInfo);
 #endif /* HP_VUE */
 extern void SetWorkspacePresence (Window propWindow, Atom *pWsPresence, unsigned long cPresence);
-extern Boolean HasProperty(ClientData *pCD, Atom property);
-extern void DiscardInitialPropertyList (ClientData *pCD);
-extern void GetInitialPropertyList (ClientData *pCD);
 extern void SetWorkspaceListProperty (WmScreenData *pSD);
 extern void SetCurrentWorkspaceProperty (WmScreenData *pSD);
 extern void SetWorkspaceInfoProperty (WmWorkspaceData *pWS);

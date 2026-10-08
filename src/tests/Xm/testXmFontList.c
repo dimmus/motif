@@ -10,30 +10,16 @@
 #include <Xm/Xm.h>
 #include <check.h>
 
+#include "leak.h"
 #include "suites.h"
 
-/* LeakSanitizer is part of ASan with GCC (__SANITIZE_ADDRESS__) and Clang. */
-#if defined(__SANITIZE_ADDRESS__)
-#define HAVE_LSAN 1
-#elif defined(__has_feature)
-#if __has_feature(address_sanitizer)
-#define HAVE_LSAN 1
-#endif
-#endif
-#ifdef HAVE_LSAN
-#include <sanitizer/lsan_interface.h>
-#define KNOWN_LEAK_BEGIN() __lsan_disable()
-#define KNOWN_LEAK_END() __lsan_enable()
-#else
-#define KNOWN_LEAK_BEGIN() ((void)0)
-#define KNOWN_LEAK_END() ((void)0)
-#endif
-
 static Display *display;
+static Widget top;
 
 static void _init_xt(void)
 {
-	display = XtDisplay(init_xt("check_XmFontList"));
+	top = init_xt("check_XmFontList");
+	display = XtDisplay(top);
 }
 
 /* Compare the tags of two entries; XmFontListEntryGetTag returns copies. */
@@ -124,6 +110,60 @@ START_TEST(add_valid_entry)
 	XmFontListEntryFree(&e2);
 	if (fx) XmFontListFree(fx);
 	else XmFontListFree(fl);
+}
+END_TEST
+
+/* The number of entries of a font list, and whether one has the tag */
+static int count_tags(XmFontList fl, const char *tag, int *found)
+{
+	XmFontContext context;
+	XmFontListEntry entry;
+	int n = 0;
+
+	*found = 0;
+	ck_assert(XmFontListInitFontContext(&context, fl));
+	while ((entry = XmFontListNextEntry(context)) != NULL) {
+		char *t = XmFontListEntryGetTag(entry);
+
+		if (t && !strcmp(t, tag))
+			*found = 1;
+		XtFree(t);
+		n++;
+	}
+	XmFontListFreeFontContext(context);
+	return n;
+}
+
+/*
+ * XmStringCreateFontList, XmStringCreateFontList_r and XmFontListAdd
+ * kept the rendition they had created for the new entry after adding a
+ * reference to it to the list, so the list could never free it.
+ */
+START_TEST(deprecated_constructors)
+{
+	XFontStruct *font = XLoadQueryFont(display, "fixed");
+	XmFontList fl;
+	int found;
+
+	ck_assert_ptr_nonnull(font);
+	fl = XmStringCreateFontList(font, "TagA");
+	ck_assert_ptr_nonnull(fl);
+	ck_assert_int_eq(count_tags(fl, "TagA", &found), 1);
+	ck_assert(found);
+	fl = XmFontListAdd(fl, font, "TagB");
+	ck_assert_ptr_nonnull(fl);
+	ck_assert_int_eq(count_tags(fl, "TagB", &found), 2);
+	ck_assert(found);
+	XmFontListFree(fl);
+	fl = XmStringCreateFontList_r(font, "TagC", top);
+	ck_assert_ptr_nonnull(fl);
+	ck_assert_int_eq(count_tags(fl, "TagC", &found), 1);
+	ck_assert(found);
+	XmFontListFree(fl);
+	XFreeFont(display, font);
+#ifdef HAVE_LSAN
+	ck_assert_msg(!leaks_found(), "the deprecated constructors leaked");
+#endif
 }
 END_TEST
 
@@ -333,6 +373,7 @@ void xmfontlist_suite(SRunner *runner)
 	t = tcase_create("Add an entry to a font list");
 	tcase_add_test(t, add_invalid_entry);
 	tcase_add_test(t, add_valid_entry);
+	tcase_add_test(t, deprecated_constructors);
 	tcase_add_checked_fixture(t, _init_xt, uninit_xt);
 	tcase_set_timeout(t, 10);
 	suite_add_tcase(s, t);

@@ -1,14 +1,21 @@
 .ta 8n 16n 24n 32n 40n 48n 56n 64n 72n
 .TH "XmMultiListMakeRowVisible" "library call"
 .SH "NAME"
-\fBXmMultiListMakeRowVisible\fP \(em A MultiList function that shifts the visible list rows as desired
-.iX "XmMultiListSelectRow"
-.iX "MultiList functions" "XmMultiListSelectRow"
+\fBXmMultiListMakeRowVisible\fP,
+\fBXmExt18ListMakeRowVisible\fP \(em MultiList functions that shift the visible list rows as desired
+.iX "XmMultiListMakeRowVisible"
+.iX "XmExt18ListMakeRowVisible"
+.iX "MultiList functions" "XmMultiListMakeRowVisible"
 .SH "SYNOPSIS"
 .PP
 .nf
 #include <Xm/MultiList\&.h>
 \fBvoid \fBXmMultiListMakeRowVisible\fP\fR(
+\fBWidget \fBwidget\fR\fR,
+\fBint \fBrow\fR\fR);
+.PP
+#include <Xm/Ext18List\&.h>
+\fBvoid \fBXmExt18ListMakeRowVisible\fP\fR(
 \fBWidget \fBwidget\fR\fR,
 \fBint \fBrow\fR\fR);
 .fi
@@ -22,6 +29,10 @@ Specifies the row number (starting from 0) to be visible in the MultiList widget
 .PP
 For a complete definition of MultiList and its associated resources, see
 \fBXmMultiList\fP(3)\&.
+.PP
+\fBXmExt18ListMakeRowVisible\fP is the obsolete name of \fBXmMultiListMakeRowVisible\fP, from the time
+the MultiList was called the Ext18List; \fB<Xm/Ext18List\&.h>\fP
+declares it deprecated\&.
 .SH "RELATED"
 .PP
 \fBXmMultiList\fP(3)\&.

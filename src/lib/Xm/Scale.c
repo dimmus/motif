@@ -486,7 +486,7 @@ static void ProcessingDirectionDefault(XmScaleWidget widget,
                                        int offset, /* unused */
                                        XrmValue *value)
 {
-  static unsigned char direction;
+  static _Thread_local unsigned char direction;
   value->addr = (XPointer)&direction;
   if (widget->scale.orientation == XmHORIZONTAL) {
     if (LayoutIsRtoLM(widget))
@@ -509,7 +509,7 @@ static void SliderVisualDefault(XmScaleWidget widget,
                                 int offset, /* unused */
                                 XrmValue *value)
 {
-  static XtEnum slider_visual;
+  static _Thread_local XtEnum slider_visual;
   value->addr = (XPointer)&slider_visual;
   if (widget->scale.sliding_mode == XmTHERMOMETER) {
     slider_visual = XmTROUGH_COLOR;
@@ -529,7 +529,7 @@ static void SliderMarkDefault(XmScaleWidget widget,
                               int offset, /* unused */
                               XrmValue *value)
 {
-  static XtEnum slider_mark;
+  static _Thread_local XtEnum slider_mark;
   value->addr = (XPointer)&slider_mark;
   if (!widget->scale.editable)
     slider_mark = XmNONE;
@@ -551,7 +551,7 @@ static void EditableDefault(XmScaleWidget widget,
                             int offset, /* unused */
                             XrmValue *value)
 {
-  static XtEnum editable;
+  static _Thread_local XtEnum editable;
   value->addr = (XPointer)&editable;
   if (widget->scale.sliding_mode == XmTHERMOMETER) {
     editable = False;
@@ -2651,7 +2651,7 @@ Widget XmCreateScale(Widget parent, char *name, ArgList arglist, Cardinal argcou
   return (XtCreateWidget(name, xmScaleWidgetClass, parent, arglist, argcount));
 }
 
-Widget XmVaCreateScale(Widget parent, char *name, ...)
+Widget XmVaCreateScale(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -2665,7 +2665,7 @@ Widget XmVaCreateScale(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedScale(Widget parent, char *name, ...)
+Widget XmVaCreateManagedScale(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

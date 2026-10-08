@@ -1,0 +1,54 @@
+.TH "XmeGetDirection" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeGetDirection\fP \(em A parse procedure that inserts a direction component
+.iX "XmeGetDirection"
+.iX "Xme functions" "XmeGetDirection"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/XmP\&.h>
+\fBXmIncludeStatus \fBXmeGetDirection\fP\fR(
+\fBXtPointer *\fBin_out\fR\fR,
+\fBXtPointer \fBtext_end\fR\fR,
+\fBXmTextType \fBtype\fR\fR,
+\fBXmStringTag \fBlocale_tag\fR\fR,
+\fBXmParseMapping \fBentry\fR\fR,
+\fBint \fBpattern_length\fR\fR,
+\fBXmString *\fBstr_include\fR\fR,
+\fBXtPointer \fBcall_data\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeGetDirection\fP is an \fB\%XmParseProc\fP, to be set as the
+\fB\%XmNinvokeParseProc\fP of a parse mapping whose pattern is
+\fB\%XmDIRECTION_CHANGE\fP\&.  When \fB\%XmStringParseText\fP finds a
+change of
+direction in the text, it returns in \fIstr_include\fP an XmString that
+holds a direction component with the direction of the character at
+\fIin_out\fP\&.  The text is not consumed\&.  \fB\%XmStringParseText\fP
+uses it
+by default for \fB\%XmDIRECTION_CHANGE\fP\&.
+.IP "\fIin_out\fP" 12
+Specifies the position in the text\&.
+.IP "\fItext_end\fP" 12
+Is not used\&.
+.IP "\fItype\fP" 12
+Specifies the type of the text\&.
+.IP "\fIlocale_tag\fP" 12
+Specifies the tag of the text\&.
+.IP "\fIentry\fP" 12
+Is not used\&.
+.IP "\fIpattern_length\fP" 12
+Is not used\&.
+.IP "\fIstr_include\fP" 12
+Returns the XmString to insert\&.
+.IP "\fIcall_data\fP" 12
+Is not used\&.
+.SH "RETURN"
+.PP
+Returns \fB\%XmINSERT\fP\&.
+.SH "RELATED"
+.PP
+\fB\%XmeGetNextCharacter\fP(3), \fB\%XmParseMapping\fP(3) and
+\fB\%XmStringParseText\fP(3)\&.

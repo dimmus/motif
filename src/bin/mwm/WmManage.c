@@ -326,6 +326,7 @@ ManageWindow (WmScreenData *pSD, Window clientWindow, long manageFlags)
     int initialState;
     int i;
     Boolean sendConfigNotify;
+    Time focusTime = CurrentTime;
 #ifdef WSM
     WmWorkspaceData *pwsi;
 #endif /* WSM */
@@ -728,12 +729,15 @@ ManageWindow (WmScreenData *pSD, Window clientWindow, long manageFlags)
 
 
     /*
-     * Make sure the client window has been reparented ...
+     * Make sure the client window has been reparented ...  Reading the
+     * server time is a round trip, like XSync, after which an error that
+     * says the window is gone has been handled; the time serves to give
+     * the window the focus below.
      */
 
     if (!(manageFlags & MANAGEW_WM_CLIENTS))
     {
-        XSync (DISPLAY, False);
+        focusTime = GetTimestamp ();
 
         if (pCD->clientFlags & CLIENT_DESTROYED)
         {
@@ -767,7 +771,13 @@ ManageWindow (WmScreenData *pSD, Window clientWindow, long manageFlags)
 #else /* WSM */
     AddClientToList (pSD->pActiveWS, pCD, True /*on top*/);
 #endif /* WSM */
-    SetClientState (pCD, initialState, GetTimestamp());
+
+    /*
+     * SetClientState uses the time only to move the focus when a window
+     * leaves the normal or the minimized state; this one is withdrawn,
+     * so a timestamp would cost a round trip for nothing.
+     */
+    SetClientState (pCD, initialState, CurrentTime);
 
     /*
      * Set the keyboard input focus to the newly managed window if appropriate:
@@ -796,12 +806,14 @@ ManageWindow (WmScreenData *pSD, Window clientWindow, long manageFlags)
 	  (pCD->inputFocusModel ||
 	   (pCD->protocolFlags & PROTOCOL_WM_TAKE_FOCUS)))))
     {
-	Do_Focus_Key (pCD, GetTimestamp() , ALWAYS_SET_FOCUS);
+	Do_Focus_Key (pCD, (focusTime != CurrentTime) ? focusTime :
+		      GetTimestamp (), ALWAYS_SET_FOCUS);
     }
     else if ((pCD->inputMode == MWM_INPUT_SYSTEM_MODAL) ||
 	     (wmGD.keyboardFocus && IS_APP_MODALIZED(wmGD.keyboardFocus)))
     {
-	Do_Focus_Key ((ClientData *)NULL, GetTimestamp() , ALWAYS_SET_FOCUS);
+	Do_Focus_Key ((ClientData *)NULL, (focusTime != CurrentTime) ?
+		      focusTime : GetTimestamp (), ALWAYS_SET_FOCUS);
     }
 
 #ifdef WSM
@@ -811,6 +823,7 @@ ManageWindow (WmScreenData *pSD, Window clientWindow, long manageFlags)
 		      (long) wmGD.xa_DT_WM_WINDOW_ACK,
 		      CurrentTime, NULL, 0);
     }
+#endif /* WSM */
 
     /*
      * Free the initial property list. This will force
@@ -819,7 +832,6 @@ ManageWindow (WmScreenData *pSD, Window clientWindow, long manageFlags)
      */
     DiscardInitialPropertyList (pCD);
 
-#endif /* WSM */
 #ifdef PANELIST
     CheckPushRecallClient (pCD);
 #endif /* PANELIST */
@@ -1292,12 +1304,12 @@ void WithdrawWindow (ClientData *pCD)
 #endif
     }
 
-#ifdef WSM
     /*
      * Insure list of initial properties has been freed.
      */
     DiscardInitialPropertyList (pCD);
 
+#ifdef WSM
     /*
      * free up list of workspace specific data
      */

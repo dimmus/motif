@@ -30,7 +30,23 @@ void xmstring_ct_suite(SRunner *runner);
 void xmstring_extent_suite(SRunner *runner);
 void widgets_suite(SRunner *runner);
 void text_suite(SRunner *runner);
+void clipboard_suite(SRunner *runner);
 void i18n_suite(SRunner *runner);
+void i18n_locale_suite(SRunner *runner);
 void layout_suite(SRunner *runner);
+void xerrors_suite(SRunner *runner);
+void list_suite(SRunner *runner);
+void msgcat_suite(SRunner *runner);
+void rtl_suite(SRunner *runner);
+void xim_suite(SRunner *runner);
+void round_trips_suite(SRunner *runner);
+void const_api_suite(SRunner *runner);
+void rendertable_suite(SRunner *runner);
+void traits_suite(SRunner *runner);
+void gadgets_suite(SRunner *runner);
+void xmim_suite(SRunner *runner);
+void cache_suite(SRunner *runner);
+void gadget_cache_suite(SRunner *runner);
+void draw_suite(SRunner *runner);
 
 #endif /* SUITES_H */

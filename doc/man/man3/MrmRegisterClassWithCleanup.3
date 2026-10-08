@@ -1,0 +1,53 @@
+.TH "MrmRegisterClassWithCleanup" "library call"
+.nh
+.SH "NAME"
+\fB\%MrmRegisterClassWithCleanup\fP \(em Registers a widget class with MRM, with a cleanup procedure
+.iX "MrmRegisterClassWithCleanup"
+.iX "uil functions" "MrmRegisterClassWithCleanup"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Mrm/MrmPublic\&.h>
+\fBCardinal \fBMrmRegisterClassWithCleanup\fP\fR(
+\fBMrmType \fBclass_code\fR\fR,
+\fBString \fBclass_name\fR\fR,
+\fBString \fBcreate_name\fR\fR,
+\fBWidget (*\fBcreator\fR)(Widget, String, ArgList, Cardinal)\fR,
+\fBWidgetClass \fBclass_record\fR\fR,
+\fBvoid (*\fBcleanup\fR)(Widget)\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%MrmRegisterClassWithCleanup\fP is \fB\%MrmRegisterClass\fP with a
+cleanup
+procedure: it registers the creation function \fIcreator\fP, under the
+name \fIcreate_name\fP that the UIL definition of a user-defined widget
+gives, so that MRM can create widgets of the class \fIclass_record\fP\&.
+Registering a name again replaces its creation function, class and
+cleanup procedure\&.
+.PP
+After MRM has created a widget of the class, with its children, as
+the child of another widget it fetches, it calls \fIcleanup\fP with the
+widget\&.  A class can use it to free what its creation function
+allocated from the argument list, such as render tables MRM made for
+it\&.
+.IP "\fIclass_code\fP" 13
+Is not used\&.
+.IP "\fIclass_name\fP" 13
+Is not used\&.
+.IP "\fIcreate_name\fP" 13
+Specifies the case-sensitive name of the creation function, as the UIL
+file names it\&.
+.IP "\fIcreator\fP" 13
+Specifies the creation function\&.
+.IP "\fIclass_record\fP" 13
+Specifies the widget class\&.
+.IP "\fIcleanup\fP" 13
+Specifies the cleanup procedure, or NULL\&.
+.SH "RETURN"
+.PP
+Returns \fB\%MrmSUCCESS\fP, or \fB\%MrmFAILURE\fP if \fIcreate_name\fP
+is NULL or memory cannot be allocated\&.
+.SH "RELATED"
+.PP
+\fB\%MrmRegisterClass\fP(3) and \fB\%MrmFetchWidget\fP(3)\&.

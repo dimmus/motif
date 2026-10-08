@@ -746,7 +746,9 @@ static XtGeometryResult GeometryManager(Widget widget,
  */
 static void ChangeManaged(Widget widget)
 {
-  static Boolean in = False;
+  /* Against recursion through the resize requests below; per thread,
+     as each thread lays out its own widgets */
+  static _Thread_local Boolean in = False;
   XmColumnWidget cw = (XmColumnWidget)widget;
   WidgetList kid = cw->composite.children;
   Widget label;
@@ -853,7 +855,9 @@ static void ChangeManaged(Widget widget)
  */
 static void ConstraintInitialize(Widget request, Widget new_w, ArgList arg_list, Cardinal *arg_cnt)
 {
-  static Boolean label_widget = False; /* STATIC DATA */
+  /* True while this thread creates a child's label, which comes back
+     here and must not get a label itself */
+  static _Thread_local Boolean label_widget = False;
   XmColumnWidget cw = (XmColumnWidget)XtParent(new_w);
   XmBulletinBoardPart *bbpart;
   /* CR03562 CR02961 When ChangeManaged is bypassed, request width and height
@@ -2140,7 +2144,7 @@ Widget XmCreateColumn(Widget parent, String name, ArgList arg_list, Cardinal arg
   return (XtCreateWidget(name, xmColumnWidgetClass, parent, arg_list, arg_cnt));
 }
 
-Widget XmVaCreateColumn(Widget parent, char *name, ...)
+Widget XmVaCreateColumn(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -2154,7 +2158,7 @@ Widget XmVaCreateColumn(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedColumn(Widget parent, char *name, ...)
+Widget XmVaCreateManagedColumn(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

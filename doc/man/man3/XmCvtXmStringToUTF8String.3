@@ -1,0 +1,38 @@
+.TH "XmCvtXmStringToUTF8String" "library call"
+.nh
+.SH "NAME"
+\fB\%XmCvtXmStringToUTF8String\fP \(em Converts a compound string to a UTF-8 string
+.iX "XmCvtXmStringToUTF8String"
+.iX "compound string functions" "XmCvtXmStringToUTF8String"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/Xm\&.h>
+\fBchar *\fBXmCvtXmStringToUTF8String\fP\fR(
+\fBXmString \fBstring\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmCvtXmStringToUTF8String\fP converts \fIstring\fP to UTF-8 text\&.
+The text
+of each segment is converted from the encoding of its tag, as
+\fB\%XmMapSegmentEncoding\fP gives it (text tagged
+\fB\%XmFONTLIST_DEFAULT_TAG\fP is in the encoding of the locale)\&.  A
+separator becomes a newline, a tab component a tab, and a change of
+direction a LEFT-TO-RIGHT MARK or RIGHT-TO-LEFT MARK\&.  Other
+components are dropped\&.
+.PP
+It is available when Motif is built with UTF-8 support (\fB\%XM_UTF8\fP
+is
+defined in \fB\%<Xm/Xm\&.h>\fP)\&.
+.IP "\fIstring\fP" 10
+Specifies the compound string\&.
+.SH "RETURN"
+.PP
+Returns a new string, which the caller frees with \fB\%XtFree\fP, or
+NULL
+if \fIstring\fP is NULL or empty, or a segment cannot be converted\&.
+.SH "RELATED"
+.PP
+\fB\%XmCvtXmStringToCT\fP(3), \fB\%XmStringUnparse\fP(3) and
+\fB\%XmMapSegmentEncoding\fP(3)\&.

@@ -1,0 +1,11 @@
+# ThreadSanitizer suppressions for Threads.mtapps in a WITH_TSAN build.
+#
+# Policy: only races inside libX11 and libXt themselves may be suppressed
+# here, each with the reason it is not a Motif bug.  A report with a
+# Motif frame on top (libXm, libMrm) is a Motif bug: fix it, do not
+# suppress it.  See doc/thread-safety.md.
+#
+# libX11 and libXt are not instrumented, so ThreadSanitizer sees neither
+# their memory accesses nor (apart from the pthread calls it intercepts)
+# their synchronization; reports confined to them would be noise.  None
+# has been seen so far, so nothing is suppressed.

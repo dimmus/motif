@@ -1,0 +1,3 @@
+libMrm.so.5 libmrm5 #MINVER#
+* Build-Depends-Package: libmotif-dev
+ (symver)MRM_2.5 2.5.0

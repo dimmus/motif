@@ -1,0 +1,32 @@
+.TH "XmDropSiteGetActiveVisuals" "library call"
+.nh
+.SH "NAME"
+\fB\%XmDropSiteGetActiveVisuals\fP \(em Returns the visual attributes of the active drop site
+.iX "XmDropSiteGetActiveVisuals"
+.iX "drop site functions" "XmDropSiteGetActiveVisuals"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/DropSMgr\&.h>
+\fBXmDropSiteVisuals \fBXmDropSiteGetActiveVisuals\fP\fR(
+\fBWidget \fBwidget\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmDropSiteGetActiveVisuals\fP returns the colours, pixmaps, shadow
+and
+highlight thicknesses and border width of the drop site the pointer is
+in during a drag, for a drag-under effect drawn by the application
+(\fB\%XmNanimationStyle\fP \fB\%XmDRAG_UNDER_NONE\fP or a drop site
+procedure)\&.
+They are read from the drop site widget, or from the data of a drop
+site in another client\&.
+.IP "\fIwidget\fP" 10
+Specifies a widget on the display of the drag\&.
+.SH "RETURN"
+.PP
+Returns an \fB\%XmDropSiteVisualsRec\fP, which the caller frees with
+\fB\%XtFree\fP, or NULL if there is no active drop site\&.
+.SH "RELATED"
+.PP
+\fB\%XmDropSite\fP(3) and \fB\%XmDragContext\fP(3)\&.

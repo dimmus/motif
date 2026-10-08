@@ -100,7 +100,7 @@ static char rcsid[] = "$XConsortium: Mrmlread.c /main/16 1996/11/13 14:02:28 drk
 
 Cardinal
 Urm__FetchLiteral (MrmHierarchy			hierarchy_id,
-		   String			index,
+		   const char			*index,
 		   URMResourceContextPtr	context_id,
 		   URMPointerListPtr		*ctxlist)
 {
@@ -241,7 +241,7 @@ Urm__FetchLiteral (MrmHierarchy			hierarchy_id,
 
 Cardinal
 MrmFetchLiteral (MrmHierarchy		hierarchy_id,
-		 String			index,
+		 const char		*index,
 		 Display		*display,
 		 XtPointer		*value_return,
 		 MrmCode		*type_return)
@@ -419,7 +419,7 @@ MrmFetchLiteral (MrmHierarchy		hierarchy_id,
 
 Cardinal
 MrmFetchIconLiteral (MrmHierarchy                hierarchy_id,
-		     String                      index,
+		     const char                  *index,
 		     Screen                      *screen,
 		     Display                     *display,
 		     Pixel                       fgpix,
@@ -524,7 +524,7 @@ MrmFetchIconLiteral (MrmHierarchy                hierarchy_id,
 
 Cardinal
 MrmFetchBitmapLiteral (MrmHierarchy                hierarchy_id,
-		       String                      index,
+		       const char                  *index,
 		       Screen                      *screen,
 		       Display                     *display,
 		       Pixmap                      *pixmap_return,
@@ -636,7 +636,7 @@ MrmFetchBitmapLiteral (MrmHierarchy                hierarchy_id,
 
 Cardinal
 MrmFetchColorLiteral (MrmHierarchy                hierarchy_id,
-		      String                      index,
+		      const char                  *index,
 		      Display                     *display,
 		      Colormap                    cmap,
 		      Pixel                       *pixel_return)
@@ -774,7 +774,7 @@ MrmFetchColorLiteral (MrmHierarchy                hierarchy_id,
 
 Cardinal
 UrmGetIndexedLiteral (IDBFile			file_id ,
-		      String			index ,
+		      const char			*index ,
 		      URMResourceContextPtr	context_id )
 {
 
@@ -892,7 +892,7 @@ UrmGetRIDLiteral (IDBFile			file_id ,
 
 Cardinal
 Urm__HGetIndexedLiteral (MrmHierarchy		hierarchy_id ,
-			 String			index ,
+			 const char			*index ,
 			 URMResourceContextPtr	context_id ,
 			 IDBFile		*file_id_return )
 {
@@ -958,7 +958,7 @@ Urm__HGetIndexedLiteral (MrmHierarchy		hierarchy_id ,
 
 Cardinal
 UrmHGetIndexedLiteral (MrmHierarchy		hierarchy_id ,
-		       String			index ,
+		       const char			*index ,
 		       URMResourceContextPtr	context_id )
 {
 

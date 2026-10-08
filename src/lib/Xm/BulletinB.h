@@ -42,8 +42,8 @@ extern Widget XmCreateBulletinBoardDialog(Widget ds_p,
 /*
  * Variable argument list functions
  */
-extern Widget XmVaCreateBulletinBoard(Widget parent, char *name, ...);
-extern Widget XmVaCreateManagedBulletinBoard(Widget parent, char *name, ...);
+extern Widget XmVaCreateBulletinBoard(Widget parent, const char *name, ...);
+extern Widget XmVaCreateManagedBulletinBoard(Widget parent, const char *name, ...);
 /********    End Public Function Declarations    ********/
 #  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

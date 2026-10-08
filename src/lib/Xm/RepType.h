@@ -39,9 +39,9 @@ typedef struct {
 } XmRepTypeEntryRec, *XmRepTypeEntry, XmRepTypeListRec, *XmRepTypeList;
 
 /********    Public Function Declarations    ********/
-extern XmRepTypeId XmRepTypeRegister(String rep_type,
+extern XmRepTypeId XmRepTypeRegister(const char *rep_type,
                                      String *value_names,
-                                     unsigned char *values,
+                                     const unsigned char *values,
                                      unsigned char num_values);
 extern void XmRepTypeAddReverse(XmRepTypeId rep_type_id);
 extern Boolean XmRepTypeValidValue(XmRepTypeId rep_type_id,
@@ -49,7 +49,7 @@ extern Boolean XmRepTypeValidValue(XmRepTypeId rep_type_id,
                                    Widget enable_default_warning);
 extern XmRepTypeList XmRepTypeGetRegistered(void);
 extern XmRepTypeEntry XmRepTypeGetRecord(XmRepTypeId rep_type_id);
-extern XmRepTypeId XmRepTypeGetId(String rep_type);
+extern XmRepTypeId XmRepTypeGetId(const char *rep_type);
 extern String *XmRepTypeGetNameList(XmRepTypeId rep_type_id, Boolean use_uppercase_format);
 extern void XmRepTypeInstallTearOffModelConverter(void);
 /********    End Public Function Declarations    ********/

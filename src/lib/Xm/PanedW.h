@@ -43,8 +43,8 @@ extern Widget XmCreatePanedWindow(Widget parent, char *name, ArgList args, Cardi
 /*
  * Variable argument list functions
  */
-extern Widget XmVaCreatePanedWindow(Widget parent, char *name, ...);
-extern Widget XmVaCreateManagedPanedWindow(Widget parent, char *name, ...);
+extern Widget XmVaCreatePanedWindow(Widget parent, const char *name, ...);
+extern Widget XmVaCreateManagedPanedWindow(Widget parent, const char *name, ...);
 /********    End Public Function Declarations    ********/
 #  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

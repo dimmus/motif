@@ -29,8 +29,8 @@ extern String XmDropDownGetValue(Widget w);
 /*
  * Variable argument list functions
  */
-extern Widget XmVaCreateDropDown(Widget parent, char *name, ...);
-extern Widget XmVaCreateManagedDropDown(Widget parent, char *name, ...);
+extern Widget XmVaCreateDropDown(Widget parent, const char *name, ...);
+extern Widget XmVaCreateManagedDropDown(Widget parent, const char *name, ...);
 /*      Function Name:  XmDropDownGetLabel
  *      Description:    Returns the "label" child of the XmDropDown
  *      Arguments:      w - The XmCombinationBox2 Widget

@@ -41,7 +41,6 @@ static char rcsid[] = "$TOG: BaseClass.c /main/20 1997/03/31 13:14:31 dbl $"
 #include <Xm/VendorSEP.h>
 #include <Xm/XmP.h>
 #include <Xm/XmosP.h> /* for bzero */
-#define MSG1 _XmMMsgBaseClass_0000
 #define MSG2 _XmMMsgBaseClass_0001
 #define IsBaseClass(wc) \
   ((wc == xmGadgetClass) || (wc == xmManagerWidgetClass) || (wc == xmPrimitiveWidgetClass) || \
@@ -73,7 +72,6 @@ static XContext geoRefWContext = 0;
 externaldef(xminheritclass) int _XmInheritClass = 0;
 /********    Static Function Declarations    ********/
 static XmWrapperData GetWrapperData(WidgetClass w_class);
-static XContext ExtTypeToContext(unsigned char extType);
 static void RealizeWrapper0(Widget w, Mask *vmask, XSetWindowAttributes *attr);
 static void RealizeWrapper1(Widget w, Mask *vmask, XSetWindowAttributes *attr);
 static void RealizeWrapper2(Widget w, Mask *vmask, XSetWindowAttributes *attr);
@@ -269,64 +267,135 @@ static XmWrapperData GetWrapperData(WidgetClass w_class)
   return (*wcePtr)->wrapperData;
 }
 
-typedef struct _ExtToContextRec {
-  unsigned char extType;
-  XContext context;
-} ExtToContextRec, *ExtToContext;
-
-static XContext ExtTypeToContext(unsigned char extType)
-{
-  static ExtToContextRec extToContextMap[16];
-  Cardinal i;
-  ExtToContext curr;
-  XContext context = 0;
-  _XmProcessLock();
-  for (i = 0, curr = &extToContextMap[0]; i < XtNumber(extToContextMap) && !context; i++, curr++) {
-    if (curr->extType == extType)
-      context = curr->context;
-    else if (!curr->extType) {
-      curr->extType = extType;
-      context = curr->context = XUniqueContext();
-    }
-  }
-  _XmProcessUnlock();
-  if (!context)
-    XmeWarning(NULL, MSG1);
-  return context;
-}
-
+/*
+ * The extension data stacks.  _XmPushWidgetExtData pushes a record on
+ * the stack of a widget and an extension type, _XmPopWidgetExtData takes
+ * it off again and _XmGetWidgetExtData looks at the top.  Gadgets push
+ * and pop one around every Initialize, GetValues and SetValues, and
+ * shells keep one for their lifetime.
+ *
+ * The stacks used to live in the display's XContext table, which cost an
+ * XtDisplayOfObject, an allocation per new entry and a lookup under the
+ * display lock for each operation, and whose hash crowded the (equally
+ * aligned) widget addresses into a few buckets.  They now have a hash
+ * table of their own, keyed by widget and extension type and guarded by
+ * the process lock.  Each record in a bucket chain is the top of a
+ * stack, and the rest of the stack hangs off its "below" field, so every
+ * operation works on the head of the stack.
+ */
 typedef struct _XmAssocDataRec {
+  Widget widget;
   XtPointer data;
-  struct _XmAssocDataRec *next;
+  struct _XmAssocDataRec *below; /* the rest of this stack */
+  struct _XmAssocDataRec *next;  /* the next stack in this bucket */
+  unsigned char extType;
 } XmAssocDataRec, *XmAssocData;
 
-/*
- * Gadgets push and pop extension data around every Get/SetValues call,
- * so keep a few free stack records instead of a malloc/free pair each.
- */
+#define EXT_TABLE_MIN_SIZE 64
+static XmAssocData *extTable = NULL;
+static Cardinal extTableSize = 0;  /* buckets, a power of two */
+static Cardinal extTableCount = 0; /* stacks */
+
+/* Keep a few free records for the gadgets' push and pop. */
 #define MAX_FREE_ASSOC 32
 static XmAssocData freeAssocData = NULL;
 static Cardinal numFreeAssocData = 0;
 
-static XmAssocData NewAssocData(void)
+/* Widget addresses share their low (alignment) bits: mix in the rest. */
+static Cardinal ExtDataHash(Widget widget, unsigned char extType)
 {
-  XmAssocData rec;
+  unsigned long h = (unsigned long)widget ^ extType;
+  h ^= (h >> 16) >> 16; /* fold the upper half of a 64 bit address */
+  h = (h ^ (h >> 16)) * 0x45d9f3bUL;
+  h = (h ^ (h >> 16)) * 0x45d9f3bUL;
+  return (Cardinal)(h ^ (h >> 16));
+}
+
+/* The link to the top of a stack, or NULL.  Call with the process lock. */
+static XmAssocData *FindExtData(Widget widget, unsigned char extType)
+{
+  XmAssocData *link;
+  if (extTable == NULL)
+    return NULL;
+  link = &extTable[ExtDataHash(widget, extType) & (extTableSize - 1)];
+  for (; *link; link = &(*link)->next)
+    if ((*link)->widget == widget && (*link)->extType == extType)
+      return link;
+  return NULL;
+}
+
+/* Double the table, or make the first one.  Call with the process lock. */
+static void GrowExtTable(void)
+{
+  Cardinal size = extTableSize ? extTableSize * 2 : EXT_TABLE_MIN_SIZE;
+  XmAssocData *table = (XmAssocData *)XtCalloc(size, sizeof(XmAssocData));
+  XmAssocData rec, next;
+  Cardinal i, b;
+  for (i = 0; i < extTableSize; i++)
+    for (rec = extTable[i]; rec; rec = next) {
+      next = rec->next;
+      b = ExtDataHash(rec->widget, rec->extType) & (size - 1);
+      rec->next = table[b];
+      table[b] = rec;
+    }
+  XtFree((char *)extTable);
+  extTable = table;
+  extTableSize = size;
+}
+
+void _XmPushWidgetExtData(Widget widget, XmWidgetExtData data, unsigned char extType)
+{
+  XmAssocData rec, *link;
   _XmProcessLock();
   if ((rec = freeAssocData) != NULL) {
     freeAssocData = rec->next;
     numFreeAssocData--;
   }
-  _XmProcessUnlock();
-  if (rec == NULL)
+  else
     rec = (XmAssocData)XtMalloc(sizeof(XmAssocDataRec));
-  rec->data = NULL;
-  rec->next = NULL;
-  return rec;
+  rec->widget = widget;
+  rec->extType = extType;
+  rec->data = (XtPointer)data;
+  if ((link = FindExtData(widget, extType)) != NULL) {
+    /* The new record takes the place of the old top in the chain. */
+    rec->below = *link;
+    rec->next = (*link)->next;
+    *link = rec;
+  }
+  else {
+    if (extTableCount >= extTableSize)
+      GrowExtTable();
+    link = &extTable[ExtDataHash(widget, extType) & (extTableSize - 1)];
+    rec->below = NULL;
+    rec->next = *link;
+    *link = rec;
+    extTableCount++;
+  }
+  _XmProcessUnlock();
 }
 
-static void FreeAssocData(XmAssocData rec)
+void _XmPopWidgetExtData(Widget widget, XmWidgetExtData *dataRtn, unsigned char extType)
 {
+  XmAssocData rec, *link;
   _XmProcessLock();
+  if ((link = FindExtData(widget, extType)) == NULL) {
+    _XmProcessUnlock();
+    *dataRtn = NULL;
+#ifdef DEBUG
+    XmeWarning(NULL, MSG2);
+#endif
+    return;
+  }
+  rec = *link;
+  if (rec->below) {
+    rec->below->next = rec->next;
+    *link = rec->below;
+  }
+  else {
+    *link = rec->next;
+    extTableCount--;
+  }
+  *dataRtn = (XmWidgetExtData)rec->data;
   if (numFreeAssocData < MAX_FREE_ASSOC) {
     rec->next = freeAssocData;
     freeAssocData = rec;
@@ -337,80 +406,57 @@ static void FreeAssocData(XmAssocData rec)
   XtFree((char *)rec);
 }
 
-/*
- * XContext hashes an id as ((id << 1) + context) & mask, so widget
- * addresses, which share their alignment, would all fall in a few of its
- * buckets.  Rotate the alignment bits out of the low end; this is a
- * bijection, so every widget still has its own id.
- */
-static XID ExtDataId(Widget widget)
-{
-  unsigned long id = (unsigned long)widget;
-  return (XID)((id >> 4) | (id << (sizeof(id) * CHAR_BIT - 4)));
-}
-
-void _XmPushWidgetExtData(Widget widget, XmWidgetExtData data, unsigned char extType)
-{
-  XmAssocData newData;
-  XmAssocData assocData = NULL;
-  XmAssocData *assocDataPtr;
-  Boolean empty;
-  XContext widgetExtContext = ExtTypeToContext(extType);
-  XID id = ExtDataId(widget);
-  newData = NewAssocData();
-  newData->data = (XtPointer)data;
-  empty = XFindContext(XtDisplay(widget), id, widgetExtContext, (char **)&assocData);
-  assocDataPtr = &assocData;
-  while (*assocDataPtr)
-    assocDataPtr = &((*assocDataPtr)->next);
-  *assocDataPtr = newData;
-  if (empty)
-    XSaveContext(XtDisplay(widget), id, widgetExtContext, (XPointer)assocData);
-}
-
-void _XmPopWidgetExtData(Widget widget, XmWidgetExtData *dataRtn, unsigned char extType)
-{
-  XmAssocData assocData = NULL;
-  XmAssocData *assocDataPtr;
-  XContext widgetExtContext = ExtTypeToContext(extType);
-  XID id = ExtDataId(widget);
-  /* Initialize the return parameter. */
-  *dataRtn = NULL;
-  if (XFindContext(XtDisplay(widget), id, widgetExtContext, (char **)&assocData)) {
-#ifdef DEBUG
-    XmeWarning(NULL, MSG2);
-#endif
-    return;
-  }
-  assocDataPtr = &assocData;
-  while ((*assocDataPtr) && (*assocDataPtr)->next)
-    assocDataPtr = &((*assocDataPtr)->next);
-  if (*assocDataPtr == assocData)
-    XDeleteContext(XtDisplay(widget), id, widgetExtContext);
-  if (*assocDataPtr) {
-    *dataRtn = (XmWidgetExtData)(*assocDataPtr)->data;
-    FreeAssocData(*assocDataPtr);
-    *assocDataPtr = NULL;
-  }
-}
-
 XmWidgetExtData _XmGetWidgetExtData(Widget widget, unsigned char extType)
 {
-  XmAssocData assocData = NULL;
-  XmAssocData *assocDataPtr;
-  XContext widgetExtContext = ExtTypeToContext(extType);
-  if ((XFindContext(XtDisplay(widget), ExtDataId(widget), widgetExtContext, (char **)&assocData))) {
+  XmAssocData *link;
+  XmWidgetExtData data = NULL;
+  _XmProcessLock();
+  if ((link = FindExtData(widget, extType)) != NULL)
+    data = (XmWidgetExtData)(*link)->data;
+  _XmProcessUnlock();
 #ifdef DEBUG
+  if (link == NULL)
     XmeWarning(NULL, "no extension data on stack");
 #endif /* DEBUG */
-    return NULL;
+  return data;
+}
+
+/*
+ * The records that gadgets push for the length of an Initialize, Get or
+ * SetValues: keep a few rather than a calloc and a free for each call.
+ * They are cleared XtCalloc'ed blocks either way, so it does not matter
+ * whether a record is freed here or with XtFree (as subclass hooks
+ * written for older versions do), or whether one given back here came
+ * from XtCalloc.
+ */
+#define MAX_FREE_EXT_DATA 8
+static XmWidgetExtData freeExtData[MAX_FREE_EXT_DATA];
+static Cardinal numFreeExtData = 0;
+
+XmWidgetExtData _XmExtDataAlloc(void)
+{
+  XmWidgetExtData data = NULL;
+  _XmProcessLock();
+  if (numFreeExtData > 0)
+    data = freeExtData[--numFreeExtData];
+  _XmProcessUnlock();
+  if (data == NULL)
+    return (XmWidgetExtData)XtCalloc(1, sizeof(XmWidgetExtDataRec));
+  memset(data, 0, sizeof(XmWidgetExtDataRec));
+  return data;
+}
+
+void _XmExtDataFree(XmWidgetExtData data)
+{
+  if (data == NULL)
+    return;
+  _XmProcessLock();
+  if (numFreeExtData < MAX_FREE_EXT_DATA) {
+    freeExtData[numFreeExtData++] = data;
+    data = NULL;
   }
-  else {
-    assocDataPtr = &assocData;
-    while ((*assocDataPtr)->next)
-      assocDataPtr = &((*assocDataPtr)->next);
-    return (XmWidgetExtData)(*assocDataPtr)->data;
-  }
+  _XmProcessUnlock();
+  XtFree((char *)data);
 }
 
 Boolean _XmIsSubclassOf(WidgetClass wc, WidgetClass sc)
@@ -1106,10 +1152,12 @@ void _XmInitializeExtensions(void)
     objectClass->core_class.initialize = InitializeRootWrapper;
     objectClass->core_class.set_values = SetValuesRootWrapper;
     objectClass->core_class.get_values_hook = GetValuesRootWrapper;
+    /* Once: the wrappers of widgets of other classes, maybe in another
+       thread, may be using them by the time a class initializes. */
+    resizeRefWContext = XUniqueContext();
+    geoRefWContext = XUniqueContext();
     firstTime = False;
   }
-  resizeRefWContext = XUniqueContext();
-  geoRefWContext = XUniqueContext();
 }
 
 Cardinal _XmSecondaryResourceData(XmBaseClassExt bcePtr,
@@ -1233,6 +1281,9 @@ void _XmTransformSubResources(XtResourceList comp_resources,
     *num_resources = num_comp_resources;
   }
   else {
+    /* The shadow class is shared: XmGetSecondaryResourceData gets here
+       at any time, from any thread */
+    _XmProcessLock();
     if (!shadowObjectClassRec.core_class.class_inited)
       XtInitializeWidgetClass((WidgetClass)&shadowObjectClassRec);
     /* This next statement is marked for change */
@@ -1244,6 +1295,7 @@ void _XmTransformSubResources(XtResourceList comp_resources,
       XtFree((char *)shadowObjectClassRec.constraint_class.resources);
     shadowObjectClassRec.constraint_class.resources = NULL;
     shadowObjectClassRec.constraint_class.num_resources = 0;
+    _XmProcessUnlock();
   }
 }
 

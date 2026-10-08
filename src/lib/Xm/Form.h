@@ -37,8 +37,8 @@ typedef struct _XmFormRec *XmFormWidget;
 /********    Public Function Declarations    ********/
 extern Widget XmCreateForm(Widget parent, char *name, ArgList arglist, Cardinal argcount);
 extern Widget XmCreateFormDialog(Widget parent, char *name, ArgList arglist, Cardinal argcount);
-extern Widget XmVaCreateForm(Widget parent, char *name, ...);
-extern Widget XmVaCreateManagedForm(Widget parent, char *name, ...);
+extern Widget XmVaCreateForm(Widget parent, const char *name, ...);
+extern Widget XmVaCreateManagedForm(Widget parent, const char *name, ...);
 /********    End Public Function Declarations    ********/
 #  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

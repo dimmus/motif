@@ -36,8 +36,8 @@ typedef struct _XmSpinBoxRec *XmSpinBoxWidget;
  * Spin externs for application accessible functions
  */
 Widget XmCreateSpinBox(Widget parent, char *name, ArgList arglist, Cardinal argcount);
-Widget XmVaCreateSpinBox(Widget parent, char *name, ...);
-Widget XmVaCreateManagedSpinBox(Widget parent, char *name, ...);
+Widget XmVaCreateSpinBox(Widget parent, const char *name, ...);
+Widget XmVaCreateManagedSpinBox(Widget parent, const char *name, ...);
 int XmSpinBoxValidatePosition(Widget text_field, int *position_value);
 #ifdef __cplusplus
 }

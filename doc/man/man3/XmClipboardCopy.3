@@ -60,8 +60,8 @@ int XmClipboardCopy (\fIdisplay, window, item_id, format_name,
         Display \fI* display\fP;
         Window  \fIwindow\fP;
         long    \fIitem_id\fP;
-        char    \fI* format_name\fP;
-        XtPointer       \fIbuffer\fP;
+        const char      \fI* format_name\fP;
+        const void      \fI* buffer\fP;
         unsigned long   \fIlength\fP;
         long    \fIprivate_id\fP;
         long    \fI* data_id\fP;

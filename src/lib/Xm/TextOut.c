@@ -260,7 +260,7 @@ static void CursorPosVisDefault(Widget widget,
                                 int offset, /* unused */
                                 XrmValue *value)
 {
-  static Boolean cursor_pos_vis;
+  static _Thread_local Boolean cursor_pos_vis;
   Widget print_shell;
   value->addr = (XPointer)&cursor_pos_vis;
   print_shell = widget;
@@ -748,7 +748,7 @@ static XmTextPosition XYToPos(XmTextWidget tw, Position x, Position y)
   XmTextBlockRec block;
   int delta = 0;
   start = end = laststart = 0;
-  if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+  if (_XmTextIsVertical(tw)) {
     y += data->voffset;
     /* take care of negative x case */
     if (data->linewidth) {
@@ -871,7 +871,7 @@ Boolean _XmTextShouldWordWrap(XmTextWidget tw)
 Boolean _XmTextScrollable(XmTextWidget tw)
 {
   OutputData data = tw->text.output->data;
-  if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT))
+  if (_XmTextIsVertical(tw))
     return (data->scrollhorizontal && XmIsScrolledWindow(XtParent(tw)));
   else
     return (data->scrollvertical && XmIsScrolledWindow(XtParent(tw)));
@@ -885,7 +885,7 @@ static Boolean PosToXY(XmTextWidget tw, XmTextPosition position, Position *x, Po
   LineTableExtra extra;
   XmTextBlockRec block;
   Position local_x, local_y;
-  if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+  if (_XmTextIsVertical(tw)) {
     _XmProcessLock();
     if (tw == posToXYCachedWidget && position == posToXYCachedPosition) {
       *x = posToXYCachedX;
@@ -954,7 +954,7 @@ XmTextPosition _XmTextFindLineEnd(XmTextWidget tw, XmTextPosition position, Line
   lastChar = (*tw->text.source->Scan)(
       tw->text.source, position, XmSELECT_LINE, XmsdRight, 1, False);
   lastBreak = startpos = position;
-  if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+  if (_XmTextIsVertical(tw)) {
     y = lastY = data->topmargin;
     goalheight = tw->text.inner_widget->core.height - data->bottommargin;
     while (position < lastChar) {
@@ -1401,7 +1401,7 @@ static void TextFindNewWidth(XmTextWidget tw, Dimension *widthRtn)
   XmTextPosition start;
   Dimension newwidth;
   newwidth = 0;
-  if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+  if (_XmTextIsVertical(tw)) {
     XmTextPosition first_position = 0;
     LineTableExtra extra;
     newwidth = (int)(tw->text.total_lines * data->linewidth) + data->leftmargin +
@@ -1466,7 +1466,7 @@ static void TextFindNewHeight(XmTextWidget tw,
   LineTableExtra extra;
   LineNum l;
   Dimension newheight = 0;
-  if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+  if (_XmTextIsVertical(tw)) {
     if (data->resizeheight && tw->text.total_lines > data->number_lines) {
       int i;
       XmTextPosition linestart, pos;
@@ -1521,7 +1521,7 @@ static void CheckForNewSize(XmTextWidget tw, XmTextPosition position)
 {
   OutputData data = tw->text.output->data;
   Dimension newwidth, newheight;
-  if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+  if (_XmTextIsVertical(tw)) {
     if (data->scrollhorizontal && XmIsScrolledWindow(XtParent(tw)) && !tw->text.hsbar_scrolling)
       _XmChangeHSB(tw);
   }
@@ -1530,7 +1530,7 @@ static void CheckForNewSize(XmTextWidget tw, XmTextPosition position)
       _XmChangeVSB(tw);
   }
   if (tw->text.in_resize || tw->text.in_expose) {
-    if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+    if (_XmTextIsVertical(tw)) {
       if (data->scrollvertical && XmIsScrolledWindow(XtParent(tw))) {
         TextFindNewHeight(tw, position, &newheight);
         newheight -= (data->bottommargin + data->topmargin);
@@ -1558,7 +1558,7 @@ static void CheckForNewSize(XmTextWidget tw, XmTextPosition position)
     }
   }
   else {
-    if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+    if (_XmTextIsVertical(tw)) {
       if (data->resizeheight || (data->scrollvertical && XmIsScrolledWindow(XtParent(tw)))) {
         TextFindNewHeight(tw, position, &newheight);
         if (data->scrollvertical && XmIsScrolledWindow(XtParent(tw))) {
@@ -1731,7 +1731,7 @@ static Boolean MeasureLine(XmTextWidget tw,
             tw->text.source, last_position, XmSELECT_LINE, XmsdRight, 1, True);
         if (*nextpos == last_position)
           *nextpos = PASTENDPOS;
-        if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+        if (_XmTextIsVertical(tw)) {
           if (extra &&
               (data->resizeheight || (data->scrollvertical && XmIsScrolledWindow(XtParent(tw)))))
           {
@@ -1907,7 +1907,7 @@ static void Draw(XmTextWidget tw,
       end = (*tw->text.source->Scan)(
           tw->text.source, nextlinestart, XmSELECT_POSITION, XmsdLeft, 1, True);
   }
-  if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+  if (_XmTextIsVertical(tw)) {
     y = data->topmargin;
     x = tw->text.inner_widget->core.width -
         (data->rightmargin + line * data->linewidth + (int)(data->linewidth * 0.5));
@@ -1924,7 +1924,7 @@ static void Draw(XmTextWidget tw,
       x += FindWidth(tw, x, &block, 0, block.length);
     }
   }
-  if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+  if (_XmTextIsVertical(tw)) {
     XOrientation orient = 0;
     newy = y;
     if (data->use_fontset == True) {
@@ -2661,7 +2661,7 @@ static void Draw(XmTextWidget tw,
       }
     }
   }
-  if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+  if (_XmTextIsVertical(tw)) {
     /* clear top margin */
     text_border = tw->primitive.shadow_thickness + tw->primitive.highlight_thickness;
     if (data->topmargin - text_border > 0 && x < rightedge + text_border)
@@ -3170,7 +3170,7 @@ static void MakePositionVisible(XmTextWidget tw, XmTextPosition position)
   Position x, y;
   LineNum line_num;
   if (!ShouldWordWrap(data, tw) && PosToXY(tw, position, &x, &y)) {
-    if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+    if (_XmTextIsVertical(tw)) {
       if (y <= data->topmargin) {
         if (tw->text.edit_mode == XmSINGLE_LINE_EDIT) {
           if (position == tw->text.bottom_position)
@@ -3179,7 +3179,7 @@ static void MakePositionVisible(XmTextWidget tw, XmTextPosition position)
         else {
           line_num = _XmTextGetTableIndex(tw, position);
           if (position == tw->text.bottom_position ||
-              (line_num < (LineNum)tw->text.total_lines &&
+              (line_num + 1 < (LineNum)tw->text.total_lines &&
                position == tw->text.line_table[line_num + 1].start_pos - 1))
             position = MAX(position - (int)data->rows / 2,
                            line_num ? (int)(tw->text.line_table[line_num].start_pos) : 0);
@@ -3208,7 +3208,7 @@ static void MakePositionVisible(XmTextWidget tw, XmTextPosition position)
         else {
           line_num = _XmTextGetTableIndex(tw, position);
           if (position == tw->text.bottom_position ||
-              (line_num < (LineNum)tw->text.total_lines &&
+              (line_num + 1 < (LineNum)tw->text.total_lines &&
                position == tw->text.line_table[line_num + 1].start_pos - 1))
             position = MAX(position - data->columns / 2,
                            line_num ? (int)(tw->text.line_table[line_num].start_pos) : 0);
@@ -3254,7 +3254,7 @@ static Boolean MoveLines(XmTextWidget tw, LineNum fromline, LineNum toline, Line
   _XmTextAdjustGC(tw);
   SetNormGC(tw, data->gc, False, False);
   SetFullGC(tw, data->gc);
-  if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+  if (_XmTextIsVertical(tw)) {
     XCopyArea(XtDisplay(tw),
               XtWindow(tw->text.inner_widget),
               XtWindow(tw->text.inner_widget),
@@ -3283,7 +3283,7 @@ static Boolean MoveLines(XmTextWidget tw, LineNum fromline, LineNum toline, Line
               (Position)data->lineheight * destline + data->topmargin);
   }
   SetMarginGC(tw, data->gc);
-  if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT))
+  if (_XmTextIsVertical(tw))
     data->exposehscroll++;
   else
     data->exposevscroll++;
@@ -3304,7 +3304,7 @@ static void RefigureDependentInfo(XmTextWidget tw)
 {
   OutputData data = tw->text.output->data;
   data->columns = data->number_lines;
-  if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+  if (_XmTextIsVertical(tw)) {
     data->rows = (short)(((int)tw->core.height - (data->topmargin + data->bottommargin)) /
                          (int)(data->font_ascent + data->font_descent));
     if (data->rows <= 0)
@@ -3326,12 +3326,12 @@ static void SizeFromRowsCols(XmTextWidget tw, Dimension *width, Dimension *heigh
   if (tw->text.edit_mode == XmSINGLE_LINE_EDIT)
     lines = 1;
   else {
-    if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT))
+    if (_XmTextIsVertical(tw))
       lines = data->columns_set;
     else
       lines = data->rows_set;
   }
-  if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+  if (_XmTextIsVertical(tw)) {
     *width = (Dimension)((lines * data->linewidth) + data->leftmargin + data->rightmargin);
     *height = (Dimension)((data->rows_set * (data->font_ascent + data->font_descent)) +
                           data->topmargin + data->bottommargin);
@@ -3453,7 +3453,7 @@ static Boolean LoadFontMetrics(XmTextWidget tw)
   }
   if (data->use_fontset) {
     fs_extents = XExtentsOfFontSet((XFontSet)data->font);
-    if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+    if (_XmTextIsVertical(tw)) {
       width = (unsigned long)fs_extents->max_ink_extent.width;
     }
     else {
@@ -3475,7 +3475,7 @@ static Boolean LoadFontMetrics(XmTextWidget tw)
     font = data->font;
     data->font_ascent = font->max_bounds.ascent;
     data->font_descent = font->max_bounds.descent;
-    if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+    if (_XmTextIsVertical(tw)) {
       width = font->max_bounds.rbearing - font->max_bounds.lbearing;
     }
     else {
@@ -3487,7 +3487,7 @@ static Boolean LoadFontMetrics(XmTextWidget tw)
       }
     }
   }
-  if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+  if (_XmTextIsVertical(tw)) {
     if (width <= 0)
       width = 1;
     data->linewidth = width;
@@ -3657,7 +3657,7 @@ static void MakeIBeamStencil(XmTextWidget tw, int line_width)
     values.line_width = line_width;
     XChangeGC(dpy, data->cursor_gc, GCForeground | GCLineWidth, &values);
     /* Draw the segments of the I-Beam */
-    if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+    if (_XmTextIsVertical(tw)) {
       /* 1st segment is the left vertical line of the cursor */
       segments[0].x1 = 1;
       segments[0].y1 = line_width - 1;
@@ -3775,7 +3775,7 @@ static void MakeCursors(XmTextWidget tw)
   int oldheight = data->cursorheight;
   if (!XtIsRealized((Widget)tw))
     return;
-  if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+  if (_XmTextIsVertical(tw)) {
     data->cursorwidth = data->averagecharwidth;
     data->cursorheight = 5;
     /* setup parameters to make a thicker I-Beam */
@@ -3913,7 +3913,7 @@ static Boolean OutputSetValues(
       newtw->text.editable = False;
       XmTextSetEditable(new_w, True);
     }
-    if (XmDirectionMatch(XmPrim_layout_direction(newtw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+    if (_XmTextIsVertical(newtw)) {
       if (data->vbar) {
         XmNavigatorDataRec nav_data;
         int new_sliderSize = 0;
@@ -3979,7 +3979,7 @@ static Boolean OutputSetValues(
   if (newtw->text.edit_mode != oldtw->text.edit_mode) {
     if (newtw->text.edit_mode == XmSINGLE_LINE_EDIT)
       newdata->rows = 1;
-    if (XmDirectionMatch(XmPrim_layout_direction(newtw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+    if (_XmTextIsVertical(newtw)) {
       if (newtw->text.edit_mode == XmSINGLE_LINE_EDIT) {
         if (data->hbar)
           XtUnmanageChild(data->hbar);
@@ -4031,7 +4031,7 @@ static Boolean OutputSetValues(
     newsize = True;
   }
   if (CK(wordwrap)) {
-    if (XmDirectionMatch(XmPrim_layout_direction(newtw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+    if (_XmTextIsVertical(newtw)) {
       /* If we are turning on wrapping, we don't want any horiz. offset */
       if (!data->wordwrap)
         ChangeVOffset(newtw, 0, True);
@@ -4144,7 +4144,7 @@ static Boolean OutputSetValues(
     if (CK(columns) || CK(rows) || newsize) {
       Dimension width, height;
       SizeFromRowsCols(newtw, &width, &height);
-      if (XmDirectionMatch(XmPrim_layout_direction(newtw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+      if (_XmTextIsVertical(newtw)) {
         if (new_width == oldtw->core.width)
           newtw->core.width = width;
         data->minwidth = newtw->core.width;
@@ -4212,7 +4212,7 @@ static void NotifyResized(Widget w, Boolean o_create)
   XmTextBlockRec block;
   Arg args[10];
   data->resizewidth = data->resizeheight = False;
-  if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+  if (_XmTextIsVertical(tw)) {
     data->number_lines = tw->text.inner_widget->core.width - data->leftmargin - data->rightmargin;
     if (data->number_lines < (int)data->linewidth || !data->linewidth)
       data->number_lines = 1;
@@ -4244,7 +4244,7 @@ static void NotifyResized(Widget w, Boolean o_create)
     int local_total, new_size;
     XmNavigatorDataRec nav_data;
     int new_voffset = 0;
-    if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+    if (_XmTextIsVertical(tw)) {
       new_size = tw->text.inner_widget->core.height - (data->topmargin + data->bottommargin);
       if (new_size < 1)
         new_size = 1;
@@ -4288,7 +4288,7 @@ static void NotifyResized(Widget w, Boolean o_create)
     int new_size = 0;
     int local_total = 0;
     int new_hoffset = 0;
-    if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+    if (_XmTextIsVertical(tw)) {
       data->ignorehbar = True;
       if (tw->text.top_line + tw->text.number_lines > (Cardinal)tw->text.total_lines)
         local_total = tw->text.top_line + tw->text.number_lines;
@@ -4339,7 +4339,7 @@ static void NotifyResized(Widget w, Boolean o_create)
   if (!o_create) /* False only if called from OutputCreate */
     _XmTextInvalidate(tw, (XmTextPosition)0, (XmTextPosition)0, NODELTA);
   /* the new size grew enough to include new text */
-  if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+  if (_XmTextIsVertical(tw)) {
     if (tw->text.edit_mode == XmSINGLE_LINE_EDIT) {
       /* this assumes only one line of text! (linestart = 0) */
 #ifdef AS_TEXTFIELD
@@ -4606,7 +4606,7 @@ static void RedrawRegion(XmTextWidget tw, int x, int y, int width, int height)
   OutputData data = tw->text.output->data;
   int i;
   XmTextPosition first, last;
-  if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+  if (_XmTextIsVertical(tw)) {
     for (i = x; i < (int)(x + width + data->linewidth); i += data->linewidth) {
       first = XYToPos(tw, i, y);
       last = XYToPos(tw, i, y + height);
@@ -4655,7 +4655,7 @@ static void OutputExpose(Widget w, XEvent *event, Region region)
   if (XtIsSensitive(w) && data->hasfocus)
     _XmTextChangeBlinkBehavior(tw, False);
   EraseInsertionPoint(tw);
-  if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+  if (_XmTextIsVertical(tw)) {
     data->number_lines = tw->text.inner_widget->core.width - data->leftmargin - data->rightmargin;
     if (data->number_lines < (int)data->linewidth || !data->linewidth)
       data->number_lines = 1;
@@ -4828,7 +4828,7 @@ static void SliderMove(Widget w, XtPointer closure, XtPointer cd)
   ((XmNavigatorTrait)XmeTraitGet((XtPointer)XtClass(w), XmQTnavigator))->getValue(w, &nav_data);
   /* look at the kind of navigator and make the appropriate update */
   if (!data->ignorehbar && (nav_data.dimMask & NavigDimensionX)) {
-    if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+    if (_XmTextIsVertical(tw)) {
       data->suspend_voffset = True;
       tw->text.hsbar_scrolling = True;
       offset = nav_data.value.x - tw->text.top_line;
@@ -4855,7 +4855,7 @@ static void SliderMove(Widget w, XtPointer closure, XtPointer cd)
     data->suspend_voffset = False;
   }
   if (!data->ignorevbar && (nav_data.dimMask & NavigDimensionY)) {
-    if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+    if (_XmTextIsVertical(tw)) {
       offset = nav_data.value.y;
       EraseInsertionPoint(tw);
       ChangeVOffset(tw, offset, False);
@@ -4899,16 +4899,17 @@ void _XmTextOutputCreate(Widget wid, ArgList args, Cardinal num_args)
   Boolean is_default;
   tw->text.output = output = (Output)XtMalloc((unsigned)sizeof(OutputRec));
   output->data = data = (OutputData)XtMalloc((unsigned)sizeof(OutputDataRec));
-  XtGetSubresources(wid,
-                    (XtPointer)data,
-                    NULL,
-                    NULL,
-                    output_resources,
-                    XtNumber(output_resources),
-                    args,
-                    num_args);
+  _XmGetSubresources(wid,
+                     (XtPointer)data,
+                     NULL,
+                     NULL,
+                     output_resources,
+                     XtNumber(output_resources),
+                     args,
+                     num_args);
   if (output->data->scrollleftside == XmDYNAMIC_BOOL) {
-    if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT))
+    /* Right to left, vertical or not: the scroll bar goes to the left */
+    if (LayoutIsRtoLP(tw))
       output->data->scrollleftside = True;
     else
       output->data->scrollleftside = False;
@@ -4967,14 +4968,14 @@ void _XmTextOutputCreate(Widget wid, ArgList args, Cardinal num_args)
   /* Don't word wrap, have multiple row or have vertical scrollbars
      if editMode is single_line */
   if (tw->text.edit_mode == XmSINGLE_LINE_EDIT) {
-    if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT))
+    if (_XmTextIsVertical(tw))
       data->columns = 1;
     else
       data->rows = 1;
   }
   /* Don't grow in width if word wrap is on */
   if (tw->text.edit_mode != XmSINGLE_LINE_EDIT && data->wordwrap) {
-    if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT))
+    if (_XmTextIsVertical(tw))
       data->resizeheight = False;
     else
       data->resizewidth = False;
@@ -4982,7 +4983,7 @@ void _XmTextOutputCreate(Widget wid, ArgList args, Cardinal num_args)
   if (data->rows <= 0) {
     if (data->rows < 0)
       XmeWarning(wid, MSG1);
-    if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT))
+    if (_XmTextIsVertical(tw))
       data->rows = 20;
     else
       data->rows = 1;
@@ -4990,7 +4991,7 @@ void _XmTextOutputCreate(Widget wid, ArgList args, Cardinal num_args)
   if (data->columns <= 0) {
     if (data->columns < 0)
       XmeWarning(wid, MSG2);
-    if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT))
+    if (_XmTextIsVertical(tw))
       data->columns = 1;
     else
       data->columns = 20;
@@ -5006,7 +5007,7 @@ void _XmTextOutputCreate(Widget wid, ArgList args, Cardinal num_args)
   if (tw->core.height == 0)
     tw->core.height = height;
   /* initialize number_lines before RefigureDependentInfo() */
-  if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+  if (_XmTextIsVertical(tw)) {
     data->number_lines = tw->text.inner_widget->core.width - data->leftmargin - data->rightmargin;
     if (data->number_lines < (int)data->linewidth || !data->linewidth)
       data->number_lines = 1;
@@ -5069,7 +5070,7 @@ void _XmTextOutputCreate(Widget wid, ArgList args, Cardinal num_args)
       XtSetArg(arglist[n], XmNhighlightThickness, 0);
       n++;
       data->hbar = XmCreateScrollBar(XtParent(tw), "HorScrollBar", arglist, n);
-      if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+      if (_XmTextIsVertical(tw)) {
         if (tw->text.edit_mode != XmSINGLE_LINE_EDIT)
           XtManageChild(data->hbar);
         XtAddEventHandler(
@@ -5096,7 +5097,7 @@ void _XmTextOutputCreate(Widget wid, ArgList args, Cardinal num_args)
       XtSetArg(arglist[n], XmNhighlightThickness, 0);
       n++;
       data->vbar = XmCreateScrollBar(XtParent(tw), "VertScrollBar", arglist, n);
-      if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+      if (_XmTextIsVertical(tw)) {
         XtManageChild(data->vbar);
       }
       else {

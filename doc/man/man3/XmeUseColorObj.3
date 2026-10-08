@@ -1,0 +1,108 @@
+.TH "XmeUseColorObj" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeUseColorObj\fP,
+\fB\%XmeGetColorObjData\fP,
+\fB\%XmeGetPixelData\fP,
+\fB\%XmeGetIconControlInfo\fP,
+\fB\%XmeGetDesktopColorCells\fP \(em Widget writer functions that query the desktop colour server
+.iX "XmeUseColorObj"
+.iX "Xme color functions" "XmeUseColorObj"
+.iX "Xme color functions" "XmeGetColorObjData"
+.iX "Xme color functions" "XmeGetPixelData"
+.iX "Xme color functions" "XmeGetIconControlInfo"
+.iX "Xme color functions" "XmeGetDesktopColorCells"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/ColorObjP\&.h>
+.PP
+\fBBoolean \fBXmeUseColorObj\fP\fR(\fBvoid\fR);
+.PP
+\fBBoolean \fBXmeGetColorObjData\fP\fR(
+\fBScreen *\fBscreen\fR\fR,
+\fBint *\fBcolorUse\fR\fR,
+\fBXmPixelSet *\fBpixelSet\fR\fR,
+\fBunsigned short \fBnum_pixelSet\fR\fR,
+\fBshort *\fBactive_id\fR\fR,
+\fBshort *\fBinactive_id\fR\fR,
+\fBshort *\fBprimary_id\fR\fR,
+\fBshort *\fBsecondary_id\fR\fR,
+\fBshort *\fBtext_id\fR\fR);
+\fBBoolean \fBXmeGetPixelData\fP\fR(
+\fBint \fBscreen_number\fR\fR,
+\fBint *\fBcolorUse\fR\fR,
+\fBXmPixelSet *\fBpixelSet\fR\fR,
+\fBshort *\fBa\fR\fR,
+\fBshort *\fBi\fR\fR,
+\fBshort *\fBp\fR\fR,
+\fBshort *\fBs\fR\fR);
+.PP
+\fBBoolean \fBXmeGetIconControlInfo\fP\fR(
+\fBScreen *\fBscreen\fR\fR,
+\fBBoolean *\fBuseMaskRtn\fR\fR,
+\fBBoolean *\fBuseMultiColorIconsRtn\fR\fR,
+\fBBoolean *\fBuseIconFileCacheRtn\fR\fR);
+.PP
+\fBBoolean \fBXmeGetDesktopColorCells\fP\fR(
+\fBScreen *\fBscreen\fR\fR,
+\fBColormap \fBcolormap\fR\fR,
+\fBXColor *\fBcolors\fR\fR,
+\fBint \fBn_colors\fR\fR,
+\fBint *\fBncolors_returns\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+On a CDE desktop, the session manager acts as a colour server: it
+allocates the colours of the palette of the user and publishes them,
+and Motif applications take their colours from it (the ColorObj, an
+object Motif creates for the application, reads them unless its
+\fB\%useColorObj\fP resource is False)\&.  These
+functions give access to that data\&.  They all return False when no
+colour server is running or the application does not use it\&.
+.PP
+\fB\%XmeUseColorObj\fP tells whether the application uses the colour
+server\&.
+.PP
+\fB\%XmeGetColorObjData\fP returns the pixel sets of the palette of
+\fIscreen\fP: \fIcolorUse\fP receives the colour mode
+(\fB\%XmCO_BLACK_WHITE\fP,
+\fB\%XmCO_LOW_COLOR\fP, \fB\%XmCO_MEDIUM_COLOR\fP or
+\fB\%XmCO_HIGH_COLOR\fP), up to
+\fInum_pixelSet\fP entries (at most \fB\%XmCO_NUM_COLORS\fP, 8) of
+\fIpixelSet\fP
+receive the foreground, background, top shadow, bottom shadow and
+select pixels (\fB\%fg\fP, \fB\%bg\fP, \fB\%ts\fP, \fB\%bs\fP and
+\fB\%sc\fP) of each
+colour set, and the other arguments the colour set used for active
+and inactive window frames, primary and secondary areas, and text\&.
+\fB\%XmeGetPixelData\fP is the same for the screen numbered
+\fIscreen_number\fP, with all \fB\%XmCO_NUM_COLORS\fP sets and without
+the text
+set\&.  The return arguments may be NULL, except \fIpixelSet\fP\&.
+.PP
+\fB\%XmeGetIconControlInfo\fP returns the icon settings of the colour
+server: whether icons use their masks, whether they are drawn in
+colour, and whether the directories of icon files are cached (see
+\fB\%XmGetIconFileName\fP)\&.  Without a colour server all three are
+True\&.
+.PP
+\fB\%XmeGetDesktopColorCells\fP is for an application that uses a
+private
+colormap: it fills \fIcolors\fP with up to \fIn_colors\fP colours used
+by the
+desktop (pixel and RGB value), the most important first, so that the
+application can allocate the same colours in its own colormap and
+avoid colormap flashing; \fIncolors_returns\fP receives the number of
+colours\&.  It also enters the primary, secondary and
+text sets in the colour cache of \fIcolormap\fP\&.  It returns False for
+a
+black and white palette\&.
+.SH "RETURN"
+.PP
+The functions return True if a colour server is in use and the data was
+returned, and False otherwise\&.
+.SH "RELATED"
+.PP
+\fB\%XmeGetDefaultPixel\fP(3), \fB\%XmGetColors\fP(3) and
+\fB\%XmGetIconFileName\fP(3)\&.

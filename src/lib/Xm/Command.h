@@ -35,8 +35,8 @@ typedef struct _XmCommandRec *XmCommandWidget;
 #endif
 /********    Public Function Declarations    ********/
 extern Widget XmCreateCommand(Widget parent, String name, ArgList al, Cardinal ac);
-extern Widget XmVaCreateCommand(Widget parent, char *name, ...);
-extern Widget XmVaCreateManagedCommand(Widget parent, char *name, ...);
+extern Widget XmVaCreateCommand(Widget parent, const char *name, ...);
+extern Widget XmVaCreateManagedCommand(Widget parent, const char *name, ...);
 extern void XmCommandSetValue(Widget widget, XmString value);
 extern void XmCommandAppendValue(Widget widget, XmString value);
 extern void XmCommandError(Widget widget, XmString error);

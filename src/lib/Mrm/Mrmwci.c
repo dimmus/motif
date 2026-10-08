@@ -69,7 +69,7 @@ static char rcsid[] = "$TOG: Mrmwci.c /main/16 1999/05/19 15:25:58 mgreess $"
  *  TABLE OF CONTENTS
  *
  */
-static int hash_function ( int l_length , char *c_value );
+static int hash_function ( int l_length , const char *c_value );
 
 
 
@@ -147,8 +147,8 @@ MrmRegisterClass (
 #else
 		  MrmType		class_code, /* unused */
 #endif
-		  String		class_name, /* unused */
-		  String		create_name,
+		  const char		*class_name, /* unused */
+		  const char		*create_name,
 		  Widget		(* creator) (Widget, String,
 					     ArgList, Cardinal),
 		  WidgetClass		class_record)
@@ -168,8 +168,8 @@ MrmRegisterClassWithCleanup (
 #else
 		  MrmType		class_code, /* unused */
 #endif
-		  String		class_name, /* unused */
-		  String		create_name,
+		  const char		*class_name, /* unused */
+		  const char		*create_name,
 		  Widget		(* creator) (Widget, String,
 					     ArgList, Cardinal),
 		  WidgetClass		class_record,
@@ -557,7 +557,7 @@ hash_initialize (URMHashTableEntryPtr	*htable,
 
 URMHashTableEntryPtr
 hash_find_name (URMHashTableEntryPtr	*htable,
-		char			*c_text)
+		const char		*c_text)
 {
   int				l_length;
   URMHashTableEntryPtr	az_current_name;
@@ -851,8 +851,8 @@ delete_name:
 **/
 
 static int
-hash_function(int	l_length,
-	      char	*c_value)
+hash_function(int		l_length,
+	      const char	*c_value)
 {
 #ifdef WORD64
 #define _shift 3

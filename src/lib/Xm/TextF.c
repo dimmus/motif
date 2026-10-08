@@ -247,6 +247,8 @@ static void RestorePrimaryHighlight(XmTextFieldWidget tf,
                                     XmTextPosition prim_right);
 static void StartDrag(Widget w, XEvent *event, String *params, Cardinal *num_params);
 static void DragStart(XtPointer data, XtIntervalId *id);
+static XmTextPosition EventPosition(XmTextFieldWidget tf, XEvent *event);
+static Time EventTime(Widget w, XEvent *event);
 static void StartSecondary(Widget w, XEvent *event, char **params, Cardinal *num_params);
 static void ProcessBDrag(Widget w, XEvent *event, char **params, Cardinal *num_params);
 static void ProcessBDragEvent(Widget w, XEvent *event, char **params, Cardinal *num_params);
@@ -331,7 +333,7 @@ static void doSetHighlight(Widget w,
                            XmTextPosition right,
                            XmHighlightMode mode);
 static Boolean TrimHighlights(XmTextFieldWidget tf, int *low, int *high);
-static void ResetUnder(XmTextFieldWidget tf);
+static void ResetUnder(XmTextFieldWidget tf, XIMResetState reset_state);
 /********    End Static Function Declarations    ********/
 static XmConst XmTextScanType sarray[] = {XmSELECT_POSITION, XmSELECT_WORD, XmSELECT_LINE};
 static XContext _XmTextFDestContext = 0;
@@ -730,7 +732,7 @@ static void CursorPosVisDefault(Widget widget,
                                 int offset, /* unused */
                                 XrmValue *value)
 {
-  static Boolean cursor_pos_vis;
+  static _Thread_local Boolean cursor_pos_vis;
   Widget print_shell;
   value->addr = (XPointer)&cursor_pos_vis;
   print_shell = widget;
@@ -3255,14 +3257,15 @@ static void ProcessCancel(Widget w, XEvent *event, char **params, Cardinal *num_
   _XmTextFieldDrawInsertionPoint(tf, False);
   if (tf->text.has_secondary) {
     tf->text.cancel = True;
-    /* This will mark the has_secondary field to False. */
-    _XmTextFieldSetSel2(w, 1, 0, False, event->xkey.time);
+    /* Drop the secondary selection, and SECONDARY with it: no transfer
+     * follows that would disown it. */
+    _XmTextFieldSetSel2(w, 1, 0, True, EventTime(w, event));
     XtUngrabKeyboard(w, CurrentTime);
   }
   if (tf->text.has_primary && tf->text.extending) {
     tf->text.cancel = True;
     /* reset orig_left and orig_right */
-    _XmTextFieldStartSelection(tf, tf->text.orig_left, tf->text.orig_right, event->xkey.time);
+    _XmTextFieldStartSelection(tf, tf->text.orig_left, tf->text.orig_right, EventTime(w, event));
     tf->text.pending_off = False;
     _XmTextFieldSetCursorPosition(tf, NULL, tf->text.stuff_pos, True, True);
   }
@@ -3776,7 +3779,10 @@ static void TextFocusIn(Widget w, XEvent *event, char **params, Cardinal *num_pa
       if (((XmTextFieldWidgetClass)XtClass(w))->primitive_class.border_highlight) {
         (*((XmTextFieldWidgetClass)XtClass(w))->primitive_class.border_highlight)(w);
       }
-      if (!tf->text.has_destination && !tf->text.sel_start)
+      /* Not when a widget of this application grabbed the keyboard
+       * for a secondary selection: the destination may be in another
+       * one. */
+      if (!tf->text.has_destination && !tf->text.sel_start && !_XmFocusFromGrab(w))
         (void)SetDestination(
             w, TextF_CursorPosition(tf), False, XtLastTimestampProcessed(XtDisplay(w)));
     }
@@ -4373,17 +4379,36 @@ static void DragStart(XtPointer data, XtIntervalId *id) /* unused */
             tf->text.transfer_action->num_params);
 }
 
+/*
+ * The position under the pointer and the time of the button or motion
+ * event of a quick transfer action, or the insertion cursor and the
+ * last timestamp when the action is called without an event.
+ */
+static XmTextPosition EventPosition(XmTextFieldWidget tf, XEvent *event)
+{
+  if (event == NULL)
+    return TextF_CursorPosition(tf);
+  return GetPosFromX(tf, (Position)event->xbutton.x);
+}
+
+static Time EventTime(Widget w, XEvent *event)
+{
+  Time t = event ? event->xbutton.time : XtLastTimestampProcessed(XtDisplay(w));
+  return t ? t : _XmValidTimestamp(w);
+}
+
 static void StartSecondary(Widget w, XEvent *event, char **params, Cardinal *num_params)
 {
   XmTextFieldWidget tf = (XmTextFieldWidget)w;
-  XmTextPosition position = GetPosFromX(tf, (Position)event->xbutton.x);
+  XmTextPosition position = EventPosition(tf, event);
+  Time event_time = EventTime(w, event);
   int status;
   tf->text.sel_start = True;
-  XAllowEvents(XtDisplay(w), AsyncBoth, event->xbutton.time);
+  XAllowEvents(XtDisplay(w), AsyncBoth, event_time);
   tf->text.sec_anchor = position;
   tf->text.selection_move = FALSE;
   tf->text.selection_link = FALSE;
-  status = XtGrabKeyboard(w, False, GrabModeAsync, GrabModeAsync, event->xbutton.time);
+  status = XtGrabKeyboard(w, False, GrabModeAsync, GrabModeAsync, event_time);
   if (status != GrabSuccess)
     XmeWarning(w, GRABKBDERROR);
 }
@@ -4398,9 +4423,10 @@ static void ProcessBDrag(Widget w, XEvent *event, char **params, Cardinal *num_p
    ** position
    */
   if (!tf->text.has_secondary || (tf->text.sec_pos_left == tf->text.sec_pos_right))
-    tf->text.sec_pos_left = GetPosFromX(tf, (Position)event->xbutton.x);
+    tf->text.sec_pos_left = EventPosition(tf, event);
   _XmTextFieldDrawInsertionPoint(tf, False);
-  if (InSelection(w, event)) {
+  /* A drag needs the event */
+  if (event && InSelection(w, event)) {
     tf->text.sel_start = False;
     StartDrag(w, event, params, num_params);
   }
@@ -4525,23 +4551,24 @@ static void ProcessBSelectEvent(Widget w, XEvent *event, String *params, Cardina
 static void ExtendSecondary(Widget w, XEvent *event, char **params, Cardinal *num_params)
 {
   XmTextFieldWidget tf = (XmTextFieldWidget)w;
-  XmTextPosition position = GetPosFromX(tf, (Position)event->xbutton.x);
+  XmTextPosition position = EventPosition(tf, event);
+  Time event_time = EventTime(w, event);
   TextFieldResetIC(w);
   if (tf->text.cancel)
     return;
   _XmTextFieldDrawInsertionPoint(tf, False);
   if (position < tf->text.sec_anchor) {
-    _XmTextFieldSetSel2(w, position, tf->text.sec_anchor, False, event->xbutton.time);
+    _XmTextFieldSetSel2(w, position, tf->text.sec_anchor, False, event_time);
   }
   else if (position > tf->text.sec_anchor) {
-    _XmTextFieldSetSel2(w, tf->text.sec_anchor, position, False, event->xbutton.time);
+    _XmTextFieldSetSel2(w, tf->text.sec_anchor, position, False, event_time);
   }
   else {
-    _XmTextFieldSetSel2(w, position, position, False, event->xbutton.time);
+    _XmTextFieldSetSel2(w, position, position, False, event_time);
   }
   tf->text.sec_extending = True;
-  if (!CheckTimerScrolling(w, event))
-    DoSecondaryExtend(w, event->xmotion.time);
+  if (event && !CheckTimerScrolling(w, event))
+    DoSecondaryExtend(w, event_time);
   _XmTextFieldDrawInsertionPoint(tf, True);
 }
 
@@ -4563,11 +4590,11 @@ static void Stuff(Widget w, XEvent *event, char **params, Cardinal *num_params)
     point->y = event->xbutton.y;
   }
   if (tf->text.selection_link)
-    XmePrimarySink(w, XmLINK, (XtPointer)point, event->xbutton.time);
+    XmePrimarySink(w, XmLINK, (XtPointer)point, EventTime(w, event));
   else if (tf->text.selection_move)
-    XmePrimarySink(w, XmMOVE, (XtPointer)point, event->xbutton.time);
+    XmePrimarySink(w, XmMOVE, (XtPointer)point, EventTime(w, event));
   else
-    XmePrimarySink(w, XmCOPY, (XtPointer)point, event->xbutton.time);
+    XmePrimarySink(w, XmCOPY, (XtPointer)point, EventTime(w, event));
 }
 
 void _XmTextFieldHandleSecondaryFinished(Widget w, XEvent *event)
@@ -4653,12 +4680,14 @@ static void SecondaryNotify(Widget w, XEvent *event, char **params, Cardinal *nu
   Atom CS_OF_ENCODING = XmeGetEncodingAtom(w);
   TextFDestData dest_data;
   XmTextPosition left = tf->text.prim_pos_left, right = tf->text.prim_pos_right;
+  Time event_time = EventTime(w, event);
   if (tf->text.selection_move == TRUE && tf->text.has_destination &&
       TextF_CursorPosition(tf) >= tf->text.sec_pos_left &&
       TextF_CursorPosition(tf) <= tf->text.sec_pos_right)
   {
-    /* This will mark the has_secondary field to False. */
-    (void)_XmTextFieldSetSel2(w, 1, 0, False, event->xbutton.time);
+    /* Moving text into itself: drop the secondary selection, and
+     * SECONDARY with it. */
+    (void)_XmTextFieldSetSel2(w, 1, 0, True, event_time);
     return;
   }
   /*
@@ -4682,11 +4711,11 @@ static void SecondaryNotify(Widget w, XEvent *event, char **params, Cardinal *nu
    * type INSERT_SELECTION as per ICCCM.
    */
   if (tf->text.selection_link)
-    XmeSecondaryTransfer(w, CS_OF_ENCODING, XmLINK, event->xbutton.time);
+    XmeSecondaryTransfer(w, CS_OF_ENCODING, XmLINK, event_time);
   else if (tf->text.selection_move)
-    XmeSecondaryTransfer(w, CS_OF_ENCODING, XmMOVE, event->xbutton.time);
+    XmeSecondaryTransfer(w, CS_OF_ENCODING, XmMOVE, event_time);
   else
-    XmeSecondaryTransfer(w, CS_OF_ENCODING, XmCOPY, event->xbutton.time);
+    XmeSecondaryTransfer(w, CS_OF_ENCODING, XmCOPY, event_time);
 }
 
 /*
@@ -4699,22 +4728,24 @@ static void ProcessBDragRelease(Widget w, XEvent *event, String *params, Cardina
 {
   XmTextFieldWidget tf = (XmTextFieldWidget)w;
   XButtonEvent *ev = (XButtonEvent *)event;
+  Time event_time = EventTime(w, event);
   XmTextPosition position;
   if (tf->text.extending)
     return;
   /* Work around for intrinsic bug.  Remove once bug is fixed. */
-  XtUngrabPointer(w, ev->time);
+  XtUngrabPointer(w, event_time);
   _XmTextFieldDrawInsertionPoint(tf, False);
   if (!tf->text.cancel)
     XtUngrabKeyboard(w, CurrentTime);
-  position = GetPosFromX(tf, (Position)event->xbutton.x);
+  position = EventPosition(tf, event);
   if (tf->text.sel_start) {
     if (tf->text.has_secondary && tf->text.sec_pos_left != tf->text.sec_pos_right) {
-      if ((Dimension)ev->x > tf->core.width || ev->x < 0 || (Dimension)ev->y > tf->core.height ||
-          ev->y < 0)
+      if (ev != NULL && ((Dimension)ev->x > tf->core.width || ev->x < 0 ||
+                         (Dimension)ev->y > tf->core.height || ev->y < 0))
       {
-        /* This will mark the has_secondary field to False. */
-        _XmTextFieldSetSel2(w, 1, 0, False, event->xkey.time);
+        /* Released outside: drop the secondary selection, and
+         * SECONDARY with it. */
+        _XmTextFieldSetSel2(w, 1, 0, True, event_time);
       }
       else {
         SecondaryNotify(w, event, params, num_params);
@@ -6786,6 +6817,45 @@ static void TextFieldMarginsProc(Widget w, XmBaselineMargins *margins_rec)
 }
 
 /*
+ * Keep the highlight records at the characters they belong to when
+ * [prev, next) is replaced by text delta characters longer: records in
+ * the replaced range move to prev, the ones after it by delta.  The
+ * preedit renditions are highlights, and a record left past the end of
+ * the text made RedisplayText measure a negative length.
+ */
+static void ShiftHighlights(XmTextFieldWidget tf,
+                            XmTextPosition prev,
+                            XmTextPosition next,
+                            int delta)
+{
+  _XmHighlightRec *l = tf->text.highlight.list;
+  Cardinal i, n = 1;
+  for (i = 1; i < tf->text.highlight.number; i++) {
+    XmTextPosition position = l[i].position;
+    XmHighlightMode mode = l[i].mode;
+    if (position >= next)
+      position += delta;
+    else if (position > prev)
+      position = prev;
+    /* A record at the position of the one before replaces it, */
+    if (position == l[n - 1].position) {
+      if (n == 1) {
+        l[0].mode = mode;
+        continue;
+      }
+      n--;
+    }
+    /* and is not needed if it does not change the mode */
+    if (mode == l[n - 1].mode)
+      continue;
+    l[n].position = position;
+    l[n].mode = mode;
+    n++;
+  }
+  tf->text.highlight.number = n;
+}
+
+/*
  * This procedure and _XmTextFieldReplaceText are almost same.
  * The difference is that this function doesn't call user's callbacks,
  * like XmNmodifyVerifyCallback.
@@ -6909,6 +6979,7 @@ static Boolean _XmTextFieldReplaceTextForPreedit(XmTextFieldWidget tf,
     }
   }
   tf->text.string_length += insert_length - replace_length;
+  ShiftHighlights(tf, replace_prev, replace_next, insert_length - replace_length);
   if (move_cursor) {
     if (TextF_CursorPosition(tf) != newInsert) {
       if (newInsert > tf->text.string_length) {
@@ -7128,7 +7199,8 @@ static void PreeditDone(XIC xic, XPointer client_data, XPointer call_data)
   XmTextFieldWidget tf = (XmTextFieldWidget)client_data;
   Widget p = (Widget)tf;
   Boolean need_verify, end_preedit = False;
-  if (!TextF_Editable(tf))
+  /* Not after TextFieldResetIC, which has committed the preedit */
+  if (!TextF_Editable(tf) || !tf->text.onthespot->under_preedit)
     return;
   while (!XtIsShell(p))
     p = XtParent(p);
@@ -7192,7 +7264,7 @@ static void PreeditDraw(XIC xic, XPointer client_data, XIMPreeditDrawCallbackStr
   char *ptr = NULL;
   Widget p = w;
   Boolean need_verify, end_preedit = False;
-  if (!TextF_Editable(tf))
+  if (!TextF_Editable(tf) || !tf->text.onthespot->under_preedit)
     return;
   if (call_data->text && (insert_length = call_data->text->length) > TEXT_MAX_INSERT_SIZE)
     return;
@@ -7445,7 +7517,7 @@ static void PreeditCaret(XIC xic, XPointer client_data, XIMPreeditCaretCallbackS
   XmTextFieldWidget tf = (XmTextFieldWidget)client_data;
   Widget p = (Widget)tf;
   Boolean need_verify;
-  if (!TextF_Editable(tf))
+  if (!TextF_Editable(tf) || !tf->text.onthespot->under_preedit)
     return;
   while (!XtIsShell(p))
     p = XtParent(p);
@@ -7489,8 +7561,18 @@ static void TextFieldResetIC(Widget w)
   XRectangle overall_ink;
   XmTextPosition cursorPos, nextPos;
   XmTextFieldWidget tf = (XmTextFieldWidget)w;
+  XIMResetState reset_state;
   if (!(tf->text.onthespot->under_preedit))
     return;
+  /*
+   * Ask for the reset state (an XIC value the client sets) before the
+   * reset.  The input method erases its preedit after the reset reply,
+   * and Xlib calls the preedit callbacks it receives during a round
+   * trip that does not wait for them, as XGetICValues does: after the
+   * reset, such a call would run them while the preedit is still on
+   * and let them delete the text just committed.
+   */
+  reset_state = XmImGetXICResetState(w);
   if (FVerifyCommitNeeded(tf)) {
     FVerifyCommitNeeded(tf) = False;
     str = _XmMallocArray(PreEnd(tf) - PreStart(tf) + 1, sizeof(wchar_t));
@@ -7521,7 +7603,7 @@ static void TextFieldResetIC(Widget w)
   else
     XmImMbResetIC(w, &mb);
   if (!mb) {
-    ResetUnder(tf);
+    ResetUnder(tf, reset_state);
     return;
   }
   if (!TextF_Editable(tf)) {
@@ -7558,6 +7640,12 @@ static void TextFieldResetIC(Widget w)
     if (nextPos != tf->text.string_length)
       nextPos++;
   }
+  else if (PreStart(tf) < PreEnd(tf)) {
+    /* The preedit is in the text: the committed string replaces it */
+    cursorPos = PreStart(tf);
+    nextPos = PreEnd(tf);
+    doSetHighlight(w, cursorPos, nextPos, XmHIGHLIGHT_NORMAL);
+  }
   if (tf->text.max_char_size == 1) {
     replace_res = _XmTextFieldReplaceText(tf, NULL, cursorPos, nextPos, mb, insert_length, True);
   }
@@ -7579,12 +7667,12 @@ done:
     XtFree(str);
   else
     XFree(mb);
-  ResetUnder(tf);
+  ResetUnder(tf, reset_state);
 }
 
-static void ResetUnder(XmTextFieldWidget tf)
+static void ResetUnder(XmTextFieldWidget tf, XIMResetState reset_state)
 {
-  if (XmImGetXICResetState((Widget)tf) != XIMPreserveState)
+  if (reset_state != XIMPreserveState)
     tf->text.onthespot->under_preedit = False;
 }
 
@@ -8473,7 +8561,7 @@ Widget XmCreateTextField(Widget parent, char *name, ArgList arglist, Cardinal ar
   return (XtCreateWidget(name, xmTextFieldWidgetClass, parent, arglist, argcount));
 }
 
-Widget XmVaCreateTextField(Widget parent, char *name, ...)
+Widget XmVaCreateTextField(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -8487,7 +8575,7 @@ Widget XmVaCreateTextField(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedTextField(Widget parent, char *name, ...)
+Widget XmVaCreateManagedTextField(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

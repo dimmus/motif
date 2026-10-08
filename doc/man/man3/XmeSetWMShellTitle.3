@@ -1,0 +1,40 @@
+.TH "XmeSetWMShellTitle" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeSetWMShellTitle\fP \(em A widget writer function that sets the title of a shell from an XmString
+.iX "XmeSetWMShellTitle"
+.iX "Xme functions" "XmeSetWMShellTitle"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/XmP\&.h>
+\fBvoid \fBXmeSetWMShellTitle\fP\fR(
+\fBXmString \fBxmstr\fR\fR,
+\fBWidget \fBshell\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeSetWMShellTitle\fP sets the \fB\%XtNtitle\fP and
+\fB\%XtNiconName\fP
+resources of \fIshell\fP, and their encodings, from \fIxmstr\fP\&.  It
+is how
+BulletinBoard applies its \fB\%XmNdialogTitle\fP\&.  A string of a
+single
+segment is used as it is, with the encoding \fB\%STRING\fP for the
+\fB\%ISO8859-1\fP tag and the encoding of the locale for
+\fB\%XmFONTLIST_DEFAULT_TAG\fP; anything else is converted to compound
+text\&.
+Nothing is done if \fIshell\fP is not a WMShell\&.
+.IP "\fIxmstr\fP" 10
+Specifies the title\&.
+.IP "\fIshell\fP" 10
+Specifies the shell\&.
+.PP
+Motif 1\&.2 called this function \fB\%_XmStringUpdateWMShellTitle\fP\&.
+The library still exports that name for old binaries, and
+\fB\%<Xm/XmP\&.h>\fP defines it as a macro for
+\fB\%XmeSetWMShellTitle\fP unless \fB\%NO_XM_1_2_BC\fP is defined; new
+code should use \fB\%XmeSetWMShellTitle\fP\&.
+.SH "RELATED"
+.PP
+\fB\%XmBulletinBoard\fP(3) and \fB\%XmCvtXmStringToCT\fP(3)\&.

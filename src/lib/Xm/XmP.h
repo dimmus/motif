@@ -946,12 +946,12 @@ extern XmImportOperator XmeToHorizontalPixels(Widget widget, int offset, XtArgVa
 extern XmImportOperator XmeToVerticalPixels(Widget widget, int offset, XtArgVal *value);
 extern void XmeFromHorizontalPixels(Widget widget, int offset, XtArgVal *value);
 extern void XmeFromVerticalPixels(Widget widget, int offset, XtArgVal *value);
-extern XmParseResult XmeParseUnits(String spec, int *unitType);
+extern XmParseResult XmeParseUnits(const char *spec, int *unitType);
 /* DragIcon. c */
 extern Widget XmeGetTextualDragIcon(Widget w);
 /* BulletinB.c */
 extern Widget XmeCreateClassDialog(
-    WidgetClass w_class, Widget ds_p, String name, ArgList bb_args, Cardinal bb_n);
+    WidgetClass w_class, Widget ds_p, const char *name, ArgList bb_args, Cardinal bb_n);
 /* ImageCache.c */
 extern Boolean XmeGetPixmapData(Screen *screen,
                                 Pixmap pixmap,
@@ -963,21 +963,21 @@ extern Boolean XmeGetPixmapData(Screen *screen,
                                 int *hot_y,
                                 unsigned int *width,
                                 unsigned int *height);
-extern Pixmap XmeGetMask(Screen *screen, char *image_name);
+extern Pixmap XmeGetMask(Screen *screen, const char *image_name);
 /* VaSimple.c */
 extern int XmeCountVaListSimple(va_list al);
 extern Widget XmeVLCreateWidget(
-    char *name, WidgetClass wc, Widget parent, Boolean managed, va_list al, int count);
+    const char *name, WidgetClass wc, Widget parent, Boolean managed, va_list al, int count);
 /* VirtKeys.c */
 extern int XmeVirtualToActualKeysyms(Display *dpy, KeySym virtKeysym, XmKeyBinding *actualKeyData);
 /* Screen.c */
 extern Cursor XmeGetNullCursor(Widget w);
 extern void XmeQueryBestCursorSize(Widget w, Dimension *width, Dimension *height);
 /* Xm.c */
-extern void XmeWarning(Widget w, char *message);
+extern void XmeWarning(Widget w, const char *message);
 /* ResConvert.c */
 extern XmFontList XmeGetDefaultRenderTable(Widget w, unsigned char fontListType);
-extern Boolean XmeNamesAreEqual(char *in_str, char *test_str);
+extern Boolean XmeNamesAreEqual(const char *in_str, const char *test_str);
 /* Primitive.c */
 extern void XmeResolvePartOffsets(WidgetClass w_class,
                                   XmOffsetPtr *offset,
@@ -1017,10 +1017,10 @@ extern void XmeGetDefaultPixel(Widget widget, int type, int offset, XrmValue *va
 /* Xmos.c */
 extern String XmeGetHomeDirName(void);
 extern int XmeMicroSleep(long secs);
-extern XmString XmeGetLocalizedString(char *reserved,
+extern XmString XmeGetLocalizedString(const char *reserved,
                                       Widget widget,
-                                      char *resource,
-                                      String string);
+                                      const char *resource,
+                                      const char *string);
 extern void XmRenderTableGetDefaultFontExtents(XmRenderTable rendertable,
                                                int *height,
                                                int *ascent,

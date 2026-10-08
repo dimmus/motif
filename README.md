@@ -53,6 +53,7 @@ CI builds and tests every change on:
 | Debian stable on s390x (big-endian, under qemu) | GCC | Debug |
 | FreeBSD | Clang | Debug |
 | Debian stable, Fedora | GCC | Distribution packaging and install-and-consume test |
+| Debian trixie, Fedora | GCC | `dpkg-buildpackage` and `rpmbuild` of `tools/packaging`, lintian, rpmlint, install and consume |
 
 CI also runs warnings-as-errors builds (informational), scan-build,
 clang-tidy and cppcheck against committed baselines, an ABI comparison
@@ -204,11 +205,15 @@ not fixed yet, which are expected to fail (`Fuzz.<name>.crashes`).  See
 
 Two targets build tools that CTest does not run.  `bench` builds and
 runs `xmbench`, the micro- and macro-benchmarks in `src/tests/bench`,
-and writes `xmbench.json`.  `ab` builds the A/B harness in
+and `mwmbench`, the mwm macro-benchmarks there, and writes
+`xmbench.json` and `mwmbench.json`.  `ab` builds the A/B harness in
 `src/tests/ab`, which runs the same pseudo-random Form, Container and
 List configurations against two builds of libXm and reports any
 difference in geometry, selection, callbacks or pixels; use it to check
 that a change to the layout code keeps their behaviour identical.
+[doc/profiling.md](doc/profiling.md) describes how to profile Motif
+with perf, callgrind, heaptrack and xtrace (`tools/dev/profile`), the
+hotspots found and the startup cost compared with earlier releases.
 
 ### Sanitizers and coverage
 

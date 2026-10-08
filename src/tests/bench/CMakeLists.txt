@@ -1,10 +1,15 @@
-# xmbench: benchmarks, not tests.  Nothing here is built by default or
-# registered with CTest; build and run them with the "bench" target:
+# xmbench: benchmarks, not tests.  xmbench is not built by default or
+# registered with CTest; build and run it with the "bench" target:
 #
 #   cmake --build <build> --target bench
 #
 # which writes <build>/src/tests/bench/xmbench.json.  XMBENCH_ARGS passes
 # extra arguments (for example "-r 3 -s 0.1 micro").
+#
+# bench.py runs xmbench under its own pinned Xvfb, optionally behind
+# xmbench-proxy (added latency, round trip counts), and compares two
+# builds; see src/tests/README.md.  The proxy is built with the tests,
+# since the bench.proxy test checks it.
 
 add_library(xmbench_preload MODULE EXCLUDE_FROM_ALL preload.c)
 target_include_directories(xmbench_preload PRIVATE ${MOTIF_XT_INCLUDE_DIRS})
@@ -42,3 +47,71 @@ add_custom_target(bench
     DEPENDS xmbench xmbench_preload
     USES_TERMINAL
     COMMENT "Running xmbench")
+
+# The latency proxy and its test, which starts its own Xvfb.
+find_program(XVFB_EXECUTABLE Xvfb DOC "Xvfb, for the bench.proxy test")
+mark_as_advanced(XVFB_EXECUTABLE)
+if(NOT XVFB_EXECUTABLE)
+    set(_xvfb "")
+else()
+    set(_xvfb "${XVFB_EXECUTABLE}")
+endif()
+
+add_executable(xmbench-proxy proxy.c)
+
+add_executable(bench_proxy_test proxytest.c)
+target_compile_definitions(bench_proxy_test PRIVATE
+    XMBENCH_PROXY="$<TARGET_FILE:xmbench-proxy>"
+    XVFB="${_xvfb}")
+target_link_libraries(bench_proxy_test PRIVATE PkgConfig::MOTIF_XT
+    PkgConfig::CHECK)
+add_dependencies(bench_proxy_test xmbench-proxy)
+add_test(NAME bench.proxy COMMAND bench_proxy_test
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+set_tests_properties(bench.proxy PROPERTIES LABELS X11 SKIP_RETURN_CODE 77)
+if(MOTIF_TEST_ENV)
+    set_tests_properties(bench.proxy PROPERTIES ENVIRONMENT "${MOTIF_TEST_ENV}")
+endif()
+
+# The comparison logic of bench.py, on canned results.
+find_package(Python3 COMPONENTS Interpreter)
+if(Python3_Interpreter_FOUND)
+    add_test(NAME bench.compare
+        COMMAND ${Python3_EXECUTABLE} -B
+            ${CMAKE_CURRENT_SOURCE_DIR}/test_bench.py)
+endif()
+
+# mwmbench: macro-benchmarks for mwm, which it starts as the window
+# manager of the bench target's display and drives through XTest.  It
+# needs libXtst, and preloads libmwmbench_preload.so into mwm.  The bench
+# target writes <build>/src/tests/bench/mwmbench.json; MWMBENCH_ARGS
+# passes extra arguments (for example "-r 3 map title").
+pkg_check_modules(MWMBENCH_XTST IMPORTED_TARGET xtst)
+if(TARGET mwm AND MWMBENCH_XTST_FOUND)
+    add_library(mwmbench_preload MODULE EXCLUDE_FROM_ALL mwmpreload.c)
+    target_include_directories(mwmbench_preload PRIVATE ${MOTIF_XT_INCLUDE_DIRS})
+    target_link_libraries(mwmbench_preload PRIVATE ${CMAKE_DL_LIBS})
+    set_target_properties(mwmbench_preload PROPERTIES
+        PREFIX lib OUTPUT_NAME mwmbench_preload)
+
+    add_executable(mwmbench EXCLUDE_FROM_ALL mwmbench.c)
+    target_compile_definitions(mwmbench PRIVATE
+        MWMBENCH_MWM="$<TARGET_FILE:mwm>"
+        MWMBENCH_PRELOAD="$<TARGET_FILE:mwmbench_preload>")
+    target_link_libraries(mwmbench PRIVATE
+        PkgConfig::MOTIF_XT PkgConfig::MWMBENCH_XTST)
+    add_dependencies(mwmbench mwmbench_preload mwm)
+
+    set(MWMBENCH_ARGS "" CACHE STRING
+        "Arguments passed to mwmbench by the bench target")
+    separate_arguments(_mwmbench_args UNIX_COMMAND "${MWMBENCH_ARGS}")
+    add_custom_target(bench-mwm
+        COMMAND ${_xmbench_cmd} $<TARGET_FILE:mwmbench>
+                -j ${CMAKE_CURRENT_BINARY_DIR}/mwmbench.json ${_mwmbench_args}
+        DEPENDS mwmbench mwmbench_preload mwm
+        USES_TERMINAL
+        COMMENT "Running mwmbench")
+    add_dependencies(bench bench-mwm)
+else()
+    message(STATUS "Benchmarks: mwmbench needs mwm and libXtst; not built")
+endif()

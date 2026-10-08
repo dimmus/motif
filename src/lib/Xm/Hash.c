@@ -49,7 +49,8 @@ typedef struct _XmHashTableRec {
 /* Static functions */
 static XmHashBucket NewBucket(void);
 static void FreeBucket(XmHashBucket);
-/* Static data */
+/* Static data: the free buckets, which all tables share, whichever lock
+   (if any) guards the table itself; guarded by the process lock. */
 static XmHashBucket FreeBucketList = NULL;
 
 /* Dumb default hash functions */
@@ -301,6 +302,7 @@ static XmHashBucket NewBucket(void)
   XmHashBucket rbucket;
   XmHashBucket buckets;
   int i;
+  _XmProcessLock();
   if (FreeBucketList == NULL) {
     /* Allocate alot of buckets at once to cut down on fragmentation */
     buckets = (XmHashBucket)XtMalloc(NUMBUCKETS * sizeof(XmHashBucketRec));
@@ -313,13 +315,16 @@ static XmHashBucket NewBucket(void)
   }
   rbucket = FreeBucketList;
   FreeBucketList = FreeBucketList->next;
+  _XmProcessUnlock();
   return (rbucket);
 }
 
 static void FreeBucket(XmHashBucket b)
 {
+  _XmProcessLock();
   b->next = FreeBucketList;
   FreeBucketList = b;
+  _XmProcessUnlock();
 }
 #ifdef DEBUG
 void _XmPrintHashTable(XmHashTable table)

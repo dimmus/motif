@@ -1,0 +1,33 @@
+.TH "XmeGetNullCursor" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeGetNullCursor\fP \(em A widget writer function that returns an invisible cursor
+.iX "XmeGetNullCursor"
+.iX "Xme functions" "XmeGetNullCursor"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/XmP\&.h>
+\fBCursor \fBXmeGetNullCursor\fP\fR(
+\fBWidget \fBw\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeGetNullCursor\fP returns a cursor whose every pixel is
+transparent,
+for widgets that hide the pointer\&.  It is created once per screen and
+kept by the XmScreen object of the screen of \fIw\fP\&.
+.IP "\fIw\fP" 10
+Specifies a widget on the screen\&.
+.PP
+Motif 1\&.2 called this function \fB\%_XmGetNullCursor\fP\&.  The
+library still exports that name for old binaries, and
+\fB\%<Xm/XmP\&.h>\fP defines it as a macro for \fB\%XmeGetNullCursor\fP
+unless \fB\%NO_XM_1_2_BC\fP is defined; new code should use
+\fB\%XmeGetNullCursor\fP\&.
+.SH "RETURN"
+.PP
+Returns the cursor\&.  It belongs to Motif and must not be freed\&.
+.SH "RELATED"
+.PP
+\fB\%XmScreen\fP(3) and \fB\%XmeQueryBestCursorSize\fP(3)\&.

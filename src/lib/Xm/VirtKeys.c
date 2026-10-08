@@ -146,12 +146,13 @@ static Boolean CvtStringToVirtualBinding(Display *dpy,
   int j;
   int codes_per_sym;
   KeyCode minK;
+  KeySym *ks_table;
   Modifiers used_mods;
   /* Lookup codes_per_sym, and let Xt cache the result instead of */
   /* always downloading a new copy with XGetKeyboardMapping(). */
   /* This also initializes Xt's per-display data structures, so */
   /* we can use XtTranslateKey() instead of XLookupString(). */
-  (void)XtGetKeysymTable(dpy, &minK, &codes_per_sym);
+  ks_table = XtGetKeysymTable(dpy, &minK, &codes_per_sym);
   count = _XmMapKeyEvents(str, &eventTypes, &keysyms, &modifiers);
   if (count > 0) {
     Boolean fini;
@@ -174,41 +175,38 @@ static Boolean CvtStringToVirtualBinding(Display *dpy,
        * modifers.
        */
       event.state = 0;
-      int keysyms_per_keycode = 0;
-      int min_codes_per_sym = 0;
-      if (event.keycode > 0) {
-        KeySym *keysymTab = XGetKeyboardMapping(dpy, event.keycode, 1, &keysyms_per_keycode);
-        if ((keysymTab != NULL) && (keysyms_per_keycode > 0)) {
-          if (keysyms_per_keycode > codes_per_sym)
-            min_codes_per_sym = codes_per_sym;
-          else
-            min_codes_per_sym = keysyms_per_keycode;
-          if (keysymTab[0] != keysyms[tmp])
-            for (j = 1; j < min_codes_per_sym; j++)
-              if (keysymTab[j] == keysyms[tmp]) {
-                /*
-                 * Gross Hack for Hobo keyboard ..
-                 * Assumptions:
-                 * 	1. Hobo keyboard has XK_Return  as the first entry
-                 *		and XK_KP_Enter as the 4th entry in its
-                 *            keycode to keysym key map.
-                 *	2. This fix is only designed to work for the precise
-                 *            combination of the Sun server with vendor
-                 *            string "Sun Microsystems, Inc." and the Hobo
-                 *            keyboard, as the fix assumes knowledge of the
-                 *            server keycode to keysym key map.
-                 */
-                if ((keysyms[tmp] == XK_KP_Enter) && (j == 4) && (keysymTab[0] == XK_Return) &&
-                    (strcmp("Sun Microsystems, Inc.", ServerVendor(dpy)) == 0))
-                {
-                  fini = True;
-                }
-                else
-                  event.state = 1 << (j - 1);
-                break;
+      /*
+       * The keysyms of the key come from Xt's copy of the keyboard
+       * mapping (the core mapping, which XGetKeyboardMapping would
+       * fetch again), not from a round trip per binding.
+       */
+      if (event.keycode > 0 && ks_table != NULL && event.keycode >= minK &&
+          codes_per_sym > 0) {
+        KeySym *keysymTab = ks_table + (event.keycode - minK) * codes_per_sym;
+        if (keysymTab[0] != keysyms[tmp])
+          for (j = 1; j < codes_per_sym; j++)
+            if (keysymTab[j] == keysyms[tmp]) {
+              /*
+               * Gross Hack for Hobo keyboard ..
+               * Assumptions:
+               * 	1. Hobo keyboard has XK_Return  as the first entry
+               *		and XK_KP_Enter as the 4th entry in its
+               *            keycode to keysym key map.
+               *	2. This fix is only designed to work for the precise
+               *            combination of the Sun server with vendor
+               *            string "Sun Microsystems, Inc." and the Hobo
+               *            keyboard, as the fix assumes knowledge of the
+               *            server keycode to keysym key map.
+               */
+              if ((keysyms[tmp] == XK_KP_Enter) && (j == 4) && (keysymTab[0] == XK_Return) &&
+                  (strcmp("Sun Microsystems, Inc.", ServerVendor(dpy)) == 0))
+              {
+                fini = True;
               }
-          XFree(keysymTab);
-        }
+              else
+                event.state = 1 << (j - 1);
+              break;
+            }
       }
       if (!fini) {
         event.state |= modifiers[tmp];
@@ -401,13 +399,23 @@ static void FindVirtKey(Display *dpy,
   XmDisplay xmDisplay = (XmDisplay)XmGetXmDisplay(dpy);
   XmVKeyBinding keyBindings = xmDisplay->display.bindings;
   KeyCode min_kcode;
-  int ks_per_kc;
+  int ks_per_kc, min_keycode, max_keycode;
   KeySym *ks_table = XtGetKeysymTable(dpy, &min_kcode, &ks_per_kc);
-  KeySym *kc_map = &ks_table[(keycode - min_kcode) * ks_per_kc];
-  Modifiers EffectiveSMMask = EffectiveStdModMask(dpy, kc_map, ks_per_kc);
+  KeySym *kc_map;
+  Modifiers EffectiveSMMask;
   /* Get the modifiers from the actual event */
   Modifiers VirtualStdMods = 0;
   Modifiers StdModMask;
+  /*
+   * A keycode outside the keyboard map has no keysyms, and so no
+   * virtual key: input methods send the strings they commit in key
+   * events with keycode 0.
+   */
+  XDisplayKeycodes(dpy, &min_keycode, &max_keycode);
+  if (keycode < min_keycode || keycode > max_keycode)
+    return;
+  kc_map = &ks_table[(keycode - min_kcode) * ks_per_kc];
+  EffectiveSMMask = EffectiveStdModMask(dpy, kc_map, ks_per_kc);
   for (i = 0; i < xmDisplay->display.num_bindings; i++) {
     unsigned j = ks_per_kc;
     KeySym vks = keyBindings[i].keysym;

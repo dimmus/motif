@@ -315,7 +315,7 @@ static void SetTopShadowPixmapDefault(Widget widget,
 {
   XmSeparatorGadget sg = (XmSeparatorGadget)widget;
   XmManagerWidget mw = (XmManagerWidget)XtParent(sg);
-  static Pixmap pixmap;
+  static _Thread_local Pixmap pixmap;
   pixmap = XmUNSPECIFIED_PIXMAP;
   value->addr = (char *)&pixmap;
   value->size = sizeof(Pixmap);
@@ -372,6 +372,28 @@ int _XmSeparatorCacheCompare(XtPointer A, XtPointer B)
     return 0;
 }
 
+/*
+ * A hash of the fields that _XmSeparatorCacheCompare compares, for the cache index.
+ */
+static unsigned int SeparatorCacheHash(XtPointer cpart)
+{
+  XmSeparatorGCacheObjPart *p = (XmSeparatorGCacheObjPart *)cpart;
+  unsigned int h = 0;
+  h = _XmCacheHashAdd(h, (unsigned long)p->margin);
+  h = _XmCacheHashAdd(h, (unsigned long)p->orientation);
+  h = _XmCacheHashAdd(h, (unsigned long)p->separator_type);
+  h = _XmCacheHashAdd(h, (unsigned long)p->separator_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->background_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->top_shadow_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->bottom_shadow_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->background);
+  h = _XmCacheHashAdd(h, (unsigned long)p->top_shadow_color);
+  h = _XmCacheHashAdd(h, (unsigned long)p->top_shadow_pixmap);
+  h = _XmCacheHashAdd(h, (unsigned long)p->bottom_shadow_color);
+  h = _XmCacheHashAdd(h, (unsigned long)p->bottom_shadow_pixmap);
+  return h;
+}
+
 /***********************************************************
  *
  *  ClassInitialize
@@ -380,6 +402,7 @@ int _XmSeparatorCacheCompare(XtPointer A, XtPointer B)
 static void ClassInitialize(void)
 {
   separatorBaseClassExtRec.record_type = XmQmotif;
+  _XmCacheSetHashProc(&SeparatorClassCachePart, SeparatorCacheHash);
   /* Install the menu savvy trait. */
   XmeTraitSet(
       (XtPointer)xmSeparatorGadgetClass, XmQTmenuSavvy, (XtPointer)&MenuSavvySeparatorRecord);
@@ -429,15 +452,15 @@ static void SecondaryObjectCreate(Widget req, Widget new_w, ArgList args, Cardin
   /*
    * fetch the resources in superclass to subclass order
    */
-  XtGetSubresources(new_w,
-                    newSec,
-                    NULL,
-                    NULL,
-                    wc->core_class.resources,
-                    wc->core_class.num_resources,
-                    args,
-                    *num_args);
-  extData = (XmWidgetExtData)XtCalloc(1, sizeof(XmWidgetExtDataRec));
+  _XmGetSubresources(new_w,
+                     newSec,
+                     NULL,
+                     NULL,
+                     wc->core_class.resources,
+                     wc->core_class.num_resources,
+                     args,
+                     *num_args);
+  extData = _XmExtDataAlloc();
   extData->widget = (Widget)newSec;
   extData->reqWidget = (Widget)reqSec;
   ((XmSeparatorGCacheObject)newSec)->ext.extensionType = XmCACHE_EXTENSION;
@@ -476,7 +499,7 @@ static void InitializePosthook(Widget req, Widget new_w, ArgList args, Cardinal 
   _XmExtObjFree((XtPointer)ext->widget);
   _XmExtObjFree((XtPointer)ext->reqWidget);
   _XmProcessUnlock();
-  XtFree((char *)ext);
+  _XmExtDataFree(ext);
 }
 
 /************************************************************************
@@ -510,7 +533,7 @@ static Boolean SetValuesPrehook(
   newSec->ext.logicalParent = newParent;
   newSec->ext.extensionType = XmCACHE_EXTENSION;
   memcpy(&(newSec->separator_cache), SEPG_Cache(newParent), sizeof(XmSeparatorGCacheObjPart));
-  extData = (XmWidgetExtData)XtCalloc(1, sizeof(XmWidgetExtDataRec));
+  extData = _XmExtDataAlloc();
   extData->widget = (Widget)newSec;
   extData->reqWidget = (Widget)reqSec;
   _XmPushWidgetExtData(newParent, extData, XmCACHE_EXTENSION);
@@ -552,7 +575,7 @@ static void GetValuesPrehook(Widget newParent, ArgList args, Cardinal *num_args)
   newSec->ext.logicalParent = newParent;
   newSec->ext.extensionType = XmCACHE_EXTENSION;
   memcpy(&(newSec->separator_cache), SEPG_Cache(newParent), sizeof(XmSeparatorGCacheObjPart));
-  extData = (XmWidgetExtData)XtCalloc(1, sizeof(XmWidgetExtDataRec));
+  extData = _XmExtDataAlloc();
   extData->widget = (Widget)newSec;
   _XmPushWidgetExtData(newParent, extData, XmCACHE_EXTENSION);
   XtGetSubvalues(
@@ -573,7 +596,7 @@ static void GetValuesPosthook(Widget new_w, ArgList args, Cardinal *num_args)
   _XmProcessLock();
   _XmExtObjFree((XtPointer)ext->widget);
   _XmProcessUnlock();
-  XtFree((char *)ext);
+  _XmExtDataFree(ext);
 }
 
 /************************************************************************
@@ -605,7 +628,7 @@ static Boolean SetValuesPosthook(
   _XmExtObjFree((XtPointer)ext->widget);
   _XmExtObjFree((XtPointer)ext->reqWidget);
   _XmProcessUnlock();
-  XtFree((char *)ext);
+  _XmExtDataFree(ext);
   return FALSE;
 }
 
@@ -1176,7 +1199,7 @@ Widget XmCreateSeparatorGadget(Widget parent, char *name, ArgList arglist, Cardi
   return (XtCreateWidget(name, xmSeparatorGadgetClass, parent, arglist, argcount));
 }
 
-Widget XmVaCreateSeparatorGadget(Widget parent, char *name, ...)
+Widget XmVaCreateSeparatorGadget(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -1190,7 +1213,7 @@ Widget XmVaCreateSeparatorGadget(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedSeparatorGadget(Widget parent, char *name, ...)
+Widget XmVaCreateManagedSeparatorGadget(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

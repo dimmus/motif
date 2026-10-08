@@ -386,7 +386,7 @@ static void ScrollBarPlacementDefault(Widget widget,
                                       int offset, /* unused */
                                       XrmValue *value)
 {
-  static unsigned char placement;
+  static _Thread_local unsigned char placement;
   value->addr = (char *)&placement;
   if (LayoutIsRtoLM(((XmScrolledWindowWidget)widget)))
     placement = XmBOTTOM_LEFT;
@@ -408,7 +408,7 @@ static void VisualPolicyDefault(Widget widget,
                                 XrmValue *value)
 {
   XmScrolledWindowWidget sw = (XmScrolledWindowWidget)widget;
-  static unsigned char visual_policy;
+  static _Thread_local unsigned char visual_policy;
   value->addr = (XPointer)&visual_policy;
   if (sw->swindow.ScrollPolicy == XmAUTOMATIC)
     visual_policy = XmCONSTANT;
@@ -2860,7 +2860,7 @@ Widget XmCreateScrolledWindow(Widget parent, char *name, ArgList args, Cardinal 
   return (XtCreateWidget(name, xmScrolledWindowWidgetClass, parent, args, argCount));
 }
 
-Widget XmVaCreateScrolledWindow(Widget parent, char *name, ...)
+Widget XmVaCreateScrolledWindow(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -2874,7 +2874,7 @@ Widget XmVaCreateScrolledWindow(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedScrolledWindow(Widget parent, char *name, ...)
+Widget XmVaCreateManagedScrolledWindow(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

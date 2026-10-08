@@ -1,0 +1,48 @@
+.TH "_XmPrimitiveEnter" "library call"
+.nh
+.SH "NAME"
+\fB\%_XmPrimitiveEnter\fP,
+\fB\%_XmPrimitiveLeave\fP \(em The enter and leave actions of Primitive
+.iX "_XmPrimitiveEnter"
+.iX "Motif internal functions" "_XmPrimitiveEnter"
+.iX "Motif internal functions" "_XmPrimitiveLeave"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/IconButtonP\&.h>
+.PP
+\fBvoid \fB_XmPrimitiveEnter\fP\fR(
+\fBWidget \fBwid\fR\fR,
+\fBXEvent *\fBevent\fR\fR,
+\fBString *\fBparams\fR\fR,
+\fBCardinal *\fBnum_params\fR\fR);
+.PP
+\fBvoid \fB_XmPrimitiveLeave\fP\fR(
+\fBWidget \fBwid\fR\fR,
+\fBXEvent *\fBevent\fR\fR,
+\fBString *\fBparams\fR\fR,
+\fBCardinal *\fBnum_params\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+These are the \fB\%PrimitiveEnter\fP and \fB\%PrimitiveLeave\fP actions
+of
+Primitive, which a subclass with its own enter and leave actions calls
+from them\&.  On entry the tool tip of the widget is scheduled, and on
+leaving it is removed\&.  With the \fB\%XmPOINTER\fP keyboard focus
+policy,
+the widget gets the focus highlight on entry and loses it on leaving,
+and the focus moved callbacks of the shell are called\&.
+\fB\%<Xm/IconButtonP\&.h>\fP
+declares them for the IconButton\&.
+.IP "\fIwid\fP" 11
+Specifies the widget\&.
+.IP "\fIevent\fP" 11
+Specifies the EnterNotify or LeaveNotify event\&.
+.IP "\fIparams\fP" 11
+Is not used\&.
+.IP "\fInum_params\fP" 11
+Is not used\&.
+.SH "RELATED"
+.PP
+\fB\%XmPrimitive\fP(3) and \fB\%XmIconButton\fP(3)\&.

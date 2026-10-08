@@ -85,8 +85,8 @@ typedef enum {
 
 /* Internal context block */
 typedef struct _ct_context {
-  OctetPtr octet;     /* octet ptr into compound text stream */
-  OctetPtr lastoctet; /* ptr to last octet in stream */
+  const_OctetPtr octet;     /* octet ptr into compound text stream */
+  const_OctetPtr lastoctet; /* ptr to last octet in stream */
 
   struct {               /* flags */
     unsigned dircs : 1;  /* direction control seq encountered */
@@ -99,9 +99,9 @@ typedef struct _ct_context {
   ct_Direction *dirstack;           /* direction stack pointer */
   unsigned int dirsp;               /* current dir stack index */
   unsigned int dirstacksize;        /* size of direction stack */
-  OctetPtr encoding;                /* ptr to current encoding sequence */
+  const_OctetPtr encoding;          /* ptr to current encoding sequence */
   unsigned int encodinglen;         /* length of encoding sequence */
-  OctetPtr item;                    /* ptr to current item */
+  const_OctetPtr item;              /* ptr to current item */
   unsigned int itemlen;             /* length of current item */
   unsigned int version;             /* version of compound text */
   XmConst char *gl_charset;         /* ptr to GL character set */
@@ -122,6 +122,10 @@ typedef struct _EncodingRegistry {
   char *fontlist_tag;
   char *ct_encoding;
   struct _EncodingRegistry *next;
+  /* The built-in entries are static and hold literals.  These say what */
+  /* XmRegisterSegmentEncoding allocated, and so has to free. */
+  Boolean allocated;          /* the entry and its tag */
+  Boolean encoding_allocated; /* ct_encoding */
 } SegmentEncoding;
 
 #define EncodingRegistryTag(er) ((SegmentEncoding *)(er))->fontlist_tag
@@ -238,6 +242,9 @@ static XmConst char UTF8_R_TO_L[] = "\342\200\217";
   (ctx)->flags.dircs = True
 #define _PopDir(ctx) ((ctx)->dirsp)--
 #define _CurDir(ctx) (ctx)->dirstack[(ctx)->dirsp]
+/* ESC 02/05 04/07, just read: UTF-8 follows (ISO 2022 other coding system) */
+#define _IsUTF8Start(ctx, final) \
+  ((ctx)->itemlen == 3 && (ctx)->item[1] == 0x25 && (final) == 0x47)
 /* this should probably be the other way around, (XmFONTLIST_DEFAULT_TAG map to
    _MOTIF_DEFAULT_LOCALE) but this is the smallest code change, and the code
    will not work any differently */
@@ -282,7 +289,7 @@ static SegmentEncoding _encoding_registry = {
     XmFONTLIST_DEFAULT_TAG, XmFONTLIST_DEFAULT_TAG, &_loc_encoding_registry};
 static SegmentEncoding *_encoding_registry_ptr = &_encoding_registry;
 /********    Static Function Declarations    ********/
-static SegmentEncoding *FindEncoding(char *fontlist_tag);
+static SegmentEncoding **FindEncoding(const char *fontlist_tag);
 static Boolean processCharsetAndText(XmStringCharSet tag,
                                      OctetPtr ctext,
                                      Boolean separator,
@@ -302,12 +309,13 @@ static Boolean processExtendedSegmentsHack(ct_context *ctx, Octet final);
 static Boolean cvtTextToXmString(XrmValue *from, XrmValue *to);
 static void outputXmString(ct_context *ctx, Boolean separator);
 static XmString concatStringToXmString(XmString compoundstring,
-                                       char *textstring,
+                                       const char *textstring,
                                        int textlen,
-                                       char *charset,
+                                       const char *charset,
                                        XmStringDirection direction,
                                        Boolean separator);
 static Boolean processESC(ct_context *ctx, Octet final);
+static Boolean processUTF8Segment(ct_context *ctx);
 static Boolean processCSI(ct_context *ctx, Octet final);
 static Boolean processExtendedSegments(ct_context *ctx, Octet final);
 static Boolean process94n(ct_context *ctx, Octet final);
@@ -331,49 +339,17 @@ static char *ConvertWithIconv(const char *str, unsigned int len, iconv_t convert
 /************************************************************************
  *
  *  FindEncoding
- *    Find the SegmentEncoding with fontlist_tag.  Return NULL if no
- *    such SegmentEncoding exists.  As a side effect, free any encodings
- *    encountered that have been unregistered.
+ *    Find the SegmentEncoding with fontlist_tag.  Return the link that
+ *    points to it, or NULL if no such SegmentEncoding exists.
  *
  ************************************************************************/
-static SegmentEncoding *FindEncoding(char *fontlist_tag)
+static SegmentEncoding **FindEncoding(const char *fontlist_tag)
 {
-  SegmentEncoding *prevPtr, *encodingPtr = _encoding_registry_ptr;
-  String encoding = NULL;
-  if (encodingPtr) {
-    if (strcmp(fontlist_tag, EncodingRegistryTag(encodingPtr)) == 0) {
-      encoding = EncodingRegistryEncoding(encodingPtr);
-      /* Free unregistered encodings. */
-      if (encoding == NULL) {
-        _encoding_registry_ptr = EncodingRegistryNext(encodingPtr);
-        XtFree((char *)encodingPtr);
-        encodingPtr = NULL;
-      }
-      return (encodingPtr);
-    }
-  }
-  else
-    return (encodingPtr);
-  for (prevPtr = encodingPtr, encodingPtr = EncodingRegistryNext(encodingPtr); encodingPtr != NULL;
-       prevPtr = encodingPtr, encodingPtr = EncodingRegistryNext(encodingPtr))
-  {
-    if (strcmp(fontlist_tag, EncodingRegistryTag(encodingPtr)) == 0) {
-      encoding = EncodingRegistryEncoding(encodingPtr);
-      /* Free unregistered encodings. */
-      if (encoding == NULL) {
-        EncodingRegistryNext(prevPtr) = EncodingRegistryNext(encodingPtr);
-        XtFree((char *)encodingPtr);
-        encodingPtr = NULL;
-      }
-      return (encodingPtr);
-    }
-    /* Free unregistered encodings. */
-    else if (EncodingRegistryEncoding(encodingPtr) == NULL) {
-      EncodingRegistryNext(prevPtr) = EncodingRegistryNext(encodingPtr);
-      XtFree((char *)encodingPtr);
-    }
-  }
-  return (NULL);
+  SegmentEncoding **link;
+  for (link = &_encoding_registry_ptr; *link != NULL; link = &EncodingRegistryNext(*link))
+    if (strcmp(fontlist_tag, EncodingRegistryTag(*link)) == 0)
+      return link;
+  return NULL;
 }
 
 /************************************************************************
@@ -381,23 +357,44 @@ static SegmentEncoding *FindEncoding(char *fontlist_tag)
  *  XmRegisterSegmentEncoding
  *    Register a compound text encoding format for a specified font list
  *    element tag.  Returns NULL for a new tag or a copy of the old encoding
- *    for an already registered tag.
+ *    for an already registered tag.  A NULL ct_encoding unregisters the
+ *    tag.
  *
  ************************************************************************/
-char *XmRegisterSegmentEncoding(char *fontlist_tag, char *ct_encoding)
+char *XmRegisterSegmentEncoding(const char *fontlist_tag, const char *ct_encoding)
 {
-  SegmentEncoding *encodingPtr = NULL;
+  SegmentEncoding **link;
+  SegmentEncoding *encodingPtr;
   String ret_val = NULL;
   _XmProcessLock();
-  encodingPtr = FindEncoding(fontlist_tag);
-  if (encodingPtr) {
+  link = FindEncoding(fontlist_tag);
+  if (link) {
+    encodingPtr = *link;
     ret_val = XtNewString(EncodingRegistryEncoding(encodingPtr));
-    EncodingRegistryEncoding(encodingPtr) = ct_encoding ? XtNewString(ct_encoding) : (String)NULL;
+    if (encodingPtr->encoding_allocated)
+      XtFree(EncodingRegistryEncoding(encodingPtr));
+    if (ct_encoding != NULL) {
+      EncodingRegistryEncoding(encodingPtr) = XtNewString(ct_encoding);
+      encodingPtr->encoding_allocated = True;
+    }
+    else {
+      /* Unlink the entry, and free it unless it is a built-in one. */
+      *link = EncodingRegistryNext(encodingPtr);
+      if (encodingPtr->allocated) {
+        XtFree(EncodingRegistryTag(encodingPtr));
+        XtFree((char *)encodingPtr);
+      }
+      else {
+        EncodingRegistryEncoding(encodingPtr) = NULL;
+        encodingPtr->encoding_allocated = False;
+      }
+    }
   }
   else if (ct_encoding != NULL) {
     encodingPtr = (SegmentEncoding *)XtMalloc((Cardinal)sizeof(SegmentEncoding));
     EncodingRegistryTag(encodingPtr) = XtNewString(fontlist_tag);
     EncodingRegistryEncoding(encodingPtr) = XtNewString(ct_encoding);
+    encodingPtr->allocated = encodingPtr->encoding_allocated = True;
     EncodingRegistryNext(encodingPtr) = _encoding_registry_ptr;
     _encoding_registry_ptr = encodingPtr;
   }
@@ -451,14 +448,14 @@ XtPointer _XmGetEncodingRegistryTarget(int *length)
  *    specified font list element tag.  Returns NULL if not found.
  *
  ************************************************************************/
-char *XmMapSegmentEncoding(char *fontlist_tag)
+char *XmMapSegmentEncoding(const char *fontlist_tag)
 {
-  SegmentEncoding *encodingPtr = NULL;
+  SegmentEncoding **link;
   String ret_val = NULL;
   _XmProcessLock();
-  encodingPtr = FindEncoding(fontlist_tag);
-  if (encodingPtr)
-    ret_val = XtNewString(EncodingRegistryEncoding(encodingPtr));
+  link = FindEncoding(fontlist_tag);
+  if (link)
+    ret_val = XtNewString(EncodingRegistryEncoding(*link));
   _XmProcessUnlock();
   return (ret_val);
 }
@@ -472,7 +469,7 @@ char *XmMapSegmentEncoding(char *fontlist_tag)
  *	for this to work.
  *
  ************************************************************************/
-XmString XmCvtCTToXmString(char *text)
+XmString XmCvtCTToXmString(const char *text)
 {
   ct_context *ctx; /* compound text context block */
   Boolean ok = True;
@@ -481,7 +478,8 @@ XmString XmCvtCTToXmString(char *text)
   XmString xmsReturned; /* returned Xm string */
   ctx = (ct_context *)XtMalloc(sizeof(ct_context));
   /* initialize the context block */
-  ctx->octet = (OctetPtr)text;
+  ctx->octet = (const_OctetPtr)text;
+  ctx->lastoctet = ctx->octet + strlen(text);
   ctx->flags.dircs = False;
   ctx->flags.gchar = False;
   ctx->flags.ignext = False;
@@ -560,6 +558,10 @@ XmString XmCvtCTToXmString(char *text)
         c = *ctx->octet; /* get next char in seq */
         ctx->octet++;
         ctx->itemlen++; /* advance ptr to next char */
+        if (_IsUTF8Start(ctx, c)) {
+          ok = processUTF8Segment(ctx);
+          break;
+        }
         if (_IsValidESCFinal(c)) {
           /* we have a valid ESC sequence - handle it */
           ok = processESCHack(ctx, c);
@@ -742,7 +744,7 @@ static Boolean processESCHack(ct_context *ctx, Octet final)
 
 static Boolean processExtendedSegmentsHack(ct_context *ctx, Octet final)
 {
-  OctetPtr esptr;      /* ptr into ext seg */
+  const_OctetPtr esptr; /* ptr into ext seg */
   unsigned int seglen; /* length of ext seg */
   unsigned int len;    /* length */
   String charset_copy; /* ptr to NULL-terminated copy of ext seg charset */
@@ -792,7 +794,7 @@ static Boolean processExtendedSegmentsHack(ct_context *ctx, Octet final)
           break;
         }
         charset_copy = XtMalloc(len + 1);
-        strncpy(charset_copy, (char *)esptr, len);
+        strncpy(charset_copy, (const char *)esptr, len);
         charset_copy[len] = EOS;
         esptr += len + 1;       /* point to text part */
         len = seglen - len - 1; /* calc length of text part */
@@ -950,6 +952,10 @@ static Boolean cvtTextToXmString(XrmValue *from, XrmValue *to)
         c = *ctx->octet; /* get next char in seq */
         ctx->octet++;
         ctx->itemlen++; /* advance ptr to next char */
+        if (_IsUTF8Start(ctx, c)) {
+          ok = processUTF8Segment(ctx);
+          break;
+        }
         if (_IsValidESCFinal(c)) {
           /* we have a valid ESC sequence - handle it */
           ok = processESC(ctx, c);
@@ -1095,20 +1101,20 @@ static Boolean cvtTextToXmString(XrmValue *from, XrmValue *to)
   return (ok);
 }
 
-static char **cvtCTsegment(ct_context *ctx, OctetPtr item, unsigned int length)
+static char **cvtCTsegment(ct_context *ctx, const_OctetPtr item, unsigned int length)
 {
   XTextProperty tmp_prop;
-  OctetPtr octets;
-  Boolean free_octets = False;
+  const_OctetPtr octets;
+  OctetPtr copy = NULL;
   int count;
   int ret_val;
   char **strings = NULL;
   if (ctx->encoding) {
     if (ctx->encoding + ctx->encodinglen != item) {
-      octets = (OctetPtr)_XmMallocArray(ctx->encodinglen + length, sizeof(Octet));
-      memcpy((char *)octets, (char *)ctx->encoding, ctx->encodinglen);
-      memcpy((char *)(octets + ctx->encodinglen), (char *)item, length);
-      free_octets = True;
+      copy = (OctetPtr)_XmMallocArray(ctx->encodinglen + length, sizeof(Octet));
+      memcpy((char *)copy, (const char *)ctx->encoding, ctx->encodinglen);
+      memcpy((char *)(copy + ctx->encodinglen), (const char *)item, length);
+      octets = copy;
     }
     else {
       octets = ctx->encoding;
@@ -1117,7 +1123,8 @@ static char **cvtCTsegment(ct_context *ctx, OctetPtr item, unsigned int length)
   else {
     octets = ctx->item;
   }
-  tmp_prop.value = octets;
+  /* XmbTextPropertyToTextList() only reads the value. */
+  tmp_prop.value = (unsigned char *)octets;
   tmp_prop.encoding = XInternAtom(_XmGetDefaultDisplay(), XmSCOMPOUND_TEXT, False);
   tmp_prop.format = 8;
   tmp_prop.nitems = ctx->encodinglen + length;
@@ -1126,8 +1133,7 @@ static char **cvtCTsegment(ct_context *ctx, OctetPtr item, unsigned int length)
     XFreeStringList(strings);
     strings = NULL;
   }
-  if (free_octets)
-    XtFree((char *)octets);
+  XtFree((char *)copy);
   return strings;
 }
 
@@ -1190,9 +1196,9 @@ static void outputXmString(ct_context *ctx, Boolean separator)
     /* OK to do single segment output but always use GR charset */
     ctx->xmstring = concatStringToXmString(
         ctx->xmstring,
-        (char *)ctx->item,
+        (const char *)ctx->item,
         ctx->itemlen,
-        (char *)ctx->gr_charset,
+        ctx->gr_charset,
         (XmStringDirection)((_CurDir(ctx) == ct_Dir_LeftToRight) ?
                                 XmSTRING_DIRECTION_L_TO_R :
                                 ((_CurDir(ctx) == ct_Dir_RightToLeft) ? XmSTRING_DIRECTION_R_TO_L :
@@ -1214,9 +1220,9 @@ static void outputXmString(ct_context *ctx, Boolean separator)
           assert(j > start);
           ctx->xmstring = concatStringToXmString(
               ctx->xmstring,
-              (char *)ctx->item + start,
+              (const char *)ctx->item + start,
               j - start,
-              (char *)ctx->gr_charset,
+              ctx->gr_charset,
               (XmStringDirection)((_CurDir(ctx) == ct_Dir_LeftToRight) ?
                                       XmSTRING_DIRECTION_L_TO_R :
                                       ((_CurDir(ctx) == ct_Dir_RightToLeft) ?
@@ -1234,9 +1240,9 @@ static void outputXmString(ct_context *ctx, Boolean separator)
           assert(j > start);
           ctx->xmstring = concatStringToXmString(
               ctx->xmstring,
-              (char *)ctx->item + start,
+              (const char *)ctx->item + start,
               j - start,
-              (char *)ctx->gl_charset,
+              ctx->gl_charset,
               (XmStringDirection)((_CurDir(ctx) == ct_Dir_LeftToRight) ?
                                       XmSTRING_DIRECTION_L_TO_R :
                                       ((_CurDir(ctx) == ct_Dir_RightToLeft) ?
@@ -1252,9 +1258,9 @@ static void outputXmString(ct_context *ctx, Boolean separator)
     /* output last segment */
     ctx->xmstring = concatStringToXmString(
         ctx->xmstring,
-        (char *)ctx->item + start,
+        (const char *)ctx->item + start,
         ctx->itemlen - start,
-        (char *)((curseg_is_gl) ? ctx->gl_charset : ctx->gr_charset),
+        (curseg_is_gl) ? ctx->gl_charset : ctx->gr_charset,
         (XmStringDirection)((_CurDir(ctx) == ct_Dir_LeftToRight) ?
                                 XmSTRING_DIRECTION_L_TO_R :
                                 ((_CurDir(ctx) == ct_Dir_RightToLeft) ? XmSTRING_DIRECTION_R_TO_L :
@@ -1270,9 +1276,9 @@ static void outputXmString(ct_context *ctx, Boolean separator)
 }
 
 static XmString concatStringToXmString(XmString compoundstring,
-                                       char *textstring,
+                                       const char *textstring,
                                        int textlen,
-                                       char *charset,
+                                       const char *charset,
                                        XmStringDirection direction,
                                        Boolean separator)
 {
@@ -1283,6 +1289,54 @@ static XmString concatStringToXmString(XmString compoundstring,
     tempxm1 = XmStringConcatAndFree(tempxm1, XmStringSeparatorCreate());
   compoundstring = XmStringConcatAndFree(compoundstring, tempxm1);
   return (compoundstring);
+}
+
+/*
+ * processUTF8Segment - the text after ESC 02/05 04/07 (ctx->item) is
+ * UTF-8, up to ESC 02/05 04/00 or the end.  Xlib writes so whatever has
+ * no compound text charset (Hebrew, Arabic, most of Unicode).  Make it
+ * one segment, in the locale's encoding when Xlib can convert it to
+ * that, else tagged "UTF-8".
+ */
+static Boolean processUTF8Segment(ct_context *ctx)
+{
+  const_OctetPtr text = ctx->octet, p = text;
+  const_OctetPtr encoding = ctx->encoding;
+  unsigned int encodinglen = ctx->encodinglen;
+  XmStringDirection direction =
+      (_CurDir(ctx) == ct_Dir_LeftToRight) ?
+          XmSTRING_DIRECTION_L_TO_R :
+          ((_CurDir(ctx) == ct_Dir_RightToLeft) ? XmSTRING_DIRECTION_R_TO_L :
+                                                  XmSTRING_DIRECTION_UNSET);
+  char **strings;
+  int len;
+  while (p < ctx->lastoctet && *p &&
+         !(ctx->lastoctet - p >= 3 && p[0] == ESC && p[1] == 0x25 && p[2] == 0x40))
+    p++;
+  len = (int)(p - text);
+  if (ctx->lastoctet - p >= 3 && p[0] == ESC)
+    p += 3;
+  ctx->itemlen += (unsigned int)(p - text);
+  ctx->octet = p;
+  /* Convert the segment on its own: it does not use the designations */
+  ctx->encoding = NULL;
+  ctx->encodinglen = 0;
+  strings = cvtCTsegment(ctx, ctx->item, ctx->itemlen);
+  ctx->encoding = encoding;
+  ctx->encodinglen = encodinglen;
+  if (strings) {
+    ctx->xmstring = concatStringToXmString(
+        ctx->xmstring, strings[0], strlen(strings[0]), XmFONTLIST_DEFAULT_TAG, direction, False);
+    XFreeStringList(strings);
+    return True;
+  }
+#if XM_UTF8
+  ctx->xmstring =
+      concatStringToXmString(ctx->xmstring, (const char *)text, len, "UTF-8", direction, False);
+  return True;
+#else
+  return (len == 0);
+#endif
 }
 
 /* processESC - handle valid ESC sequences */
@@ -1368,7 +1422,7 @@ static Boolean processCSI(ct_context *ctx, Octet final)
 
 static Boolean processExtendedSegments(ct_context *ctx, Octet final)
 {
-  OctetPtr esptr;      /* ptr into ext seg */
+  const_OctetPtr esptr; /* ptr into ext seg */
   unsigned int seglen; /* length of ext seg */
   unsigned int len;    /* length */
   String charset_copy; /* ptr to NULL-terminated copy of ext seg charset */
@@ -1415,7 +1469,7 @@ static Boolean processExtendedSegments(ct_context *ctx, Octet final)
           break;
         }
         charset_copy = XtMalloc(len + 1);
-        strncpy(charset_copy, (char *)esptr, len);
+        strncpy(charset_copy, (const char *)esptr, len);
         charset_copy[len] = EOS;
         esptr += len + 1;       /* point to text part */
         len = seglen - len - 1; /* calc length of text part */

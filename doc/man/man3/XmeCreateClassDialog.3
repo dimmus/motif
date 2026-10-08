@@ -1,0 +1,49 @@
+.TH "XmeCreateClassDialog" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeCreateClassDialog\fP \(em A widget writer function that creates a dialog of a given class
+.iX "XmeCreateClassDialog"
+.iX "Xme functions" "XmeCreateClassDialog"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/XmP\&.h>
+\fBWidget \fBXmeCreateClassDialog\fP\fR(
+\fBWidgetClass \fBw_class\fR\fR,
+\fBWidget \fBds_p\fR\fR,
+\fBconst char *\fBname\fR\fR,
+\fBArgList \fBbb_args\fR\fR,
+\fBCardinal \fBbb_n\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeCreateClassDialog\fP creates a DialogShell child of \fIds_p\fP
+and,
+unmanaged inside it, a widget of class \fIw_class\fP\&.  It is how the
+\fB\%XmCreate\fP\&.\&.\&.\fB\%Dialog\fP functions of the dialog widgets
+are written\&.
+.PP
+The shell is named \fIname\fP followed by \fB\%_popup\fP, and is created
+with
+the arguments \fIbb_args\fP and \fB\%XmNallowShellResize\fP set to True;
+the
+child is named \fIname\fP (an empty name if \fIname\fP is NULL) and
+created
+with the same arguments\&.  A destroy callback on the child destroys the
+shell with it\&.  Manage the child to pop the dialog up\&.
+.IP "\fIw_class\fP" 10
+Specifies the class of the child, usually a BulletinBoard subclass\&.
+.IP "\fIds_p\fP" 10
+Specifies the parent of the DialogShell\&.
+.IP "\fIname\fP" 10
+Specifies the name of the child\&.
+.IP "\fIbb_args\fP" 10
+Specifies the argument list of both widgets\&.
+.IP "\fIbb_n\fP" 10
+Specifies the number of arguments in \fIbb_args\fP\&.
+.SH "RETURN"
+.PP
+Returns the child widget\&.
+.SH "RELATED"
+.PP
+\fB\%XmDialogShell\fP(3) and \fB\%XmCreateDialogShell\fP(3)\&.

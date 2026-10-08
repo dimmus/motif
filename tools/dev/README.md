@@ -97,6 +97,13 @@ The package commands for Debian/Ubuntu and Fedora are in the
 `tools/dev/env/ci/deps.sh` has the lists for Debian, Ubuntu, Fedora,
 Alpine, Arch Linux and FreeBSD.
 
+## Profiling (`profile/`)
+
+A container image with perf, valgrind, heaptrack and xtrace, and the
+scripts that build several Motif versions in it and profile a small
+program's startup, the `xmbench` cases, an XmText, an XmList and mwm.
+See [doc/profiling.md](../../doc/profiling.md).
+
 ## Development Environment (`env/`)
 
 A comprehensive containerized development environment for testing Motif builds across multiple operating systems using Docker/Podman.

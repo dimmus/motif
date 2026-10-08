@@ -40,8 +40,8 @@ Widget XmCreateColorSelector(Widget, String, ArgList, Cardinal);
 /*
  * Variable argument list functions
  */
-extern Widget XmVaCreateColorSelector(Widget parent, char *name, ...);
-extern Widget XmVaCreateManagedColorSelector(Widget parent, char *name, ...);
+extern Widget XmVaCreateColorSelector(Widget parent, const char *name, ...);
+extern Widget XmVaCreateManagedColorSelector(Widget parent, const char *name, ...);
 extern WidgetClass xmColorSelectorWidgetClass;
 #if defined(__cplusplus)
 }

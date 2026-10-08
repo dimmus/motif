@@ -1,0 +1,8 @@
+# rpmlint filters for motif.spec (rpmlint -r motif.rpmlintrc).
+
+# The licence notices of the sources and headers (The Open Group's, from
+# 2012) carry the FSF's former postal address.  They are kept verbatim.
+addFilter(r"incorrect-fsf-address")
+
+# The names of the libraries and programs are not English words.
+addFilter(r"spelling-error \('(libXm|libMrm|libUil|mwm|uil|xmbind)'")

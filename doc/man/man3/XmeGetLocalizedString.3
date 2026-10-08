@@ -1,0 +1,44 @@
+.TH "XmeGetLocalizedString" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeGetLocalizedString\fP \(em A widget writer function that makes an XmString in the current locale
+.iX "XmeGetLocalizedString"
+.iX "Xme functions" "XmeGetLocalizedString"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/XmP\&.h>
+\fBXmString \fBXmeGetLocalizedString\fP\fR(
+\fBconst char *\fBreserved\fR\fR,
+\fBWidget \fBwidget\fR\fR,
+\fBconst char *\fBresource\fR\fR,
+\fBconst char *\fBstring\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeGetLocalizedString\fP returns
+\fB\%XmStringCreateLocalized\fP(\fIstring\fP)\&.  The other arguments
+are
+reserved for a localisation of the default strings of resources, which
+is not implemented\&.
+.IP "\fIreserved\fP" 10
+Is not used; pass NULL\&.
+.IP "\fIwidget\fP" 10
+Is not used\&.
+.IP "\fIresource\fP" 10
+Is not used\&.
+.IP "\fIstring\fP" 10
+Specifies the text, in the encoding of the locale\&.
+.PP
+Motif 1\&.2 called this function \fB\%_XmOSGetLocalizedString\fP\&.  The
+library still exports that name for old binaries, and
+\fB\%<Xm/XmP\&.h>\fP defines it as a macro for
+\fB\%XmeGetLocalizedString\fP unless \fB\%NO_XM_1_2_BC\fP is defined;
+new code should use \fB\%XmeGetLocalizedString\fP\&.
+.SH "RETURN"
+.PP
+Returns a new XmString, which the caller must free with
+\fB\%XmStringFree\fP\&.
+.SH "RELATED"
+.PP
+\fB\%XmStringCreateLocalized\fP(3)\&.

@@ -68,8 +68,8 @@ extern int XmClipboardStartCopy(Display *display,
 extern int XmClipboardCopy(Display *display,
                            Window window,
                            long itemid,
-                           char *format,
-                           XtPointer buffer,
+                           const char *format,
+                           const void *buffer,
                            unsigned long length,
                            long private_id,
                            long *dataid);
@@ -79,7 +79,7 @@ extern int XmClipboardWithdrawFormat(Display *display, Window window, long data)
 extern int XmClipboardCopyByName(Display *display,
                                  Window window,
                                  long data,
-                                 XtPointer buffer,
+                                 const void *buffer,
                                  unsigned long length,
                                  long private_id);
 extern int XmClipboardUndoCopy(Display *display, Window window);
@@ -89,7 +89,7 @@ extern int XmClipboardStartRetrieve(Display *display, Window window, Time timest
 extern int XmClipboardEndRetrieve(Display *display, Window window);
 extern int XmClipboardRetrieve(Display *display,
                                Window window,
-                               char *format,
+                               const char *format,
                                XtPointer buffer,
                                unsigned long length,
                                unsigned long *outlength,
@@ -106,14 +106,14 @@ extern int XmClipboardInquireFormat(Display *display,
                                     unsigned long *outlength);
 extern int XmClipboardInquireLength(Display *display,
                                     Window window,
-                                    char *format,
+                                    const char *format,
                                     unsigned long *length);
 extern int XmClipboardInquirePendingItems(Display *display,
                                           Window window,
-                                          char *format,
+                                          const char *format,
                                           XmClipboardPendingList *list,
                                           unsigned long *count);
-extern int XmClipboardRegisterFormat(Display *display, char *format_name, int format_length);
+extern int XmClipboardRegisterFormat(Display *display, const char *format_name, int format_length);
 /********    End Public Function Declarations    ********/
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

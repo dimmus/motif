@@ -148,7 +148,7 @@ Urm__GetValidWidgetRecord (IDBFile			file_id,
 
 Cardinal
 UrmHGetWidget (MrmHierarchy		hierarchy_id,
-	       String			index,
+	       const char			*index,
 	       URMResourceContextPtr	context_id,
 	       IDBFile			*file_id_return)
 {
@@ -204,7 +204,7 @@ UrmHGetWidget (MrmHierarchy		hierarchy_id,
 
 Cardinal
 UrmGetIndexedWidget (IDBFile			file_id,
-		     String			index,
+		     const char			*index,
 		     URMResourceContextPtr	context_id)
 {
   /*

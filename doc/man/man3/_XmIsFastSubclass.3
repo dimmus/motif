@@ -1,0 +1,70 @@
+.TH "_XmIsFastSubclass" "library call"
+.nh
+.SH "NAME"
+\fB\%_XmIsFastSubclass\fP,
+\fB\%_XmFastSubclassInit\fP,
+\fB\%_XmIsSubclassOf\fP,
+\fB\%_XmGetClassExtensionPtr\fP \(em Class test functions that the XmIs macros use
+.iX "_XmIsFastSubclass"
+.iX "Motif internal functions" "_XmIsFastSubclass"
+.iX "Motif internal functions" "_XmFastSubclassInit"
+.iX "Motif internal functions" "_XmIsSubclassOf"
+.iX "Motif internal functions" "_XmGetClassExtensionPtr"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/BaseClassP\&.h>
+.PP
+\fBBoolean \fB_XmIsFastSubclass\fP\fR(
+\fBWidgetClass \fBwc\fR\fR,
+\fBunsigned int \fBbit\fR\fR);
+.PP
+\fBvoid \fB_XmFastSubclassInit\fP\fR(
+\fBWidgetClass \fBwc\fR\fR,
+\fBunsigned int \fBbit\fR\fR);
+.PP
+\fBBoolean \fB_XmIsSubclassOf\fP\fR(
+\fBWidgetClass \fBwc\fR\fR,
+\fBWidgetClass \fBsc\fR\fR);
+.PP
+\fBXmGenericClassExt *\fB_XmGetClassExtensionPtr\fP\fR(
+\fBXmGenericClassExt *\fBlistHeadPtr\fR\fR,
+\fBXrmQuark \fBowner\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+These functions are exported because macros of the installed headers
+expand to calls to them; programs should use the macros\&.
+.PP
+Every Motif class has a base class extension that holds a bit field,
+with one bit for each of the Motif classes it is a subclass of\&.
+\fB\%_XmFastSubclassInit\fP sets the bit \fIbit\fP (such as
+\fB\%XmPUSH_BUTTON_BIT\fP) for the class \fIwc\fP; a Motif class does it
+in its
+class_part_initialize method, so that the bit is set for its
+subclasses too\&.  \fB\%_XmIsFastSubclass\fP tests the bit: the
+\fB\%XmIs\fP
+macros of \fB\%<Xm/XmP\&.h>\fP, such as \fB\%XmIsPushButton\fP, are
+written with
+it, and are faster than \fB\%XtIsSubclass\fP\&.
+.PP
+\fB\%_XmIsSubclassOf\fP tells whether \fIwc\fP is \fIsc\fP or one of its
+subclasses, by walking the superclass chain of \fIwc\fP\&.
+.PP
+\fB\%_XmGetClassExtensionPtr\fP returns the address of the pointer to
+the
+extension record of type \fIowner\fP in the chain of class extensions
+that
+starts at \fIlistHeadPtr\fP, or the address of the NULL pointer at the
+end
+of the chain; the \fB\%_XmGetBaseClassExtPtr\fP macro uses it to find
+the
+Motif base class extension of a class\&.
+.SH "RETURN"
+.PP
+\fB\%_XmIsFastSubclass\fP and \fB\%_XmIsSubclassOf\fP return True if the
+class
+is a subclass, and False otherwise\&.
+.SH "RELATED"
+.PP
+\fB\%XtIsSubclass\fP(3)\&.

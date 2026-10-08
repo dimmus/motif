@@ -1,0 +1,38 @@
+.TH "XmeGetTextualDragIcon" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeGetTextualDragIcon\fP \(em A widget writer function that returns the drag icon of text
+.iX "XmeGetTextualDragIcon"
+.iX "Xme functions" "XmeGetTextualDragIcon"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/XmP\&.h>
+\fBWidget \fBXmeGetTextualDragIcon\fP\fR(
+\fBWidget \fBw\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeGetTextualDragIcon\fP returns the DragIcon object that Text,
+TextField and the other text widgets use as the source icon when text
+is dragged\&.  It is made the first time for the screen of \fIw\fP, from
+a
+16 by 16 or a 32 by 32 bitmap depending on the cursor sizes the server
+supports, in the alternative look when the \fB\%XmNenableDragIcon\fP
+resource of the XmDisplay is True\&.
+.IP "\fIw\fP" 10
+Specifies a widget on the screen\&.
+.PP
+Motif 1\&.2 called this function \fB\%_XmGetTextualDragIcon\fP\&.  The
+library still exports that name for old binaries, and
+\fB\%<Xm/XmP\&.h>\fP defines it as a macro for
+\fB\%XmeGetTextualDragIcon\fP unless \fB\%NO_XM_1_2_BC\fP is defined;
+new code should use \fB\%XmeGetTextualDragIcon\fP\&.
+.SH "RETURN"
+.PP
+Returns the DragIcon\&.  It belongs to Motif and must not be
+destroyed\&.
+.SH "RELATED"
+.PP
+\fB\%XmDragIcon\fP(3), \fB\%XmDragStart\fP(3) and
+\fB\%XmeDragSource\fP(3)\&.

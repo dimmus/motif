@@ -1,0 +1,47 @@
+.TH "XmeResolvePartOffsets" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeResolvePartOffsets\fP \(em A widget writer function that computes the part offsets of a widget class
+.iX "XmeResolvePartOffsets"
+.iX "Xme functions" "XmeResolvePartOffsets"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/XmP\&.h>
+\fBvoid \fBXmeResolvePartOffsets\fP\fR(
+\fBWidgetClass \fBw_class\fR\fR,
+\fBXmOffsetPtr *\fBoffset\fR\fR,
+\fBXmOffsetPtr *\fBconstraint_offset\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeResolvePartOffsets\fP lets a widget class be compiled without
+the
+sizes of its superclass parts, so that it keeps working when those
+parts grow\&.  The class declares its resources with
+\fB\%XmPartOffset\fP
+(and its constraint resources with \fB\%XmConstraintPartOffset\fP)
+instead
+of \fB\%XtOffset\fP, and calls \fB\%XmeResolvePartOffsets\fP from its
+class_initialize or class_part_initialize method\&.
+.PP
+It adds the sizes of the superclasses to the widget and constraint
+sizes of \fIw_class\fP, aligned for any type; allocates and fills the
+offset tables, which give for each class in the chain the offset of
+its part in the instance and constraint records; and rewrites the
+offsets of the resources and synthetic resources of the class\&.  The
+widget then reaches its fields through the tables, with \fB\%XmField\fP
+and \fB\%XmConstraintField\fP\&.
+.IP "\fIw_class\fP" 10
+Specifies the widget class\&.
+.IP "\fIoffset\fP" 10
+Returns the offset table of the instance record\&.
+.IP "\fIconstraint_offset\fP" 10
+Returns the offset table of the constraint record, or NULL if
+\fIw_class\fP is not a Constraint subclass\&.  Pass NULL if the class
+has no
+constraint resources of its own\&.
+.SH "RELATED"
+.PP
+\fB\%XmResolveAllPartOffsets\fP(3) and
+\fB\%XmResolvePartOffsets\fP(3)\&.

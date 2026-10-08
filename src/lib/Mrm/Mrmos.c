@@ -85,7 +85,7 @@ void _MrmOSIEEEDoubleToHost(double *val)	/* unused */
  ************************************************************************/
 
 String
-_MrmOSSetLocale(String locale)
+_MrmOSSetLocale(const char *locale)
 {
   return setlocale(LC_ALL, locale);
 }

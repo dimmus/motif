@@ -1,0 +1,27 @@
+.TH "XmTextGetAddMode" "library call"
+.nh
+.SH "NAME"
+\fB\%XmTextGetAddMode\fP \(em A Text function that returns the state of Add mode
+.iX "XmTextGetAddMode"
+.iX "Text functions" "XmTextGetAddMode"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/Text\&.h>
+\fBBoolean \fBXmTextGetAddMode\fP\fR(
+\fBWidget \fBwidget\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmTextGetAddMode\fP tells whether the Text or TextField
+\fIwidget\fP is in
+Add mode, in which the insertion cursor moves without changing the
+selection\&.
+.IP "\fIwidget\fP" 10
+Specifies the Text or TextField widget\&.
+.SH "RETURN"
+.PP
+Returns True if the widget is in Add mode, and False otherwise\&.
+.SH "RELATED"
+.PP
+\fB\%XmTextSetAddMode\fP(3) and \fB\%XmTextFieldGetAddMode\fP(3)\&.

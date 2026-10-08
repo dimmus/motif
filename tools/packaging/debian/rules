@@ -1,0 +1,32 @@
+#!/usr/bin/make -f
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
+include /usr/share/dpkg/architecture.mk
+include /usr/share/dpkg/buildopts.mk
+
+ifneq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
+WITH_TESTS = OFF
+else
+WITH_TESTS = ON
+endif
+
+%:
+	dh $@ --buildsystem=cmake+ninja
+
+# The distribution's compiler and linker flags (dpkg-buildflags) take the
+# place of the project's own hardening flags.  The examples are not
+# packaged.
+override_dh_auto_configure:
+	dh_auto_configure -- \
+		-DWITH_DEMOS=OFF \
+		-DWITH_HARDENING=OFF \
+		-DWITH_TESTS=$(WITH_TESTS)
+
+# The X11 test suites run under xvfb-run, which CTest finds at configure
+# time.  --no-tests=error: a build that registers no tests fails.
+override_dh_auto_test:
+ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
+	ctest --test-dir obj-$(DEB_HOST_GNU_TYPE) --no-tests=error \
+		--output-on-failure -j$(or $(DEB_BUILD_OPTION_PARALLEL),1)
+endif

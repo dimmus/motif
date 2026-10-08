@@ -87,7 +87,7 @@ typedef Status (*XmInitialDirectionProc)(XtPointer /* chars */,
                                          XmDirection * /* direction */);
 /********    Private Function Declarations    ********/
 extern XmOSMethodStatus XmOSGetMethod(Widget w,
-                                      String method_name,
+                                      const char *method_name,
                                       XtPointer *method,
                                       XtPointer *os_data);
 /********    End Private Function Declarations    ********/

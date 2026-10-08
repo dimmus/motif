@@ -1,0 +1,145 @@
+.TH "_XmListInit" "library call"
+.nh
+.SH "NAME"
+\fB\%_XmListInit\fP,
+\fB\%_XmListFree\fP,
+\fB\%_XmListAddAfter\fP,
+\fB\%_XmListAddBefore\fP,
+\fB\%_XmListRemove\fP,
+\fB\%_XmListCount\fP,
+\fB\%_XmListExec\fP,
+\fB\%_XmStackInit\fP,
+\fB\%_XmStackFree\fP,
+\fB\%_XmStackPush\fP,
+\fB\%_XmStackPop\fP,
+\fB\%_XmQueueInit\fP,
+\fB\%_XmQueueFree\fP,
+\fB\%_XmQueuePop\fP,
+\fB\%_XmQueueCount\fP,
+\fB\%_Xm_AddQueue\fP,
+\fB\%_Xm_RemQueue\fP,
+\fB\%_Xm_GetNewElement\fP \(em Linked list, stack and queue functions of the Motif widgets
+.iX "_XmListInit"
+.iX "Motif internal functions" "_XmListInit"
+.iX "Motif internal functions" "_XmListFree"
+.iX "Motif internal functions" "_XmListAddAfter"
+.iX "Motif internal functions" "_XmListAddBefore"
+.iX "Motif internal functions" "_XmListRemove"
+.iX "Motif internal functions" "_XmListCount"
+.iX "Motif internal functions" "_XmListExec"
+.iX "Motif internal functions" "_XmStackInit"
+.iX "Motif internal functions" "_XmStackFree"
+.iX "Motif internal functions" "_XmStackPush"
+.iX "Motif internal functions" "_XmStackPop"
+.iX "Motif internal functions" "_XmQueueInit"
+.iX "Motif internal functions" "_XmQueueFree"
+.iX "Motif internal functions" "_XmQueuePop"
+.iX "Motif internal functions" "_XmQueueCount"
+.iX "Motif internal functions" "_Xm_AddQueue"
+.iX "Motif internal functions" "_Xm_RemQueue"
+.iX "Motif internal functions" "_Xm_GetNewElement"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/xmlist\&.h>
+.PP
+\fBXmList \fB_XmListInit\fP\fR(\fBvoid\fR);
+\fBvoid \fB_XmListFree\fP\fR(
+\fBXmList \fBlist\fR\fR);
+\fBXmListElem *\fB_XmListAddAfter\fP\fR(
+\fBXmList \fBlist\fR\fR,
+\fBXmListElem *\fBelem\fR\fR,
+\fBXtPointer \fBdata\fR\fR);
+\fBXmListElem *\fB_XmListAddBefore\fP\fR(
+\fBXmList \fBlist\fR\fR,
+\fBXmListElem *\fBelem\fR\fR,
+\fBXtPointer \fBdata\fR\fR);
+\fBvoid \fB_XmListRemove\fP\fR(
+\fBXmList \fBlist\fR\fR,
+\fBXmListElem *\fBelem\fR\fR);
+\fBint \fB_XmListCount\fP\fR(
+\fBXmList \fBlist\fR\fR);
+\fBXmListElem *\fB_XmListExec\fP\fR(
+\fBXmList \fBlist\fR\fR,
+\fBXmListElem *\fBstart\fR\fR,
+\fBXmListElem *\fBend\fR\fR,
+\fBXmListFunc \fBfunc\fR\fR,
+\fBXtPointer \fBdata\fR\fR);
+.PP
+\fBXmStack \fB_XmStackInit\fP\fR(\fBvoid\fR);
+\fBvoid \fB_XmStackFree\fP\fR(
+\fBXmStack \fBstack\fR\fR);
+\fBvoid \fB_XmStackPush\fP\fR(
+\fBXmStack \fBstack\fR\fR,
+\fBXtPointer \fBelem\fR\fR);
+\fBXtPointer \fB_XmStackPop\fP\fR(
+\fBXmStack \fBstack\fR\fR);
+.PP
+\fBXmQueue \fB_XmQueueInit\fP\fR(\fBvoid\fR);
+\fBvoid \fB_XmQueueFree\fP\fR(
+\fBXmQueue \fBqueue\fR\fR);
+\fBXtPointer \fB_XmQueuePop\fP\fR(
+\fBXmQueue \fBqueue\fR\fR);
+\fBint \fB_XmQueueCount\fP\fR(
+\fBXmQueue \fBqueue\fR\fR);
+\fBvoid \fB_Xm_AddQueue\fP\fR(
+\fBXmQueue \fBqueue\fR\fR,
+\fB_XmQElem *\fBafter\fR\fR,
+\fB_XmQElem *\fBelem\fR\fR);
+\fB_XmQElem *\fB_Xm_RemQueue\fP\fR(
+\fB_XmQElem **\fBqueue\fR\fR);
+\fB_XmQElem *\fB_Xm_GetNewElement\fP\fR(
+\fBXmQueue \fBqueue\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+These are the container types of the widgets of the Motif extension
+library (Tree, Outline, IconButton); they are exported for them, and
+are not meant for applications\&.
+.PP
+An \fB\%XmList\fP is a doubly linked list of \fB\%XmListElem\fP, each
+holding a
+data pointer; the macros \fB\%XmListFirst\fP, \fB\%XmListLast\fP,
+\fB\%XmListElemNext\fP, \fB\%XmListElemPrev\fP and
+\fB\%XmListElemData\fP walk it\&.
+\fB\%_XmListInit\fP creates an empty list and \fB\%_XmListFree\fP frees
+it
+with its elements (not the data)\&.  \fB\%_XmListAddAfter\fP inserts
+\fIdata\fP
+after \fIelem\fP, or at the start if \fIelem\fP is NULL;
+\fB\%_XmListAddBefore\fP inserts it before \fIelem\fP, or at the end if
+\fIelem\fP
+is NULL; both return the new element\&.  \fB\%_XmListRemove\fP removes
+\fIelem\fP\&.  \fB\%_XmListCount\fP returns the number of elements\&.
+\fB\%_XmListExec\fP calls \fIfunc\fP(\fIelement\fP, \fIdata\fP) on each
+element from
+\fIstart\fP (the first if NULL) up to but not including \fIend\fP (the
+end of
+the list if NULL), and stops at the first element for which \fIfunc\fP
+returns False\&.
+.PP
+An \fB\%XmStack\fP is a stack of pointers: \fB\%_XmStackInit\fP creates
+it,
+\fB\%_XmStackPush\fP pushes \fIelem\fP, \fB\%_XmStackPop\fP pops the
+last pushed
+element, and \fB\%_XmStackFree\fP frees the stack\&.
+.PP
+An \fB\%XmQueue\fP is the type on which \fB\%XmList\fP is built:
+\fB\%_XmQueueInit\fP, \fB\%_XmQueueFree\fP, \fB\%_XmQueuePop\fP (which
+removes
+and returns the data of the first element) and \fB\%_XmQueueCount\fP\&.
+\fB\%_XmQueuePush\fP is declared but does not exist; use
+\fB\%_XmListAddBefore\fP(\fIqueue\fP, NULL, \fIdata\fP) to append\&.
+\fB\%_Xm_AddQueue\fP, \fB\%_Xm_RemQueue\fP and \fB\%_Xm_GetNewElement\fP
+link and
+unlink elements and take one from the free list of a queue; the list
+functions are built on them\&.
+.SH "RETURN"
+.PP
+\fB\%_XmListExec\fP returns the element at which it stopped, or NULL if
+\fIfunc\fP accepted every element\&.  \fB\%_XmStackPop\fP and
+\fB\%_XmQueuePop\fP
+return NULL when the stack or queue is empty\&.
+.SH "RELATED"
+.PP
+\fB\%XmOutline\fP(3) and \fB\%XmTree\fP(3)\&.

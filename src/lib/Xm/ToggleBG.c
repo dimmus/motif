@@ -87,6 +87,7 @@ static void SecondaryObjectCreate(Widget req, Widget new_w, ArgList args, Cardin
 static void InitializePrehook(Widget req, Widget new_w, ArgList args, Cardinal *num_args);
 static void InitializePosthook(Widget req, Widget new_w, ArgList args, Cardinal *num_args);
 int _XmToggleBCacheCompare(XtPointer A, XtPointer B);
+static unsigned int ToggleBCacheHash(XtPointer cpart);
 static void InputDispatch(Widget wid, XEvent *event, Mask event_mask);
 static void SetAndDisplayPixmap(XmToggleButtonGadget w, XEvent *event, Region region);
 static void Help(XmToggleButtonGadget tb, XEvent *event);
@@ -520,6 +521,7 @@ static void ClassInitialize(void)
   xmToggleButtonGCacheObjClassRec.object_class.resources = merged_list;
   xmToggleButtonGCacheObjClassRec.object_class.num_resources = wc_num_res + sc_num_res;
   ToggleBGClassExtensionRec.record_type = XmQmotif;
+  _XmCacheSetHashProc(&ToggleButtonClassCachePart, ToggleBCacheHash);
 }
 
 /************************************************************************
@@ -575,6 +577,39 @@ int _XmToggleBCacheCompare(XtPointer A, XtPointer B)
     return 0;
 }
 
+/*
+ * A hash of the fields that _XmToggleBCacheCompare compares, for the cache index.
+ */
+static unsigned int ToggleBCacheHash(XtPointer cpart)
+{
+  XmToggleButtonGCacheObjPart *p = (XmToggleButtonGCacheObjPart *)cpart;
+  unsigned int h = 0;
+  h = _XmCacheHashAdd(h, (unsigned long)p->ind_type);
+  h = _XmCacheHashAdd(h, (unsigned long)p->visible);
+  h = _XmCacheHashAdd(h, (unsigned long)p->spacing);
+  h = _XmCacheHashAdd(h, (unsigned long)p->indicator_dim);
+  h = _XmCacheHashAdd(h, (unsigned long)p->on_pixmap);
+  h = _XmCacheHashAdd(h, (unsigned long)p->insen_pixmap);
+  h = _XmCacheHashAdd(h, (unsigned long)p->ind_on);
+  h = _XmCacheHashAdd(h, (unsigned long)p->fill_on_select);
+  h = _XmCacheHashAdd(h, (unsigned long)p->select_color);
+  h = _XmCacheHashAdd(h, (unsigned long)p->select_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->unselect_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->unselect_color);
+  h = _XmCacheHashAdd(h, (unsigned long)p->indeterminate_pixmap);
+  h = _XmCacheHashAdd(h, (unsigned long)p->indeterminate_insensitive_pixmap);
+  h = _XmCacheHashAdd(h, (unsigned long)p->indeterminate_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->indeterminate_box_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->toggle_mode);
+  h = _XmCacheHashAdd(h, (unsigned long)p->reversed_select);
+  h = _XmCacheHashAdd(h, (unsigned long)p->background_gc);
+  h = _XmCacheHashAdd(h, (unsigned long)p->ind_left_delta);
+  h = _XmCacheHashAdd(h, (unsigned long)p->ind_right_delta);
+  h = _XmCacheHashAdd(h, (unsigned long)p->ind_top_delta);
+  h = _XmCacheHashAdd(h, (unsigned long)p->ind_bottom_delta);
+  return h;
+}
+
 /************************************************************************
  *
  *  SecondaryObjectCreate
@@ -609,15 +644,15 @@ static void SecondaryObjectCreate(Widget req, Widget new_w, ArgList args, Cardin
    * ClassInitialize time we need to make only one call to
    * XtGetSubresources()
    */
-  XtGetSubresources(new_w,
-                    newSec,
-                    NULL,
-                    NULL,
-                    wc->core_class.resources,
-                    wc->core_class.num_resources,
-                    args,
-                    *num_args);
-  extData = (XmWidgetExtData)XtCalloc(1, sizeof(XmWidgetExtDataRec));
+  _XmGetSubresources(new_w,
+                     newSec,
+                     NULL,
+                     NULL,
+                     wc->core_class.resources,
+                     wc->core_class.num_resources,
+                     args,
+                     *num_args);
+  extData = _XmExtDataAlloc();
   extData->widget = (Widget)newSec;
   extData->reqWidget = (Widget)reqSec;
   ((XmToggleButtonGCacheObject)newSec)->ext.extensionType = XmCACHE_EXTENSION;
@@ -671,7 +706,7 @@ static void InitializePosthook(Widget req, Widget new_w, ArgList args, Cardinal 
   _XmExtObjFree((XtPointer)ext->widget);
   _XmExtObjFree((XtPointer)ext->reqWidget);
   _XmProcessUnlock();
-  XtFree((char *)ext);
+  _XmExtDataFree(ext);
 }
 
 static Boolean HandleRedraw(Widget kid, Widget cur_parent, Widget new_parent, Mask visual_flag)
@@ -2385,7 +2420,7 @@ static Boolean SetValuesPrehook(
   newSec->ext.extensionType = XmCACHE_EXTENSION;
   memcpy(&(newSec->label_cache), LabG_Cache(newParent), sizeof(XmLabelGCacheObjPart));
   memcpy(&(newSec->toggle_cache), TBG_Cache(newParent), sizeof(XmToggleButtonGCacheObjPart));
-  extData = (XmWidgetExtData)XtCalloc(1, sizeof(XmWidgetExtDataRec));
+  extData = _XmExtDataAlloc();
   extData->widget = (Widget)newSec;
   extData->reqWidget = (Widget)reqSec;
   _XmPushWidgetExtData(newParent, extData, XmCACHE_EXTENSION);
@@ -2438,7 +2473,7 @@ static void GetValuesPrehook(Widget newParent, ArgList args, Cardinal *num_args)
   newSec->ext.extensionType = XmCACHE_EXTENSION;
   memcpy(&(newSec->label_cache), LabG_Cache(newParent), sizeof(XmLabelGCacheObjPart));
   memcpy(&(newSec->toggle_cache), TBG_Cache(newParent), sizeof(XmToggleButtonGCacheObjPart));
-  extData = (XmWidgetExtData)XtCalloc(1, sizeof(XmWidgetExtDataRec));
+  extData = _XmExtDataAlloc();
   extData->widget = (Widget)newSec;
   _XmPushWidgetExtData(newParent, extData, XmCACHE_EXTENSION);
   /*
@@ -2477,7 +2512,7 @@ static void GetValuesPosthook(Widget new_w,
   _XmProcessLock();
   _XmExtObjFree((XtPointer)ext->widget);
   _XmProcessUnlock();
-  XtFree((char *)ext);
+  _XmExtDataFree(ext);
 }
 
 /************************************************************************
@@ -2523,7 +2558,7 @@ static Boolean SetValuesPosthook(Widget current,
   _XmExtObjFree((XtPointer)ext->widget);
   _XmExtObjFree((XtPointer)ext->reqWidget);
   _XmProcessUnlock();
-  XtFree((char *)ext);
+  _XmExtDataFree(ext);
   return FALSE;
 }
 
@@ -3023,7 +3058,7 @@ Widget XmCreateToggleButtonGadget(Widget parent, char *name, Arg *arglist, Cardi
   return XtCreateWidget(name, xmToggleButtonGadgetClass, parent, arglist, argCount);
 }
 
-Widget XmVaCreateToggleButtonGadget(Widget parent, char *name, ...)
+Widget XmVaCreateToggleButtonGadget(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -3037,7 +3072,7 @@ Widget XmVaCreateToggleButtonGadget(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedToggleButtonGadget(Widget parent, char *name, ...)
+Widget XmVaCreateManagedToggleButtonGadget(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

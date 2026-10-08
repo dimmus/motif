@@ -39,8 +39,8 @@ typedef struct _XmIconGadgetRec *XmIconGadget;
 #  endif /* XmIsIconGadget */
 /********    Public Function Declarations    ********/
 extern Widget XmCreateIconGadget(Widget parent, String name, ArgList arglist, Cardinal argcount);
-extern Widget XmVaCreateIconGadget(Widget parent, char *name, ...);
-extern Widget XmVaCreateManagedIconGadget(Widget parent, char *name, ...);
+extern Widget XmVaCreateIconGadget(Widget parent, const char *name, ...);
+extern Widget XmVaCreateManagedIconGadget(Widget parent, const char *name, ...);
 /********    End Public Function Declarations    ********/
 #  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */
