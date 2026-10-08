@@ -201,15 +201,20 @@ static void MergeEnds(_XmStringEntry a, _XmStringEntry b);
 static void MergeBegins(_XmStringEntry a, _XmStringEntry b);
 static Boolean _is_asn1(unsigned char *string);
 static XmString Clone(XmString string, int lines);
-static void OptLineMetrics(XmRenderTable rendertable,
-                           _XmString line,
-                           XmRendition *rend_io,
-                           XmRendition base_rend,
-                           Dimension *width,
-                           Dimension *height,
-                           Dimension *ascender,
-                           Dimension *descender);
-static Dimension OptLineAscender(XmRenderTable f, _XmStringOpt opt);
+static Boolean OptLineMetrics(XmRenderTable rendertable,
+                              _XmString line,
+                              XmRendition *rend_io,
+                              XmRendition base_rend,
+                              Dimension *width,
+                              Dimension *height,
+                              Dimension *ascender,
+                              Dimension *descender);
+static void OptLineExtent(XmRenderTable rendertable,
+                          _XmString opt,
+                          Dimension *width,
+                          Dimension *height,
+                          Dimension *ascent,
+                          Dimension *descent);
 static void LineMetrics(_XmStringEntry line,
                         XmRenderTable r,
                         XmRendition *rend_io,
@@ -1021,6 +1026,61 @@ static void MergeBegins(_XmStringEntry a, _XmStringEntry b)
 /*
  * general external TCS utilties
  */
+/*
+ * Arrays that grow a piece at a time (the entries of a string, the
+ * segments of a line, the text of a segment that XmStringConcatAndFree
+ * appends to) are sized by _XmStringGrowArray with room for their count
+ * rounded up to a power of two, so that building a string from n
+ * pieces copies O(n) data however realloc behaves.  The structure that
+ * holds such an array records it in its grown bit; code that sizes the
+ * array otherwise leaves the bit clear, and the next growth starts from
+ * an exact size again.
+ */
+unsigned int _XmStringArrayRoom(unsigned int count)
+{
+  unsigned int room;
+  if (count == 0 || count > UINT_MAX / 2)
+    return count;
+  for (room = 1; room < count; room <<= 1)
+    ;
+  return room;
+}
+
+/* Return array, which holds count elements of size bytes and was sized
+ * by _XmStringGrowArray if grown is set, resized to hold need. */
+XtPointer _XmStringGrowArray(
+    XtPointer array, Boolean grown, unsigned int count, unsigned int need, Cardinal size)
+{
+  if (grown && need <= _XmStringArrayRoom(count))
+    return array;
+  return (XtPointer)_XmReallocArray((char *)array, _XmStringArrayRoom(need), size);
+}
+
+/*
+ * The direction of the last segment with a direction set among the
+ * first `lines` entries of str, or XmSTRING_DIRECTION_UNSET.  At most
+ * limit lines and segments are looked at, from the end.
+ */
+static XmStringDirection LastDirection(_XmString str, int lines, unsigned int limit)
+{
+  _XmStringEntry line;
+  _XmStringNREntry seg;
+  int i, j;
+  for (i = lines; i > 0; i--) {
+    if (limit-- == 0)
+      break;
+    line = _XmStrEntry(str)[i - 1];
+    for (j = _XmEntrySegmentCountGet(line); j > 0; j--) {
+      if (limit-- == 0)
+        return XmSTRING_DIRECTION_UNSET;
+      seg = _XmEntrySegmentGet(line)[j - 1];
+      if (_XmEntryDirectionGet((_XmStringEntry)seg) != XmSTRING_DIRECTION_UNSET)
+        return (XmStringDirection)_XmEntryDirectionGet((_XmStringEntry)seg);
+    }
+  }
+  return XmSTRING_DIRECTION_UNSET;
+}
+
 static Boolean IsUnopt(_XmString str, int lines)
 {
   _XmStringEntry line;
@@ -1104,6 +1164,10 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
   int i, j;
   int merged = 0;
   XmStringDirection last = XmSTRING_DIRECTION_UNSET;
+  XmStringDirection a_dir;
+  unsigned int b_lines, b_segs;
+  Boolean a_dir_known;
+  Boolean segs_grown = False;
   Boolean modify_a, modify_b, free_b;
   Boolean a_needs_unopt = False, b_needs_unopt = False;
   _XmStringArraySegRec array_seg;
@@ -1145,6 +1209,7 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
         opt_str = (_XmString)b;
       else
         _XmStrCreate(opt_str, XmSTRING_OPTIMIZED, a_len + b_len);
+      _XmStrExtentsReset(opt_str);
       _XmStrByteCount((_XmString)opt_str) = a_len + b_len;
       _XmStrTextType((_XmString)opt_str) = (a_type == XmNO_TEXT) ? b_type : a_type;
       _XmStrTagIndex((_XmString)opt_str) = (a_index == TAG_INDEX_UNSET) ? b_index : a_index;
@@ -1186,25 +1251,18 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
       lc = a_lc + b_lc;
   }
   modify_a = !_XmStrOptimized(a) && (_XmStrRefCountGet(a) == 1);
-  if (modify_a) {
-    a_str = a;
+  if (modify_a || _XmStrOptimized(a)) {
+    a_str = modify_a ? a : _XmStringOptToNonOpt((_XmStringOpt)a);
     if (a_lc > 1 && !_XmStrAddNewline(a) && _XmStrAddNewline(b)) {
+      /* a's entries become the segments of its first line, below */
       segs = _XmStrEntry(a_str);
+      segs_grown = _XmStrGrown(a_str);
       _XmStrEntry(a_str) = NULL;
+      _XmStrGrown(a_str) = False;
     }
-    _XmStrEntry(a_str) =
-        (_XmStringEntry *)_XmReallocArray((char *)_XmStrEntry(a_str), lc, sizeof(_XmStringEntry));
-    for (i = (segs ? 0 : a_lc); (unsigned int)i < lc; i++)
-      _XmStrEntry(a_str)[i] = NULL;
-  }
-  else if (_XmStrOptimized(a)) {
-    a_str = _XmStringOptToNonOpt((_XmStringOpt)a);
-    if (a_lc > 1 && !_XmStrAddNewline(a) && _XmStrAddNewline(b)) {
-      segs = _XmStrEntry(a_str);
-      _XmStrEntry(a_str) = NULL;
-    }
-    _XmStrEntry(a_str) =
-        (_XmStringEntry *)_XmReallocArray((char *)_XmStrEntry(a_str), lc, sizeof(_XmStringEntry));
+    _XmStrEntry(a_str) = (_XmStringEntry *)_XmStringGrowArray(
+        (XtPointer)_XmStrEntry(a_str), _XmStrGrown(a_str), a_lc, lc, sizeof(_XmStringEntry));
+    _XmStrGrown(a_str) = True;
     for (i = (segs ? 0 : a_lc); (unsigned int)i < lc; i++)
       _XmStrEntry(a_str)[i] = NULL;
   }
@@ -1231,6 +1289,7 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
     _XmEntryCreate(line, XmSTRING_ENTRY_ARRAY);
     _XmEntrySegmentCount(line) = a_lc;
     _XmEntrySegment(line) = (_XmStringNREntry *)segs;
+    _XmEntryGrownSet(line, segs_grown);
     _XmStrEntry(a_str)[0] = line;
     _XmStrImplicitLine(a_str) = True;
     a_lc = 1;
@@ -1255,22 +1314,27 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
       b_str = (XmString)&b_tmp;
       _XmStrInit(b_str, XmSTRING_MULTIPLE_ENTRY);
       _XmStrEntryCount(b_str) = 1;
-      _XmStrRefCountSet(b, 0);
+      b->opt_str.pad = 0; /* the segment's permanent and soft_line_break */
       _XmEntryTabsSet(b, _XmStrTabs(b));
       _XmEntryImm(b) = 1;
       if (_XmStrText(b) != (char *)_XmEntryTextGet((_XmStringEntry)b)) {
-        /* If the XtPointer in the union in the
-         * optimized segment leads to padding in the structure
-         * between the header and the text data
-         * (it will on some 64-bit architectures) we have
-         * to move the text data, since the optimized
-         * string does not have this padding.
+        /* The text of a segment starts at its data union, which
+         * is not where the text of a string starts: move it.
+         * Move it before shrinking the block, and after
+         * growing it.
          */
+        unsigned int len = _XmStrByteCount(b);
         unsigned int size = sizeof(_XmStringOptSegRec);
-        if (_XmStrByteCount(b) > sizeof(XtPointer))
-          size += _XmStrByteCount(b) - sizeof(XtPointer);
-        b = (XmString)XtRealloc((char *)b, size);
-        memmove(_XmEntryTextGet((_XmStringEntry)b), _XmStrText(b), _XmStrByteCount(b));
+        if (len > sizeof(XtPointer))
+          size += len - sizeof(XtPointer);
+        if ((char *)_XmEntryTextGet((_XmStringEntry)b) < _XmStrText(b)) {
+          memmove(_XmEntryTextGet((_XmStringEntry)b), _XmStrText(b), len);
+          b = (XmString)XtRealloc((char *)b, size);
+        }
+        else {
+          b = (XmString)XtRealloc((char *)b, size);
+          memmove(_XmEntryTextGet((_XmStringEntry)b), _XmStrText(b), len);
+        }
       }
       b_entry = (_XmStringEntry)b;
       _XmStrEntry(b_str) = &b_entry;
@@ -1288,6 +1352,13 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
   else
     b_str = b;
   assert((a != b) || (!modify_a && !modify_b));
+  /* How much b adds, which bounds the search for the last direction */
+  b_lines = _XmStrEntryCount(b_str);
+  b_segs = 0;
+  for (i = 0; (unsigned int)i < b_lines; i++)
+    b_segs += _XmEntrySegmentCountGet(_XmStrEntry(b_str)[i]);
+  a_dir_known = _XmStrLastDirKnown(a_str);
+  a_dir = _XmStrLastDir(a_str);
   /* convert a to unopt segs if necessary */
   a_needs_unopt = IsUnopt(a_str, a_lc);
   if (!a_needs_unopt) {
@@ -1336,6 +1407,19 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
         !_XmEntryPopGet((_XmStringEntry)a_last) && !_XmEntryPushGet((_XmStringEntry)b_seg) &&
         (((a_len != 0) && b_tabs == 0) || ((a_len == 0) && a_tabs + b_tabs <= 7)))
     {
+      if (_XmEntryOptimized(a_last) && (a_len + b_len >= (1 << BYTE_COUNT_BITS))) {
+        /*
+         * The byte count of an optimized segment is 8 bits wide: the
+         * merged text needs an unoptimized one.  A string whose first
+         * segment is unoptimized must have only unoptimized segments
+         * (see IsUnopt), so convert all of a, and b's segments below.
+         */
+        for (i = 0; (unsigned int)i < a_lc; i++)
+          _XmStrEntry(a_str)[i] = Unoptimize(_XmStrEntry(a_str)[i], True);
+        a_needs_unopt = True;
+        a_line = _XmStrEntry(a_str)[a_lc - 1];
+        a_last = _XmEntrySegmentGet(a_line)[a_sc - 1];
+      }
       if (b_len) {
         if ((_XmEntryType(a_last) == XmSTRING_ENTRY_OPTIMIZED) && _XmEntryImm(a_last)) {
           unsigned int size = sizeof(_XmStringOptSegRec);
@@ -1348,6 +1432,16 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
           else /* a_last is not a_line itself, so a_line is an array entry */
             _XmEntrySegment(a_line)[a_sc - 1] = a_last = (_XmStringNREntry)XtRealloc(
                 (char *)a_last, size);
+        }
+        else if (_XmEntryUnoptimized(a_last)) {
+          /* Text appended to piece by piece: grow it geometrically */
+          _XmEntryTextSet((_XmStringEntry)a_last,
+                          _XmStringGrowArray(_XmEntryTextGet((_XmStringEntry)a_last),
+                                             _XmEntryGrown(a_last),
+                                             a_len,
+                                             a_len + b_len,
+                                             1));
+          _XmEntryGrownSet(a_last, True);
         }
         else {
           _XmEntryTextSet(
@@ -1405,6 +1499,7 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
       if (modify_b) {
         /* Free leftover bits of b_seg */
         if (_XmEntryUnoptimized(b_seg)) {
+          _XmStringCacheFree(_XmEntryCacheGet((_XmStringEntry)b_seg));
           if (_XmEntryOptimized(a_last) ||
               (_XmUnoptSegRendBegins(a_last) != _XmUnoptSegRendBegins(b_seg)))
             XtFree((char *)_XmUnoptSegRendBegins(b_seg));
@@ -1419,36 +1514,29 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
       merged = 1;
     }
   }
-  else /* Need to figure out last direction set. */ {
-    for (i = a_lc; i > 0; i--) {
-      tmp_line = _XmStrEntry(a_str)[i - 1];
-      for (j = _XmEntrySegmentCountGet(tmp_line); j > 0; j--) {
-        tmp_seg = _XmEntrySegmentGet(tmp_line)[j - 1];
-        if (_XmEntryDirectionGet((_XmStringEntry)tmp_seg) != XmSTRING_DIRECTION_UNSET) {
-          last = _XmEntryDirectionGet((_XmStringEntry)tmp_seg);
-          break;
-        }
-      }
-      if (last != XmSTRING_DIRECTION_UNSET)
-        break;
-    }
-  }
+  else /* Need to figure out last direction set. */
+    last = a_dir_known ? a_dir : LastDirection(a_str, a_lc, UINT_MAX);
   if (merged && !_XmStrImplicitLine(a_str))
     _XmStrEntryCount(a_str)--;
   if (b_sc > (unsigned int)merged && _XmStrImplicitLine(a_str)) {
     Boolean free_b_line = (modify_b && _XmEntryMultiple(b_line) &&
                            ((_XmStringEntry)b_seg != b_line));
     if (_XmEntryMultiple(a_line)) {
-      _XmEntrySegment(a_line) = (_XmStringNREntry *)_XmReallocArray((char *)_XmEntrySegment(a_line),
-                                                                    a_sc + b_sc - merged,
-                                                                    sizeof(_XmStringNREntry));
+      _XmEntrySegment(a_line) = (_XmStringNREntry *)_XmStringGrowArray(
+          (XtPointer)_XmEntrySegment(a_line),
+          _XmEntryGrown(a_line),
+          a_sc,
+          a_sc + b_sc - merged,
+          sizeof(_XmStringNREntry));
+      _XmEntryGrownSet(a_line, True);
       _XmEntrySegmentCount(a_line) = a_sc + b_sc - merged;
     }
     else {
       _XmEntryCreate(a_line, XmSTRING_ENTRY_ARRAY);
       _XmEntrySegmentCount(a_line) = a_sc + b_sc - merged;
-      _XmEntrySegment(a_line) =
-          (_XmStringNREntry *)_XmMallocArray(a_sc + b_sc - merged, sizeof(_XmStringNREntry));
+      _XmEntrySegment(a_line) = (_XmStringNREntry *)_XmStringGrowArray(
+          NULL, False, 0, a_sc + b_sc - merged, sizeof(_XmStringNREntry));
+      _XmEntryGrownSet(a_line, True);
       _XmEntrySegment(a_line)[0] = (_XmStringNREntry)_XmStrEntry(a_str)[a_lc - 1];
       _XmStrEntry(a_str)[a_lc - 1] = a_line;
       _XmStrImplicitLine(a_str) = True;
@@ -1524,6 +1612,17 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
     XtFree((char *)_XmStrEntry(b_str));
     _XmStrFree((char *)b_str);
   }
+  /*
+   * Remember the last direction set, for the next concatenation: it is
+   * in what b added or in a's last segment, which a search of
+   * b_lines + b_segs + 2 lines and segments from the end covers, or
+   * else it is a's.
+   */
+  last = LastDirection(a_str, _XmStrEntryCount(a_str), b_lines + b_segs + 2);
+  if (last == XmSTRING_DIRECTION_UNSET)
+    last = a_dir_known ? a_dir : LastDirection(a_str, _XmStrEntryCount(a_str), UINT_MAX);
+  _XmStrLastDir(a_str) = last;
+  _XmStrLastDirKnown(a_str) = True;
   /* Set layout cache dirty */
   if (a_str && _XmStrEntryCount(a_str) > 0) {
     tmp_line = _XmStrEntry(a_str)[0];
@@ -1782,13 +1881,58 @@ static Boolean _is_asn1(unsigned char *string)
  * optimized internal TCS structure handling routines
  */
 /*
- * find the ascender for the given optimized line
+ * The extent of an optimized string by itself (no base or scratch
+ * rendition).  It depends on nothing but the string and the render
+ * table, so it is cached in the string under the table's stamp.  The
+ * stamp is checked again afterwards: loading a deferred font changes
+ * the table, and a result computed across a change is not kept.
  */
-static Dimension OptLineAscender(XmRenderTable f, _XmStringOpt opt)
+static void OptLineExtent(XmRenderTable r,
+                          _XmString opt,
+                          Dimension *width,
+                          Dimension *height,
+                          Dimension *ascent,
+                          Dimension *descent)
 {
-  Dimension width, height, ascent, descent;
-  OptLineMetrics(f, (_XmString)opt, NULL, NULL, &width, &height, &ascent, &descent);
-  return (ascent);
+  _XmStringOpt str = (_XmStringOpt)opt;
+  unsigned long long stamp;
+  Boolean cached;
+  /* OptLineMetrics leaves them alone when there is no font */
+  Dimension w = 0, h = 0, asc = 0, dsc = 0;
+  /*
+   * The caller may hold only an application lock, and a string can be
+   * shared between application contexts: the cache is read and written
+   * under the process lock.
+   */
+  _XmProcessLock();
+  stamp = _XmRenderTableStamp(r);
+  cached = (str->extent_stamp == stamp);
+  if (cached) {
+    w = str->width;
+    h = str->height;
+    asc = str->ascent;
+    dsc = str->descent;
+  }
+  _XmProcessUnlock();
+  if (!cached && OptLineMetrics(r, opt, NULL, NULL, &w, &h, &asc, &dsc)) {
+    _XmProcessLock();
+    if (_XmRenderTableStamp(r) == stamp) {
+      str->width = w;
+      str->height = h;
+      str->ascent = asc;
+      str->descent = dsc;
+      str->extent_stamp = stamp;
+    }
+    _XmProcessUnlock();
+  }
+  if (width != NULL)
+    *width = w;
+  if (height != NULL)
+    *height = h;
+  if (ascent != NULL)
+    *ascent = asc;
+  if (descent != NULL)
+    *descent = dsc;
 }
 
 int _XmConvertFactor(unsigned char units, float *factor)
@@ -1862,15 +2006,18 @@ static int TabVal(Display *d, Screen **pscreen, Window w, XmTab tab)
 
 /*
  * Find width, height, ascent and descent for the given optimized line.
+ * Return whether they were found from the render table alone, with no
+ * callback and no tab in units that can change, so that they can be
+ * cached under its stamp.
  */
-static void OptLineMetrics(XmRenderTable r,
-                           _XmString opt,
-                           XmRendition *rend_io,
-                           XmRendition base_rend,
-                           Dimension *width,
-                           Dimension *height,
-                           Dimension *ascent,
-                           Dimension *descent)
+static Boolean OptLineMetrics(XmRenderTable r,
+                              _XmString opt,
+                              XmRendition *rend_io,
+                              XmRendition base_rend,
+                              Dimension *width,
+                              Dimension *height,
+                              Dimension *ascent,
+                              Dimension *descent)
 {
   short rend_index;
   XmRendition rend = NULL;
@@ -1883,6 +2030,7 @@ static void OptLineMetrics(XmRenderTable r,
   unsigned int tab_cnt;
   Dimension tab_w = 0;
   _XmRendition rend_int;
+  Boolean cacheable = True;
   /* compute rendition */
   /* Find font as per I 198. */
   /* 1. Find font from rendition tags. */
@@ -1929,6 +2077,8 @@ static void OptLineMetrics(XmRenderTable r,
       cb.rendition = rend;
       cb.font_name = XmS;
       XtCallCallbackList((Widget)dsp, dsp->display.noFontCallback, &cb);
+      _XmRenderTableChanged(); /* the callback may change renditions */
+      cacheable = False;
       if (rend_int != *rend) /* Changed in callback. */ {
         /* Need to split ref counts. */
         _XmRendRefcount(&rend_int) = ref_cnt - rt_ref_cnt;
@@ -1964,6 +2114,8 @@ static void OptLineMetrics(XmRenderTable r,
       cb.rendition = rend;
       cb.font_name = XmS;
       XtCallCallbackList((Widget)dsp, dsp->display.noFontCallback, &cb);
+      _XmRenderTableChanged(); /* the callback may change renditions */
+      cacheable = False;
       if (rend_int != *rend) /* Changed in callback. */ {
         /* Need to split ref counts. */
         _XmRendRefcount(&rend_int) = ref_cnt - rt_ref_cnt;
@@ -1980,7 +2132,7 @@ static void OptLineMetrics(XmRenderTable r,
       if ((base_rend != NULL) && (rend_io == NULL))
         XmRenditionFree(rend);
       rend = NULL;
-      return;
+      return False;
     }
     else if (rend_io != NULL) {
       _XmRendFont(*rend_io) = _XmRendFont(rend);
@@ -2025,6 +2177,8 @@ static void OptLineMetrics(XmRenderTable r,
          tab = _XmTabNext(tab), tab_cnt++, i++)
     {
       val = TabVal(d, &screen, None, tab);
+      if (_XmTabUnits(tab) != XmPIXELS)
+        cacheable = False; /* font units follow the XmScreen */
       if (_XmTabModel(tab) == XmABSOLUTE) {
         tab_w = val;
         prev_val = val;
@@ -2038,6 +2192,7 @@ static void OptLineMetrics(XmRenderTable r,
   (*width) += tab_w;
   if ((base_rend != NULL) && (rend_io == NULL))
     XmRenditionFree(rend);
+  return cacheable;
 }
 
 /*
@@ -2519,7 +2674,7 @@ void XmStringExtent(XmRenderTable rendertable,
     _XmProcessLock();
   }
   if (_XmStrOptimized(string))
-    OptLineMetrics(rendertable, string, NULL, NULL, width, height, NULL, NULL);
+    OptLineExtent(rendertable, string, width, height, NULL, NULL);
   else {
     _XmRenditionRec scratch;
     _XmRendition tmp;
@@ -4359,10 +4514,11 @@ void _XmStringSegmentNew(_XmString string, int line_index, _XmStringEntry value,
   _XmStringEntry seg;
   int sc;
   int lc = _XmStrEntryCount(string);
+  _XmStrLastDirKnown(string) = False;
   if (lc == 0 || lc - 1 < line_index) {
-    _XmStrEntry(string) = (_XmStringEntry *)_XmReallocArray((char *)_XmStrEntry(string),
-                                                            lc + 1,
-                                                            sizeof(_XmStringEntry));
+    _XmStrEntry(string) = (_XmStringEntry *)_XmStringGrowArray(
+        (XtPointer)_XmStrEntry(string), _XmStrGrown(string), lc, lc + 1, sizeof(_XmStringEntry));
+    _XmStrGrown(string) = True;
     _XmStrEntryCount(string)++;
     if (line_index > lc)
       line_index = lc;
@@ -4382,16 +4538,18 @@ void _XmStringSegmentNew(_XmString string, int line_index, _XmStringEntry value,
       _XmEntryCreate(line, XmSTRING_ENTRY_ARRAY);
       _XmEntrySegmentCount(line) = sc;
       _XmEntrySoftNewlineSet(line, _XmEntrySoftNewlineGet(seg));
-      _XmEntrySegment(line) = (_XmStringNREntry *)XtMalloc(sizeof(_XmStringEntry) * 2);
+      _XmEntrySegment(line) = (_XmStringNREntry *)_XmStringGrowArray(
+          NULL, False, 0, 2, sizeof(_XmStringEntry));
+      _XmEntryGrownSet(line, True);
       _XmEntrySegment(line)[0] = (_XmStringNREntry)seg;
       _XmStrEntry(string)[line_index] = line;
       _XmStrImplicitLine(string) = True;
     }
     else {
       sc = _XmEntrySegmentCount(line);
-      _XmEntrySegment(line) = (_XmStringNREntry *)_XmReallocArray((char *)_XmEntrySegment(line),
-                                                                  sc + 1,
-                                                                  sizeof(_XmStringEntry));
+      _XmEntrySegment(line) = (_XmStringNREntry *)_XmStringGrowArray(
+          (XtPointer)_XmEntrySegment(line), _XmEntryGrown(line), sc, sc + 1, sizeof(_XmStringEntry));
+      _XmEntryGrownSet(line, True);
     }
     seg = (copy ? _XmStringEntryCopy(value) : value);
     _XmEntrySegment(line)[sc] = (_XmStringNREntry)seg;
@@ -4633,12 +4791,12 @@ static _XmString _XmStringNonOptCreate(unsigned char *c, unsigned char *end, Boo
         if (!_XmStrImplicitLine(string) && _XmStrEntryCount(string) > 1) {
           /* need to move segments down one level */
           _XmStringEntry line;
-          line = (_XmStringEntry)XtMalloc(sizeof(_XmStringArraySegRec));
-          _XmEntryType(line) = XmSTRING_ENTRY_ARRAY;
-          _XmEntrySoftNewlineSet(line, False);
+          _XmEntryCreate(line, XmSTRING_ENTRY_ARRAY);
           _XmEntrySegmentCount(line) = _XmStrEntryCount(string);
           _XmEntrySegment(line) = (_XmStringNREntry *)_XmStrEntry(string);
+          _XmEntryGrownSet(line, _XmStrGrown(string));
           _XmStrEntry(string) = (_XmStringEntry *)XtMalloc(sizeof(_XmStringEntry));
+          _XmStrGrown(string) = False;
           _XmStrEntry(string)[0] = line;
           _XmStrEntryCount(string) = 1;
         }
@@ -4830,6 +4988,7 @@ _XmStringEntry _XmStringEntryCopy(_XmStringEntry entry)
       _XmStringNREntry *arr;
       new_entry = (_XmStringEntry)XtMalloc(sizeof(_XmStringArraySegRec));
       memcpy((char *)new_entry, (char *)entry, sizeof(_XmStringArraySegRec));
+      _XmEntryGrownSet(new_entry, False); /* the copy is exactly sized */
       if (_XmEntrySegmentCount(entry) > 0) {
         arr = (_XmStringNREntry *)_XmMallocArray(_XmEntrySegmentCount(entry),
                                                  sizeof(_XmStringNREntry));
@@ -4843,6 +5002,7 @@ _XmStringEntry _XmStringEntryCopy(_XmStringEntry entry)
     case XmSTRING_ENTRY_UNOPTIMIZED: {
       new_entry = (_XmStringEntry)XtMalloc(sizeof(_XmStringUnoptSegRec));
       memcpy((char *)new_entry, (char *)entry, sizeof(_XmStringUnoptSegRec));
+      _XmEntryGrownSet(new_entry, False); /* the copy is exactly sized */
       if (_XmEntryPermGet(entry)) {
         _XmEntryTextSet(new_entry, _XmEntryTextGet(entry));
       }
@@ -5434,6 +5594,7 @@ static Boolean SpecifiedSegmentExtents(_XmStringEntry entry,
         cb.rendition = def_rend;
         cb.font_name = XmS;
         XtCallCallbackList((Widget)dsp, dsp->display.noFontCallback, &cb);
+        _XmRenderTableChanged(); /* the callback may change renditions */
         if (rend_int != *def_rend) /* Changed in callback. */ {
           /* Need to split ref counts. */
           _XmRendRefcount(&rend_int) = ref_cnt - rt_ref_cnt;
@@ -5475,6 +5636,7 @@ static Boolean SpecifiedSegmentExtents(_XmStringEntry entry,
         cb.rendition = def_rend;
         cb.font_name = XmS;
         XtCallCallbackList((Widget)dsp, dsp->display.noFontCallback, &cb);
+        _XmRenderTableChanged(); /* the callback may change renditions */
         if (rend_int != *def_rend) /* Changed in callback. */ {
           /* Need to split ref counts. */
           _XmRendRefcount(&rend_int) = ref_cnt - rt_ref_cnt;
@@ -5719,11 +5881,8 @@ static XmString Clone(XmString string, int lines)
 {
   XmString new_string;
   if (_XmStrOptimized(string)) {
-    _XmStringOpt n_o_string = (_XmStringOpt)_XmStrMalloc(
-        sizeof(_XmStringOptRec) + _XmStrByteCount(string) - TEXT_BYTES_IN_STRUCT);
-    memcpy(n_o_string,
-           string,
-           sizeof(_XmStringOptRec) + _XmStrByteCount(string) - TEXT_BYTES_IN_STRUCT);
+    _XmStringOpt n_o_string = (_XmStringOpt)_XmStrMalloc(_XmStrOptSize(_XmStrByteCount(string)));
+    memcpy(n_o_string, string, _XmStrOptSize(_XmStrByteCount(string)));
     new_string = (XmString)n_o_string;
   }
   else {
@@ -5731,6 +5890,8 @@ static XmString Clone(XmString string, int lines)
     _XmString n_string;
     _XmStrCreate(n_string, XmSTRING_MULTIPLE_ENTRY, 0);
     _XmStrImplicitLine(n_string) = _XmStrImplicitLine(string);
+    _XmStrLastDirKnown(n_string) = _XmStrLastDirKnown(string);
+    _XmStrLastDir(n_string) = _XmStrLastDir(string);
     _XmStrEntryCount(n_string) = _XmStrEntryCount(string);
     _XmStrEntry(n_string) = (_XmStringEntry *)_XmMallocArray(lines, sizeof(_XmStringEntry));
     for (i = 0; i < _XmStrEntryCount(string); i++)
@@ -5860,23 +6021,18 @@ Dimension XmStringBaseline(XmRenderTable rendertable, XmString string)
       line = (_XmStringEntry)&array_seg;
     }
     LineMetrics(line, rendertable, &rend, NULL, XmLEFT_TO_RIGHT, &width, &height, &asc, &desc);
-    if (app) {
-      _XmAppUnlock(app);
-    }
-    else {
-      _XmProcessUnlock();
-    }
-    return (asc);
+    if (_XmRendTags(rend) != NULL)
+      XtFree((char *)_XmRendTags(rend));
+  }
+  else
+    OptLineExtent(rendertable, string, NULL, NULL, &asc, NULL);
+  if (app) {
+    _XmAppUnlock(app);
   }
   else {
-    if (app) {
-      _XmAppUnlock(app);
-    }
-    else {
-      _XmProcessUnlock();
-    }
-    return (OptLineAscender(rendertable, (_XmStringOpt)string));
+    _XmProcessUnlock();
   }
+  return (asc);
 }
 
 void _XmStringGetBaselines(XmRenderTable rendertable,
@@ -6773,8 +6929,13 @@ static void check_unparse_models(XmStringContext context,
 
 /*
  * unparse_text: A helper for XmStringUnparse.  Output a matched text
- *	component.
+ *	component.  The result grows by powers of two, as it gets a piece
+ *	per text component: it always has room for
+ *	_XmStringArrayRoom(*length) bytes.
  */
+#define UnparseGrow(result, length, add) \
+  ((char *)_XmStringGrowArray((XtPointer)(result), (result) != NULL, (length), (length) + (add), 1))
+
 static void unparse_text(char **result,
                          int *length,
                          XmTextType output_type,
@@ -6790,7 +6951,7 @@ static void unparse_text(char **result,
     /* No conversion is necessary. */
     if (c_length == 0)
       return;
-    *result = XtRealloc(*result, *length + c_length);
+    *result = UnparseGrow(*result, *length, c_length);
     memcpy(*result + *length, c_value, c_length);
     *length += c_length;
   }
@@ -6801,7 +6962,7 @@ static void unparse_text(char **result,
     wchar_t *null_text = (wchar_t *)XtMalloc(c_length + sizeof(wchar_t));
     memcpy(null_text, c_value, c_length);
     null_text[c_length / sizeof(wchar_t)] = (wchar_t)'\0';
-    *result = XtRealloc(*result, *length + max_bytes);
+    *result = UnparseGrow(*result, *length, max_bytes);
     len = wcstombs(*result + *length, null_text, max_bytes);
     if (len > 0)
       *length += len;
@@ -6813,7 +6974,7 @@ static void unparse_text(char **result,
     char *null_text = XtMalloc(c_length + 1);
     memcpy(null_text, c_value, c_length);
     null_text[c_length] = '\0';
-    *result = XtRealloc(*result, *length + c_length * sizeof(wchar_t));
+    *result = UnparseGrow(*result, *length, c_length * sizeof(wchar_t));
     len = mbstowcs((wchar_t *)(*result + *length), null_text, c_length);
     if (len > 0)
       *length += len * sizeof(wchar_t);
@@ -7232,11 +7393,8 @@ XmString XmStringComponentCreate(XmStringComponentType c_type,
   /* Convert one of the proto-segments into a real _XmString. */
   if (optimized) {
     /* Convert opt into an optimized XmString. */
-    str = (_XmString)_XmStrMalloc(sizeof(_XmStringOptRec) +
-                                  (_XmStrByteCount((_XmString)&opt) ?
-                                       (_XmStrByteCount((_XmString)&opt) - TEXT_BYTES_IN_STRUCT) :
-                                       0));
-    memcpy(str, &opt, sizeof(_XmStringOptRec) - TEXT_BYTES_IN_STRUCT);
+    str = (_XmString)_XmStrMalloc(_XmStrOptSize(_XmStrByteCount((_XmString)&opt)));
+    memcpy(str, &opt, _XmStrOptSize(0));
     if (_XmStrByteCount((_XmString)&opt) > 0)
       memcpy(_XmStrText(str), value, _XmStrByteCount((_XmString)&opt));
     _XmStrRefCountSet(str, 1);
@@ -7623,7 +7781,7 @@ XmStringComponentType XmeStringGetComponent(_XmStringContext context,
         /* Try the next segment of this line recursively. */
         XmStringComponentType answer;
         char saved_state = _XmStrContState(context);
-        unsigned short saved_seg = _XmStrContCurrSeg(context);
+        int saved_seg = _XmStrContCurrSeg(context);
         _XmStrContState(context) = PUSH_STATE;
         _XmStrContCurrSeg(context)++;
         answer = XmeStringGetComponent(context, update_context, copy_data, length, value);
@@ -7770,6 +7928,7 @@ XmString XmStringGenerate(XtPointer text, XmStringTag tag, XmTextType type, XmSt
     if (rend_index < REND_INDEX_MAX) {
       _XmStrRendIndex(result) = rend_index;
       _XmStrRendBegin(result) = _XmStrRendEnd(result) = True;
+      _XmStrExtentsReset(result);
       _XmProcessUnlock();
       return result;
     }

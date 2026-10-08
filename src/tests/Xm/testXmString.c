@@ -23,6 +23,7 @@
 #include <X11/Intrinsic.h>
 #include <Xm/Xm.h>
 #include <Xm/XmStringI.h>
+#include <Xm/XmTabListI.h>
 #include <check.h>
 
 #include "leak.h"
@@ -274,6 +275,324 @@ START_TEST(concat_text)
 	assert_text(t, "abcdabcd");
 	XmStringFree(s);
 	XmStringFree(t);
+}
+END_TEST
+
+/* n copies of piece, as a C string */
+static char *repeat(const char *piece, int n)
+{
+	size_t len = strlen(piece);
+	char *s = XtMalloc(len * n + 1);
+	int i;
+
+	for (i = 0; i < n; i++)
+		memcpy(s + i * len, piece, len);
+	s[len * n] = '\0';
+	return s;
+}
+
+/*
+ * Concatenating text onto an optimized segment past 255 bytes wrapped
+ * its 8-bit byte count: 33 pieces of 8 bytes came out as 8 bytes.  The
+ * merged text must stay one text component, also on the last line of
+ * a multi-line string and with a tag.
+ */
+START_TEST(concat_long_text)
+{
+	static const char *const tags[] = { NULL, "tag1" };
+	int t, n, lines;
+
+	for (t = 0; t < 2; t++)
+		for (lines = 1; lines <= 2; lines++)
+			for (n = 30; n <= 100; n += 7) {
+				XmString s = NULL;
+				char *expect = repeat("segment ", n);
+				char *first = NULL, *all;
+				int i;
+
+				if (lines == 2) {
+					s = cat(XmStringCreateLocalized("first"),
+						sep(), NULL);
+					first = "first"; /* text_of() drops separators */
+				}
+				for (i = 0; i < n; i++)
+					s = XmStringConcatAndFree(s,
+						tags[t] ? tagged("segment ", tags[t]) :
+							  XmStringCreateLocalized("segment "));
+				all = XtMalloc(strlen(expect) + 7);
+				sprintf(all, "%s%s", first ? first : "", expect);
+				assert_text(s, all);
+				ck_assert_int_eq(XmStringLineCount(s), lines);
+				ck_assert_int_eq(count_comps(s, XmSTRING_COMPONENT_TEXT) +
+						 count_comps(s, XmSTRING_COMPONENT_LOCALE_TEXT),
+						 lines);
+				assert_byte_stream_round_trip(s, SAME_COMPS | SAME_STRING);
+				XtFree(all);
+				XtFree(expect);
+				XmStringFree(s);
+			}
+}
+END_TEST
+
+/* The direction of the last segment of s whose direction is set */
+static XmStringDirection scan_last_dir(XmString s)
+{
+	int i, j;
+
+	for (i = _XmStrEntryCount(s); i > 0; i--) {
+		_XmStringEntry line = _XmStrEntry(s)[i - 1];
+
+		for (j = _XmEntrySegmentCountGet(line); j > 0; j--) {
+			_XmStringEntry seg =
+				(_XmStringEntry)_XmEntrySegmentGet(line)[j - 1];
+
+			/* _XmEntryDirectionGet is not exported */
+			unsigned int dir = _XmEntryOptimized(seg) ?
+						   seg->single.str_dir :
+						   seg->unopt_single.str_dir;
+
+			if (dir != XmSTRING_DIRECTION_UNSET)
+				return dir;
+		}
+	}
+	return XmSTRING_DIRECTION_UNSET;
+}
+
+/*
+ * XmStringConcatAndFree keeps the last direction set in the header of
+ * the string it builds, rather than search the whole string for it
+ * when a line is empty.  Whatever the pieces, it must be what that
+ * search finds.
+ */
+START_TEST(concat_last_direction)
+{
+	static const XmStringDirection dirs[] = {
+		XmSTRING_DIRECTION_L_TO_R, XmSTRING_DIRECTION_R_TO_L,
+		XmSTRING_DIRECTION_UNSET
+	};
+	unsigned int rng = 12345;
+	int round, i;
+
+	for (round = 0; round < 200; round++) {
+		XmString s = NULL, piece;
+
+		for (i = 0; i < 40; i++) {
+			rng = rng * 1103515245 + 12345;
+			switch ((rng >> 16) % 7) {
+			case 0:
+				piece = XmStringDirectionCreate(
+					dirs[(rng >> 8) % 3]);
+				break;
+			case 1:
+			case 2:
+				piece = sep();
+				break;
+			case 3:
+				piece = XmStringCreate("x", "tagA");
+				break;
+			case 4:
+				piece = cat(sep(), XmStringCreate("y", "tagB"),
+					    sep(), NULL);
+				break;
+			case 5:
+				piece = tab();
+				break;
+			default:
+				piece = XmStringCreateLocalized("z");
+				break;
+			}
+			if ((rng >> 24) % 5 == 0)
+				s = XmStringConcatAndFree(piece, s);
+			else
+				s = XmStringConcatAndFree(s, piece);
+			if (_XmStrMultiple(s) && _XmStrLastDirKnown(s))
+				ck_assert_uint_eq(_XmStrLastDir(s),
+						  scan_last_dir(s));
+		}
+		XmStringFree(s);
+	}
+}
+END_TEST
+
+/* The text of s with its separators as newlines */
+static char *unparse_lines(XmString s)
+{
+	XmString nl = sep();
+	XmParseMapping map;
+	Arg args[3];
+	char *text;
+
+	XtSetArg(args[0], XmNpattern, "\n");
+	XtSetArg(args[1], XmNsubstitute, nl);
+	XtSetArg(args[2], XmNincludeStatus, XmINSERT);
+	map = XmParseMappingCreate(args, 3);
+	text = (char *)XmStringUnparse(s, NULL, XmCHARSET_TEXT, XmCHARSET_TEXT,
+				       &map, 1, XmOUTPUT_ALL);
+	XmParseMappingFree(map);
+	XmStringFree(nl);
+	return text;
+}
+
+/*
+ * Strings built from many pieces: the arrays and the text grow
+ * geometrically.  Whichever way a string is built, it must come out
+ * the same.
+ */
+START_TEST(build_many_pieces)
+{
+	enum { LINES = 20000 };
+	char *text = XtMalloc(LINES * 8 + 1), *p = text, *got;
+	XmString parsed, built = NULL, line;
+	int i;
+
+	for (i = 0; i < LINES; i++)
+		p += sprintf(p, "l%05d%s", i, i + 1 < LINES ? "\n" : "");
+	parsed = XmStringGenerate(text, NULL, XmCHARSET_TEXT, NULL);
+	ck_assert_int_eq(XmStringLineCount(parsed), LINES);
+	for (i = 0; i < LINES; i++) {
+		char buf[8];
+
+		snprintf(buf, sizeof buf, "l%05d", i);
+		line = XmStringGenerate(buf, NULL, XmCHARSET_TEXT, NULL);
+		built = XmStringConcatAndFree(built, line);
+		if (i + 1 < LINES)
+			built = XmStringConcatAndFree(built, sep());
+	}
+	ck_assert(XmStringCompare(parsed, built));
+	got = unparse_lines(parsed);
+	ck_assert_str_eq(got, text);
+	XtFree(got);
+	got = unparse_lines(built);
+	ck_assert_str_eq(got, text);
+	XtFree(got);
+	XmStringFree(parsed);
+	XmStringFree(built);
+
+	/* One segment that text is appended to, 64 KiB of it */
+	built = NULL;
+	for (i = 0; i < 8192; i++)
+		built = XmStringConcatAndFree(built,
+			XmStringCreate("abcdefgh", "tagA"));
+	ck_assert_int_eq(count_comps(built, XmSTRING_COMPONENT_TEXT), 1);
+	got = text_of(built);
+	ck_assert_uint_eq(strlen(got), 8192 * 8);
+	for (i = 0; i < 8192; i++)
+		ck_assert(!memcmp(got + i * 8, "abcdefgh", 8));
+	XtFree(got);
+	XmStringFree(built);
+	XtFree(text);
+}
+END_TEST
+
+/* Count the components of s of each type, walking it with a context */
+static void walk_comps(XmString s, int *texts, int *seps, int *tabs)
+{
+	XmStringContext ctx;
+	XmStringComponentType t;
+	unsigned int len;
+	XtPointer val;
+
+	*texts = *seps = *tabs = 0;
+	ck_assert(XmStringInitContext(&ctx, s));
+	while ((t = XmStringGetNextTriple(ctx, &len, &val)) !=
+	       XmSTRING_COMPONENT_END) {
+		if (t == XmSTRING_COMPONENT_TEXT ||
+		    t == XmSTRING_COMPONENT_LOCALE_TEXT)
+			(*texts)++;
+		else if (t == XmSTRING_COMPONENT_SEPARATOR)
+			(*seps)++;
+		else if (t == XmSTRING_COMPONENT_TAB)
+			(*tabs)++;
+		XtFree((char *)val);
+	}
+	XmStringFreeContext(ctx);
+}
+
+/*
+ * A string context counted lines in a short and segments in an unsigned
+ * short: walking a string of more than 32767 lines read before its
+ * entry array and crashed, and the walk of a line of more than 65535
+ * segments wrapped back to its start and never ended.  Strings that
+ * size are quick to build now (XmStringGenerate of 1 MB of short lines
+ * makes 85000).
+ */
+START_TEST(context_many_lines_and_segments)
+{
+	enum { LINES = 40000, SEGS = 70000 };
+	char *text = XtMalloc(LINES * 2), *got;
+	XmString s, nl;
+	XmParseMapping map;
+	Arg args[3];
+	int i, texts, seps, tabs;
+
+	for (i = 0; i < LINES; i++) {
+		text[2 * i] = 'a' + i % 26;
+		text[2 * i + 1] = i + 1 < LINES ? '\n' : '\0';
+	}
+	s = XmStringGenerate(text, NULL, XmCHARSET_TEXT, NULL);
+	ck_assert_int_eq(XmStringLineCount(s), LINES);
+	walk_comps(s, &texts, &seps, &tabs);
+	ck_assert_int_eq(texts, LINES);
+	ck_assert_int_eq(seps, LINES - 1);
+
+	/* XmStringUnparse walks it with a context too */
+	nl = sep();
+	XtSetArg(args[0], XmNpattern, "\n");
+	XtSetArg(args[1], XmNsubstitute, nl);
+	XtSetArg(args[2], XmNincludeStatus, XmINSERT);
+	map = XmParseMappingCreate(args, 3);
+	got = (char *)XmStringUnparse(s, NULL, XmCHARSET_TEXT, XmCHARSET_TEXT,
+				      &map, 1, XmOUTPUT_ALL);
+	ck_assert_str_eq(got, text);
+	XtFree(got);
+	XmParseMappingFree(map);
+	XmStringFree(nl);
+	XmStringFree(s);
+	XtFree(text);
+
+	/* One line of tabbed segments: a tab cannot follow text */
+	s = NULL;
+	for (i = 0; i < SEGS; i++)
+		s = XmStringConcatAndFree(s,
+			cat(tab(), XmStringCreate("x", "tagA"), NULL));
+	ck_assert_int_eq(XmStringLineCount(s), 1);
+	walk_comps(s, &texts, &seps, &tabs);
+	ck_assert_int_eq(texts, SEGS);
+	ck_assert_int_eq(tabs, SEGS);
+	ck_assert_int_eq(seps, 0);
+	XmStringFree(s);
+}
+END_TEST
+
+/*
+ * XmStringCopy shares the string.  The reference counts were 6 bits
+ * (optimized strings) and 8 bits wide, so every 64th or 256th copy was
+ * a full clone.
+ */
+START_TEST(copy_shares)
+{
+	XmString s[2], copies[1000];
+	int i, j;
+
+	s[0] = XmStringCreateLocalized("The quick brown fox");
+	s[1] = cat(XmStringCreateLocalized("one"), sep(),
+		   XmStringCreateLocalized("two"), NULL);
+	ck_assert(_XmStrOptimized(s[0]));
+	ck_assert(_XmStrMultiple(s[1]));
+	for (j = 0; j < 2; j++) {
+		for (i = 0; i < 1000; i++) {
+			copies[i] = XmStringCopy(s[j]);
+			ck_assert_ptr_eq(copies[i], s[j]);
+		}
+		ck_assert_uint_eq(_XmStrRefCountGet(s[j]), 1001);
+		for (i = 0; i < 1000; i++)
+			XmStringFree(copies[i]);
+		ck_assert_uint_eq(_XmStrRefCountGet(s[j]), 1);
+	}
+	assert_text(s[0], "The quick brown fox");
+	assert_text(s[1], "onetwo");
+	XmStringFree(s[0]);
+	XmStringFree(s[1]);
 }
 END_TEST
 
@@ -1101,6 +1420,11 @@ void xmstring_suite(SRunner *runner)
 	tcase_add_test(t, create_and_compare);
 	tcase_add_test(t, empty_strings);
 	tcase_add_test(t, concat_text);
+	tcase_add_test(t, concat_long_text);
+	tcase_add_test(t, copy_shares);
+	tcase_add_test(t, concat_last_direction);
+	tcase_add_test(t, build_many_pieces);
+	tcase_add_test(t, context_many_lines_and_segments);
 	tcase_add_test(t, line_count);
 	tcase_add_test(t, concat_keeps_tab_after_text);
 	tcase_add_test(t, empty_text_component);
@@ -1349,6 +1673,394 @@ START_TEST(layout_push_pop_after_concat)
 }
 END_TEST
 
+/*
+ * Extents, which need fonts and so a display.
+ */
+static Widget ext_shell;
+
+static void _init_xt_extent(void)
+{
+	ext_shell = init_xt("check_XmStringExtent");
+}
+
+static void _uninit_xt_extent(void)
+{
+	ext_shell = NULL;
+	uninit_xt();
+}
+
+/* A rendition, with no font if font is NULL */
+static XmRendition make_rend(const char *tag, const char *font,
+			     XmFontType type)
+{
+	Arg args[2];
+
+	XtSetArg(args[0], XmNfontName, font);
+	XtSetArg(args[1], XmNfontType, type);
+	return XmRenditionCreate(ext_shell, (XmStringTag)tag, args,
+				 font ? 2 : 0);
+}
+
+/* Add a rendition to rt, or replace the one with its tag */
+static XmRenderTable add_rend(XmRenderTable rt, const char *tag,
+			      const char *font, XmMergeMode mode)
+{
+	XmRendition rend = make_rend(tag, font, XmFONT_IS_FONT);
+
+	rt = XmRenderTableAddRenditions(rt, &rend, 1, mode);
+	XmRenditionFree(rend);
+	return rt;
+}
+
+/* A render table of one rendition, with no font if font is NULL */
+static XmRenderTable make_rt(const char *tag, const char *font,
+			     XmFontType type)
+{
+	XmRendition rend = make_rend(tag, font, type);
+	XmRenderTable rt;
+
+	rt = XmRenderTableAddRenditions(NULL, &rend, 1, XmMERGE_NEW);
+	XmRenditionFree(rend);
+	return rt;
+}
+
+static void quiet_warning(String msg)
+{
+	(void)msg;
+}
+
+/* Leave garbage where the next call's locals will be */
+static void __attribute__((noinline)) dirty_stack(void)
+{
+	volatile unsigned char junk[8192];
+	size_t i;
+
+	for (i = 0; i < sizeof junk; i++)
+		junk[i] = 0x5a;
+}
+
+/*
+ * With no font for an optimized string, XmStringBaseline returned the
+ * ascent OptLineMetrics never set: whatever was on the stack.
+ */
+START_TEST(baseline_without_font)
+{
+	XmRenderTable rt;
+	XmString s = XmStringCreateLocalized("abc");
+	Dimension w = 1, h = 1;
+	int i;
+
+	ck_assert(_XmStrOptimized(s));
+	XtAppSetWarningHandler(app, quiet_warning);
+	rt = make_rt(XmFONTLIST_DEFAULT_TAG, NULL, XmFONT_IS_FONT);
+	for (i = 0; i < 3; i++) {
+		dirty_stack();
+		ck_assert_uint_eq(XmStringBaseline(rt, s), 0);
+		XmStringExtent(rt, s, &w, &h);
+		ck_assert_uint_eq(w, 0);
+		ck_assert_uint_eq(h, 0);
+	}
+	XmRenderTableFree(rt);
+	XmStringFree(s);
+}
+END_TEST
+
+#ifdef HAVE_LSAN
+/*
+ * XmStringBaseline of a multi-segment string did not free the rendition
+ * tags that measuring its first line collected.
+ */
+START_TEST(baseline_rendition_leak)
+{
+	XmRenderTable rt = make_rt("r1", "fixed", XmFONT_IS_FONT);
+	XmString s = XmStringGenerate("abc\ndef", NULL, XmCHARSET_TEXT, "r1");
+
+	ck_assert(!_XmStrOptimized(s));
+	ck_assert_uint_gt(XmStringBaseline(rt, s), 0);
+	XmStringFree(s);
+	XmRenderTableFree(rt);
+	ck_assert_msg(!leaks_found(), "XmStringBaseline leaked");
+}
+END_TEST
+
+/*
+ * Measuring a multi-segment string gives its segments a layout cache.
+ * XmStringConcatAndFree freed the first segment of its second argument
+ * without that cache when it merged the segment's text into the last
+ * one of the first.
+ */
+START_TEST(concat_merged_segment_cache_leak)
+{
+	XmRenderTable rt = make_rt(XmFONTLIST_DEFAULT_TAG, "fixed",
+				   XmFONT_IS_FONT);
+	char *long_text = repeat("0123456789", 30);
+	XmString a, b;
+	Dimension w, h, w_a, w_b;
+
+	/* 300 bytes: unoptimized segments, which carry caches */
+	a = XmStringCreateLocalized(long_text);
+	b = XmStringCreateLocalized(long_text);
+	ck_assert(!_XmStrOptimized(a) && !_XmStrOptimized(b));
+	XmStringExtent(rt, a, &w_a, &h);
+	XmStringExtent(rt, b, &w_b, &h);
+	a = XmStringConcatAndFree(a, b);
+	ck_assert_int_eq(count_comps(a, XmSTRING_COMPONENT_LOCALE_TEXT) +
+			 count_comps(a, XmSTRING_COMPONENT_TEXT), 1);
+	XmStringExtent(rt, a, &w, &h);
+	ck_assert_uint_eq(w, w_a + w_b);
+	XmStringFree(a);
+	XmRenderTableFree(rt);
+	XtFree(long_text);
+	ck_assert_msg(!leaks_found(), "XmStringConcatAndFree leaked");
+}
+END_TEST
+#endif
+
+/* The extent and baseline of s with rt */
+struct extent {
+	Dimension w, h, base;
+};
+
+static struct extent extent_of(XmRenderTable rt, XmString s)
+{
+	struct extent e;
+
+	XmStringExtent(rt, s, &e.w, &e.h);
+	e.base = XmStringBaseline(rt, s);
+	return e;
+}
+
+static void assert_extent_eq(struct extent a, struct extent b)
+{
+	ck_assert_uint_eq(a.w, b.w);
+	ck_assert_uint_eq(a.h, b.h);
+	ck_assert_uint_eq(a.base, b.base);
+}
+
+/* What a string that was never measured measures, with rt */
+static struct extent fresh_extent(XmRenderTable rt, const char *text,
+				  const char *tag)
+{
+	XmString s = tag ? XmStringCreate((char *)text, (XmStringTag)tag) :
+			   XmStringCreateLocalized((char *)text);
+	struct extent e;
+
+	ck_assert(_XmStrOptimized(s));
+	ck_assert(((_XmStringOpt)s)->extent_stamp == 0);
+	e = extent_of(rt, s);
+	XmStringFree(s);
+	return e;
+}
+
+/*
+ * Optimized strings cache their extent under the render table's stamp:
+ * the cached extent is the computed one, with a core font, a font set
+ * and Xft.
+ */
+START_TEST(extent_cache_hits)
+{
+	static const XmFontType types[] = {
+		XmFONT_IS_FONT, XmFONT_IS_FONTSET,
+#if USE_XFT
+		XmFONT_IS_XFT
+#endif
+	};
+	static const char *const texts[] = { "", "a", "The quick brown fox" };
+	unsigned int i, j;
+
+	for (i = 0; i < XtNumber(types); i++) {
+		XmRenderTable rt = make_rt(XmFONTLIST_DEFAULT_TAG,
+					   types[i] == XmFONT_IS_XFT ?
+						   "Sans-10" : "fixed",
+					   types[i]);
+
+		for (j = 0; j < XtNumber(texts); j++) {
+			XmString s = XmStringCreateLocalized((char *)texts[j]);
+			struct extent first = extent_of(rt, s);
+
+			ck_assert(((_XmStringOpt)s)->extent_stamp != 0);
+			assert_extent_eq(extent_of(rt, s), first);
+			assert_extent_eq(fresh_extent(rt, texts[j], NULL), first);
+			if (j > 0)
+				ck_assert_uint_gt(first.w, 0);
+			XmStringFree(s);
+		}
+		XmRenderTableFree(rt);
+	}
+}
+END_TEST
+
+/*
+ * A cached extent must not survive a change of the render table: one
+ * replaced in place, one added, a table removed and another one
+ * allocated (likely at the same address), and a copy.
+ */
+START_TEST(extent_cache_follows_table)
+{
+	XmRenderTable rt = make_rt(XmFONTLIST_DEFAULT_TAG, "fixed",
+				   XmFONT_IS_FONT), copy;
+	XmString s = XmStringCreateLocalized("The quick brown fox");
+	XmString t = XmStringCreate("jumps over", "tagA");
+	XmStringTag tags[1] = { "tagA" };
+	struct extent before = extent_of(rt, s), after;
+
+	(void)extent_of(rt, t);
+
+	/* Replace the default rendition, in place since rt is not shared */
+	rt = add_rend(rt, XmFONTLIST_DEFAULT_TAG, "9x15", XmMERGE_REPLACE);
+	after = extent_of(rt, s);
+	ck_assert_uint_ne(after.w, before.w);
+	assert_extent_eq(after, fresh_extent(rt, "The quick brown fox", NULL));
+	assert_extent_eq(extent_of(rt, t), fresh_extent(rt, "jumps over", "tagA"));
+
+	/* Add a rendition for t's tag */
+	rt = add_rend(rt, "tagA", "fixed", XmMERGE_NEW);
+	assert_extent_eq(extent_of(rt, t), fresh_extent(rt, "jumps over", "tagA"));
+
+	/* And remove it */
+	rt = XmRenderTableRemoveRenditions(rt, tags, 1);
+	assert_extent_eq(extent_of(rt, t), fresh_extent(rt, "jumps over", "tagA"));
+
+	/* A copy measures the same, and so does a table that replaced it */
+	copy = XmRenderTableCopy(rt, NULL, 0);
+	assert_extent_eq(extent_of(copy, s), after);
+	XmRenderTableFree(copy);
+	XmRenderTableFree(rt);
+	rt = make_rt(XmFONTLIST_DEFAULT_TAG, "fixed", XmFONT_IS_FONT);
+	assert_extent_eq(extent_of(rt, s), before);
+	assert_extent_eq(extent_of(rt, t), fresh_extent(rt, "jumps over", "tagA"));
+
+	XmRenderTableFree(rt);
+	XmStringFree(s);
+	XmStringFree(t);
+}
+END_TEST
+
+/*
+ * XmStringConcatAndFree reuses an optimized string it owns when the
+ * other one adds no text: its cached extent must go, as a tab or a
+ * rendition in front of the text changes it.
+ */
+START_TEST(extent_cache_string_changed)
+{
+	XmRendition rend[2];
+	XmRenderTable rt;
+	XmTabList tabs;
+	XmTab xtab;
+	XmString s, reused;
+	struct extent e;
+	Arg args[3];
+
+	xtab = XmTabCreate(100.0, XmPIXELS, XmABSOLUTE, XmALIGNMENT_BEGINNING,
+			  NULL);
+	tabs = XmTabListInsertTabs(NULL, &xtab, 1, 0);
+	XmTabFree(xtab);
+	XtSetArg(args[0], XmNfontName, "fixed");
+	XtSetArg(args[1], XmNfontType, XmFONT_IS_FONT);
+	XtSetArg(args[2], XmNtabList, tabs);
+	rend[0] = XmRenditionCreate(ext_shell, XmFONTLIST_DEFAULT_TAG, args, 3);
+	XtSetArg(args[0], XmNfontName, "9x15");
+	rend[1] = XmRenditionCreate(ext_shell, "r1", args, 2);
+	rt = XmRenderTableAddRenditions(NULL, rend, 2, XmMERGE_NEW);
+	XmRenditionFree(rend[0]);
+	XmRenditionFree(rend[1]);
+	XmTabListFree(tabs);
+
+	/* A tab */
+	s = XmStringCreateLocalized("abc");
+	e = extent_of(rt, s);
+	reused = XmStringConcatAndFree(tab(), s);
+	ck_assert_ptr_eq(reused, s);
+	ck_assert_uint_eq(extent_of(rt, reused).w, 100 + e.w);
+	XmStringFree(reused);
+
+	/* A rendition */
+	s = XmStringCreateLocalized("abc");
+	e = extent_of(rt, s);
+	reused = XmStringConcatAndFree(
+		XmStringComponentCreate(XmSTRING_COMPONENT_RENDITION_BEGIN, 2,
+					"r1"), s);
+	ck_assert_ptr_eq(reused, s);
+	ck_assert_uint_gt(extent_of(rt, reused).w, e.w);
+	ck_assert_uint_gt(extent_of(rt, reused).h, e.h);
+	XmStringFree(reused);
+
+	XmRenderTableFree(rt);
+}
+END_TEST
+
+/*
+ * Tabs in units other than pixels depend on the screen (font units on
+ * the XmScreen's resources), so their extent is not cached.
+ */
+START_TEST(extent_cache_skips_tab_units)
+{
+	XmRendition rend;
+	XmRenderTable rt;
+	XmTabList tabs;
+	XmTab xtab;
+	XmString s;
+	Arg args[3];
+	Dimension w1, w2, h;
+
+	xtab = XmTabCreate(2.0, XmFONT_UNITS, XmABSOLUTE, XmALIGNMENT_BEGINNING,
+			  NULL);
+	tabs = XmTabListInsertTabs(NULL, &xtab, 1, 0);
+	XmTabFree(xtab);
+	XtSetArg(args[0], XmNfontName, "fixed");
+	XtSetArg(args[1], XmNfontType, XmFONT_IS_FONT);
+	XtSetArg(args[2], XmNtabList, tabs);
+	rend = XmRenditionCreate(ext_shell, XmFONTLIST_DEFAULT_TAG, args, 3);
+	rt = XmRenderTableAddRenditions(NULL, &rend, 1, XmMERGE_NEW);
+	XmRenditionFree(rend);
+	XmTabListFree(tabs);
+
+	s = XmStringConcatAndFree(tab(), XmStringCreateLocalized("abc"));
+	ck_assert(_XmStrOptimized(s));
+	XmStringExtent(rt, s, &w1, &h);
+	ck_assert(((_XmStringOpt)s)->extent_stamp == 0);
+	XmStringExtent(rt, s, &w2, &h);
+	ck_assert_uint_eq(w1, w2);
+	XmStringFree(s);
+	XmRenderTableFree(rt);
+}
+END_TEST
+
+/*
+ * Mrm builds a rendition's tab list in place after the rendition is in
+ * its render table (_XmCreateRendition, then _XmCreateTabList and
+ * _XmCreateTab): an extent cached before must not survive it.
+ */
+START_TEST(extent_cache_follows_mrm_tabs)
+{
+	XmRenderTable rt = make_rt(XmFONTLIST_DEFAULT_TAG, "fixed",
+				   XmFONT_IS_FONT);
+	XmString s = XmStringConcatAndFree(tab(),
+					   XmStringCreateLocalized("abc"));
+	XmRendition rend;
+	Widget tl;
+	Dimension w0, w1, h;
+	Arg args[1];
+
+	ck_assert(_XmStrOptimized(s));
+	XmStringExtent(rt, s, &w0, &h);
+	ck_assert(((_XmStringOpt)s)->extent_stamp != 0);
+
+	/* A handle that shares the table's rendition record */
+	rend = XmRenderTableGetRendition(rt, XmFONTLIST_DEFAULT_TAG);
+	tl = _XmCreateTabList((Widget)rend, NULL, NULL, 0);
+	ck_assert_ptr_nonnull(tl);
+	XtSetArg(args[0], XmNtabValue, 100);
+	(void)_XmCreateTab(tl, NULL, args, 1);
+
+	XmStringExtent(rt, s, &w1, &h);
+	ck_assert_uint_eq(w1, w0 + 100);
+	XmRenditionFree(rend);
+	XmRenderTableFree(rt);
+	XmStringFree(s);
+}
+END_TEST
+
 void xmstring_extent_suite(SRunner *runner)
 {
 	TCase *t;
@@ -1360,6 +2072,20 @@ void xmstring_extent_suite(SRunner *runner)
 	tcase_add_loop_test(t, layout_push_pop_after_concat, 0, n);
 	tcase_add_checked_fixture(t, _init_extent, uninit_xt);
 	tcase_set_timeout(t, 30);
+	suite_add_tcase(s, t);
+
+	t = tcase_create("Extents");
+	tcase_add_test(t, baseline_without_font);
+	tcase_add_test(t, extent_cache_hits);
+	tcase_add_test(t, extent_cache_follows_table);
+	tcase_add_test(t, extent_cache_string_changed);
+	tcase_add_test(t, extent_cache_skips_tab_units);
+	tcase_add_test(t, extent_cache_follows_mrm_tabs);
+#ifdef HAVE_LSAN
+	tcase_add_test(t, baseline_rendition_leak);
+	tcase_add_test(t, concat_merged_segment_cache_leak);
+#endif
+	tcase_add_checked_fixture(t, _init_xt_extent, _uninit_xt_extent);
 	suite_add_tcase(s, t);
 
 	srunner_add_suite(runner, s);

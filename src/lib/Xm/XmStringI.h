@@ -82,8 +82,8 @@ enum {
 
 typedef struct __XmStringContextRec {
   _XmString string;              /* pointer to internal string	*/
-  short current_line;            /* index of current line	*/
-  unsigned short current_seg;    /* index of current segment	*/
+  int current_line;              /* index of current line	*/
+  int current_seg;               /* index of current segment	*/
   Boolean optimized;             /* is string optimized		*/
   Boolean error;                 /* something wrong		*/
   short tab_count;               /* tabs processed		*/
@@ -131,6 +131,17 @@ typedef struct __XmParseMappingRec {
   256 bytes with an associated string direction and up to three
   implicit tabs.
   The text is stored immediately after the header within the string.
+
+  The first word has the layout of an optimized segment's header
+  (_XmStringOptSegHdrRec): XmStringConcatAndFree turns a string it owns
+  into a segment in place.  pad must stay zero for that, as it overlays
+  the segment's permanent, soft_line_break and immediate bits.
+
+  The extent of the string with the render table whose stamp
+  (_XmRenderTableStamp) is extent_stamp is cached after the header; 0
+  means none.  Whatever changes a string in place resets it with
+  _XmStrExtentsReset.  (The cache is not in the header so that
+  _XmStringRec stays as small as a multi-entry string.)
  ****************************************************************/
 typedef struct __XmStringOptHeader {
   unsigned int type : 2;                     /* XmSTRING_OPTIMIZED */
@@ -143,13 +154,18 @@ typedef struct __XmStringOptHeader {
   unsigned int str_dir : 2;                  /* string direction set by app */
   unsigned int flipped : 1;                  /* whether the text has been flipped */
   unsigned int tabs : 2;                     /* number of tabs preceding the text */
-  unsigned int refcount : 6;                 /* reference count */
+  unsigned int pad : 6;                      /* zero */
+  unsigned int refcount;                     /* reference count */
 } _XmStringOptHeader;
 
 typedef struct __XmStringOpt {
   _XmStringOptHeader header;
+  unsigned long long extent_stamp;          /* render table of the extent */
+  Dimension width, height, ascent, descent; /* cached extent */
   char text[TEXT_BYTES_IN_STRUCT];
 } _XmStringOptRec, *_XmStringOpt;
+/* Bytes taken by an optimized string with len bytes of text */
+#define _XmStrOptSize(len) (XtOffsetOf(_XmStringOptRec, text) + (len))
 /****************************************************************
   XmStringMulti specifies a string consisting of multiple entries.
   Each entry is a segment, either an optimized single segment, an
@@ -164,11 +180,23 @@ typedef union __XmStringEntryRec *_XmStringEntry;
 /* Same type as _XmStringEntry; see _XmStringNREntryRec below. */
 typedef union __XmStringEntryRec *_XmStringNREntry;
 
+/*
+ * grown: the entry array was sized by _XmStringGrowArray, so it has room
+ * for _XmStringArrayRoom(entry_count) entries.  last_dir, when
+ * last_dir_known is set, is the direction of the last segment whose
+ * direction is set, or XmSTRING_DIRECTION_UNSET if there is none.  It
+ * is kept by XmStringConcatAndFree; whatever else adds or changes
+ * segments clears last_dir_known.
+ */
 typedef struct __XmStringMultiHeader {
   unsigned int type : 2;          /* XmSTRING_MULTIPLE_ENTRY */
   unsigned int implicit_line : 1; /* 1 => linefeed at end */
   unsigned int entry_count : 21;
-  unsigned char refcount;
+  unsigned int grown : 1;          /* entry array has spare room */
+  unsigned int last_dir_known : 1; /* last_dir is valid */
+  unsigned int last_dir : 2;       /* last direction set */
+  unsigned int pad : 4;
+  unsigned int refcount;
 } _XmStringMultiHeader;
 
 typedef struct __XmStringMulti {
@@ -273,7 +301,8 @@ typedef struct __XmStringOptSegRec {
 typedef struct __XmStringArraySegHdrRec {
   unsigned int type : 2;            /* XmSTRING_ENTRY_ARRAY */
   unsigned int soft_line_break : 1; /* linebreak before is soft */
-  unsigned int pad : 5;
+  unsigned int grown : 1;           /* seg was sized by _XmStringGrowArray */
+  unsigned int pad : 4;
   unsigned int segment_count : 24; /* holds any entry_count */
 } _XmStringArraySegHdrRec;
 
@@ -292,6 +321,7 @@ typedef struct __XmStringUnoptSegHdrRec {
   unsigned int pop_after : 1;       /* whether a pop follows the text */
   unsigned int str_dir : 2;         /* Direction of text in segment */
   unsigned int flipped : 1;         /* 1 => data is character-flipped */
+  unsigned int grown : 1;           /* text was sized by _XmStringGrowArray */
   XmDirection push_before;          /* if NULL => no push */
   unsigned char tabs_before;        /* Number of tabs preceding segment */
   XmTextType text_type;             /* determines type of text and tag */
@@ -378,6 +408,7 @@ typedef struct __XmStringArraySegRec *_XmStringLine;
   (_XmStrMultiple(str) ? --((str)->multi_str.refcount) : \
                          (_XmStrOptimized(str) ? --((str)->opt_str.refcount) : 0))
 /* Optimized, one-segment XmStrings */
+#define _XmStrExtentsReset(str) (((_XmStringOpt)(str))->extent_stamp = 0)
 #define _XmStrTextType(str) ((str)->opt_str.text_type)
 #define _XmStrTagIndex(str) ((str)->opt_str.tag_index)
 #define _XmStrTagGet(str) \
@@ -398,6 +429,9 @@ typedef struct __XmStringArraySegRec *_XmStringLine;
 #define _XmStrImplicitLine(str) (str)->multi_str.implicit_line
 #define _XmStrAddNewline(str) (_XmStrMultiple(str) ? _XmStrImplicitLine(str) : False)
 #define _XmStrEntryCount(str) (str)->multi_str.entry_count
+#define _XmStrGrown(str) (str)->multi_str.grown
+#define _XmStrLastDirKnown(str) (str)->multi_str.last_dir_known
+#define _XmStrLastDir(str) (str)->multi_str.last_dir
 #define _XmStrEntryCountGet(str) (_XmStrMultiple(str) ? _XmStrEntryCount(str) : 1)
 #define _XmStrLineCountGet(str) \
   (_XmStrMultiple(str) && _XmStrAddNewline(str) ? _XmStrEntryCount(str) : 1)
@@ -434,9 +468,8 @@ typedef struct __XmStringArraySegRec *_XmStringLine;
   { \
     switch (type) { \
       case XmSTRING_OPTIMIZED: \
-        (str) = (_XmString)_XmStrMalloc(sizeof(_XmStringOptRec) + \
-                                        (text_len ? (text_len - TEXT_BYTES_IN_STRUCT) : 0)); \
-        bzero((char *)str, sizeof(_XmStringOptRec)); \
+        (str) = (_XmString)_XmStrMalloc(_XmStrOptSize(text_len)); \
+        bzero((char *)str, _XmStrOptSize(0)); \
         _XmStrType(str) = type; \
         _XmStrTextType(str) = XmNO_TEXT; \
         _XmStrDirection(str) = XmSTRING_DIRECTION_UNSET; \
@@ -508,6 +541,17 @@ typedef struct __XmStringArraySegRec *_XmStringLine;
             (((_XmStringEntry)(entry))->unopt_single.soft_line_break = (val)) : \
             (((_XmStringEntry)(entry))->multiple.soft_line_break = (val))))
 #define _XmEntryImm(entry) (((_XmStringEntry)(entry))->single.immediate)
+/* The segment array of an array entry, or the text of an unoptimized
+ * segment, was sized by _XmStringGrowArray (never for optimized ones). */
+#define _XmEntryGrown(entry) \
+  (_XmEntryMultiple(entry) ? \
+       ((_XmStringEntry)(entry))->multiple.grown : \
+       (_XmEntryUnoptimized(entry) ? ((_XmStringEntry)(entry))->unopt_single.grown : 0))
+#define _XmEntryGrownSet(entry, val) \
+  (_XmEntryMultiple(entry) ? \
+       (((_XmStringEntry)(entry))->multiple.grown = (val)) : \
+       (_XmEntryUnoptimized(entry) ? (((_XmStringEntry)(entry))->unopt_single.grown = (val)) : \
+                                     0))
 #define _XmEntryPushSet(entry, val) \
   (_XmEntryUnoptimized(entry) ? (((_XmStringEntry)(entry))->unopt_single.push_before = (val)) : 0)
 #define _XmEntryPopSet(entry, val) \
@@ -897,6 +941,9 @@ extern void _XmStringContextFree(_XmStringContext target);
 extern XmString _XmStringNCreate(char *text, XmStringTag tag, int len);
 extern void _XmStringSegmentNew(_XmString string, int line_index, _XmStringEntry value, int copy);
 extern void _XmStringContextReInit(_XmStringContext context, _XmString string);
+extern unsigned int _XmStringArrayRoom(unsigned int count);
+extern XtPointer _XmStringGrowArray(
+    XtPointer array, Boolean grown, unsigned int count, unsigned int need, Cardinal size);
 extern int _XmConvertFactor(unsigned char units, float *factor);
 #ifdef _XmDEBUG_XMSTRING
 extern void _Xm_dump_fontlist(XmFontList f);

@@ -583,6 +583,35 @@ static void SetDefault(XmRendition rend)
 #endif
 }
 
+/*
+ * Render table stamps, drawn from one 64-bit counter that does not
+ * wrap.  A table record keeps its stamp while it is newer than the last
+ * change; _XmRenderTableChanged makes every stamp handed out so far
+ * stale, so each table gets a fresh one when next asked.  A new record
+ * starts with stamp 0, which is always stale.
+ */
+static unsigned long long render_stamp = 0;  /* last stamp handed out */
+static unsigned long long render_change = 0; /* stamps up to it are stale */
+
+void _XmRenderTableChanged(void)
+{
+  _XmProcessLock();
+  render_change = render_stamp;
+  _XmProcessUnlock();
+}
+
+unsigned long long _XmRenderTableStamp(XmRenderTable table)
+{
+  _XmRenderTable t = GetPtr(table);
+  unsigned long long stamp;
+  _XmProcessLock();
+  if (t->stamp <= render_change)
+    t->stamp = ++render_stamp;
+  stamp = t->stamp;
+  _XmProcessUnlock();
+  return stamp;
+}
+
 /* Extern function to pick out display from rendertable. */
 Display *_XmRenderTableDisplay(XmRenderTable table)
 {
@@ -618,6 +647,7 @@ XmRendition _XmRenderTableFindRendition(XmRenderTable table,
           if (_XmRendLoadModel(rend) == XmLOAD_DEFERRED)
             _XmRendLoadModel(rend) = XmLOAD_IMMEDIATE;
           ValidateAndLoadFont(rend, _XmRendDisplay(rend));
+          _XmRenderTableChanged(); /* rend has a font now */
           if (need_font && (_XmRendFont(rend) == NULL && _XmRendXftFont(rend) == NULL))
             break;
         }
@@ -652,6 +682,7 @@ XmRendition _XmRenderTableFindRendition(XmRenderTable table,
             XtFree((char *)GetPtr(table));
           SetPtr(table, GetPtr(cb.render_table));
           FreeHandle(cb.render_table);
+          _XmRenderTableChanged();
         }
         else
           break;
@@ -1090,6 +1121,7 @@ XmRenderTable XmRenderTableAddRenditions(XmRenderTable oldtable,
     table = (_XmRenderTable)XtMalloc(
         sizeof(_XmRenderTableRec) +
         (sizeof(XmRendition) * (rendition_count - RENDITIONS_IN_STRUCT)));
+    table->stamp = 0;
     oldtable = GetHandle(_XmRenderTable);
     SetPtr(oldtable, table);
     _XmRTCount(oldtable) = rendition_count;
@@ -1103,6 +1135,8 @@ XmRenderTable XmRenderTableAddRenditions(XmRenderTable oldtable,
     }
   }
   else {
+    /* The renditions and the table may change in place */
+    _XmRenderTableChanged();
     matches = (Boolean *)_XmMallocArray(rendition_count, sizeof(Boolean));
     bzero(matches, rendition_count * sizeof(Boolean));
     /* May have to copy table if shared. */
@@ -1111,6 +1145,7 @@ XmRenderTable XmRenderTableAddRenditions(XmRenderTable oldtable,
       table = (_XmRenderTable)XtMalloc(
           sizeof(_XmRenderTableRec) +
           (sizeof(XmRendition) * (_XmRTCount(oldtable) - RENDITIONS_IN_STRUCT)));
+      table->stamp = 0;
       newtable = GetHandle(_XmRenderTable);
       SetPtr(newtable, table);
       _XmRTDisplay(newtable) = _XmRTDisplay(oldtable);
@@ -1164,6 +1199,7 @@ XmRenderTable XmRenderTableAddRenditions(XmRenderTable oldtable,
       table = (_XmRenderTable)XtMalloc(
           sizeof(_XmRenderTableRec) +
           (sizeof(XmRendition) * (_XmRTCount(oldtable) + count - RENDITIONS_IN_STRUCT)));
+      table->stamp = 0;
       newtable = GetHandle(_XmRenderTable);
       SetPtr(newtable, table);
       _XmRTDisplay(newtable) = _XmRTDisplay(oldtable);
@@ -1245,12 +1281,14 @@ XmRenderTable _XmRenderTableRemoveRenditions(XmRenderTable oldtable,
   XmRenderTable newtable = NULL;
   if ((oldtable == NULL) || (tags == NULL) || (tag_count == 0))
     return (oldtable);
+  _XmRenderTableChanged(); /* the table may change in place */
   count = 0;
   if (_XmRTRefcount(oldtable) > 1) {
     /* Allocate new table */
     table = (_XmRenderTable)XtMalloc(
         sizeof(_XmRenderTableRec) +
         (sizeof(XmRendition) * (_XmRTCount(oldtable) - RENDITIONS_IN_STRUCT)));
+    table->stamp = 0;
     newtable = GetHandle(_XmRenderTable);
     SetPtr(newtable, table);
     _XmRTDisplay(newtable) = _XmRTDisplay(oldtable);
@@ -1414,6 +1452,7 @@ XmRenderTable XmRenderTableCopy(XmRenderTable table, XmStringTag *tags, int tag_
       size = (sizeof(_XmRendition) * (_XmRTCount(table) - RENDITIONS_IN_STRUCT));
     size = (size < 0) ? 0 : size;
     t = (_XmRenderTable)XtMalloc(sizeof(_XmRenderTableRec) + size);
+    t->stamp = 0;
     rt = GetHandle(_XmRenderTable);
     SetPtr(rt, t);
     _XmRTRefcount(rt) = 1;
@@ -1434,6 +1473,7 @@ XmRenderTable XmRenderTableCopy(XmRenderTable table, XmStringTag *tags, int tag_
         t = (_XmRenderTable)XtMalloc(
             sizeof(_XmRenderTableRec) +
             (sizeof(_XmRendition) * (_XmRTCount(table) - RENDITIONS_IN_STRUCT)));
+        t->stamp = 0;
         rt = GetHandle(_XmRenderTable);
         SetPtr(rt, t);
         _XmRTRefcount(rt) = 1;
@@ -1830,6 +1870,7 @@ Widget _XmCreateRenderTable(Widget parent,
   _XmRenderTable table;
   /* Malloc new table */
   table = (_XmRenderTable)XtMalloc(sizeof(_XmRenderTableRec));
+  table->stamp = 0;
   newtable = GetHandle(_XmRenderTable);
   SetPtr(newtable, table);
   _XmRTCount(newtable) = 0;
@@ -1858,6 +1899,7 @@ Widget _XmCreateRendition(Widget parent, String name, ArgList arglist, Cardinal 
       sizeof(_XmRenderTableRec) +
           (sizeof(XmRendition) * ((_XmRTCount(rt) + 1) - RENDITIONS_IN_STRUCT)));
   SetPtr(rt, table);
+  _XmRenderTableChanged();
   /* Copy new rendition. */
   _XmRTRenditions(rt)[_XmRTCount(rt)] = CopyRendition(rend);
   _XmRTCount(rt)++;
@@ -1936,6 +1978,7 @@ void XmRenditionRetrieve(XmRendition rendition, ArgList arglist, Cardinal argcou
             if (_XmRendLoadModel(rendition) == XmLOAD_DEFERRED)
               _XmRendLoadModel(rendition) = XmLOAD_IMMEDIATE;
             ValidateAndLoadFont(rendition, _XmRendDisplay(rendition));
+            _XmRenderTableChanged(); /* rendition may be in a table */
           }
           if (_XmRendFont(rendition) == NULL
 #if USE_XFT
@@ -2034,6 +2077,8 @@ void XmRenditionUpdate(XmRendition rendition, ArgList arglist, Cardinal argcount
     XmTabListFree(oldtabs);
   ValidateTag(rendition, oldtag);
   ValidateAndLoadFont(rendition, display);
+  /* A rendition changed in place may be in a table */
+  _XmRenderTableChanged();
   if (app) {
     _XmAppUnlock(app);
   }
@@ -2447,6 +2492,7 @@ static int XftDisplayClose(Display *display, XExtCodes *codes)
       _XmFreeHashTable(rec->colors);
       _XmMapHashTable(rec->fonts, FreeXftFont, (XtPointer)display);
       _XmFreeHashTable(rec->fonts);
+      _XmRenderTableChanged();
       XtFree((char *)rec);
       break;
     }

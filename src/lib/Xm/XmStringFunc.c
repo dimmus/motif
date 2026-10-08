@@ -341,9 +341,9 @@ static void new_line(_XmString string)
   int lc = _XmStrEntryCount(string);
   _XmStringEntry line;
   _XmStrImplicitLine(string) = TRUE;
-  _XmStrEntry(string) = (_XmStringEntry *)_XmReallocArray((char *)_XmStrEntry(string),
-                                                          lc + 1,
-                                                          sizeof(_XmStringEntry));
+  _XmStrEntry(string) = (_XmStringEntry *)_XmStringGrowArray(
+      (XtPointer)_XmStrEntry(string), _XmStrGrown(string), lc, lc + 1, sizeof(_XmStringEntry));
+  _XmStrGrown(string) = True;
   _XmEntryCreate(line, XmSTRING_ENTRY_ARRAY);
   _XmStrEntry(string)[lc] = line;
   _XmEntrySegmentCount(line) = 0;

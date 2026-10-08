@@ -451,6 +451,8 @@ Widget _XmCreateTab(Widget parent,
     _XmTabPrev(start) = tab;
   }
   _XmTabLCount(tl)++;
+  /* tl may belong to a rendition already in a render table */
+  _XmRenderTableChanged();
   return ((Widget)NULL);
 }
 

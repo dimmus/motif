@@ -16,3 +16,7 @@
 # known to be Motif's fault.
 leak:XtOwnSelection
 leak:XtDisownSelection
+
+# fontconfig: the configuration that FcInit loads, the first time Xft
+# opens a font, is kept until FcFini, which no X client calls.
+leak:libfontconfig.so
