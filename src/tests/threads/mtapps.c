@@ -245,7 +245,11 @@ static void exercise_text(struct worker *w, Widget text, Widget tf)
 	/* The primary selection, then the clipboard (TextSel, Transfer,
 	 * CutPaste).  The copy is not checked: taking the CLIPBOARD
 	 * selection fails, by the X protocol, when the other client took
-	 * it at a later server time. */
+	 * it at a later server time.  Paste only when this application
+	 * owns CLIPBOARD: a paste from another worker goes unanswered when
+	 * that worker closes its display first, and Xt keeps the request
+	 * until its selection timeout, after this application context is
+	 * gone (a leak of Xt's request records under LeakSanitizer). */
 	pthread_mutex_lock(&clipboard_turn);
 	XmTextSetSelection(text, 0, 5, CurrentTime);
 	CHECK(w, XmTextGetSelectionPosition(text, &left, &right));
@@ -253,7 +257,10 @@ static void exercise_text(struct worker *w, Widget text, Widget tf)
 	CHECK(w, s && strcmp(s, "START") == 0);
 	XtFree(s);
 	(void)XmTextCopy(text, CurrentTime);
-	(void)XmTextPaste(text);
+	if (XtWindowToWidget(XtDisplay(text),
+			     XGetSelectionOwner(XtDisplay(text),
+						XInternAtom(XtDisplay(text), "CLIPBOARD", False))))
+		(void)XmTextPaste(text);
 	XmTextClearSelection(text, CurrentTime);
 	pthread_mutex_unlock(&clipboard_turn);
 	(void)XmTextFindString(text, 0, "two", XmTEXT_FORWARD, &left);
