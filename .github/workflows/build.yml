@@ -132,12 +132,15 @@ jobs:
           key: ccache-s390x-${{ github.sha }}
           restore-keys: ccache-s390x-
       - name: Build and test
+        # Under emulation everything runs many times slower: scale the
+        # CTest timeout and libcheck's per-test timeouts (4 s by default,
+        # which the XmString stress tests reach) alike.
         run: |
           docker run --rm --platform linux/s390x \
             -v "$PWD:/src" -w /src \
             -e CCACHE_DIR=/src/.ccache -e CCACHE_MAXSIZE \
             -e CC=gcc -e MOTIF_CI_PROFILE=debug -e MOTIF_CI_NO_SKIP=1 \
-            -e MOTIF_CI_TEST_TIMEOUT=1800 \
+            -e MOTIF_CI_TEST_TIMEOUT=1800 -e CK_TIMEOUT_MULTIPLIER=10 \
             debian:stable \
             sh -c 'tools/dev/env/ci/deps.sh && tools/dev/env/ci/build.sh'
       - name: Upload test logs
