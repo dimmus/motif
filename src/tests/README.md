@@ -88,9 +88,73 @@ It is not part of CTest and is not built by default; `cmake --build
 trips and `XSetICValues` calls per operation (the counters come from a
 small `LD_PRELOAD` library that `xmbench` loads itself; with
 `XMBENCH_REPORT=1` it prints them when any program it is preloaded into
-exits, see `doc/profiling.md`).
+exits, see `doc/profiling.md`), and in the JSON the exact requests and
+round trips per timed run.
 
 `ab/` holds the A/B harness for the Form, Container and List layout code
 (`xm_abtest`, `xm_layoutbench` and `ab.sh`).  It is not part of CTest
 either, since a comparison needs two builds of libXm; `cmake --build
 <build> --target ab` builds it.  See `ab/README.md`.
+
+## Benchmark runs and the regression gate
+
+`bench/bench.py` runs `xmbench` the same way every time, for one build or
+to compare two:
+
+    bench.py run -o out.json <build> [--cases CASE|GROUP ...]
+    bench.py run --delay 2 -o out.json <build>
+    bench.py compare old.json new.json
+    bench.py gate <base-build> <head-build>
+
+- Each build gets its own Xvfb (`-screen 0 1920x1080x24 +extension
+  RENDER`, no TCP, no access control), warmed up by one run of every
+  case, since the first Motif client of a display leaves state on the
+  server (the drag window) that later ones reuse.
+- `taskset` pins `xmbench` to the last allowed CPU and the server to the
+  one before (`--client-cpu`, `--server-cpu`, `--no-pin`).
+- Every case runs in its own process, `--rounds` times (default 5); a
+  case's result is the median over the rounds, each being the median of
+  `--repeat` runs inside the process (`xmbench -r`, default 3).  With two
+  builds the rounds alternate between them.
+- `--delay MS` puts `xmbench-proxy` between `xmbench` and the server, over
+  TCP: it delays each direction by MS milliseconds, as `tc qdisc add dev
+  lo root netem delay MS` would but without root, so that a round trip
+  costs 2 × MS more (plus the host's timer wake-up latency).  It also
+  counts the requests, replies, errors, events and round trips (replies
+  or errors the client receives after having sent something since the
+  previous one) of each connection, and the JSON gets them per process,
+  under `proxy`.  `bench.proxy` (CTest) checks those counts and the delay.
+
+`compare` and `gate` fail when, for some case, a round trip count grew
+(`xmbench`'s count of `_XReply` calls per timed run, or the proxy's
+count for the whole process, initialization included), or the median
+time per operation is more than `--threshold` % (default 5) slower and
+that is unlikely to be noise: a one-sided Mann-Whitney U test over the
+rounds must give p < `--alpha` (default 0.001, small because some 40
+cases are compared at once).  Five rounds against five cannot reach
+that, so `gate` re-runs the cases whose median is above the threshold
+with `--confirm` more rounds (default 5) before it decides.  The counts
+are deterministic once the server is warm; still, a count is compared
+as head's lowest value over the rounds against base's highest, so that
+a count that depended on timing would not fail for its jitter.
+`bench.compare` (CTest) checks this logic on canned results.
+
+On a quiet machine the rounds of a case spread by a few percent; on a
+loaded one (the 2-CPU development box this was written on, shared with
+other builds) by 30 % or more, and the test then only reports what it
+can tell from noise: a library made 32 % slower in `XmeTraitGet` was
+caught there (p = 0.001 over 10 + 10 rounds), one made 3 % slower was
+not, and master against an unchanged head gave no time report (lowest
+p 0.08).  Round trips are caught whatever the load: one more `XSync`
+per `XmGetVisibility` (`visibility`: 1000 -> 2000 per run) or a single
+one at `XmDisplay` creation (every X case: +1 proxy round trip).
+
+The `Bench` workflow (`.github/workflows/bench.yml`) runs `bench/gate.sh`
+on every pull request: it builds the bench of the pull request's head and
+of its merge base in the same job and gates in two passes, `time`
+(Unix socket, scale 0.5) and `latency` (`--delay 2`, scale 0.05, where
+round trips dominate).  The step summary has the table of both, and the
+JSON results are uploaded.  To run it locally:
+
+    git worktree add ../motif-base master
+    src/tests/bench/gate.sh ../motif-base . bench-results
