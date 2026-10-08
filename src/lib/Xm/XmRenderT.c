@@ -138,7 +138,7 @@ static void SetRend(XmRendition to, XmRendition from);
 static Boolean RendComplete(XmRendition rend);
 static void CopyFromArg(XtArgVal src, char *dst, unsigned int size);
 static void CopyToArg(char *src, XtArgVal *dst, unsigned int size);
-static Cardinal GetNamesAndClasses(Widget w, XrmNameList names, XrmClassList classes);
+static void GetNamesAndClasses(Widget w, Cardinal depth, XrmNameList names, XrmClassList classes);
 static XrmResourceList CompileResourceTable(XtResourceList resources, Cardinal num_resources);
 static Boolean GetResources(XmRendition rend,
                             Display *dsp,
@@ -324,37 +324,23 @@ static XtResource _XmRenditionResources[] = {
 static XmConst Cardinal _XmNumRenditionResources = XtNumber(_XmRenditionResources);
 
 /* Searches up widget hierarchy, quarkifying ancestor names and */
-/* classes. */
-static Cardinal GetNamesAndClasses(Widget w, XrmNameList names, XrmClassList classes)
+/* classes, into the first depth entries of names and classes, the */
+/* depth being the number of widgets from the root to w. */
+static void GetNamesAndClasses(Widget w, Cardinal depth, XrmNameList names, XrmClassList classes)
 {
-  Cardinal length, j;
-  XrmQuark t;
   WidgetClass wc;
-  /* Return null-terminated quark arrays, with length the number of
-     quarks (not including NULL) */
-  for (length = 0; w != NULL; w = (Widget)w->core.parent) {
-    names[length] = w->core.xrm_name;
+  /* Fill the arrays from the end, which is w, to the root. */
+  for (; w != NULL; w = (Widget)w->core.parent) {
+    depth--;
+    names[depth] = w->core.xrm_name;
     wc = XtClass(w);
     /* KLUDGE KLUDGE KLUDGE KLUDGE */
     if (w->core.parent == NULL && XtIsApplicationShell(w)) {
-      classes[length] = ((ApplicationShellWidget)w)->application.xrm_class;
+      classes[depth] = ((ApplicationShellWidget)w)->application.xrm_class;
     }
     else
-      classes[length] = wc->core_class.xrm_class;
-    length++;
+      classes[depth] = wc->core_class.xrm_class;
   }
-  /* They're in backwards order, flop them around */
-  for (j = 0; j < length / 2; j++) {
-    t = names[j];
-    names[j] = names[length - j - 1];
-    names[length - j - 1] = t;
-    t = classes[j];
-    classes[j] = classes[length - j - 1];
-    classes[length - j - 1] = t;
-  }
-  names[length] = NULLQUARK;
-  classes[length] = NULLQUARK;
-  return length;
 } /* GetNamesAndClasses */
 
 /* Converts resource list to quarkified list. */
@@ -400,18 +386,52 @@ static XrmDatabase RenditionDatabase(Display *dsp, Widget wid)
   return (NULL);
 }
 
-/* Set names and classes to those of wid and its ancestors, if wid is */
-/* not NULL, followed by resname and resclass.  Returns their number; */
-/* the arrays, of 100 entries, have room for two more. */
-static Cardinal RenditionNames(
-    Widget wid, String resname, String resclass, XrmName *names, XrmClass *classes)
+/*
+ * The names and classes that the resources of a rendition are looked
+ * up under: those of a widget and its ancestors, a resource name and
+ * class, a rendition tag and NULLQUARK.  They are in the arrays of the
+ * record, unless the widget is nested too deep for them.
+ */
+#define RENDITION_NAMES_SIZE 100
+
+typedef struct {
+  XrmName *names;
+  XrmClass *classes;
+  XrmName stack_names[RENDITION_NAMES_SIZE];
+  XrmClass stack_classes[RENDITION_NAMES_SIZE];
+} XmRendNamesRec;
+
+/* Set the names and classes of rn to those of wid and its ancestors, */
+/* if wid is not NULL, followed by resname and resclass.  Returns */
+/* their number; the arrays have room for two more.  Free rn with */
+/* FreeRenditionNames. */
+static Cardinal RenditionNames(Widget wid, String resname, String resclass, XmRendNamesRec *rn)
 {
-  Cardinal length = 0;
-  if (wid != NULL)
-    length = GetNamesAndClasses(wid, names, classes);
-  names[length] = XrmStringToQuark(resname);
-  classes[length] = XrmStringToQuark(resclass);
-  return (length + 1);
+  Cardinal depth = 0;
+  Widget w;
+  for (w = wid; w != NULL; w = (Widget)w->core.parent)
+    depth++;
+  /* The resource, a tag and NULLQUARK follow the widgets. */
+  if (depth + 3 <= RENDITION_NAMES_SIZE) {
+    rn->names = rn->stack_names;
+    rn->classes = rn->stack_classes;
+  }
+  else {
+    rn->names = (XrmName *)_XmMallocArray(depth + 3, sizeof(XrmName));
+    rn->classes = (XrmClass *)_XmMallocArray(depth + 3, sizeof(XrmClass));
+  }
+  GetNamesAndClasses(wid, depth, rn->names, rn->classes);
+  rn->names[depth] = XrmStringToQuark(resname);
+  rn->classes[depth] = XrmStringToQuark(resclass);
+  return (depth + 1);
+}
+
+static void FreeRenditionNames(XmRendNamesRec *rn)
+{
+  if (rn->names != rn->stack_names) {
+    XtFree((char *)rn->names);
+    XtFree((char *)rn->classes);
+  }
 }
 
 /* Get the search list of db for the resources of rendition tag (NULL */
@@ -488,8 +508,7 @@ static Boolean GetResources(XmRendition rend,
   Arg *arg;
   XrmName argName;
   XrmResource *res;
-  XrmName names[100];
-  XrmClass classes[100];
+  XmRendNamesRec rn;
   XrmDatabase db;
   XrmHashTable stackSearchList[SEARCH_LIST_SIZE];
   XrmHashTable *searchList = stackSearchList;
@@ -540,14 +559,10 @@ static Boolean GetResources(XmRendition rend,
     }
   }
   /* DB query */
-  if ((db = RenditionDatabase(dsp, wid)) != NULL)
-    RenditionSearchList(db,
-                        names,
-                        classes,
-                        RenditionNames(wid, resname, resclass, names, classes),
-                        tag,
-                        stackSearchList,
-                        &searchList);
+  if ((db = RenditionDatabase(dsp, wid)) != NULL) {
+    Cardinal length = RenditionNames(wid, resname, resclass, &rn);
+    RenditionSearchList(db, rn.names, rn.classes, length, tag, stackSearchList, &searchList);
+  }
   /* Loop over table */
   for (j = 0, res = table; (Cardinal)j < _XmNumRenditionResources; j++, res++) {
     if (!found[j]) {
@@ -612,6 +627,8 @@ static Boolean GetResources(XmRendition rend,
   }
   if (searchList != stackSearchList)
     XtFree((char *)searchList);
+  if (db != NULL)
+    FreeRenditionNames(&rn);
   _XmProcessUnlock();
   if (app) {
     _XmAppUnlock(app);
@@ -2205,15 +2222,15 @@ static void KeyAddRendition(XmRTKey key,
 /* renditions tagged in tags, from a font list entry, of display. */
 static void KeyAddFontListRenditions(XmRTKey check, Display *display, XmRTKey tags)
 {
-  XrmName names[100];
-  XrmClass classes[100];
+  XmRendNamesRec rn;
   XrmDatabase db = RenditionDatabase(display, NULL);
-  Cardinal length = RenditionNames(NULL, XmS, XmCFontList, names, classes);
+  Cardinal length = RenditionNames(NULL, XmS, XmCFontList, &rn);
   char *tag;
   for (tag = tags->data; tag < tags->data + tags->size; tag += strlen(tag) + 1) {
     KeyAdd(check, tag, strlen(tag) + 1);
-    KeyAddRendition(check, db, names, classes, length, tag);
+    KeyAddRendition(check, db, rn.names, rn.classes, length, tag);
   }
+  FreeRenditionNames(&rn);
 }
 
 static Boolean CompareRTCacheEntry(XmHashKey k1, XmHashKey k2)
@@ -2392,8 +2409,7 @@ XmRenderTable _XmRenderTableCvtCacheGet(
   XmRTCacheRec *rec;
   XmRenderTable table = NULL;
   char key_buf[KEY_BUF_SIZE], spec_buf[256];
-  XrmName names[100];
-  XrmClass classes[100];
+  XmRendNamesRec rn;
   Cardinal length;
   XrmDatabase db;
   Screen *screen;
@@ -2426,15 +2442,16 @@ XmRenderTable _XmRenderTableCvtCacheGet(
   KeyAdd(&key.key, spec, spec_len + 1);
   /* The values found for each rendition that the converter makes. */
   db = RenditionDatabase(NULL, wid);
-  length = RenditionNames(wid, resname, resclass, names, classes);
-  KeyAddRendition(&key.key, db, names, classes, length, NULL);
+  length = RenditionNames(wid, resname, resclass, &rn);
+  KeyAddRendition(&key.key, db, rn.names, rn.classes, length, NULL);
   s = (spec_len < sizeof(spec_buf)) ? memcpy(spec_buf, spec, spec_len + 1) : XtNewString(spec);
   for (tag = strtok_r(s, _XmRENDITION_TAG_DELIMITERS, &strtok_buf); tag != NULL;
        tag = strtok_r(NULL, _XmRENDITION_TAG_DELIMITERS, &strtok_buf))
-    KeyAddRendition(&key.key, db, names, classes, length, tag);
+    KeyAddRendition(&key.key, db, rn.names, rn.classes, length, tag);
   if (s != spec_buf)
     XtFree(s);
   key.hash = KeyHash(&key.key);
+  FreeRenditionNames(&rn);
   if ((rec = FindRTCache(XtDisplayOfObject(wid), False)) != NULL &&
       (cached = (XmRTCacheEntry)_XmGetHashEntry(rec->entries, (XmHashKey)&key)) != NULL &&
       RTCacheEntryValid(cached, XtDisplayOfObject(wid))) {
