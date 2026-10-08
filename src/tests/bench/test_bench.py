@@ -79,6 +79,19 @@ class Compare(unittest.TestCase):
         self.assertEqual(rows["b"], ["+5.1% time"])
         self.assertEqual([r["name"] for r in bad], ["b"])
 
+    def test_min_ns(self):
+        # 5.8 -> 6.4 ns is +10 %, but 0.6 ns: a shift in where the code
+        # of a few-nanosecond case landed, not a regression.
+        rows, bad = self.check([rounds("a", 5.8)], [rounds("a", 6.4)])
+        self.assertEqual(bad, [])
+        rows, bad = bench.compare(report(rounds("a", 5.8)),
+                                  report(rounds("a", 6.4)), 5.0,
+                                  min_ns=0.5)
+        self.assertEqual(rows[0]["problems"], ["+10.3% time"])
+        # The same 10 % of a 100 ns case is 10 ns.
+        rows, bad = self.check([rounds("a", 100)], [rounds("a", 110)])
+        self.assertEqual(rows["a"], ["+10.0% time"])
+
     def test_threshold_option(self):
         rows, bad = self.check([rounds("a", 100)], [rounds("a", 109)], 10)
         self.assertEqual(bad, [])

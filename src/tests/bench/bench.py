@@ -27,9 +27,10 @@ the rounds of the builds are interleaved, so that a change in the load
 of the machine affects all of them alike.
 
 "compare" and "gate" fail (exit status 1) when, for some case,
-  - the median time per operation grew by more than PCT % (default 5),
-    and a one-sided Mann-Whitney U test over the rounds gives a
-    probability below --alpha (default 0.001) that this is noise, or
+  - the median time per operation grew by more than PCT % (default 5)
+    and by more than --min-ns nanoseconds (default 1), and a one-sided
+    Mann-Whitney U test over the rounds gives a probability below
+    --alpha (default 0.001) that this is noise, or
   - a round trip count grew: xmbench's _XReply count per timed run, or
     the proxy's count of round trips of the whole process.
 A count is compared as the smallest value of the head build over the
@@ -66,6 +67,12 @@ PROXY_FIELDS = ("requests", "replies", "errors", "events", "round_trips")
 # small because about 40 cases are compared at once: five rounds against
 # five cannot reach it, ten against ten can.
 ALPHA = 0.001
+# A slowdown must also be this many nanoseconds per operation.  The
+# micro cases take a few nanoseconds, and a change elsewhere in libXm
+# that moves their code or data (an unrelated file growing) can make
+# them a fraction of a nanosecond slower or faster for good: 0.6 ns is
+# 10 % of trait-get.  Such a shift is not a regression of the change.
+MIN_NS = 1.0
 # The counts that must not grow, and where they are.
 GATED_COUNTS = (("round_trips_per_run", None), ("round_trips", "proxy"))
 
@@ -434,7 +441,16 @@ def p_slower(base, head):
     return 0.5 * math.erfc(z / math.sqrt(2))
 
 
-def compare(base, head, threshold, alpha=ALPHA):
+def slower(base_ns, head_ns, threshold, min_ns=MIN_NS):
+    """Whether head's median is enough slower to be gated, before the
+    test of significance."""
+    if threshold is None or base_ns <= 0:
+        return False
+    return (head_ns / base_ns - 1) * 100 > threshold + 1e-9 and \
+        head_ns - base_ns > min_ns + 1e-9
+
+
+def compare(base, head, threshold, alpha=ALPHA, min_ns=MIN_NS):
     """Compare two reports; returns (rows, regressions).  A threshold of
     None compares the round trip counts only."""
     base_cases = {c["name"]: c for c in base["cases"]}
@@ -448,7 +464,7 @@ def compare(base, head, threshold, alpha=ALPHA):
         p = p_slower(b.get("ns_per_op_runs", []),
                      h.get("ns_per_op_runs", []))
         problems = []
-        if threshold is not None and change > threshold + 1e-9 and \
+        if slower(b["ns_per_op"], h["ns_per_op"], threshold, min_ns) and \
                 p < alpha:
             problems.append("%+.1f%% time" % change)
         row = {"name": h["name"], "base_ns": b["ns_per_op"],
@@ -473,7 +489,7 @@ def fmt_count(c):
     return "%g" % c[0] if c[0] == c[1] else "%g-%g" % c
 
 
-def table(rows, threshold, alpha, markdown=False):
+def table(rows, threshold, alpha, markdown=False, min_ns=MIN_NS):
     head = ("case", "base ns/op", "head ns/op", "change", "p", "rtrips",
             "proxy rtrips", "verdict")
     lines = []
@@ -502,20 +518,22 @@ def table(rows, threshold, alpha, markdown=False):
                    "not gated).")
     else:
         out.append("Gated: a median time per operation more than %g %% "
-                   "slower, with p < %g that it is noise (one-sided "
-                   "Mann-Whitney U over the rounds); any increase of a "
-                   "round trip count." % (threshold, alpha))
+                   "and %g ns slower, with p < %g that it is noise "
+                   "(one-sided Mann-Whitney U over the rounds); any "
+                   "increase of a round trip count."
+                   % (threshold, min_ns, alpha))
     return "\n".join(out)
 
 
-def report(rows, bad, threshold, label=None, alpha=ALPHA):
-    print(table(rows, threshold, alpha))
+def report(rows, bad, threshold, label=None, alpha=ALPHA, min_ns=MIN_NS):
+    print(table(rows, threshold, alpha, min_ns=min_ns))
     summary = os.environ.get("GITHUB_STEP_SUMMARY")
     if summary:
         with open(summary, "a") as f:
             f.write("### xmbench%s: head against base\n\n"
                     % (" (%s)" % label if label else ""))
-            f.write(table(rows, threshold, alpha, markdown=True) + "\n\n")
+            f.write(table(rows, threshold, alpha, markdown=True,
+                          min_ns=min_ns) + "\n\n")
             f.write("**%d regression(s)**\n" % len(bad) if bad
                     else "No regression.\n")
     if bad:
@@ -555,8 +573,9 @@ def cmd_compare(args):
         base = json.load(f)
     with open(args.head) as f:
         head = json.load(f)
-    rows, bad = compare(base, head, args.threshold, args.alpha)
-    return report(rows, bad, args.threshold, args.label, args.alpha)
+    rows, bad = compare(base, head, args.threshold, args.alpha, args.min_ns)
+    return report(rows, bad, args.threshold, args.label, args.alpha,
+                  args.min_ns)
 
 
 def cmd_gate(args):
@@ -571,11 +590,12 @@ def cmd_gate(args):
         run_builds(builds, cases, args, args.rounds, workdir)
         reports = [report_json(b, args) for b in builds]
         rows, bad = compare(reports[0], reports[1], args.threshold,
-                            args.alpha)
+                            args.alpha, args.min_ns)
         # Time is noisy: confirm with more rounds of the suspects.
         # Not only the significant ones: five rounds can hide a shift.
-        slow = [r["name"] for r in rows if args.threshold is not None and
-                r["change"] > args.threshold]
+        slow = [r["name"] for r in rows if
+                slower(r["base_ns"], r["head_ns"], args.threshold,
+                       args.min_ns)]
         if slow and args.confirm:
             log("confirming %s with %d more rounds" % (" ".join(slow),
                                                        args.confirm))
@@ -586,8 +606,10 @@ def cmd_gate(args):
     reports = [report_json(b, args) for b in builds]
     for build, data in zip(builds, reports):
         write_json(os.path.join(out, build.name + ".json"), data)
-    rows, bad = compare(reports[0], reports[1], args.threshold, args.alpha)
-    return report(rows, bad, args.threshold, args.label, args.alpha)
+    rows, bad = compare(reports[0], reports[1], args.threshold, args.alpha,
+                        args.min_ns)
+    return report(rows, bad, args.threshold, args.label, args.alpha,
+                  args.min_ns)
 
 
 def main(argv=None):
@@ -633,6 +655,9 @@ def main(argv=None):
     def compare_options(p):
         p.add_argument("-t", "--threshold", type=float, default=5.0,
                        help="allowed slowdown in %% (default 5)")
+        p.add_argument("--min-ns", type=float, default=MIN_NS,
+                       help="allowed slowdown in ns per operation "
+                       "(default %g)" % MIN_NS)
         p.add_argument("--alpha", type=float, default=ALPHA,
                        help="largest p that a slowdown is noise "
                        "(default %g)" % ALPHA)

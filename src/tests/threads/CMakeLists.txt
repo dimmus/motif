@@ -31,3 +31,18 @@ if(WITH_TSAN)
 endif()
 
 motif_test_set_env()
+
+# mtapps' own LeakSanitizer suppressions (lsan.supp here), joined with
+# the suites' (src/tests/lsan.supp): LeakSanitizer reads one file.  Set
+# after motif_test_set_env() so that this LSAN_OPTIONS is the one used.
+if(WITH_COMPILER_ASAN)
+    file(READ ${CMAKE_CURRENT_SOURCE_DIR}/../lsan.supp _lsan_common)
+    file(READ ${CMAKE_CURRENT_SOURCE_DIR}/lsan.supp _lsan_mtapps)
+    file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/mtapps-lsan.supp
+        "${_lsan_common}\n${_lsan_mtapps}")
+    set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+        ${CMAKE_CURRENT_SOURCE_DIR}/../lsan.supp
+        ${CMAKE_CURRENT_SOURCE_DIR}/lsan.supp)
+    set_property(TEST Threads.mtapps APPEND PROPERTY ENVIRONMENT
+        "LSAN_OPTIONS=suppressions=${CMAKE_CURRENT_BINARY_DIR}/mtapps-lsan.supp:print_suppressions=0")
+endif()
