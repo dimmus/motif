@@ -433,7 +433,7 @@ static void SecondaryObjectCreate(Widget req, Widget new_w, ArgList args, Cardin
                      wc->core_class.num_resources,
                      args,
                      *num_args);
-  extData = (XmWidgetExtData)XtCalloc(1, sizeof(XmWidgetExtDataRec));
+  extData = _XmExtDataAlloc();
   extData->widget = (Widget)newSec;
   extData->reqWidget = (Widget)reqSec;
   ((XmCascadeButtonGCacheObject)newSec)->ext.extensionType = XmCACHE_EXTENSION;
@@ -484,7 +484,7 @@ static void InitializePosthook(Widget req, Widget new_w, ArgList args, Cardinal 
   _XmPopWidgetExtData((Widget)cbw, &ext, XmCACHE_EXTENSION);
   _XmExtObjFree((XtPointer)ext->widget);
   _XmExtObjFree((XtPointer)ext->reqWidget);
-  XtFree((char *)ext);
+  _XmExtDataFree(ext);
   _XmProcessUnlock();
 }
 
@@ -1732,7 +1732,7 @@ static Boolean SetValuesPrehook(
   memcpy(&(newSec->label_cache), LabG_Cache(newParent), sizeof(XmLabelGCacheObjPart));
   memcpy(
       &(newSec->cascade_button_cache), CBG_Cache(newParent), sizeof(XmCascadeButtonGCacheObjPart));
-  extData = (XmWidgetExtData)XtCalloc(1, sizeof(XmWidgetExtDataRec));
+  extData = _XmExtDataAlloc();
   extData->widget = (Widget)newSec;
   extData->reqWidget = (Widget)reqSec;
   _XmPushWidgetExtData(newParent, extData, XmCACHE_EXTENSION);
@@ -1786,7 +1786,7 @@ static void GetValuesPrehook(Widget newParent, ArgList args, Cardinal *num_args)
   memcpy(&(newSec->label_cache), LabG_Cache(newParent), sizeof(XmLabelGCacheObjPart));
   memcpy(
       &(newSec->cascade_button_cache), CBG_Cache(newParent), sizeof(XmCascadeButtonGCacheObjPart));
-  extData = (XmWidgetExtData)XtCalloc(1, sizeof(XmWidgetExtDataRec));
+  extData = _XmExtDataAlloc();
   extData->widget = (Widget)newSec;
   _XmPushWidgetExtData(newParent, extData, XmCACHE_EXTENSION);
   /* Note that if a resource is defined in the superclass's as well as a
@@ -1820,7 +1820,7 @@ static void GetValuesPosthook(Widget new_w, ArgList args, Cardinal *num_args)
   _XmProcessLock();
   _XmExtObjFree((XtPointer)ext->widget);
   _XmProcessUnlock();
-  XtFree((char *)ext);
+  _XmExtDataFree(ext);
 }
 
 /************************************************************************
@@ -1860,7 +1860,7 @@ static Boolean SetValuesPosthook(
   _XmExtObjFree((XtPointer)ext->widget);
   _XmExtObjFree((XtPointer)ext->reqWidget);
   _XmProcessUnlock();
-  XtFree((char *)ext);
+  _XmExtDataFree(ext);
   return FALSE;
 }
 

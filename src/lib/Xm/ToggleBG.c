@@ -617,7 +617,7 @@ static void SecondaryObjectCreate(Widget req, Widget new_w, ArgList args, Cardin
                      wc->core_class.num_resources,
                      args,
                      *num_args);
-  extData = (XmWidgetExtData)XtCalloc(1, sizeof(XmWidgetExtDataRec));
+  extData = _XmExtDataAlloc();
   extData->widget = (Widget)newSec;
   extData->reqWidget = (Widget)reqSec;
   ((XmToggleButtonGCacheObject)newSec)->ext.extensionType = XmCACHE_EXTENSION;
@@ -671,7 +671,7 @@ static void InitializePosthook(Widget req, Widget new_w, ArgList args, Cardinal 
   _XmExtObjFree((XtPointer)ext->widget);
   _XmExtObjFree((XtPointer)ext->reqWidget);
   _XmProcessUnlock();
-  XtFree((char *)ext);
+  _XmExtDataFree(ext);
 }
 
 static Boolean HandleRedraw(Widget kid, Widget cur_parent, Widget new_parent, Mask visual_flag)
@@ -2385,7 +2385,7 @@ static Boolean SetValuesPrehook(
   newSec->ext.extensionType = XmCACHE_EXTENSION;
   memcpy(&(newSec->label_cache), LabG_Cache(newParent), sizeof(XmLabelGCacheObjPart));
   memcpy(&(newSec->toggle_cache), TBG_Cache(newParent), sizeof(XmToggleButtonGCacheObjPart));
-  extData = (XmWidgetExtData)XtCalloc(1, sizeof(XmWidgetExtDataRec));
+  extData = _XmExtDataAlloc();
   extData->widget = (Widget)newSec;
   extData->reqWidget = (Widget)reqSec;
   _XmPushWidgetExtData(newParent, extData, XmCACHE_EXTENSION);
@@ -2438,7 +2438,7 @@ static void GetValuesPrehook(Widget newParent, ArgList args, Cardinal *num_args)
   newSec->ext.extensionType = XmCACHE_EXTENSION;
   memcpy(&(newSec->label_cache), LabG_Cache(newParent), sizeof(XmLabelGCacheObjPart));
   memcpy(&(newSec->toggle_cache), TBG_Cache(newParent), sizeof(XmToggleButtonGCacheObjPart));
-  extData = (XmWidgetExtData)XtCalloc(1, sizeof(XmWidgetExtDataRec));
+  extData = _XmExtDataAlloc();
   extData->widget = (Widget)newSec;
   _XmPushWidgetExtData(newParent, extData, XmCACHE_EXTENSION);
   /*
@@ -2477,7 +2477,7 @@ static void GetValuesPosthook(Widget new_w,
   _XmProcessLock();
   _XmExtObjFree((XtPointer)ext->widget);
   _XmProcessUnlock();
-  XtFree((char *)ext);
+  _XmExtDataFree(ext);
 }
 
 /************************************************************************
@@ -2523,7 +2523,7 @@ static Boolean SetValuesPosthook(Widget current,
   _XmExtObjFree((XtPointer)ext->widget);
   _XmExtObjFree((XtPointer)ext->reqWidget);
   _XmProcessUnlock();
-  XtFree((char *)ext);
+  _XmExtDataFree(ext);
   return FALSE;
 }
 

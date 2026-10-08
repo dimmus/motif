@@ -43,5 +43,6 @@ void round_trips_suite(SRunner *runner);
 void const_api_suite(SRunner *runner);
 void rendertable_suite(SRunner *runner);
 void traits_suite(SRunner *runner);
+void gadgets_suite(SRunner *runner);
 
 #endif /* SUITES_H */
