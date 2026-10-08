@@ -39,5 +39,6 @@ void list_suite(SRunner *runner);
 void msgcat_suite(SRunner *runner);
 void rtl_suite(SRunner *runner);
 void xim_suite(SRunner *runner);
+void round_trips_suite(SRunner *runner);
 
 #endif /* SUITES_H */

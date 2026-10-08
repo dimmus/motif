@@ -1120,28 +1120,56 @@ static void InitializeLineTable(XmTextWidget tw, int size)
   tw->text.table_size = size;
 }
 
+/*
+ * The line of the table that holds pos.  The start positions of the lines
+ * increase along the table, so this bisects the part of the table after
+ * table_index (or before it), where it used to walk it line by line: from
+ * table_index to the end of the table for every insertion at the end of a
+ * text, which made filling a text quadratic in its number of lines.  The
+ * result is the line the walk stopped at.
+ */
 unsigned int _XmTextGetTableIndex(XmTextWidget tw, XmTextPosition pos)
 {
   XmTextLineTable line_table;
   unsigned int cur_index;
   unsigned int max_index;
-  XmTextPosition position;
-  position = pos;
+  unsigned int position;
+  unsigned int lo, hi, mid;
+  position = (unsigned int)pos;
   max_index = tw->text.total_lines - 1;
   line_table = tw->text.line_table;
   cur_index = tw->text.table_index;
-  /* look forward to find the current record */
-  if (line_table[cur_index].start_pos < (unsigned int)position) {
-    while (cur_index < max_index && line_table[cur_index].start_pos < (unsigned int)position)
-      cur_index++;
+  /* look forward to find the current record: the first line after
+     cur_index that does not start before position, or the last line */
+  if (line_table[cur_index].start_pos < position) {
+    lo = cur_index;
+    hi = max_index;
+    while (lo < hi) {
+      mid = lo + (hi - lo) / 2;
+      if (line_table[mid].start_pos < position)
+        lo = mid + 1;
+      else
+        hi = mid;
+    }
+    cur_index = lo;
     /* if over shot it by one */
-    if ((unsigned int)position < line_table[cur_index].start_pos)
+    if (position < line_table[cur_index].start_pos)
       cur_index--;
   }
-  else
-    /* look backward to find the current record */
-    while (cur_index && line_table[cur_index].start_pos > (unsigned int)position)
-      cur_index--;
+  else {
+    /* look backward to find the current record: the last line up to
+       cur_index that does not start after position, or the first line */
+    lo = 0;
+    hi = cur_index;
+    while (lo < hi) {
+      mid = hi - (hi - lo) / 2;
+      if (line_table[mid].start_pos > position)
+        hi = mid - 1;
+      else
+        lo = mid;
+    }
+    cur_index = lo;
+  }
   return (cur_index);
 }
 

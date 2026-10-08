@@ -42,12 +42,13 @@ set(MOTIF_TEST_SRCS
     Xm/testMsgCat.c
     Xm/testRtl.c
     Xm/testXim.c
+    Xm/testRoundTrips.c
     i18n_util.c
 )
 
 # Suites that open a display, and suites that do not.
 set(MOTIF_TEST_X_SUITES FontListEntry FontList XmStringCT XmStringExtent Widgets Text
-    Clipboard Layout XErrors List I18nLocale MsgCat Rtl Xim)
+    Clipboard Layout XErrors List I18nLocale MsgCat Rtl Xim RoundTrips)
 set(MOTIF_TEST_SUITES Svg Log LogConfig XmString I18n)
 set(MOTIF_TEST_DEFS "")
 

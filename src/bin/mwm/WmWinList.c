@@ -2867,21 +2867,32 @@ void UpdateScreenClientList (
     int count = 0;
     ClientListEntry *pEntry;
 
-    windows = malloc (sizeof (Window));
-    pEntry = pSD->clientList;
-
-    while (pEntry)
+    /*
+     * Filter out entries for icons.  Count the clients first: this runs
+     * whenever a client is managed or withdrawn, and growing the array
+     * one entry at a time made that quadratic in the number of clients.
+     */
+    for (pEntry = pSD->clientList; pEntry; pEntry = pEntry->nextSibling)
     {
-        /*
-         * Filter out entries for icons
-         */
         if (pEntry->type != MINIMIZED_STATE)
         {
-            windows = realloc (windows, (count + 1) * sizeof (Window));
-            windows[count] = (XID) pEntry->pCD->client;
             count++;
         }
-        pEntry = pEntry->nextSibling;
+    }
+
+    windows = malloc ((count ? count : 1) * sizeof (Window));
+    if (!windows)
+    {
+        return;
+    }
+
+    count = 0;
+    for (pEntry = pSD->clientList; pEntry; pEntry = pEntry->nextSibling)
+    {
+        if (pEntry->type != MINIMIZED_STATE)
+        {
+            windows[count++] = (XID) pEntry->pCD->client;
+        }
     }
 
     SetMwmClientList (pSD->rootWindow, windows, count);

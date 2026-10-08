@@ -72,6 +72,25 @@ upstream release (December 2017).  The git history has the details.
   documented differences suppressed, and compares the types of the
   installed headers and the offsets of the `_XmStrings` tables.
 
+### Performance
+
+- A small program's startup makes 43 round trips to the server instead
+  of 80: the virtual key bindings no longer fetch the keyboard mapping
+  of every binding (34 round trips), and reads of the drag window's
+  properties no longer end with an `XSync`.
+- XmText finds the line of a position by bisecting its line table:
+  appending to a long text was quadratic in its number of lines (10 MB
+  in 1 KB lines: 3.2 times fewer instructions).
+- mwm builds its client list (`_NET_CLIENT_LIST`) with one allocation
+  instead of one per client, every time a client comes or goes.
+- [doc/profiling.md](doc/profiling.md): how to profile Motif with perf,
+  callgrind, heaptrack and xtrace (`tools/dev/profile`), the hotspots of
+  the startup, of `xmbench`, of XmText, XmList and mwm, and the startup
+  cost compared with 2.3.8 and 2.4.1.  `libxmbench_preload` counts
+  round trips in libxcb, so that they are also counted where libX11 is
+  linked with `-Bsymbolic-functions`, and prints its counts at exit with
+  `XMBENCH_REPORT=1`.
+
 ## 2.5.0 (2026-10-04)
 
 Changes since 2.4.1.  The release is 2.5.0 rather than 2.4.2 because

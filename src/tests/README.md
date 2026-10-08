@@ -86,7 +86,9 @@ It is not part of CTest and is not built by default; `cmake --build
 `xvfb-run` when it was found) and writes `<build>/src/tests/bench/xmbench.json`.
 `xmbench -l` lists the cases; each reports ns, mallocs, X requests, round
 trips and `XSetICValues` calls per operation (the counters come from a
-small `LD_PRELOAD` library that `xmbench` loads itself).
+small `LD_PRELOAD` library that `xmbench` loads itself; with
+`XMBENCH_REPORT=1` it prints them when any program it is preloaded into
+exits, see `doc/profiling.md`).
 
 `ab/` holds the A/B harness for the Form, Container and List layout code
 (`xm_abtest`, `xm_layoutbench` and `ab.sh`).  It is not part of CTest

@@ -210,6 +210,9 @@ and writes `xmbench.json`.  `ab` builds the A/B harness in
 List configurations against two builds of libXm and reports any
 difference in geometry, selection, callbacks or pixels; use it to check
 that a change to the layout code keeps their behaviour identical.
+[doc/profiling.md](doc/profiling.md) describes how to profile Motif
+with perf, callgrind, heaptrack and xtrace (`tools/dev/profile`), the
+hotspots found and the startup cost compared with earlier releases.
 
 ### Sanitizers and coverage
 

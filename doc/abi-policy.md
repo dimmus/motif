@@ -283,7 +283,16 @@ Label, a PushButton and a Text, realized, then exit) under Xvfb, from
 4688 to 4380 (Release) and from 5746 to 5167 (Debug).  The loader time
 (about 3 million cycles) and the wall time (about 100 ms, dominated by
 the X server round trips) did not change measurably on the shared test
-machine; `perf` was not available.
+machine.
+
+[profiling.md](profiling.md#startup-hello_motif) compares the startup of
+that program (`tools/dev/profile/hello_motif.c`) with upstream 2.3.8,
+the 2.4.1 tag and master, with `LD_DEBUG=statistics`, `perf stat` and
+callgrind.  With master the dynamic loader executes 2.4 million of the
+15.4 million instructions of the startup, against 2.1 million with
+2.3.8: `-z now` binds every imported function at startup (2836 symbol
+lookups, against 2358 bound lazily).  The rest of the startup is mostly
+libX11's locale and input method, and the round trips.
 
 Most of the remaining `R_X86_64_64` relocations of libXm are pointers in
 the resource and class tables to the exported string tables: 3114 to

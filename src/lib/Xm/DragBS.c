@@ -170,10 +170,16 @@ static void StartProtectedSection(XmErrorTrap trap, Display *display, Window win
  *  EndProtectedSection ()
  *
  *  Flushes any generated errors and returns True if the window was bad.
+ *  A section that is one request with a reply (reading a property) needs
+ *  no XSync: Xlib has handled the error of that request, if any, when it
+ *  returned the reply.
  ***************************************************************************/
 static Boolean EndProtectedSection(XmErrorTrap trap)
 {
-  return _XmEndErrorTrap(trap, True) != 0;
+  Display *display = trap->display;
+  Boolean sync = NextRequest(display) != trap->first_request + 1 ||
+                 LastKnownRequestProcessed(display) != trap->first_request;
+  return _XmEndErrorTrap(trap, sync) != 0;
 }
 
 /*****************************************************************************

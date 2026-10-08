@@ -10,7 +10,9 @@
  * so the driver can see what mwm does.  With --hostile it first sets
  * malformed WM_HINTS, WM_NORMAL_HINTS, _MOTIF_WM_HINTS,
  * WM_COLORMAP_WINDOWS and _MOTIF_WM_MENU, to check that mwm survives
- * them.  Exits 77 without a display.
+ * them.  With --client-list it only prints the windows of mwm's client
+ * list (_XA_MWM_CLIENT_LIST: the root's _NET_CLIENT_LIST) as
+ * "clientlist N 0x... 0x..." and exits.  Exits 77 without a display.
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -61,6 +63,32 @@ static void set_hostile(Display *dpy, Window w)
 	}
 }
 
+/* Print the windows that _NET_CLIENT_LIST on the root lists. */
+static int client_list(Display *dpy)
+{
+	Atom type;
+	int format;
+	unsigned long n, after, i;
+	unsigned char *data = NULL;
+
+	if (XGetWindowProperty(dpy, DefaultRootWindow(dpy),
+			       prop(dpy, "_NET_CLIENT_LIST"), 0, 65536, False,
+			       XA_WINDOW, &type, &format, &n, &after,
+			       &data) != Success || type != XA_WINDOW ||
+	    format != 32) {
+		printf("clientlist none\n");
+		if (data)
+			XFree(data);
+		return 1;
+	}
+	printf("clientlist %lu", n);
+	for (i = 0; i < n; i++)
+		printf(" 0x%lx", (unsigned long)((Window *)data)[i]);
+	printf("\n");
+	XFree(data);
+	return 0;
+}
+
 int main(int argc, char **argv)
 {
 	Display *dpy;
@@ -69,12 +97,14 @@ int main(int argc, char **argv)
 	XSizeHints hints;
 	XTextProperty name;
 	char *title = "mwmclient";
-	int hostile = 0, i;
+	int hostile = 0, list = 0, i;
 	XEvent ev;
 
 	for (i = 1; i < argc; i++)
 		if (!strcmp(argv[i], "--hostile"))
 			hostile = 1;
+		else if (!strcmp(argv[i], "--client-list"))
+			list = 1;
 		else if (!strcmp(argv[i], "--title") && i + 1 < argc)
 			title = argv[++i];
 
@@ -83,6 +113,8 @@ int main(int argc, char **argv)
 		printf("wmclient: SKIP: no display\n");
 		return 77;
 	}
+	if (list)
+		return client_list(dpy);
 	root = DefaultRootWindow(dpy);
 	attr.event_mask = StructureNotifyMask;
 	attr.background_pixel = WhitePixel(dpy, DefaultScreen(dpy));
