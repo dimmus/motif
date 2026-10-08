@@ -43,6 +43,7 @@ static char rcsid[] = "$TOG: ScrollBar.c /main/20 1997/03/10 14:52:28 dbl $"
 #include <Xm/TransltnsP.h>
 #include <Xm/VaSimpleP.h>
 #include <stdlib.h>
+#include <string.h>
 /* see comments in ScrollBarP.h */
 #define slider_visual etched_slider
 #define flat_slider_GC unhighlight_GC
@@ -119,6 +120,8 @@ static void MoveSlider(XmScrollBarWidget sbw, int currentX, int currentY);
 static void RedrawSliderWindow(XmScrollBarWidget sbw);
 static Boolean ChangeScrollBarValue(XmScrollBarWidget sbw);
 static void TimerEvent(XtPointer closure, XtIntervalId *id);
+static void ThrottleRepeat(XmScrollBarWidget sbw);
+static XContext repeat_context = 0; /* serial of the last repeat's marker */
 static void ScrollCallback(
     XmScrollBarWidget sbw, int reason, int value, int xpixel, int ypixel, XEvent *event);
 static void ExportScrollBarValue(Widget wid, int offset, XtArgVal *value);
@@ -1575,6 +1578,8 @@ static void Destroy(Widget wid)
     XtRemoveTimeOut(sbw->scrollBar.timer);
     sbw->scrollBar.timer = 0;
   }
+  if (repeat_context)
+    XDeleteContext(XtDisplay(sbw), (XID)sbw, repeat_context);
 }
 
 /************************************************************************
@@ -3170,6 +3175,63 @@ static Boolean ChangeScrollBarValue(XmScrollBarWidget sbw)
 
 /*********************************************************************
  *
+ *  ThrottleRepeat
+ *	Keep the repeat of TimerEvent from running ahead of the server.
+ *	If the callbacks of a repeat ask the server for more drawing than
+ *	it can do in the repeat delay, the requests pile up and the
+ *	scrolling goes on long after the button is released.  Waiting
+ *	for the server after every repeat (XSync) prevents that but costs
+ *	a round trip per repeat, which slows the repeat down on any
+ *	connection with some latency (at 50 ms of round trip, from 20 to
+ *	10 repeats a second).  Instead, every repeat ends with an event
+ *	that the server sends back to us, and waits only until the server
+ *	has sent the one of the previous repeat: the server is then at
+ *	most one repeat behind, and nothing waits while it keeps up.
+ *
+ *********************************************************************/
+static Bool MarkerReached(Display *display /* unused */, XEvent *event, XPointer serial)
+{
+  return (long)(event->xany.serial - *(unsigned long *)serial) >= 0;
+}
+
+static void ThrottleRepeat(XmScrollBarWidget sbw)
+{
+  Display *display = XtDisplay(sbw);
+  XClientMessageEvent marker;
+  XEvent event;
+  XPointer data;
+  unsigned long serial;
+  if (!XtIsRealized((Widget)sbw))
+    return;
+  _XmProcessLock();
+  if (!repeat_context)
+    repeat_context = XUniqueContext();
+  _XmProcessUnlock();
+  /* An event sent to a window with an empty mask goes to the client
+   * that created the window: the marker comes back to us, and is then
+   * dispatched to the scroll bar, which ignores it. */
+  memset(&marker, 0, sizeof(marker));
+  marker.type = ClientMessage;
+  marker.window = XtWindow(sbw);
+  marker.message_type = XInternAtom(display, "_MOTIF_SCROLLBAR_REPEAT", False);
+  marker.format = 32;
+  /* After XInternAtom, which makes a request the first time. */
+  serial = NextRequest(display);
+  XSendEvent(display, XtWindow(sbw), False, NoEventMask, (XEvent *)&marker);
+  if (XFindContext(display, (XID)sbw, repeat_context, &data) == 0) {
+    unsigned long previous = (unsigned long)data;
+    /* Every event carries the serial of the last request the server
+     * processed; anything at or past the previous marker will do. */
+    if ((long)(LastKnownRequestProcessed(display) - previous) < 0) {
+      XFlush(display);
+      XPeekIfEvent(display, &event, MarkerReached, (XPointer)&previous);
+    }
+  }
+  XSaveContext(display, (XID)sbw, repeat_context, (XPointer)serial);
+}
+
+/*********************************************************************
+ *
  *  TimerEvent
  *	This is an event processing function which handles timer
  *	event evoked because of arrow selection.
@@ -3199,17 +3261,12 @@ static void TimerEvent(XtPointer closure, XtIntervalId *id) /* unused */
   /*  slider moved callbacks                                    */
   if (flag)
     ScrollCallback(sbw, sbw->scrollBar.change_type, sbw->scrollBar.value, 0, 0, NULL);
-  /*
-   * If the callback does alot of processing, and XSync is needed
-   * to flush the output and input buffers.  If this is not done,
-   * the entry back to MainLoop will cause the flush.  The server
-   * will then perform it work which may take longer than the timer
-   * interval which will cause the scrollbar to be stuck in a loop.
-   */
-  XSync(XtDisplay(sbw), False);
   /*  Add the repeat timer and check that the scrollbar hasn't been set
             insensitive by some callbacks */
   if (flag) {
+    /* Arm the timer only after waiting, so that the button release
+     * and other input are processed between two repeats. */
+    ThrottleRepeat(sbw);
     sbw->scrollBar.timer = XtAppAddTimeOut(XtWidgetToApplicationContext((Widget)sbw),
                                            (unsigned long)sbw->scrollBar.repeat_delay,
                                            TimerEvent,
