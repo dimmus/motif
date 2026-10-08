@@ -36,6 +36,8 @@
 #include <Xm/TraitP.h>
 #include <Xm/VendorSP.h>
 #include <Xm/XmP.h>
+#include <stdatomic.h>
+#include <string.h>
 /*
  * Internal data structures
  *
@@ -45,32 +47,54 @@
  * live in an open addressing hash table keyed by (object, trait name),
  * with linear probing in a power of two sized array that grows as it
  * fills, so that a lookup, hit or miss, is a few probes into one array.
+ * A slot is in use when its data is not NULL; removing a trait shifts
+ * the slots after it back (there are no tombstones).
  *
- * A slot is in use when its data is not NULL (XmeTraitSet with NULL data
- * removes the trait).  A removed slot keeps the tombstone marker as its
- * object so that probing goes on past it.
+ * XmeTraitSet changes the table under the process lock, but XmeTraitGet
+ * does not take it: traits are mostly set once, when a class is
+ * initialized, and read all the time, from every thread of a threaded
+ * program.  A reader validates its lookup with a sequence count instead
+ * (a seqlock): a writer makes TraitSeq odd, changes slots in place and
+ * makes it even again, and a reader that saw it odd, or changed by the
+ * time its probe ended, repeats the lookup under the lock.  The slots
+ * are atomics, so a reader racing with a writer reads whole words, and
+ * the writer's release stores order its odd TraitSeq before any slot
+ * change a reader can see.
+ *
+ * Growing the table copies the traits into a new array before it is
+ * published, but a reader may still be probing the old one, which is
+ * therefore never freed: it is kept on the new table's retired list
+ * (which also keeps leak checkers from reporting it).  Since the table
+ * only ever doubles, the retired arrays together are smaller than the
+ * current one.
  */
 typedef struct _XmTraitSlot {
-  XtPointer obj;
-  XrmQuark name;
-  XtPointer data;
+  _Atomic(XtPointer) obj;
+  _Atomic(XrmQuark) name;
+  _Atomic(XtPointer) data;
 } XmTraitSlotRec, *XmTraitSlot;
+
+typedef struct _XmTraitTable {
+  struct _XmTraitTable *retired; /* the previous, smaller table */
+  Cardinal mask;                 /* size - 1 */
+  XmTraitSlotRec slots[];
+} XmTraitTableRec, *XmTraitTable;
 
 #define TRAIT_INITIAL_SIZE 512 /* a power of two */
 
-static XmTraitSlot TraitSlots;
-static Cardinal TraitMask;   /* size - 1 */
-static Cardinal TraitInUse;  /* slots holding a trait */
-static Cardinal TraitFilled; /* slots in use or holding a tombstone */
-static char TraitTombstone;
-#define TOMBSTONE ((XtPointer)&TraitTombstone)
+static _Atomic(XmTraitTable) TraitTable;
+static atomic_ulong TraitSeq; /* odd while XmeTraitSet changes slots */
+static Cardinal TraitInUse;   /* slots holding a trait, under the lock */
 
 /*
  * Static functions
  */
 static Cardinal TraitHash(XtPointer obj, XrmQuark name);
-static XmTraitSlot TraitFind(XtPointer obj, XrmQuark name, Boolean for_insert);
-static void TraitResize(Cardinal size);
+static XtPointer TraitLookup(XmTraitTable table, XtPointer obj, XrmQuark name);
+static Cardinal TraitFind(XmTraitTable table, XtPointer obj, XrmQuark name);
+static void TraitStore(XmTraitSlot slot, XtPointer obj, XrmQuark name, XtPointer data);
+static XmTraitTable TraitGrow(XmTraitTable old);
+static void TraitDelete(XmTraitTable table, Cardinal i);
 /*
  * List all quarks here
  */
@@ -112,9 +136,6 @@ void _XmInitializeTraits(void)
   if (initialized)
     return;
   initialized = True;
-  /* Create Hash Table */
-  if (TraitSlots == NULL)
-    TraitResize(TRAIT_INITIAL_SIZE);
   XmQTmotifTrait = XrmPermStringToQuark("XmQTmotifTrait");
   /* Menu system manipulation and status */
   XmQTmenuSystem = XrmPermStringToQuark("XmTmenuSystem");
@@ -161,44 +182,48 @@ void _XmInitializeTraits(void)
 
 XtPointer XmeTraitGet(XtPointer obj, XrmQuark name)
 {
-  XtPointer trait = NULL;
-  XmTraitSlot slot;
+  XtPointer trait;
+  unsigned long seq = atomic_load_explicit(&TraitSeq, memory_order_acquire);
+  if (!(seq & 1)) {
+    trait = TraitLookup(atomic_load_explicit(&TraitTable, memory_order_acquire), obj, name);
+    /* The slot loads are acquires, so this load is not done before them. */
+    if (atomic_load_explicit(&TraitSeq, memory_order_relaxed) == seq)
+      return trait;
+  }
+  /* XmeTraitSet is changing the table: wait for it. */
   _XmProcessLock();
-  if (TraitSlots && (slot = TraitFind(obj, name, False)) != NULL)
-    trait = slot->data;
+  trait = TraitLookup(atomic_load_explicit(&TraitTable, memory_order_relaxed), obj, name);
   _XmProcessUnlock();
   return (trait);
 }
 
 Boolean XmeTraitSet(XtPointer object, XrmQuark name, XtPointer data)
 {
-  XmTraitSlot slot;
+  XmTraitTable table;
+  Cardinal i;
+  unsigned long seq;
   _XmProcessLock();
-  if (data != NULL) {
-    /* Keep the load under 3/4, counting tombstones. */
-    if ((TraitFilled + 1) * 4 > (TraitMask + 1) * 3 || !TraitSlots) {
-      Cardinal size = TraitSlots ? TraitMask + 1 : TRAIT_INITIAL_SIZE;
-      /* Grow if mostly full of traits, else just drop the tombstones. */
-      if ((TraitInUse + 1) * 2 > size)
-        size *= 2;
-      TraitResize(size);
+  table = atomic_load_explicit(&TraitTable, memory_order_relaxed);
+  /* Keep the load under 3/4. */
+  if (data != NULL && (!table || (TraitInUse + 1) * 4 > (table->mask + 1) * 3))
+    table = TraitGrow(table);
+  if (table != NULL) {
+    i = TraitFind(table, object, name);
+    if (data != NULL || atomic_load_explicit(&table->slots[i].data, memory_order_relaxed)) {
+      seq = atomic_load_explicit(&TraitSeq, memory_order_relaxed);
+      atomic_store_explicit(&TraitSeq, seq + 1, memory_order_relaxed);
+      if (data == NULL) {
+        /* if data == NULL then remove the trait */
+        TraitDelete(table, i);
+        TraitInUse--;
+      }
+      else {
+        if (atomic_load_explicit(&table->slots[i].data, memory_order_relaxed) == NULL)
+          TraitInUse++;
+        TraitStore(&table->slots[i], object, name, data);
+      }
+      atomic_store_explicit(&TraitSeq, seq + 2, memory_order_release);
     }
-    slot = TraitFind(object, name, True);
-    if (slot->data == NULL) {
-      if (slot->obj != TOMBSTONE)
-        TraitFilled++;
-      TraitInUse++;
-      slot->obj = object;
-      slot->name = name;
-    }
-    slot->data = data;
-  }
-  else if (TraitSlots && (slot = TraitFind(object, name, False)) != NULL) {
-    /* if data == NULL then remove the trait */
-    slot->obj = TOMBSTONE;
-    slot->name = NULLQUARK;
-    slot->data = NULL;
-    TraitInUse--;
   }
   _XmProcessUnlock();
   return True;
@@ -218,44 +243,109 @@ static Cardinal TraitHash(XtPointer obj, XrmQuark name)
 }
 
 /*
- * Return the slot that holds (obj, name), or NULL if there is none; with
- * for_insert, return the slot to store it in instead of NULL (the first
- * tombstone met, else the empty slot that ended the probe).  The table
- * always has an empty slot, so the probe terminates.
+ * Return the trait stored for (obj, name) in table, or NULL.  The probe
+ * ends at an empty slot, of which there always is one, and at the
+ * latest after visiting every slot, in case a writer is moving them.
  */
-static XmTraitSlot TraitFind(XtPointer obj, XrmQuark name, Boolean for_insert)
+static XtPointer TraitLookup(XmTraitTable table, XtPointer obj, XrmQuark name)
 {
-  Cardinal i = TraitHash(obj, name) & TraitMask;
-  XmTraitSlot tomb = NULL;
-  for (;; i = (i + 1) & TraitMask) {
-    XmTraitSlot slot = &TraitSlots[i];
-    if (slot->data != NULL) {
-      if (slot->obj == obj && slot->name == name)
-        return slot;
-    }
-    else if (slot->obj == TOMBSTONE) {
-      if (!tomb)
-        tomb = slot;
-    }
-    else
-      return for_insert ? (tomb ? tomb : slot) : NULL;
+  Cardinal i, n;
+  if (table == NULL)
+    return NULL;
+  i = TraitHash(obj, name) & table->mask;
+  for (n = 0; n <= table->mask; n++, i = (i + 1) & table->mask) {
+    XmTraitSlot slot = &table->slots[i];
+    XtPointer data = atomic_load_explicit(&slot->data, memory_order_acquire);
+    if (data == NULL)
+      break;
+    if (atomic_load_explicit(&slot->obj, memory_order_acquire) == obj &&
+        atomic_load_explicit(&slot->name, memory_order_acquire) == name)
+      return data;
+  }
+  return NULL;
+}
+
+/*
+ * Return the index of the slot that holds (obj, name), or of the empty
+ * slot that ended the probe if there is none.  Called under the lock.
+ */
+static Cardinal TraitFind(XmTraitTable table, XtPointer obj, XrmQuark name)
+{
+  Cardinal i = TraitHash(obj, name) & table->mask;
+  for (;; i = (i + 1) & table->mask) {
+    XmTraitSlot slot = &table->slots[i];
+    if (atomic_load_explicit(&slot->data, memory_order_relaxed) == NULL ||
+        (atomic_load_explicit(&slot->obj, memory_order_relaxed) == obj &&
+         atomic_load_explicit(&slot->name, memory_order_relaxed) == name))
+      return i;
   }
 }
 
-/* Move the traits into a new array of size slots (a power of two). */
-static void TraitResize(Cardinal size)
+/*
+ * Write a slot of the published table.  The release stores keep the
+ * writer's odd TraitSeq, stored before, ahead of them for any reader.
+ */
+static void TraitStore(XmTraitSlot slot, XtPointer obj, XrmQuark name, XtPointer data)
 {
-  XmTraitSlot old = TraitSlots;
-  Cardinal i, old_size = old ? TraitMask + 1 : 0;
-  TraitSlots = (XmTraitSlot)XtCalloc(size, sizeof(XmTraitSlotRec));
-  TraitMask = size - 1;
-  TraitInUse = TraitFilled = 0;
-  for (i = 0; i < old_size; i++)
-    if (old[i].data != NULL) {
-      XmTraitSlot slot = TraitFind(old[i].obj, old[i].name, True);
-      *slot = old[i];
-      TraitInUse++;
-      TraitFilled++;
+  atomic_store_explicit(&slot->obj, obj, memory_order_release);
+  atomic_store_explicit(&slot->name, name, memory_order_release);
+  atomic_store_explicit(&slot->data, data, memory_order_release);
+}
+
+/*
+ * Empty slot i and move back the traits after it that could no longer
+ * be reached past the gap (backward shift deletion for linear probing).
+ */
+static void TraitDelete(XmTraitTable table, Cardinal i)
+{
+  Cardinal j, home, mask = table->mask;
+  for (j = (i + 1) & mask;; j = (j + 1) & mask) {
+    XmTraitSlot slot = &table->slots[j];
+    XtPointer data = atomic_load_explicit(&slot->data, memory_order_relaxed);
+    XtPointer obj;
+    XrmQuark name;
+    if (data == NULL)
+      break;
+    obj = atomic_load_explicit(&slot->obj, memory_order_relaxed);
+    name = atomic_load_explicit(&slot->name, memory_order_relaxed);
+    home = TraitHash(obj, name) & mask;
+    /* Leave it if its home is cyclically in (i, j]. */
+    if (((j - home) & mask) < ((j - i) & mask))
+      continue;
+    TraitStore(&table->slots[i], obj, name, data);
+    i = j;
+  }
+  TraitStore(&table->slots[i], NULL, NULLQUARK, NULL);
+}
+
+/*
+ * Publish a table twice the size of old (or the initial one) holding
+ * its traits, and return it.  Called under the lock; old stays valid.
+ */
+static XmTraitTable TraitGrow(XmTraitTable old)
+{
+  Cardinal size = old ? (old->mask + 1) * 2 : TRAIT_INITIAL_SIZE;
+  Cardinal i;
+  size_t bytes = sizeof(XmTraitTableRec) + (size_t)size * sizeof(XmTraitSlotRec);
+  /* XtMalloc takes a Cardinal: _XmMallocArray fails rather than
+   * truncate, long before size itself could overflow. */
+  XmTraitTable table = (XmTraitTable)_XmMallocArray(1, bytes);
+  memset(table, 0, bytes);
+  table->retired = old;
+  table->mask = size - 1;
+  for (i = 0; old && i <= old->mask; i++) {
+    XmTraitSlot from = &old->slots[i];
+    XtPointer data = atomic_load_explicit(&from->data, memory_order_relaxed);
+    if (data != NULL) {
+      XtPointer obj = atomic_load_explicit(&from->obj, memory_order_relaxed);
+      XrmQuark name = atomic_load_explicit(&from->name, memory_order_relaxed);
+      XmTraitSlot to = &table->slots[TraitFind(table, obj, name)];
+      atomic_store_explicit(&to->obj, obj, memory_order_relaxed);
+      atomic_store_explicit(&to->name, name, memory_order_relaxed);
+      atomic_store_explicit(&to->data, data, memory_order_relaxed);
     }
-  XtFree((char *)old);
+  }
+  /* Readers that load the new table see it filled in. */
+  atomic_store_explicit(&TraitTable, table, memory_order_release);
+  return table;
 }

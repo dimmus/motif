@@ -294,8 +294,9 @@ that an application enables with `XtToolkitThreadInitialize()`.  Motif
 follows the same model.  Every public entry point brackets its work with
 `_XmAppLock(app)` (the application-context lock) and the modules that
 keep process-wide static state (the segment buffer of `Draw.c`, the
-caches, the trait table) use `_XmProcessLock()`.  In this tree these
-macros are
+caches, the trait table) use `_XmProcessLock()`; trait lookups, the
+most frequent of these accesses, validate a sequence count instead
+(chapter 1.2).  In this tree these macros are
 
 ```c
 /* src/lib/Xm/XmI.h */
@@ -354,10 +355,11 @@ compile error.
 instead of O(n²) (chapter 3.2); `XmContainer` appends children in O(1)
 (chapter 3.3); `XmList` scrolls by copying the rows that stay visible
 (chapter 6.1); Xft fonts, colours and draws are cached per display
-(chapter 5); the trait table is an open-addressing hash table (chapter
-5.1); the Text gap buffer grows geometrically (chapter 6.1).  Every one
-of these is measured by a case of `xmbench`, and the layout changes were
-validated against the old code with the A/B harness in
+(chapter 5); the trait table is an open-addressing hash table read
+without the process lock (chapters 1.2 and 5.1); the Text gap buffer
+grows geometrically (chapter 6.1).  Every one of these is measured by
+a case of `xmbench`, and the layout changes were validated against the
+old code with the A/B harness in
 [`src/tests/ab`](../../src/tests/ab/README.md), which drives both
 libraries through the same pseudo-random configurations and compares
 geometry, callbacks and window pixels.

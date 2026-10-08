@@ -396,16 +396,44 @@ variable as its transfer trait" ([CHANGELOG](../../CHANGELOG.md)).
 
 All traits of all classes live in one process-wide table, keyed by the
 pair (object pointer, quark).  In this tree it is an open-addressing
-hash table with linear probing and tombstones:
+hash table with linear probing, read without a lock:
 
 ```c
 /* src/lib/Xm/Trait.c */
-typedef struct _XmTraitSlot { XtPointer obj; XrmQuark name; XtPointer data; } XmTraitSlotRec, *XmTraitSlot;
+typedef struct _XmTraitSlot {
+  _Atomic(XtPointer) obj;
+  _Atomic(XrmQuark) name;
+  _Atomic(XtPointer) data;
+} XmTraitSlotRec, *XmTraitSlot;
+
+typedef struct _XmTraitTable {
+  struct _XmTraitTable *retired; /* the previous, smaller table */
+  Cardinal mask;                 /* size - 1 */
+  XmTraitSlotRec slots[];
+} XmTraitTableRec, *XmTraitTable;
+
 #define TRAIT_INITIAL_SIZE 512 /* a power of two */
-static XmTraitSlot TraitSlots;
-static Cardinal TraitMask;   /* size - 1 */
-static Cardinal TraitInUse;  /* slots holding a trait */
-static Cardinal TraitFilled; /* slots in use or holding a tombstone */
+
+static _Atomic(XmTraitTable) TraitTable;
+static atomic_ulong TraitSeq; /* odd while XmeTraitSet changes slots */
+static Cardinal TraitInUse;   /* slots holding a trait, under the lock */
+
+XtPointer XmeTraitGet(XtPointer obj, XrmQuark name)
+{
+  XtPointer trait;
+  unsigned long seq = atomic_load_explicit(&TraitSeq, memory_order_acquire);
+  if (!(seq & 1)) {
+    trait = TraitLookup(atomic_load_explicit(&TraitTable, memory_order_acquire), obj, name);
+    /* The slot loads are acquires, so this load is not done before them. */
+    if (atomic_load_explicit(&TraitSeq, memory_order_relaxed) == seq)
+      return trait;
+  }
+  /* XmeTraitSet is changing the table: wait for it. */
+  _XmProcessLock();
+  trait = TraitLookup(atomic_load_explicit(&TraitTable, memory_order_relaxed), obj, name);
+  _XmProcessUnlock();
+  return (trait);
+}
 
 static Cardinal TraitHash(XtPointer obj, XrmQuark name)
 {
@@ -420,22 +448,22 @@ static Cardinal TraitHash(XtPointer obj, XrmQuark name)
   return (Cardinal)h;
 }
 
-static XmTraitSlot TraitFind(XtPointer obj, XrmQuark name, Boolean for_insert)
+static XtPointer TraitLookup(XmTraitTable table, XtPointer obj, XrmQuark name)
 {
-  Cardinal i = TraitHash(obj, name) & TraitMask;
-  XmTraitSlot tomb = NULL;
-  for (;; i = (i + 1) & TraitMask) {
-    XmTraitSlot slot = &TraitSlots[i];
-    if (slot->data != NULL) {
-      if (slot->obj == obj && slot->name == name)
-        return slot;
-    }
-    else if (slot->obj == TOMBSTONE) {
-      if (!tomb) tomb = slot;
-    }
-    else
-      return for_insert ? (tomb ? tomb : slot) : NULL;
+  Cardinal i, n;
+  if (table == NULL)
+    return NULL;
+  i = TraitHash(obj, name) & table->mask;
+  for (n = 0; n <= table->mask; n++, i = (i + 1) & table->mask) {
+    XmTraitSlot slot = &table->slots[i];
+    XtPointer data = atomic_load_explicit(&slot->data, memory_order_acquire);
+    if (data == NULL)
+      break;
+    if (atomic_load_explicit(&slot->obj, memory_order_acquire) == obj &&
+        atomic_load_explicit(&slot->name, memory_order_acquire) == name)
+      return data;
   }
+  return NULL;
 }
 ```
 
@@ -446,20 +474,33 @@ Design points:
   function folds the high bits down and mixes with two odd constants
   (the golden-ratio constant `0x9e3779b1` and a MurmurHash3 finaliser
   constant), a standard recipe for pointer keys.
-- **Load factor.** `XmeTraitSet` keeps `(TraitFilled + 1) * 4 <= (TraitMask + 1) * 3`,
-  that is, live slots plus tombstones under 75 %.  When the bound is
-  reached it doubles the table if more than half of it holds live
-  traits, otherwise it rebuilds at the same size to drop tombstones.
-  Expected probe length for a successful lookup with linear probing at
-  load α is about ½(1 + 1/(1 − α)), which is 2.5 at α = 0.75; the
-  actual load in a Motif program is far lower (a few hundred traits in
-  512 or 1 024 slots).
+- **Load factor.** `XmeTraitSet` keeps `(TraitInUse + 1) * 4 <= size * 3`,
+  that is, live traits under 75 %, and doubles the table when the bound
+  is reached.  Expected probe length for a successful lookup with
+  linear probing at load α is about ½(1 + 1/(1 − α)), which is 2.5 at
+  α = 0.75; the actual load in a Motif program is far lower (a few
+  hundred traits in 512 or 1 024 slots).
 - **Deletion** (`XmeTraitSet` with `data == NULL`, or the
-  `XmeTraitRemove` macro) writes a tombstone, so that probe chains
-  through the removed slot stay intact.
-- **Locking.** Both operations take `_XmProcessLock`.  `XmeTraitGet` is
-  on hot paths (every `XmIsXxx`-style capability test, every default
-  button update), so the lock test of chapter 1 §1.7 matters here.
+  `XmeTraitRemove` macro) empties the slot and moves back the traits
+  after it that would otherwise be cut off from their home slot
+  (backward-shift deletion), so there are no tombstones and setting
+  and removing tool tips over and over never grows the table.
+- **Locking.** `XmeTraitSet` takes `_XmProcessLock`; `XmeTraitGet`,
+  which is on hot paths (every `XmIsXxx`-style capability test, every
+  default button update), does not.  It is a *seqlock* reader: a
+  writer makes `TraitSeq` odd, changes slots in place with release
+  stores and makes it even again, and a reader keeps its result only
+  if `TraitSeq` was even and unchanged across the probe.  Because the
+  slot loads are acquires, a reader that saw any value a writer stored
+  also sees that writer's odd count when it checks again.  A reader
+  that loses the race repeats the lookup under the lock instead of
+  spinning.  Growing copies the traits into a new table and publishes
+  it with a release store; the old one may still be probed by a
+  reader, so it is never freed but chained on `retired` (the retired
+  tables together are smaller than the current one, since it only
+  doubles).  With threads initialised a lookup costs the same as
+  without, where it used to cost a lock and unlock (about 37 against
+  7 ns in `xmbench -t trait-get`, and far more when threads contend).
 
 The `trait-get` case of `xmbench` measures "XmeTraitGet, hits and
 misses"; the [CHANGELOG](../../CHANGELOG.md) records that traits "use
@@ -471,7 +512,7 @@ cheaper lookups" than before.
 |----------|---------|--------------------|
 | Interface by name | Any class, in or out of libXm, can implement a trait; consumers need no class test. | A name is a string; a typo compiles. Trait records are untyped `XtPointer`s cast on use. |
 | Per-class installation | Exact, explicit; a subclass can drop a trait. | Not inherited: every subclass re-installs (DataField). |
-| Central table | One lookup path; traits on non-widget objects (`XmScreen`, `XmDisplay`) work the same way. | Global mutable state; needs the process lock; cannot be freed per display. |
+| Central table | One lookup path; traits on non-widget objects (`XmScreen`, `XmDisplay`) work the same way. | Global mutable state; writers take the process lock (readers do not); cannot be freed per display. |
 | Version field | Records can grow compatibly. | Only the scroll-frame trait has ever used it (version 1); every other record is version 0. |
 
 ## 1.2.5 Putting the three together: creating a `XmLabelGadget`

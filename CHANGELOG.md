@@ -36,6 +36,15 @@ upstream release (December 2017).  The git history has the details.
   build tools had no profile, and with Clang their many `main()`
   functions shared one profile record.
 
+### Code
+
+- `XmeTraitGet` no longer takes the process lock.  It checks a sequence
+  count that `XmeTraitSet` changes around its updates, and repeats the
+  lookup under the lock only when it raced with one.  With threads
+  initialised a lookup costs what it costs without them (7 ns against
+  37 in `xmbench -t trait-get`), and lookups from several threads no
+  longer contend (two threads: 8 ns against 240).
+
 ### Documentation
 
 - `doc/guide` rewritten as a technical architecture guide of sixteen

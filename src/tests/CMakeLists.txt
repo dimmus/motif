@@ -45,6 +45,7 @@ set(MOTIF_TEST_SRCS
     Xm/testRoundTrips.c
     Xm/testConstApi.c
     Xm/testRenderTable.c
+    Xm/testTraits.c
     i18n_util.c
 )
 
@@ -52,7 +53,7 @@ set(MOTIF_TEST_SRCS
 set(MOTIF_TEST_X_SUITES FontListEntry FontList XmStringCT XmStringExtent Widgets Text
     Clipboard Layout XErrors List I18nLocale MsgCat Rtl Xim RoundTrips ConstApi
     RenderTable)
-set(MOTIF_TEST_SUITES Svg Log LogConfig XmString I18n)
+set(MOTIF_TEST_SUITES Svg Log LogConfig XmString I18n Traits)
 set(MOTIF_TEST_DEFS "")
 
 # Suites with test cases tagged "xfail" (known library bugs); these get an

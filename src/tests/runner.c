@@ -51,6 +51,7 @@ static const struct suite_entry {
 	{ "RoundTrips",    round_trips_suite,     1 },
 	{ "ConstApi",      const_api_suite,       1 },
 	{ "RenderTable",   rendertable_suite,     1 },
+	{ "Traits",        traits_suite,          0 },
 };
 
 #define N_SUITES (sizeof suite_table / sizeof suite_table[0])
