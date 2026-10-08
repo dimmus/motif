@@ -147,6 +147,7 @@ static XmImShellInfo get_im_info(Widget w, Boolean create);
 static void draw_separator(Widget vw);
 static void null_proc(Widget w, XtPointer ptr, XEvent *ev, Boolean *b);
 static Boolean get_ic_card32(XIC xic, const char *name, unsigned long *value);
+static unsigned long ic_card32(unsigned long v);
 static void ImCountVaList(va_list var, int *total_count);
 static ArgList ImCreateArgList(va_list var, int total_count);
 static XmImXICInfo create_xic_info(Widget shell,
@@ -1157,8 +1158,8 @@ static void set_values(Widget w, ArgList args, Cardinal num_args, XmInputPolicy 
     }
     /* ??? Both a write-once and an unrecognized arg might be present. */
     if ((ret != NULL) && unrecognized) {
-      unsigned long status_bg, status_fg;
-      unsigned long preedit_bg, preedit_fg;
+      unsigned long status_bg = 0, status_fg = 0;
+      unsigned long preedit_bg = 0, preedit_fg = 0;
       /* ??? This code assumes that the XIM hasn't changed. */
       assert(XIMOfIC(icp->xic) == xim_info->xim);
       /* We do this in case an input method does not support
@@ -1173,6 +1174,11 @@ static void set_values(Widget w, ArgList args, Cardinal num_args, XmInputPolicy 
       XGetICValues(icp->xic, XNStatusAttributes, va_slist, XNPreeditAttributes, va_plist, NULL);
       XFree(va_slist);
       XFree(va_plist);
+      /* The colours are CARD32 values too */
+      status_bg = ic_card32(status_bg);
+      status_fg = ic_card32(status_fg);
+      preedit_bg = ic_card32(preedit_bg);
+      preedit_fg = ic_card32(preedit_fg);
       if (icp->anonymous)
         XDestroyIC(icp->xic);
       icp->anonymous = TRUE;
@@ -1562,7 +1568,6 @@ static void set_callback_values(
   Widget p = w;
   if (value == NULL)
     return;
-  call = value->callback;
   /* The XmPER_SHELL callbacks get the shell, whatever the policy given */
   while (!XtIsShell(p))
     p = XtParent(p);
@@ -2043,12 +2048,18 @@ static Boolean get_ic_card32(XIC xic, const char *name, unsigned long *value)
 
   if (XGetICValues(xic, (char *)name, &v, NULL) != NULL)
     return False;
+  *value = ic_card32(v);
+  return True;
+}
+
+/* A CARD32 IC value that Xlib stored in a zeroed long (see above). */
+static unsigned long ic_card32(unsigned long v)
+{
 #if ULONG_MAX > 0xffffffffUL
   if ((v & 0xffffffffUL) == 0)
     v >>= 32;
 #endif
-  *value = v;
-  return True;
+  return v;
 }
 
 static void null_proc(Widget w,      /* unused */

@@ -1535,8 +1535,8 @@ static void SelectionCallbackWrapper(Widget wid,
   if (tb != NULL) {
     /* Unchain this transfer block */
     tc->requests = (TransferBlock)tb->next;
-    /* If this is the last block then reset last */
-    if (tc->last == tb)
+    /* If this was the last block the list is empty */
+    if (tc->requests == NULL)
       tc->last = NULL;
   }
   if (!(tc->flags & TC_FLUSHED)) {
@@ -1745,15 +1745,13 @@ static TransferBlock AddTransferBlock(TransferContext tc)
   TransferBlock tb;
   tb = (TransferBlock)XtMalloc(sizeof(TransferBlockRec));
   tb->next = NULL;
-  /* we append blocks to the end of the list */
-  if (tc->requests == NULL) {
+  /* we append blocks to the end of the list, which is empty when it has
+   * no last block */
+  if (tc->last == NULL)
     tc->requests = tb;
-    tc->last = tb;
-  }
-  else {
+  else
     (tc->last)->next = (XtPointer)tb;
-    tc->last = tb;
-  }
+  tc->last = tb;
   if (TB_internal)
     tb->flags = TB_INTERNAL;
   else

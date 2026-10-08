@@ -1171,7 +1171,7 @@ XmString XmStringConcatAndFree(XmString a, XmString b)
   XmStringDirection a_dir;
   unsigned int b_lines, b_segs;
   Boolean a_dir_known;
-  Boolean segs_grown = False;
+  unsigned int segs_grown = 0;
   Boolean modify_a, modify_b, free_b;
   Boolean a_needs_unopt = False, b_needs_unopt = False;
   _XmStringArraySegRec array_seg;
