@@ -60,6 +60,18 @@ upstream release (December 2017).  The git history has the details.
   pasted or dropped compound string could hang a client.  Pops without
   a push no longer leave segments unmeasured.
 
+### Packaging and CI
+
+- Debian (`tools/packaging/debian`: libxm5, libmrm5, libuil5,
+  libmotif-common, libmotif-dev, mwm, uil) and RPM
+  (`tools/packaging/rpm/motif.spec`: motif, motif-devel) packaging.  CI
+  builds it with `dpkg-buildpackage` on Debian trixie and `rpmbuild` on
+  Fedora, runs the test suite, lintian and rpmlint, installs the
+  packages and builds a client against them.
+- The ABI job also compares with upstream Motif 2.3.8, with the
+  documented differences suppressed, and compares the types of the
+  installed headers and the offsets of the `_XmStrings` tables.
+
 ## 2.5.0 (2026-10-04)
 
 Changes since 2.4.1.  The release is 2.5.0 rather than 2.4.2 because

@@ -1,0 +1,8 @@
+usr/include
+usr/lib/${DEB_HOST_MULTIARCH}/cmake
+usr/lib/${DEB_HOST_MULTIARCH}/libMrm.so
+usr/lib/${DEB_HOST_MULTIARCH}/libUil.so
+usr/lib/${DEB_HOST_MULTIARCH}/libXm.so
+usr/lib/${DEB_HOST_MULTIARCH}/pkgconfig
+usr/share/man/man3
+usr/share/man/man5/Traits.5

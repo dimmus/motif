@@ -53,6 +53,7 @@ CI builds and tests every change on:
 | Debian stable on s390x (big-endian, under qemu) | GCC | Debug |
 | FreeBSD | Clang | Debug |
 | Debian stable, Fedora | GCC | Distribution packaging and install-and-consume test |
+| Debian trixie, Fedora | GCC | `dpkg-buildpackage` and `rpmbuild` of `tools/packaging`, lintian, rpmlint, install and consume |
 
 CI also runs warnings-as-errors builds (informational), scan-build,
 clang-tidy and cppcheck against committed baselines, an ABI comparison
