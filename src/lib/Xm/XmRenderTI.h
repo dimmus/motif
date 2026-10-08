@@ -196,6 +196,14 @@ extern Boolean _XmRenderTableFindFallback(
 extern Boolean _XmRenderTableFindFirstFont(XmRenderTable rendertable,
                                            short *indx,
                                            XmRendition *rend_ptr);
+/* What separates the tags of the renditions in a render table string. */
+#  define _XmRENDITION_TAG_DELIMITERS " \t\r\n\v\f,"
+extern XmRenderTable _XmRenderTableCvtCacheGet(
+    Widget wid, String resname, String resclass, char *spec, XtPointer *pending);
+extern void _XmRenderTableCvtCachePut(Widget wid,
+                                      XtPointer pending,
+                                      XmRenderTable table,
+                                      Boolean font_list);
 extern XmRenderTable _XmRenderTableRemoveRenditions(XmRenderTable oldtable,
                                                     XmStringTag *tags,
                                                     int tag_count,

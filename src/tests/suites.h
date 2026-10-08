@@ -41,5 +41,6 @@ void rtl_suite(SRunner *runner);
 void xim_suite(SRunner *runner);
 void round_trips_suite(SRunner *runner);
 void const_api_suite(SRunner *runner);
+void rendertable_suite(SRunner *runner);
 
 #endif /* SUITES_H */

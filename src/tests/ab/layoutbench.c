@@ -5,9 +5,10 @@
  * Licensed under the LGPL 2.1 license.
  *
  * xm_layoutbench: wall-clock timings of the Form, Container and List
- * layout code with many children or items.
+ * layout code with many children or items, and of the creation of
+ * Labels whose render table is converted from a resource.
  *
- *   xm_layoutbench form|container|list|listops N
+ *   xm_layoutbench form|formgrid|outline|spatial|detail|list|listops|rendertable N
  *
  * Prints the time of each phase (create, manage, resize, destroy, ...)
  * to stdout.  With PROF=FILE it also samples the stack on SIGPROF and
@@ -19,9 +20,11 @@
 #include <Xm/Container.h>
 #include <Xm/Form.h>
 #include <Xm/IconG.h>
+#include <Xm/Label.h>
 #include <Xm/LabelG.h>
 #include <Xm/List.h>
 #include <Xm/PushB.h>
+#include <Xm/RowColumn.h>
 #include <Xm/ScrolledW.h>
 #include <Xm/ScrollBar.h>
 #include <stdio.h>
@@ -400,6 +403,56 @@ static void listops_bench(int n)
   }
 }
 
+/*
+ * N Labels whose XmNrenderTable comes from the same resource, for render
+ * tables of a font list, of one and three renditions from the resource
+ * database, and of an Xft rendition.
+ */
+static void rendertable_bench(int n)
+{
+  static const char *db[] = {
+      "*core.fontName: -*-fixed-medium-r-normal--13-*-*-*-*-*-*-*",
+      "*core.fontType: FONT_IS_FONT",
+      "*bold.fontName: -*-fixed-bold-r-normal--13-*-*-*-*-*-*-*",
+      "*bold.fontType: FONT_IS_FONT",
+      "*red.renditionForeground: red",
+      "*red.underlineType: SINGLE_LINE",
+      "*xft.fontName: Sans",
+      "*xft.fontType: FONT_IS_XFT",
+      "*xft.fontSize: 12",
+      "*fontlist*l.renderTable: -*-fixed-medium-r-normal--13-*-*-*-*-*-*-*",
+      "*one*l.renderTable: core",
+      "*three*l.renderTable: core bold red",
+      "*xft*l.renderTable: xft",
+  };
+  static const char *cases[] = {"fontlist", "one", "three", "xft"};
+  XrmDatabase rdb = XtScreenDatabase(XtScreen(top));
+  unsigned int i, c;
+  int j;
+  for (i = 0; i < XtNumber(db); i++)
+    XrmPutLineResource(&rdb, db[i]);
+  printf("rendertable n=%d\n", n);
+  for (c = 0; c < XtNumber(cases); c++) {
+    char what[64];
+    Widget rc = XtVaCreateWidget(cases[c], xmRowColumnWidgetClass, top, NULL), l = NULL;
+    XmRenderTable rt = NULL;
+    XmStringTag *tags = NULL;
+    int ntags;
+    start();
+    for (j = 0; j < n; j++)
+      l = XtVaCreateWidget("l", xmLabelWidgetClass, rc, NULL);
+    XtVaGetValues(l, XmNrenderTable, &rt, NULL);
+    ntags = XmRenderTableGetTags(rt, &tags);
+    snprintf(what, sizeof(what), "create labels (%s, %d renditions)", cases[c], ntags);
+    while (ntags > 0)
+      XtFree(tags[--ntags]);
+    XtFree((char *)tags);
+    lap(what);
+    XtDestroyWidget(rc);
+    lap("destroy");
+  }
+}
+
 int main(int argc, char **argv)
 {
   const char *mode = argc > 1 ? argv[1] : "form";
@@ -425,5 +478,7 @@ int main(int argc, char **argv)
     list_bench(n);
   else if (!strcmp(mode, "listops"))
     listops_bench(n);
+  else if (!strcmp(mode, "rendertable"))
+    rendertable_bench(n);
   return 0;
 }

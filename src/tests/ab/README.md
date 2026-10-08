@@ -1,10 +1,12 @@
-# Layout and XmString A/B harness
+# Layout, XmString and render table A/B harness
 
 Tools for checking that a change to the Form, Container or List layout
-code, or to XmString, keeps their behaviour identical, and for timing
-it.  They were used to validate the layout performance work (the Form
-sort and sizing, the Container insert fast path and the List selection
-and scrolling changes) and the XmString building and extent cache work.
+code, to XmString, or to the String to RenderTable conversion, keeps
+their behaviour identical, and for timing it.  They were used to
+validate the layout performance work (the Form sort and sizing, the
+Container insert fast path and the List selection and scrolling
+changes), the XmString building and extent cache work and the cache of
+converted render tables.
 They are not tests: a comparison needs two builds of libXm, so nothing
 here is registered with CTest or built by default.
 
@@ -18,17 +20,23 @@ here is registered with CTest or built by default.
   the item and selection resources), `listmix` (the same with keyboard
   and button actions of the List, called with synthetic events,
   interleaved with the API, also between a button press and its release,
-  and changes of the selection policy), and `xmstring`, which builds
+  and changes of the selection policy), `xmstring`, which builds
   strings from SIZE random pieces (concatenation, copies,
   XmStringGenerate, XmStringParseText) and prints their byte streams,
   text and extents with a core font, a font set and Xft, also after the
-  render tables change.
+  render tables change; and `rendertable`, which builds a random
+  resource database of rendition resources and a random widget tree
+  whose widgets convert render tables and font lists from strings, and
+  prints every table and every warning (no input there).
 - `ab.sh OLD_LIBDIR NEW_LIBDIR MODE FIRST LAST [SIZE]` runs a range of
   seeds against both libraries and reports seeds whose output differs.
 - `xm_layoutbench form|container|list|listops N` times the phases of a
   layout with N children or items; `listops` times the List item and
   selection operations (adds at both ends, lookups, selection and
-  deletion by value and by position, replacements).
+  deletion by value and by position, replacements);
+  `xm_layoutbench rendertable N` times the creation of N Labels whose
+  XmNrenderTable comes from the same resource (a font list, one and
+  three renditions from the database, an Xft rendition).
 
 ## Usage
 
