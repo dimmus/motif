@@ -12,8 +12,8 @@
 # Two passes, both failing on any increase of a round trip count:
 #   time      xmbench on a Unix socket, the CPU cost (GATE_TIME_ARGS); it
 #             also fails on a median time per operation more than
-#             GATE_THRESHOLD % (default 5) slower, if the rounds show
-#             that it is not noise (see bench.py);
+#             GATE_THRESHOLD % (default 5) and 1 ns slower, if the rounds
+#             show that it is not noise (see bench.py);
 #   latency   through xmbench-proxy with 2 ms each way, where every round
 #             trip costs 4 ms, at a smaller scale (GATE_LATENCY_ARGS).
 #             Its times are reported but not gated: at that scale, the
