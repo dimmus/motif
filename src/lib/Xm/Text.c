@@ -131,7 +131,7 @@ static int PreeditStart(XIC xic, XPointer client_data, XPointer call_data);
 static void PreeditDone(XIC xic, XPointer client_data, XPointer call_data);
 static void PreeditDraw(XIC xic, XPointer client_data, XIMPreeditDrawCallbackStruct *call_data);
 static void PreeditCaret(XIC xic, XPointer client_data, XIMPreeditCaretCallbackStruct *call_data);
-static void ResetUnder(XmTextWidget tw);
+static void ResetUnder(XmTextWidget tw, XIMResetState reset_state);
 /********    End Static Function Declarations    ********/
 /*
  * For resource list management.
@@ -3139,9 +3139,9 @@ static void PreeditCaret(XIC xic, XPointer client_data, XIMPreeditCaretCallbackS
   (*tw->text.output->DrawInsertionPoint)(tw, tw->text.cursor_position, on);
 }
 
-static void ResetUnder(XmTextWidget tw)
+static void ResetUnder(XmTextWidget tw, XIMResetState reset_state)
 {
-  if (XmImGetXICResetState((Widget)tw) != XIMPreserveState)
+  if (reset_state != XIMPreserveState)
     PreUnder(tw) = False;
 }
 
@@ -3162,8 +3162,11 @@ void _XmTextResetIC(Widget widget)
   InputData data = tw->text.input->data;
   OutputData o_data = tw->text.output->data;
   XFontStruct *font = o_data->font;
+  XIMResetState reset_state;
   if (!PreUnder((XmTextWidget)widget))
     return;
+  /* Before the reset: see TextFieldResetIC in TextF.c. */
+  reset_state = XmImGetXICResetState(widget);
   if (VerifyCommitNeeded(tw)) {
     VerifyCommitNeeded(tw) = False;
     mb = _XmStringSourceGetString(tw, PreStartTW(tw), PreEndTW(tw), False);
@@ -3174,12 +3177,12 @@ void _XmTextResetIC(Widget widget)
   else
     XmImMbResetIC(widget, &mb);
   if (!mb) {
-    ResetUnder(tw);
+    ResetUnder(tw, reset_state);
     return;
   }
   n = strlen(mb);
   if (n > TEXT_MAX_INSERT_SIZE) {
-    ResetUnder(tw);
+    ResetUnder(tw, reset_state);
     return;
   }
   if (n > 0) {
@@ -3189,7 +3192,7 @@ void _XmTextResetIC(Widget widget)
       escapement = XmbTextExtents((XFontSet)font, mb, n, &overall_ink, NULL);
       if (escapement == 0 && overall_ink.width == 0 && strchr(mb, '\t') == 0) {
         (*tw->text.output->DrawInsertionPoint)(tw, tw->text.cursor_position, on);
-        ResetUnder(tw);
+        ResetUnder(tw, reset_state);
         return;
       }
     }
@@ -3213,7 +3216,7 @@ void _XmTextResetIC(Widget widget)
     (*tw->text.output->DrawInsertionPoint)(tw, tw->text.cursor_position, on);
     XtFree(mb);
   }
-  ResetUnder(tw);
+  ResetUnder(tw, reset_state);
 }
 
 XmTextPosition _XmTextSetPreeditPosition(Widget w, XmTextPosition position)

@@ -332,7 +332,7 @@ static void doSetHighlight(Widget w,
                            XmTextPosition right,
                            XmHighlightMode mode);
 static Boolean TrimHighlights(XmTextFieldWidget tf, int *low, int *high);
-static void ResetUnder(XmTextFieldWidget tf);
+static void ResetUnder(XmTextFieldWidget tf, XIMResetState reset_state);
 /********    End Static Function Declarations    ********/
 static XmConst XmTextScanType sarray[] = {XmSELECT_POSITION, XmSELECT_WORD, XmSELECT_LINE};
 static XContext _XmTextFDestContext = 0;
@@ -7546,8 +7546,18 @@ static void TextFieldResetIC(Widget w)
   XRectangle overall_ink;
   XmTextPosition cursorPos, nextPos;
   XmTextFieldWidget tf = (XmTextFieldWidget)w;
+  XIMResetState reset_state;
   if (!(tf->text.onthespot->under_preedit))
     return;
+  /*
+   * Ask for the reset state (an XIC value the client sets) before the
+   * reset.  The input method erases its preedit after the reset reply,
+   * and Xlib calls the preedit callbacks it receives during a round
+   * trip that does not wait for them, as XGetICValues does: after the
+   * reset, such a call would run them while the preedit is still on
+   * and let them delete the text just committed.
+   */
+  reset_state = XmImGetXICResetState(w);
   if (FVerifyCommitNeeded(tf)) {
     FVerifyCommitNeeded(tf) = False;
     str = _XmMallocArray(PreEnd(tf) - PreStart(tf) + 1, sizeof(wchar_t));
@@ -7578,7 +7588,7 @@ static void TextFieldResetIC(Widget w)
   else
     XmImMbResetIC(w, &mb);
   if (!mb) {
-    ResetUnder(tf);
+    ResetUnder(tf, reset_state);
     return;
   }
   if (!TextF_Editable(tf)) {
@@ -7642,12 +7652,12 @@ done:
     XtFree(str);
   else
     XFree(mb);
-  ResetUnder(tf);
+  ResetUnder(tf, reset_state);
 }
 
-static void ResetUnder(XmTextFieldWidget tf)
+static void ResetUnder(XmTextFieldWidget tf, XIMResetState reset_state)
 {
-  if (XmImGetXICResetState((Widget)tf) != XIMPreserveState)
+  if (reset_state != XIMPreserveState)
     tf->text.onthespot->under_preedit = False;
 }
 
