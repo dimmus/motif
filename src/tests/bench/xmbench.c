@@ -258,20 +258,6 @@ static void destroy_work(void)
 	}
 }
 
-static void pump_ms(int ms)
-{
-	double end = now_ns() + ms * 1e6;
-
-	while (now_ns() < end) {
-		XtInputMask mask = XtAppPending(app);
-
-		if (mask)
-			XtAppProcessEvent(app, mask);
-		else
-			usleep(100);
-	}
-}
-
 /* ------------------------------------------------------------------ */
 /* Traits                                                              */
 /* ------------------------------------------------------------------ */
