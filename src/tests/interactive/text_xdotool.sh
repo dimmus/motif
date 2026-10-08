@@ -153,9 +153,17 @@ secondary() {
 # into the source application, whose focus widget would then take the
 # destination back (Motif gives it to the text widget that gets the
 # focus).  Set the focus to the window like a click-to-focus window
-# manager does.
+# manager does.  Name the window: xdotool before 3.2021 (Debian and
+# Ubuntu ship 3.20160805) does not put the window under the pointer on
+# its window stack after getmouselocation, so a chained windowfocus
+# would have no window.
 destination() {
-	xdotool mousemove "$1" "$2" click 1 getmouselocation windowfocus --sync key End > /dev/null
+	xdotool mousemove "$1" "$2" click 1
+	WINDOW=
+	eval "$(xdotool getmouselocation --shell)"
+	[ -n "$WINDOW" ] || fail "no window at $1,$2"
+	xdotool windowfocus --sync "$WINDOW" key End ||
+		fail "could not focus the window at $1,$2"
 	settle
 }
 
