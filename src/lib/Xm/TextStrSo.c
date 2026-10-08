@@ -914,9 +914,10 @@ static XmTextStatus Replace(XmTextWidget initiator,
       *data->gap_start++ = block->ptr[i];
     }
   }
-  else {
+  else if (block_num_chars > 0) {
+    /* A deletion passes a block with no text, often with a NULL ptr. */
     data->gap_start += char_size * _XmTextBytesToCharacters(data->gap_start,
-                                                            &block->ptr[0],
+                                                            block->ptr,
                                                             block_num_chars,
                                                             False,
                                                             (int)initiator->text.char_size);

@@ -42,6 +42,7 @@ static char rcsid[] = "$TOG: XmIm.c /main/28 1997/10/13 14:57:31 cshi $"
 #include <Xm/VendorSEP.h>
 #include <Xm/VendorSP.h>
 #include <Xm/XmosP.h> /* for bzero */
+#include <limits.h>
 #include <stdarg.h>
 #include <stdio.h>
 #if !HAVE_XICPROC
@@ -145,6 +146,7 @@ static XtPointer *get_im_info_ptr(Widget w, Boolean create);
 static XmImShellInfo get_im_info(Widget w, Boolean create);
 static void draw_separator(Widget vw);
 static void null_proc(Widget w, XtPointer ptr, XEvent *ev, Boolean *b);
+static Boolean get_ic_card32(XIC xic, const char *name, unsigned long *value);
 static void ImCountVaList(va_list var, int *total_count);
 static ArgList ImCreateArgList(va_list var, int total_count);
 static XmImXICInfo create_xic_info(Widget shell,
@@ -809,7 +811,7 @@ static XmImXICInfo recreate_xic_info(XIC xic,
   /* This XIC must have been created by the application directly. */
   xic_info = XtNew(XmImXICRec);
   bzero((char *)xic_info, sizeof(XmImXICRec));
-  (void)XGetICValues(xic, XNInputStyle, &xic_info->input_style, NULL);
+  (void)get_ic_card32(xic, XNInputStyle, &xic_info->input_style);
   xic_info->next = im_info->iclist;
   im_info->iclist = xic_info;
   if (XtIsRealized(shell)) {
@@ -1091,7 +1093,7 @@ static void set_values(Widget w, ArgList args, Cardinal num_args, XmInputPolicy 
     icp->spot_valid = spot_set;
     icp->area = area;
     icp->area_valid = area_set;
-    XGetICValues(icp->xic, XNFilterEvents, &mask, NULL);
+    (void)get_ic_card32(icp->xic, XNFilterEvents, &mask);
     if (mask) {
       XtAddEventHandler(p, (EventMask)mask, False, null_proc, NULL);
     }
@@ -2023,6 +2025,32 @@ static void draw_separator(Widget vw)
                    XmSHADOW_ETCHED_IN); /* separator.separator_type */
 }
 
+/*
+ * Get an IC value that the XIM protocol carries as a CARD32
+ * (XNInputStyle, XNFilterEvents, XNResetState) into an unsigned long.
+ * For an attribute the input method server lists, Xlib copies the 4
+ * bytes of the protocol value to the start of the caller's long
+ * (_XCopyToArg), not the whole long: on a 64-bit big-endian machine they
+ * land in its high half and the low half is left as it was.  Read into a
+ * zeroed long and move a value found only in the high half down; the
+ * values fit in 32 bits, so a long that Xlib wrote whole (an attribute it
+ * answers itself) never looks like that.  False if the IC has no such
+ * value.
+ */
+static Boolean get_ic_card32(XIC xic, const char *name, unsigned long *value)
+{
+  unsigned long v = 0;
+
+  if (XGetICValues(xic, (char *)name, &v, NULL) != NULL)
+    return False;
+#if ULONG_MAX > 0xffffffffUL
+  if ((v & 0xffffffffUL) == 0)
+    v >>= 32;
+#endif
+  *value = v;
+  return True;
+}
+
 static void null_proc(Widget w,      /* unused */
                       XtPointer ptr, /* unused */
                       XEvent *ev,    /* unused */
@@ -2296,9 +2324,9 @@ void XmImMbResetIC(Widget w, char **mb)
 XIMResetState XmImGetXICResetState(Widget w)
 {
   XmImXICInfo icp;
-  XIMResetState state = XIMInitialState;
+  unsigned long state;
   icp = get_current_xic(get_xim_info(w), w);
-  if (icp != NULL && icp->xic != NULL)
-    XGetICValues(icp->xic, XNResetState, &state, NULL);
-  return state;
+  if (icp == NULL || icp->xic == NULL || !get_ic_card32(icp->xic, XNResetState, &state))
+    return XIMInitialState;
+  return (XIMResetState)state;
 }

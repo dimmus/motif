@@ -13,11 +13,18 @@
  * input method has no XIMPreeditPosition style, which is the one that
  * takes an area, so there XGetIMValues reports that style, XCreateIC
  * creates a plain context and XSetICValues only records its arguments.
+ *
+ * XGetICValues is interposed too, to store the values that the XIM
+ * protocol carries as a CARD32 (input style, filter events, reset state)
+ * the way Xlib does on a 64-bit big-endian machine when the input method
+ * server lists them: as 4 bytes at the start of the caller's long, which
+ * there is its high half.
  */
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
 #endif
 #include <dlfcn.h>
+#include <limits.h>
 #include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
@@ -50,6 +57,7 @@ typedef struct {
 static struct {
 	int active;		/* record the calls */
 	int fake;		/* over the spot, see above */
+	int card32_high;	/* CARD32 values as on 64-bit big-endian */
 	unsigned long set_calls;	/* XSetICValues calls */
 	unsigned long creates;	/* XCreateIC calls */
 	unsigned long spots;	/* XNSpotLocation values passed */
@@ -100,6 +108,7 @@ static void collect(va_list ap, ImArg *a)
 
 typedef char *(*set_ic_fn)(XIC, ...);
 typedef char *(*get_im_fn)(XIM, ...);
+typedef char *(*get_ic_fn)(XIC, ...);
 typedef XIC (*create_ic_fn)(XIM, ...);
 typedef Bool (*filter_fn)(XEvent *, Window);
 
@@ -152,6 +161,43 @@ char *XGetIMValues(XIM xim, ...)
 			*(XIMStyles **)a[i].value = styles;
 		}
 	}
+	return ret;
+}
+
+static int is_card32(const char *name)
+{
+	return !strcmp(name, XNInputStyle) || !strcmp(name, XNFilterEvents) ||
+	       !strcmp(name, XNResetState);
+}
+
+char *XGetICValues(XIC ic, ...)
+{
+	static get_ic_fn real;
+	ImArg a[IM_MAX_ARGS + 1] = { { NULL, NULL } };
+	unsigned long before[IM_MAX_ARGS];
+	va_list ap;
+	char *ret;
+	int i;
+
+	va_start(ap, ic);
+	collect(ap, a);
+	va_end(ap);
+	for (i = 0; im.card32_high && a[i].name; i++)
+		if (is_card32(a[i].name))
+			before[i] = *(unsigned long *)a[i].value;
+	if (!real)
+		real = (get_ic_fn)dlsym(RTLD_NEXT, "XGetICValues");
+	ret = IM_FORWARD(real, ic, a);
+#if ULONG_MAX > 0xffffffffUL
+	/* The 32-bit value in the high half, the low half left as it was. */
+	for (i = 0; im.card32_high && !ret && a[i].name; i++)
+		if (is_card32(a[i].name)) {
+			unsigned long *v = (unsigned long *)a[i].value;
+
+			*v = (before[i] & 0xffffffffUL) |
+			     ((*v & 0xffffffffUL) << 32);
+		}
+#endif
 	return ret;
 }
 
@@ -258,11 +304,17 @@ static void setup_fake(void)
 	setup_im(1);
 }
 
+static void setup_card32_high(void)
+{
+	im.card32_high = 1;
+	setup_im(0);
+}
+
 static void teardown(void)
 {
 	uninit_xt();
 	/* Without fork (CK_FORK=no) the next suites share this process. */
-	im.active = im.fake = 0;
+	im.active = im.fake = im.card32_high = 0;
 	unsetenv("XMODIFIERS");
 }
 
@@ -568,6 +620,20 @@ START_TEST(over_the_spot_coalesced)
 }
 END_TEST
 
+/*
+ * The CARD32 values of the input context, stored in the high half of a
+ * long as Xlib does on a 64-bit big-endian machine, reach XmIm whole:
+ * the reset state, and the filter events (the local input method's
+ * KeyPress and KeyRelease), which XmIm selects on the shell.
+ */
+START_TEST(card32_values_big_endian)
+{
+	ck_assert_uint_eq(XmImGetXICResetState(text), XIMInitialState);
+	ck_assert_uint_eq(XtBuildEventMask(top) & KeyReleaseMask,
+			  KeyReleaseMask);
+}
+END_TEST
+
 void xmim_suite(SRunner *runner)
 {
 	Suite *s = suite_create("XmIm");
@@ -591,6 +657,12 @@ void xmim_suite(SRunner *runner)
 	t = tcase_create("Over the spot");
 	tcase_add_checked_fixture(t, setup_fake, teardown);
 	tcase_add_test(t, over_the_spot_coalesced);
+	tcase_set_timeout(t, 60);
+	suite_add_tcase(s, t);
+
+	t = tcase_create("Big-endian values");
+	tcase_add_checked_fixture(t, setup_card32_high, teardown);
+	tcase_add_test(t, card32_values_big_endian);
 	tcase_set_timeout(t, 60);
 	suite_add_tcase(s, t);
 
