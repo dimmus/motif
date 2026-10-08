@@ -651,6 +651,9 @@ static void SelfInsert(Widget w, XEvent *event, String *params, Cardinal *num_pa
   Boolean pending_delete = False;
   Boolean freeBlock;
   Time event_time = event ? event->xkey.time : XtLastTimestampProcessed(XtDisplay((Widget)tw));
+  /* Without a key event there is no key to insert */
+  if (event == NULL)
+    return;
   /* Determine what was pressed.
    */
   n = XmImMbLookupString(
@@ -2530,6 +2533,9 @@ static void StartDrag(Widget w, XEvent *event, String *params, Cardinal *num_par
   Widget drag_icon;
   Arg args[10];
   int n = 0;
+  /* A drag needs the event that starts it */
+  if (event == NULL)
+    return;
   drag_icon = XmeGetTextualDragIcon(w);
   n = 0;
   XtSetArg(args[n], XmNcursorBackground, tw->core.background_pixel);
@@ -2567,7 +2573,8 @@ static void ProcessBDrag(Widget w, XEvent *event, char **params, Cardinal *num_p
   if (data->extending)
     return;
   EraseInsertionPoint(tw);
-  if (InSelection(w, event)) {
+  /* A drag needs the event */
+  if (event && InSelection(w, event)) {
     data->sel_start = False;
     StartDrag(w, event, params, num_params);
   }
@@ -2615,16 +2622,18 @@ static void ProcessBSelect(Widget w, XEvent *event, char **params, Cardinal *num
 {
   XmTextWidget tw = (XmTextWidget)w;
   InputData data = tw->text.input->data;
-  Time event_time = event->xbutton.time;
+  Time event_time;
   XtEnum drag_on_btn1 = XmOFF;
   XmDisplay dpy;
   dpy = (XmDisplay)XmGetXmDisplay(XtDisplay(w));
   drag_on_btn1 = dpy->display.enable_btn1_transfer;
-  if (!drag_on_btn1) {
+  /* A drag needs the event: without one, select as without drags */
+  if (!drag_on_btn1 || event == NULL) {
     if (*num_params > 0)
       XtCallActionProc(w, params[0], event, NULL, 0);
     return;
   }
+  event_time = event->xbutton.time;
   if (*num_params == 0) {
     if (event->type == ButtonPress && InSelection(w, event))
       StartDrag(w, event, params, num_params);

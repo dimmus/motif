@@ -2992,6 +2992,9 @@ static void InsertChar(Widget w, XEvent *event, char **params, Cardinal *num_par
   Boolean pending_delete = False;
   Status status_return;
   XmAnyCallbackStruct cb;
+  /* Without a key event there is no key to insert */
+  if (event == NULL)
+    return;
   /* Determine what was pressed.
    */
   insert_length = XmImMbLookupString(
@@ -3072,6 +3075,7 @@ static void DeletePrevChar(Widget w, XEvent *event, char **params, Cardinal *num
 {
   XmTextFieldWidget tf = (XmTextFieldWidget)w;
   XmAnyCallbackStruct cb;
+  Time event_time = event ? event->xkey.time : XtLastTimestampProcessed(XtDisplay(w));
   /* if pending delete is on and there is a selection */
   _XmTextFieldDrawInsertionPoint(tf, False);
   if (NeedsPendingDelete(tf))
@@ -3082,7 +3086,7 @@ static void DeletePrevChar(Widget w, XEvent *event, char **params, Cardinal *num
         if (_XmTextFieldReplaceText(
                 tf, event, TextF_CursorPosition(tf) - 1, TextF_CursorPosition(tf), NULL, 0, True))
         {
-          CheckDisjointSelection(w, TextF_CursorPosition(tf), event->xkey.time);
+          CheckDisjointSelection(w, TextF_CursorPosition(tf), event_time);
           _XmTextFieldSetCursorPosition(tf, event, TextF_CursorPosition(tf), False, True);
           cb.reason = XmCR_VALUE_CHANGED;
           cb.event = event;
@@ -3093,7 +3097,7 @@ static void DeletePrevChar(Widget w, XEvent *event, char **params, Cardinal *num
       if (_XmTextFieldReplaceText(
               tf, event, TextF_CursorPosition(tf) - 1, TextF_CursorPosition(tf), NULL, 0, True))
       {
-        CheckDisjointSelection(w, TextF_CursorPosition(tf), event->xkey.time);
+        CheckDisjointSelection(w, TextF_CursorPosition(tf), event_time);
         _XmTextFieldSetCursorPosition(tf, event, TextF_CursorPosition(tf), False, True);
         cb.reason = XmCR_VALUE_CHANGED;
         cb.event = event;
@@ -3108,6 +3112,7 @@ static void DeleteNextChar(Widget w, XEvent *event, char **params, Cardinal *num
 {
   XmTextFieldWidget tf = (XmTextFieldWidget)w;
   XmAnyCallbackStruct cb;
+  Time event_time = event ? event->xkey.time : XtLastTimestampProcessed(XtDisplay(w));
   /* if pending delete is on and there is a selection */
   _XmTextFieldDrawInsertionPoint(tf, False);
   if (NeedsPendingDelete(tf))
@@ -3118,7 +3123,7 @@ static void DeleteNextChar(Widget w, XEvent *event, char **params, Cardinal *num
         if (_XmTextFieldReplaceText(
                 tf, event, TextF_CursorPosition(tf), TextF_CursorPosition(tf) + 1, NULL, 0, True))
         {
-          CheckDisjointSelection(w, TextF_CursorPosition(tf), event->xkey.time);
+          CheckDisjointSelection(w, TextF_CursorPosition(tf), event_time);
           _XmTextFieldSetCursorPosition(tf, event, TextF_CursorPosition(tf), False, True);
           cb.reason = XmCR_VALUE_CHANGED;
           cb.event = event;
@@ -3129,7 +3134,7 @@ static void DeleteNextChar(Widget w, XEvent *event, char **params, Cardinal *num
       if (_XmTextFieldReplaceText(
               tf, event, TextF_CursorPosition(tf), TextF_CursorPosition(tf) + 1, NULL, 0, True))
       {
-        CheckDisjointSelection(w, TextF_CursorPosition(tf), event->xkey.time);
+        CheckDisjointSelection(w, TextF_CursorPosition(tf), event_time);
         _XmTextFieldSetCursorPosition(tf, event, TextF_CursorPosition(tf), False, True);
         cb.reason = XmCR_VALUE_CHANGED;
         cb.event = event;
@@ -3144,6 +3149,7 @@ static void DeletePrevWord(Widget w, XEvent *event, char **params, Cardinal *num
   XmTextFieldWidget tf = (XmTextFieldWidget)w;
   XmTextPosition left, right;
   XmAnyCallbackStruct cb;
+  Time event_time = event ? event->xkey.time : XtLastTimestampProcessed(XtDisplay(w));
   /* if pending delete is on and there is a selection */
   _XmTextFieldDrawInsertionPoint(tf, False);
   if (NeedsPendingDelete(tf))
@@ -3152,7 +3158,7 @@ static void DeletePrevWord(Widget w, XEvent *event, char **params, Cardinal *num
     FindPrevWord(tf, &left, &right);
     if (tf->text.has_primary && tf->text.prim_pos_left != tf->text.prim_pos_right) {
       if (_XmTextFieldReplaceText(tf, event, left, TextF_CursorPosition(tf), NULL, 0, True)) {
-        CheckDisjointSelection(w, TextF_CursorPosition(tf), event->xkey.time);
+        CheckDisjointSelection(w, TextF_CursorPosition(tf), event_time);
         _XmTextFieldSetCursorPosition(tf, event, TextF_CursorPosition(tf), False, True);
         cb.reason = XmCR_VALUE_CHANGED;
         cb.event = event;
@@ -3161,7 +3167,7 @@ static void DeletePrevWord(Widget w, XEvent *event, char **params, Cardinal *num
     }
     else if (TextF_CursorPosition(tf) - 1 >= 0)
       if (_XmTextFieldReplaceText(tf, event, left, TextF_CursorPosition(tf), NULL, 0, True)) {
-        CheckDisjointSelection(w, TextF_CursorPosition(tf), event->xkey.time);
+        CheckDisjointSelection(w, TextF_CursorPosition(tf), event_time);
         _XmTextFieldSetCursorPosition(tf, event, TextF_CursorPosition(tf), False, True);
         cb.reason = XmCR_VALUE_CHANGED;
         cb.event = event;
@@ -3176,6 +3182,7 @@ static void DeleteNextWord(Widget w, XEvent *event, char **params, Cardinal *num
   XmTextFieldWidget tf = (XmTextFieldWidget)w;
   XmTextPosition left, right;
   XmAnyCallbackStruct cb;
+  Time event_time = event ? event->xkey.time : XtLastTimestampProcessed(XtDisplay(w));
   /* if pending delete is on and there is a selection */
   _XmTextFieldDrawInsertionPoint(tf, False);
   if (NeedsPendingDelete(tf))
@@ -3184,7 +3191,7 @@ static void DeleteNextWord(Widget w, XEvent *event, char **params, Cardinal *num
     FindNextWord(tf, &left, &right);
     if (tf->text.has_primary && tf->text.prim_pos_left != tf->text.prim_pos_right) {
       if (_XmTextFieldReplaceText(tf, event, TextF_CursorPosition(tf), right, NULL, 0, True)) {
-        CheckDisjointSelection(w, TextF_CursorPosition(tf), event->xkey.time);
+        CheckDisjointSelection(w, TextF_CursorPosition(tf), event_time);
         _XmTextFieldSetCursorPosition(tf, event, TextF_CursorPosition(tf), False, True);
         cb.reason = XmCR_VALUE_CHANGED;
         cb.event = event;
@@ -3193,7 +3200,7 @@ static void DeleteNextWord(Widget w, XEvent *event, char **params, Cardinal *num
     }
     else if (TextF_CursorPosition(tf) < tf->text.string_length)
       if (_XmTextFieldReplaceText(tf, event, TextF_CursorPosition(tf), right, NULL, 0, True)) {
-        CheckDisjointSelection(w, TextF_CursorPosition(tf), event->xkey.time);
+        CheckDisjointSelection(w, TextF_CursorPosition(tf), event_time);
         _XmTextFieldSetCursorPosition(tf, event, TextF_CursorPosition(tf), False, True);
         cb.reason = XmCR_VALUE_CHANGED;
         cb.event = event;
@@ -3207,6 +3214,7 @@ static void DeleteToEndOfLine(Widget w, XEvent *event, char **params, Cardinal *
 {
   XmTextFieldWidget tf = (XmTextFieldWidget)w;
   XmAnyCallbackStruct cb;
+  Time event_time = event ? event->xkey.time : XtLastTimestampProcessed(XtDisplay(w));
   /* if pending delete is on and there is a selection */
   _XmTextFieldDrawInsertionPoint(tf, False);
   if (NeedsPendingDelete(tf))
@@ -3215,7 +3223,7 @@ static void DeleteToEndOfLine(Widget w, XEvent *event, char **params, Cardinal *
     if (_XmTextFieldReplaceText(
             tf, event, TextF_CursorPosition(tf), tf->text.string_length, NULL, 0, True))
     {
-      CheckDisjointSelection(w, TextF_CursorPosition(tf), event->xkey.time);
+      CheckDisjointSelection(w, TextF_CursorPosition(tf), event_time);
       _XmTextFieldSetCursorPosition(tf, event, TextF_CursorPosition(tf), False, True);
       cb.reason = XmCR_VALUE_CHANGED;
       cb.event = event;
@@ -3229,13 +3237,14 @@ static void DeleteToStartOfLine(Widget w, XEvent *event, char **params, Cardinal
 {
   XmTextFieldWidget tf = (XmTextFieldWidget)w;
   XmAnyCallbackStruct cb;
+  Time event_time = event ? event->xkey.time : XtLastTimestampProcessed(XtDisplay(w));
   /* if pending delete is on and there is a selection */
   _XmTextFieldDrawInsertionPoint(tf, False);
   if (NeedsPendingDelete(tf))
     (void)TextFieldRemove(w, event);
   else if (TextF_CursorPosition(tf) - 1 >= 0) {
     if (_XmTextFieldReplaceText(tf, event, 0, TextF_CursorPosition(tf), NULL, 0, True)) {
-      CheckDisjointSelection(w, TextF_CursorPosition(tf), event->xkey.time);
+      CheckDisjointSelection(w, TextF_CursorPosition(tf), event_time);
       _XmTextFieldSetCursorPosition(tf, event, TextF_CursorPosition(tf), False, True);
       cb.reason = XmCR_VALUE_CHANGED;
       cb.event = event;
@@ -3394,6 +3403,7 @@ static void SimpleMovement(Widget w,
   XmTextFieldWidget tf = (XmTextFieldWidget)w;
   Boolean extend = False;
   int value;
+  Time event_time = event ? event->xkey.time : XtLastTimestampProcessed(XtDisplay(w));
   if (*num_params > 0) {
     /* There is only one valid reptype value for this reptype, i.e.
          "extend". If we found a match then set the Boolean to true. */
@@ -3406,7 +3416,7 @@ static void SimpleMovement(Widget w,
   }
   _XmTextFieldDrawInsertionPoint(tf, False);
   SetNavigationAnchor(tf, cursorPos, position, extend);
-  CompleteNavigation(tf, event, position, event->xkey.time, extend);
+  CompleteNavigation(tf, event, position, event_time, extend);
   _XmTextFieldDrawInsertionPoint(tf, True);
 }
 
@@ -3698,6 +3708,7 @@ static void KeySelection(Widget w, XEvent *event, char **params, Cardinal *num_p
   XmTextFieldWidget tf = (XmTextFieldWidget)w;
   XmTextPosition cursorPos;
   int direction;
+  Time event_time = event ? event->xkey.time : XtLastTimestampProcessed(XtDisplay(w));
   TextFieldResetIC(w);
   _XmTextFieldDrawInsertionPoint(tf, False); /* Turn off I beam blink
                                                during selection */
@@ -3751,12 +3762,12 @@ static void KeySelection(Widget w, XEvent *event, char **params, Cardinal *num_p
     right = tempIndex;
   }
   if (tf->text.take_primary)
-    _XmTextFieldStartSelection(tf, left, right, event->xbutton.time);
+    _XmTextFieldStartSelection(tf, left, right, event_time);
   else
     SetSelection(tf, left, right, True);
   tf->text.pending_off = False;
   _XmTextFieldSetCursorPosition(tf, event, cursorPos, True, True);
-  (void)SetDestination(w, cursorPos, False, event->xkey.time);
+  (void)SetDestination(w, cursorPos, False, event_time);
   tf->text.orig_left = tf->text.prim_pos_left;
   tf->text.orig_right = tf->text.prim_pos_right;
   tf->text.extending = False;
@@ -3770,7 +3781,7 @@ static void TextFocusIn(Widget w, XEvent *event, char **params, Cardinal *num_pa
   XmAnyCallbackStruct cb;
   XRectangle xmim_area;
   XPoint xmim_point;
-  if (event->xfocus.send_event && !(tf->text.has_focus)) {
+  if (event && event->xfocus.send_event && !(tf->text.has_focus)) {
     tf->text.has_focus = True;
     _XmTextFieldDrawInsertionPoint(tf, False);
     tf->text.blink_on = False;
@@ -3802,7 +3813,7 @@ static void TextFocusIn(Widget w, XEvent *event, char **params, Cardinal *num_pa
 static void TextFocusOut(Widget w, XEvent *event, char **params, Cardinal *num_params)
 {
   XmTextFieldWidget tf = (XmTextFieldWidget)w;
-  if (event->xfocus.send_event && tf->text.has_focus) {
+  if (event && event->xfocus.send_event && tf->text.has_focus) {
     ChangeBlinkBehavior(tf, False);
     _XmTextFieldDrawInsertionPoint(tf, False);
     tf->text.has_focus = False;
@@ -3815,7 +3826,9 @@ static void TextFocusOut(Widget w, XEvent *event, char **params, Cardinal *num_p
   }
   /* If traversal is on, then the leave verification callback is called in
      the traversal event handler */
-  if (event->xfocus.send_event && !tf->text.traversed && _XmGetFocusPolicy(w) == XmEXPLICIT) {
+  if (event && event->xfocus.send_event && !tf->text.traversed &&
+      _XmGetFocusPolicy(w) == XmEXPLICIT)
+  {
     if (!VerifyLeave(tf, event)) {
       if (tf->text.verify_bell)
         XBell(XtDisplay(w), 0);
@@ -3830,7 +3843,9 @@ static void TextFocusOut(Widget w, XEvent *event, char **params, Cardinal *num_p
 static void SetScanIndex(XmTextFieldWidget tf, XEvent *event)
 {
   Time sel_time;
-  if (event->type == ButtonPress)
+  if (event == NULL)
+    sel_time = XtLastTimestampProcessed(XtDisplay((Widget)tf));
+  else if (event->type == ButtonPress)
     sel_time = event->xbutton.time;
   else
     sel_time = event->xkey.time;
@@ -3933,8 +3948,9 @@ static void SetScanSelection(XmTextFieldWidget tf, XEvent *event)
   XmTextPosition cursorPos = TextF_CursorPosition(tf);
   Position dummy = 0;
   Boolean update_position = False;
+  Time event_time = event ? event->xbutton.time : XtLastTimestampProcessed(XtDisplay((Widget)tf));
   SetScanIndex(tf, event);
-  if (event->type == ButtonPress)
+  if (event && event->type == ButtonPress)
     new_position = GetPosFromX(tf, (Position)event->xbutton.x);
   else
     new_position = TextF_CursorPosition(tf);
@@ -3954,7 +3970,7 @@ static void SetScanSelection(XmTextFieldWidget tf, XEvent *event)
     case XmSELECT_WORD:
       FindWord(tf, TextF_CursorPosition(tf), &left, &right);
       if (tf->text.take_primary)
-        _XmTextFieldStartSelection(tf, left, right, event->xbutton.time);
+        _XmTextFieldStartSelection(tf, left, right, event_time);
       else
         SetSelection(tf, left, right, True);
       tf->text.pending_off = False;
@@ -3968,11 +3984,11 @@ static void SetScanSelection(XmTextFieldWidget tf, XEvent *event)
     case XmSELECT_PARAGRAPH:
     case XmSELECT_ALL:
       if (tf->text.take_primary)
-        _XmTextFieldStartSelection(tf, 0, tf->text.string_length, event->xbutton.time);
+        _XmTextFieldStartSelection(tf, 0, tf->text.string_length, event_time);
       else
         SetSelection(tf, 0, tf->text.string_length, True);
       tf->text.pending_off = False;
-      if (event->type == ButtonPress) {
+      if (event && event->type == ButtonPress) {
         if ((tf->text.string_length) / 2 <= new_position) {
           cursorPos = tf->text.string_length;
         }
@@ -3982,7 +3998,7 @@ static void SetScanSelection(XmTextFieldWidget tf, XEvent *event)
       }
       break;
   }
-  (void)SetDestination((Widget)tf, cursorPos, False, event->xkey.time);
+  (void)SetDestination((Widget)tf, cursorPos, False, event_time);
   if (cursorPos != TextF_CursorPosition(tf) || update_position) {
     _XmTextFieldSetCursorPosition(tf, event, cursorPos, True, True);
   }
@@ -4009,11 +4025,12 @@ static void MoveDestination(Widget w, XEvent *event, char **params, Cardinal *nu
   XmTextPosition new_position;
   Boolean old_has_focus = tf->text.has_focus;
   Boolean reset_cursor = False;
+  Time event_time = event ? event->xbutton.time : XtLastTimestampProcessed(XtDisplay(w));
   TextFieldResetIC(w);
-  new_position = GetPosFromX(tf, (Position)event->xbutton.x);
+  new_position = EventPosition(tf, event);
   _XmTextFieldDrawInsertionPoint(tf, False);
   if (tf->text.has_primary && (right != left))
-    (void)SetDestination(w, new_position, False, event->xbutton.time);
+    (void)SetDestination(w, new_position, False, event_time);
   tf->text.pending_off = False;
   if (!tf->text.has_focus && _XmGetFocusPolicy(w) == XmEXPLICIT)
     (void)XmProcessTraversal(w, XmTRAVERSE_CURRENT);
@@ -4037,19 +4054,16 @@ static void MoveDestination(Widget w, XEvent *event, char **params, Cardinal *nu
 static void ExtendPrimary(Widget w, XEvent *event, char **params, Cardinal *num_params)
 {
   XmTextFieldWidget tf = (XmTextFieldWidget)w;
+  Time event_time = event ? event->xkey.time : XtLastTimestampProcessed(XtDisplay(w));
   TextFieldResetIC(w);
   if (tf->text.cancel)
     return;
   _XmTextFieldDrawInsertionPoint(tf, False);
   tf->text.do_drop = False;
-  if (event->type == ButtonPress)
+  if (event && event->type == ButtonPress)
     tf->text.stuff_pos = TextF_CursorPosition(tf);
-  if (!CheckTimerScrolling(w, event)) {
-    if (event->type == ButtonPress)
-      DoExtendedSelection(w, event->xbutton.time);
-    else
-      DoExtendedSelection(w, event->xkey.time);
-  }
+  if (!CheckTimerScrolling(w, event))
+    DoExtendedSelection(w, event_time);
   else
     ExtendScanSelection(tf, event); /* use scan type to set the selection */
   _XmTextFieldDrawInsertionPoint(tf, True);
@@ -4222,6 +4236,12 @@ static Boolean CheckTimerScrolling(Widget w, XEvent *event)
                           tf->primitive.highlight_thickness;
   Dimension top_margin = TextF_MarginHeight(tf) + tf->primitive.shadow_thickness +
                          tf->primitive.highlight_thickness;
+  Position dummy;
+  if (event == NULL) {
+    /* The insertion cursor stands for the pointer */
+    GetXYFromPos(tf, TextF_CursorPosition(tf), &tf->text.select_pos_x, &dummy);
+    return False;
+  }
   tf->text.select_pos_x = event->xmotion.x;
   if ((event->xmotion.x > (int)margin_size) &&
       (event->xmotion.x < (int)(tf->core.width - margin_size)) &&
@@ -4468,15 +4488,17 @@ static void ProcessBSelect(Widget w, XEvent *event, char **params, Cardinal *num
 #define ABS_DELTA(x1, x2) (x1 < x2 ? x2 - x1 : x1 - x2)
   XmTextFieldWidget tf = (XmTextFieldWidget)w;
   XtEnum drag_on_btn1 = XmOFF;
-  Time event_time = event->xbutton.time;
+  Time event_time;
   XmDisplay dpy;
   dpy = (XmDisplay)XmGetXmDisplay(XtDisplay(w));
   drag_on_btn1 = dpy->display.enable_btn1_transfer;
-  if (!drag_on_btn1) {
+  /* A drag needs the event: without one, select as without drags */
+  if (!drag_on_btn1 || event == NULL) {
     if (*num_params > 0)
       XtCallActionProc(w, params[0], event, NULL, 0);
     return;
   }
+  event_time = event->xbutton.time;
   if (*num_params == 0) {
     if (event->type == ButtonPress && InSelection(w, event))
       StartDrag(w, event, params, num_params);
@@ -4976,10 +4998,11 @@ static void LinkPrimary(Widget w, XEvent *event, char **params, Cardinal *num_pa
 static void SetAnchor(Widget w, XEvent *event, char **params, Cardinal *num_params)
 {
   XmTextFieldWidget tf = (XmTextFieldWidget)w;
+  Time event_time = event ? event->xkey.time : XtLastTimestampProcessed(XtDisplay(w));
   tf->text.prim_anchor = TextF_CursorPosition(tf);
-  (void)SetDestination(w, tf->text.prim_anchor, False, event->xkey.time);
+  (void)SetDestination(w, tf->text.prim_anchor, False, event_time);
   if (tf->text.has_primary) {
-    _XmTextFieldStartSelection(tf, tf->text.prim_anchor, tf->text.prim_anchor, event->xkey.time);
+    _XmTextFieldStartSelection(tf, tf->text.prim_anchor, tf->text.prim_anchor, event_time);
     if (tf->text.add_mode) {
       _XmTextFieldDrawInsertionPoint(tf, False);
       tf->text.add_mode = False;
@@ -5019,10 +5042,11 @@ static void ToggleAddMode(Widget w, XEvent *event, char **params, Cardinal *num_
 static void SelectAll(Widget w, XEvent *event, char **params, Cardinal *num_params)
 {
   XmTextFieldWidget tf = (XmTextFieldWidget)w;
+  Time event_time = event ? event->xkey.time : XtLastTimestampProcessed(XtDisplay(w));
   TextFieldResetIC(w);
   _XmTextFieldDrawInsertionPoint(tf, False);
   if (tf->text.take_primary)
-    _XmTextFieldStartSelection(tf, 0, tf->text.string_length, event->xbutton.time);
+    _XmTextFieldStartSelection(tf, 0, tf->text.string_length, event_time);
   else
     SetSelection(tf, 0, tf->text.string_length, True);
   /* Call _XmTextFieldSetCursorPosition to force image gc to be updated
@@ -5030,19 +5054,20 @@ static void SelectAll(Widget w, XEvent *event, char **params, Cardinal *num_para
   tf->text.pending_off = False;
   _XmTextFieldSetCursorPosition(tf, NULL, TextF_CursorPosition(tf), False, False);
   tf->text.prim_anchor = 0;
-  (void)SetDestination(w, TextF_CursorPosition(tf), False, event->xkey.time);
+  (void)SetDestination(w, TextF_CursorPosition(tf), False, event_time);
   _XmTextFieldDrawInsertionPoint(tf, True);
 }
 
 static void DeselectAll(Widget w, XEvent *event, char **params, Cardinal *num_params)
 {
   XmTextFieldWidget tf = (XmTextFieldWidget)w;
+  Time event_time = event ? event->xkey.time : XtLastTimestampProcessed(XtDisplay(w));
   _XmTextFieldDrawInsertionPoint(tf, False);
   SetSelection(tf, TextF_CursorPosition(tf), TextF_CursorPosition(tf), True);
   tf->text.pending_off = True;
   _XmTextFieldSetCursorPosition(tf, event, TextF_CursorPosition(tf), True, True);
   tf->text.prim_anchor = TextF_CursorPosition(tf);
-  (void)SetDestination(w, TextF_CursorPosition(tf), False, event->xkey.time);
+  (void)SetDestination(w, TextF_CursorPosition(tf), False, event_time);
   _XmTextFieldDrawInsertionPoint(tf, True);
 }
 
@@ -5054,19 +5079,21 @@ static void VoidAction(Widget w, XEvent *event, char **params, Cardinal *num_par
 static void CutClipboard(Widget w, XEvent *event, char **params, Cardinal *num_params)
 {
   XmTextFieldWidget tf = (XmTextFieldWidget)w;
+  Time event_time = event ? event->xkey.time : XtLastTimestampProcessed(XtDisplay(w));
   _XmTextFieldDrawInsertionPoint(tf, False);
   if (TextF_Editable(tf) && tf->text.prim_pos_left != tf->text.prim_pos_right)
-    (void)XmeClipboardSource(w, XmMOVE, event->xkey.time);
+    (void)XmeClipboardSource(w, XmMOVE, event_time);
   _XmTextFieldDrawInsertionPoint(tf, True);
 }
 
 static void CopyClipboard(Widget w, XEvent *event, char **params, Cardinal *num_params)
 {
   XmTextFieldWidget tf = (XmTextFieldWidget)w;
+  Time event_time = event ? event->xkey.time : XtLastTimestampProcessed(XtDisplay(w));
   _XmTextFieldDrawInsertionPoint(tf, False);
   if (tf->text.prim_pos_left != tf->text.prim_pos_right)
-    (void)XmeClipboardSource(w, XmCOPY, event->xkey.time);
-  (void)SetDestination(w, TextF_CursorPosition(tf), False, event->xkey.time);
+    (void)XmeClipboardSource(w, XmCOPY, event_time);
+  (void)SetDestination(w, TextF_CursorPosition(tf), False, event_time);
   _XmTextFieldDrawInsertionPoint(tf, True);
 }
 
@@ -5175,8 +5202,8 @@ static void TextEnter(Widget w, XEvent *event, String *params, Cardinal *num_par
    * sending input method info if reason for the event is pointer moving
    * from TextF widget to over-the-spot window (case when over-the-spot
    * is child of TextF widget). */
-  if (_XmGetFocusPolicy(w) != XmEXPLICIT && !(tf->text.has_focus) && event->xcrossing.focus &&
-      (event->xcrossing.detail != NotifyInferior))
+  if (_XmGetFocusPolicy(w) != XmEXPLICIT && !(tf->text.has_focus) && event &&
+      event->xcrossing.focus && (event->xcrossing.detail != NotifyInferior))
   {
     _XmTextFieldDrawInsertionPoint(tf, False);
     tf->text.blink_on = False;
@@ -5200,8 +5227,8 @@ static void TextLeave(Widget w, XEvent *event, String *params, Cardinal *num_par
   /* use detail!= NotifyInferior to handle focus change due to pointer
    * wandering into over-the-spot input window - we don't want to change
    * IM's focus state in this case. */
-  if (_XmGetFocusPolicy(w) != XmEXPLICIT && tf->text.has_focus && event->xcrossing.focus &&
-      (event->xcrossing.detail != NotifyInferior))
+  if (_XmGetFocusPolicy(w) != XmEXPLICIT && tf->text.has_focus && event &&
+      event->xcrossing.focus && (event->xcrossing.detail != NotifyInferior))
   {
     if (XtIsSensitive(w))
       ChangeBlinkBehavior(tf, False);

@@ -62,7 +62,9 @@ The i18n suites:
 The `Text` suite drives the actions of the secondary selection and of
 the other quick transfers of XmText and XmTextField (`secondary-start`,
 `secondary-adjust`, `copy-to`, `move-to`, `process-bdrag`) through
-`XtCallActionProc`, with synthetic events and without one.  The widgets
+`XtCallActionProc`, with synthetic events and without one, and calls
+every action of both widgets without an event, each in a process of its
+own, so that one run names all the actions that crash.  The widgets
 have no undo: no action undoes an edit, and the `osfUndo` virtual key
 is not bound in their translations (upstream Motif has none either;
 only CDE's DtEditor, which is not part of this tree, has one).  The

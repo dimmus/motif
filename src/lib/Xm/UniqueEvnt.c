@@ -119,7 +119,12 @@ static void UniqueStampDisplayDestroyCallback(Widget w,
 
 static Boolean ManipulateEvent(XEvent *event, int action)
 {
-  XmUniqueStamp uniqueStamp = GetUniqueStamp(event);
+  XmUniqueStamp uniqueStamp;
+  /* An action called without an event (XtCallActionProc) is no repeat
+   * of one, and there is nothing to record. */
+  if (event == NULL)
+    return action == XmCHECK_UNIQUENESS;
+  uniqueStamp = GetUniqueStamp(event);
   switch (action) {
     case XmCHECK_UNIQUENESS: {
       /*
