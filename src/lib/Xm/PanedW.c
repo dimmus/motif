@@ -418,7 +418,7 @@ static void SashIndentDefault(Widget widget,
                               int offset, /* unused */
                               XrmValue *value)
 {
-  static Position indent;
+  static _Thread_local Position indent;
   value->addr = (XPointer)&indent;
   if (LayoutIsRtoLM(widget))
     indent = (Position)DEFAULT_SASH_INDENT_RTOL;

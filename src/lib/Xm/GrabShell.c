@@ -64,7 +64,6 @@ static void _XmFastExpose(Widget widget);
 static void DrawBorder(Widget widget);
 static void DoLayout(Widget gs);
 static void GSAllowEvents(Widget gs, int, Time);
-static int IgnoreXErrors(Display *, XErrorEvent *);
 /********    End Static Function Declarations    ********/
 static XtActionsRec actionsList[] = {{"GrabShellBtnDown", BtnDown},
                                      {"GrabShellBtnUp", BtnUp},
@@ -317,7 +316,7 @@ static void MapNotifyHandler(Widget shell, XtPointer client_data, XEvent *event,
 {
   XmGrabShellWidget grabshell = (XmGrabShellWidget)shell;
   Time time;
-  XErrorHandler old_handler;
+  XmErrorTrapRec trap;
   /* Only handles map events */
   if (event->type != MapNotify)
     return;
@@ -345,10 +344,9 @@ static void MapNotifyHandler(Widget shell, XtPointer client_data, XEvent *event,
   /* Fix focus to shell */
   XGetInputFocus(
       XtDisplay(shell), &grabshell->grab_shell.old_focus, &grabshell->grab_shell.old_revert_to);
-  old_handler = XSetErrorHandler(IgnoreXErrors);
+  _XmStartErrorTrap(&trap, XtDisplay(shell), 0, 0);
   XSetInputFocus(XtDisplay(shell), XtWindow(shell), RevertToParent, time);
-  XSync(XtDisplay(shell), False);
-  XSetErrorHandler(old_handler);
+  (void)_XmEndErrorTrap(&trap, True);
 }
 
 static void MouseWheel(Widget w, XEvent *event, String *params, Cardinal *num_params)
@@ -428,22 +426,21 @@ static void Popdown(Widget shell,
     time = CurrentTime;
   /* CR 9920:  Popdown may be called before MapNotify. */
   if (grabshell->shell.popped_up && grabshell->grab_shell.mapped) {
-    XErrorHandler old_handler;
+    XmErrorTrapRec trap;
     if (screen->screen.unpostBehavior == XmUNPOST_AND_REPLAY)
       GSAllowEvents(shell, ReplayPointer, event ? event->xbutton.time : time);
     XtUngrabPointer(shell, time);
     XtUngrabKeyboard(shell, time);
     _XmPopdown(shell);
     /* Reset focus to old holder */
-    old_handler = XSetErrorHandler(IgnoreXErrors);
+    _XmStartErrorTrap(&trap, XtDisplay(shell), 0, 0);
     if (time != CurrentTime)
       time = time - 1; /* Avoid race in wm */
     XSetInputFocus(XtDisplay(shell),
                    grabshell->grab_shell.old_focus,
                    grabshell->grab_shell.old_revert_to,
                    time);
-    XSync(XtDisplay(shell), False);
-    XSetErrorHandler(old_handler);
+    (void)_XmEndErrorTrap(&trap, True);
   }
   grabshell->grab_shell.mapped = False;
 }
@@ -618,17 +615,6 @@ static void DrawBorder(Widget widg)
                  XtHeight(widg) - 2 * offset,
                  gs->grab_shell.shadow_thickness,
                  XmSHADOW_OUT);
-}
-
-/*
- * IgnoreXErrors()
- *	An XErrorHandler that smothers errors.
- */
-/*ARGSUSED*/
-static int IgnoreXErrors(Display *dpy,       /* unused */
-                         XErrorEvent *event) /* unused */
-{
-  return 0;
 }
 
 /*******************

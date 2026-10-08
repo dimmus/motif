@@ -37,6 +37,11 @@ The other directories:
 - `visual/` renders a fixed scene with the BDF fonts of
   `environment/fonts` and compares it with `golden/scene.png`
   (`Visual.*`; `--target update-golden` regenerates it).
+- `threads/` runs Motif from several threads: `Threads.mtapps` (two
+  application contexts and displays, one per thread; the
+  ThreadSanitizer test of a `-DWITH_TSAN=ON` build) and
+  `Threads.sharedapp` (two threads sharing one application context).
+  See `doc/thread-safety.md`.
 - `fuzz/` holds the libFuzzer targets (`-DWITH_FUZZERS=ON`, Clang); see
   `fuzz/README.md`.
 - `XmString/` holds the old interactive XmString programs and data, which

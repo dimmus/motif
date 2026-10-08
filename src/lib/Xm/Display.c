@@ -28,12 +28,14 @@ static char rcsid[] = "$TOG: Display.c /main/23 1997/06/18 17:36:59 samborn $"
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
 #endif
+#include "ColorI.h"
 #include "ColorObjI.h"
 #include "DisplayI.h"
 #include "DragBSI.h"
 #include "DragCI.h"
 #include "DragICCI.h"
 #include "MessagesI.h"
+#include "ResConverI.h"
 #include "VirtKeysI.h"
 #include "XmI.h"
 #include <X11/Intrinsic.h>
@@ -615,6 +617,8 @@ static void DisplayDestroy(Widget w)
   if (dd->display.dsm != NULL)
     XtDestroyWidget((Widget)dd->display.dsm);
   _XmClearDisplayTables(XtDisplay(w));
+  _XmFreeDefaultRenderTable(XtDisplay(w));
+  _XmFlushColorCache(XtDisplay(w));
   _XmVirtKeysDestroy(w);
   XDeleteContext(XtDisplay(w), None, context);
 }
@@ -1032,7 +1036,7 @@ WidgetClass _XmSetXmDisplayClass(WidgetClass wc)
 void _XmSetThickness(Widget widget, int offset, XrmValue *value)
 {
   XmDisplay xmDisplay;
-  static Dimension thickness;
+  static _Thread_local Dimension thickness;
   xmDisplay = (XmDisplay)XmGetXmDisplay(XtDisplay(widget));
   if (xmDisplay->display.enable_thin_thickness) {
     thickness = 1;
@@ -1054,7 +1058,7 @@ void _XmSetThickness(Widget widget, int offset, XrmValue *value)
 void _XmSetThicknessDefault0(Widget widget, int offset, XrmValue *value)
 {
   XmDisplay xmDisplay;
-  static Dimension thickness;
+  static _Thread_local Dimension thickness;
   xmDisplay = (XmDisplay)XmGetXmDisplay(XtDisplay(widget));
   if (xmDisplay->display.enable_thin_thickness) {
     thickness = 1;

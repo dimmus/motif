@@ -41,6 +41,7 @@ extern void _XmBottomShadowColorDefault(Widget widget, int offset, XrmValue *val
 extern void _XmSelectColorDefault(Widget widget, int offset, XrmValue *value);
 extern Boolean _XmSearchColorCache(unsigned int which, XmColorData *values, XmColorData **ret);
 extern XmColorData *_XmAddToColorCache(XmColorData *new_rec);
+extern void _XmFlushColorCache(Display *display);
 extern Pixmap _XmConvertToBW(Widget w, Pixmap pm);
 /********    End Private Function Declarations    ********/
 #  ifdef __cplusplus

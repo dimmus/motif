@@ -1365,39 +1365,56 @@ typedef struct _system_font_list {
   XmFontList fontlist;
 } SystemFontList;
 
+/*
+ * The default render table of each display, loaded on first use.  An
+ * entry is dropped when the display's XmDisplay is destroyed, before
+ * XtCloseDisplay: a later display may get the same address.  Callers
+ * hold the process lock.
+ */
+static SystemFontList *sFontLists = NULL;
+static int nsFontLists = 0;
+static int maxnsFontLists = 0;
+
 static XmFontList DefaultSystemFontList(Display *display, XmFontList fontlist)
 {
-  static SystemFontList *sFontLists = NULL;
-  static int nsFontLists = 0;
-  static int maxnsFontLists = 0;
+  int i;
   if (fontlist) {
     if (nsFontLists >= maxnsFontLists) {
-      Cardinal nbytes;
       maxnsFontLists += 8;
-      nbytes = (Cardinal)sizeof(SystemFontList) * maxnsFontLists;
-      if (NULL == sFontLists) {
-        sFontLists = (SystemFontList *)XtMalloc(nbytes);
-        memset((void *)sFontLists, 0, nbytes);
-      }
-      else {
-        sFontLists = (SystemFontList *)XtRealloc((char *)sFontLists, nbytes);
-        memset((void *)&sFontLists[nsFontLists], 0, nbytes);
-      }
-      sFontLists[nsFontLists].display = display;
-      sFontLists[nsFontLists].fontlist = fontlist;
-      nsFontLists++;
+      sFontLists = (SystemFontList *)_XmReallocArray(
+          (char *)sFontLists, (size_t)maxnsFontLists, sizeof(SystemFontList));
     }
+    sFontLists[nsFontLists].display = display;
+    sFontLists[nsFontLists].fontlist = fontlist;
+    nsFontLists++;
+    return fontlist;
   }
-  else {
-    int i;
-    if (NULL == sFontLists)
-      return NULL;
-    for (i = 0; i < nsFontLists; i++) {
-      if (sFontLists[i].display == display)
-        return sFontLists[i].fontlist;
-    }
+  for (i = 0; i < nsFontLists; i++) {
+    if (sFontLists[i].display == display)
+      return sFontLists[i].fontlist;
   }
   return NULL;
+}
+
+/*
+ * Forget, and release, the default render table of a display; called
+ * when its XmDisplay is destroyed.
+ */
+void _XmFreeDefaultRenderTable(Display *display)
+{
+  XmFontList fontlist = NULL;
+  int i;
+  _XmProcessLock();
+  for (i = 0; i < nsFontLists; i++) {
+    if (sFontLists[i].display == display) {
+      fontlist = sFontLists[i].fontlist;
+      sFontLists[i] = sFontLists[--nsFontLists];
+      break;
+    }
+  }
+  _XmProcessUnlock();
+  if (fontlist)
+    XmFontListFree(fontlist);
 }
 
 XmFontList XmeGetDefaultRenderTable(Widget w, unsigned char fontListType)

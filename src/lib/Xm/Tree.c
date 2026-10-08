@@ -963,7 +963,7 @@ static Boolean CvtStringToLineStyle(
 static void HorizontalNodeSpaceDefault(Widget widget, int offset, XrmValue *value)
 {
   XmTreeWidget tw = (XmTreeWidget)widget;
-  static Dimension default_val;
+  static _Thread_local Dimension default_val;
   if (XmTree_orientation(tw) == XmVERTICAL)
     default_val = 2;
   else
@@ -983,7 +983,7 @@ static void HorizontalNodeSpaceDefault(Widget widget, int offset, XrmValue *valu
 static void VerticalNodeSpaceDefault(Widget widget, int offset, XrmValue *value)
 {
   XmTreeWidget tw = (XmTreeWidget)widget;
-  static Dimension default_val;
+  static _Thread_local Dimension default_val;
   if (XmTree_orientation(tw) == XmVERTICAL)
     default_val = 20;
   else

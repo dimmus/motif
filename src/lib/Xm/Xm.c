@@ -36,6 +36,7 @@
 #include <Xm/LabelGP.h>
 #include <Xm/ManagerP.h>
 #include <Xm/PrimitiveP.h>
+#include <stdatomic.h>
 /**************************************************************************
  *   This is Xm.c
  *    It contains global API that:
@@ -435,6 +436,131 @@ Boolean _XmGetWindowPropertyChecked(Display *display,
   *nitems_return = nitems;
   *prop_return = data;
   return ok;
+}
+
+/************************************************************************
+ *
+ *  _XmGetSubresources
+ *	XtGetSubresources, under the process lock.
+ *
+ *	Xt compiles a resource list in place the first time it is used,
+ *	holding only the lock of the application context of the widget.
+ *	Motif's static lists are shared by all application contexts, so
+ *	two threads could compile one at the same time.
+ *
+ *	The application lock is taken first, as Xt does: some callers
+ *	(XmCreateSimpleCheckBox, ...) do not hold it, and taking the
+ *	process lock first deadlocks with a thread of the same
+ *	application context that holds the application lock and waits
+ *	for the process lock.
+ *
+ ************************************************************************/
+void _XmGetSubresources(Widget w,
+                        XtPointer base,
+                        _Xconst char *name,
+                        _Xconst char *class_name,
+                        XtResourceList resources,
+                        Cardinal num_resources,
+                        ArgList args,
+                        Cardinal num_args)
+{
+  _XmWidgetToAppContext(w);
+  _XmAppLock(app);
+  _XmProcessLock();
+  XtGetSubresources(w, base, name, class_name, resources, num_resources, args, num_args);
+  _XmProcessUnlock();
+  _XmAppUnlock(app);
+}
+
+/************************************************************************
+ *
+ *  _XmStartErrorTrap, _XmEndErrorTrap
+ *	Catch the X errors that the requests made on a display between
+ *	the two calls cause, instead of letting them reach the
+ *	application's error handler (which by default exits).
+ *
+ *	Xlib has one error handler for the whole process, so code that
+ *	installs its own around a request and then puts the old one back
+ *	loses or misroutes errors when two threads do so at once.  Here
+ *	TrapErrorHandler stays installed while any thread has a trap, and
+ *	keeps an error only when the thread that reads it from the
+ *	connection has a trap that matches it; any other error goes to the
+ *	handler that was installed before.  With Xt's locking that thread
+ *	is the one holding the application lock, which made the requests.
+ *
+ *	error_code and resource restrict the errors trapped (0: any).
+ *	_XmEndErrorTrap first makes a round trip when sync is True (pass
+ *	False when the last request was itself a round trip) and returns
+ *	the error code of the first error trapped, or 0.  Traps nest.
+ *
+ ************************************************************************/
+static _Thread_local XmErrorTrap threadErrorTraps = NULL;
+static _Atomic(XErrorHandler) trapPreviousHandler = NULL;
+static int numErrorTraps = 0; /* traps of all threads; process lock */
+
+static int TrapErrorHandler(Display *display, XErrorEvent *event)
+{
+  XmErrorTrap trap;
+  XErrorHandler previous;
+  for (trap = threadErrorTraps; trap != NULL; trap = trap->prev) {
+    if (trap->display == display && event->serial >= trap->first_request &&
+        (trap->error_code == 0 || event->error_code == trap->error_code) &&
+        (trap->resource == 0 || event->resourceid == trap->resource))
+    {
+      if (trap->error == 0)
+        trap->error = event->error_code;
+      return 0;
+    }
+  }
+  previous = atomic_load(&trapPreviousHandler);
+  return previous ? (*previous)(display, event) : 0;
+}
+
+void _XmStartErrorTrap(XmErrorTrap trap, Display *display, int error_code, XID resource)
+{
+  XErrorHandler previous;
+  trap->display = display;
+  trap->error_code = (unsigned char)error_code;
+  trap->resource = resource;
+  trap->error = 0;
+  /* Install the handler, and remember the one it replaces, which gets
+     the errors no trap keeps.  It is installed again for every trap:
+     another thread may have put its own in while traps were on, and
+     that one is the application's handler now.  Never remember
+     TrapErrorHandler itself (an application may put back what it got
+     from XSetErrorHandler while a trap was on), or it would call
+     itself. */
+  _XmProcessLock();
+  previous = XSetErrorHandler(TrapErrorHandler);
+  if (previous != TrapErrorHandler)
+    atomic_store(&trapPreviousHandler, previous);
+  numErrorTraps++;
+  _XmProcessUnlock();
+  trap->first_request = NextRequest(display);
+  trap->prev = threadErrorTraps;
+  threadErrorTraps = trap;
+}
+
+int _XmEndErrorTrap(XmErrorTrap trap, Boolean sync)
+{
+  XmErrorTrap *link;
+  if (sync)
+    XSync(trap->display, False);
+  for (link = &threadErrorTraps; *link != NULL; link = &(*link)->prev) {
+    if (*link == trap) {
+      *link = trap->prev;
+      break;
+    }
+  }
+  _XmProcessLock();
+  if (--numErrorTraps == 0) {
+    XErrorHandler current = XSetErrorHandler(atomic_load(&trapPreviousHandler));
+    /* A handler another thread installed meanwhile stays */
+    if (current != TrapErrorHandler)
+      (void)XSetErrorHandler(current);
+  }
+  _XmProcessUnlock();
+  return trap->error;
 }
 
 /*

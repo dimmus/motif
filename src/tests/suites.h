@@ -32,5 +32,6 @@ void widgets_suite(SRunner *runner);
 void text_suite(SRunner *runner);
 void i18n_suite(SRunner *runner);
 void layout_suite(SRunner *runner);
+void xerrors_suite(SRunner *runner);
 
 #endif /* SUITES_H */

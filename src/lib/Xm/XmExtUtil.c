@@ -497,13 +497,6 @@ void XmCopyISOLatin1Lowered(char *dst, char *src)
 }
 
 /*
- *	Creates a stippled pixmap of specified depth
- *	caches these so that multiple requests share the pixmap
- */
-#define pixmap_width 2
-#define pixmap_height 2
-
-/*
  * Function:
  *	XmCompareXtWidgetGeometryToWidget(geom, widget)
  * Description:

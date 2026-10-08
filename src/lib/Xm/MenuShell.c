@@ -270,9 +270,11 @@ static XmConst XmSpecRenderTraitRec menushellSRT = {
 static XmConst XmSpecifyLayoutDirectionTraitRec LayoutDirection = {0, /* version */
                                                                    GetDirection};
 /* Save pointers for renderTable XmRCallProc */
-static XmMenuShellWidget check_set_save = NULL;
-static int check_set_offset1 = 0;
-static int check_set_offset2 = 0;
+/* State of CheckSetRenderTables between the resource defaults of one
+   widget, which Xt fetches in one thread but not under one lock */
+static _Thread_local XmMenuShellWidget check_set_save = NULL;
+static _Thread_local int check_set_offset1 = 0;
+static _Thread_local int check_set_offset2 = 0;
 
 /*
  * When using an override redirect window, it is safe to draw to the

@@ -469,7 +469,7 @@ static void Initialize(Widget rw, Widget nw, ArgList args, Cardinal *num_args)
   if ((*cePtr) && (*cePtr)->secondaryObjectClass &&
       (secondaryCreate = (*cePtr)->secondaryObjectCreate))
     (*secondaryCreate)((Widget)request, (Widget)gw, args, num_args);
-  XtGetSubresources(
+  _XmGetSubresources(
       nw, &tool_tip_string, NULL, NULL, subresources, XtNumber(subresources), args, *num_args);
   XmSetToolTipString(nw, tool_tip_string);
   gw->gadget.event_mask = 0;

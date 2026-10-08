@@ -126,8 +126,8 @@ typedef struct {
 #define MESSAGE7 _XmMMsgDragBS_0006
 /********    Static Function Declarations    ********/
 static int LocalErrorHandler(Display *display, XErrorEvent *error);
-static void StartProtectedSection(Display *display, Window window);
-static void EndProtectedSection(Display *display);
+static void StartProtectedSection(XmErrorTrap trap, Display *display, Window window);
+static Boolean EndProtectedSection(XmErrorTrap trap);
 static Window GetMotifWindow(Display *display);
 static void SetMotifWindow(Display *display, Window motifWindow);
 static xmTargetsTable GetTargetsTable(Display *display);
@@ -149,38 +149,9 @@ static xmTargetsTable CreateDefaultTargetsTable(Display *display);
 static xmAtomsTable CreateDefaultAtomsTable(Display *display);
 static int AtomCompare(XmConst void *atom1, XmConst void *atom2);
 /********    End Static Function Declarations    ********/
-static Boolean bad_window;
-static XErrorHandler oldErrorHandler = NULL;
-static unsigned long firstProtectRequest;
-static Window errorWindow;
 static XContext displayToMotifWindowContext = 0;
 static XContext displayToTargetsContext = 0;
 static XContext displayToAtomsContext = 0;
-
-/*****************************************************************************
- *
- *  LocalErrorHandler ()
- *
- ***************************************************************************/
-static int LocalErrorHandler(Display *display, XErrorEvent *error)
-{
-  int ret_val;
-  _XmProcessLock();
-  if (error->error_code == BadWindow && error->resourceid == errorWindow &&
-      error->serial >= firstProtectRequest)
-  {
-    bad_window = True;
-    _XmProcessUnlock();
-    return 0;
-  }
-  if (oldErrorHandler == NULL) {
-    _XmProcessUnlock();
-    return 0; /* should never happen */
-  }
-  ret_val = (*oldErrorHandler)(display, error);
-  _XmProcessUnlock();
-  return ret_val;
-}
 
 /*****************************************************************************
  *
@@ -189,25 +160,20 @@ static int LocalErrorHandler(Display *display, XErrorEvent *error)
  *  To protect against reading or writing to a property on a window that has
  *  been destroyed.
  ***************************************************************************/
-static void StartProtectedSection(Display *display, Window window)
+static void StartProtectedSection(XmErrorTrap trap, Display *display, Window window)
 {
-  bad_window = False;
-  oldErrorHandler = XSetErrorHandler(LocalErrorHandler);
-  firstProtectRequest = NextRequest(display);
-  errorWindow = window;
+  _XmStartErrorTrap(trap, display, BadWindow, window);
 }
 
 /*****************************************************************************
  *
  *  EndProtectedSection ()
  *
- *  Flushes any generated errors on and restores the original error handler.
+ *  Flushes any generated errors and returns True if the window was bad.
  ***************************************************************************/
-static void EndProtectedSection(Display *display)
+static Boolean EndProtectedSection(XmErrorTrap trap)
 {
-  XSync(display, False);
-  XSetErrorHandler(oldErrorHandler);
-  oldErrorHandler = NULL;
+  return _XmEndErrorTrap(trap, True) != 0;
 }
 
 /*****************************************************************************
@@ -376,29 +342,14 @@ static void SetAtomsTable(Display *display, xmAtomsTable atomsTable)
  *  ReadMotifWindow ()
  *
  ***************************************************************************/
-static Boolean RMW_ErrorFlag;
-
-static int RMW_ErrorHandler(Display *display,   /* unused */
-                            XErrorEvent *event) /* unused */
-{
-  _XmProcessLock();
-  RMW_ErrorFlag = True;
-  _XmProcessUnlock();
-  return 0; /* unused */
-}
-
 static Window ReadMotifWindow(Display *display)
 {
   Atom motifWindowAtom;
   unsigned long lengthRtn;
   Window *property = NULL;
   Window motifWindow = None;
-  XErrorHandler old_Handler;
-  /* Setup error proc and reset error flag */
-  old_Handler = XSetErrorHandler((XErrorHandler)RMW_ErrorHandler);
-  _XmProcessLock();
-  RMW_ErrorFlag = False;
-  _XmProcessUnlock();
+  XmErrorTrapRec trap;
+  _XmStartErrorTrap(&trap, display, 0, 0);
   motifWindowAtom = XInternAtom(display, XmI_MOTIF_DRAG_WINDOW, False);
   if (_XmGetWindowPropertyChecked(display,
                                   RootWindow(display, 0),
@@ -419,11 +370,9 @@ static Window ReadMotifWindow(Display *display)
   if (property) {
     XFree((char *)property);
   }
-  XSetErrorHandler(old_Handler);
-  _XmProcessLock();
-  if (RMW_ErrorFlag)
+  /* the property request was a round trip */
+  if (_XmEndErrorTrap(&trap, False))
     motifWindow = None;
-  _XmProcessUnlock();
   return (motifWindow);
 }
 
@@ -492,6 +441,7 @@ static void WriteMotifWindow(Display *display, Window *motifWindow)
  ***************************************************************************/
 static void WriteAtomsTable(Display *display, xmAtomsTable atomsTable)
 {
+  XmErrorTrapRec trap;
   BYTE stackData[MAXSTACK];
 
   struct _propertyRec {
@@ -533,7 +483,7 @@ static void WriteAtomsTable(Display *display, xmAtomsTable atomsTable)
   atomsTableAtom = XInternAtom(display, XmI_MOTIF_DRAG_ATOMS, False);
   motifWindow = GetMotifWindow(display);
   _XmProcessLock();
-  StartProtectedSection(display, motifWindow);
+  StartProtectedSection(&trap, display, motifWindow);
   XChangeProperty(display,
                   motifWindow,
                   atomsTableAtom,
@@ -546,8 +496,7 @@ static void WriteAtomsTable(Display *display, xmAtomsTable atomsTable)
   if (propertyRecPtr != (struct _propertyRec *)stackData) {
     XtFree((char *)propertyRecPtr);
   }
-  EndProtectedSection(display);
-  if (bad_window) {
+  if (EndProtectedSection(&trap)) {
     XmeWarning((Widget)XmGetXmDisplay(display), MESSAGE1);
   }
   _XmProcessUnlock();
@@ -560,6 +509,7 @@ static void WriteAtomsTable(Display *display, xmAtomsTable atomsTable)
  ***************************************************************************/
 static Boolean ReadAtomsTable(Display *display, xmAtomsTable atomsTable)
 {
+  XmErrorTrapRec trap;
   struct {
     xmMotifAtomsPropertyRec info;
     xmMotifAtomsTableRec entry[1];
@@ -574,7 +524,7 @@ static Boolean ReadAtomsTable(Display *display, xmAtomsTable atomsTable)
   atomsTableAtom = XInternAtom(display, XmI_MOTIF_DRAG_ATOMS, False);
   motifWindow = GetMotifWindow(display);
   _XmProcessLock();
-  StartProtectedSection(display, motifWindow);
+  StartProtectedSection(&trap, display, motifWindow);
   ret = _XmGetWindowPropertyChecked(display,
                                     motifWindow,
                                     atomsTableAtom,
@@ -587,8 +537,7 @@ static Boolean ReadAtomsTable(Display *display, xmAtomsTable atomsTable)
                                     &lengthRtn,
                                     NULL,
                                     (unsigned char **)&propertyRecPtr);
-  EndProtectedSection(display);
-  if (bad_window) {
+  if (EndProtectedSection(&trap)) {
     static Boolean first_time = True;
     /*
      * Try to recreate the motifWindow. We could have gotten an invalid
@@ -663,6 +612,7 @@ static Boolean ReadAtomsTable(Display *display, xmAtomsTable atomsTable)
  ***************************************************************************/
 static void WriteTargetsTable(Display *display, xmTargetsTable targetsTable)
 {
+  XmErrorTrapRec trap;
   BYTE stackData[MAXSTACK], *fill;
 
   struct _propertyRec {
@@ -718,7 +668,7 @@ static void WriteTargetsTable(Display *display, xmTargetsTable targetsTable)
   targetsTableAtom = XInternAtom(display, XmI_MOTIF_DRAG_TARGETS, False);
   motifWindow = GetMotifWindow(display);
   _XmProcessLock();
-  StartProtectedSection(display, motifWindow);
+  StartProtectedSection(&trap, display, motifWindow);
   XChangeProperty(display,
                   motifWindow,
                   targetsTableAtom,
@@ -731,8 +681,7 @@ static void WriteTargetsTable(Display *display, xmTargetsTable targetsTable)
   if (propertyRecPtr != (struct _propertyRec *)stackData) {
     XtFree((char *)propertyRecPtr);
   }
-  EndProtectedSection(display);
-  if (bad_window) {
+  if (EndProtectedSection(&trap)) {
     XmeWarning((Widget)XmGetXmDisplay(display), MESSAGE1);
   }
   _XmProcessUnlock();
@@ -771,6 +720,7 @@ static Boolean ReadTargetsCount(char **bufptr, char *bufend, BYTE byte_order, Ca
  ***************************************************************************/
 static Boolean ReadTargetsTable(Display *display, xmTargetsTable targetsTable)
 {
+  XmErrorTrapRec trap;
   struct _propertyRec {
     xmMotifTargetsPropertyRec info;
   } *propertyRecPtr = NULL;
@@ -787,7 +737,7 @@ static Boolean ReadTargetsTable(Display *display, xmTargetsTable targetsTable)
   targetsTableAtom = XInternAtom(display, XmI_MOTIF_DRAG_TARGETS, False);
   motifWindow = GetMotifWindow(display);
   _XmProcessLock();
-  StartProtectedSection(display, motifWindow);
+  StartProtectedSection(&trap, display, motifWindow);
   ret = _XmGetWindowPropertyChecked(display,
                                     motifWindow,
                                     targetsTableAtom,
@@ -800,8 +750,7 @@ static Boolean ReadTargetsTable(Display *display, xmTargetsTable targetsTable)
                                     &lengthRtn,
                                     NULL,
                                     (unsigned char **)&propertyRecPtr);
-  EndProtectedSection(display);
-  if (bad_window) {
+  if (EndProtectedSection(&trap)) {
     XmeWarning((Widget)XmGetXmDisplay(display), MESSAGE1);
     ret = False;
   }
@@ -1253,6 +1202,7 @@ void _XmDestroyMotifWindow(Display *display)
  ***************************************************************************/
 Window _XmGetDragProxyWindow(Display *display)
 {
+  XmErrorTrapRec trap;
   Atom motifProxyWindowAtom;
   unsigned long lengthRtn;
   Window *property = NULL;
@@ -1261,7 +1211,7 @@ Window _XmGetDragProxyWindow(Display *display)
   if ((motifWindow = ReadMotifWindow(display)) != None) {
     motifProxyWindowAtom = XInternAtom(display, XmI_MOTIF_DRAG_PROXY_WINDOW, False);
     _XmProcessLock();
-    StartProtectedSection(display, motifWindow);
+    StartProtectedSection(&trap, display, motifWindow);
     if (_XmGetWindowPropertyChecked(display,
                                     motifWindow,
                                     motifProxyWindowAtom,
@@ -1278,7 +1228,7 @@ Window _XmGetDragProxyWindow(Display *display)
     {
       motifProxyWindow = *property;
     }
-    EndProtectedSection(display);
+    (void)EndProtectedSection(&trap);
     _XmProcessUnlock();
     if (property) {
       XFree((char *)property);

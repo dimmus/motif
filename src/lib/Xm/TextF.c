@@ -729,7 +729,7 @@ static void CursorPosVisDefault(Widget widget,
                                 int offset, /* unused */
                                 XrmValue *value)
 {
-  static Boolean cursor_pos_vis;
+  static _Thread_local Boolean cursor_pos_vis;
   Widget print_shell;
   value->addr = (XPointer)&cursor_pos_vis;
   print_shell = widget;

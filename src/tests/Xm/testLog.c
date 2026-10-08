@@ -1,3 +1,4 @@
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -107,6 +108,67 @@ START_TEST(test_multi_threaded_logging)
    }
    
    ck_assert_msg(XM_TRUE, "Multi-threaded logging test completed");
+}
+END_TEST
+
+/*
+ * Threads registering domains, which grows the domain table, while
+ * others log through it: the table and the output are under one lock.
+ */
+#define CONCURRENT_THREADS 4
+#define CONCURRENT_DOMAINS 64
+
+static int concurrent_messages;
+
+static void counting_cb(const XmLogDomain *d, XmLogLevel level, const char *file,
+                        const char *fnc, int line, const char *fmt, void *data,
+                        va_list args)
+{
+   (void)d; (void)level; (void)file; (void)fnc; (void)line; (void)fmt;
+   (void)data; (void)args;
+   concurrent_messages++; /* the callback runs under the log lock */
+}
+
+static void *register_and_log(void *arg)
+{
+   char name[32];
+   int id = *(int *)arg;
+
+   for (int i = 0; i < CONCURRENT_DOMAINS; i++) {
+      int domain;
+
+      snprintf(name, sizeof(name), "T%d_%d", id, i);
+      domain = XmLogDomainRegister(name, NULL);
+      if (domain < 0)
+         return (void *)1;
+      XmLogDomainRegisteredLevelSet(domain, XM_LOG_LEVEL_DBG);
+      XM_LOG_DOM_INFO(domain, "message %d", i);
+      if (XmLogDomainLevelGet(name) != XM_LOG_LEVEL_DBG)
+         return (void *)1;
+   }
+   return NULL;
+}
+
+START_TEST(test_concurrent_registration)
+{
+   pthread_t threads[CONCURRENT_THREADS];
+   int ids[CONCURRENT_THREADS];
+   void *failed;
+
+   ck_assert(XmLogInit());
+   concurrent_messages = 0;
+   XmLogPrintCbSet(counting_cb, NULL);
+   for (int i = 0; i < CONCURRENT_THREADS; i++) {
+      ids[i] = i;
+      ck_assert_int_eq(pthread_create(&threads[i], NULL, register_and_log, &ids[i]), 0);
+   }
+   for (int i = 0; i < CONCURRENT_THREADS; i++) {
+      pthread_join(threads[i], &failed);
+      ck_assert_ptr_null(failed);
+   }
+   ck_assert_int_eq(concurrent_messages, CONCURRENT_THREADS * CONCURRENT_DOMAINS);
+   XmLogPrintCbSet(NULL, NULL);
+   XmLogShutdown();
 }
 END_TEST
 
@@ -383,7 +445,8 @@ void log_suite(SRunner *runner)
    t = tcase_create("Thread management");
    tcase_add_test(t, test_thread_management);
    tcase_add_test(t, test_multi_threaded_logging);
-   tcase_set_timeout(t, 2);
+   tcase_add_test(t, test_concurrent_registration);
+   tcase_set_timeout(t, 5);
    suite_add_tcase(s, t);
 
    t = tcase_create("Level management");

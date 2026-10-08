@@ -576,7 +576,7 @@ externaldef(dragContextclass) WidgetClass xmDragContextClass = (WidgetClass)&xmD
 
 static void GetRefForeground(Widget widget, int offset, XrmValue *value)
 {
-  static Pixel pixel;
+  static _Thread_local Pixel pixel;
   XmDragContext dc = (XmDragContext)widget;
   Widget sw = dc->drag.sourceWidget;
   pixel = BlackPixelOfScreen(XtScreen(widget));
@@ -601,7 +601,7 @@ static void CopyRefForeground(Widget widget, int offset, XrmValue *value)
 
 static void GetRefBackground(Widget widget, int offset, XrmValue *value)
 {
-  static Pixel pixel;
+  static _Thread_local Pixel pixel;
   XmDragContext dc = (XmDragContext)widget;
   Widget sw = dc->drag.sourceWidget;
   pixel = WhitePixelOfScreen(XtScreen(dc));
@@ -955,26 +955,10 @@ static void GetScreenInfo(XmDragContext dc)
   }
 }
 
-/**
- * Handle X errors around drag message send operations
- */
-static XmDragContext current_dc = NULL;
-
-static int drag_error(Display *display, XErrorEvent *e)
-{
-  (void)display;
-  (void)e;
-  if (!current_dc)
-    return 0;
-  current_dc->drag.activeProtocolStyle = XmDRAG_NONE;
-  current_dc = NULL;
-  return 0;
-}
-
 static void SendDragMessage(XmDragContext dc, Window destination, unsigned char messageType)
 {
   Atom xdndSelection;
-  XErrorHandler old_handler;
+  XmErrorTrapRec trap;
   XmDropSiteManagerObject dsm = (XmDropSiteManagerObject)_XmGetDropSiteManagerObject(
       (XmDisplay)(XtParent(dc)));
   XmICCCallbackStruct callbackRec;
@@ -1039,19 +1023,17 @@ static void SendDragMessage(XmDragContext dc, Window destination, unsigned char 
       (dc->drag.activeProtocolStyle == XmDRAG_DYNAMIC ||
        dc->drag.activeProtocolStyle == XmDRAG_XDND || reason == XmCR_DROP_START))
   {
-    XFlush(XtDisplayOfObject((Widget)dc));
-    XSync(XtDisplayOfObject((Widget)dc), False);
-    current_dc = dc;
-    old_handler = XSetErrorHandler(drag_error);
+    /* A receiver that went away must not make the error fatal: stop
+     * talking to it instead. */
+    _XmStartErrorTrap(&trap, XtDisplayOfObject((Widget)dc), 0, 0);
     _XmSendICCCallback(XtDisplayOfObject((Widget)dc),
                        destination,
                        dc->drag.srcWindow,
                        dc->drag.activeProtocolStyle,
                        &callbackRec,
                        XmICC_INITIATOR_EVENT);
-    XFlush(XtDisplayOfObject((Widget)dc));
-    XSync(XtDisplayOfObject((Widget)dc), False);
-    (void)XSetErrorHandler(old_handler);
+    if (_XmEndErrorTrap(&trap, True))
+      dc->drag.activeProtocolStyle = XmDRAG_NONE;
     /**
      * Here, we commit to the XdndSelection atom if the recipient
      * is using Xdnd.
@@ -1569,7 +1551,7 @@ static void LocalNotifyHandler(Widget w, XtPointer client, XtPointer call)
  */
 static void ExternalNotifyHandler(Widget w, XtPointer client, XtPointer call)
 {
-  XErrorHandler old_handler;
+  XmErrorTrapRec trap;
   XmDragContext dc = (XmDragContext)client;
   XmAnyICCCallback cb = (XmAnyICCCallback)call;
   if (dc->drag.activeProtocolStyle == XmDRAG_NONE &&
@@ -1588,19 +1570,15 @@ static void ExternalNotifyHandler(Widget w, XtPointer client, XtPointer call)
       /*
        * send a message to the external source
        */
-      XFlush(XtDisplayOfObject((Widget)dc));
-      XSync(XtDisplayOfObject((Widget)dc), False);
-      current_dc = dc;
-      old_handler = XSetErrorHandler(drag_error);
+      _XmStartErrorTrap(&trap, XtDisplayOfObject((Widget)dc), 0, 0);
       _XmSendICCCallback(XtDisplayOfObject((Widget)dc),
                          dc->drag.srcWindow,
                          dc->drag.srcWindow,
                          dc->drag.activeProtocolStyle,
                          (XmICCCallback)cb,
                          XmICC_RECEIVER_EVENT);
-      XFlush(XtDisplayOfObject((Widget)dc));
-      XSync(XtDisplayOfObject((Widget)dc), False);
-      (void)XSetErrorHandler(old_handler);
+      if (_XmEndErrorTrap(&trap, True))
+        dc->drag.activeProtocolStyle = XmDRAG_NONE;
       break;
     default:
       XmeWarning((Widget)dc, MESSAGE5);

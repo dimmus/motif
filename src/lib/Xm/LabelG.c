@@ -800,14 +800,14 @@ static void SecondaryObjectCreate(Widget req, Widget new_w, ArgList args, Cardin
   /*
    * Fetch the resources in superclass to subclass order
    */
-  XtGetSubresources(new_w,
-                    newSec,
-                    NULL,
-                    NULL,
-                    wc->core_class.resources,
-                    wc->core_class.num_resources,
-                    args,
-                    *num_args);
+  _XmGetSubresources(new_w,
+                     newSec,
+                     NULL,
+                     NULL,
+                     wc->core_class.resources,
+                     wc->core_class.num_resources,
+                     args,
+                     *num_args);
   extData = (XmWidgetExtData)XtCalloc(1, sizeof(XmWidgetExtDataRec));
   extData->widget = (Widget)newSec;
   extData->reqWidget = (Widget)reqSec;
@@ -1371,10 +1371,10 @@ static void Initialize(Widget req, Widget new_w, ArgList args, Cardinal *num_arg
      * but failed because the colors were not accessible
      * prior to Initialize, because the cache wasn't there yet.
      * We have to try again from here. */
-    XtGetSubresources(new_w, new_w, NULL, NULL, label_pixmap_resource, 1, args, *num_args);
+    _XmGetSubresources(new_w, new_w, NULL, NULL, label_pixmap_resource, 1, args, *num_args);
   }
   if (Pix_insen(new_w) == XmDELAYED_PIXMAP) {
-    XtGetSubresources(new_w, new_w, NULL, NULL, label_pixmap_insen_resource, 1, args, *num_args);
+    _XmGetSubresources(new_w, new_w, NULL, NULL, label_pixmap_insen_resource, 1, args, *num_args);
   }
   /* If menuProcs is not set up yet, try again */
   _XmProcessLock();
@@ -2606,8 +2606,10 @@ static void GetMnemonicCharset(Widget wid,
  *     fields and set them, instead of doing a SetValues.
  *
  ************************************************************************/
-static XmLabelGCacheObjPart local_cache;
-static Boolean local_cache_inited = FALSE;
+/* The changes _XmAssignLabG_* collect for the next _XmReCacheLabG made by
+   the same thread */
+static _Thread_local XmLabelGCacheObjPart local_cache;
+static _Thread_local Boolean local_cache_inited = FALSE;
 
 /*
  * QualifyLabelLocalCache

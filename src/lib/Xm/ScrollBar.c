@@ -460,7 +460,7 @@ static void ProcessingDirectionDefault(XmScrollBarWidget widget,
                                        int offset, /* unused */
                                        XrmValue *value)
 {
-  static unsigned char direction;
+  static _Thread_local unsigned char direction;
   value->addr = (XPointer)&direction;
   if (widget->scrollBar.orientation == XmHORIZONTAL) {
     if (LayoutIsRtoLP(widget))
@@ -487,7 +487,7 @@ static void ProcessingDirectionDefault(XmScrollBarWidget widget,
  *********************************************************************/
 static void BackgroundPixelDefault(XmScrollBarWidget widget, int offset, XrmValue *value)
 {
-  static Pixel background;
+  static _Thread_local Pixel background;
   Widget parent = XtParent(widget);
   if (XmIsScrolledWindow(parent)) {
     value->addr = (XPointer)&background;
@@ -513,7 +513,7 @@ static void TraversalDefault(XmScrollBarWidget widget,
                              int offset, /* unused */
                              XrmValue *value)
 {
-  static Boolean traversal;
+  static _Thread_local Boolean traversal;
   Widget parent = XtParent(widget);
   Arg al[1];
   unsigned char sp;
@@ -539,7 +539,7 @@ static void SliderVisualDefault(XmScrollBarWidget widget,
                                 int offset, /* unused */
                                 XrmValue *value)
 {
-  static XtEnum slider_visual;
+  static _Thread_local XtEnum slider_visual;
   value->addr = (XPointer)&slider_visual;
   if (widget->scrollBar.sliding_mode == XmTHERMOMETER) {
     slider_visual = XmTROUGH_COLOR;
@@ -559,7 +559,7 @@ static void SliderMarkDefault(XmScrollBarWidget widget,
                               int offset, /* unused */
                               XrmValue *value)
 {
-  static XtEnum slider_mark;
+  static _Thread_local XtEnum slider_mark;
   value->addr = (XPointer)&slider_mark;
   if ((widget->scrollBar.sliding_mode == XmTHERMOMETER) && (widget->scrollBar.editable))
     slider_mark = XmROUND_MARK;
@@ -577,7 +577,7 @@ static void EditableDefault(XmScrollBarWidget widget,
                             int offset, /* unused */
                             XrmValue *value)
 {
-  static XtEnum editable;
+  static _Thread_local XtEnum editable;
   value->addr = (XPointer)&editable;
   if (widget->scrollBar.sliding_mode == XmTHERMOMETER) {
     editable = False;
@@ -601,7 +601,7 @@ static void HighlightDefault(XmScrollBarWidget widget,
                              int offset, /* unused */
                              XrmValue *value)
 {
-  static Dimension highlight;
+  static _Thread_local Dimension highlight;
   Widget parent = XtParent(widget);
   Arg al[1];
   unsigned char sp;

@@ -1187,17 +1187,16 @@ static void DisplayCurrentFont(XmFontSelectorWidget fsw, String font)
  */
 static String BuildFontString(XmFontSelectorWidget fsw, FontData *cf, String buf, int size)
 {
-  static XrmQuark anyquark2, anyquark = NULLQUARK;
+  XrmQuark anyquark2, anyquark;
   String family, encoding;
   char res_x[16], res_y[16], point_size[16]; /* "*" or an int */
-  if (anyquark == NULLQUARK) {
-    String temp1 = _XmGetMBStringFromXmString(ANY_STRING(fsw));
-    String temp2 = _XmGetMBStringFromXmString(LOWER_ANY_STRING(fsw));
-    anyquark = XrmStringToQuark(temp1);
-    anyquark2 = XrmStringToQuark(temp2);
-    XtFree(temp1);
-    XtFree(temp2);
-  }
+  /* This widget's strings: other font selectors may have others */
+  String temp1 = _XmGetMBStringFromXmString(ANY_STRING(fsw));
+  String temp2 = _XmGetMBStringFromXmString(LOWER_ANY_STRING(fsw));
+  anyquark = XrmStringToQuark(temp1);
+  anyquark2 = XrmStringToQuark(temp2);
+  XtFree(temp1);
+  XtFree(temp2);
   if ((anyquark == cf->familyq) || (anyquark2 == cf->familyq))
     family = STAR_STRING;
   else

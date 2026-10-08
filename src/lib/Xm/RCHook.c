@@ -47,23 +47,21 @@ void _XmRCColorHook(Widget w,
   Arg al[10];
   int ac;
   unsigned char rcType;
-  static int mono, color, colorPrim, init = 0;
-  static Screen *screen;
+  int mono, color, colorPrim;
+  Screen *screen;
   Pixmap ditherPix, solidPix;
   XmColorObj tmpColorObj = NULL;
   Pixel defaultBackground;
   int depth = w->core.depth;
-  Display *ColorObjCacheDisplay;
   XContext ColorObjCache;
   XmColorObj DefaultColorObj;
   _XmProcessLock();
-  ColorObjCacheDisplay = _XmColorObjCacheDisplay;
   ColorObjCache = _XmColorObjCache;
   DefaultColorObj = _XmDefaultColorObj;
   _XmProcessUnlock();
   /** get the colorObj for this display connection **/
-  if (XFindContext(
-          ColorObjCacheDisplay, (XID)XtDisplay(w), ColorObjCache, (XPointer *)&tmpColorObj) != 0)
+  if (!ColorObjCache ||
+      XFindContext(XtDisplay(w), None, ColorObjCache, (XPointer *)&tmpColorObj) != 0)
   { /* none found, use default */
     if (DefaultColorObj)
       tmpColorObj = DefaultColorObj;
@@ -80,18 +78,11 @@ void _XmRCColorHook(Widget w,
   ac++;
   XtGetValues(w, al, ac);
   if (rcType == XmMENU_BAR) /* set to secondary, rather than primary */ {
-    _XmProcessLock();
-    if (!init) {
-      if (tmpColorObj->color_obj.colorUse[tmpColorObj->color_obj.myScreen] == XmCO_BLACK_WHITE)
-        mono = 1;
-      else
-        mono = 0;
-      color = tmpColorObj->color_obj.secondary;
-      colorPrim = tmpColorObj->color_obj.primary;
-      screen = XtScreen(tmpColorObj);
-      init = 1;
-    }
-    _XmProcessUnlock();
+    /* From this display's ColorObj: the first one's screen may be gone. */
+    mono = tmpColorObj->color_obj.colorUse[tmpColorObj->color_obj.myScreen] == XmCO_BLACK_WHITE;
+    color = tmpColorObj->color_obj.secondary;
+    colorPrim = tmpColorObj->color_obj.primary;
+    screen = XtScreen(tmpColorObj);
     /** if background didn't default to ColorObj,
           don't overwrite colors **/
     if (defaultBackground != tmpColorObj->color_obj.myColors[colorPrim].bg)

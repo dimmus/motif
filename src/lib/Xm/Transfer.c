@@ -89,14 +89,17 @@ static void ClipboardLoseProc(Widget w, Atom *selection);
 #define XmSCLIPBOARD_MANAGER "CLIPBOARD_MANAGER"
 #define BYTELENGTH(length, format) \
   ((format == 8) ? length : ((format == 16) ? length * sizeof(short) : (length * sizeof(long))))
-static int local_convert_flag = 0;
+/*
+ * Set by _XmConvertHandlerSetLocal for the next _XmConvertHandler call,
+ * which is made by the same thread: so the flag is per thread, or a
+ * request that another thread is converting would take it.
+ */
+static _Thread_local int local_convert_flag = 0;
 static XmHashTable DataIdDictionary = NULL;
 
 void _XmConvertHandlerSetLocal(void)
 {
-  _XmProcessLock();
   local_convert_flag = 1;
-  _XmProcessUnlock();
 }
 
 /************************************************************************/
@@ -146,9 +149,7 @@ Boolean _XmConvertHandler(Widget wid,
   int my_local_convert_flag;
   assert(XtNumber(atom_names) == NUM_ATOMS);
   XInternAtoms(XtDisplay(wid), atom_names, XtNumber(atom_names), False, atoms);
-  _XmProcessLock();
   my_local_convert_flag = local_convert_flag;
-  _XmProcessUnlock();
   /* Find the context block */
   cc = LookupContextBlock(XtDisplay(wid), *selection);
   /* Setup the callback structure */
@@ -224,10 +225,8 @@ Boolean _XmConvertHandler(Widget wid,
   {
     cbstruct.flags |= XmCONVERTING_SAME;
   }
-  _XmProcessLock();
   /* Reset bypass flag */
   local_convert_flag = 0;
-  _XmProcessUnlock();
   if (*selection != atoms[XmA_MOTIF_DESTINATION] || *target == atoms[XmA_MOTIF_LOSE_SELECTION]) {
     /* First we call any convert callbacks */
     if (XtHasCallbacks(wid, XmNconvertCallback) == XtCallbackHasSome)
@@ -328,12 +327,15 @@ static void SecondaryConvertHandler(Widget w,
   XtIntervalId timer;
   Boolean timed_out = False;
   Boolean done;
+  /* Take the lock now, in the same critical section as the test: the
+     convert procs of two displays can run at once in two threads. */
   _XmProcessLock();
   if (secondary_lock != 0) {
     cs->status = XmCONVERT_REFUSE;
     _XmProcessUnlock();
     return;
   }
+  secondary_lock = 1;
   _XmProcessUnlock();
   req_event = XtGetSelectionRequest(w, cs->selection, NULL);
   cs->event = (XEvent *)req_event;
@@ -342,23 +344,24 @@ static void SecondaryConvertHandler(Widget w,
   if (req_event != NULL && old_serial != req_event->serial)
     old_serial = req_event->serial;
   else {
+    secondary_lock = 0;
+    cs->status = XmCONVERT_REFUSE;
+    _XmProcessUnlock();
+    return;
+  }
+  /* The parameter is the ATOM_PAIR (selection, target) written by the
+     requestor, another client. */
+  if (cs->parm == NULL || cs->parm_format != 32 || cs->parm_length < 2) {
+    secondary_lock = 0;
     cs->status = XmCONVERT_REFUSE;
     _XmProcessUnlock();
     return;
   }
   _XmProcessUnlock();
-  /* The parameter is the ATOM_PAIR (selection, target) written by the
-     requestor, another client. */
-  if (cs->parm == NULL || cs->parm_format != 32 || cs->parm_length < 2) {
-    cs->status = XmCONVERT_REFUSE;
-    return;
-  }
   pair = (_XmTextInsertPair *)cs->parm;
   event_copy = (XSelectionRequestEvent *)XtMalloc(sizeof(XSelectionRequestEvent));
   *event_copy = *req_event;
   _XmProcessLock();
-  /* Lock */
-  secondary_lock = 1;
   secondary_event = event_copy;
   _XmProcessUnlock();
   assert(XtNumber(atom_names) == NUM_ATOMS);
@@ -985,8 +988,9 @@ Widget XmeDragSource(
 /* Destination section						*/
 /* 								*/
 /****************************************************************/
-/* internal flag for transfer block setup */
-static int TB_internal = 0;
+/* internal flag for transfer block setup, while this thread calls a
+   widget's destinationProc */
+static _Thread_local int TB_internal = 0;
 
 Boolean _XmDestinationHandler(Widget wid,
                               Atom selection,
@@ -1085,15 +1089,11 @@ Boolean _XmDestinationHandler(Widget wid,
   if (ttrait != NULL && tc->status == XmTRANSFER_DONE_DEFAULT &&
       ((tc->count == 0) || (tc->outstanding == 0 && !(TC_CALLED_WIDGET))))
   {
-    _XmProcessLock();
     TB_internal = 1;
-    _XmProcessUnlock();
     tc->flags |= TC_CALLED_WIDGET;
     if (ttrait->destinationProc != 0)
       ttrait->destinationProc(wid, NULL, cbstruct);
-    _XmProcessLock();
     TB_internal = 0;
-    _XmProcessUnlock();
   }
   if (tc->count == 0 && tc->selection == MOTIF_DROP) {
     XmDropProcCallbackStruct *ds = (XmDropProcCallbackStruct *)location_data;
@@ -1559,14 +1559,10 @@ static void SelectionCallbackWrapper(Widget wid,
     /* Now lookup the trait on this widget and call the
        internal routine. */
     if (ttrait != NULL) {
-      _XmProcessLock();
       TB_internal = 1;
-      _XmProcessUnlock();
       if (ttrait->destinationProc != 0)
         ttrait->destinationProc(wid, NULL, tc->callback_struct);
-      _XmProcessLock();
       TB_internal = 0;
-      _XmProcessUnlock();
     }
   }
   /* Send a delete if this is a move operation and we've complete
@@ -1619,11 +1615,11 @@ static ConvertContext LookupContextBlock(Display *d, Atom a)
   _XmCCKeyRec x;
   x.display = d;
   x.selection = a;
+  /* The table is shared by all displays: look up and add under one lock */
   _XmProcessLock();
   if (ConvertHashTable == (XmHashTable)NULL)
     ConvertHashTable = _XmAllocHashTable(10, CCMatch, CCHash);
   cc = (ConvertContext)_XmGetHashEntry(ConvertHashTable, (XmHashKey)&x);
-  _XmProcessUnlock();
   if (cc == NULL) {
     _XmCCKey new_k;
     new_k = (_XmCCKey)XtMalloc(sizeof(_XmCCKeyRec));
@@ -1631,10 +1627,9 @@ static ConvertContext LookupContextBlock(Display *d, Atom a)
     new_k->selection = a;
     /* Allocate a context block for this selection */
     cc = (ConvertContext)XtMalloc(sizeof(ConvertContextRec));
-    _XmProcessLock();
     _XmAddHashEntry(ConvertHashTable, (XmHashKey)new_k, (XtPointer)cc);
-    _XmProcessUnlock();
   }
+  _XmProcessUnlock();
   return (cc);
 }
 
@@ -1689,13 +1684,12 @@ static void FreeTransferID(XtPointer id)
   /* Free done_proc list */
   if (tid->doneProcs != NULL)
     XtFree((char *)tid->doneProcs);
-  /* first unchain from global_tc */
+  /* first unchain from global_tc, which every thread's transfers share */
+  _XmProcessLock();
   if (global_tc == tid) {
-    _XmProcessLock();
     global_tc = (TransferContext)tid->next;
     if (global_tc != NULL)
       global_tc->prev = NULL;
-    _XmProcessUnlock();
   }
   else {
     /* Get previous and next */
@@ -1707,7 +1701,6 @@ static void FreeTransferID(XtPointer id)
     if (nid != NULL)
       nid->prev = (XtPointer)pid;
   }
-  _XmProcessLock();
   /* Put on free list */
   tid->next = (XtPointer)free_tc;
   free_tc = tid;
@@ -1737,12 +1730,10 @@ static TransferBlock AddTransferBlock(TransferContext tc)
     (tc->last)->next = (XtPointer)tb;
     tc->last = tb;
   }
-  _XmProcessLock();
   if (TB_internal)
     tb->flags = TB_INTERNAL;
   else
     tb->flags = TB_NONE;
-  _XmProcessUnlock();
   return (tb);
 }
 
@@ -2112,18 +2103,6 @@ XmDestinationCallbackStruct *_XmTransferGetDestinationCBStruct(XtPointer tid)
   return (tc->callback_struct);
 }
 
-/* Error handler for XGetAtomName */
-static int SIF_ErrorFlag;
-
-static int SIF_ErrorHandler(Display *display, /* unused */
-                            XErrorEvent *event)
-{
-  _XmProcessLock();
-  SIF_ErrorFlag = event->type;
-  _XmProcessUnlock();
-  return 0;
-}
-
 /* NOTE! XGetAtomName return value MUST be freed with XFree; however, there
  ** isn't a good way to allocate data which can be freed with XFree. We could
  ** cache a static character pointer to NULL and check it to decide whether or
@@ -2132,23 +2111,17 @@ static int SIF_ErrorHandler(Display *display, /* unused */
  */
 static char *GetSafeAtomName(Display *display, Atom a, FreeType *howFree)
 {
-  XErrorHandler old_Handler;
+  XmErrorTrapRec trap;
   char *returnvalue;
-  /* Setup error proc and reset error flag */
-  old_Handler = XSetErrorHandler((XErrorHandler)SIF_ErrorHandler);
-  _XmProcessLock();
-  SIF_ErrorFlag = 0;
-  _XmProcessUnlock();
+  _XmStartErrorTrap(&trap, display, 0, 0);
   returnvalue = XGetAtomName(display, a);
   *howFree = DoXFree;
-  XSetErrorHandler(old_Handler);
-  _XmProcessLock();
-  if (SIF_ErrorFlag != 0) {
+  /* XGetAtomName was a round trip */
+  if (_XmEndErrorTrap(&trap, False) != 0) {
     returnvalue = XtMalloc(1); /* does not return NULL */
     returnvalue[0] = 0;        /* Create empty string to return */
     *howFree = DoFree;
     TransferWarning(NULL, ATOM, ARG, BAD_ATOM_MESSAGE);
   }
-  _XmProcessUnlock();
   return (returnvalue);
 }

@@ -4210,14 +4210,14 @@ void _XmTextInputCreate(Widget wid, ArgList args, Cardinal num_args)
   XtPointer temp_ptr;
   tw->text.input = input = (Input)XtMalloc((unsigned)sizeof(InputRec));
   input->data = data = (InputData)XtMalloc((unsigned)sizeof(InputDataRec));
-  XtGetSubresources(wid,
-                    (XtPointer)data,
-                    NULL,
-                    NULL,
-                    input_resources,
-                    XtNumber(input_resources),
-                    args,
-                    num_args);
+  _XmGetSubresources(wid,
+                     (XtPointer)data,
+                     NULL,
+                     NULL,
+                     input_resources,
+                     XtNumber(input_resources),
+                     args,
+                     num_args);
   data->widget = tw;
   if (data->sarray == NULL)
     data->sarray = (XmTextScanType *)sarray;

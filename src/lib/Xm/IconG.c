@@ -158,7 +158,7 @@ static Boolean PointIn(Widget widget, Position x, Position y);
    IconConverter. */
 static XContext largeIconContext = 0;
 static XContext smallIconContext = 0;
-static XPointer dummy;
+static _Thread_local XPointer dummy; /* XFindContext output only */
 #define OwnLargeMask(widget) \
   (XFindContext(XtDisplay(widget), (Window)widget, largeIconContext, &dummy) == 0)
 #define OwnSmallMask(widget) \
@@ -715,14 +715,14 @@ static void SecondaryObjectCreate(Widget req, Widget new_w, ArgList args, Cardin
   /*
    * fetch the resources in superclass to subclass order
    */
-  XtGetSubresources(new_w,
-                    newSec,
-                    NULL,
-                    NULL,
-                    wc->core_class.resources,
-                    wc->core_class.num_resources,
-                    args,
-                    *num_args);
+  _XmGetSubresources(new_w,
+                     newSec,
+                     NULL,
+                     NULL,
+                     wc->core_class.resources,
+                     wc->core_class.num_resources,
+                     args,
+                     *num_args);
   extData = (XmWidgetExtData)XtCalloc(1, sizeof(XmWidgetExtDataRec));
   extData->widget = (Widget)newSec;
   extData->reqWidget = (Widget)reqSec;

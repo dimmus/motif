@@ -425,14 +425,14 @@ static void SecondaryObjectCreate(Widget req, Widget new_w, ArgList args, Cardin
   LabG_Cache(req) = &(((XmLabelGCacheObject)reqSec)->label_cache);
   CBG_Cache(new_w) = &(((XmCascadeButtonGCacheObject)newSec)->cascade_button_cache);
   CBG_Cache(req) = &(((XmCascadeButtonGCacheObject)reqSec)->cascade_button_cache);
-  XtGetSubresources(new_w,
-                    newSec,
-                    NULL,
-                    NULL,
-                    wc->core_class.resources,
-                    wc->core_class.num_resources,
-                    args,
-                    *num_args);
+  _XmGetSubresources(new_w,
+                     newSec,
+                     NULL,
+                     NULL,
+                     wc->core_class.resources,
+                     wc->core_class.num_resources,
+                     args,
+                     *num_args);
   extData = (XmWidgetExtData)XtCalloc(1, sizeof(XmWidgetExtDataRec));
   extData->widget = (Widget)newSec;
   extData->reqWidget = (Widget)reqSec;
@@ -2073,14 +2073,14 @@ static void Initialize(Widget rw, Widget nw, ArgList args, Cardinal *num_args)
     request_resources.default_type = XmRImmediate;
     request_resources.resource_offset = 0;
     request_resources.default_addr = (XtPointer)XmINVALID_DIMENSION;
-    XtGetSubresources(XtParent(new_w),
-                      &requestedMarginWidth,
-                      XtName((Widget)new_w),
-                      new_w->object.widget_class->core_class.class_name,
-                      &request_resources,
-                      1,
-                      args,
-                      *num_args);
+    _XmGetSubresources(XtParent(new_w),
+                       &requestedMarginWidth,
+                       XtName((Widget)new_w),
+                       new_w->object.widget_class->core_class.class_name,
+                       &request_resources,
+                       1,
+                       args,
+                       *num_args);
     if (requestedMarginWidth == XmINVALID_DIMENSION) {
       LabG_MarginWidth(new_w) = 6;
     }

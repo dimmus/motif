@@ -259,7 +259,7 @@ static void CursorPosVisDefault(Widget widget,
                                 int offset, /* unused */
                                 XrmValue *value)
 {
-  static Boolean cursor_pos_vis;
+  static _Thread_local Boolean cursor_pos_vis;
   Widget print_shell;
   value->addr = (XPointer)&cursor_pos_vis;
   print_shell = widget;
@@ -3867,13 +3867,15 @@ static Boolean OutputSetValues(
     XmRenderTableFree(data->fontlist);
     if (CK(rendertable)) {
       if (newdata->rendertable == NULL)
-        newdata->fontlist = XmeGetDefaultRenderTable(new_w, XmTEXT_FONTLIST);
+        newdata->fontlist = XmRenderTableCopy(
+            XmeGetDefaultRenderTable(new_w, XmTEXT_FONTLIST), NULL, 0);
       else
         newdata->fontlist = XmRenderTableCopy(newdata->rendertable, NULL, 0);
     }
     else if (CK(fontlist)) {
       if (newdata->fontlist == NULL)
-        newdata->fontlist = XmeGetDefaultRenderTable(new_w, XmTEXT_FONTLIST);
+        newdata->fontlist = XmRenderTableCopy(
+            XmeGetDefaultRenderTable(new_w, XmTEXT_FONTLIST), NULL, 0);
       else
         newdata->fontlist = XmRenderTableCopy(newdata->fontlist, NULL, 0);
     }
@@ -3882,7 +3884,8 @@ static Boolean OutputSetValues(
     CP(rendertable);
     if (!LoadFontMetrics(newtw)) {
       XmRenderTableFree(newdata->fontlist);
-      newdata->fontlist = XmeGetDefaultRenderTable(new_w, XmTEXT_FONTLIST);
+      newdata->fontlist = XmRenderTableCopy(
+          XmeGetDefaultRenderTable(new_w, XmTEXT_FONTLIST), NULL, 0);
       newdata->rendertable = newdata->fontlist;
       CP(fontlist);
       CP(rendertable);
@@ -4877,14 +4880,14 @@ void _XmTextOutputCreate(Widget wid, ArgList args, Cardinal num_args)
   XmScrollFrameTrait scrollFrameTrait;
   tw->text.output = output = (Output)XtMalloc((unsigned)sizeof(OutputRec));
   output->data = data = (OutputData)XtMalloc((unsigned)sizeof(OutputDataRec));
-  XtGetSubresources(wid,
-                    (XtPointer)data,
-                    NULL,
-                    NULL,
-                    output_resources,
-                    XtNumber(output_resources),
-                    args,
-                    num_args);
+  _XmGetSubresources(wid,
+                     (XtPointer)data,
+                     NULL,
+                     NULL,
+                     output_resources,
+                     XtNumber(output_resources),
+                     args,
+                     num_args);
   if (output->data->scrollleftside == XmDYNAMIC_BOOL) {
     if (XmDirectionMatch(XmPrim_layout_direction(tw), XmTOP_TO_BOTTOM_RIGHT_TO_LEFT))
       output->data->scrollleftside = True;

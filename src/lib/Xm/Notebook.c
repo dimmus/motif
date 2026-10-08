@@ -1355,7 +1355,7 @@ static void GetDefaultBackPageBackground(Widget w,
                                          XrmValue *value)
 {
   XmNotebookWidget nb = (XmNotebookWidget)w;
-  static Pixel pixel;
+  static _Thread_local Pixel pixel;
   value->addr = (XtPointer)&pixel;
   XmGetColors(
       XtScreen(w), nb->core.colormap, nb->notebook.frame_background, NULL, NULL, NULL, &pixel);
@@ -1366,7 +1366,7 @@ static void GetDefaultBackPagePos(Widget w,
                                   int offset, /* unused */
                                   XrmValue *value)
 {
-  static unsigned char back_page_pos;
+  static _Thread_local unsigned char back_page_pos;
   XmNotebookWidget nb = (XmNotebookWidget)w;
   /* initialize the notebook layout default */
   if (LayoutIsRtoLM(w)) {

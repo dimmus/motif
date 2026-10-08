@@ -607,7 +607,7 @@ static void _XmDialogTypeDefault(Widget widget,
                                  int offset, /* unused */
                                  XrmValue *value)
 {
-  static unsigned char type;
+  static _Thread_local unsigned char type;
   /****************/
   /*
    * Set the default type.  To do this, we check the dialog

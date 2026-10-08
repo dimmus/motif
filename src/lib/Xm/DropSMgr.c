@@ -336,7 +336,7 @@ static void DropSiteManagerInitialize(Widget rw, Widget nw, ArgList args, Cardin
   dsm->dropManager.updateTimeOutId = 0;
   dsm->dropManager.dragUnderData = NULL;
   /* Patch around broken Xt interfaces */
-  XtGetSubresources(nw, info, NULL, NULL, _XmDSResources, _XmNumDSResources, NULL, 0);
+  _XmGetSubresources(nw, info, NULL, NULL, _XmDSResources, _XmNumDSResources, NULL, 0);
 }
 
 static void Destroy(Widget w)
@@ -533,10 +533,6 @@ static void DetectAncestorClippers(XmDropSiteManagerObject dsm,
 
 static void DetectImpliedClipper(XmDropSiteManagerObject dsm, XmDSInfo info)
 {
-  static XmRegion tmpRegion = NULL;
-  if (tmpRegion == NULL) {
-    tmpRegion = _XmRegionCreate();
-  }
   if ((GetDSType(info) == XmDROP_SITE_SIMPLE) && GetDSHasRegion(info)) {
     Widget w = GetDSWidget(info);
     XRectangle wr, tr, rr;
@@ -872,15 +868,9 @@ static Boolean IntersectWithWidgetAncestors(Widget w, XmRegion r)
 
 static Boolean IntersectWithDSInfoAncestors(XmDSInfo parent, XmRegion r)
 {
-  static XmRegion testR = (XmRegion)NULL;
   static XmRegion pR = (XmRegion)NULL;
   Dimension bw;
-  _XmProcessLock();
-  if (testR == NULL) {
-    testR = _XmRegionCreate();
-    pR = _XmRegionCreate();
-  }
-  _XmProcessUnlock();
+  Boolean visible;
   /*
    * A simplifying assumption in this code is that the regions
    * are all relative to the shell widget.  We don't have to
@@ -896,9 +886,11 @@ static Boolean IntersectWithDSInfoAncestors(XmDSInfo parent, XmRegion r)
    */
   if (parent == NULL)
     return (True);
+  /* pR is shared by all threads: hold the lock while it is used */
   _XmProcessLock();
+  if (pR == NULL)
+    pR = _XmRegionCreate();
   _XmRegionUnion(GetDSRegion(parent), GetDSRegion(parent), pR);
-  _XmProcessUnlock();
   if ((bw = GetDSBorderWidth(parent)) != 0) {
     /*
      * Adjust for the border width ala X clipping
@@ -907,16 +899,14 @@ static Boolean IntersectWithDSInfoAncestors(XmDSInfo parent, XmRegion r)
      * should be done to the window not the border.  The clip
      * region is smaller than the sensitive region.
      */
-    _XmProcessLock();
     _XmRegionShrink(pR, bw, bw);
-    _XmProcessUnlock();
   }
-  _XmProcessLock();
   _XmRegionIntersect(r, pR, r);
+  /* C will ensure that we only recurse if r is non-empty */
+  visible = (!_XmRegionIsEmpty(r)) &&
+            (IntersectWithDSInfoAncestors((XmDSInfo)GetDSParent(parent), r));
   _XmProcessUnlock();
-  /* C will ensure that we only recurse if testR is non-empty */
-  return ((!_XmRegionIsEmpty(r)) &&
-          (IntersectWithDSInfoAncestors((XmDSInfo)GetDSParent(parent), r)));
+  return visible;
 }
 
 static Boolean CalculateAncestorClip(XmDropSiteManagerObject dsm, XmDSInfo info, XmRegion r)
@@ -967,55 +957,46 @@ static Boolean PointInDS(XmDropSiteManagerObject dsm, XmDSInfo info, Position x,
   static XmRegion tmpR = (XmRegion)NULL;
   XmRegion *visR = &(dsm->dropManager.newAncestorClipRegion);
   Widget w = GetDSWidget(info);
+  Position tmpX = 0, tmpY = 0;
+  Boolean in;
+  if (!GetDSRemote(info))
+    XtTranslateCoords(w, 0, 0, &tmpX, &tmpY);
+  /* testR and tmpR are shared by all threads: hold the lock while they
+     are used */
   _XmProcessLock();
   if (testR == NULL) {
     testR = _XmRegionCreate();
     tmpR = _XmRegionCreate();
   }
-  _XmProcessUnlock();
   /*
    * CalculateAncestorClip will intersect the universe with all of
    * the ancestors.  If anything is left, it will return true the
    * intersection will be in tmpR.
    */
-  _XmProcessLock();
   if (!CalculateAncestorClip(dsm, info, tmpR)) {
     _XmProcessUnlock();
     return (False);
   }
-  _XmProcessUnlock();
   if (GetDSRemote(info)) {
     /*
      * We know that the region in the info struct is shell relative
      */
-    _XmProcessLock();
     _XmRegionIntersect(tmpR, GetDSRegion(info), testR);
-    _XmProcessUnlock();
   }
   else {
-    Position tmpX, tmpY;
     _XmRegionUnion(GetDSRegion(info), GetDSRegion(info), testR);
     /*
      * We know that the information is widget
      * relative so we will have to translate it.
      */
-    XtTranslateCoords(w, 0, 0, &tmpX, &tmpY);
-    _XmProcessLock();
     _XmRegionOffset(testR, (tmpX - dsm->dropManager.rootX), (tmpY - dsm->dropManager.rootY));
     _XmRegionIntersect(tmpR, testR, testR);
-    _XmProcessUnlock();
   }
-  _XmProcessLock();
-  if ((!_XmRegionIsEmpty(testR)) && (_XmRegionPointInRegion(testR, x, y))) {
+  in = (!_XmRegionIsEmpty(testR)) && (_XmRegionPointInRegion(testR, x, y));
+  if (in)
     _XmRegionUnion(tmpR, tmpR, *visR);
-    _XmProcessUnlock();
-    return (True);
-  }
-  else {
-    _XmProcessUnlock();
-    return (False);
-  }
-  /* _XmProcessUnlock();	*/ /* not reached */
+  _XmProcessUnlock();
+  return in;
 }
 
 static XmDSInfo PointToDSInfo(XmDropSiteManagerObject dsm, XmDSInfo info, Position x, Position y)
@@ -1072,9 +1053,7 @@ static void DoAnimation(XmDropSiteManagerObject dsm,
   int i, n;
   XmDSInfo child;
   XmAnimationDataRec animationData;
-  static XmRegion dsRegion = (XmRegion)NULL;
-  static XmRegion clipRegion = (XmRegion)NULL;
-  static XmRegion tmpRegion = (XmRegion)NULL;
+  XmRegion dsRegion, clipRegion, tmpRegion;
   Widget dc = dsm->dropManager.curDragContext;
   Boolean sourceIsExternal;
   Dimension bw = 0;
@@ -1088,13 +1067,10 @@ static void DoAnimation(XmDropSiteManagerObject dsm,
   XtSetArg(args[n], XmNsourceIsExternal, &sourceIsExternal);
   n++;
   XtGetValues(dc, args, n);
-  _XmProcessLock();
-  if (dsRegion == NULL) {
-    dsRegion = _XmRegionCreate();
-    clipRegion = _XmRegionCreate();
-    tmpRegion = _XmRegionCreate();
-  }
-  _XmProcessUnlock();
+  /* The animation takes copies of the regions it keeps */
+  dsRegion = _XmRegionCreate();
+  clipRegion = _XmRegionCreate();
+  tmpRegion = _XmRegionCreate();
   if (sourceIsExternal) {
     animationData.dragOver = NULL;
     /*
@@ -1113,22 +1089,16 @@ static void DoAnimation(XmDropSiteManagerObject dsm,
   animationData.windowY = dsm->dropManager.rootY;
   animationData.saveAddr = (XtPointer) & (dsm->dropManager.dragUnderData);
   /* We're going to need a copy. */
-  _XmProcessLock();
   _XmRegionUnion(GetDSRegion(info), GetDSRegion(info), dsRegion);
-  _XmProcessUnlock();
   bw = GetDSBorderWidth(info);
   if (!GetDSRemote(info)) {
     Position wX, wY;
     w = GetDSWidget(info);
     XtTranslateCoords(w, 0, 0, &wX, &wY);
-    _XmProcessLock();
     _XmRegionOffset(dsRegion, (wX - dsm->dropManager.rootX), (wY - dsm->dropManager.rootY));
-    _XmProcessUnlock();
   }
   /* All drawing occurs within the drop site */
-  _XmProcessLock();
   _XmRegionUnion(dsRegion, dsRegion, clipRegion);
-  _XmProcessUnlock();
   if (bw && !GetDSHasRegion(info)) {
     /*
      * The region is stored widget relative, and it represents
@@ -1142,17 +1112,13 @@ static void DoAnimation(XmDropSiteManagerObject dsm,
      * (which will offset it) before passing it on to the
      * animation code.
      */
-    _XmProcessLock();
     _XmRegionShrink(clipRegion, bw, bw);
-    _XmProcessUnlock();
   }
   /*
    * trim off anything clipped by ancestors
    * ancestorClip region is in shell relative coordinates.
    */
-  _XmProcessLock();
   _XmRegionIntersect(clipRegion, dsm->dropManager.curAncestorClipRegion, clipRegion);
-  _XmProcessUnlock();
   /* trim off anything obsucred by a sibling stacked above us */
   if (parentInfo != NULL) {
     for (i = 0; i < (int)GetDSNumChildren(parentInfo); i++) {
@@ -1165,9 +1131,7 @@ static void DoAnimation(XmDropSiteManagerObject dsm,
            * Non-local case.  The info region is in shell
            * relative coordinates.
            */
-          _XmProcessLock();
           _XmRegionSubtract(clipRegion, GetDSRegion(child), clipRegion);
-          _XmProcessUnlock();
         }
         else {
           /*
@@ -1176,20 +1140,19 @@ static void DoAnimation(XmDropSiteManagerObject dsm,
           Position wX, wY;
           Widget sibling = GetDSWidget(child);
           XtTranslateCoords(sibling, 0, 0, &wX, &wY);
-          _XmProcessLock();
           _XmRegionUnion(GetDSRegion(child), GetDSRegion(child), tmpRegion);
           _XmRegionOffset(tmpRegion, (wX - dsm->dropManager.rootX), (wY - dsm->dropManager.rootY));
           _XmRegionSubtract(clipRegion, tmpRegion, clipRegion);
-          _XmProcessUnlock();
         }
       }
     }
   }
-  _XmProcessLock();
   animationData.clipRegion = clipRegion;
   animationData.dropSiteRegion = dsRegion;
-  _XmProcessUnlock();
   _XmDragUnderAnimation((Widget)dsm, (XtPointer)&animationData, (XtPointer)callback);
+  _XmRegionDestroy(dsRegion);
+  _XmRegionDestroy(clipRegion);
+  _XmRegionDestroy(tmpRegion);
 }
 
 static void ProxyDragProc(XmDropSiteManagerObject dsm,
@@ -1645,7 +1608,7 @@ static void PutDSToStream(XmDropSiteManagerObject dsm,
                           Boolean last,
                           XtPointer dataPtr)
 {
-  static XmRegion tmpRegion = NULL;
+  XmRegion tmpRegion;
   unsigned char dsType = 0, tType = 0;
   unsigned char unitType = XmPIXELS;
   Position wX, wY;
@@ -1654,11 +1617,7 @@ static void PutDSToStream(XmDropSiteManagerObject dsm,
   XmICCDropSiteInfoStruct iccInfo;
   Arg args[30];
   int n;
-  _XmProcessLock();
-  if (tmpRegion == NULL) {
-    tmpRegion = _XmRegionCreate();
-  }
-  _XmProcessUnlock();
+  tmpRegion = _XmRegionCreate();
   /*
    * Clear out the info.  This is especially important in the cases
    * that the widget does not define resources all of the required
@@ -1689,23 +1648,17 @@ static void PutDSToStream(XmDropSiteManagerObject dsm,
    */
   XtTranslateCoords(w, 0, 0, &wX, &wY);
   if (GetDSHasRegion(dsInfo)) {
-    _XmProcessLock();
     _XmRegionUnion(GetDSRegion(dsInfo), GetDSRegion(dsInfo), tmpRegion);
-    _XmProcessUnlock();
   }
   else {
     XRectangle rect;
     rect.x = rect.y = -bw;
     rect.width = XtWidth(w) + (2 * bw);
     rect.height = XtHeight(w) + (2 * bw);
-    _XmProcessLock();
     _XmRegionClear(tmpRegion);
     _XmRegionUnionRectWithRegion(&rect, tmpRegion, tmpRegion);
-    _XmProcessUnlock();
   }
-  _XmProcessLock();
   _XmRegionOffset(tmpRegion, (wX - dsm->dropManager.rootX), (wY - dsm->dropManager.rootY));
-  _XmProcessUnlock();
   /*
    * We need to pull up the relevant visual information from
    * the widget so it will be available for correct animation
@@ -1717,9 +1670,7 @@ static void PutDSToStream(XmDropSiteManagerObject dsm,
   iccInfo.header.animationStyle = GetDSAnimationStyle(dsInfo);
   iccInfo.header.operations = GetDSOperations(dsInfo);
   iccInfo.header.importTargetsID = GetDSImportTargetsID(dsInfo);
-  _XmProcessLock();
   iccInfo.header.region = tmpRegion;
-  _XmProcessUnlock();
   /*
    * We need to retrieve information from the widget. XtGetValues is
    * too slow, so retrieve the information directly from the widget
@@ -1979,6 +1930,7 @@ static void PutDSToStream(XmDropSiteManagerObject dsm,
     }
   }
   _XmWriteDSToStream(dsm, dataPtr, &iccInfo);
+  _XmRegionDestroy(tmpRegion);
 }
 
 static void GetDSFromDSM(XmDropSiteManagerObject dsm,
@@ -2279,7 +2231,7 @@ static void CreateInfo(XmDropSiteManagerObject dsm, Widget widget, ArgList args,
   /* Load that puppy */
   SetDSLeaf(&fullInfoRec, True);
   fullInfoRec.widget = widget;
-  XtGetSubresources(
+  _XmGetSubresources(
       widget, &fullInfoRec, NULL, NULL, _XmDSResources, _XmNumDSResources, args, argCount);
   /* Handle ignore first. */
   if (fullInfoRec.activity == XmDROP_SITE_IGNORE) {

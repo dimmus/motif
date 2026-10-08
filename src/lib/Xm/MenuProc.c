@@ -78,6 +78,13 @@ static XContext SaveTranslationsContext = 0;
  ************************************************************************/
 void _XmSaveCoreClassTranslations(Widget widget)
 {
+  /*
+   * The caller changes the translations of the widget's class, which
+   * every widget of the class shares, for the time it takes Core to
+   * initialize this one: keep the process lock until
+   * _XmRestoreCoreClassTranslations has put them back, or another
+   * thread creating a widget of the class would get these.
+   */
   _XmProcessLock();
   if (SaveTranslationsContext == 0)
     SaveTranslationsContext = XUniqueContext();
@@ -85,7 +92,6 @@ void _XmSaveCoreClassTranslations(Widget widget)
                (XID)widget,
                SaveTranslationsContext,
                (char *)(widget->core.widget_class->core_class.tm_table));
-  _XmProcessUnlock();
 }
 
 /************************************************************************
@@ -106,7 +112,12 @@ void _XmRestoreCoreClassTranslations(Widget widget)
                                                 (XID)widget,
                                                 SaveTranslationsContext,
                                                 (XtPointer)&saved_translations)))
+  {
     widget->core.widget_class->core_class.tm_table = saved_translations;
+    XDeleteContext(XtDisplay(widget), (XID)widget, SaveTranslationsContext);
+    /* the lock taken by _XmSaveCoreClassTranslations */
+    _XmProcessUnlock();
+  }
 #ifdef DEBUG
   else /* This should'nt happen ! */
     abort();
