@@ -19,9 +19,9 @@
 #
 # The tests are run with ctest --no-tests=error, so a configuration that
 # registers no tests fails instead of reporting success.  CTest itself
-# starts the X11 suites under xvfb-run when that was found at configure
-# time; where there is no xvfb-run (FreeBSD) but an Xvfb binary, this
-# script starts one and exports DISPLAY.  The ctest output is kept in
+# starts each X11 suite under a server of its own: xvfb-run when that
+# was found at configure time, and where there is no xvfb-run (FreeBSD)
+# but an Xvfb binary, src/tests/xvfb-run.sh.  The ctest output is kept in
 # $BUILD_DIR/ctest-output.log for upload as a CI artifact.
 
 set -eu
@@ -163,24 +163,6 @@ if [ -z "${LSAN_OPTIONS:-}" ] && [ -f src/tests/lsan.supp ]; then
   export LSAN_OPTIONS
 fi
 
-xvfb_pid=
-if [ -z "${DISPLAY:-}" ] && ! command -v xvfb-run >/dev/null 2>&1 &&
-   command -v Xvfb >/dev/null 2>&1; then
-  # The default font path of FreeBSD's Xvfb does not include the bitmap
-  # fonts deps.sh installs (the tests use "fixed" and "8x13bold").
-  fp=
-  for d in /usr/local/share/fonts/misc /usr/share/fonts/X11/misc; do
-    if [ -f "$d/fonts.dir" ]; then fp="$fp$d/,"; fi
-  done
-  # shellcheck disable=SC2086
-  Xvfb :99 -screen 0 1280x1024x24 +extension RENDER -nolisten tcp -noreset \
-    ${fp:+-fp ${fp}built-ins} >/dev/null 2>&1 &
-  xvfb_pid=$!
-  DISPLAY=:99
-  export DISPLAY
-  sleep 2
-fi
-
 log="$BUILD_DIR/ctest-output.log"
 {
   rc=0
@@ -189,10 +171,6 @@ log="$BUILD_DIR/ctest-output.log"
   echo "$rc" >"$BUILD_DIR/ctest-status"
 } 2>&1 | tee "$log"
 status=$(cat "$BUILD_DIR/ctest-status")
-
-if [ -n "$xvfb_pid" ]; then
-  kill "$xvfb_pid" 2>/dev/null || true
-fi
 
 # Where an X server is available nothing may be skipped: a suite that
 # skips itself (exit 77) there means the CI setup is broken.

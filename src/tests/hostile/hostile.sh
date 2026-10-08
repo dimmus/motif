@@ -71,9 +71,12 @@ wait_line() {
 	return 0
 }
 
+# The output files of the previous phase are removed first: the "ready"
+# in them would satisfy wait_line before the new process truncates them.
 start_peer() {
 	_mode=$1
 	shift
+	rm -f "$work/peer.out" "$work/peer.err"
 	"$peer" "$_mode" "$@" > "$work/peer.out" 2> "$work/peer.err" &
 	peer_pid=$!
 	pids="$pids $peer_pid"
@@ -92,6 +95,7 @@ start_victim() {
 	# This test is about memory corruption and undefined behaviour, not
 	# leaks (those are covered, and suppressed, elsewhere): a real bug
 	# makes ASan/UBSan print to stderr, which check_sane looks for.
+	rm -f "$work/victim.out" "$work/victim.err"
 	ASAN_OPTIONS="${ASAN_OPTIONS:-}:detect_leaks=0" \
 	UBSAN_OPTIONS="${UBSAN_OPTIONS:-}:print_stacktrace=1" \
 	"$victim" -geometry 400x300+0+300 -title victim \

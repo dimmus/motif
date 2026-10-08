@@ -17,6 +17,14 @@ option(WITH_FUZZERS "Build the libFuzzer targets in src/tests/fuzz (Clang only)"
 
 find_program(XVFB_RUN_EXECUTABLE xvfb-run
     DOC "xvfb-run used for the tests that need an X server (OFF: use $DISPLAY)")
+# Without xvfb-run (FreeBSD), but with Xvfb, a small stand-in gives each
+# X11 test a server of its own, as xvfb-run does.  Not when xvfb-run was
+# turned off (-DXVFB_RUN_EXECUTABLE=OFF) to use $DISPLAY.
+find_program(XVFB_EXECUTABLE Xvfb DOC "Xvfb, for xvfb-run.sh where there is no xvfb-run")
+mark_as_advanced(XVFB_EXECUTABLE)
+if(XVFB_RUN_EXECUTABLE MATCHES "-NOTFOUND$" AND XVFB_EXECUTABLE)
+    set(XVFB_RUN_EXECUTABLE ${CMAKE_CURRENT_SOURCE_DIR}/xvfb-run.sh)
+endif()
 # -noreset: the suites fork a client per test case, and a client that
 # connects while Xvfb resets after the previous one left can be refused.
 set(XVFB_RUN_ARGS -a -s "-screen 0 1280x1024x24 +extension RENDER -noreset"
