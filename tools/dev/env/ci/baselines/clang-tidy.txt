@@ -29,7 +29,6 @@
 1	src/bin/mwm/WmInitWs.c	clang-analyzer-core.NonNullParamChecker
 5	src/bin/mwm/WmInitWs.c	clang-analyzer-security.insecureAPI.strcpy
 3	src/bin/mwm/WmKeyFocus.c	clang-analyzer-core.NullDereference
-1	src/bin/mwm/WmMenu.c	clang-analyzer-core.NonNullParamChecker
 5	src/bin/mwm/WmMenu.c	clang-analyzer-core.NullDereference
 2	src/bin/mwm/WmResParse.c	bugprone-suspicious-string-compare
 1	src/bin/mwm/WmResParse.c	clang-analyzer-core.NullDereference
@@ -45,7 +44,6 @@
 1	src/bin/mwm/WmWinInfo.c	bugprone-unhandled-code-paths
 4	src/bin/mwm/WmWinInfo.c	clang-analyzer-core.NullDereference
 1	src/bin/mwm/WmWinList.c	bugprone-redundant-branch-condition
-1	src/bin/mwm/WmWinList.c	bugprone-suspicious-realloc-usage
 1	src/bin/mwm/WmWinState.c	bugprone-unhandled-code-paths
 14	src/bin/mwm/WmXSMP.c	bugprone-unchecked-string-to-number-conversion
 14	src/bin/mwm/WmXSMP.c	cert-err34-c
@@ -112,7 +110,6 @@
 1	src/lib/Uil/UilSemVal.c	clang-analyzer-deadcode.DeadStores
 1	src/lib/Uil/UilSrcSrc.c	bugprone-signed-char-misuse
 1	src/lib/Uil/UilSrcSrc.c	clang-analyzer-deadcode.DeadStores
-1	src/lib/Wsm/debug.c	bugprone-unhandled-code-paths
 2	src/lib/Wsm/free.c	clang-analyzer-deadcode.DeadStores
 1	src/lib/Wsm/pack.c	bugprone-unhandled-code-paths
 2	src/lib/Wsm/pack.c	clang-analyzer-deadcode.DeadStores
@@ -160,7 +157,7 @@
 1	src/lib/Xm/GeoUtils.c	cert-str34-c
 5	src/lib/Xm/GeoUtils.c	clang-analyzer-security.ArrayBound
 1	src/lib/Xm/GrabShell.c	clang-analyzer-deadcode.DeadStores
-2	src/lib/Xm/I18List.c	clang-analyzer-deadcode.DeadStores
+1	src/lib/Xm/I18List.c	clang-analyzer-deadcode.DeadStores
 1	src/lib/Xm/IconFile.c	bugprone-not-null-terminated-result
 3	src/lib/Xm/IconFile.c	bugprone-unhandled-code-paths
 1	src/lib/Xm/IconFile.c	clang-analyzer-core.NonNullParamChecker
@@ -236,7 +233,7 @@
 1	src/lib/Xm/TextF.c	bugprone-misplaced-widening-cast
 2	src/lib/Xm/TextF.c	bugprone-unhandled-code-paths
 2	src/lib/Xm/TextF.c	clang-analyzer-core.NonNullParamChecker
-5	src/lib/Xm/TextF.c	clang-analyzer-core.NullDereference
+2	src/lib/Xm/TextF.c	clang-analyzer-core.NullDereference
 1	src/lib/Xm/TextF.c	clang-analyzer-core.uninitialized.UndefReturn
 4	src/lib/Xm/TextF.c	clang-analyzer-deadcode.DeadStores
 2	src/lib/Xm/TextFSel.c	clang-analyzer-deadcode.DeadStores
@@ -246,8 +243,6 @@
 2	src/lib/Xm/TextIn.c	clang-analyzer-core.UndefinedBinaryOperatorResult
 1	src/lib/Xm/TextIn.c	clang-analyzer-deadcode.DeadStores
 3	src/lib/Xm/TextOut.c	clang-analyzer-core.NullDereference
-1	src/lib/Xm/TextOut.c	clang-analyzer-core.UndefinedBinaryOperatorResult
-2	src/lib/Xm/TextOut.c	clang-analyzer-core.uninitialized.Assign
 10	src/lib/Xm/TextOut.c	clang-analyzer-deadcode.DeadStores
 2	src/lib/Xm/TextSel.c	clang-analyzer-deadcode.DeadStores
 1	src/lib/Xm/TextStrSo.c	clang-analyzer-core.NullPointerArithm
@@ -264,13 +259,11 @@
 1	src/lib/Xm/Tree.c	clang-analyzer-deadcode.DeadStores
 3	src/lib/Xm/TxtPropCv.c	clang-analyzer-core.NonNullParamChecker
 1	src/lib/Xm/VendorS.c	bugprone-unhandled-code-paths
-1	src/lib/Xm/VendorS.c	clang-analyzer-core.NonNullParamChecker
 4	src/lib/Xm/VendorS.c	clang-analyzer-core.NullDereference
 1	src/lib/Xm/VendorS.c	clang-analyzer-deadcode.DeadStores
 1	src/lib/Xm/Xm.c	bugprone-signed-char-misuse
 1	src/lib/Xm/Xm.c	cert-str34-c
 1	src/lib/Xm/XmExtUtil.c	clang-analyzer-core.NullDereference
-1	src/lib/Xm/XmIm.c	clang-analyzer-deadcode.DeadStores
 1	src/lib/Xm/XmRenderT.c	bugprone-unhandled-code-paths
 1	src/lib/Xm/XmRenderT.c	clang-analyzer-core.uninitialized.Assign
 1	src/lib/Xm/XmRenderT.c	clang-analyzer-optin.core.EnumCastOutOfRange
