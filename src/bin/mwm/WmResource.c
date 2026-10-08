@@ -6222,7 +6222,9 @@ void SetupDefaultResources(WmScreenData *pSD)
 {
     KeySpec *nextKeySpec;
     String keyBindings;
+#if !XM_MSGCAT
     MenuSpec *menuSpec;
+#endif
 
 
 /*
