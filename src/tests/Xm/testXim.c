@@ -291,6 +291,10 @@ static void im_sync(Widget w)
 	unsigned long mask = 0;
 
 	ck_assert_ptr_null(XGetICValues(XmImSetXIC(w, NULL), XNFilterEvents, &mask, NULL));
+	/* Xlib stores the CARD32 in the first 4 bytes of the long: its high
+	 * half on a 64-bit big-endian machine (see get_ic_card32 in XmIm.c). */
+	if (!(mask & 0xffffffffUL))
+		mask = mask >> 16 >> 16;
 	ck_assert_uint_eq(mask, KeyPressMask);
 }
 
