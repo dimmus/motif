@@ -1,16 +1,23 @@
 .TH "XmMultiListGetSelectedRowArray" "library call"
 .SH "NAME"
-\fBXmMultiListGetSelectedRowArray\fP \(em an MultiList function that returns an array
+\fBXmMultiListGetSelectedRowArray\fP,
+\fBXmExt18ListGetSelectedRowArray\fP \(em MultiList functions that return an array
 of integers which are selected row numbers.
 .iX "XmMultiListGetSelectedRowArray"
+.iX "XmExt18ListGetSelectedRowArray"
 .iX "List functions" "XmMultiListGetSelectedRowArray"
 .SH "SYNOPSIS"
 .PP
 .nf
 #include <Xm/MultiList\&.h>
-\fBint * \fBXmMultiListGetSelectedRowArray\fP\fR(
+\fBint *\fBXmMultiListGetSelectedRowArray\fP\fR(
 \fBWidget \fBwidget\fR\fR,
-\fBint * \fBnum_rows\fR\fR);
+\fBint *\fBnum_rows\fR\fR);
+.PP
+#include <Xm/Ext18List\&.h>
+\fBint *\fBXmExt18ListGetSelectedRowArray\fP\fR(
+\fBWidget \fBwidget\fR\fR,
+\fBint *\fBnum_rows\fR\fR);
 .fi
 .SH "DESCRIPTION"
 .PP
@@ -23,6 +30,10 @@ Specifies pointer to the integer indicates number of returned row numbers.
 .PP
 For a complete definition of MultiList and its associated resources, see
 \fBXmMultiList\fP(3)\&.
+.PP
+\fBXmExt18ListGetSelectedRowArray\fP is the obsolete name of \fBXmMultiListGetSelectedRowArray\fP, from the time
+the MultiList was called the Ext18List; \fB<Xm/Ext18List\&.h>\fP
+declares it deprecated\&.
 .SH "RETURN"
 .PP
 The \fBint *\fR returned by this function contains a selected rows numbers array.

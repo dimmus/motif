@@ -1,0 +1,28 @@
+.TH "XmeFocusIsInShell" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeFocusIsInShell\fP \(em A widget writer function that tells whether the shell of a widget has the focus
+.iX "XmeFocusIsInShell"
+.iX "Xme functions" "XmeFocusIsInShell"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/XmP\&.h>
+\fBBoolean \fBXmeFocusIsInShell\fP\fR(
+\fBWidget \fBwid\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeFocusIsInShell\fP tells whether the keyboard focus is in the
+top-level shell of \fIwid\fP\&.  For a VendorShell, Motif keeps track of
+the focus itself; for another shell the X input focus is compared
+with the windows of the shell\&.
+.IP "\fIwid\fP" 10
+Specifies a widget\&.
+.SH "RETURN"
+.PP
+Returns True if the shell of \fIwid\fP has the focus, and False
+otherwise\&.
+.SH "RELATED"
+.PP
+\fB\%XmGetFocusWidget\fP(3) and \fB\%XmProcessTraversal\fP(3)\&.

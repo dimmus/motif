@@ -1,0 +1,36 @@
+.TH "XmCreateFontSelector" "library call"
+.nh
+.SH "NAME"
+\fB\%XmCreateFontSelector\fP \(em The FontSelector widget creation function
+.iX "XmCreateFontSelector"
+.iX "creation functions" "XmCreateFontSelector"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/FontS\&.h>
+\fBWidget \fBXmCreateFontSelector\fP\fR(
+\fBWidget \fBparent\fR\fR,
+\fBString \fBname\fR\fR,
+\fBArgList \fBarglist\fR\fR,
+\fBCardinal \fBargcount\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmCreateFontSelector\fP creates an instance of a FontSelector
+widget
+and returns the associated widget ID\&.
+.IP "\fIparent\fP" 10
+Specifies the parent widget ID\&.
+.IP "\fIname\fP" 10
+Specifies the name of the created widget\&.
+.IP "\fIarglist\fP" 10
+Specifies the argument list\&.
+.IP "\fIargcount\fP" 10
+Specifies the number of attribute/value pairs in the argument list
+(\fIarglist\fP)\&.
+.SH "RETURN"
+.PP
+Returns the FontSelector widget ID\&.
+.SH "RELATED"
+.PP
+\fB\%XmFontSelector\fP(3) and \fB\%XtCreateWidget\fP(3)\&.

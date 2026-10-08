@@ -1,0 +1,30 @@
+.TH "XmImGetXICResetState" "library call"
+.nh
+.SH "NAME"
+\fB\%XmImGetXICResetState\fP \(em Returns the reset state of the input context of a widget
+.iX "XmImGetXICResetState"
+.iX "input method functions" "XmImGetXICResetState"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/XmIm\&.h>
+\fBXIMResetState \fBXmImGetXICResetState\fP\fR(
+\fBWidget \fBw\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmImGetXICResetState\fP returns the \fB\%XNResetState\fP value of
+the input
+context that \fIw\fP uses: whether resetting it (\fB\%XmImMbResetIC\fP)
+returns it to its initial state or keeps the current state of the
+input method\&.
+.IP "\fIw\fP" 10
+Specifies the widget\&.
+.SH "RETURN"
+.PP
+Returns \fB\%XIMInitialState\fP or \fB\%XIMPreserveState\fP;
+\fB\%XIMInitialState\fP if
+\fIw\fP has no input context\&.
+.SH "RELATED"
+.PP
+\fB\%XmImMbResetIC\fP(3) and \fB\%XmImGetXIC\fP(3)\&.

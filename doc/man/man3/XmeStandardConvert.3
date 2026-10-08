@@ -1,0 +1,49 @@
+.TH "XmeStandardConvert" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeStandardConvert\fP \(em A widget writer function that converts the targets every widget supports
+.iX "XmeStandardConvert"
+.iX "Xme transfer functions" "XmeStandardConvert"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/TransferP\&.h>
+\fBvoid \fBXmeStandardConvert\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBXtPointer \fBignore\fR\fR,
+\fBXmConvertCallbackStruct *\fBcs\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeStandardConvert\fP converts the targets that any Motif widget
+can
+supply, for the convert procedure of an \fB\%XmQTtransfer\fP trait,
+which
+calls it for the targets it does not handle itself\&.
+.IP "\fB\%TARGETS\fP" 10
+the targets of \fB\%XmeStandardTargets\fP\&.
+.IP "\fB\%FOREGROUND\fP, \fB\%BACKGROUND\fP, \fB\%COLORMAP\fP" 10
+the colours and colormap of the widget (of the parent of a gadget)\&.
+.IP "\fB\%CLASS\fP, \fB\%NAME\fP" 10
+the \fB\%WM_CLASS\fP and \fB\%WM_NAME\fP properties of the nearest shell
+that has them\&.
+.IP "\fB\%CLIENT_WINDOW\fP" 10
+the window of the nearest shell\&.
+.IP "\fB\%_MOTIF_RENDER_TABLE\fP" 10
+the render table of the widget, or its default one\&.
+.IP "\fB\%_MOTIF_ENCODING_REGISTRY\fP" 10
+the encoding registry of Motif\&.
+.PP
+The result is stored in the \fB\%value\fP, \fB\%length\fP,
+\fB\%format\fP and
+\fB\%type\fP members of \fIcs\fP; other targets are left alone\&.
+.IP "\fIw\fP" 10
+Specifies the widget\&.
+.IP "\fIignore\fP" 10
+Is not used\&.
+.IP "\fIcs\fP" 10
+Specifies the conversion request, and returns the result\&.
+.SH "RELATED"
+.PP
+\fB\%XmeStandardTargets\fP(3), \fB\%XmeConvertMerge\fP(3),
+\fB\%XmTransferValue\fP(3) and \fB\%XmTransferDone\fP(3)\&.

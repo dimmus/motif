@@ -1,0 +1,39 @@
+.TH "XmeNamesAreEqual" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeNamesAreEqual\fP \(em A widget writer function that compares a resource value with a name
+.iX "XmeNamesAreEqual"
+.iX "Xme functions" "XmeNamesAreEqual"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/XmP\&.h>
+\fBBoolean \fBXmeNamesAreEqual\fP\fR(
+\fBchar *\fBin_str\fR\fR,
+\fBchar *\fBtest_str\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeNamesAreEqual\fP compares the string \fIin_str\fP, without
+regard to
+case and without a leading \fB\%Xm\fP or \fB\%xm\fP, with
+\fItest_str\fP, which must
+be in lower case\&.  Resource converters use it to accept
+\fB\%XmPIXELS\fP,
+\fB\%pixels\fP and \fB\%Pixels\fP alike for the value \fB\%pixels\fP\&.
+.IP "\fIin_str\fP" 10
+Specifies the string to test\&.
+.IP "\fItest_str\fP" 10
+Specifies the name, in lower case and without the \fB\%Xm\fP prefix\&.
+.PP
+Motif 1\&.2 called this function \fB\%_XmStringsAreEqual\fP\&.  The
+library still exports that name for old binaries, and
+\fB\%<Xm/XmP\&.h>\fP defines it as a macro for \fB\%XmeNamesAreEqual\fP
+unless \fB\%NO_XM_1_2_BC\fP is defined; new code should use
+\fB\%XmeNamesAreEqual\fP\&.
+.SH "RETURN"
+.PP
+Returns True if the strings are equal, and False otherwise\&.
+.SH "RELATED"
+.PP
+\fB\%XmeParseUnits\fP(3)\&.

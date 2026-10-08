@@ -1,13 +1,19 @@
 .TH "XmMultiListGetSelectedRows" "library call"
 .SH "NAME"
-\fBXmMultiListGetSelectedRows\fP \(em an MultiList function that returns the rows that currently are selected.
+\fBXmMultiListGetSelectedRows\fP,
+\fBXmExt18ListGetSelectedRows\fP \(em MultiList functions that return the rows that currently are selected.
 .iX "XmMultiListGetSelectedRows"
+.iX "XmExt18ListGetSelectedRows"
 .iX "List functions" "XmMultiListGetSelectedRows"
 .SH "SYNOPSIS"
 .PP
 .nf
 #include <Xm/MultiList\&.h>
-\fBXmMultiListRowInfo ** \fBXmMultiListGetSelectedRows\fP\fR(
+\fBXmMultiListRowInfo **\fBXmMultiListGetSelectedRows\fP\fR(
+\fBWidget \fBwidget\fR\fR);
+.PP
+#include <Xm/Ext18List\&.h>
+\fBXm18RowInfo **\fBXmExt18ListGetSelectedRows\fP\fR(
 \fBWidget \fBwidget\fR\fR);
 .fi
 .SH "DESCRIPTION"
@@ -19,6 +25,10 @@ Specifies the ID of the MultiList widget\&.
 .PP
 For a complete definition of MultiList and its associated resources, see
 \fBXmMultiList\fP(3)\&.
+.PP
+\fBXmExt18ListGetSelectedRows\fP is the obsolete name of \fBXmMultiListGetSelectedRows\fP, from the time
+the MultiList was called the Ext18List; \fB<Xm/Ext18List\&.h>\fP
+declares it deprecated\&.
 .SH "RETURN"
 .PP
 The XmMultiListRowInfo ** returned by this function contains a NULL terminated array of

@@ -1,0 +1,61 @@
+.TH "XmeDrawIndicator" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeDrawIndicator\fP \(em A widget writer function that draws a check mark or a cross
+.iX "XmeDrawIndicator"
+.iX "Xme draw functions" "XmeDrawIndicator"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/DrawP\&.h>
+\fBvoid \fBXmeDrawIndicator\fP\fR(
+\fBDisplay *\fBdisplay\fR\fR,
+\fBDrawable \fBd\fR\fR,
+\fBGC \fBgc\fR\fR,
+\fBPosition \fBx\fR\fR,
+\fBPosition \fBy\fR\fR,
+\fBDimension \fBwidth\fR\fR,
+\fBDimension \fBheight\fR\fR,
+\fBDimension \fBmargin\fR\fR,
+\fBXtEnum \fBtype\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeDrawIndicator\fP draws, with \fIgc\fP, the glyph of the
+indicator of a
+ToggleButton in the rectangle \fIx\fP, \fIy\fP, \fIwidth\fP,
+\fIheight\fP of the
+drawable \fId\fP, less \fImargin\fP pixels on each side\&.  The glyph is
+taken
+from the high four bits of \fItype\fP: \fB\%XmINDICATOR_CHECK\fP draws a
+check
+mark and \fB\%XmINDICATOR_CROSS\fP a cross, both scaled to the
+rectangle\&.
+The box of the \fB\%_BOX\fP types is not drawn (use
+\fB\%XmeDrawShadows\fP);
+other values draw nothing\&.
+.IP "\fIdisplay\fP" 10
+Specifies the display\&.
+.IP "\fId\fP" 10
+Specifies the drawable to draw into\&.
+.IP "\fIgc\fP" 10
+Specifies the GC of the glyph\&.
+.IP "\fIx\fP" 10
+Specifies the x coordinate of the rectangle\&.
+.IP "\fIy\fP" 10
+Specifies the y coordinate of the rectangle\&.
+.IP "\fIwidth\fP" 10
+Specifies the width of the rectangle\&.
+.IP "\fIheight\fP" 10
+Specifies the height of the rectangle\&.
+.IP "\fImargin\fP" 10
+Specifies the space between the rectangle and the glyph\&.
+.IP "\fItype\fP" 10
+Specifies the indicator type, as for the \fB\%XmNindicatorType\fP
+resource of \fB\%XmToggleButton\fP(3): \fB\%XmINDICATOR_CHECK\fP,
+\fB\%XmINDICATOR_CHECK_BOX\fP, \fB\%XmINDICATOR_CROSS\fP or
+\fB\%XmINDICATOR_CROSS_BOX\fP\&.
+.SH "RELATED"
+.PP
+\fB\%XmeDrawCircle\fP(3), \fB\%XmeDrawDiamond\fP(3) and
+\fB\%XmToggleButton\fP(3)\&.

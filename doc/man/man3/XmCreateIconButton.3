@@ -1,0 +1,36 @@
+.TH "XmCreateIconButton" "library call"
+.nh
+.SH "NAME"
+\fB\%XmCreateIconButton\fP \(em The IconButton widget creation function
+.iX "XmCreateIconButton"
+.iX "creation functions" "XmCreateIconButton"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/IconButton\&.h>
+\fBWidget \fBXmCreateIconButton\fP\fR(
+\fBWidget \fBparent\fR\fR,
+\fBString \fBname\fR\fR,
+\fBArgList \fBarglist\fR\fR,
+\fBCardinal \fBargcount\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmCreateIconButton\fP creates an instance of an IconButton widget
+and
+returns the associated widget ID\&.
+.IP "\fIparent\fP" 10
+Specifies the parent widget ID\&.
+.IP "\fIname\fP" 10
+Specifies the name of the created widget\&.
+.IP "\fIarglist\fP" 10
+Specifies the argument list\&.
+.IP "\fIargcount\fP" 10
+Specifies the number of attribute/value pairs in the argument list
+(\fIarglist\fP)\&.
+.SH "RETURN"
+.PP
+Returns the IconButton widget ID\&.
+.SH "RELATED"
+.PP
+\fB\%XmIconButton\fP(3) and \fB\%XtCreateWidget\fP(3)\&.

@@ -1,0 +1,61 @@
+.TH "XmeClipboardSource" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeClipboardSource\fP \(em A widget writer function that puts the data of a widget on the clipboard
+.iX "XmeClipboardSource"
+.iX "Xme transfer functions" "XmeClipboardSource"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/TransferP\&.h>
+\fBBoolean \fBXmeClipboardSource\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBXtEnum \fBop\fR\fR,
+\fBTime \fBtime\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeClipboardSource\fP copies the data of \fIw\fP to the clipboard,
+as the
+copy and cut actions of a text widget do\&.
+.PP
+If a clipboard manager owns \fB\%CLIPBOARD_MANAGER\fP, \fIw\fP also
+takes the
+\fB\%CLIPBOARD\fP selection, so that the manager can ask it for the
+data\&.
+Then \fIw\fP is asked to convert \fB\%_MOTIF_CLIPBOARD_TARGETS\fP, and
+each
+target it lists is converted and stored on the Motif clipboard
+(\fB\%XmClipboardCopy\fP)\&.  The targets it lists for
+\fB\%_MOTIF_DEFERRED_CLIPBOARD_TARGETS\fP are stored by name only, and
+converted when another client asks for them; for these,
+\fB\%_MOTIF_SNAPSHOT\fP
+must be converted to a value that identifies the data\&.  For
+\fB\%XmMOVE\fP, if something was stored, \fIw\fP is then asked to
+convert
+\fB\%DELETE\fP\&.
+.PP
+Data is then sent the way of the Uniform Transfer Model: when a
+target is asked for, the \fB\%XmNconvertCallback\fP callbacks of \fIw\fP
+are
+called and then, unless one of them set the status to
+\fB\%XmCONVERT_DONE\fP or \fB\%XmCONVERT_REFUSE\fP, the convert
+procedure of the
+\fB\%XmQTtransfer\fP trait of its class\&.
+.IP "\fIw\fP" 10
+Specifies the source widget\&.
+.IP "\fIop\fP" 10
+Specifies the operation: \fB\%XmCOPY\fP (copy), \fB\%XmMOVE\fP (cut) or
+\fB\%XmLINK\fP\&.
+.IP "\fItime\fP" 10
+Specifies the time of the event that caused the call, or 0 for the time
+of the last event processed\&.
+.SH "RETURN"
+.PP
+Returns True if data was put on the clipboard, and False if the
+clipboard is locked by another client or nothing was converted\&.
+.SH "RELATED"
+.PP
+\fB\%XmeClipboardSink\fP(3), \fB\%XmClipboardStartCopy\fP(3),
+\fB\%XmTransferValue\fP(3), \fB\%XmTransferDone\fP(3) and
+\fB\%XmeStandardConvert\fP(3)\&.

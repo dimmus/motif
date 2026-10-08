@@ -1,0 +1,67 @@
+.TH "XmCvtToHorizontalPixels" "library call"
+.nh
+.SH "NAME"
+\fB\%XmCvtToHorizontalPixels\fP,
+\fB\%XmCvtToVerticalPixels\fP,
+\fB\%XmCvtFromHorizontalPixels\fP,
+\fB\%XmCvtFromVerticalPixels\fP \(em Convert a distance between pixels and another unit
+.iX "XmCvtToHorizontalPixels"
+.iX "resolution independence functions" "XmCvtToHorizontalPixels"
+.iX "resolution independence functions" "XmCvtToVerticalPixels"
+.iX "resolution independence functions" "XmCvtFromHorizontalPixels"
+.iX "resolution independence functions" "XmCvtFromVerticalPixels"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/Xm\&.h>
+.PP
+\fBint \fBXmCvtToHorizontalPixels\fP\fR(
+\fBScreen *\fBscreen\fR\fR,
+\fBint \fBfrom_val\fR\fR,
+\fBint \fBfrom_type\fR\fR);
+\fBint \fBXmCvtToVerticalPixels\fP\fR(
+\fBScreen *\fBscreen\fR\fR,
+\fBint \fBfrom_val\fR\fR,
+\fBint \fBfrom_type\fR\fR);
+.PP
+\fBint \fBXmCvtFromHorizontalPixels\fP\fR(
+\fBScreen *\fBscreen\fR\fR,
+\fBint \fBfrom_val\fR\fR,
+\fBint \fBto_type\fR\fR);
+\fBint \fBXmCvtFromVerticalPixels\fP\fR(
+\fBScreen *\fBscreen\fR\fR,
+\fBint \fBfrom_val\fR\fR,
+\fBint \fBto_type\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmCvtToHorizontalPixels\fP and \fB\%XmCvtToVerticalPixels\fP
+convert the
+distance \fIfrom_val\fP, in the unit \fIfrom_type\fP, to pixels;
+\fB\%XmCvtFromHorizontalPixels\fP and \fB\%XmCvtFromVerticalPixels\fP
+convert
+\fIfrom_val\fP pixels to the unit \fIto_type\fP\&.  The horizontal
+functions use
+the horizontal resolution of \fIscreen\fP, and the vertical ones its
+vertical resolution\&.  They are the same as \fB\%XmConvertUnits\fP with
+\fB\%XmPIXELS\fP on one side\&.
+.IP "\fIscreen\fP" 10
+Specifies the screen\&.
+.IP "\fIfrom_val\fP" 10
+Specifies the distance to convert\&.
+.IP "\fIfrom_type\fP" 10
+Specifies the unit of \fIfrom_val\fP: \fB\%XmPIXELS\fP,
+\fB\%Xm100TH_MILLIMETERS\fP,
+\fB\%Xm1000TH_INCHES\fP, \fB\%Xm100TH_POINTS\fP,
+\fB\%Xm100TH_FONT_UNITS\fP, \fB\%XmINCHES\fP,
+\fB\%XmCENTIMETERS\fP, \fB\%XmMILLIMETERS\fP, \fB\%XmPOINTS\fP or
+\fB\%XmFONT_UNITS\fP\&.
+.IP "\fIto_type\fP" 10
+Specifies the unit to convert to, as for \fIfrom_type\fP\&.
+.SH "RETURN"
+.PP
+The functions return the converted distance, or 0 if a unit is not
+valid\&.
+.SH "RELATED"
+.PP
+\fB\%XmConvertUnits\fP(3) and \fB\%XmeToHorizontalPixels\fP(3)\&.

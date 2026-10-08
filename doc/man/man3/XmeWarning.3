@@ -1,0 +1,35 @@
+.TH "XmeWarning" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeWarning\fP \(em A widget writer function that prints a warning
+.iX "XmeWarning"
+.iX "Xme functions" "XmeWarning"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/XmP\&.h>
+\fBvoid \fBXmeWarning\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBchar *\fBmessage\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeWarning\fP prints the warning \fImessage\fP about the widget
+\fIw\fP\&.
+With a widget, it calls \fB\%XtAppWarningMsg\fP with the name
+\fB\%XmeWarning\fP
+and the class of the widget; the warning handler that Motif installs
+prints it after a header that names the widget and its class\&.  With a
+NULL widget, the message is passed to \fB\%XtWarning\fP\&.
+.IP "\fIw\fP" 10
+Specifies the widget, or NULL\&.
+.IP "\fImessage\fP" 10
+Specifies the text of the warning\&.
+.PP
+Motif 1\&.2 called this function \fB\%_XmWarning\fP\&.  The library
+still exports that name for old binaries, and \fB\%<Xm/XmP\&.h>\fP
+defines it as a macro for \fB\%XmeWarning\fP unless \fB\%NO_XM_1_2_BC\fP
+is defined; new code should use \fB\%XmeWarning\fP\&.
+.SH "RELATED"
+.PP
+\fB\%XtAppWarningMsg\fP(3) and \fB\%XtWarning\fP(3)\&.

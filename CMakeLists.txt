@@ -739,16 +739,21 @@ endfunction()
 # <target> must export every symbol that the installed <header>s declare,
 # that is <script> must not leave one out.  The objects of <target> and of
 # the OBJECTS_OF libraries are the symbols looked for.
+#
+# The target and its headers are also recorded for doc/CMakeLists.txt, whose
+# doc.manpages.<target> test checks that what they declare has a man page.
 function(motif_exports_test target script)
   cmake_parse_arguments(E "" "" "HEADERS;OBJECTS_OF" ${ARGN})
-  if(NOT WITH_TESTS OR NOT MOTIF_HAVE_VERSION_SCRIPT OR NOT CMAKE_NM)
-    return()
-  endif()
   set(_headers)
   foreach(_h IN LISTS E_HEADERS)
     get_filename_component(_h ${_h} ABSOLUTE)
     list(APPEND _headers ${_h})
   endforeach()
+  set_property(GLOBAL APPEND PROPERTY MOTIF_PUBLIC_LIBRARIES ${target})
+  set_property(GLOBAL PROPERTY MOTIF_PUBLIC_HEADERS_${target} ${_headers})
+  if(NOT WITH_TESTS OR NOT MOTIF_HAVE_VERSION_SCRIPT OR NOT CMAKE_NM)
+    return()
+  endif()
   set(_objects "$<TARGET_OBJECTS:${target}>")
   foreach(_lib IN LISTS E_OBJECTS_OF)
     string(APPEND _objects ";$<TARGET_OBJECTS:${_lib}>")

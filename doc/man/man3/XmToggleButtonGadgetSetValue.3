@@ -1,0 +1,41 @@
+.TH "XmToggleButtonGadgetSetValue" "library call"
+.nh
+.SH "NAME"
+\fB\%XmToggleButtonGadgetSetValue\fP \(em A ToggleButtonGadget function that sets its state
+.iX "XmToggleButtonGadgetSetValue"
+.iX "ToggleButtonGadget functions" "XmToggleButtonGadgetSetValue"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/ToggleBG\&.h>
+\fBBoolean \fBXmToggleButtonGadgetSetValue\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBXmToggleButtonState \fBnewstate\fR\fR,
+\fBBoolean \fBnotify\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmToggleButtonGadgetSetValue\fP is \fB\%XmToggleButtonSetValue\fP
+for a
+ToggleButtonGadget: it sets its state to \fInewstate\fP and redraws
+it\&.
+If \fInotify\fP is True and the state changed, the
+\fB\%XmNvalueChangedCallback\fP callbacks are called, and the parent is
+told (for the radio behaviour of a RowColumn)\&.
+.IP "\fIw\fP" 10
+Specifies the ToggleButtonGadget\&.
+.IP "\fInewstate\fP" 10
+Specifies the state: \fB\%XmSET\fP, \fB\%XmUNSET\fP or, if the
+\fB\%XmNtoggleMode\fP of the gadget is \fB\%XmTOGGLE_INDETERMINATE\fP,
+\fB\%XmINDETERMINATE\fP\&.
+.IP "\fInotify\fP" 10
+Specifies whether the callbacks are called\&.
+.SH "RETURN"
+.PP
+Returns False if \fInewstate\fP is \fB\%XmINDETERMINATE\fP and the
+gadget is not
+in indeterminate mode, and True otherwise\&.
+.SH "RELATED"
+.PP
+\fB\%XmToggleButtonGadget\fP(3), \fB\%XmToggleButtonSetValue\fP(3) and
+\fB\%XmToggleButtonGadgetSetState\fP(3)\&.

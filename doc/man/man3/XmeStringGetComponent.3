@@ -1,0 +1,48 @@
+.TH "XmeStringGetComponent" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeStringGetComponent\fP \(em A widget writer function that returns the next component of an XmString
+.iX "XmeStringGetComponent"
+.iX "Xme functions" "XmeStringGetComponent"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/XmP\&.h>
+\fBXmStringComponentType \fBXmeStringGetComponent\fP\fR(
+\fB_XmStringContext \fBcontext\fR\fR,
+\fBBoolean \fBupdate_context\fR\fR,
+\fBBoolean \fBcopy_data\fR\fR,
+\fBunsigned int *\fBlength\fR\fR,
+\fBXtPointer *\fBvalue\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeStringGetComponent\fP returns the type, length and value of the
+next component of the XmString that \fIcontext\fP walks, as
+\fB\%XmStringGetNextTriple\fP and \fB\%XmStringPeekNextTriple\fP do;
+both are
+written with it\&.  A widget can use it to walk a string without copying
+the components\&.
+.IP "\fIcontext\fP" 10
+Specifies the context, made by \fB\%XmStringInitContext\fP\&.
+.IP "\fIupdate_context\fP" 10
+Specifies whether the context moves to the next component (as
+\fB\%XmStringGetNextTriple\fP does) or stays (as
+\fB\%XmStringPeekNextTriple\fP does)\&.
+.IP "\fIcopy_data\fP" 10
+Specifies whether \fIvalue\fP is a copy, which the caller frees with
+\fB\%XtFree\fP, or points into the string, in which case it is valid
+only
+as long as the string and must not be modified\&.
+.IP "\fIlength\fP" 10
+Returns the length of the value, in bytes\&.
+.IP "\fIvalue\fP" 10
+Returns the value\&.
+.SH "RETURN"
+.PP
+Returns the type of the component, or \fB\%XmSTRING_COMPONENT_END\fP at
+the end of the string or if \fIlength\fP or \fIvalue\fP is NULL\&.
+.SH "RELATED"
+.PP
+\fB\%XmStringInitContext\fP(3), \fB\%XmStringGetNextTriple\fP(3),
+\fB\%XmStringPeekNextTriple\fP(3) and \fB\%XmStringFreeContext\fP(3)\&.

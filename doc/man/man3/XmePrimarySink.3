@@ -1,0 +1,70 @@
+.TH "XmePrimarySink" "library call"
+.nh
+.SH "NAME"
+\fB\%XmePrimarySink\fP,
+\fB\%XmeNamedSink\fP,
+\fB\%XmeClipboardSink\fP \(em Widget writer functions that paste a selection into a widget
+.iX "XmePrimarySink"
+.iX "Xme transfer functions" "XmePrimarySink"
+.iX "Xme transfer functions" "XmeNamedSink"
+.iX "Xme transfer functions" "XmeClipboardSink"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/TransferP\&.h>
+.PP
+\fBBoolean \fBXmePrimarySink\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBXtEnum \fBop\fR\fR,
+\fBXtPointer \fBlocation_data\fR\fR,
+\fBTime \fBtime\fR\fR);
+\fBBoolean \fBXmeNamedSink\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBAtom \fBsel\fR\fR,
+\fBXtEnum \fBop\fR\fR,
+\fBXtPointer \fBlocation_data\fR\fR,
+\fBTime \fBtime\fR\fR);
+.PP
+\fBBoolean \fBXmeClipboardSink\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBXtEnum \fBop\fR\fR,
+\fBXtPointer \fBlocation_data\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+These functions transfer the contents of a selection into \fIw\fP:
+\fB\%XmePrimarySink\fP the \fB\%PRIMARY\fP selection,
+\fB\%XmeNamedSink\fP the
+selection \fIsel\fP and \fB\%XmeClipboardSink\fP the \fB\%CLIPBOARD\fP
+selection (as
+the paste action of a text widget does)\&.
+.PP
+The transfer follows the Uniform Transfer Model: the
+\fB\%XmNdestinationCallback\fP callbacks of \fIw\fP are called with an
+\fB\%XmDestinationCallbackStruct\fP, and then, unless they started
+transfers and did not leave the status at
+\fB\%XmTRANSFER_DONE_DEFAULT\fP,
+the destination procedure of the \fB\%XmQTtransfer\fP trait of its
+class,
+which requests the data with \fB\%XmTransferValue\fP\&.
+.IP "\fIw\fP" 10
+Specifies the destination widget\&.
+.IP "\fIsel\fP" 10
+Specifies the selection\&.
+.IP "\fIop\fP" 10
+Specifies the operation: \fB\%XmCOPY\fP, \fB\%XmMOVE\fP or
+\fB\%XmLINK\fP\&.
+.IP "\fIlocation_data\fP" 10
+Specifies where the data goes in the widget, in a form the widget
+defines; it is passed in the \fB\%location_data\fP member of the
+callback structure\&.
+.IP "\fItime\fP" 10
+Specifies the time of the event that caused the call\&.
+.SH "RETURN"
+.PP
+Returns True\&.
+.SH "RELATED"
+.PP
+\fB\%XmePrimarySource\fP(3), \fB\%XmeClipboardSource\fP(3),
+\fB\%XmeDropSink\fP(3), \fB\%XmTransferValue\fP(3),
+\fB\%XmTransferDone\fP(3) and \fB\%XmeStandardConvert\fP(3)\&.

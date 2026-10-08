@@ -1,0 +1,66 @@
+.TH "XmCombinationBox2GetValue" "library call"
+.nh
+.SH "NAME"
+\fB\%XmCombinationBox2GetValue\fP,
+\fB\%XmCombinationBox2GetChild\fP,
+\fB\%XmCombinationBox2GetLabel\fP,
+\fB\%XmCombinationBox2GetArrow\fP,
+\fB\%XmCombinationBox2GetText\fP,
+\fB\%XmCombinationBox2GetList\fP \(em Obsolete names of the DropDown functions
+.iX "XmCombinationBox2GetValue"
+.iX "CombinationBox2 functions" "XmCombinationBox2GetValue"
+.iX "CombinationBox2 functions" "XmCombinationBox2GetChild"
+.iX "CombinationBox2 functions" "XmCombinationBox2GetLabel"
+.iX "CombinationBox2 functions" "XmCombinationBox2GetArrow"
+.iX "CombinationBox2 functions" "XmCombinationBox2GetText"
+.iX "CombinationBox2 functions" "XmCombinationBox2GetList"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/ComboBox2\&.h>
+.PP
+\fBString \fBXmCombinationBox2GetValue\fP\fR(
+\fBWidget \fBw\fR\fR);
+.PP
+\fBWidget \fBXmCombinationBox2GetChild\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBint \fBchild\fR\fR);
+.PP
+\fBWidget \fBXmCombinationBox2GetLabel\fP\fR(
+\fBWidget \fBw\fR\fR);
+.PP
+\fBWidget \fBXmCombinationBox2GetArrow\fP\fR(
+\fBWidget \fBw\fR\fR);
+.PP
+\fBWidget \fBXmCombinationBox2GetText\fP\fR(
+\fBWidget \fBw\fR\fR);
+.PP
+\fBWidget \fBXmCombinationBox2GetList\fP\fR(
+\fBWidget \fBw\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+The CombinationBox2 widget is now called DropDown\&.  These functions
+are
+the old names of the DropDown functions, which
+\fB\%<Xm/ComboBox2\&.h>\fP
+declares deprecated: \fB\%XmCombinationBox2GetValue\fP is
+\fB\%XmDropDownGetValue\fP, \fB\%XmCombinationBox2GetChild\fP is
+\fB\%XmDropDownGetChild\fP, \fB\%XmCombinationBox2GetLabel\fP is
+\fB\%XmDropDownGetLabel\fP, \fB\%XmCombinationBox2GetArrow\fP is
+\fB\%XmDropDownGetArrow\fP, \fB\%XmCombinationBox2GetText\fP is
+\fB\%XmDropDownGetText\fP and \fB\%XmCombinationBox2GetList\fP is
+\fB\%XmDropDownGetList\fP\&.  See those pages\&.
+.IP "\fIw\fP" 10
+Specifies the DropDown widget ID\&.
+.IP "\fIchild\fP" 10
+Specifies the component: \fB\%XiCOMBINATIONBOX2_LABEL\fP,
+\fB\%XiCOMBINATIONBOX2_TEXT\fP, \fB\%XiCOMBINATIONBOX2_ARROW_BUTTON\fP
+or
+\fB\%XiCOMBINATIONBOX2_LIST\fP, the old names of the \fB\%XmDROPDOWN_\fP
+values\&.
+.SH "RELATED"
+.PP
+\fB\%XmDropDown\fP(3), \fB\%XmDropDownGetValue\fP(3),
+\fB\%XmDropDownGetChild\fP(3)
+and \fB\%XmCreateCombinationBox2\fP(3)\&.

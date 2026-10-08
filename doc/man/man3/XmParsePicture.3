@@ -1,0 +1,97 @@
+.TH "XmParsePicture" "library call"
+.nh
+.SH "NAME"
+\fB\%XmParsePicture\fP,
+\fB\%XmGetNewPictureState\fP,
+\fB\%XmPictureProcessCharacter\fP,
+\fB\%XmPictureDoAutoFill\fP,
+\fB\%XmPictureGetCurrentString\fP,
+\fB\%XmPictureDeleteState\fP,
+\fB\%XmPictureDelete\fP \(em Functions that match text against a picture
+.iX "XmParsePicture"
+.iX "Picture functions" "XmParsePicture"
+.iX "Picture functions" "XmGetNewPictureState"
+.iX "Picture functions" "XmPictureProcessCharacter"
+.iX "Picture functions" "XmPictureDoAutoFill"
+.iX "Picture functions" "XmPictureGetCurrentString"
+.iX "Picture functions" "XmPictureDeleteState"
+.iX "Picture functions" "XmPictureDelete"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/Picture\&.h>
+.PP
+\fBXmPicture \fBXmParsePicture\fP\fR(
+\fBchar *\fBinput\fR\fR);
+\fBvoid \fBXmPictureDelete\fP\fR(
+\fBXmPicture \fBpicture\fR\fR);
+.PP
+\fBXmPictureState \fBXmGetNewPictureState\fP\fR(
+\fBXmPicture \fBpicture\fR\fR);
+\fBchar *\fBXmPictureProcessCharacter\fP\fR(
+\fBXmPictureState \fBstate\fR\fR,
+\fBchar \fBin\fR\fR,
+\fBBoolean *\fBis_finished\fR\fR);
+\fBchar *\fBXmPictureDoAutoFill\fP\fR(
+\fBXmPictureState \fBstate\fR\fR);
+\fBchar *\fBXmPictureGetCurrentString\fP\fR(
+\fBXmPictureState \fBstate\fR\fR);
+\fBvoid \fBXmPictureDeleteState\fP\fR(
+\fBXmPictureState \fBstate\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+A picture is a pattern that a string typed in a field must match, such
+as \fB\%(###)###-####\fP for a telephone number; the DataField widget
+checks its text against the picture of its \fB\%XmNpicture\fP resource
+with
+these functions\&.  The syntax of pictures is described in
+\fB\%XmDataField\fP(3)\&.
+.PP
+\fB\%XmParsePicture\fP compiles the picture \fIinput\fP\&.
+\fB\%XmPictureDelete\fP frees a compiled picture\&.
+.PP
+\fB\%XmGetNewPictureState\fP creates a matching state, at the start of
+the
+picture\&.  \fB\%XmPictureProcessCharacter\fP feeds the next character
+of
+the text to the state: the character is accepted if the picture
+allows it at this point, after being made upper case if the picture
+asks for an upper case letter\&.  \fB\%XmPictureGetCurrentString\fP
+returns
+the text accepted so far\&.  \fB\%XmPictureDoAutoFill\fP appends the
+characters that the picture imposes at this point (literal
+characters, such as the \fB\%-\fP of the telephone number) for as long
+as
+there is only one possibility\&.  \fB\%XmPictureDeleteState\fP frees a
+state\&.
+.IP "\fIinput\fP" 10
+Specifies the picture\&.
+.IP "\fIpicture\fP" 10
+Specifies the compiled picture\&.
+.IP "\fIstate\fP" 10
+Specifies the matching state\&.
+.IP "\fIin\fP" 10
+Specifies the character\&.
+.IP "\fIis_finished\fP" 10
+Returns True if the text accepted so far matches the whole picture,
+or if the character was rejected, and False otherwise\&.
+.SH "RETURN"
+.PP
+\fB\%XmParsePicture\fP returns the compiled picture, and
+\fB\%XmGetNewPictureState\fP the state\&.
+\fB\%XmPictureProcessCharacter\fP
+returns a pointer to the accepted character within the current string,
+or NULL if the character was rejected; a rejected character leaves
+the state with no possible match, so the caller starts again from a
+new state with the text it keeps\&.  \fB\%XmPictureDoAutoFill\fP and
+\fB\%XmPictureGetCurrentString\fP return the current string\&.  The
+strings
+belong to the state\&.
+.SH "BUGS"
+.PP
+The current string of a state has room for 1023 characters, and is
+not checked: longer text must not be fed to a state\&.
+.SH "RELATED"
+.PP
+\fB\%XmDataField\fP(3)\&.

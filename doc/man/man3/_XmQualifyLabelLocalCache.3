@@ -1,0 +1,52 @@
+.TH "_XmQualifyLabelLocalCache" "library call"
+.nh
+.SH "NAME"
+\fB\%_XmQualifyLabelLocalCache\fP,
+\fB\%_XmReCacheLabG_r\fP,
+\fB\%_XmStringBaseline\fP \(em Internal Label and LabelGadget functions
+.iX "_XmQualifyLabelLocalCache"
+.iX "Motif internal functions" "_XmQualifyLabelLocalCache"
+.iX "Motif internal functions" "_XmReCacheLabG_r"
+.iX "Motif internal functions" "_XmStringBaseline"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/LabelGP\&.h>
+.PP
+\fBvoid \fB_XmQualifyLabelLocalCache\fP\fR(
+\fBXmLabelGCacheObjPart *\fBlocal_cache\fR\fR,
+\fBXmLabelGadget \fBw\fR\fR);
+\fBvoid \fB_XmReCacheLabG_r\fP\fR(
+\fBXmLabelGCacheObjPart *\fBlocal_cache\fR\fR,
+\fBXmLabelGadget \fBw\fR\fR);
+.PP
+\fBDimension \fB_XmStringBaseline\fP\fR(
+\fBXmRenderTable \fBrendertable\fR\fR,
+\fB_XmString \fBstring\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+These functions are exported because Motif classes and macros of the
+installed headers use them; they are not meant for applications\&.
+.PP
+The resources that LabelGadgets usually share are kept in a cache
+part, shared between the gadgets that have the same values\&.  To change
+one, \fB\%_XmQualifyLabelLocalCache\fP copies the cache part of \fIw\fP
+to
+\fIlocal_cache\fP; after \fIlocal_cache\fP is changed,
+\fB\%_XmReCacheLabG_r\fP
+replaces the cache part of \fIw\fP with the shared part that holds those
+values, made if needed\&.  RowColumn uses them to change gadgets it
+manages\&.
+.PP
+\fB\%_XmStringBaseline\fP returns the baseline of the internal string
+\fIstring\fP with \fIrendertable\fP, or 0 if either is NULL; the
+\fB\%Lab_Baseline\fP macro of \fB\%<Xm/LabelP\&.h>\fP and the
+\fB\%LabG_Baseline\fP
+macro of \fB\%<Xm/LabelGP\&.h>\fP call it, but no installed header
+declares
+it\&.
+.SH "RELATED"
+.PP
+\fB\%XmLabel\fP(3), \fB\%XmLabelGadget\fP(3) and
+\fB\%XmStringBaseline\fP(3)\&.

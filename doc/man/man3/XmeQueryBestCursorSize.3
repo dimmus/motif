@@ -1,0 +1,35 @@
+.TH "XmeQueryBestCursorSize" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeQueryBestCursorSize\fP \(em A widget writer function that returns the largest cursor size of a screen
+.iX "XmeQueryBestCursorSize"
+.iX "Xme functions" "XmeQueryBestCursorSize"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/XmP\&.h>
+\fBvoid \fBXmeQueryBestCursorSize\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBDimension *\fBwidth\fR\fR,
+\fBDimension *\fBheight\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeQueryBestCursorSize\fP returns the largest cursor the screen of
+\fIw\fP supports, as recorded by its XmScreen object (the
+\fB\%XmNmaxCursorWidth\fP and \fB\%XmNmaxCursorHeight\fP resources)\&.
+.IP "\fIw\fP" 10
+Specifies a widget on the screen\&.
+.IP "\fIwidth\fP" 10
+Returns the width\&.
+.IP "\fIheight\fP" 10
+Returns the height\&.
+.PP
+Motif 1\&.2 called this function \fB\%_XmGetMaxCursorSize\fP\&.  The
+library still exports that name for old binaries, and
+\fB\%<Xm/XmP\&.h>\fP defines it as a macro for
+\fB\%XmeQueryBestCursorSize\fP unless \fB\%NO_XM_1_2_BC\fP is defined;
+new code should use \fB\%XmeQueryBestCursorSize\fP\&.
+.SH "RELATED"
+.PP
+\fB\%XmScreen\fP(3) and \fB\%XQueryBestCursor\fP(3)\&.

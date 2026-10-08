@@ -1,0 +1,47 @@
+.TH "XmeConvertMerge" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeConvertMerge\fP \(em A widget writer function that appends data to the result of a conversion
+.iX "XmeConvertMerge"
+.iX "Xme transfer functions" "XmeConvertMerge"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/TransferP\&.h>
+\fBvoid \fBXmeConvertMerge\fP\fR(
+\fBXtPointer \fBdata\fR\fR,
+\fBAtom \fBtype\fR\fR,
+\fBint \fBformat\fR\fR,
+\fBunsigned long \fBsize\fR\fR,
+\fBXmConvertCallbackStruct *\fBcs\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeConvertMerge\fP appends \fIsize\fP items of \fIdata\fP to the
+value of the
+conversion \fIcs\fP\&.  An \fB\%XmNconvertCallback\fP procedure that
+sets the
+status to \fB\%XmCONVERT_MERGE\fP leaves its result in \fIcs\fP for the
+widget,
+whose convert procedure then calls \fB\%XmeConvertMerge\fP to add its
+own
+data\&.  The value is reallocated with \fB\%XtRealloc\fP and its length
+increased; \fIdata\fP is copied and still belongs to the caller\&.
+.PP
+It prints a warning and does nothing if the status of \fIcs\fP is not
+\fB\%XmCONVERT_MERGE\fP, or if \fItype\fP and \fIformat\fP differ from
+those of \fIcs\fP\&.
+.IP "\fIdata\fP" 10
+Specifies the data to append\&.
+.IP "\fItype\fP" 10
+Specifies the type of the data\&.
+.IP "\fIformat\fP" 10
+Specifies the format of the data: 8, 16 or 32\&.
+.IP "\fIsize\fP" 10
+Specifies the number of items of \fIformat\fP bits in \fIdata\fP\&.
+.IP "\fIcs\fP" 10
+Specifies the conversion, whose value is extended\&.
+.SH "RELATED"
+.PP
+\fB\%XmeStandardConvert\fP(3), \fB\%XmTransferValue\fP(3) and
+\fB\%XmTransferDone\fP(3)\&.

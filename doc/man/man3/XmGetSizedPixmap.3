@@ -1,0 +1,52 @@
+.TH "XmGetSizedPixmap" "library call"
+.nh
+.SH "NAME"
+\fB\%XmGetSizedPixmap\fP \(em Returns a pixmap of an image scaled to a given size
+.iX "XmGetSizedPixmap"
+.iX "pixmap functions" "XmGetSizedPixmap"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/Xm\&.h>
+\fBPixmap \fBXmGetSizedPixmap\fP\fR(
+\fBWidget \fBwidget\fR\fR,
+\fBchar *\fBimage_name\fR\fR,
+\fBPixel \fBforeground\fR\fR,
+\fBPixel \fBbackground\fR\fR,
+\fBint \fBdepth\fR\fR,
+\fBint \fBwidth\fR\fR,
+\fBint \fBheight\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmGetSizedPixmap\fP is \fB\%XmGetPixmapByDepth\fP with a size: it
+returns
+a pixmap of depth \fIdepth\fP of the image \fIimage_name\fP, looked up
+and
+coloured as \fB\%XmGetPixmapByDepth\fP does, scaled to \fIwidth\fP by
+\fIheight\fP\&.  If one of \fIwidth\fP and \fIheight\fP is 0, it is
+computed from
+the other so as to keep the proportions of the image; if both are 0,
+the image is not scaled\&.  The pixmap is cached like the other pixmaps
+of Motif\&.
+.IP "\fIwidget\fP" 11
+Specifies the widget whose screen is used\&.
+.IP "\fIimage_name\fP" 11
+Specifies the name of the image\&.
+.IP "\fIforeground\fP" 11
+Specifies the foreground of a bitmap image\&.
+.IP "\fIbackground\fP" 11
+Specifies the background of a bitmap image\&.
+.IP "\fIdepth\fP" 11
+Specifies the depth of the pixmap\&.
+.IP "\fIwidth\fP" 11
+Specifies the width of the pixmap, or 0\&.
+.IP "\fIheight\fP" 11
+Specifies the height of the pixmap, or 0\&.
+.SH "RETURN"
+.PP
+Returns the pixmap, or \fB\%XmUNSPECIFIED_PIXMAP\fP if the image is not
+found\&.  Release it with \fB\%XmDestroyPixmap\fP\&.
+.SH "RELATED"
+.PP
+\fB\%XmGetPixmapByDepth\fP(3) and \fB\%XmDestroyPixmap\fP(3)\&.

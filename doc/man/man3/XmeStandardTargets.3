@@ -1,0 +1,57 @@
+.TH "XmeStandardTargets" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeStandardTargets\fP \(em A widget writer function that lists the targets every widget supports
+.iX "XmeStandardTargets"
+.iX "Xme transfer functions" "XmeStandardTargets"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/TransferP\&.h>
+\fBAtom *\fBXmeStandardTargets\fP\fR(
+\fBWidget \fBw\fR\fR,
+\fBint \fBcount\fR\fR,
+\fBint *\fBtcount\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeStandardTargets\fP returns a new array of the targets that every
+Motif widget supports: \fB\%TARGETS\fP, \fB\%TIMESTAMP\fP,
+\fB\%FOREGROUND\fP,
+\fB\%BACKGROUND\fP, \fB\%COLORMAP\fP, \fB\%CLASS\fP, \fB\%NAME\fP,
+\fB\%CLIENT_WINDOW\fP,
+\fB\%_MOTIF_RENDER_TABLE\fP and \fB\%_MOTIF_ENCODING_REGISTRY\fP (all
+but
+\fB\%TIMESTAMP\fP are converted by \fB\%XmeStandardConvert\fP)\&.  The
+array has
+room for \fIcount\fP more atoms after them, for the targets of the
+widget
+itself; see EXAMPLE\&.
+.IP "\fIw\fP" 10
+Specifies the widget\&.
+.IP "\fIcount\fP" 10
+Specifies the number of free entries to leave at the end of the array\&.
+.IP "\fItcount\fP" 10
+Returns the number of standard targets in the array\&.
+.SH "RETURN"
+.PP
+Returns the array, which the caller frees with \fB\%XtFree\fP\&.
+.SH "EXAMPLE"
+.PP
+The convert procedure of a widget can answer \fB\%TARGETS\fP with:
+.PP
+.nf
+int n;
+Atom *targets = XmeStandardTargets(w, 2, &n);
+
+targets[n++] = COMPOUND_TEXT;
+targets[n++] = XA_STRING;
+cs->value = (XtPointer) targets;
+cs->length = n;
+cs->type = XA_ATOM;
+cs->format = 32;
+.fi
+.SH "RELATED"
+.PP
+\fB\%XmeStandardConvert\fP(3), \fB\%XmTransferValue\fP(3) and
+\fB\%XmTransferDone\fP(3)\&.

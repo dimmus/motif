@@ -1,0 +1,47 @@
+.TH "XmeGetDefaultPixel" "library call"
+.nh
+.SH "NAME"
+\fB\%XmeGetDefaultPixel\fP \(em A widget writer function that computes a default colour
+.iX "XmeGetDefaultPixel"
+.iX "Xme functions" "XmeGetDefaultPixel"
+.SH "SYNOPSIS"
+.PP
+.nf
+#include <Xm/XmP\&.h>
+\fBvoid \fBXmeGetDefaultPixel\fP\fR(
+\fBWidget \fBwidget\fR\fR,
+\fBint \fBtype\fR\fR,
+\fBint \fBoffset\fR\fR,
+\fBXrmValue *\fBvalue\fR\fR);
+.fi
+.SH "DESCRIPTION"
+.PP
+\fB\%XmeGetDefaultPixel\fP computes the default background, foreground,
+shadow or select colour of \fIwidget\fP, as the \fB\%XmNbackground\fP,
+\fB\%XmNforeground\fP, \fB\%XmNtopShadowColor\fP,
+\fB\%XmNbottomShadowColor\fP and
+\fB\%XmNselectColor\fP resources of the Motif widgets get it: the
+background is the default background colour of Motif for the screen
+(\fB\%XtDefaultBackground\fP on a monochrome screen), and the other
+colours are derived
+from the background of the widget and allocated in its colormap\&.  For
+a gadget the colormap and the background are those of its parent\&.
+.PP
+It is meant to be called from a resource default procedure
+(\fB\%XtRCallProc\fP)\&.  The colour is returned in a static variable,
+which
+the next call overwrites\&.
+.IP "\fIwidget\fP" 10
+Specifies the widget or gadget\&.
+.IP "\fItype\fP" 10
+Specifies the colour: \fB\%XmBACKGROUND\fP, \fB\%XmFOREGROUND\fP,
+\fB\%XmTOP_SHADOW\fP, \fB\%XmBOTTOM_SHADOW\fP or \fB\%XmSELECT\fP
+(defined in
+\fB\%<Xm/ColorP\&.h>\fP)\&.
+.IP "\fIoffset\fP" 10
+Is not used\&.
+.IP "\fIvalue\fP" 10
+Returns the address and the size of the Pixel\&.
+.SH "RELATED"
+.PP
+\fB\%XmGetColors\fP(3) and \fB\%XmGetColorCalculation\fP(3)\&.
