@@ -1,0 +1,15 @@
+# LeakSanitizer suppressions for Threads.mtapps, on top of
+# src/tests/lsan.supp (CMake joins the two files for this test only).
+#
+# Policy, as for tsan.supp: only leaks that libX11 or libXt make and
+# lose themselves, each with the reason it is not a Motif bug.  A leak
+# of memory that Motif holds or frees is a Motif bug: fix it.
+
+# libX11: now and then, 8 bytes that _XimOpenIM allocates (the input
+# method name, from _XimMakeImName) are lost while the rest of the XIM
+# is freed; Motif never sees that string.  Only seen with several
+# threads opening input methods at once (Ubuntu clang debug-asan, PR
+# #19).  It is scoped to this test because the pattern also matches the
+# XIM record itself, which would leak if Motif failed to XCloseIM: the
+# single-threaded suites keep catching that.
+leak:_XimOpenIM
