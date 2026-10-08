@@ -17,7 +17,7 @@ build tree (`<build>/src/tests/fixtures`).
 Suites labelled `X11` (`FontList`, `FontListEntry`, `XmStringCT`,
 `XmStringExtent`, `Widgets`, `Text`, `Clipboard`, `Layout`, `XErrors`,
 `List`, `I18nLocale`, `MsgCat`, `Rtl`, `Xim`, `RoundTrips`, `ConstApi`,
-`RenderTable`, `Gadgets`) need an X server, as do the `Uil.load*`
+`RenderTable`, `Gadgets`, `XmIm`) need an X server, as do the `Uil.load*`
 tests, those in `interactive/` and `visual/` and some in `fuzz/`.  When
 `xvfb-run` is found at configure time, CTest starts each of them under
 its own Xvfb (with `-noreset`, see `XVFB_RUN_ARGS`); configure with

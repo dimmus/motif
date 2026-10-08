@@ -47,13 +47,14 @@ set(MOTIF_TEST_SRCS
     Xm/testRenderTable.c
     Xm/testTraits.c
     Xm/testGadgets.c
+    Xm/testXmIm.c
     i18n_util.c
 )
 
 # Suites that open a display, and suites that do not.
 set(MOTIF_TEST_X_SUITES FontListEntry FontList XmStringCT XmStringExtent Widgets Text
     Clipboard Layout XErrors List I18nLocale MsgCat Rtl Xim RoundTrips ConstApi
-    RenderTable Gadgets)
+    RenderTable Gadgets XmIm)
 set(MOTIF_TEST_SUITES Svg Log LogConfig XmString I18n Traits)
 set(MOTIF_TEST_DEFS "")
 
@@ -109,7 +110,8 @@ target_include_directories(motif_tests PRIVATE
     ${CMAKE_SOURCE_DIR}/src/lib/Xm
     ${CMAKE_BINARY_DIR}/include
 )
-target_link_libraries(motif_tests PRIVATE Xm PkgConfig::CHECK Threads::Threads)
+# The XmIm suite interposes Xlib calls and forwards them with dlsym.
+target_link_libraries(motif_tests PRIVATE Xm PkgConfig::CHECK Threads::Threads ${CMAKE_DL_LIBS})
 
 # The input method server the Xim suite types through.
 add_executable(stubxim xim/stubxim.c)
