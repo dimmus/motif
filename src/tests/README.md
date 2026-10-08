@@ -64,6 +64,10 @@ The other directories:
 - `interactive/` drives a Text/TextField program and mwm (in a nested
   Xephyr) with real input through `xdotool` (`Text.xdotool`,
   `Mwm.xdotool`); they are skipped without `xdotool` or `Xephyr`.
+  `Mwm.manage` (`mwm_tests`, libcheck) runs mwm as the window manager
+  of its display and checks the focus timestamps, the properties it
+  reads when it manages a window and later, `_NET_CLIENT_LIST`, and the
+  title shown after many title changes in a row.
 - `visual/` renders a fixed scene with the BDF fonts of
   `environment/fonts` and compares it with `golden/scene.png`
   (`Visual.*`; `--target update-golden` regenerates it).
@@ -90,6 +94,22 @@ small `LD_PRELOAD` library that `xmbench` loads itself; with
 `XMBENCH_REPORT=1` it prints them when any program it is preloaded into
 exits, see `doc/profiling.md`), and in the JSON the exact requests and
 round trips per timed run.
+
+`bench/` also holds `mwmbench`, macro-benchmarks for mwm (built when
+libXtst is found): it starts mwm as the window manager of its display
+and maps and destroys 500 clients, retitles a client 10,000 times (back
+to back, and waiting for mwm each time) and drags a window by its title
+bar (opaque and outline) and by its resize handle with XTest.  The
+`bench` target runs it too and writes `mwmbench.json`, in the format of
+`xmbench.json`, with mwm's and the X server's CPU time, mwm's mallocs,
+requests and round trips per operation, and for the map case the time
+until all clients are mapped and mwm's memory.  `-m` runs another mwm,
+for example one built from another commit; the counters come from
+`libmwmbench_preload.so`, which `mwmbench` preloads into mwm.  mwm,
+the X server and `mwmbench` wake each other up for every operation;
+on a virtual machine the latency of those wake-ups across CPUs can
+dwarf the work, so for A/B comparisons run everything on one CPU
+(`taskset -c 0 xvfb-run -a mwmbench ...`).
 
 `ab/` holds the A/B harness for the Form, Container and List layout code
 (`xm_abtest`, `xm_layoutbench` and `ab.sh`).  It is not part of CTest

@@ -205,7 +205,8 @@ not fixed yet, which are expected to fail (`Fuzz.<name>.crashes`).  See
 
 Two targets build tools that CTest does not run.  `bench` builds and
 runs `xmbench`, the micro- and macro-benchmarks in `src/tests/bench`,
-and writes `xmbench.json`.  `ab` builds the A/B harness in
+and `mwmbench`, the mwm macro-benchmarks there, and writes
+`xmbench.json` and `mwmbench.json`.  `ab` builds the A/B harness in
 `src/tests/ab`, which runs the same pseudo-random Form, Container and
 List configurations against two builds of libXm and reports any
 difference in geometry, selection, callbacks or pixels; use it to check

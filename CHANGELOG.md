@@ -81,8 +81,9 @@ upstream release (December 2017).  The git history has the details.
 - XmText finds the line of a position by bisecting its line table:
   appending to a long text was quadratic in its number of lines (10 MB
   in 1 KB lines: 3.2 times fewer instructions).
-- mwm builds its client list (`_NET_CLIENT_LIST`) with one allocation
-  instead of one per client, every time a client comes or goes.
+- mwm builds its client list (`_NET_CLIENT_LIST`) in an array it keeps
+  and doubles, instead of reallocating it once per client every time a
+  client comes or goes.
 - [doc/profiling.md](doc/profiling.md): how to profile Motif with perf,
   callgrind, heaptrack and xtrace (`tools/dev/profile`), the hotspots of
   the startup, of `xmbench`, of XmText, XmList and mwm, and the startup

@@ -710,6 +710,97 @@ Boolean HandleEventsOnClientWindow (ClientData *pCD, XEvent *pEvent)
 
 /*************************************<->*************************************
  *
+ *  DiscardStalePropertyNotify (window, property, serial)
+ *
+ *
+ *  Description:
+ *  -----------
+ *  Remove from the event queue the PropertyNotify events for a property
+ *  of a window that the server generated before it processed request
+ *  serial.  The property was read after that request, so these events
+ *  tell nothing new; a client that sets its title in a loop would
+ *  otherwise cost a property read and a redraw for each change.
+ *
+ *  Only the events already in the queue are looked at: XCheckIfEvent,
+ *  when it finds nothing, flushes and reads the connection, which would
+ *  cost two system calls for every title change of a client that does
+ *  not change it in a loop.  So the stale events are counted first, with
+ *  XPeekIfEvent stopped at the last queued event, and XCheckIfEvent is
+ *  called only as many times as it will find one.
+ *
+ *
+ *  Inputs:
+ *  ------
+ *  window = the window
+ *
+ *  property = the property
+ *
+ *  serial = a request made before the property was read
+ *
+ *************************************<->***********************************/
+
+typedef struct
+{
+    Window window;
+    Atom property;
+    unsigned long serial;
+    int unseen;		/* queued events not looked at yet */
+    int stale;		/* stale events among those looked at */
+} StalePropertyScan;
+
+static Bool IsStalePropertyNotify (Display *display, XEvent *event,
+				   XPointer arg)
+{
+    StalePropertyScan *scan = (StalePropertyScan *) arg;
+
+    (void) display;
+    return ((event->type == PropertyNotify) &&
+	    (event->xproperty.window == scan->window) &&
+	    (event->xproperty.atom == scan->property) &&
+	    ((long) (event->xproperty.serial - scan->serial) < 0));
+}
+
+static Bool CountStalePropertyNotify (Display *display, XEvent *event,
+				      XPointer arg)
+{
+    StalePropertyScan *scan = (StalePropertyScan *) arg;
+
+    if (IsStalePropertyNotify (display, event, arg))
+    {
+	scan->stale++;
+    }
+    return (--scan->unseen == 0);	/* stop at the last queued event */
+}
+
+static void DiscardStalePropertyNotify (Window window, Atom property,
+					unsigned long serial)
+{
+    StalePropertyScan scan;
+    XEvent event;
+
+    scan.window = window;
+    scan.property = property;
+    scan.serial = serial;
+    scan.unseen = QLength (DISPLAY);
+    scan.stale = 0;
+    if (scan.unseen == 0)
+    {
+	return;
+    }
+    XPeekIfEvent (DISPLAY, &event, CountStalePropertyNotify, (XPointer) &scan);
+    while ((scan.stale-- > 0) &&
+	   XCheckIfEvent (DISPLAY, &event, IsStalePropertyNotify,
+			  (XPointer) &scan))
+    {
+	/* discard it */
+    }
+
+} /* END OF FUNCTION DiscardStalePropertyNotify */
+
+
+
+/*************************************<->*************************************
+ *
  *  HandleCPropertyNotify (pCD, propertyEvent)
  *
  *
@@ -729,6 +820,7 @@ Boolean HandleEventsOnClientWindow (ClientData *pCD, XEvent *pEvent)
 
 void HandleCPropertyNotify (ClientData *pCD, XPropertyEvent *propertyEvent)
 {
+    unsigned long serial;
 
     switch (propertyEvent->atom)
     {
@@ -746,13 +838,20 @@ void HandleCPropertyNotify (ClientData *pCD, XPropertyEvent *propertyEvent)
 
         case XA_WM_NAME:
 	{
+	    serial = NextRequest (DISPLAY);
 	    ProcessWmWindowTitle (pCD, FALSE /*not first time*/);
+	    if (NextRequest (DISPLAY) != serial)	/* it read WM_NAME */
+		DiscardStalePropertyNotify (pCD->client, XA_WM_NAME, serial);
 	    break;
 	}
 
         case XA_WM_ICON_NAME:
 	{
+	    serial = NextRequest (DISPLAY);
 	    ProcessWmIconTitle (pCD, FALSE /*not first time*/);
+	    if (NextRequest (DISPLAY) != serial)	/* it read WM_ICON_NAME */
+		DiscardStalePropertyNotify (pCD->client, XA_WM_ICON_NAME,
+					    serial);
 	    break;
 	}
 
@@ -2746,17 +2845,18 @@ void DetermineActiveScreen (XEvent *pEvent)
 WmScreenData * GetScreenForWindow(Window win)
 
 {
-    XWindowAttributes attribs;
     WmScreenData *pSD = NULL;
 
 
     /*
-     * Get the screen that the event occurred on.
+     * Get the screen that the event occurred on.  The attributes stay
+     * cached for this pass through the event loop: a window that is
+     * mapped is managed next, which reads them again.
      */
-    if (XGetWindowAttributes (DISPLAY, win, &attribs))
+    if (WmGetWindowAttributes (win))
     {
-	if (!XFindContext (DISPLAY, attribs.root, wmGD.screenContextType,
-			                                (char **)&pSD))
+	if (!XFindContext (DISPLAY, wmGD.windowAttributes.root,
+			   wmGD.screenContextType, (char **)&pSD))
 	{
 	    if (pSD && !pSD->screenTopLevelW)
 	    {

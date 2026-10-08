@@ -42,6 +42,7 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/extensions/shape.h>
+#include <X11/extensions/sync.h>
 #include <X11/IntrinsicP.h>
 #include <X11/Intrinsic.h>
 #include <X11/StringDefs.h>
@@ -1728,10 +1729,8 @@ typedef struct _ClientData
     struct _WmFpEmbeddedClientData  *pECD; /* embedded client data */
     struct _WmFpPushRecallClientData  *pPRCD; /* embedded client data */
 #endif /* PANELIST */
-#ifdef WSM
     Atom *	paInitialProperties;	/* initial window properties */
     int		numInitialProperties;	/* number of initial properties */
-#endif /* WSM */
 
     /* client supported protocols: */
 
@@ -2344,6 +2343,7 @@ typedef struct _WmGlobalData
 
     Boolean     hasShape;                /* server supports Shape extension */
     int         shapeEventBase, shapeErrorBase;
+    XSyncCounter serverTimeCounter;      /* SYNC SERVERTIME, or None */
     /* Need to replay enter notify events on windows with the
        pointer that used to be modalized.  This is for pointer focus. */
     int         replayEnterEvent;

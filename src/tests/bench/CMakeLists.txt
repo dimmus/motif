@@ -80,3 +80,38 @@ if(Python3_Interpreter_FOUND)
         COMMAND ${Python3_EXECUTABLE} -B
             ${CMAKE_CURRENT_SOURCE_DIR}/test_bench.py)
 endif()
+
+# mwmbench: macro-benchmarks for mwm, which it starts as the window
+# manager of the bench target's display and drives through XTest.  It
+# needs libXtst, and preloads libmwmbench_preload.so into mwm.  The bench
+# target writes <build>/src/tests/bench/mwmbench.json; MWMBENCH_ARGS
+# passes extra arguments (for example "-r 3 map title").
+pkg_check_modules(MWMBENCH_XTST IMPORTED_TARGET xtst)
+if(TARGET mwm AND MWMBENCH_XTST_FOUND)
+    add_library(mwmbench_preload MODULE EXCLUDE_FROM_ALL mwmpreload.c)
+    target_include_directories(mwmbench_preload PRIVATE ${MOTIF_XT_INCLUDE_DIRS})
+    target_link_libraries(mwmbench_preload PRIVATE ${CMAKE_DL_LIBS})
+    set_target_properties(mwmbench_preload PROPERTIES
+        PREFIX lib OUTPUT_NAME mwmbench_preload)
+
+    add_executable(mwmbench EXCLUDE_FROM_ALL mwmbench.c)
+    target_compile_definitions(mwmbench PRIVATE
+        MWMBENCH_MWM="$<TARGET_FILE:mwm>"
+        MWMBENCH_PRELOAD="$<TARGET_FILE:mwmbench_preload>")
+    target_link_libraries(mwmbench PRIVATE
+        PkgConfig::MOTIF_XT PkgConfig::MWMBENCH_XTST)
+    add_dependencies(mwmbench mwmbench_preload mwm)
+
+    set(MWMBENCH_ARGS "" CACHE STRING
+        "Arguments passed to mwmbench by the bench target")
+    separate_arguments(_mwmbench_args UNIX_COMMAND "${MWMBENCH_ARGS}")
+    add_custom_target(bench-mwm
+        COMMAND ${_xmbench_cmd} $<TARGET_FILE:mwmbench>
+                -j ${CMAKE_CURRENT_BINARY_DIR}/mwmbench.json ${_mwmbench_args}
+        DEPENDS mwmbench mwmbench_preload mwm
+        USES_TERMINAL
+        COMMENT "Running mwmbench")
+    add_dependencies(bench bench-mwm)
+else()
+    message(STATUS "Benchmarks: mwmbench needs mwm and libXtst; not built")
+endif()

@@ -740,6 +740,7 @@ void InitWmGlobal (int argc, char *argv [], char *envp [])
 		    wmGD.hasShape = XShapeQueryExtension (DISPLAY,
 							  &wmGD.shapeEventBase,
 							  &wmGD.shapeErrorBase);
+		    InitServerTimeCounter ();
 
                     wmGD.replayEnterEvent = False;
 		    wmGD.menuActive = NULL;

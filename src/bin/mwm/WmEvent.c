@@ -2512,6 +2512,48 @@ void HandleWsFocusIn (XFocusInEvent *focusEvent)
 
 /*************************************<->*************************************
  *
+ *  InitServerTimeCounter ()
+ *
+ *
+ *  Description:
+ *  -----------
+ *  Find the SERVERTIME system counter of the SYNC extension, which
+ *  GetTimestamp reads.
+ *
+ *
+ *  Outputs:
+ *  -------
+ *  wmGD.serverTimeCounter = the counter, or None
+ *
+ *************************************<->***********************************/
+
+void InitServerTimeCounter (void)
+{
+    XSyncSystemCounter *counters;
+    int eventBase, errorBase, major, minor, count, i;
+
+    wmGD.serverTimeCounter = None;
+    if (!XSyncQueryExtension (DISPLAY, &eventBase, &errorBase) ||
+	!XSyncInitialize (DISPLAY, &major, &minor) ||
+	!(counters = XSyncListSystemCounters (DISPLAY, &count)))
+    {
+	return;
+    }
+    for (i = 0; i < count; i++)
+    {
+	if (counters[i].name && !strcmp (counters[i].name, "SERVERTIME"))
+	{
+	    wmGD.serverTimeCounter = counters[i].counter;
+	    break;
+	}
+    }
+    XSyncFreeSystemCounterList (counters);
+
+} /* END OF FUNCTION InitServerTimeCounter */
+
+
+/*************************************<->*************************************
+ *
  *  GetTimestamp ()
  *
  *
@@ -2528,7 +2570,12 @@ void HandleWsFocusIn (XFocusInEvent *focusEvent)
  *
  *  Comment:
  *  --------
- *  This costs a server round-trip
+ *  This costs a server round-trip.  The time is read from the SYNC
+ *  extension's SERVERTIME counter, whose low 32 bits are the server time
+ *  in milliseconds that it stamps events with.  Without it, append
+ *  nothing to a property and pick the PropertyNotify event out of the
+ *  queue, which means a scan of the whole queue: that is long when many
+ *  clients map at once.
  *
  *************************************<->***********************************/
 
@@ -2538,6 +2585,13 @@ Time GetTimestamp (void)
     WmScreenData *pSD = ACTIVE_PSD;
     XEvent event;
     long property = 0;
+    XSyncValue now;
+
+    if ((wmGD.serverTimeCounter != None) &&
+	XSyncQueryCounter (DISPLAY, wmGD.serverTimeCounter, &now))
+    {
+	return ((Time) XSyncValueLow32 (now));
+    }
 
     /*
      * Do zero-length append to our own WM_STATE
