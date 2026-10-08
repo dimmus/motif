@@ -526,7 +526,7 @@ Widget XmCreateSimpleSpinBox(Widget parent, String name, ArgList arglist, Cardin
   return (XtCreateWidget(name, xmSimpleSpinBoxWidgetClass, parent, arglist, argcount));
 }
 
-Widget XmVaCreateSimpleSpinBox(Widget parent, char *name, ...)
+Widget XmVaCreateSimpleSpinBox(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -540,7 +540,7 @@ Widget XmVaCreateSimpleSpinBox(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedSimpleSpinBox(Widget parent, char *name, ...)
+Widget XmVaCreateManagedSimpleSpinBox(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

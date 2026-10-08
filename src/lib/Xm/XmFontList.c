@@ -54,9 +54,9 @@
    which passes in an additional widget parameter ... this widget
    MUST be for the display that font will be used in
     Font should not be shared between displays in an MT environment */
-XmFontListEntry XmFontListEntryCreate(char *tag, XmFontType type, XtPointer font)
+XmFontListEntry XmFontListEntryCreate(const char *tag, XmFontType type, XtPointer font)
 {
-  char *derived_tag;
+  const char *derived_tag;
   Cardinal n;
   Arg args[4];
   XmFontListEntry ret_val;
@@ -93,9 +93,12 @@ XmFontListEntry XmFontListEntryCreate(char *tag, XmFontType type, XtPointer font
  *
  *  Fonts can not be shared among displays in an MT environment
  */
-XmFontListEntry XmFontListEntryCreate_r(char *tag, XmFontType type, XtPointer font, Widget wid)
+XmFontListEntry XmFontListEntryCreate_r(const char *tag,
+                                        XmFontType type,
+                                        XtPointer font,
+                                        Widget wid)
 {
-  char *derived_tag;
+  const char *derived_tag;
   Cardinal n;
   Arg args[4];
   XmFontListEntry ret_val;
@@ -278,7 +281,10 @@ XmFontList XmFontListRemoveEntry(XmFontList old, XmFontListEntry entry)
   return (old);
 }
 
-XmFontListEntry XmFontListEntryLoad(Display *display, char *fontName, XmFontType type, char *tag)
+XmFontListEntry XmFontListEntryLoad(Display *display,
+                                    const char *fontName,
+                                    XmFontType type,
+                                    const char *tag)
 {
   Cardinal n;
   Arg args[4];
@@ -309,12 +315,12 @@ XmFontListEntry XmFontListEntryLoad(Display *display, char *fontName, XmFontType
    which passes in an additional widget parameter ... this widget
    MUST be for the display that font will be used in
     Font should not be shared between displays in an MT environment */
-XmFontList XmFontListCreate(XFontStruct *font, XmStringCharSet charset)
+XmFontList XmFontListCreate(XFontStruct *font, const char *charset)
 {
   Cardinal n;
   Arg args[4];
   XmRendition rends[1];
-  XmStringCharSet curcharset;
+  const char *curcharset;
   XmRenderTable ret_val;
   _XmProcessLock();
   if ((font == NULL) || (charset == NULL)) {
@@ -346,12 +352,12 @@ XmFontList XmFontListCreate(XFontStruct *font, XmStringCharSet charset)
    font however it MUST be on the same display
    Fonts can not be shared among displays in an MT environment
 */
-XmFontList XmFontListCreate_r(XFontStruct *font, XmStringCharSet charset, Widget wid)
+XmFontList XmFontListCreate_r(XFontStruct *font, const char *charset, Widget wid)
 {
   Cardinal n;
   Arg args[4];
   XmRendition rends[1];
-  XmStringCharSet curcharset;
+  const char *curcharset;
   XmRenderTable ret_val;
   _XmWidgetToAppContext(wid);
   _XmAppLock(app);
@@ -384,9 +390,13 @@ XmFontList XmFontListCreate_r(XFontStruct *font, XmStringCharSet charset, Widget
    which passes in an additional widget parameter ... this widget
    MUST be for the display that font will be used in
     Font should not be shared between displays in an MT environment */
-XmFontList XmStringCreateFontList(XFontStruct *font, XmStringCharSet charset)
+XmFontList XmStringCreateFontList(XFontStruct *font, const char *charset)
 { /* deprecated */
-  return XmFontListAppendEntry(NULL, XmFontListEntryCreate(charset, XmFONT_IS_FONT, font));
+  XmFontListEntry entry = XmFontListEntryCreate(charset, XmFONT_IS_FONT, font);
+  XmFontList ret_val = XmFontListAppendEntry(NULL, entry);
+  /* The font list holds its own reference to the rendition. */
+  XmFontListEntryFree(&entry);
+  return ret_val;
 }
 
 /* MT safe version of XmStringCreateFontList - requires widget parameter
@@ -396,10 +406,16 @@ XmFontList XmStringCreateFontList(XFontStruct *font, XmStringCharSet charset)
    font however it MUST be on the same display
    Fonts can not be shared among displays in an MT environment
 */
-XmFontList XmStringCreateFontList_r(XFontStruct *font, XmStringCharSet charset, Widget wid)
+XmFontList XmStringCreateFontList_r(XFontStruct *font, const char *charset, Widget wid)
 { /* deprecated */
+  XmFontListEntry entry;
+  XmFontList ret_val;
   (void)wid;
-  return XmFontListAppendEntry(NULL, XmFontListEntryCreate(charset, XmFONT_IS_FONT, font));
+  entry = XmFontListEntryCreate(charset, XmFONT_IS_FONT, font);
+  ret_val = XmFontListAppendEntry(NULL, entry);
+  /* The font list holds its own reference to the rendition. */
+  XmFontListEntryFree(&entry);
+  return ret_val;
 }
 
 /*
@@ -413,9 +429,9 @@ void XmFontListFree(XmFontList fontlist)
 /*
  * extent a font list by one element, the old font list is gone
  */
-XmFontList XmFontListAdd(XmFontList old, XFontStruct *font, XmStringCharSet charset)
+XmFontList XmFontListAdd(XmFontList old, XFontStruct *font, const char *charset)
 {
-  XmStringCharSet curcharset;
+  const char *curcharset;
   Cardinal n;
   Arg args[4];
   XmRendition rends[1];
@@ -444,6 +460,7 @@ XmFontList XmFontListAdd(XmFontList old, XFontStruct *font, XmStringCharSet char
   n++;
   rends[0] = XmRenditionCreate(NULL, _XmStringCacheTag(curcharset, XmSTRING_TAG_STRLEN), args, n);
   ret_val = XmRenderTableAddRenditions(old, rends, 1, XmDUPLICATE);
+  XmRenditionFree(rends[0]);
   if (app)
     _XmAppUnlock(app);
   else

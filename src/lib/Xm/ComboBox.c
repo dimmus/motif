@@ -2682,7 +2682,7 @@ Widget XmCreateDropDownList(Widget parent, char *name, ArgList args, Cardinal nu
   return result;
 }
 
-Widget XmVaCreateComboBox(Widget parent, char *name, ...)
+Widget XmVaCreateComboBox(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -2696,7 +2696,7 @@ Widget XmVaCreateComboBox(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedComboBox(Widget parent, char *name, ...)
+Widget XmVaCreateManagedComboBox(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

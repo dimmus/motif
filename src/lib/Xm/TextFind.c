@@ -34,7 +34,7 @@
 
 Boolean _XmTextFindStringBackwards(Widget w,
                                    XmTextPosition start,
-                                   char *search_string,
+                                   const char *search_string,
                                    XmTextPosition *position)
 {
   int i;
@@ -437,7 +437,7 @@ Boolean _XmTextFindStringBackwards(Widget w,
 
 Boolean _XmTextFindStringForwards(Widget w,
                                   XmTextPosition start,
-                                  char *search_string,
+                                  const char *search_string,
                                   XmTextPosition *position)
 {
   int i;
@@ -814,7 +814,7 @@ Boolean _XmTextFindStringForwards(Widget w,
 
 Boolean XmTextFindString(Widget w,
                          XmTextPosition start,
-                         char *search_string,
+                         const char *search_string,
                          XmTextDirection direction,
                          XmTextPosition *position)
 {
@@ -839,11 +839,11 @@ Boolean XmTextFindString(Widget w,
 
 Boolean XmTextFindStringWcs(Widget w,
                             XmTextPosition start,
-                            wchar_t *wc_string,
+                            const wchar_t *wc_string,
                             XmTextDirection direction,
                             XmTextPosition *position)
 {
-  wchar_t *tmp_wc;
+  const wchar_t *tmp_wc;
   char *string;
   int num_chars = 0;
   Boolean return_val = False;

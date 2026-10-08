@@ -3023,7 +3023,7 @@ Widget XmCreateToggleButtonGadget(Widget parent, char *name, Arg *arglist, Cardi
   return XtCreateWidget(name, xmToggleButtonGadgetClass, parent, arglist, argCount);
 }
 
-Widget XmVaCreateToggleButtonGadget(Widget parent, char *name, ...)
+Widget XmVaCreateToggleButtonGadget(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -3037,7 +3037,7 @@ Widget XmVaCreateToggleButtonGadget(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedToggleButtonGadget(Widget parent, char *name, ...)
+Widget XmVaCreateManagedToggleButtonGadget(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

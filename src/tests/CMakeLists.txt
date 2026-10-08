@@ -43,12 +43,13 @@ set(MOTIF_TEST_SRCS
     Xm/testRtl.c
     Xm/testXim.c
     Xm/testRoundTrips.c
+    Xm/testConstApi.c
     i18n_util.c
 )
 
 # Suites that open a display, and suites that do not.
 set(MOTIF_TEST_X_SUITES FontListEntry FontList XmStringCT XmStringExtent Widgets Text
-    Clipboard Layout XErrors List I18nLocale MsgCat Rtl Xim RoundTrips)
+    Clipboard Layout XErrors List I18nLocale MsgCat Rtl Xim RoundTrips ConstApi)
 set(MOTIF_TEST_SUITES Svg Log LogConfig XmString I18n)
 set(MOTIF_TEST_DEFS "")
 
@@ -91,6 +92,12 @@ add_custom_command(
 list(APPEND MOTIF_TEST_SRCS ${CMAKE_CURRENT_BINARY_DIR}/widget_classes.h)
 
 add_executable(motif_tests ${MOTIF_TEST_SRCS})
+# The ConstApi suite passes string literals to the functions that take
+# const strings: it must not compile if one of them loses its const.
+set(_const_api_flags)
+motif_check_c_flags(_const_api_flags -Wwrite-strings -Werror=discarded-qualifiers
+    -Werror=incompatible-pointer-types-discards-qualifiers)
+set_property(SOURCE Xm/testConstApi.c APPEND PROPERTY COMPILE_OPTIONS ${_const_api_flags})
 target_compile_definitions(motif_tests PRIVATE ${MOTIF_TEST_DEFS})
 target_include_directories(motif_tests PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
@@ -171,6 +178,56 @@ function(motif_x_test name)
     set_tests_properties(${name} PROPERTIES LABELS X11 SKIP_RETURN_CODE 77
         RESOURCE_LOCK xvfb)
 endfunction()
+
+# A C++ program that passes string literals to the functions that take
+# const strings: C++ does not convert a string literal to char *.
+#
+# It has to be built by the C compiler's own C++ driver: the sanitizer,
+# LTO and linker options are global and are the C compiler's, and the
+# libraries instrumented by one compiler do not link with the sanitizer
+# runtime of another.  Without CXX or CMAKE_CXX_COMPILER CMake takes
+# c++, which is GCC even with CC=clang, so look next to the C compiler
+# first (clang -> clang++, gcc-14 -> g++-14, cc -> c++).
+if(NOT DEFINED CMAKE_CXX_COMPILER AND NOT DEFINED ENV{CXX})
+    get_filename_component(_c_dir "${CMAKE_C_COMPILER}" DIRECTORY)
+    get_filename_component(_c_name "${CMAKE_C_COMPILER}" NAME)
+    set(_cxx_name "")
+    if(_c_name MATCHES "clang")
+        string(REPLACE "clang" "clang++" _cxx_name "${_c_name}")
+    elseif(_c_name MATCHES "gcc")
+        string(REPLACE "gcc" "g++" _cxx_name "${_c_name}")
+    elseif(_c_name MATCHES "^cc")
+        string(REGEX REPLACE "^cc" "c++" _cxx_name "${_c_name}")
+    endif()
+    if(_cxx_name AND EXISTS "${_c_dir}/${_cxx_name}")
+        set(CMAKE_CXX_COMPILER "${_c_dir}/${_cxx_name}" CACHE FILEPATH "C++ compiler")
+    endif()
+endif()
+include(CheckLanguage)
+check_language(CXX)
+if(CMAKE_CXX_COMPILER)
+    enable_language(CXX)
+endif()
+if(NOT CMAKE_CXX_COMPILER)
+    message(STATUS "Tests: no C++ compiler, Xm.cxx_const_api not built")
+elseif(NOT CMAKE_CXX_COMPILER_ID STREQUAL CMAKE_C_COMPILER_ID OR
+       NOT CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL CMAKE_C_COMPILER_VERSION)
+    message(STATUS "Tests: the C++ compiler (${CMAKE_CXX_COMPILER_ID} "
+        "${CMAKE_CXX_COMPILER_VERSION}) is not the C compiler's "
+        "(${CMAKE_C_COMPILER_ID} ${CMAKE_C_COMPILER_VERSION}), "
+        "Xm.cxx_const_api not built")
+else()
+    include(CheckCXXCompilerFlag)
+    add_executable(cxx_const_api cxx/const_api.cpp)
+    set_target_properties(cxx_const_api PROPERTIES
+        CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS OFF)
+    check_cxx_compiler_flag(-Werror=write-strings MOTIF_HAVE_CXXFLAG_WERROR_WRITE_STRINGS)
+    if(MOTIF_HAVE_CXXFLAG_WERROR_WRITE_STRINGS)
+        target_compile_options(cxx_const_api PRIVATE -Werror=write-strings)
+    endif()
+    target_link_libraries(cxx_const_api PRIVATE Mrm Xm)
+    motif_x_test(Xm.cxx_const_api $<TARGET_FILE:cxx_const_api>)
+endif()
 
 add_subdirectory(uil)
 add_subdirectory(interactive)

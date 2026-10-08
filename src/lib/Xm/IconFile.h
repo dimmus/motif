@@ -41,9 +41,9 @@ extern "C" {
 #  define XmTINY_ICON_SIZE 4
 /********    Public Function Declarations for IconFile.c    ********/
 extern String XmGetIconFileName(Screen *screen,
-                                String imageInstanceName,
-                                String imageClassName,
-                                String hostPrefix,
+                                const char *imageInstanceName,
+                                const char *imageClassName,
+                                const char *hostPrefix,
                                 unsigned int size);
 /********    End Public Function Declarations    ********/
 #  ifdef __cplusplus

@@ -37,8 +37,8 @@ typedef struct _XmLabelGCacheObjRec *XmLabelGCacheObject;
 #  endif /* XmIsLabelGadget */
 /********    Public Function Declarations    ********/
 extern Widget XmCreateLabelGadget(Widget parent, char *name, Arg *arglist, Cardinal argCount);
-extern Widget XmVaCreateLabelGadget(Widget parent, char *name, ...);
-extern Widget XmVaCreateManagedLabelGadget(Widget parent, char *name, ...);
+extern Widget XmVaCreateLabelGadget(Widget parent, const char *name, ...);
+extern Widget XmVaCreateManagedLabelGadget(Widget parent, const char *name, ...);
 /********    End Public Function Declarations    ********/
 #  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

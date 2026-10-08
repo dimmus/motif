@@ -13,6 +13,11 @@ target_include_directories(uidload PRIVATE
     ${CMAKE_BINARY_DIR}/include
 )
 target_link_libraries(uidload PRIVATE Mrm Xm)
+# Like the ConstApi suite: the Mrm functions take const names and buffers.
+set(_const_api_flags)
+motif_check_c_flags(_const_api_flags -Wwrite-strings -Werror=discarded-qualifiers
+    -Werror=incompatible-pointer-types-discards-qualifiers)
+target_compile_options(uidload PRIVATE ${_const_api_flags})
 
 # Files that are not compiled, and why.
 set(MOTIF_UIL_SKIP

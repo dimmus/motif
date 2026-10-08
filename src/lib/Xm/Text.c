@@ -2463,9 +2463,9 @@ void _XmTextEnableRedisplay(XmTextWidget widget)
 /* Count the number of characters represented in the char* str.  By
  * definition, if MB_CUR_MAX == 1 then num_count_bytes == number of characters.
  * Otherwise, use mblen to calculate. */
-int _XmTextCountCharacters(char *str, int num_count_bytes)
+int _XmTextCountCharacters(const char *str, int num_count_bytes)
 {
-  char *bptr;
+  const char *bptr;
   int count = 0;
   int char_size = 0;
   if (num_count_bytes <= 0)
@@ -3510,7 +3510,7 @@ Widget XmCreateText(Widget parent, char *name, ArgList arglist, Cardinal argcoun
   return XtCreateWidget(name, xmTextWidgetClass, parent, arglist, argcount);
 }
 
-Widget XmVaCreateText(Widget parent, char *name, ...)
+Widget XmVaCreateText(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -3524,7 +3524,7 @@ Widget XmVaCreateText(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedText(Widget parent, char *name, ...)
+Widget XmVaCreateManagedText(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

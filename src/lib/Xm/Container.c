@@ -7909,7 +7909,7 @@ Widget XmCreateContainer(Widget parent, String name, ArgList arglist, Cardinal a
   return (XtCreateWidget(name, xmContainerWidgetClass, parent, arglist, argcount));
 }
 
-Widget XmVaCreateContainer(Widget parent, char *name, ...)
+Widget XmVaCreateContainer(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -7923,7 +7923,7 @@ Widget XmVaCreateContainer(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedContainer(Widget parent, char *name, ...)
+Widget XmVaCreateManagedContainer(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

@@ -450,7 +450,7 @@ Idb__BM_GetRecord (IDBFile                     file_id,
   Cardinal		result ;  /* function results */
   int			ndx ;	  /* loop index */
   IDBRecordBufferPtr	curbuf ;  /* current buffer being examined */
-  unsigned char		*buf_src; /* tmp pointer to location in uid buffer */
+  const unsigned char	*buf_src; /* tmp pointer to location in uid buffer */
 
   /*
    * Record numbers start at 1 (the header record). The number may come

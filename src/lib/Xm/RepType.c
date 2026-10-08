@@ -104,14 +104,15 @@ static char rcsid[] = "$TOG: RepType.c /main/17 1997/09/15 10:10:39 cshi $"
                       CopyStringArray(
                           String * StrArray, unsigned char NumEntries, Boolean UppercaseFormat);
 static void CopyRecord(XmRepTypeEntry OutputEntry,
-                       String rep_type_name,
+                       const char *rep_type_name,
                        String *value_names,
-                       unsigned char *values,
+                       const unsigned char *values,
                        unsigned char num_values,
                        Boolean reverse_installed,
                        XmRepTypeId rep_type_id,
                        Boolean copy_in);
-static Boolean ValuesConsecutiveStartingAtZero(unsigned char *values, unsigned char num_values);
+static Boolean ValuesConsecutiveStartingAtZero(const unsigned char *values,
+                                               unsigned char num_values);
 static XmRepTypeEntry GetRepTypeRecord(XmRepTypeId rep_type_id);
 static Boolean ConvertRepType(Display *disp,
                               XrmValue *args,
@@ -1359,9 +1360,9 @@ static String *CopyStringArray(String *StrArray, unsigned char NumEntries, Boole
 }
 
 static void CopyRecord(XmRepTypeEntry OutputEntry,
-                       String rep_type_name,
+                       const char *rep_type_name,
                        String *value_names,
-                       unsigned char *values,
+                       const unsigned char *values,
                        unsigned char num_values,
                        Boolean reverse_installed,
                        XmRepTypeId rep_type_id,
@@ -1388,7 +1389,8 @@ static void CopyRecord(XmRepTypeEntry OutputEntry,
   OutputEntry->rep_type_id = rep_type_id;
 }
 
-static Boolean ValuesConsecutiveStartingAtZero(unsigned char *values, unsigned char num_values)
+static Boolean ValuesConsecutiveStartingAtZero(const unsigned char *values,
+                                               unsigned char num_values)
 {
   if (values) {
     while (num_values--) {
@@ -1411,9 +1413,9 @@ static XmRepTypeEntry GetRepTypeRecord(XmRepTypeId rep_type_id)
   return (XmRepTypeEntry)NULL;
 }
 
-XmRepTypeId XmRepTypeRegister(String rep_type_name,
+XmRepTypeId XmRepTypeRegister(const char *rep_type_name,
                               String *value_names,
-                              unsigned char *values,
+                              const unsigned char *values,
                               unsigned char num_values)
 {
   XmRepTypeEntry NewRecord;
@@ -1573,7 +1575,7 @@ XmRepTypeEntry XmRepTypeGetRecord(XmRepTypeId rep_type_id)
   return (NULL);
 }
 
-XmRepTypeId XmRepTypeGetId(String rep_type_name)
+XmRepTypeId XmRepTypeGetId(const char *rep_type_name)
 {
   Cardinal Index;
   _XmProcessLock();

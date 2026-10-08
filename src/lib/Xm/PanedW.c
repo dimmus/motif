@@ -2179,7 +2179,7 @@ Widget XmCreatePanedWindow(Widget parent, char *name, ArgList args, Cardinal arg
   return (XtCreateWidget(name, xmPanedWindowWidgetClass, parent, args, argCount));
 }
 
-Widget XmVaCreatePanedWindow(Widget parent, char *name, ...)
+Widget XmVaCreatePanedWindow(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -2193,7 +2193,7 @@ Widget XmVaCreatePanedWindow(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedPanedWindow(Widget parent, char *name, ...)
+Widget XmVaCreateManagedPanedWindow(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

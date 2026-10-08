@@ -35,8 +35,8 @@ typedef struct _XmDrawingAreaRec *XmDrawingAreaWidget;
 #  endif
 /********    Public Function Declarations    ********/
 extern Widget XmCreateDrawingArea(Widget p, String name, ArgList args, Cardinal n);
-extern Widget XmVaCreateDrawingArea(Widget parent, char *name, ...);
-extern Widget XmVaCreateManagedDrawingArea(Widget parent, char *name, ...);
+extern Widget XmVaCreateDrawingArea(Widget parent, const char *name, ...);
+extern Widget XmVaCreateManagedDrawingArea(Widget parent, const char *name, ...);
 /********    End Public Function Declarations    ********/
 #  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

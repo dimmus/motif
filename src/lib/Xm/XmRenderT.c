@@ -132,7 +132,7 @@ static Boolean GetResources(XmRendition rend,
                             Widget wid,
                             String resname,
                             String resclass,
-                            XmStringTag tag,
+                            const char *tag,
                             ArgList arglist,
                             Cardinal argcount);
 static void SetDefault(XmRendition rend);
@@ -367,7 +367,7 @@ static Boolean GetResources(XmRendition rend,
                             Widget wid,
                             String resname,
                             String resclass,
-                            XmStringTag tag,
+                            const char *tag,
                             ArgList arglist,
                             Cardinal argcount)
 {
@@ -1554,13 +1554,16 @@ int XmRenderTableGetTags(XmRenderTable table, XmStringTag **tag_list)
 }
 
 /* Returns copy of matching rendition. */
-XmRendition XmRenderTableGetRendition(XmRenderTable table, XmStringTag tag)
+XmRendition XmRenderTableGetRendition(XmRenderTable table, const char *tag)
 {
   XmRendition ret_val;
   _XmDisplayToAppContext(_XmRTDisplay(table));
   _XmAppLock(app);
   _XmProcessLock(); /* for the reference count, see XmRenderTableCopy */
-  ret_val = CopyRendition(_XmRenderTableFindRendition(table, tag, FALSE, FALSE, FALSE, NULL));
+  /* With call False, the tag is only compared, never handed to the */
+  /* XmNnoRenditionCallback. */
+  ret_val = CopyRendition(
+      _XmRenderTableFindRendition(table, (XmStringTag)tag, FALSE, FALSE, FALSE, NULL));
   _XmProcessUnlock();
   _XmAppUnlock(app);
   return ret_val;
@@ -1789,7 +1792,7 @@ static void ValidateAndLoadFont(XmRendition rend, Display *display)
 }
 
 /* Create new rendition. */
-XmRendition XmRenditionCreate(Widget widget, XmStringTag tag, ArgList arglist, Cardinal argcount)
+XmRendition XmRenditionCreate(Widget widget, const char *tag, ArgList arglist, Cardinal argcount)
 {
   XmRendition ret_val;
   XtAppContext app = NULL;
@@ -1818,7 +1821,7 @@ XmRendition _XmRenditionCreate(Display *display,
                                Widget widget,
                                String resname,
                                String resclass,
-                               XmStringTag tag,
+                               const char *tag,
                                ArgList arglist,
                                Cardinal argcount,
                                Boolean *in_db)
@@ -2268,7 +2271,7 @@ typedef struct _TokenRec {
 /* Every token but T_EOF consumes at least one character.  A T_STR */
 /* string is owned by the token: callers that keep it must set */
 /* token->string to NULL, otherwise it is freed by the next call. */
-static Token ReadToken(char *string, int *position, Token reusetoken)
+static Token ReadToken(const char *string, int *position, Token reusetoken)
 {
   Token new_token = reusetoken;
   int pos = *position;
@@ -2858,7 +2861,7 @@ void _XmXftFontAverageWidth(Widget w, XtPointer f, int *width)
     *width = ext.width / l;
 }
 #endif
-XmRenderTable XmRenderTableCvtFromProp(Widget w, char *prop, unsigned int len) /* unused */
+XmRenderTable XmRenderTableCvtFromProp(Widget w, const char *prop, unsigned int len) /* unused */
 {
   TokenRec reusetoken;
   XmRenderTable new_rt;

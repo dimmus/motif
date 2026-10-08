@@ -35,8 +35,8 @@ typedef struct _XmFrameClassRec *XmFrameWidgetClass;
 typedef struct _XmFrameRec *XmFrameWidget;
 /********    Public Function Declarations    ********/
 extern Widget XmCreateFrame(Widget parent, char *name, ArgList arglist, Cardinal argcount);
-extern Widget XmVaCreateFrame(Widget parent, char *name, ...);
-extern Widget XmVaCreateManagedFrame(Widget parent, char *name, ...);
+extern Widget XmVaCreateFrame(Widget parent, const char *name, ...);
+extern Widget XmVaCreateManagedFrame(Widget parent, const char *name, ...);
 /********    End Public Function Declarations    ********/
 #  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

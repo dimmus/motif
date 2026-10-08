@@ -66,7 +66,7 @@ extern void _XmTextInvalidate(XmTextWidget widget,
                               XmTextPosition topos,
                               long delta);
 extern void _XmTextSetTopCharacter(Widget widget, XmTextPosition top_character);
-extern int _XmTextCountCharacters(char *str, int num_count_bytes);
+extern int _XmTextCountCharacters(const char *str, int num_count_bytes);
 extern void _XmTextSetCursorPosition(Widget widget, XmTextPosition position);
 extern void _XmTextDisableRedisplay(XmTextWidget widget, Boolean losesbackingstore);
 extern void _XmTextEnableRedisplay(XmTextWidget widget);

@@ -1817,7 +1817,7 @@ Widget XmCreateBulletinBoardDialog(Widget ds_p, String name, ArgList bb_args, Ca
   return XmeCreateClassDialog(xmBulletinBoardWidgetClass, ds_p, name, bb_args, bb_n);
 }
 
-Widget XmVaCreateBulletinBoard(Widget parent, char *name, ...)
+Widget XmVaCreateBulletinBoard(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -1831,7 +1831,7 @@ Widget XmVaCreateBulletinBoard(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedBulletinBoard(Widget parent, char *name, ...)
+Widget XmVaCreateManagedBulletinBoard(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

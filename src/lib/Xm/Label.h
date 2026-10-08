@@ -36,8 +36,8 @@ typedef struct _XmLabelRec *XmLabelWidget;
 #  endif /* XmIsLabel */
 /********    Public Function Declarations    ********/
 extern Widget XmCreateLabel(Widget parent, char *name, Arg *arglist, Cardinal argCount);
-extern Widget XmVaCreateLabel(Widget parent, char *name, ...);
-extern Widget XmVaCreateManagedLabel(Widget parent, char *name, ...);
+extern Widget XmVaCreateLabel(Widget parent, const char *name, ...);
+extern Widget XmVaCreateManagedLabel(Widget parent, const char *name, ...);
 /********    End Public Function Declarations    ********/
 #  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

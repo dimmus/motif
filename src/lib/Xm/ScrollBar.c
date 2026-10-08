@@ -3482,7 +3482,7 @@ Widget XmCreateScrollBar(Widget parent, char *name, ArgList arglist, Cardinal ar
   return (XtCreateWidget(name, xmScrollBarWidgetClass, parent, arglist, argcount));
 }
 
-Widget XmVaCreateScrollBar(Widget parent, char *name, ...)
+Widget XmVaCreateScrollBar(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -3496,7 +3496,7 @@ Widget XmVaCreateScrollBar(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedScrollBar(Widget parent, char *name, ...)
+Widget XmVaCreateManagedScrollBar(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

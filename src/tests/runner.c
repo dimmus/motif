@@ -49,6 +49,7 @@ static const struct suite_entry {
 	{ "Rtl",           rtl_suite,             1 },
 	{ "Xim",           xim_suite,             1 },
 	{ "RoundTrips",    round_trips_suite,     1 },
+	{ "ConstApi",      const_api_suite,       1 },
 };
 
 #define N_SUITES (sizeof suite_table / sizeof suite_table[0])

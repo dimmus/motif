@@ -573,7 +573,7 @@ static void Destroy(Widget w)
  ************************************************************************/
 Widget XmPrintSetup(Widget video_widget,
                     Screen *print_screen,
-                    String print_shell_name,
+                    const char *print_shell_name,
                     ArgList args,
                     Cardinal num_args)
 {
@@ -680,7 +680,7 @@ static void FilePipeCB(XtPointer client_data, int *source, XtInputId *id)
 static void ChildPrintToFile(String display_name,
                              XPContext pcontext,
                              FILE *file,
-                             char *file_name,
+                             const char *file_name,
                              int pipe,
                              String application_name,
                              String application_class)
@@ -712,7 +712,7 @@ static void ChildPrintToFile(String display_name,
 }
 
 XtEnum XmPrintToFile(Display *pdpy,
-                     char *file_name,
+                     const char *file_name,
                      XPFinishProc finish_proc,
                      XPointer client_data)
 {

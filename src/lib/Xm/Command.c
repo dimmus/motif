@@ -746,7 +746,7 @@ Widget XmCreateCommand(Widget parent, String name, ArgList al, Cardinal ac)
   return (w);
 }
 
-Widget XmVaCreateCommand(Widget parent, char *name, ...)
+Widget XmVaCreateCommand(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -760,7 +760,7 @@ Widget XmVaCreateCommand(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedCommand(Widget parent, char *name, ...)
+Widget XmVaCreateManagedCommand(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

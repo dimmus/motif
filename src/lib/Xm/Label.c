@@ -1845,7 +1845,7 @@ Widget XmCreateLabel(Widget parent, char *name, Arg *arglist, Cardinal argCount)
   return XtCreateWidget(name, xmLabelWidgetClass, parent, arglist, argCount);
 }
 
-Widget XmVaCreateLabel(Widget parent, char *name, ...)
+Widget XmVaCreateLabel(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -1859,7 +1859,7 @@ Widget XmVaCreateLabel(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedLabel(Widget parent, char *name, ...)
+Widget XmVaCreateManagedLabel(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

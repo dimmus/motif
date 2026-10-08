@@ -43,8 +43,8 @@ extern void XmScrollBarSetValues(
 /*
  * Variable argument list functions
  */
-extern Widget XmVaCreateScrollBar(Widget parent, char *name, ...);
-extern Widget XmVaCreateManagedScrollBar(Widget parent, char *name, ...);
+extern Widget XmVaCreateScrollBar(Widget parent, const char *name, ...);
+extern Widget XmVaCreateManagedScrollBar(Widget parent, const char *name, ...);
 /********    End Public Function Declarations    ********/
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

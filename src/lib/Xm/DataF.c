@@ -325,7 +325,7 @@ Widget XmCreateDataField(Widget parent, char *name, ArgList arglist, Cardinal ar
   return XtCreateWidget(name, xmDataFieldWidgetClass, parent, arglist, argcount);
 }
 
-Widget XmVaCreateDataField(Widget parent, char *name, ...)
+Widget XmVaCreateDataField(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -339,7 +339,7 @@ Widget XmVaCreateDataField(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedDataField(Widget parent, char *name, ...)
+Widget XmVaCreateManagedDataField(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;

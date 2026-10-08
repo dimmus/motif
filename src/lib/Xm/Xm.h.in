@@ -1329,11 +1329,11 @@ extern Cardinal XmGetSecondaryResourceData(WidgetClass w_class,
 
 /********    Public Function Declarations for ImageCache.c    ********/
 
-extern Boolean XmInstallImage(XImage *image, char *image_name);
+extern Boolean XmInstallImage(XImage *image, const char *image_name);
 extern Boolean XmUninstallImage(XImage *image);
-extern Pixmap XmGetPixmap(Screen *screen, char *image_name, Pixel foreground, Pixel background);
+extern Pixmap XmGetPixmap(Screen *screen, const char *image_name, Pixel foreground, Pixel background);
 extern Pixmap XmGetPixmapByDepth(
-    Screen *screen, char *image_name, Pixel foreground, Pixel background, int depth);
+    Screen *screen, const char *image_name, Pixel foreground, Pixel background, int depth);
 
 /**
  * Get a pixmap, scaled to the given width and height. If either
@@ -1341,7 +1341,7 @@ extern Pixmap XmGetPixmapByDepth(
  * the given dimension and that of the image.
  */
 extern Pixmap XmGetSizedPixmap(Widget widget,
-                               char *image_name,
+                               const char *image_name,
                                Pixel foreground,
                                Pixel background,
                                int depth,
@@ -1382,9 +1382,9 @@ extern Boolean XmWidgetGetDisplayRect(Widget wid, XRectangle *displayrect);
 
 /********    Public Function Declarations for ResConvert.c    ********/
 
-extern char *XmRegisterSegmentEncoding(char *fontlist_tag, char *ct_encoding);
-extern char *XmMapSegmentEncoding(char *fontlist_tag);
-extern XmString XmCvtCTToXmString(char *text);
+extern char *XmRegisterSegmentEncoding(const char *fontlist_tag, const char *ct_encoding);
+extern char *XmMapSegmentEncoding(const char *fontlist_tag);
+extern XmString XmCvtCTToXmString(const char *text);
 extern Boolean XmCvtTextToXmString(Display *display,
                                    XrmValuePtr args,
                                    Cardinal *num_args,
@@ -1406,7 +1406,7 @@ extern char *XmCvtXmStringToUTF8String(XmString string);
 /********    Public Function Declarations for ResInd.c    ********/
 
 extern int XmConvertStringToUnits(
-    Screen *screen, String spec, int orientation, int to_type, XtEnum *parse_error);
+    Screen *screen, const char *spec, int orientation, int to_type, XtEnum *parse_error);
 extern int XmConvertUnits(Widget widget,
                           int dimension,
                           int from_type,
@@ -1440,20 +1440,26 @@ extern Widget XmCreateSimpleCheckBox(Widget parent, String name, ArgList args, C
 /********    End Public Function Declarations    ********/
 
 /********    Public Function Declarations for VaSimple.c   ********/
-extern Widget XmVaCreateSimpleMenuBar(Widget parent, String name, ...);
-extern Widget XmVaCreateSimplePopupMenu(Widget parent, String name, XtCallbackProc callback, ...);
+extern Widget XmVaCreateSimpleMenuBar(Widget parent, const char *name, ...);
+extern Widget XmVaCreateSimplePopupMenu(Widget parent,
+                                        const char *name,
+                                        XtCallbackProc callback,
+                                        ...);
 extern Widget XmVaCreateSimplePulldownMenu(
-    Widget parent, String name, int post_from_button, XtCallbackProc callback, ...);
+    Widget parent, const char *name, int post_from_button, XtCallbackProc callback, ...);
 extern Widget XmVaCreateSimpleOptionMenu(Widget parent,
-                                         String name,
+                                         const char *name,
                                          XmString option_label,
                                          KeySym option_mnemonic,
                                          int button_set,
                                          XtCallbackProc callback,
                                          ...);
 extern Widget XmVaCreateSimpleRadioBox(
-    Widget parent, String name, int button_set, XtCallbackProc callback, ...);
-extern Widget XmVaCreateSimpleCheckBox(Widget parent, String name, XtCallbackProc callback, ...);
+    Widget parent, const char *name, int button_set, XtCallbackProc callback, ...);
+extern Widget XmVaCreateSimpleCheckBox(Widget parent,
+                                       const char *name,
+                                       XtCallbackProc callback,
+                                       ...);
 /********    End Public Function Declarations    ********/
 
 /********    Public Function Declarations for TrackLoc.c    ********/
@@ -1483,15 +1489,15 @@ extern void XmChangeColor(Widget widget, Pixel background);
 
 /********    Public Function Declarations for XmString.c    ********/
 
-extern XmString XmStringCreate(const char *text, XmStringCharSet charset);
+extern XmString XmStringCreate(const char *text, const char *charset);
 extern XmString XmStringCreateLocalized(const char *text);
 extern XmString XmStringDirectionCreate(XmStringDirection direction);
 extern XmString XmStringSeparatorCreate(void);
-extern XmString XmStringLtoRCreate(const char *text, XmStringCharSet charset);
+extern XmString XmStringLtoRCreate(const char *text, const char *charset);
 extern Boolean XmStringInitContext(XmStringContext *context, XmString string);
 extern void XmStringFreeContext(XmStringContext context);
-extern XmFontListEntry XmFontListEntryCreate(char *tag, XmFontType type, XtPointer font);
-extern XmFontListEntry XmFontListEntryCreate_r(char *tag,
+extern XmFontListEntry XmFontListEntryCreate(const char *tag, XmFontType type, XtPointer font);
+extern XmFontListEntry XmFontListEntryCreate_r(const char *tag,
                                                XmFontType type,
                                                XtPointer font,
                                                Widget wid);
@@ -1502,9 +1508,9 @@ extern XmFontList XmFontListAppendEntry(XmFontList old, XmFontListEntry entry);
 extern XmFontListEntry XmFontListNextEntry(XmFontContext context);
 extern XmFontList XmFontListRemoveEntry(XmFontList old, XmFontListEntry entry);
 extern XmFontListEntry XmFontListEntryLoad(Display *display,
-                                           char *fontName,
+                                           const char *fontName,
                                            XmFontType type,
-                                           char *tag);
+                                           const char *tag);
 extern void XmFontListFree(XmFontList fontlist);
 extern XmFontList XmFontListCopy(XmFontList fontlist);
 extern Boolean XmFontListInitFontContext(XmFontContext *context, XmFontList fontlist);
@@ -1562,17 +1568,17 @@ extern void XmStringDrawUnderline(Display *d,
                                   XRectangle *clip,
                                   XmString under);
 extern unsigned int XmCvtXmStringToByteStream(XmString string, unsigned char **prop_return);
-extern XmString XmCvtByteStreamToXmString(unsigned char *property);
-extern unsigned int XmStringByteStreamLength(unsigned char *string);
+extern XmString XmCvtByteStreamToXmString(const unsigned char *property);
+extern unsigned int XmStringByteStreamLength(const unsigned char *string);
 extern XmStringComponentType XmStringPeekNextTriple(XmStringContext context);
 extern XmStringComponentType XmStringGetNextTriple(XmStringContext context,
                                                    unsigned int *length,
                                                    XtPointer *value);
 extern XmString XmStringComponentCreate(XmStringComponentType tag,
                                         unsigned int length,
-                                        XtPointer value);
+                                        const void *value);
 extern XtPointer XmStringUnparse(XmString string,
-                                 XmStringTag tag,
+                                 const char *tag,
                                  XmTextType tag_type,
                                  XmTextType output_type,
                                  XmParseTable parse_table,
@@ -1593,7 +1599,7 @@ extern XmString XmStringTableToXmString(XmStringTable table,
                                         XmString break_component);
 extern XtPointer *XmStringTableUnparse(XmStringTable table,
                                        Cardinal count,
-                                       XmStringTag tag,
+                                       const char *tag,
                                        XmTextType tag_type,
                                        XmTextType output_type,
                                        XmParseTable parse,
@@ -1610,11 +1616,11 @@ extern XmStringTable XmStringTableParseStringArray(XtPointer *strings,
 extern XmStringDirection XmDirectionToStringDirection(XmDirection dir);
 extern XmDirection XmStringDirectionToDirection(XmStringDirection dir);
 
-extern XmString XmStringGenerate(XtPointer text,
-                                 XmStringTag tag,
+extern XmString XmStringGenerate(const void *text,
+                                 const char *tag,
                                  XmTextType type,
-                                 XmStringTag rendition);
-extern XmString XmStringPutRendition(XmString string, XmStringTag rendition);
+                                 const char *rendition);
+extern XmString XmStringPutRendition(XmString string, const char *rendition);
 
 extern XmParseMapping XmParseMappingCreate(ArgList arg_list, Cardinal arg_count);
 extern void XmParseMappingSetValues(XmParseMapping parse_mapping,
@@ -1646,7 +1652,7 @@ extern XmTab XmTabCreate(float value,
                          unsigned char units,
                          XmOffsetModel offset_model,
                          unsigned char alignment,
-                         char *decimal);
+                         const char *decimal);
 extern XmTabList XmTabListRemoveTabs(XmTabList oldlist,
                                      Cardinal *position_list,
                                      Cardinal position_count);
@@ -1666,19 +1672,19 @@ extern XmTabList XmTabListInsertTabs(XmTabList oldlist,
 
 /********    Public Function Declarations for XmRenderTable.c    ********/
 
-extern XmRenderTable XmRenderTableCvtFromProp(Widget, char *prop, unsigned int len);
+extern XmRenderTable XmRenderTableCvtFromProp(Widget, const char *prop, unsigned int len);
 extern unsigned int XmRenderTableCvtToProp(Widget, XmRenderTable table, char **prop_return);
 extern void XmRenditionUpdate(XmRendition rendition, ArgList arglist, Cardinal argcount);
 extern void XmRenditionRetrieve(XmRendition rendition, ArgList arglist, Cardinal argcount);
 extern void XmRenditionFree(XmRendition rendition);
 extern XmRendition XmRenditionCreate(Widget widget,
-                                     XmStringTag tag,
+                                     const char *tag,
                                      ArgList arglist,
                                      Cardinal argcount);
 extern XmRendition *XmRenderTableGetRenditions(XmRenderTable table,
                                                XmStringTag *tags,
                                                Cardinal tag_count);
-extern XmRendition XmRenderTableGetRendition(XmRenderTable table, XmStringTag tag);
+extern XmRendition XmRenderTableGetRendition(XmRenderTable table, const char *tag);
 extern int XmRenderTableGetTags(XmRenderTable table, XmStringTag **tag_list);
 extern void XmRenderTableFree(XmRenderTable table);
 extern XmRenderTable XmRenderTableCopy(XmRenderTable table, XmStringTag *tags, int tag_count);

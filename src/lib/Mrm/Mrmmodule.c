@@ -401,7 +401,7 @@ Urm__ValidModule (URMResourceContextPtr		context_id)
 
 Cardinal
 UrmIFMHGetModule (MrmHierarchy		hierarchy_id ,
-		  String		index ,
+		  const char		*index ,
 		  URMResourceContextPtr	context_id ,
 		  IDBFile		*file_id_return )
 {
@@ -457,7 +457,7 @@ UrmIFMHGetModule (MrmHierarchy		hierarchy_id ,
 
 Cardinal
 UrmIFMGetModule (IDBFile		file_id ,
-		 String			index ,
+		 const char			*index ,
 		 URMResourceContextPtr	context_id )
 {
 

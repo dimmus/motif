@@ -37,7 +37,7 @@ static char rcsid[] = "$TOG: AtomMgr.c /main/13 1997/09/08 14:06:18 cshi $"
      *
      ****************************************************************************/
     Atom
-    XmInternAtom(Display * display, String name, Boolean only_if_exists)
+    XmInternAtom(Display * display, const char *name, Boolean only_if_exists)
 {
   /* While not yet obsolete, this routine is not in favor.  Use */
   /* XInternAtom directly. */

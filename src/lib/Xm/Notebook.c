@@ -5273,7 +5273,7 @@ Widget XmCreateNotebook(Widget parent, String name, ArgList arglist, Cardinal ar
   return (XtCreateWidget(name, xmNotebookWidgetClass, parent, arglist, argcount));
 }
 
-Widget XmVaCreateNotebook(Widget parent, char *name, ...)
+Widget XmVaCreateNotebook(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -5287,7 +5287,7 @@ Widget XmVaCreateNotebook(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedNotebook(Widget parent, char *name, ...)
+Widget XmVaCreateManagedNotebook(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

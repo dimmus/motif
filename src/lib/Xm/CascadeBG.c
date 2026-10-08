@@ -2147,7 +2147,7 @@ Widget XmCreateCascadeButtonGadget(Widget parent, char *name, ArgList al, Cardin
   return (cb);
 }
 
-Widget XmVaCreateCascadeButtonGadget(Widget parent, char *name, ...)
+Widget XmVaCreateCascadeButtonGadget(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -2161,7 +2161,7 @@ Widget XmVaCreateCascadeButtonGadget(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedCascadeButtonGadget(Widget parent, char *name, ...)
+Widget XmVaCreateManagedCascadeButtonGadget(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;

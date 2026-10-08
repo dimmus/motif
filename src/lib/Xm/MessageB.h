@@ -48,8 +48,8 @@ extern Widget XmMessageBoxGetChild(Widget widget, unsigned char child);
 /*
  * Variable argument list functions
  */
-extern Widget XmVaCreateMessageBox(Widget parent, char *name, ...);
-extern Widget XmVaCreateManagedMessageBox(Widget parent, char *name, ...);
+extern Widget XmVaCreateMessageBox(Widget parent, const char *name, ...);
+extern Widget XmVaCreateManagedMessageBox(Widget parent, const char *name, ...);
 /********    End Public Function Declarations    ********/
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

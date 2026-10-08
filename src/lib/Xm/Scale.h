@@ -38,8 +38,8 @@ typedef struct _XmScaleRec *XmScaleWidget;
 void XmScaleSetValue(Widget w, int value);
 void XmScaleGetValue(Widget w, int *value);
 Widget XmCreateScale(Widget parent, char *name, ArgList arglist, Cardinal argcount);
-Widget XmVaCreateScale(Widget parent, char *name, ...);
-Widget XmVaCreateManagedScale(Widget parent, char *name, ...);
+Widget XmVaCreateScale(Widget parent, const char *name, ...);
+Widget XmVaCreateManagedScale(Widget parent, const char *name, ...);
 void XmScaleSetTicks(Widget scale,
                      int big_every,
                      Cardinal num_med,

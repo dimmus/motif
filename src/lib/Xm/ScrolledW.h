@@ -40,8 +40,8 @@ extern void XmScrollVisible(Widget scrw, Widget wid, Dimension hor_margin, Dimen
 /*
  * Variable argument list functions
  */
-extern Widget XmVaCreateScrolledWindow(Widget parent, char *name, ...);
-extern Widget XmVaCreateManagedScrolledWindow(Widget parent, char *name, ...);
+extern Widget XmVaCreateScrolledWindow(Widget parent, const char *name, ...);
+extern Widget XmVaCreateManagedScrolledWindow(Widget parent, const char *name, ...);
 /********    End Public Function Declarations    ********/
 #  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

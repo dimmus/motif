@@ -110,10 +110,13 @@ static int BufferLength(int len, long needed, int char_size)
  * This routine assumes that a BITS16 is two-bytes;
  * the routine must be modified if these assumptions are incorrect.
  */
-int _XmTextBytesToCharacters(
-    char *characters, char *bytes, int num_chars, Boolean add_null_terminator, int max_char_size)
+int _XmTextBytesToCharacters(char *characters,
+                             const char *bytes,
+                             int num_chars,
+                             Boolean add_null_terminator,
+                             int max_char_size)
 {
-  unsigned char *tmp_bytes;
+  const unsigned char *tmp_bytes;
   int num_bytes;
   int count = 0;
   BITS16 *bits16_ptr, temp_bits16;
@@ -125,17 +128,17 @@ int _XmTextBytesToCharacters(
     return 0;
   switch (max_char_size) {
     case 1: {
-      (void)memcpy((void *)characters, (void *)bytes, num_chars);
+      (void)memcpy((void *)characters, (const void *)bytes, num_chars);
       count = num_chars;
       break;
     } /* end case 1 */
     case 2: {
       bits16_ptr = (BITS16 *)characters;
-      tmp_bytes = (unsigned char *)bytes;
-      for (num_bytes = mblen((char *)tmp_bytes, max_char_size), temp_bits16 = 0;
+      tmp_bytes = (const unsigned char *)bytes;
+      for (num_bytes = mblen((const char *)tmp_bytes, max_char_size), temp_bits16 = 0;
            num_chars > 0 && num_bytes > 0;
            num_chars--,
-          num_bytes = mblen((char *)tmp_bytes, max_char_size),
+          num_bytes = mblen((const char *)tmp_bytes, max_char_size),
           temp_bits16 = 0,
           bits16_ptr++)
       {

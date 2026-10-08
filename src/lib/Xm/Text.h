@@ -53,8 +53,8 @@ extern void XmTextSetHighlight(Widget w,
                                XmHighlightMode mode);
 extern Widget XmCreateScrolledText(Widget parent, char *name, ArgList arglist, Cardinal argcount);
 extern Widget XmCreateText(Widget parent, char *name, ArgList arglist, Cardinal argcount);
-extern Widget XmVaCreateText(Widget parent, char *name, ...);
-extern Widget XmVaCreateManagedText(Widget parent, char *name, ...);
+extern Widget XmVaCreateText(Widget parent, const char *name, ...);
+extern Widget XmVaCreateManagedText(Widget parent, const char *name, ...);
 extern int XmTextGetSubstring(
     Widget widget, XmTextPosition start, int num_chars, int buf_size, char *buffer);
 extern int XmTextGetSubstringWcs(
@@ -117,12 +117,12 @@ extern void XmTextDisableRedisplay(Widget widget);
 extern void XmTextEnableRedisplay(Widget widget);
 extern Boolean XmTextFindString(Widget w,
                                 XmTextPosition start,
-                                char *search_string,
+                                const char *search_string,
                                 XmTextDirection direction,
                                 XmTextPosition *position);
 extern Boolean XmTextFindStringWcs(Widget w,
                                    XmTextPosition start,
-                                   wchar_t *wc_string,
+                                   const wchar_t *wc_string,
                                    XmTextDirection direction,
                                    XmTextPosition *position);
 /********    End Public Function Declarations    ********/

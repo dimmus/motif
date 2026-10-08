@@ -535,7 +535,7 @@ void _XmRegisterConverters(void)
  *	responsibility to ensure that test_str is already lower cased.
  *
  ************************************************************************/
-Boolean XmeNamesAreEqual(char *in_str, char *test_str)
+Boolean XmeNamesAreEqual(const char *in_str, const char *test_str)
 {
   char i;
   if (((in_str[0] == 'X') || (in_str[0] == 'x')) && ((in_str[1] == 'M') || (in_str[1] == 'm'))) {

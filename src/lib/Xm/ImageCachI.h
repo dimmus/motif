@@ -37,7 +37,7 @@
 extern "C" {
 #endif
 /********    Private Function Declarations for ImageCache.c    ********/
-extern Boolean _XmInstallImage(XImage *image, char *image_name, int hot_x, int hot_y);
+extern Boolean _XmInstallImage(XImage *image, const char *image_name, int hot_x, int hot_y);
 extern Boolean _XmGetImage(Screen *screen, char *image_name, XImage **image);
 extern Boolean _XmCachePixmap(Pixmap pixmap,
                               Screen *screen,
@@ -62,10 +62,10 @@ extern Boolean _XmGetPixmapData(Screen *screen,
                                 int *hot_y,
                                 unsigned int *width,
                                 unsigned int *height);
-extern Boolean _XmInImageCache(String image_name);
+extern Boolean _XmInImageCache(const char *image_name);
 extern Pixmap _XmGetScaledPixmap(Screen *screen,
                                  Widget widget,
-                                 char *image_name,
+                                 const char *image_name,
                                  XmAccessColorData acc_color,
                                  int depth,
                                  Boolean only_if_exists,
@@ -89,7 +89,7 @@ extern void _XmPutScaledImage(Screen *screen,
 extern void _XmCleanPixmapCache(Screen *screen, Widget shell);
 /* for Xm.h */
 extern Pixmap XmGetScaledPixmap(Widget widget,
-                                char *image_name,
+                                const char *image_name,
                                 Pixel foreground,
                                 Pixel background,
                                 int depth,

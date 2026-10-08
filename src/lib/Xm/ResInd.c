@@ -53,7 +53,7 @@ static XmImportOperator ToPixels(Widget widget,
                                  int offset,
                                  XtArgVal *value,
                                  unsigned char orientation);
-static XmParseResult ParseUnitString(String spec,
+static XmParseResult ParseUnitString(const char *spec,
                                      float *float_value, /* RETURN */
                                      int *unit_type);    /* RETURN */
 
@@ -70,8 +70,11 @@ static XmParseResult ParseUnitString(String spec,
  *			future, if desired.
  *
  **********************************************************************/
-int XmConvertStringToUnits(
-    Screen *screen, String spec, int orientation, int to_type, XtEnum *parse_error) /* RETURN */
+int XmConvertStringToUnits(Screen *screen,
+                           const char *spec,
+                           int orientation,
+                           int to_type,
+                           XtEnum *parse_error) /* RETURN */
 {
   int value;
   _XmDisplayToAppContext(DisplayOfScreen(screen));
@@ -140,7 +143,7 @@ int _XmConvertFloatUnitsToIntUnits(
  *
  **********************************************************************/
 int _XmConvertStringToUnits(Screen *screen,
-                            String spec,
+                            const char *spec,
                             int default_from_type,
                             int orientation,
                             int to_type,
@@ -178,7 +181,7 @@ int _XmConvertStringToUnits(Screen *screen,
  * XmeParseUnits
  *
  **********************************************************************/
-XmParseResult XmeParseUnits(String spec, int *unitType)
+XmParseResult XmeParseUnits(const char *spec, int *unitType)
 {
   /*
    * Figure out which unit type was specified using same
@@ -220,11 +223,11 @@ XmParseResult XmeParseUnits(String spec, int *unitType)
  * Internal routine for parsing <float><units> specifications
  *
  **********************************************************************/
-static XmParseResult ParseUnitString(String spec,
+static XmParseResult ParseUnitString(const char *spec,
                                      float *float_value, /* RETURN */
                                      int *unit_type)     /* RETURN */
 {
-  char *string = spec;
+  const char *string = spec;
   double power, value;
   int sign;
   char c;

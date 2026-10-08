@@ -34,8 +34,8 @@ typedef struct _XmArrowButtonClassRec *XmArrowButtonWidgetClass;
 typedef struct _XmArrowButtonRec *XmArrowButtonWidget;
 /********    Public Function Declarations    ********/
 extern Widget XmCreateArrowButton(Widget parent, char *name, ArgList arglist, Cardinal argcount);
-extern Widget XmVaCreateManagedArrowButton(Widget parent, char *name, ...);
-extern Widget XmVaCreateArrowButton(Widget parent, char *name, ...);
+extern Widget XmVaCreateManagedArrowButton(Widget parent, const char *name, ...);
+extern Widget XmVaCreateArrowButton(Widget parent, const char *name, ...);
 /********    End Public Function Declarations    ********/
 #  ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */

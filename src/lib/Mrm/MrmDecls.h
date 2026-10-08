@@ -181,10 +181,10 @@ externalref _MrmConst char *_MrmMsg_0119;
 extern void MrmInitialize  _ARGUMENTS(( void ));
 
 /* mrmlread.c */
-extern Cardinal MrmFetchLiteral  _ARGUMENTS(( MrmHierarchy hierarchy_id , String index , Display *display , XtPointer *value_return , MrmCode *type_return ));
-extern Cardinal MrmFetchIconLiteral  _ARGUMENTS(( MrmHierarchy hierarchy_id , String index , Screen *screen , Display *display , Pixel fgpix , Pixel bgpix , Pixmap *pixmap_return ));
-extern Cardinal MrmFetchBitmapLiteral  _ARGUMENTS(( MrmHierarchy hierarchy_id , String index , Screen *screen , Display *display , Pixmap *pixmap_return , Dimension *width , Dimension *height));
-extern Cardinal MrmFetchColorLiteral  _ARGUMENTS(( MrmHierarchy hierarchy_id , String index , Display *display , Colormap cmap , Pixel *pixel_return ));
+extern Cardinal MrmFetchLiteral  _ARGUMENTS(( MrmHierarchy hierarchy_id , const char *index , Display *display , XtPointer *value_return , MrmCode *type_return ));
+extern Cardinal MrmFetchIconLiteral  _ARGUMENTS(( MrmHierarchy hierarchy_id , const char *index , Screen *screen , Display *display , Pixel fgpix , Pixel bgpix , Pixmap *pixmap_return ));
+extern Cardinal MrmFetchBitmapLiteral  _ARGUMENTS(( MrmHierarchy hierarchy_id , const char *index , Screen *screen , Display *display , Pixmap *pixmap_return , Dimension *width , Dimension *height));
+extern Cardinal MrmFetchColorLiteral  _ARGUMENTS(( MrmHierarchy hierarchy_id , const char *index , Display *display , Colormap cmap , Pixel *pixel_return ));
 
 /* Deal with Wide stuff now because there is an error in Saber 3.0 */
 
@@ -196,11 +196,11 @@ extern Cardinal MrmRegisterNames  _ARGUMENTS(( MrmRegisterArglist reglist ,int n
 extern Cardinal MrmRegisterNamesInHierarchy  _ARGUMENTS(( MrmHierarchy hierarchy_id , MrmRegisterArglist reglist , int num_reg ));
 
 #if defined(__cplusplus)
-extern Cardinal MrmRegisterClass  _ARGUMENTS(( int class_code , String class_name , String create_name , Widget (*creator )(...), WidgetClass class_record ));
-extern Cardinal MrmRegisterClassWithCleanup  _ARGUMENTS(( int class_code , String class_name , String create_name , Widget (*creator )(), WidgetClass class_record, void (*cleanup)(...) ));
+extern Cardinal MrmRegisterClass  _ARGUMENTS(( int class_code , const char *class_name , const char *create_name , Widget (*creator )(...), WidgetClass class_record ));
+extern Cardinal MrmRegisterClassWithCleanup  _ARGUMENTS(( int class_code , const char *class_name , const char *create_name , Widget (*creator )(), WidgetClass class_record, void (*cleanup)(...) ));
 #else
-extern Cardinal MrmRegisterClass  _ARGUMENTS(( int class_code , String class_name , String create_name , Widget (*creator )(Widget, String, ArgList, Cardinal), WidgetClass class_record ));
-extern Cardinal MrmRegisterClassWithCleanup  _ARGUMENTS(( int class_code , String class_name , String create_name , Widget (*creator )(Widget, String, ArgList, Cardinal), WidgetClass class_record, void (*cleanup)(Widget) ));
+extern Cardinal MrmRegisterClass  _ARGUMENTS(( int class_code , const char *class_name , const char *create_name , Widget (*creator )(Widget, String, ArgList, Cardinal), WidgetClass class_record ));
+extern Cardinal MrmRegisterClassWithCleanup  _ARGUMENTS(( int class_code , const char *class_name , const char *create_name , Widget (*creator )(Widget, String, ArgList, Cardinal), WidgetClass class_record, void (*cleanup)(Widget) ));
 #endif
 
 #else
@@ -210,21 +210,21 @@ extern Cardinal MrmOpenHierarchyPerDisplay  _ARGUMENTS(( Display *display , MrmC
 extern Cardinal MrmRegisterNames  _ARGUMENTS(( MrmRegisterArglist reglist ,MrmCount num_reg ));
 extern Cardinal MrmRegisterNamesInHierarchy  _ARGUMENTS(( MrmHierarchy hierarchy_id , MrmRegisterArglist reglist , MrmCount num_reg ));
 #if defined(__cplusplus)
-extern Cardinal MrmRegisterClass  _ARGUMENTS(( MrmType class_code , String class_name , String create_name , Widget (*creator )(), WidgetClass class_record ));
-extern Cardinal MrmRegisterClassWithCleanup  _ARGUMENTS(( MrmType class_code , String class_name , String create_name , Widget (*creator )(), WidgetClass class_record, void (*cleanup)() ));
+extern Cardinal MrmRegisterClass  _ARGUMENTS(( MrmType class_code , const char *class_name , const char *create_name , Widget (*creator )(), WidgetClass class_record ));
+extern Cardinal MrmRegisterClassWithCleanup  _ARGUMENTS(( MrmType class_code , const char *class_name , const char *create_name , Widget (*creator )(), WidgetClass class_record, void (*cleanup)() ));
 #else
-extern Cardinal MrmRegisterClass  _ARGUMENTS(( MrmType class_code , String class_name , String create_name , Widget (*creator )(Widget, String, ArgList, Cardinal), WidgetClass class_record ));
-extern Cardinal MrmRegisterClassWithCleanup  _ARGUMENTS(( MrmType class_code , String class_name , String create_name , Widget (*creator )(Widget, String, ArgList, Cardinal), WidgetClass class_record, void (*cleanup)(Widget) ));
+extern Cardinal MrmRegisterClass  _ARGUMENTS(( MrmType class_code , const char *class_name , const char *create_name , Widget (*creator )(Widget, String, ArgList, Cardinal), WidgetClass class_record ));
+extern Cardinal MrmRegisterClassWithCleanup  _ARGUMENTS(( MrmType class_code , const char *class_name , const char *create_name , Widget (*creator )(Widget, String, ArgList, Cardinal), WidgetClass class_record, void (*cleanup)(Widget) ));
 #endif
 
 #endif
 
-extern Cardinal MrmOpenHierarchyFromBuffer  _ARGUMENTS(( unsigned char *uid_buffer , MrmHierarchy *hierarchy_id_return ));
-extern Cardinal MrmOpenHierarchyFromBufferWithSize  _ARGUMENTS(( unsigned char *uid_buffer , size_t uid_buffer_size , MrmHierarchy *hierarchy_id_return ));
+extern Cardinal MrmOpenHierarchyFromBuffer  _ARGUMENTS(( const unsigned char *uid_buffer , MrmHierarchy *hierarchy_id_return ));
+extern Cardinal MrmOpenHierarchyFromBufferWithSize  _ARGUMENTS(( const unsigned char *uid_buffer , size_t uid_buffer_size , MrmHierarchy *hierarchy_id_return ));
 extern Cardinal MrmCloseHierarchy  _ARGUMENTS(( MrmHierarchy hierarchy_id ));
-extern Cardinal MrmFetchInterfaceModule  _ARGUMENTS(( MrmHierarchy hierarchy_id , char *module_name , Widget parent , Widget *w_return ));
-extern Cardinal MrmFetchWidget  _ARGUMENTS(( MrmHierarchy hierarchy_id , String index , Widget parent , Widget *w_return , MrmType *class_return ));
-extern Cardinal MrmFetchWidgetOverride  _ARGUMENTS(( MrmHierarchy hierarchy_id , String index , Widget parent , String ov_name , ArgList ov_args , Cardinal ov_num_args , Widget *w_return , MrmType *class_return ));
+extern Cardinal MrmFetchInterfaceModule  _ARGUMENTS(( MrmHierarchy hierarchy_id , const char *module_name , Widget parent , Widget *w_return ));
+extern Cardinal MrmFetchWidget  _ARGUMENTS(( MrmHierarchy hierarchy_id , const char *index , Widget parent , Widget *w_return , MrmType *class_return ));
+extern Cardinal MrmFetchWidgetOverride  _ARGUMENTS(( MrmHierarchy hierarchy_id , const char *index , Widget parent , String ov_name , ArgList ov_args , Cardinal ov_num_args , Widget *w_return , MrmType *class_return ));
 extern Cardinal MrmFetchSetValues  _ARGUMENTS(( MrmHierarchy hierarchy_id , Widget w , ArgList args , Cardinal num_args ));
 
 /* mrmwci.c */

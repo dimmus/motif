@@ -1048,7 +1048,7 @@ Widget XmCreateMessageBox(Widget parent, char *name, ArgList al, Cardinal ac)
   return XtCreateWidget(name, xmMessageBoxWidgetClass, parent, al, ac);
 }
 
-Widget XmVaCreateMessageBox(Widget parent, char *name, ...)
+Widget XmVaCreateMessageBox(Widget parent, const char *name, ...)
 {
   Widget w;
   va_list var;
@@ -1062,7 +1062,7 @@ Widget XmVaCreateMessageBox(Widget parent, char *name, ...)
   return w;
 }
 
-Widget XmVaCreateManagedMessageBox(Widget parent, char *name, ...)
+Widget XmVaCreateManagedMessageBox(Widget parent, const char *name, ...)
 {
   Widget w = NULL;
   va_list var;
