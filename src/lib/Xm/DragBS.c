@@ -125,7 +125,6 @@ typedef struct {
 #define MESSAGE6 _XmMMsgDragBS_0005
 #define MESSAGE7 _XmMMsgDragBS_0006
 /********    Static Function Declarations    ********/
-static int LocalErrorHandler(Display *display, XErrorEvent *error);
 static void StartProtectedSection(XmErrorTrap trap, Display *display, Window window);
 static Boolean EndProtectedSection(XmErrorTrap trap);
 static Window GetMotifWindow(Display *display);

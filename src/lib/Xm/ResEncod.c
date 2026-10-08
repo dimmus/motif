@@ -1300,8 +1300,8 @@ static XmString concatStringToXmString(XmString compoundstring,
  */
 static Boolean processUTF8Segment(ct_context *ctx)
 {
-  OctetPtr text = ctx->octet, p = text;
-  OctetPtr encoding = ctx->encoding;
+  const_OctetPtr text = ctx->octet, p = text;
+  const_OctetPtr encoding = ctx->encoding;
   unsigned int encodinglen = ctx->encodinglen;
   XmStringDirection direction =
       (_CurDir(ctx) == ct_Dir_LeftToRight) ?
@@ -1332,7 +1332,7 @@ static Boolean processUTF8Segment(ct_context *ctx)
   }
 #if XM_UTF8
   ctx->xmstring =
-      concatStringToXmString(ctx->xmstring, (char *)text, len, "UTF-8", direction, False);
+      concatStringToXmString(ctx->xmstring, (const char *)text, len, "UTF-8", direction, False);
   return True;
 #else
   return (len == 0);

@@ -409,7 +409,7 @@ static void RenditionSearchList(XrmDatabase db,
                                 XrmName *names,
                                 XrmClass *classes,
                                 Cardinal length,
-                                XmStringTag tag,
+                                const char *tag,
                                 XrmHashTable *stackSearchList,
                                 XrmHashTable **searchList)
 {
