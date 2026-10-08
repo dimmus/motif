@@ -2,49 +2,55 @@
 
 ## Status as of this branch
 
-Branch `motif-maturity`: `maturity/stage2` plus the `todo3/sweep` and
-`todo3/legacy` streams and the final integration fixes.  The checkboxes
-below were ticked by reading the code and the git log, not from the stream
-reports; a *(status: ...)* note marks items that are only partly done or
-done differently from the plan.  119 of 141 items are ticked.
+Branch `round2` (named `round2/integration` in git, since the stream
+branches `round2/*` take the `round2` ref name): `master` (e779d945)
+with the nineteen round 2 streams merged one at a time (threads,
+xmstring, list, i18n, ci, hostile, profile, constify, benchgate,
+mwmbench, rendertable, traits, gadgets, container, imspot, texttests,
+roundtrips, cachedraw, manpages) and the integration fixes.  The
+checkboxes were ticked by reading the code and the git log, not from the
+stream reports alone; a *(status: ...)* note marks items that are only
+partly done or done differently from the plan.  140 of 141 items are
+ticked.
 
 Verification of this branch (2 CPUs, Arch Linux, GCC 16, Clang 23):
-- Fresh GCC RelWithDebInfo build of everything (tests, demos, docs): no
-  warnings in the libraries, mwm, uil, the build tools or the tests; 472
-  distinct warnings remain, all in `src/examples` (which `WITH_WERROR`
-  exempts).
-- Fresh Clang Debug build with ASan+UBSan, tests, fuzzers and demos, done
-  with the source tree read-only: `ctest --no-tests=error` passes 95/95
-  with `UBSAN_OPTIONS=halt_on_error=1`, none skipped (X tests under
-  `xvfb-run`).  The GCC build passes its 80 tests (the same suite
-  without the fuzzers).
-- Every fuzzer ran 120 s.  Findings fixed here: a UIL NULL operand and a
-  widget-as-operand over-read, two XmString rendition leaks and an Mrm
-  callback leak.  A libX11 `memcmp` report was not Motif's (see
-  `src/tests/fuzz/run.sh`).
-- Installed with `cmake --install --prefix`: `pkg-config motif/mrm/uil` and
-  `find_package(Motif CONFIG)` hello worlds build and run; SONAMEs
-  `libXm.so.5`, `libMrm.so.5`, `libUil.so.5`, versioned `XM_2.5` /
-  `MRM_2.5` / `UIL_2.5`; 1737 / 219 / 51 exported symbols; no internal
-  `*I.h` installed apart from `Mrm/MrmosI.h`, which Motif 2.3 installs too.
-  abidiff against the master baseline: 0 changed functions or variables,
-  only removals of symbols hidden by the version scripts.
-- mwm and 32 demos were started under Xvfb with the ASan+UBSan build
-  (with ASan `strict_memcmp=0` for the libX11 quark lookup): mwm and 29
-  demos ran without sanitizer reports.  periodic_demo and
-  hellomotifi18n_demo exit at once because the build does not put their
-  .uid files where they look; the workspace demo's Wsm library
-  (`src/examples/lib/Wsm/pack.c`) over-reads the empty reply of an mwm
-  built without WSM.  (That demo has since been removed: it needs the
-  Mwm 2.0 workspace manager protocol, which mwm does not implement.)
+- Fresh GCC RelWithDebInfo build of everything (libraries, mwm, tools,
+  tests, demos, docs, plus the `ab` and `bench` targets) with
+  `WITH_WERROR=ON` and `WITH_MESSAGE_CATALOG=ON`: no warnings at all,
+  `src/examples` included.  The integration fixed three build breaks
+  where streams met without a textual conflict, two mwm warnings of the
+  message catalog build and one in xmbench.
+- `ctest --no-tests=error`: 116/116 pass in the C locale and with
+  `LANG=C.UTF-8`; no test skipped (X tests under `xvfb-run`, the
+  generated ja_JP/de_DE/he_IL locales, the message catalogs).
+- Fresh Clang Debug build with ASan+UBSan, tests, fuzzers and demos,
+  also with `WITH_WERROR=ON` and no warnings: 130/130 pass with
+  `UBSAN_OPTIONS=halt_on_error=1`, in C and C.UTF-8.
+- Clang TSan build: `Threads.mtapps`, `Threads.sharedapp` and the
+  `Xm.Traits` stress test pass with no ThreadSanitizer report.
+- abidiff against master's libraries: libMrm and libUil 0 changes
+  (Mrm: 47 parameter-qualifier changes filtered); libXm 386
+  parameter-qualifier changes filtered and two functions reported only
+  through internal structures behind opaque pointers (the render table
+  stamp, `focus_from_grab` in the focus data, the int line and segment
+  counters of XmString contexts; none of these headers is installed).
+  No symbol removed or added.  The October 4 baseline in
+  `~/.cache/motif-round2/abi` predates the 2.5.0 release, whose
+  `XM_2.4` -> `XM_2.5` version nodes make every symbol appear removed
+  there.
+- Merging found one real regression: the Xim reset tests (round2/i18n)
+  failed once round2/imspot deferred the spot location; XmText and
+  XmTextField now ask for the XIC reset state before the reset.
 
-What remains, by priority:
+What remains:
+- **Hostile-client test, part (b):** the hostile drag-source phase of
+  `Hostile.client` does not yet make the victim drop or convert
+  anything, so malformed TARGETS replies of a drag source are not tested
+  end to end.
 - **P0/P1, known open bugs** (reproducers in `src/tests/fuzz/crashes/`):
   - Mrm passes an argument value to the widget without checking it against
     the resource's type, so a corrupt `.uid` can hand a widget a wild
     XmString (`uid/corrupt-xmstring-segv`).
-  - A corrupt `_MOTIF_CLIP_*` record still makes any Motif application
-    `exit(1)` through `ClipboardError` (`clipboard/corrupt-record-exit`).
   - A crafted XPM can make the bundled libXpm allocate up to INT_MAX bytes
     (`xpm/huge-chars-per-pixel-oom`); no lower size policy yet.
   - A crafted `.wmd` database is still trusted inside its tables.
@@ -53,24 +59,13 @@ What remains, by priority:
     (`XmStringSeparatorCreate`).
   - The `Widgets` suite tracks FontSelector, SlideContext, GrabShell and
     Label/LabelG bugs as expected failures.
-- **Tests:** a hostile-client end-to-end test against a drag source and a
-  clipboard owner; secondary selection and undo; ja_JP/de_DE, RTL,
-  preedit and message-catalog tests; publishing coverage reports; OSS-Fuzz.
-  TSan and MSan have never been run (MSan needs instrumented X libraries).
-- **CI:** none of the GitHub/GitVerse jobs has been run from here; the
-  cppcheck baseline must come from the first CI run; the ABI job does not
-  build upstream 2.3.8; there is no real `dpkg-buildpackage`/`rpmbuild`.
-- **Hardening:** a full audit of the mutable statics with a two-context
-  TSan test; the remaining ~90 type-punned out-parameters (the build uses
-  `-fno-strict-aliasing` until then); constifying the rest of the public
-  string API; replacing the bundled libXpm with the system one.
-- **Docs:** man pages for 135 exported functions (mostly `Xme*`); real
-  translations of 21 catalog messages.
-- **Performance:** XmString extent cache and builder, List and Container
-  data structures (blocked by installed struct layouts), render-table
-  converter caching, lock-free traits, the remaining per-tick ScrollBar
-  `XSync`, idle coalescing of IM spot updates; mwm benchmarks, a CI
-  performance gate and profiling.
+- **Tests:** publishing coverage reports; OSS-Fuzz.  MSan has never been
+  run (it needs instrumented X libraries).
+- **CI:** the cppcheck baseline must come from the first CI run.
+- **Hardening:** the remaining ~90 type-punned out-parameters (the build
+  uses `-fno-strict-aliasing` until then); replacing the bundled libXpm
+  with the system one.
+- **Docs:** real translations of 21 catalog messages.
 - **Warnings at `-O3`:** the zero-warning result holds for GCC at
   `-O2` (RelWithDebInfo). A CMake `Release` build (`-O3`) still reports
   optimisation-dependent warnings in library code:
@@ -162,7 +157,7 @@ Priority legend:
   - Check `idx < maxCbProcs` and `formatlength >= sizeof *formatitem`.
   - Ignore events with `send_event` set.
 - [x] `CutPaste.c:833-838` `ClipboardFindItem` overflows in its chunked read. The buffer is sized from the first chunk, but `BYTELENGTH` counts 8 bytes per format-32 item on LP64 against the server's 4. Realloc per chunk, and reject a format change between chunks.
-- [x] CutPaste header and lock records (`:391, :733, :1066-1100, :1403, :1493, :1923, :2439, :3287`): offsets and counts from the root property are used unchecked, and there are NULL dereferences when the property is missing. Add one `ClipboardFindItem(…, min_len, type, format)` helper and use it everywhere. *(status: corrupt records still make the application exit through ClipboardError (crashes/clipboard/corrupt-record-exit), but no longer corrupt memory)*
+- [x] CutPaste header and lock records (`:391, :733, :1066-1100, :1403, :1493, :1923, :2439, :3287`): offsets and counts from the root property are used unchecked, and there are NULL dereferences when the property is missing. Add one `ClipboardFindItem(…, min_len, type, format)` helper and use it everywhere. *(status: done; a corrupt record no longer exits the application either: the operation fails, the clipboard lock is released and the clipboard reset (Xm.Clipboard; the old reproducer is now fuzz corpus))*
 - [x] `DragBS.c:597-645, 798-852` `ReadAtomsTable` / `ReadTargetsTable` trust `num_atoms`, `num_target_lists` and `num_targets` (a signed `short`) without comparing them with `lengthRtn`, and never check `format`. Add a bounds-checked cursor.
 - [x] `DragICC.c:172`: `messageTable[messageType]` has 9 entries, but the index comes from the wire and can be 0..127.
 - [x] `ColorObj.c:504-570`: `value[length-1]` with `length==0` touches `value[-1]`. `FetchPixelData` advances by the length of its re-formatted `sprintf` output instead of the bytes it consumed, which over-reads. `colors[]` is used uninitialised. The error paths leak.
@@ -268,9 +263,9 @@ Priority legend:
    - the UIL lexer and parser;
    - `.mwmrc` and `.motifbind`;
    - **DnD receiver-info and drop-site stream**, and clipboard header records (feed them through a fake property buffer).
-5. [ ] **Hostile-client tests:** a helper X client sets malformed `_MOTIF_DRAG_RECEIVER_INFO`, `_MOTIF_BINDINGS`, `_MOTIF_CLIP_*` and TARGETS replies, and the Motif app must survive under ASan. *(status: partial: the DnD, clipboard, bindings and compound-text parsers are covered by the fuzzers, and malformed window-manager properties by the mwm test; there is no end-to-end hostile client against a drag source or clipboard owner)*
-6. [ ] **Text and TextField:** editing, clipboard, primary/secondary selection, undo, large documents (10 MB). *(status: partial: editing, primary selection, clipboard and a 10 MB document are tested, also with real xdotool input; secondary selection and undo are not)*
-7. [ ] **i18n:** `ja_JP.UTF-8`, `de_DE.UTF-8`, RTL layout, input-method preedit (with a stub IM), message catalogs. *(status: partial: UTF-8, C locale and wide-character conversions are tested; ja_JP/de_DE (locales not installed here), RTL, preedit with a stub IM and message catalogs are not)*
+5. [ ] **Hostile-client tests:** a helper X client sets malformed `_MOTIF_DRAG_RECEIVER_INFO`, `_MOTIF_BINDINGS`, `_MOTIF_CLIP_*` and TARGETS replies, and the Motif app must survive under ASan. *(status: partial: clipboard part done (corrupt records no longer exit the app; the lock is released and the clipboard reset afterwards: Xm.Clipboard, fuzz_clipboard); receiver-info, root-property and clipboard-owner phases run in Hostile.client; the hostile drag-source phase does not yet cause any drop or conversion in the victim (its replies are never asked for), so part (b) is still open)*
+6. [x] **Text and TextField:** editing, clipboard, primary/secondary selection, undo, large documents (10 MB). *(status: secondary selection tested (actions via XtCallActionProc for every Text/TextField pair, plus real Alt+Button2 drags with xdotool within one process and between two); 5 bugs fixed: a move to a destination that refuses the text deleted it; TextField kept SECONDARY after a cancel; the quick transfer actions crashed without an event; a drag from a non-focus widget sent the text into its own app; transfers leaked. There is no undo: XmText and XmTextField have no undo action and osfUndo is unbound, as in upstream (see src/tests/README.md). XmClipboardUndoCopy is tested)*
+7. [x] **i18n:** `ja_JP.UTF-8`, `de_DE.UTF-8`, RTL layout, input-method preedit (with a stub IM), message catalogs. *(status: done: localedef-generated ja_JP.UTF-8/EUC-JP, de_DE.UTF-8/ISO-8859-1, he_IL.UTF-8 (Xm.I18nLocale.*); Rtl suite; stubxim XIM server + Xim suite (on/over/off-the-spot, root); MsgCat C/de catalogs; 8 library bugs found and fixed)*
 8. [x] **mwm:** `.mwmrc` parse tests; a headless start under Xvfb; `f.*` functions driven through `xdotool`; malformed `WM_HINTS`, `WM_NORMAL_HINTS` and `_MOTIF_WM_HINTS` from a hostile client.
 9. [x] **Visual regression:** `XGetImage` under Xvfb with the BDF fonts in `src/tests/environment/fonts` to keep output deterministic, compared against golden PNGs with a tolerance.
 10. [x] A **coverage gate**: wire `WITH_COMPILER_CODE_COVERAGE` (it currently does nothing, see 1.3), publish the reports, and ratchet the target up. Start at 30% line coverage of `libXm`, then raise it. *(status: the coverage target fails below MOTIF_COVERAGE_MIN (30); measured 33.76% line coverage of libXm; reports are not published yet)*
@@ -291,9 +286,9 @@ Priority legend:
   - `cppcheck`.
   - Start in baseline/ratchet mode.
 - [x] An install-and-consume job: `cmake --install` into a staging directory, then compile hello-world through `pkg-config motif` **and** through `find_package(Motif)`.
-- [ ] An ABI job: `abidiff` against the last tag and against upstream 2.3.8. *(status: partial: the informational job compares with the previous tag and the PR base; upstream 2.3.8 is not built in CI (it was compared once by hand))*
+- [x] An ABI job: `abidiff` against the last tag and against upstream 2.3.8. *(status: done: abi-check.sh compares libXm/libMrm/libUil, the installed header types and the _XmStrings offsets with the previous tag and with upstream 2.3.8 (pinned-sha256 SourceForge tarball built with autotools, cached in CI), with the documented differences suppressed (tools/dev/env/ci/abi/); status 0 for both)*
 - [x] A reproducibility job: two builds plus `diffoscope` with `SOURCE_DATE_EPOCH` set.
-- [ ] Distro packaging smoke tests: Debian `dpkg-buildpackage` and Fedora `rpmbuild`. *(status: partial: builds with the dpkg-buildflags and rpm %build_cflags flags and checks the staged install; there is no debian/ or .spec, so no real dpkg-buildpackage or rpmbuild run)*
+- [x] Distro packaging smoke tests: Debian `dpkg-buildpackage` and Fedora `rpmbuild`. *(status: done: tools/packaging/debian (dh + cmake, libxm5/libmrm5/libuil5/libmotif-common/libmotif-dev/mwm/uil) and tools/packaging/rpm/motif.spec; CI job "Distribution package" runs dpkg-buildpackage -us -uc -b on debian:trixie and rpmbuild -ba on fedora:latest with the test suite, lintian/rpmlint (0 errors), installs the packages and builds hello.c against them)*
 - [x] Turn warnings into errors in CI (`CMAKE_COMPILE_WARNING_AS_ERROR`) once the curated warning list (2.3) is clean. *(status: WITH_WERROR=ON (all targets except the examples), and the blocking CI job uses it)*
 
 ---
@@ -309,7 +304,7 @@ Priority legend:
   - Uil: 96 `sprintf`.
   - Ban them with `-Werror=deprecated-declarations` through a poisoning header.
 - [x] Strict-aliasing: there are 37 `(XtPointer *)&typed_ptr` out-parameters (30 in `CutPaste.c`), and function pointers are stored through `XtPointer*` (`XmString.c:6206, 6428, 7260`). This is the same class as the `_XmEntrySegmentGet` miscompile (`97547c53`). Fix them, or build with `-fno-strict-aliasing` until they are fixed. *(status: the XtPointer * out-parameters are fixed; about 90 other type-punned out-parameters remain, so the build uses -fno-strict-aliasing)*
-- [ ] Thread safety: about 166 file-scope and 160 function-scope mutable statics, many not protected by `_XmProcessLock` (e.g. `DropTrans.c:404`, `ResConvert.c:582,1092,1741`, `ClipWindow.c:225`). Audit them, and add a TSan test with two `XtAppContext`s. *(status: partial: the locks are now real (they compiled to nothing before) and DataField, DrawUtils, Obso1_2, TabBox and IconG statics were fixed; the full audit and a TSan test with two XtAppContexts are not done)*
+- [x] Thread safety: about 166 file-scope and 160 function-scope mutable statics, many not protected by `_XmProcessLock` (e.g. `DropTrans.c:404`, `ResConvert.c:582,1092,1741`, `ClipWindow.c:225`). Audit them, and add a TSan test with two `XtAppContext`s. *(status: every mutable static of libXm and libMrm audited and classified in doc/thread-safety.md; real races fixed (locks taken application-then-process, per-display caches emptied when the display goes, thread-local hand-off state and default-proc buffers, per-thread X error traps instead of handler swapping, subresources fetched under the locks); Threads.mtapps (two XtAppContexts/Displays in two threads; the TSan test, clean with no suppressions), Threads.sharedapp (lock order in one shared context) and the XErrors suite)*
 - [x] Fix the logic bugs found along the way:
   - XdndProxy is never honoured (`DragICC.c:1015`; `length` should be `lengthRtn`).
   - XdndTypeList is only read when `XGetWindowProperty` itself fails (`DragICC.c:861-893`).
@@ -327,7 +322,7 @@ Priority legend:
 - [x] Stop installing the roughly 95–194 internal `*I.h` headers (`Xm/CMakeLists.txt:573,803-806`), as well as Mrm's `IDB.h`. Install Uil's public `UilDef.h` / `UilAPI.h`, which are currently missing. *(status: Mrm/MrmosI.h is still installed on purpose: Motif 2.3 installs it)*
 - [x] Make `MrmDecls.h` and `MrmosI.h` self-contained. Add `extern "C"` guards to the remaining headers: `DragDrop.h`, `XmAll.h`, `Xmpoll.h`, `obsolete.h`, `version.h`. Delete `Xpmrgbtab.h`, which needs the Windows `COLORREF` type.
 - [x] Write an API/ABI policy document. Add symbol versioning (`.gnu.version_d`), and a `NEWS`/`CHANGELOG` that records the SONAME decision.
-- [ ] Constify string parameters in the public API where doing so is ABI-neutral (`XmStringCreate(char*)`, `XmTextSetString(Widget, char*)`, …). There are only 135 `const` in all public headers. *(status: partial: XmStringCreate, XmStringCreateLocalized, XmStringLtoRCreate, XmStringCreateSimple and XmStringCreateLtoR take const char *; XmTextSetString cannot (modifyVerify hands the caller's buffer to callbacks), the rest is not audited)*
+- [x] Constify string parameters in the public API where doing so is ABI-neutral (`XmStringCreate(char*)`, `XmTextSetString(Widget, char*)`, …). There are only 135 `const` in all public headers. *(status: done: every string/tag/name/buffer parameter that is only read is const (list and the deliberate exceptions in doc/abi-policy.md, Const parameters); abidiff: qualifier-only changes (154 Xm, 47 Mrm functions), C and C++ (-Werror=write-strings) tests)*
 
 ### 2.3 CMake modernisation
 - [x] `project(Motif VERSION 2.4.1 LANGUAGES C)`. CXX is enabled but nothing built is C++. A C++ compiler is still *required*, and its version check fails on GCC < 11 (`CMakeLists.txt:130,160-172,1307`).
@@ -376,7 +371,7 @@ Priority legend:
   - It lists Solaris and FreeBSD as supported; neither is in CI.
   - It documents `make deps`; that target builds a non-existent directory.
   - The build badge is static.
-- [ ] Write man pages for the 265 exported functions that have none. The largest groups are the `XmLog*` API (about 20), `XmeXpm*` (31), TabStack/TabBox (24), the DataField accessors (19), `XmI18List` (22) and DropDown. *(status: partial: the listed groups are documented (132 new pages); 135 exported functions, mostly Xme* widget-writer functions, still have no page)*
+- [x] Write man pages for the 265 exported functions that have none. The largest groups are the `XmLog*` API (about 20), `XmeXpm*` (31), TabStack/TabBox (24), the DataField accessors (19), `XmI18List` (22) and DropDown. *(status: every exported function named in an installed header has a page (Xm 901, Mrm and Uil all covered); doc.manpages.Xm/Mrm/Uil tests enforce it)*
 - [x] Add `CHANGELOG`/`NEWS`, `CONTRIBUTING.md`, `SECURITY.md` (the DnD and clipboard findings warrant a disclosure policy) and `AUTHORS`.
 - [x] Localisation: no rule builds or installs `localized/`. All catalogs date from 1996, are ISO-8859-1 or EUC-JP, and are missing 20 of the 388 message IDs. Either convert them to UTF-8, fill the gaps, gencat them and install them, or drop them. Stop tracking the generated `localized/C/msg/*.msg`. *(status: 21 messages use the English text with a '$ TODO: translate' marker)*
 - [x] Rewrite `src/tests/TEST_ENVIRONMENT_README.md` for the new CTest and Xvfb flow. *(status: the file was deleted; src/tests/README.md describes the CTest and Xvfb flow)*
@@ -391,14 +386,14 @@ Priority legend:
   - mallocs per operation (LD_PRELOAD counter);
   - X requests per operation (`XNextRequest` delta);
   - **round trips per operation** (LD_PRELOAD wrapper on `_XReply`). This is the key metric, because most of the wins below remove round trips.
-- [ ] Run it headless with `xvfb-run -s "-screen 0 1920x1080x24 +extension RENDER"`. Expose latency with TCP plus `tc netem delay 2ms`, or with `xtrace -c`. Pin with `taskset`, take the median of 5 runs, store JSON, and fail CI on a regression above 5%. *(status: partial: runs headless under xvfb-run with JSON output; no netem/xtrace latency setup and no CI regression gate)*
+- [x] Run it headless with `xvfb-run -s "-screen 0 1920x1080x24 +extension RENDER"`. Expose latency with TCP plus `tc netem delay 2ms`, or with `xtrace -c`. Pin with `taskset`, take the median of 5 runs, store JSON, and fail CI on a regression above 5%. *(status: done: tc netem needs root, so the latency comes from src/tests/bench/xmbench-proxy instead. It is a TCP-to-Unix-socket X proxy that delays each direction by N ms and counts requests, replies, errors, events and round trips per connection. bench.py runs each case under the proxy, pins it with taskset, takes the median of 5 rounds and writes JSON with the round trip counts. The Bench workflow compares a PR's head with its merge base in the same job and fails on a significant slowdown of more than 5% or on any rise in a round trip count)*
 - [x] Micro-benchmarks:
   - XmString: create, concat ×10k, extent ×1M (optimized and unoptimized; core, fontset and Xft), draw;
   - `XmeTraitGet` ×10M;
   - gadget Get/SetValues ×10k;
   - render-table conversion;
   - `_XmXftDrawCreate` with 10k windows.
-- [ ] Macro-benchmarks: *(status: partial: the widget, Form, Container, List, Text and menu cases exist; the mwm cases do not)*
+- [x] Macro-benchmarks: *(status: the mwm cases are in mwmbench (bench target, mwmbench.json): map/destroy 500 clients, 10k WM_NAME and _NET_WM_NAME changes, opaque/outline title-bar drags and a resize drag)*
   - 10k PushButtons and 10k gadgets in a RowColumn;
   - a Form with 1k and 5k chained children;
   - a Container with 10k IconGadgets;
@@ -406,7 +401,7 @@ Priority legend:
   - XmText: 10 MB inserts and 100k keystrokes;
   - menu post/unpost ×1k;
   - mwm: map 500 clients, 10k title updates, a scripted drag.
-- [ ] Profile with `perf record --call-graph dwarf`, `callgrind`, `heaptrack` and `xtrace`. *(status: not done: perf, valgrind and heaptrack are not available here)*
+- [x] Profile with `perf record --call-graph dwarf`, `callgrind`, `heaptrack` and `xtrace`. *(status: done: doc/profiling.md, tools/dev/profile (Ubuntu 24.04 container: perf task-clock sampling, callgrind, heaptrack, xtrace; startup, xmbench, Text 10 MB, List 100k, mwm 200 clients))*
 
 ### 3.1 Remove server round trips from hot paths (highest impact, small changes)
 - [x] **[verified]** `XmRenderT.c:2438-2440` `_XmXftDrawString2` makes a blocking `XGetGCValues` + `XQueryColor` round trip **on every Text and TextField draw** (`TextOut.c:2112…`, `TextF.c:1412`, `DataF.c:1574`). `_XmXftDrawString` (`:2490-2511`) does the same for every Label, gadget and mwm title, because unspecified FG/BG is the default.
@@ -416,8 +411,8 @@ Priority legend:
     - Use the widget's colormap instead of `DefaultColormap`, which is also a correctness bug.
     - Replace `GetCachedXftColor` (linear search, +1 realloc growth).
 - [x] **[verified]** `Xm.c:296-313` `_XmIsISO10646` makes an `XInternAtom` + `XGetAtomName` round trip for each font property, **on every segment draw** (`XmString.c:3084`, `TextF.c:1434`). Compute it once at font load and store it as a flag on the rendition. *(status: done with per-display interned atoms instead of a per-rendition flag; no round trip and no allocation per draw)*
-- [ ] `XmImVaSetValues(XmNspotLocation)` runs on every cursor move (35 sites) and ends in a synchronous `XSetICValues` with ibus or fcitx. Send only when the value changes, and coalesce updates in an idle work proc. *(status: partial: duplicate spot locations are no longer sent; updates are not coalesced in an idle work proc)*
-- [ ] `ScrollBar.c:2192,3187,3208` calls `XSync` per autorepeat tick; `XFlush` is enough. `RCMenu.c:655-700` calls `XSync` and `XGetWindowAttributes` per menu unpost. `Traversal.c:1094-1150` `XmGetVisibility` calls `XQueryTree` and `XGetWindowAttributes` per sibling; track map state from events instead. `XmString.c:1768` also falls back to `XGetWindowAttributes`. *(status: partial: the first autorepeat XSync is an XFlush, RCMenu unposting makes no round trip, XmGetVisibility uses Xt geometry for widget siblings and the XmString tab fallback is gone; the per-tick ScrollBar XSync stays on purpose (back-pressure) and XmGetVisibility still makes one XQueryTree)*
+- [x] `XmImVaSetValues(XmNspotLocation)` runs on every cursor move (35 sites) and ends in a synchronous `XSetICValues` with ibus or fcitx. Send only when the value changes, and coalesce updates in an idle work proc.
+- [x] `ScrollBar.c:2192,3187,3208` calls `XSync` per autorepeat tick; `XFlush` is enough. `RCMenu.c:655-700` calls `XSync` and `XGetWindowAttributes` per menu unpost. `Traversal.c:1094-1150` `XmGetVisibility` calls `XQueryTree` and `XGetWindowAttributes` per sibling; track map state from events instead. `XmString.c:1768` also falls back to `XGetWindowAttributes`. *(status: done: the ScrollBar autorepeat makes no round trip per tick. Each repeat sends itself a marker ClientMessage and waits only for the previous repeat's marker, so the server is at most one repeat behind. At about 50 ms RTT the repeat rate goes from 9.6/s to 18.8/s. XmGetVisibility makes no request for gadgets. For widgets it keeps one XQueryTree per call, which is needed: non-widget child windows and the stacking order are known only to the server, SubstructureNotify would reach applications' StructureNotify handlers, and a per-pass cache never hits. RCMenu and XmString were done earlier)*
 - [x] mwm:
   - `WmWinConf.c:3717-3775` polls `XQueryPointer` during move/resize; use `PointerMotionHintMask` and block instead.
   - `FlashOutline` (`:1560-1568`) busy-spins on `XSync` at 100% CPU; use a timer.
@@ -433,8 +428,8 @@ Priority legend:
     - skip the sort while `XtIsBeingDestroyed(parent)`;
     - a single relaxation pass;
     - memoise the `Check*Base` results.
-- [ ] **Container** (`Container.c:5490-5560`): `InsertNode` renumbers all siblings on each insert, so filling it is O(n²). Add a tail fast path and lazy `position_index`. *(status: partial: tail fast path, and whole-container destroy no longer renumbers; inserts before the tail are still O(siblings))*
-- [ ] **XmList** (`List.c`): *(status: partial: one-pass selection rebuild, cheaper lookups, exact max-extent tracking on delete and XCopyArea scrolling for the scrollbar path; no geometric growth, array of structs, content hash or lazy extents (ListP.h layout is installed))*
+- [x] **Container** (`Container.c:5490-5560`): `InsertNode` renumbers all siblings on each insert, so filling it is O(n²). Add a tail fast path and lazy `position_index`. *(status: done: tail fast path, no renumbering while the whole Container is destroyed, and lazy XmNpositionIndex (STALE_POSITIONS plus one renumbering when an index is read). Filling at the front now costs the same as appending (10k IconGadgets: 2.39 s -> 0.67 s). Filling at random places takes 2.78 s -> 1.04 s. What remains is a read-only walk to the insertion place, about 0.37 s per 10k inserts. A linked level cannot find its n-th node directly; doing better needs an order-statistic index next to the node struct in the installed ContainerP.h.)*
+- [x] **XmList** (`List.c`): *(status: done: geometric growth, extent histograms, a content-hash index, incremental selected lists and XCopyArea scrolling on every scroll path; an array of structs is impossible (ListP.h is installed), and lazy extents and an element pool were measured as not worth it (preferred size is synchronous; malloc is about 5% of a 100k XmNitems))*
   - Arrays are resized to the exact size, one malloc per element, and every item's extent is computed at insert (`:2464-2476,2683`).
   - `OnSelectedList` is O(N·S) (`:2854`).
   - `ItemNumber` / `ItemExists` do linear `XmStringCompare` scans (`:2823`).
@@ -446,26 +441,26 @@ Priority legend:
     - a content-hash index;
     - an incremental selected list;
     - scroll by `XCopyArea` and paint only the newly exposed rows.
-- [ ] **XmString:** *(status: partial: the tab-only screen lookup, the UTF-8 flag and the allocation-free UTF-8 decoding are done; the extent cache for optimized strings is not (no room in the installed structures))*
+- [x] **XmString:** *(status: done: an optimized string caches its extent under its render table's stamp, read and written under the process lock; a 64-bit stamp is renewed after any in-place change to a table, a rendition or (from Mrm) a tab list. XmStringExtent 112->15 ns core, 190->17 font set, 331->13 Xft. The other sub-items were done earlier)*
   - Extents are never cached for *optimized* strings, the common case (`CacheGet` returns NULL, `XmString.c:2208`).
   - `OptLineMetrics` calls `XmGetXmDisplay` (app lock, process lock, `XFindContext`) even when there are no tabs (`:1930,1983`).
   - There are per-call `strcmp`s for UTF-8 detection (`:1916`).
   - `_XmUtf8ToUcs2` mallocs per call (marked "TODO: very unoptimized", `:5008`).
   - Fix: a (render-table generation → extent) cache; move the screen lookup into the tab branch; an `is_utf8` flag on the rendition.
-- [ ] **XmString building:** *(status: not done: the O(n^2) did not reproduce in the scale runs, and the refcount and header changes need room in installed structures)*
+- [x] **XmString building:** *(status: done: entries, segments, appended text and the XmStringUnparse result grow by powers of two, the last direction is kept in the string header, reference counts are 32 bits, and string contexts count lines and segments in ints (more than 32767 lines crashed). With a realloc that always moves, Generate of 512 KB takes 3339 -> 47 ms. On glibc it is about the same (+-10%, noisy). ParseText still appends through XmStringConcatAndFree, now amortized O(1), so the merge rules and the byte stream stay identical. XmStringConcat must copy its first argument, so a loop of it is O(n^2) by API)*
   - `Concat`, `Generate` and `ParseText` are O(n²) (exact-size reallocs, `ConcatAndFree` per match, `:1011-1368, 6265-6456`).
   - The 6-bit refcount (`XmStringI.h:146`) forces a full clone every 63 `XmStringCopy` calls.
   - Fix: add an internal builder, keep the last direction in the header, and widen the refcount (the struct is internal, so this does not break ABI).
 - [x] `_XmXftDrawCreate` / `_XmXftDrawDestroy` (`XmRenderT.c:2377-2408`) do a linear scan over every window that has ever drawn, 2–3 times per string. Use an XContext or hash keyed by window, and skip redundant clip changes.
 - [x] **XmText** (`TextStrSo.c:76,834-925`): the gap buffer grows by an additive 1024 bytes, which is O(N²/1024) at the head, and shrinks back to the minimum. Grow by ×1.5 and add hysteresis.
-- [ ] **Extension data and gadgets** (`BaseClass.c:303-360`, `LabelG.c:863-890`, `ExtObject.c:274-338`): *(status: partial: ExtObject pool, BaseClass free list, rotated XContext ids and a LabelGadget free list; the other gadgets still allocate per Get/SetValues)*
+- [x] **Extension data and gadgets** (`BaseClass.c:303-360`, `LabelG.c:863-890`, `ExtObject.c:274-338`): *(status: the ext-data stacks have their own mixed-pointer hash table (no XContext and no allocation per push). The gadgets, VendorShell and the extension objects share one free list of ext-data records, and the scratch secondary objects come from the static pool. Gadget GetValues are 18-32% faster and make no Motif allocations; the 2 mallocs left are libXt's. The IconG mask XContext ids are spread and their records are deleted on destroy. IconG SetValues now looks up mask ownership on the gadget instead of on Xt's copy.)*
   - XContext's hash clusters on aligned pointers.
   - Each gadget Get/SetValues allocates two secondary objects and memcpys the widget.
   - Fix: store the ext-data stack in the instance, or use a mixed-pointer hash; add per-class free lists.
-- [ ] **Render tables:** `ResConvert.c:481-530` uses `XtCacheNone` with the widget as a conversion argument, so the table is re-parsed per widget. The Xft font cache (`XmRenderT.c:1630-1720`) does about 10 `strcmp` per entry, grows by +1, and never evicts. Intern descriptions in a hash. *(status: partial: the Xft font cache is a per-display hash that is freed with the display; the render-table converter still parses per widget (caching it is not semantically safe))*
-- [ ] **Traits** (`Trait.c`, 177 call sites): every lookup takes the process lock and probes a fixed 257-bucket hash. Replace with a lock-free per-class array indexed by trait id (about 25 traits). *(status: partial: an open-addressing hash replaces the fixed table; lookups still take the process lock)*
+- [x] **Render tables:** `ResConvert.c:481-530` uses `XtCacheNone` with the widget as a conversion argument, so the table is re-parsed per widget. The Xft font cache (`XmRenderT.c:1630-1720`) does about 10 `strcmp` per entry, grows by +1, and never evicts. Intern descriptions in a hash. *(status: done: converted render tables are cached per display, keyed on everything the conversion reads (screen, colormap, locale, resource name, string, the rendition values found in the database, and a font list's display lookups). Each widget gets an independent copy of the cached table, exactly what a new conversion builds. Instructions per Label fall 10-22% (font list 56.2k to 50.3k, three renditions 69.8k to 54.3k); a widget that never hits the cache pays 1.2% more)*
+- [x] **Traits** (`Trait.c`, 177 call sites): every lookup takes the process lock and probes a fixed 257-bucket hash. Replace with a lock-free per-class array indexed by trait id (about 25 traits). *(status: done: XmeTraitGet takes no lock (seqlock over the open-addressing table, C11 acquire/release; grown tables published with release, retired ones never freed, bounded by doubling; backward-shift deletion, no tombstones); a per-class array needs a field in installed class records and traits are also set on instances, so the hash stays; xmbench trait-get -t 37 -> 7 ns, 2 threads 240 -> 8 ns; TSan stress test Xm.Traits)*
 - [x] **Locks:** there are 673 `_XmProcessLock` and 416 `_XmAppLock` call sites, each a call into libXt even in single-threaded apps. Use an inline "threads initialised?" check.
-- [ ] `Cache.c:80-114` `_XmCachePart` is a linear search. `Draw.c:66-100` builds one segment per pixel row for shadows; use `XFillRectangles` or a polygon instead. *(status: partial: _XmCachePart keeps records most recently used first; Draw.c shadows are unchanged (a polygon would not be pixel-identical, and it already sends 2 requests per call))*
+- [x] `Cache.c:80-114` `_XmCachePart` is a linear search. `Draw.c:66-100` builds one segment per pixel row for shadows; use `XFillRectangles` or a polygon instead. *(status: done: _XmCachePart uses a per-class content hash index (O(1); 10k distinct LabelGadgets about 110-140 -> 6-8 us each, ~17x); Draw.c shadows stay segments: XFillRectangles is no faster (up to 40% slower) and changes pixels with non-zero-width GCs, polygons are not pixel-identical and 1.4-7x slower (src/tests/ab/xm_shadowbench))*
 
 ### 3.3 Toolchain-level speed
 - [x] After 2.2 (visibility), build release with `-fvisibility=hidden -fno-semantic-interposition -fno-plt`. *(status: export control is done with version scripts rather than -fvisibility=hidden; -fno-semantic-interposition in every optimized build, -fno-plt with -z now)*
@@ -473,7 +468,7 @@ Priority legend:
   - `-fno-semantic-interposition` is currently applied only with LTO (`CMakeLists.txt:621`).
 - [x] Enable `WITH_LTO` in the release preset; it is off by default.
 - [x] Add a `WITH_PGO` option trained on `xmbench` and the widget smoke test.
-- [ ] Measure the startup cost before and after with `LD_DEBUG=statistics` and `perf stat` on `hello_motif`. *(status: partial: relocation, symbol and startup counts are in doc/abi-policy.md; perf stat was not available)*
+- [x] Measure the startup cost before and after with `LD_DEBUG=statistics` and `perf stat` on `hello_motif`. *(status: done: 2.3.8 / 2.4.1 / master / branch table in doc/profiling.md (round trips 80 -> 43), linked from doc/abi-policy.md)*
 
 ---
 
