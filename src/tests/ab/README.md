@@ -42,6 +42,11 @@ here is registered with CTest or built by default.
   (the creation of N Labels whose XmNrenderTable comes from the same
   resource: a font list, one and three renditions from the database, an
   Xft rendition).
+- `xm_shadowbench check|time [N]` compares XmeDrawShadows (one line
+  segment per pixel row and column) with XFillRectangles of the same
+  rows and with polygons: `check` counts the pixels that differ for
+  every shadow type, thicknesses 0 to 10 and several GCs, `time` gives
+  the time and request bytes per shadow.  It needs only one library.
 
 ## Usage
 

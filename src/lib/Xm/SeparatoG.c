@@ -372,6 +372,28 @@ int _XmSeparatorCacheCompare(XtPointer A, XtPointer B)
     return 0;
 }
 
+/*
+ * A hash of the fields that _XmSeparatorCacheCompare compares, for the cache index.
+ */
+static unsigned int SeparatorCacheHash(XtPointer cpart)
+{
+  XmSeparatorGCacheObjPart *p = (XmSeparatorGCacheObjPart *)cpart;
+  unsigned int h = 0;
+  h = _XmCacheHashAdd(h, (unsigned long)p->margin);
+  h = _XmCacheHashAdd(h, (unsigned long)p->orientation);
+  h = _XmCacheHashAdd(h, (unsigned long)p->separator_type);
+  h = _XmCacheHashAdd(h, (unsigned long)p->separator_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->background_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->top_shadow_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->bottom_shadow_GC);
+  h = _XmCacheHashAdd(h, (unsigned long)p->background);
+  h = _XmCacheHashAdd(h, (unsigned long)p->top_shadow_color);
+  h = _XmCacheHashAdd(h, (unsigned long)p->top_shadow_pixmap);
+  h = _XmCacheHashAdd(h, (unsigned long)p->bottom_shadow_color);
+  h = _XmCacheHashAdd(h, (unsigned long)p->bottom_shadow_pixmap);
+  return h;
+}
+
 /***********************************************************
  *
  *  ClassInitialize
@@ -380,6 +402,7 @@ int _XmSeparatorCacheCompare(XtPointer A, XtPointer B)
 static void ClassInitialize(void)
 {
   separatorBaseClassExtRec.record_type = XmQmotif;
+  _XmCacheSetHashProc(&SeparatorClassCachePart, SeparatorCacheHash);
   /* Install the menu savvy trait. */
   XmeTraitSet(
       (XtPointer)xmSeparatorGadgetClass, XmQTmenuSavvy, (XtPointer)&MenuSavvySeparatorRecord);

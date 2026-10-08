@@ -54,6 +54,9 @@ static const struct suite_entry {
 	{ "Traits",        traits_suite,          0 },
 	{ "Gadgets",       gadgets_suite,         1 },
 	{ "XmIm",          xmim_suite,            1 },
+	{ "Cache",         cache_suite,           0 },
+	{ "GadgetCache",   gadget_cache_suite,    1 },
+	{ "Draw",          draw_suite,            1 },
 };
 
 #define N_SUITES (sizeof suite_table / sizeof suite_table[0])

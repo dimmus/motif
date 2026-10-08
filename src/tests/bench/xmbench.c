@@ -460,6 +460,35 @@ static long cache_run(long n)
 	return n;
 }
 
+/* Every gadget with a look of its own: n distinct cache parts. */
+static long cache_distinct_run(long n)
+{
+	long i;
+
+	for (i = 0; i < n; i++)
+		XtVaCreateWidget("g", xmLabelGadgetClass, work,
+				 XmNmarginWidth, (Dimension)(i % 100),
+				 XmNmarginHeight, (Dimension)(i / 100 % 100),
+				 NULL);
+	return n;
+}
+
+/*
+ * The same with colors: each gadget its own foreground and select color.
+ * Most of the time goes to Xt's GC cache, which is a list too.
+ */
+static long cache_colors_run(long n)
+{
+	long i;
+
+	for (i = 0; i < n; i++)
+		XtVaCreateWidget("g", xmToggleButtonGadgetClass, work,
+				 XmNforeground, (Pixel)i,
+				 XmNselectColor, (Pixel)(n - i),
+				 NULL);
+	return n;
+}
+
 /* ------------------------------------------------------------------ */
 /* XmText source                                                       */
 /* ------------------------------------------------------------------ */
@@ -1205,6 +1234,10 @@ static const struct bench_case cases[] = {
 	  1, 100000, NULL, NULL, shell_get_run, NULL, NULL },
 	{ "gadget-cache", "micro", "create LabelGadgets, 200 distinct cache parts",
 	  1, 10000, NULL, cache_setup, cache_run, destroy_work, NULL },
+	{ "gadget-cache-distinct", "micro", "create LabelGadgets, all distinct cache parts",
+	  1, 10000, NULL, cache_setup, cache_distinct_run, destroy_work, NULL },
+	{ "gadget-cache-colors", "micro", "create ToggleButtonGadgets, all distinct colors",
+	  1, 2000, NULL, cache_setup, cache_colors_run, destroy_work, NULL },
 	{ "xmstring-create", "micro", "XmStringCreateLocalized + XmStringFree",
 	  0, 200000, NULL, NULL, xs_create_run, NULL, NULL },
 	{ "xmstring-concat", "micro", "XmStringConcatAndFree, one segment at a time",

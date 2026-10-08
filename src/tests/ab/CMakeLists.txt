@@ -15,7 +15,11 @@ add_executable(xm_layoutbench EXCLUDE_FROM_ALL layoutbench.c)
 target_include_directories(xm_layoutbench PRIVATE ${CMAKE_BINARY_DIR}/include)
 target_link_libraries(xm_layoutbench PRIVATE Xm ${CMAKE_DL_LIBS})
 
-set(MOTIF_AB_TARGETS xm_abtest xm_layoutbench)
+add_executable(xm_shadowbench EXCLUDE_FROM_ALL shadowbench.c)
+target_include_directories(xm_shadowbench PRIVATE ${CMAKE_BINARY_DIR}/include)
+target_link_libraries(xm_shadowbench PRIVATE Xm)
+
+set(MOTIF_AB_TARGETS xm_abtest xm_layoutbench xm_shadowbench)
 
 # The ScrollBar autorepeat timing presses the button with XTest.
 pkg_check_modules(MOTIF_XTST IMPORTED_TARGET xtst)
