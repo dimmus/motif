@@ -13,15 +13,22 @@ here is registered with CTest or built by default.
   prints child geometry, selection and scroll state, callbacks and a hash
   of the window pixels after every step.  Modes: `form`, `formcyc`
   (attachment cycles), `formgrid`, `formcolumn`, `formwide`, `container`,
-  `list`, `listscroll`, and `xmstring`, which builds strings from SIZE
-  random pieces (concatenation, copies, XmStringGenerate,
-  XmStringParseText) and prints their byte streams, text and extents
-  with a core font, a font set and Xft, also after the render tables
-  change.
+  `list`, `listscroll`, `listapi` (the List API alone, without input:
+  lookups, selection and replacement by value with many duplicates, and
+  the item and selection resources), `listmix` (the same with keyboard
+  and button actions of the List, called with synthetic events,
+  interleaved with the API, also between a button press and its release,
+  and changes of the selection policy), and `xmstring`, which builds
+  strings from SIZE random pieces (concatenation, copies,
+  XmStringGenerate, XmStringParseText) and prints their byte streams,
+  text and extents with a core font, a font set and Xft, also after the
+  render tables change.
 - `ab.sh OLD_LIBDIR NEW_LIBDIR MODE FIRST LAST [SIZE]` runs a range of
   seeds against both libraries and reports seeds whose output differs.
-- `xm_layoutbench form|container|list N` times the phases of a layout
-  with N children or items.
+- `xm_layoutbench form|container|list|listops N` times the phases of a
+  layout with N children or items; `listops` times the List item and
+  selection operations (adds at both ends, lookups, selection and
+  deletion by value and by position, replacements).
 
 ## Usage
 

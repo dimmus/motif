@@ -14,8 +14,8 @@
  *   xm_abtest MODE SEED [SIZE]
  *
  * MODE is form, formcyc, formgrid, formcolumn, formwide, container,
- * list, listscroll or xmstring.  SIZE 0 (the default) lets the seed
- * choose.
+ * list, listapi, listmix, listscroll or xmstring.  SIZE 0 (the default)
+ * lets the seed choose.
  * Setting ABT_DESTROY_UNMANAGED also destroys unmanaged Form children.
  */
 #include <Xm/XmP.h>
@@ -1370,6 +1370,353 @@ static void xmstring_test(int pieces)
     XmRenderTableFree(str_rt[i]);
 }
 
+/* Items with many duplicates, and some multi-segment ones that compare
+ * equal to single-segment items. */
+static XmString mkapiitem(int range)
+{
+  char text[64];
+  int v = rn(range);
+  XmString a, b, s;
+  snprintf(text, sizeof(text), "it %d%.*s", v, v % 7 * 3, "=====================");
+  if (rn(8))
+    return XmStringCreateLocalized(text);
+  /* "it " followed by the rest as a second segment */
+  a = XmStringCreateLocalized("it ");
+  b = XmStringCreateLocalized(text + 3);
+  s = XmStringConcat(a, b);
+  XmStringFree(a);
+  XmStringFree(b);
+  return s;
+}
+
+static void dump_list_api(Widget list)
+{
+  int count, i, kbd, *pos = NULL, npos = 0;
+  unsigned int h = 2166136261u;
+  XmStringTable items = NULL;
+  XtVaGetValues(list, XmNitemCount, &count, XmNitems, &items, NULL);
+  for (i = 0; i < count; i++) {
+    char *t = (char *)XmStringUnparse(items[i], NULL, XmCHARSET_TEXT, XmCHARSET_TEXT, NULL, 0,
+                                      XmOUTPUT_ALL);
+    const char *c;
+    for (c = t ? t : "?"; *c; c++)
+      h = (h ^ (unsigned char)*c) * 16777619u;
+    h = (h ^ '|') * 16777619u;
+    XtFree(t);
+  }
+  kbd = XmListGetKbdItemPos(list);
+  printf("  items=%08x kbd=%d size=%dx%d", h, kbd, XtWidth(list), XtHeight(list));
+  if (XmListGetSelectedPos(list, &pos, &npos)) {
+    printf(" getsel=[");
+    for (i = 0; i < npos; i++)
+      printf(" %d", pos[i]);
+    printf(" ]");
+    XtFree((char *)pos);
+  }
+  printf("\n");
+  dump_list(list);
+}
+
+/* listmix: actions of the List interleaved with the API, through
+ * XtCallActionProc with synthetic events (no xdotool). */
+static int api_mix;
+static Time mix_time = 1000;
+
+static void mix_key(Widget list, const char *action)
+{
+  XKeyEvent ev;
+  memset(&ev, 0, sizeof(ev));
+  ev.type = KeyPress;
+  ev.display = dpy;
+  ev.window = XtWindow(list);
+  ev.time = (mix_time += 1000);
+  printf("  action %s\n", action);
+  XtCallActionProc(list, (String)action, (XEvent *)&ev, NULL, 0);
+}
+
+/* A button event over position pos (1-based), or below the items. */
+static void mix_button(Widget list, int type, const char *action, int pos)
+{
+  XButtonEvent ev;
+  Position x = 4, y = 4;
+  Dimension w, h;
+  memset(&ev, 0, sizeof(ev));
+  if (!XmListPosToBounds(list, pos, &x, &y, &w, &h))
+    y = (Position)(XtHeight(list) - 2);
+  ev.type = type;
+  ev.display = dpy;
+  ev.window = XtWindow(list);
+  ev.x = x + 2;
+  ev.y = y + 1;
+  ev.button = Button1;
+  ev.time = (mix_time += (type == ButtonPress ? 1000 : 10));
+  printf("  action %s %d\n", action, pos);
+  XtCallActionProc(list, (String)action, (XEvent *)&ev, NULL, 0);
+}
+
+/* A visible position, for the button actions. */
+static int mix_pos(Widget list)
+{
+  int top_pos = 1, vis = 1;
+  XtVaGetValues(list, XmNtopItemPosition, &top_pos, XmNvisibleItemCount, &vis, NULL);
+  return top_pos + rn(vis + 1);
+}
+
+static const char *const mix_keys[] = {
+    "ListKbdSelectAll",  "ListKbdDeSelectAll", "ListKbdActivate",   "ListNextItem",
+    "ListPrevItem",      "ListShiftNextItem",  "ListShiftPrevItem", "ListCtrlNextItem",
+    "ListAddMode",       "ListBeginData",      "ListEndData",       "ListEndDataExtend",
+    "ListKbdBeginSelect", "ListKbdEndSelect",  "ListKbdCtrlSelect", "ListKbdCtrlUnSelect",
+    "ListKbdShiftSelect", "ListKbdShiftUnSelect", "ListKbdCancel",  "ListNextPage",
+};
+
+static const char *const mix_begin[] = {"ListBeginSelect", "ListBeginToggle", "ListBeginExtend"};
+static const char *const mix_end[] = {"ListEndSelect", "ListEndToggle", "ListEndExtend"};
+
+/* The List API only, with many duplicate items: lookups, selection and
+ * replacement by value, and the item and selection resources. */
+static void list_api_test(int nitems)
+{
+  Arg args[16];
+  int n = 0, i, round, range = 1 + nitems / (1 + rn(4));
+  Widget list;
+  XmString *tab;
+  unsigned char policy =
+      pick(4, XmSINGLE_SELECT, XmBROWSE_SELECT, XmMULTIPLE_SELECT, XmEXTENDED_SELECT);
+  XtSetArg(args[n], XmNselectionPolicy, policy), n++;
+  XtSetArg(args[n], XmNvisibleItemCount, 3 + rn(15)), n++;
+  XtSetArg(args[n], XmNlistSizePolicy, pick(3, XmCONSTANT, XmVARIABLE, XmRESIZE_IF_POSSIBLE)),
+      n++;
+  if (rn(2))
+    XtSetArg(args[n], XmNlistSpacing, rn(4)), n++;
+  tab = calloc(nitems + 1, sizeof(XmString));
+  for (i = 0; i < nitems; i++)
+    tab[i] = mkapiitem(range);
+  XtSetArg(args[n], XmNitems, tab), n++;
+  XtSetArg(args[n], XmNitemCount, nitems), n++;
+  if (nitems && rn(3) == 0) {
+    XtSetArg(args[n], XmNselectedItems, tab + rn(nitems)), n++;
+    XtSetArg(args[n], XmNselectedItemCount, 1), n++;
+  }
+  list = XmCreateScrolledList(top, "list", args, n);
+  for (i = 0; i < nitems; i++)
+    XmStringFree(tab[i]);
+  free(tab);
+  XtAddCallback(list, XmNsingleSelectionCallback, list_cb, NULL);
+  XtAddCallback(list, XmNbrowseSelectionCallback, list_cb, NULL);
+  XtAddCallback(list, XmNmultipleSelectionCallback, list_cb, NULL);
+  XtAddCallback(list, XmNextendedSelectionCallback, list_cb, NULL);
+  XtManageChild(list);
+  printf("listapi policy=%d n=%d range=%d\n", policy, nitems, range);
+  XtRealizeWidget(top);
+  checkpoint("realize", top);
+  dump_list_api(list);
+  for (round = 0; round < 120; round++) {
+    int count, what = rn(api_mix ? 32 : 22), k, m;
+    XmString s, *t;
+    int *p;
+    XtVaGetValues(list, XmNitemCount, &count, NULL);
+    m = 1 + rn(rn(4) ? 4 : 60);
+    t = calloc(m, sizeof(XmString));
+    p = calloc(m, sizeof(int));
+    for (k = 0; k < m; k++) {
+      t[k] = mkapiitem(range + 2);
+      p[k] = rn(count + 2);
+    }
+    s = t[0];
+    printf("op %d m=%d\n", what, m);
+    switch (what) {
+      case 0:
+        XmListAddItem(list, s, rn(count + 2));
+        break;
+      case 1:
+        XmListAddItems(list, t, m, rn(count + 2));
+        break;
+      case 2:
+        XmListAddItemsUnselected(list, t, m, rn(count + 2));
+        break;
+      case 3:
+        XmListDeleteItem(list, s);
+        break;
+      case 4:
+        XmListDeleteItems(list, t, m);
+        break;
+      case 5:
+        XmListDeletePositions(list, p, m);
+        break;
+      case 6:
+        if (count)
+          XmListDeleteItemsPos(list, m, 1 + rn(count));
+        break;
+      case 7:
+        XmListDeletePos(list, rn(count + 1));
+        break;
+      case 8:
+      case 9:
+        for (k = 0; k < m; k++)
+          XmListSelectItem(list, t[k], rn(4) == 0);
+        break;
+      case 10:
+        for (k = 0; k < m; k++)
+          XmListSelectPos(list, p[k], rn(4) == 0);
+        break;
+      case 11:
+        for (k = 0; k < m; k++)
+          XmListDeselectItem(list, t[k]);
+        break;
+      case 12:
+        for (k = 0; k < m; k++)
+          XmListDeselectPos(list, p[k]);
+        break;
+      case 13: {
+        XmString *u = calloc(m, sizeof(XmString));
+        for (k = 0; k < m; k++)
+          u[k] = mkapiitem(range + 2);
+        if (rn(2))
+          XmListReplaceItems(list, t, m, u);
+        else
+          XmListReplaceItemsUnselected(list, t, m, u);
+        for (k = 0; k < m; k++)
+          XmStringFree(u[k]);
+        free(u);
+        break;
+      }
+      case 14:
+        for (k = 0; k < m; k++)
+          if (p[k] < 1 || p[k] > count)
+            p[k] = count ? 1 + rn(count) : 1;
+        XmListReplacePositions(list, p, t, m);
+        break;
+      case 15: {
+        int *mp = NULL, mc = 0;
+        for (k = 0; k < m; k++) {
+          printf("  exists=%d pos=%d", XmListItemExists(list, t[k]), XmListItemPos(list, t[k]));
+          if (XmListGetMatchPos(list, t[k], &mp, &mc)) {
+            int j;
+            printf(" match:");
+            for (j = 0; j < mc; j++)
+              printf(" %d", mp[j]);
+            XtFree((char *)mp);
+          }
+          printf(" possel=%d\n", XmListPosSelected(list, p[k]));
+        }
+        break;
+      }
+      case 16: {
+        XmString *all = NULL;
+        XmString *sel = calloc(m, sizeof(XmString));
+        XtVaGetValues(list, XmNitems, &all, NULL);
+        for (k = 0; k < m; k++)
+          sel[k] = (count && rn(3)) ? XmStringCopy(all[rn(count)]) : XmStringCopy(t[k]);
+        XtVaSetValues(list, XmNselectedItems, sel, XmNselectedItemCount, rn(3) ? m : 0, NULL);
+        for (k = 0; k < m; k++)
+          XmStringFree(sel[k]);
+        free(sel);
+        break;
+      }
+      case 17:
+        for (k = 0; k < m; k++)
+          if (p[k] < 1 || p[k] > count)
+            p[k] = count ? 1 + rn(count) : 1;
+        /* Without a selection: the old code reads the freed selected
+         * items when the positions replace them. */
+        XmListDeselectAllItems(list);
+        if (count)
+          XtVaSetValues(list, XmNselectedPositions, p, XmNselectedPositionCount, m, NULL);
+        break;
+      case 18: {
+        /* a new item list, or part of the current one */
+        XmString *all = NULL;
+        XtVaGetValues(list, XmNitems, &all, NULL);
+        if (rn(2) && count)
+          XtVaSetValues(list, XmNitems, all + rn(count), XmNitemCount, 1 + rn(1), NULL);
+        else
+          XtVaSetValues(list, XmNitems, t, XmNitemCount, rn(m + 1), NULL);
+        break;
+      }
+      case 19:
+        if (rn(3) == 0)
+          XmListDeleteAllItems(list);
+        else if (rn(2))
+          XmListDeselectAllItems(list);
+        else
+          XmListUpdateSelectedList(list);
+        break;
+      case 20:
+        if (rn(2))
+          XmListSetItem(list, s);
+        else
+          XmListSetBottomItem(list, s);
+        break;
+      case 21:
+        XmListReplaceItemsPos(list, t, m, 1 + rn(count + 1));
+        break;
+      case 22:
+      case 23:
+      case 24:
+        for (k = 0; k < m && k < 6; k++)
+          mix_key(list, mix_keys[rn(sizeof(mix_keys) / sizeof(mix_keys[0]))]);
+        break;
+      case 25:
+      case 26: {
+        /* a click, or a drag over a few items */
+        int b = rn(3), from = mix_pos(list);
+        mix_button(list, ButtonPress, mix_begin[b], from);
+        if (rn(2))
+          mix_button(list, MotionNotify, "ListButtonMotion", mix_pos(list));
+        mix_button(list, ButtonRelease, mix_end[b], mix_pos(list));
+        break;
+      }
+      case 27: {
+        /* the API between a press and its release */
+        int b = rn(3);
+        mix_button(list, ButtonPress, mix_begin[b], mix_pos(list));
+        switch (rn(5)) {
+          case 0:
+            XmListSelectPos(list, p[0], False);
+            break;
+          case 1:
+            XmListDeselectPos(list, p[0]);
+            break;
+          case 2:
+            XmListDeletePos(list, p[0]);
+            break;
+          case 3:
+            XmListAddItem(list, s, p[0]);
+            break;
+          default:
+            XmListSelectItem(list, s, rn(2));
+            break;
+        }
+        if (rn(2))
+          mix_button(list, MotionNotify, "ListButtonMotion", mix_pos(list));
+        mix_button(list, ButtonRelease, mix_end[b], mix_pos(list));
+        break;
+      }
+      case 28:
+        XtVaSetValues(list, XmNselectionPolicy,
+                      pick(4, XmSINGLE_SELECT, XmBROWSE_SELECT, XmMULTIPLE_SELECT,
+                           XmEXTENDED_SELECT),
+                      NULL);
+        break;
+      case 29:
+        XmListSetAddMode(list, rn(2));
+        break;
+      default:
+        for (k = 0; k < m && k < 8; k++)
+          XmListSelectPos(list, p[k], rn(2));
+        break;
+    }
+    for (k = 0; k < m; k++)
+      XmStringFree(t[k]);
+    free(t);
+    free(p);
+    if (round % 10 == 9)
+      checkpoint("ops", top);
+    dump_list_api(list);
+  }
+}
+
 static void quiet(String msg) { printf("  warning: %s\n", msg); }
 static int xerr(Display *d, XErrorEvent *e)
 {
@@ -1407,6 +1754,12 @@ int main(int argc, char **argv)
     container_test(size ? size : 1 + rn(40));
   else if (!strcmp(mode, "list"))
     list_test(size ? size : rn(4) == 0 ? rn(3) : rn(300));
+  else if (!strcmp(mode, "listapi"))
+    list_api_test(size ? size : rn(4) == 0 ? rn(10) : rn(400));
+  else if (!strcmp(mode, "listmix")) {
+    api_mix = 1;
+    list_api_test(size ? size : rn(4) == 0 ? rn(10) : rn(400));
+  }
   else if (!strcmp(mode, "listscroll")) {
     scroll_mode = 1;
     list_test(size ? size : 20 + rn(400));

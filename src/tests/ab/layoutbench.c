@@ -7,7 +7,7 @@
  * xm_layoutbench: wall-clock timings of the Form, Container and List
  * layout code with many children or items.
  *
- *   xm_layoutbench form|container|list N
+ *   xm_layoutbench form|container|list|listops N
  *
  * Prints the time of each phase (create, manage, resize, destroy, ...)
  * to stdout.  With PROF=FILE it also samples the stack on SIGPROF and
@@ -225,6 +225,30 @@ static void list_bench(int n)
   for (i = 0; i < 1000; i++)
     XmListSetPos(list, 1 + (n / 2) + (i % 2));
   lap("1000 one-line scrolls");
+  /* the same, waiting for the X server to draw each one */
+  for (i = 0; i < 1000; i++) {
+    XmListSetPos(list, 1 + (n / 2) + (i % 2));
+    XSync(dpy, False);
+  }
+  lap("1000 one-line scrolls, synced");
+  {
+    /* the location cursor at the bottom row, then down and up a line */
+    XKeyEvent ev;
+    memset(&ev, 0, sizeof(ev));
+    ev.type = KeyPress;
+    ev.display = dpy;
+    ev.window = None; /* as from an accelerator: without the focus */
+    XmListSetPos(list, 1);
+    XmListSetKbdItemPos(list, 20);
+    settle();
+    start();
+    for (i = 0; i < 1000; i++) {
+      ev.time += 100;
+      XtCallActionProc(list, "ListNextItem", (XEvent *)&ev, NULL, 0);
+      XSync(dpy, False);
+    }
+    lap("1000 keyboard line scrolls, synced");
+  }
   {
     Widget vsb = NULL;
     int value, size, inc, page;
@@ -258,6 +282,124 @@ static void list_bench(int n)
   lap("XmListAddItems all + delete all");
 }
 
+/* A pseudo-random sequence that does not depend on the C library. */
+static unsigned int lcg_state = 12345;
+static int rnd(int n)
+{
+  lcg_state = lcg_state * 1103515245u + 12345u;
+  return (int)((lcg_state >> 8) % (unsigned int)n);
+}
+
+/* The XmList operations on many items: adds, lookups, selection,
+ * deletes and replacements by value and by position. */
+static void listops_bench(int n)
+{
+  Widget list;
+  XmString *t = calloc(n, sizeof(XmString));
+  XmString *u = calloc(n, sizeof(XmString));
+  XmString *sel;
+  int *pos = calloc(1000, sizeof(int));
+  int i, k, count;
+  char buf[64];
+  XKeyEvent ev;
+  list = XmCreateScrolledList(top, "list", NULL, 0);
+  XtVaSetValues(list, XmNvisibleItemCount, 20, XmNselectionPolicy, XmMULTIPLE_SELECT, NULL);
+  XtManageChild(list);
+  XtRealizeWidget(top);
+  printf("listops n=%d\n", n);
+  for (i = 0; i < n; i++) {
+    snprintf(buf, sizeof(buf), "item number %d", i);
+    t[i] = XmStringCreateLocalized(buf);
+    snprintf(buf, sizeof(buf), "other item %d", i);
+    u[i] = XmStringCreateLocalized(buf);
+  }
+  memset(&ev, 0, sizeof(ev));
+  ev.type = KeyPress;
+  ev.display = dpy;
+  ev.window = XtWindow(list);
+  start();
+  for (i = 0; i < n; i++)
+    XmListAddItemUnselected(list, t[i], 0);
+  lap("append one by one");
+  XmListDeleteAllItems(list);
+  lap("delete all");
+  for (i = 0; i < n; i++)
+    XmListAddItemUnselected(list, t[n - 1 - i], 1);
+  lap("add one by one at the top");
+  for (i = 0; i < 10000; i++)
+    if (XmListItemPos(list, t[rnd(n)]) == 0)
+      printf("missing\n");
+  lap("10000 XmListItemPos");
+  for (i = 0; i < 10000; i++)
+    XmListSelectItem(list, t[rnd(n)], False);
+  lap("10000 select by value");
+  for (i = 0; i < 10000; i++)
+    XmListSelectPos(list, 1 + rnd(n), False);
+  lap("10000 select by position");
+  for (i = 0; i < 5000; i++)
+    XmListDeselectPos(list, 1 + rnd(n));
+  lap("5000 deselect by position");
+  for (i = 0; i < 1000; i++)
+    XtCallActionProc(list, "ListNextPage", (XEvent *)&ev, NULL, 0);
+  lap("1000 page-downs");
+  for (i = 0; i < 1000; i++)
+    XtCallActionProc(list, "ListPrevPage", (XEvent *)&ev, NULL, 0);
+  lap("1000 page-ups");
+  XmListAddItems(list, u, n / 10, n / 2);
+  lap("add n/10 checking the selection");
+  for (i = 0; i < 1000; i++)
+    XmListDeleteItem(list, t[rnd(n)]);
+  lap("1000 delete by value");
+  for (i = 0; i < 1000; i++) {
+    XtVaGetValues(list, XmNitemCount, &count, NULL);
+    XmListDeletePos(list, count / 2);
+  }
+  lap("1000 delete from the middle");
+  for (i = 0; i < 1000; i++) {
+    XtVaGetValues(list, XmNitemCount, &count, NULL);
+    pos[i] = 1 + rnd(count);
+  }
+  XmListDeletePositions(list, pos, 1000);
+  lap("XmListDeletePositions 1000");
+  for (i = 0; i < 1000; i++) {
+    k = rnd(n);
+    XmListReplaceItems(list, &t[k], 1, &u[k]);
+  }
+  lap("1000 XmListReplaceItems");
+  XtVaGetValues(list, XmNselectedItems, &sel, XmNselectedItemCount, &count, NULL);
+  printf("  (%d selected)\n", count);
+  start();
+  XmListDeleteItems(list, sel, count < 2000 ? count : 2000);
+  lap("XmListDeleteItems 2000 selected");
+  XtVaSetValues(list, XmNselectedItems, t, XmNselectedItemCount, n / 10, NULL);
+  lap("XmNselectedItems n/10");
+  for (i = 0; i < 1000; i++)
+    XmListDeselectItem(list, t[rnd(n / 10)]);
+  lap("1000 deselect by value");
+  {
+    /* 300 ever wider items, deleted from the widest: each time the
+     * list shrinks to the next one. */
+    char wide[400];
+    XmString s;
+    for (i = 0; i < 300; i++) {
+      memset(wide, '#', 40 + i);
+      wide[40 + i] = '\0';
+      s = XmStringCreateLocalized(wide);
+      XmListAddItemUnselected(list, s, 1 + rnd(1000));
+      XmStringFree(s);
+    }
+    start();
+    for (i = 299; i >= 0; i--) {
+      memset(wide, '#', 40 + i);
+      wide[40 + i] = '\0';
+      s = XmStringCreateLocalized(wide);
+      XmListDeleteItem(list, s);
+      XmStringFree(s);
+    }
+    lap("300 deletes of the widest by value");
+  }
+}
+
 int main(int argc, char **argv)
 {
   const char *mode = argc > 1 ? argv[1] : "form";
@@ -281,5 +423,7 @@ int main(int argc, char **argv)
     container_bench(n, XmDETAIL);
   else if (!strcmp(mode, "list"))
     list_bench(n);
+  else if (!strcmp(mode, "listops"))
+    listops_bench(n);
   return 0;
 }
