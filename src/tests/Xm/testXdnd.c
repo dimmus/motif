@@ -310,24 +310,6 @@ static void peer_events(void)
 	}
 }
 
-/* Run the peer until cond() holds, or for ms milliseconds. */
-static int peer_pump(int (*cond)(void), long ms)
-{
-	long deadline = now_ms() + ms;
-	struct pollfd fd;
-
-	for (;;) {
-		peer_events();
-		if (cond && cond())
-			return 1;
-		if (now_ms() >= deadline)
-			return 0;
-		fd.fd = ConnectionNumber(peer);
-		fd.events = POLLIN;
-		(void)poll(&fd, 1, 10);
-	}
-}
-
 /* Run both ends (or Motif only) until cond() holds, or for ms milliseconds. */
 static int pump(int (*cond)(void), long ms)
 {
@@ -770,6 +752,24 @@ END_TEST
 /* ------------------------------------------------------------------ */
 
 #ifdef XM_WITH_XTST
+/* Run the peer until cond() holds, or for ms milliseconds. */
+static int peer_pump(int (*cond)(void), long ms)
+{
+	long deadline = now_ms() + ms;
+	struct pollfd fd;
+
+	for (;;) {
+		peer_events();
+		if (cond && cond())
+			return 1;
+		if (now_ms() >= deadline)
+			return 0;
+		fd.fd = ConnectionNumber(peer);
+		fd.events = POLLIN;
+		(void)poll(&fd, 1, 10);
+	}
+}
+
 static Widget src_shell, src;
 static unsigned char drag_operations;
 
