@@ -890,7 +890,10 @@ static void ReceiverShellExternalSourceHandler(Widget w,
         dc->drag.currReceiverInfo = _XmAllocReceiverInfo(dc);
         dc->drag.currReceiverInfo->shell = shell;
         dc->drag.currReceiverInfo->dragProtocolStyle = dd->display.dragReceiverProtocolStyle;
-        if (!q.hasDropStart && teCallback->dragProtocolStyle == XmDRAG_XDND)
+        /* an Xdnd drop can come in one go with its XdndEnter */
+        if (q.hasDropStart ?
+                dsCallback->iccHandle == XInternAtom(XtDisplay(w), "XdndSelection", False) :
+                teCallback->dragProtocolStyle == XmDRAG_XDND)
           dc->drag.currReceiverInfo->dragProtocolStyle = XmDRAG_XDND;
         _XmReadInitiatorInfo((Widget)dc);
       }
@@ -911,6 +914,23 @@ static void ReceiverShellExternalSourceHandler(Widget w,
         dropStartCB.y = dc->drag.currReceiverInfo->yLast;
       }
       _XmDSMUpdate(dsm, (XtPointer)&topClientData, (XtPointer)&dropStartCB);
+      /*
+       * An Xdnd drag ends at the target with the drop: no XdndLeave
+       * follows.  Leave the drop site and the shell, so that the drop
+       * site manager keeps neither them nor the drag context, which goes
+       * when the transfer is done, for the next drag.
+       */
+      if (dc->drag.currReceiverInfo->dragProtocolStyle == XmDRAG_XDND) {
+        XmTopLevelLeaveCallbackStruct leave;
+        leave.reason = XmCR_TOP_LEVEL_LEAVE;
+        leave.event = NULL;
+        leave.timeStamp = dropStartCB.timeStamp;
+        leave.screen = XtScreen(shell);
+        leave.window = dropStartCB.window;
+        topClientData.window = XtWindow(w);
+        topClientData.dragOver = NULL;
+        _XmDSMUpdate(dsm, (XtPointer)&topClientData, (XtPointer)&leave);
+      }
     }
     /*
      * we only see enters if they're not matched with a leave

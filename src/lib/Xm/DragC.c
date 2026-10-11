@@ -681,13 +681,18 @@ static void DragContextDestroy(Widget w)
   XmDropFinishCallbackStruct cb;
   XmDragContext dc = (XmDragContext)w;
   Cardinal i;
-  /* Make sure we send XdndFinished back to the source */
+  /*
+   * Make sure we send XdndFinished back to the source, after a drop:
+   * with the operation of the drop (see ExternalNotifyHandler()) and
+   * the outcome of its transfer (see TerminateTransfer() in DropTrans.c).
+   */
   if (dc->drag.sourceIsExternal && dc->drag.activeProtocolStyle == XmDRAG_XDND) {
     cb.reason = XmCR_DROP_FINISH;
     cb.event = NULL;
     cb.timeStamp = dc->drag.dropFinishTime;
     cb.operation = dc->drag.operation;
     cb.operations = dc->drag.operations;
+    cb.dropSiteStatus = XmVALID_DROP_SITE;
     cb.dropAction = dc->drag.dragCompletionStatus;
     cb.completionStatus = dc->drag.dragDropCompletionStatus;
     ExternalNotifyHandler(w, (XtPointer)dc, &cb);
@@ -967,6 +972,9 @@ static void SendDragMessage(XmDragContext dc, Window destination, unsigned char 
   if (dc->drag.activeProtocolStyle == XmDRAG_NONE ||
       (dc->drag.activeProtocolStyle == XmDRAG_DROP_ONLY && reason != XmCR_DROP_START))
     return;
+  /* Xdnd has no message of its own for a change of operation */
+  if (dc->drag.activeProtocolStyle == XmDRAG_XDND && reason == XmCR_OPERATION_CHANGED)
+    reason = XmCR_DRAG_MOTION;
   switch (callbackRec.any.reason = reason) {
     case XmCR_TOP_LEVEL_ENTER: {
       XmTopLevelEnterCallback callback = (XmTopLevelEnterCallback)&callbackRec;
@@ -1034,6 +1042,15 @@ static void SendDragMessage(XmDragContext dc, Window destination, unsigned char 
                        XmICC_INITIATOR_EVENT);
     if (_XmEndErrorTrap(&trap, True))
       dc->drag.activeProtocolStyle = XmDRAG_NONE;
+    /*
+     * A Motif receiver echoes the drop start, which replaces the short
+     * timeout that waits for the echo by a long one that waits for the
+     * end of the transfer.  An Xdnd target does not: without this, the
+     * drop would fail when its transfer took longer than the selection
+     * timeout.
+     */
+    if (dc->drag.activeProtocolStyle == XmDRAG_XDND && reason == XmCR_DROP_START)
+      DropStartConfirmed((Widget)dsm, (XtPointer)dc, (XtPointer)&callbackRec);
     /**
      * Here, we commit to the XdndSelection atom if the recipient
      * is using Xdnd.
@@ -1538,6 +1555,9 @@ static void LocalNotifyHandler(Widget w, XtPointer client, XtPointer call)
       break;
     case XmCR_DROP_FINISH:
       dc->drag.dragDropCompletionStatus = cb->completionStatus;
+      /* an Xdnd target of version 5 says what it did */
+      if (dc->drag.activeProtocolStyle == XmDRAG_XDND && cb->operation != XmDROP_NOOP)
+        dc->drag.operation = cb->operation;
       dc->drag.dropFinishTime = XtLastTimestampProcessed(XtDisplay(dc));
       DragDropFinish(dc);
       break;
@@ -1554,11 +1574,27 @@ static void ExternalNotifyHandler(Widget w, XtPointer client, XtPointer call)
   XmErrorTrapRec trap;
   XmDragContext dc = (XmDragContext)client;
   XmAnyICCCallback cb = (XmAnyICCCallback)call;
+  Window target = dc->drag.srcWindow;
   if (dc->drag.activeProtocolStyle == XmDRAG_NONE &&
       dc->drag.currReceiverInfo->dragProtocolStyle == XmDRAG_XDND)
     dc->drag.activeProtocolStyle = XmDRAG_XDND;
   if (dc->drag.activeProtocolStyle == XmDRAG_NONE)
     return;
+  if (dc->drag.activeProtocolStyle == XmDRAG_XDND) {
+    /* XdndStatus and XdndFinished carry the target window */
+    if (dc->drag.currReceiverInfo->shell)
+      target = XtWindow(dc->drag.currReceiverInfo->shell);
+    /*
+     * XdndFinished reports the operation of the drop, which the drop
+     * site may have changed (see DragContextDestroy()).
+     */
+    if (cb->reason == XmCR_DROP_START) {
+      XmDropStartCallback ds = (XmDropStartCallback)cb;
+      dc->drag.operation = ds->operation;
+      dc->drag.operations = ds->operations;
+      dc->drag.dragCompletionStatus = ds->dropAction;
+    }
+  }
   switch (cb->reason) {
     case XmCR_DROP_SITE_ENTER:
     case XmCR_DROP_SITE_LEAVE:
@@ -1573,7 +1609,7 @@ static void ExternalNotifyHandler(Widget w, XtPointer client, XtPointer call)
       _XmStartErrorTrap(&trap, XtDisplayOfObject((Widget)dc), 0, 0);
       _XmSendICCCallback(XtDisplayOfObject((Widget)dc),
                          dc->drag.srcWindow,
-                         dc->drag.srcWindow,
+                         target,
                          dc->drag.activeProtocolStyle,
                          (XmICCCallback)cb,
                          XmICC_RECEIVER_EVENT);
@@ -1617,8 +1653,15 @@ static void SiteEnteredWithLocalSource(Widget w, XtPointer client, XtPointer cal
   if (dc->drag.siteEnterCallback) {
     XtCallCallbackList((Widget)dc, dc->drag.siteEnterCallback, cb);
   }
-  dc->drag.operation = cb->operation;
-  dc->drag.operations = cb->operations;
+  /*
+   * XdndStatus answers with the one action the target would do, or
+   * None.  Each XdndPosition asks for the operation of the source
+   * again; it must not become the target's answer to an earlier one.
+   */
+  if (dc->drag.activeProtocolStyle != XmDRAG_XDND) {
+    dc->drag.operation = cb->operation;
+    dc->drag.operations = cb->operations;
+  }
   dc->drag.inDropSite = True;
   _XmDragOverChange((Widget)dc->drag.curDragOver, cb->dropSiteStatus);
 }

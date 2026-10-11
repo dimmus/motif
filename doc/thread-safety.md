@@ -177,6 +177,7 @@ caller reads its own thread's buffer.
 | DragC.c | `current_dc` | fixed: removed, error trap |
 | DragICC.c | `_XmByteOrderChar` (exported) | once (`_XmInitByteOrderChar`, from DisplayInitialize) |
 | DragICC.c | `xdnd_version`, `xdnd_version_min` | read-only |
+| DragICC.c | `xdndSourceContext`, `xdndTargetContext` (lazily created `XContext`s; the Xdnd state they hold is per display) | once (locked) |
 | DragIcon.c | `*CursorTable` | read-only |
 | DragOverS.c | `mixed_cache` | fixed: searched without the lock and linked in before being filled; pixmap ids now compared only for icons of the same display |
 | DrArrow.c | `allocated`, `top`, `cent`, `bot` | locked; fixed: the size was tested outside the lock |

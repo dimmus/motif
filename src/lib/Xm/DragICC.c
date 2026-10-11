@@ -35,9 +35,11 @@ static char rcsid[] = "$TOG: DragICC.c /main/14 1997/06/18 17:38:07 samborn $"
 #include "RegionI.h"
 #include "XmI.h"
 #include <X11/Xatom.h>
+#include <X11/Xutil.h>
 #include <Xm/AtomMgr.h>
 #include <Xm/DisplayP.h>
 #include <Xm/DragC.h>
+#include <stdint.h>
 #ifdef DEBUG
 #  include <stdio.h> /* for printf() */
 #endif               /* DEBUG */
@@ -148,8 +150,91 @@ static XmConst int messageTable[] = {
     XmCR_DRAG_DROP_FINISH,  /* XmDRAG_DROP_FINISH	7 */
     XmCR_OPERATION_CHANGED, /* XmOPERATION_CHANGED	8 */
 };
-static unsigned char xdnd_version = 5;     /**< Xdnd protocol version */
-static unsigned char xdnd_version_min = 3; /**< Xdnd minimum version  */
+/*
+ * Xdnd protocol versions.  Longs: XdndAware is a 32-bit property, which
+ * Xlib reads from an array of long.
+ */
+static const long xdnd_version = 5;     /**< Xdnd protocol version */
+static const long xdnd_version_min = 3; /**< Xdnd minimum version  */
+
+/*
+ * What an Xdnd conversation has to remember between two messages, kept
+ * per display in two contexts:
+ *
+ * - as the target, per source window: the action of the source's last
+ *   XdndPosition, which XdndDrop does not repeat, and whether XdndDrop
+ *   came, after which (and only after which) XdndFinished is sent;
+ * - as the source, per target window: the version of its XdndAware, so
+ *   that XdndEnter offers the highest version both ends know and the
+ *   XdndFinished of a version 5 target is read as version 5 defines it.
+ *
+ * The source state is one word: atoms have 29 bits (the X protocol
+ * keeps the top three bits of an atom zero), which leaves room for two
+ * flags.
+ */
+#define XDND_SOURCE_SEEN (1UL << 30)
+#define XDND_SOURCE_DROPPED (1UL << 29)
+#define XDND_SOURCE_ACTION ((1UL << 29) - 1)
+static XContext xdndSourceContext = 0;
+static XContext xdndTargetContext = 0;
+
+static XContext XdndContext(XContext *context)
+{
+  XContext c;
+  _XmProcessLock();
+  if (*context == 0)
+    *context = XUniqueContext();
+  c = *context;
+  _XmProcessUnlock();
+  return c;
+}
+
+static unsigned long GetXdndState(Display *display, XContext *context, Window window)
+{
+  XPointer value;
+  if (XFindContext(display, window, XdndContext(context), &value) != 0)
+    return 0;
+  return (unsigned long)(uintptr_t)value;
+}
+
+static void SetXdndState(Display *display, XContext *context, Window window, unsigned long state)
+{
+  XSaveContext(display, window, XdndContext(context), (XPointer)(uintptr_t)state);
+}
+
+static void ForgetXdndState(Display *display, XContext *context, Window window)
+{
+  XDeleteContext(display, window, XdndContext(context));
+}
+
+/*
+ * The Motif operation of an Xdnd action.  Motif has no equivalent of
+ * XdndActionAsk or XdndActionPrivate; take them, None and actions it
+ * does not know as a copy, the one operation that loses nothing (the
+ * other toolkits do the same).
+ */
+static unsigned char XdndActionToOperation(Display *display, Atom action)
+{
+  if (action == XInternAtom(display, "XdndActionMove", False))
+    return XmDROP_MOVE;
+  if (action == XInternAtom(display, "XdndActionLink", False))
+    return XmDROP_LINK;
+  return XmDROP_COPY;
+}
+
+static Atom XdndOperationToAction(Display *display, unsigned char operation)
+{
+  switch (operation) {
+    case XmDROP_MOVE:
+      return XInternAtom(display, "XdndActionMove", False);
+    case XmDROP_COPY:
+      return XInternAtom(display, "XdndActionCopy", False);
+    case XmDROP_LINK:
+      return XInternAtom(display, "XdndActionLink", False);
+    default:
+      return None;
+  }
+}
 
 /************************************************************************
  *
@@ -308,122 +393,140 @@ void _XmICCCallbackToICCEvent(Display *display,
   xmessage->any.message_type |= PUT_ICC_EVENT_TYPE(type);
 }
 
-static void _XmICCCallbackToXdndEvent(Display *display,
-                                      Window window,
-                                      Window src_window,
-                                      XmICCCallback callback,
-                                      XClientMessageEvent *ev,
-                                      XmICCEventType type)
+/*
+ * Reformat a Motif callback into an Xdnd client message.  As the source
+ * (type XmICC_INITIATOR_EVENT) Motif sends XdndEnter, XdndPosition,
+ * XdndLeave and XdndDrop to window, the target; as the target
+ * (XmICC_RECEIVER_EVENT) it sends XdndStatus and XdndFinished to window,
+ * the source.  src_window is the window that speaks for this end: the
+ * source window of the drag, or the target window, whose XID XdndStatus
+ * and XdndFinished carry.  Returns False when the callback has no Xdnd
+ * message.
+ */
+static Boolean _XmICCCallbackToXdndEvent(Display *display,
+                                         Window window,
+                                         Window src_window,
+                                         XmICCCallback callback,
+                                         XClientMessageEvent *ev,
+                                         XmICCEventType type)
 {
-  Atom xdndEnter, xdndPosition, xdndStatus, xdndLeave, xdndDrop;
-  Atom xdndFinished, xdndMove, xdndCopy, xdndLink;
   XmDragMotionCallback motion = (XmDragMotionCallback)callback;
   XmDropStartCallback drop = (XmDropStartCallback)callback;
   XmDropFinishCallback finish = (XmDropFinishCallback)callback;
-  xdndEnter = XInternAtom(display, "XdndEnter", False);
-  xdndLeave = XInternAtom(display, "XdndLeave", False);
-  xdndPosition = XInternAtom(display, "XdndPosition", False);
-  xdndStatus = XInternAtom(display, "XdndStatus", False);
-  xdndDrop = XInternAtom(display, "XdndDrop", False);
-  xdndFinished = XInternAtom(display, "XdndFinished", False);
-  xdndMove = XInternAtom(display, "XdndActionMove", False);
-  xdndCopy = XInternAtom(display, "XdndActionCopy", False);
-  xdndLink = XInternAtom(display, "XdndActionLink", False);
+  Boolean accepted;
+  long version;
+  memset(ev, 0, sizeof *ev);
   ev->format = 32;
   ev->display = display;
   ev->type = ClientMessage;
   ev->serial = LastKnownRequestProcessed(display);
   ev->send_event = True;
   ev->window = window;
-  memset(&ev->data.b, 0, sizeof ev->data.b);
-  if (callback->any.reason != XmCR_TOP_LEVEL_ENTER) {
-    switch (motion->operation) {
-      case XmDROP_MOVE:
-        ev->data.l[4] = xdndMove;
-        break;
-      case XmDROP_COPY:
-        ev->data.l[4] = xdndCopy;
-        break;
-      case XmDROP_LINK:
-        ev->data.l[4] = xdndLink;
-        break;
-    }
-  }
-  /* The receiver receives XdndPosition and sends XdndStatus */
+  ev->data.l[0] = (long)src_window;
   if (type == XmICC_RECEIVER_EVENT) {
-    if (callback->any.reason == XmCR_DRAG_MOTION)
-      callback->any.reason = XmCR_OPERATION_CHANGED;
-    if (callback->any.reason == XmCR_DROP_START)
-      return;
+    /*
+     * XdndStatus answers XdndPosition: not after XdndLeave, nor after
+     * XdndDrop, after which the source waits for XdndFinished.
+     */
+    if (callback->any.reason != XmCR_DROP_FINISH &&
+        callback->any.reason != XmCR_DRAG_DROP_FINISH &&
+        (GetXdndState(display, &xdndSourceContext, window) &
+         (XDND_SOURCE_SEEN | XDND_SOURCE_DROPPED)) != XDND_SOURCE_SEEN)
+      return False;
+    switch (callback->any.reason) {
+      case XmCR_DROP_SITE_ENTER:
+      case XmCR_DRAG_MOTION:
+      case XmCR_OPERATION_CHANGED:
+        /*
+         * These three callbacks have the operation and the drop site
+         * status in the same place.  Report the operation the drop
+         * site chose, or None when it refuses the drop.  Bit 1: send
+         * XdndPosition for every motion (the rectangle is empty).
+         */
+        accepted = motion->dropSiteStatus == XmVALID_DROP_SITE && motion->operation != XmDROP_NOOP;
+#ifdef DEBUG_XDND
+        printf("-> xdndStatus (accepted: %d op: %d)\n", accepted, motion->operation);
+#endif
+        ev->message_type = XInternAtom(display, "XdndStatus", False);
+        ev->data.l[1] = 2 | (accepted ? 1 : 0);
+        ev->data.l[4] = accepted ? (long)XdndOperationToAction(display, motion->operation) : None;
+        return True;
+      case XmCR_DROP_SITE_LEAVE:
+#ifdef DEBUG_XDND
+        puts("-> xdndStatus (leave)");
+#endif
+        ev->message_type = XInternAtom(display, "XdndStatus", False);
+        ev->data.l[1] = 2;
+        ev->data.l[4] = None;
+        return True;
+      case XmCR_DROP_FINISH:
+      case XmCR_DRAG_DROP_FINISH:
+        /*
+         * XdndFinished answers XdndDrop, once: not a drag that left
+         * with XdndLeave, nor a drop that was answered already.
+         */
+        if (!(GetXdndState(display, &xdndSourceContext, window) & XDND_SOURCE_DROPPED))
+          return False;
+        ForgetXdndState(display, &xdndSourceContext, window);
+        /* version 5: whether the drop succeeded, and the action done */
+        accepted = finish->completionStatus == XmDROP_SUCCESS;
+#ifdef DEBUG_XDND
+        printf("-> xdndFinished (%d op: %d)\n", accepted, finish->operation);
+#endif
+        ev->message_type = XInternAtom(display, "XdndFinished", False);
+        ev->data.l[1] = accepted ? 1 : 0;
+        ev->data.l[2] = accepted ? (long)XdndOperationToAction(display, finish->operation) : None;
+        return True;
+      default:
+        /* XmCR_DROP_START: Xdnd does not echo the drop */
+        return False;
+    }
   }
   switch (callback->any.reason) {
     case XmCR_TOP_LEVEL_ENTER:
-      /**
-       * We set bit 0 in l[1] to signify that the other end
-       * should query the XdndTypesList and not rely on the
-       * 'quick' three Atoms method of conveyance.
+      /*
+       * Offer the highest version both ends know: the target's
+       * XdndAware was read on the way in.  Bit 0 of l[1]: the types
+       * are in XdndTypeList, not in l[2] to l[4].
        */
+      version = (long)GetXdndState(display, &xdndTargetContext, window);
+      if (version > xdnd_version)
+        version = xdnd_version;
+      if (version < xdnd_version_min)
+        version = xdnd_version_min;
 #ifdef DEBUG_XDND
-      printf("-> xdndEnter from:0x%lx to:0x%lx\n", src_window, window);
+      printf("-> xdndEnter from:0x%lx to:0x%lx version %ld\n", src_window, window, version);
 #endif
-      ev->message_type = xdndEnter;
-      ev->data.l[0] = src_window;
-      ev->data.l[1] = (xdnd_version_min << 24) | 1;
-      ev->data.l[2] = None;
-      ev->data.l[3] = None;
-      ev->data.l[4] = None;
-      break;
+      ev->message_type = XInternAtom(display, "XdndEnter", False);
+      ev->data.l[1] = (version << 24) | 1;
+      return True;
     case XmCR_TOP_LEVEL_LEAVE:
 #ifdef DEBUG_XDND
       printf("-> xdndLeave from:0x%lx to:0x%lx\n", src_window, window);
 #endif
-      ev->message_type = xdndLeave;
-      ev->data.l[0] = src_window;
-      break;
+      ev->message_type = XInternAtom(display, "XdndLeave", False);
+      ForgetXdndState(display, &xdndTargetContext, window);
+      return True;
     case XmCR_DRAG_MOTION:
 #ifdef DEBUG_XDND
-      printf("-> xdndPosition 0x%lx\n", src_window);
+      printf("-> xdndPosition 0x%lx op: %d\n", src_window, motion->operation);
 #endif
-      ev->message_type = xdndPosition;
-      ev->data.l[0] = src_window;
-      ev->data.l[2] = ((motion->x & 0xffff) << 16) | (motion->y & 0xffff);
-      ev->data.l[3] = motion->timeStamp;
-      break;
-    case XmCR_DROP_SITE_ENTER:
-    case XmCR_OPERATION_CHANGED:
-#ifdef DEBUG_XDND
-      printf("-> xdndStatus (ds: %d)\n", motion->dropSiteStatus == XmVALID_DROP_SITE);
-#endif
-      ev->message_type = xdndStatus;
-      ev->data.l[0] = src_window;
-      ev->data.l[1] = 2 | (motion->dropSiteStatus == XmVALID_DROP_SITE);
-      break;
-    case XmCR_DROP_SITE_LEAVE:
-#ifdef DEBUG_XDND
-      puts("-> xdndStatus (leave)");
-#endif
-      ev->message_type = xdndStatus;
-      ev->data.l[0] = src_window;
-      ev->data.l[1] = 2;
-      break;
+      ev->message_type = XInternAtom(display, "XdndPosition", False);
+      ev->data.l[2] = (long)((((unsigned long)motion->x & 0xffff) << 16) |
+                             ((unsigned long)motion->y & 0xffff));
+      ev->data.l[3] = (long)motion->timeStamp;
+      ev->data.l[4] = (long)XdndOperationToAction(display, motion->operation);
+      return True;
     case XmCR_DROP_START:
 #ifdef DEBUG_XDND
       puts("-> xdndDrop");
 #endif
-      ev->message_type = xdndDrop;
-      ev->data.l[0] = src_window;
-      ev->data.l[2] = drop->timeStamp;
-      break;
-    case XmCR_DROP_FINISH:
-    case XmCR_DRAG_DROP_FINISH:
-#ifdef DEBUG_XDND
-      printf("-> xdndFinished (%d)\n", finish->dropAction != XmDROP_FAILURE);
-#endif
-      ev->message_type = xdndFinished;
-      ev->data.l[0] = src_window;
-      ev->data.l[1] = finish->dropAction != XmDROP_FAILURE;
-      ev->data.l[2] = ev->data.l[4];
-      break;
+      ev->message_type = XInternAtom(display, "XdndDrop", False);
+      ev->data.l[2] = (long)drop->timeStamp;
+      return True;
+    default:
+      /* XmCR_OPERATION_CHANGED is sent as an XdndPosition by the caller */
+      return False;
   }
 }
 
@@ -442,26 +545,37 @@ void _XmSendICCCallback(Display *display,
   XClientMessageEvent msgEvent;
   XmDisplay dd = (XmDisplay)XmGetXmDisplay(display);
   Window receiverWindow = dd->display.proxyWindow;
-  if (protocol_style == XmDRAG_XDND)
-    _XmICCCallbackToXdndEvent(display, window, src_window, callback, &msgEvent, type);
+  if (protocol_style == XmDRAG_XDND) {
+    if (!_XmICCCallbackToXdndEvent(display, window, src_window, callback, &msgEvent, type))
+      return;
+  }
   else if (callback->any.reason == XmCR_DROP_FINISH)
     return;
   else
     _XmICCCallbackToICCEvent(display, window, callback, &msgEvent, type);
-  /* Fix for 8746 */
-  if (receiverWindow == None || (protocol_style != XmDRAG_XDND && type == XmICC_RECEIVER_EVENT)) {
-    /* always ACK to the src win */
+  /*
+   * Fix for 8746: always ACK to the src win.  The proxy window is the
+   * one of the last receiver this display dragged over; it has nothing
+   * to do with a reply to an initiator, Motif or Xdnd.
+   */
+  if (receiverWindow == None || type == XmICC_RECEIVER_EVENT)
     receiverWindow = window;
-  }
   XSendEvent(display, receiverWindow, False, 0, (XEvent *)&msgEvent);
 }
 
 /**
- * Translate inbound Xdnd events to our ICC callbacks
+ * Translate inbound Xdnd events to our ICC callbacks.  type is the kind
+ * of message the caller handles: XmICC_INITIATOR_EVENT for the messages
+ * of a source (XdndEnter, XdndPosition, XdndLeave and XdndDrop), and
+ * XmICC_RECEIVER_EVENT for those of a target (XdndStatus and
+ * XdndFinished).
  *
- * The Ask and Private actions are not supported.
+ * Motif has no XdndActionAsk or XdndActionPrivate: they are taken as a
+ * copy.
  */
-static Boolean _XdndToMotifEvent(XClientMessageEvent *msgEv, XmICCCallbackStruct *callback)
+static Boolean _XdndToMotifEvent(XClientMessageEvent *msgEv,
+                                 XmICCCallbackStruct *callback,
+                                 XmICCEventType type)
 {
   XmTopLevelEnterCallback te = (XmTopLevelEnterCallback)callback;
   XmTopLevelLeaveCallback tl = (XmTopLevelLeaveCallback)callback;
@@ -469,108 +583,153 @@ static Boolean _XdndToMotifEvent(XClientMessageEvent *msgEv, XmICCCallbackStruct
   XmDropSiteEnterCallback de = (XmDropSiteEnterCallback)callback;
   XmDropStartCallback ds = (XmDropStartCallback)callback;
   XmDropFinishCallback df = (XmDropFinishCallback)callback;
-  unsigned long op = XmDROP_NOOP;
-  Atom xdndEnter, xdndPosition, xdndStatus, xdndLeave, xdndDrop;
-  Atom xdndFinished, xdndSelection, xdndMove, xdndCopy, xdndLink;
+  Display *display = msgEv->display;
+  Atom message = msgEv->message_type;
+  Window peer = (Window)msgEv->data.l[0];
+  unsigned long state;
+  unsigned char op;
+  Boolean accepted;
   if (msgEv->format != 32)
     return False;
-  xdndEnter = XInternAtom(msgEv->display, "XdndEnter", False);
-  xdndLeave = XInternAtom(msgEv->display, "XdndLeave", False);
-  xdndPosition = XInternAtom(msgEv->display, "XdndPosition", False);
-  xdndStatus = XInternAtom(msgEv->display, "XdndStatus", False);
-  xdndDrop = XInternAtom(msgEv->display, "XdndDrop", False);
-  xdndFinished = XInternAtom(msgEv->display, "XdndFinished", False);
-  xdndSelection = XInternAtom(msgEv->display, "XdndSelection", False);
-  xdndMove = XInternAtom(msgEv->display, "XdndActionMove", False);
-  xdndCopy = XInternAtom(msgEv->display, "XdndActionCopy", False);
-  xdndLink = XInternAtom(msgEv->display, "XdndActionLink", False);
-  if ((Atom)msgEv->data.l[4] == xdndMove)
-    op = XmDROP_MOVE;
-  if ((Atom)msgEv->data.l[4] == xdndCopy)
-    op = XmDROP_COPY;
-  if ((Atom)msgEv->data.l[4] == xdndLink)
-    op = XmDROP_LINK;
   /**
-   * NB: We can't rely on the timestamp in the message data
-   * as it may get sign extended somewhere before Xt calls
-   * ReceiverShellExternalSourceHandler(), even if it's
-   * correct when the other side puts it on the wire.
+   * NB: The drag context and the drop site manager compare the times
+   * of the callbacks with those this client has seen, so the callbacks
+   * get the last of those, except for XdndDrop (see below).  The times
+   * in the messages are the source's, and l[] is signed: on LP64 Xlib
+   * sign-extends the 32-bit wire value.
    */
   callback->any.event = NULL;
-  callback->any.timeStamp = XtLastTimestampProcessed(msgEv->display);
-  if (msgEv->message_type == xdndEnter) {
+  callback->any.timeStamp = XtLastTimestampProcessed(display);
+  if (type == XmICC_INITIATOR_EVENT) {
+    if (message == XInternAtom(display, "XdndEnter", False)) {
 #ifdef DEBUG_XDND
-    puts("<- xdndEnter");
+      puts("<- xdndEnter");
 #endif
-    te->reason = XmCR_TOP_LEVEL_ENTER;
-    te->window = msgEv->data.l[0];
-    te->iccHandle = xdndSelection;
-    te->dragProtocolStyle = XmDRAG_XDND;
-    if (!(msgEv->data.l[1] & 1)) {
-      te->targets[0] = msgEv->data.l[2];
-      te->targets[1] = msgEv->data.l[3];
-      te->targets[2] = msgEv->data.l[4];
-      te->n_targets = (te->targets[0] != None) + (te->targets[1] != None) +
-                      (te->targets[2] != None);
+      te->reason = XmCR_TOP_LEVEL_ENTER;
+      te->window = peer;
+      te->iccHandle = XInternAtom(display, "XdndSelection", False);
+      te->dragProtocolStyle = XmDRAG_XDND;
+      if (!(msgEv->data.l[1] & 1)) {
+        te->targets[0] = (Atom)msgEv->data.l[2];
+        te->targets[1] = (Atom)msgEv->data.l[3];
+        te->targets[2] = (Atom)msgEv->data.l[4];
+        te->n_targets = (te->targets[0] != None) + (te->targets[1] != None) +
+                        (te->targets[2] != None);
+      }
+      else {
+        /* more than 3 types: they are read from XdndTypeList later */
+        te->n_targets = 0;
+      }
+      /* a new drag from this source: no action yet, no drop */
+      SetXdndState(display, &xdndSourceContext, peer, XDND_SOURCE_SEEN);
+      return True;
     }
-    else {
-      /* more than 3 types: they are read from XdndTypeList later */
-      te->n_targets = 0;
+    if (message == XInternAtom(display, "XdndLeave", False)) {
+#ifdef DEBUG_XDND
+      puts("<- xdndLeave");
+#endif
+      tl->reason = XmCR_TOP_LEVEL_LEAVE;
+      tl->window = peer;
+      ForgetXdndState(display, &xdndSourceContext, peer);
+      return True;
     }
-  }
-  else if (msgEv->message_type == xdndLeave) {
+    if (message == XInternAtom(display, "XdndPosition", False)) {
+      Atom action = (Atom)msgEv->data.l[4];
 #ifdef DEBUG_XDND
-    puts("<- xdndLeave");
+      printf("<- xdndPosition (action %lu)\n", action);
 #endif
-    tl->reason = XmCR_TOP_LEVEL_LEAVE;
-    tl->window = msgEv->data.l[0];
-  }
-  else if (msgEv->message_type == xdndPosition) {
+      /*
+       * The source asks for one action, which is the one operation it
+       * allows: Motif computes the operation from the operations the
+       * initiator allows, and would otherwise turn a copy into a move.
+       * XdndDrop does not repeat the action, so remember it.
+       */
+      state = GetXdndState(display, &xdndSourceContext, peer) | XDND_SOURCE_SEEN;
+      state &= ~XDND_SOURCE_ACTION;
+      if (action <= XDND_SOURCE_ACTION)
+        state |= action;
+      SetXdndState(display, &xdndSourceContext, peer, state);
+      dm->reason = XmCR_DRAG_MOTION;
+      dm->x = (Position)(msgEv->data.l[2] >> 16);
+      dm->y = (Position)(msgEv->data.l[2] & 0xffff);
+      dm->operation = XdndActionToOperation(display, action);
+      dm->operations = dm->operation;
+      dm->dropSiteStatus = XmVALID_DROP_SITE;
+      return True;
+    }
+    if (message == XInternAtom(display, "XdndDrop", False)) {
+      Time dropTime = (Time)((unsigned long)msgEv->data.l[2] & 0xffffffffUL);
 #ifdef DEBUG_XDND
-    puts("<- xdndPosition");
+      puts("<- xdndDrop");
 #endif
-    dm->reason = XmCR_DRAG_MOTION;
-    dm->x = (Position)(msgEv->data.l[2] >> 16);
-    dm->y = (Position)(msgEv->data.l[2] & 0xffff);
-    dm->operation = op;
-    dm->operations = XmDROP_COPY | XmDROP_MOVE | XmDROP_LINK;
-    dm->dropSiteStatus = op == XmDROP_NOOP ? XmINVALID_DROP_SITE : XmVALID_DROP_SITE;
+      /*
+       * The transfer must ask for XdndSelection at the time of the
+       * drop (Qt, for one, finds the drag by it).  It is the time the
+       * drop takes, and the one the transfer uses, unless it is older
+       * than what this client has seen, which only a broken source
+       * sends: the drag context would not match the drop.
+       */
+      if (dropTime != CurrentTime && dropTime >= callback->any.timeStamp)
+        callback->any.timeStamp = dropTime;
+      /* the operation is the one of the last XdndPosition */
+      state = GetXdndState(display, &xdndSourceContext, peer);
+      op = XdndActionToOperation(display, (Atom)(state & XDND_SOURCE_ACTION));
+      SetXdndState(
+          display, &xdndSourceContext, peer, state | XDND_SOURCE_SEEN | XDND_SOURCE_DROPPED);
+      ds->reason = XmCR_DROP_START;
+      ds->window = peer;
+      ds->iccHandle = XInternAtom(display, "XdndSelection", False);
+      ds->operation = op;
+      ds->operations = op;
+      ds->dropSiteStatus = XmVALID_DROP_SITE;
+      /* Xdnd has no help or cancel: a drop is a drop */
+      ds->dropAction = XmDROP;
+      ds->x = -1;
+      ds->y = -1;
+      return True;
+    }
+    return False;
   }
-  else if (msgEv->message_type == xdndStatus) {
+  if (message == XInternAtom(display, "XdndStatus", False)) {
+    accepted = (msgEv->data.l[1] & 1) != 0;
+    op = accepted ? XdndActionToOperation(display, (Atom)msgEv->data.l[4]) : XmDROP_NOOP;
 #ifdef DEBUG_XDND
-    printf("<- xdndStatus (ds? %ld op=%lu)\n", msgEv->data.l[1] & 1, op);
+    printf("<- xdndStatus (accepted %d op=%d)\n", accepted, op);
 #endif
     de->reason = XmCR_DROP_SITE_ENTER;
     de->x = -1;
     de->y = -1;
     de->operation = op;
-    de->operations = XmDROP_COPY | XmDROP_MOVE | XmDROP_LINK;
-    de->dropSiteStatus = (op != XmDROP_NOOP && (msgEv->data.l[1] & 1)) ? XmVALID_DROP_SITE :
-                                                                         XmINVALID_DROP_SITE;
+    de->operations = op;
+    de->dropSiteStatus = accepted ? XmVALID_DROP_SITE : XmINVALID_DROP_SITE;
+    return True;
   }
-  else if (msgEv->message_type == xdndDrop) {
+  if (message == XInternAtom(display, "XdndFinished", False)) {
+    /*
+     * Version 5 says in l[1] whether the target accepted the drop and
+     * in l[2] what it did; before that a finish was a success.
+     */
+    if ((long)GetXdndState(display, &xdndTargetContext, peer) >= 5) {
+      accepted = (msgEv->data.l[1] & 1) != 0;
+      op = accepted ? XdndActionToOperation(display, (Atom)msgEv->data.l[2]) : XmDROP_NOOP;
+    }
+    else {
+      accepted = True;
+      op = XmDROP_NOOP;
+    }
+    ForgetXdndState(display, &xdndTargetContext, peer);
 #ifdef DEBUG_XDND
-    puts("<- xdndDrop");
-#endif
-    ds->reason = XmCR_DROP_START;
-    ds->window = msgEv->data.l[0];
-    ds->iccHandle = xdndSelection;
-    ds->operation = op;
-    ds->operations = XmDROP_COPY | XmDROP_MOVE | XmDROP_LINK;
-    ds->dropSiteStatus = XmVALID_DROP_SITE;
-    ds->x = -1;
-    ds->y = -1;
-  }
-  else if (msgEv->message_type == xdndFinished) {
-#ifdef DEBUG_XDND
-    puts("<- xdndFinished");
+    printf("<- xdndFinished (accepted %d op=%d)\n", accepted, op);
 #endif
     df->reason = XmCR_DROP_FINISH;
-    df->completionStatus = XmDROP_SUCCESS;
+    df->operation = op;
+    df->operations = op;
+    df->dropSiteStatus = accepted ? XmVALID_DROP_SITE : XmINVALID_DROP_SITE;
+    df->dropAction = XmDROP;
+    df->completionStatus = accepted ? XmDROP_SUCCESS : XmDROP_FAILURE;
+    return True;
   }
-  else
-    return False;
-  return True;
+  return False;
 }
 
 /************************************************************************
@@ -741,7 +900,7 @@ Boolean _XmICCEventToICCCallback(XClientMessageEvent *msgEv,
 #endif /* DEBUG */
     return (type == GetMessageData(msgEv->display, xmessage, callback)) ? True : False;
   }
-  return _XdndToMotifEvent(msgEv, callback);
+  return _XdndToMotifEvent(msgEv, callback, type);
 }
 
 /************************************************************************
@@ -860,12 +1019,13 @@ void _XmReadInitiatorInfo(Widget dc)
   unsigned long lengthRtn;
   Arg args[3];
   Window srcWindow;
-  Cardinal numExportTargets = 0;
+  Cardinal numExportTargets = 0, numEnterTargets = 0;
   Atom initiatorAtom, iccHandle, xdndTypeList, *exportTargets = NULL;
   unsigned char *data = NULL;
   XtSetArg(args[0], XmNsourceWindow, &srcWindow);
   XtSetArg(args[1], XmNiccHandle, &iccHandle);
-  XtGetValues(dc, args, 2);
+  XtSetArg(args[2], XmNnumExportTargets, &numEnterTargets);
+  XtGetValues(dc, args, 3);
   initiatorAtom = XInternAtom(XtDisplayOfObject(dc), XmI_MOTIF_DRAG_INITIATOR_INFO, FALSE);
   if (_XmGetWindowPropertyChecked(XtDisplayOfObject(dc),
                                   srcWindow,
@@ -887,10 +1047,11 @@ void _XmReadInitiatorInfo(Widget dc)
     ++set_exports;
     numExportTargets = _XmIndexToTargets(dc, info->targets_index, &exportTargets);
   }
-  if (!set_exports) {
+  if (!set_exports && numEnterTargets == 0) {
     /**
      * No Motif initiator info: get the Xdnd type list, if the source
-     * has published it
+     * has published it.  Not when XdndEnter carried the types: the
+     * list is then left from an earlier drag, if there is one.
      */
     xdndTypeList = XInternAtom(XtDisplayOfObject(dc), "XdndTypeList", False);
     if (_XmGetWindowPropertyChecked(XtDisplayOfObject(dc),
@@ -1082,14 +1243,19 @@ Boolean _XmGetDragReceiverInfo(Display *display,
                                   NULL,
                                   &data))
   {
-    if (*(Atom *)data >= (Atom)xdnd_version_min) {
+    unsigned long version = *(unsigned long *)data;
+    XFree(data);
+    if (version >= (unsigned long)xdnd_version_min) {
       receiverInfoRtn->dragProtocolStyle = XmDRAG_XDND;
-      XFree(data);
+      /* for the version XdndEnter offers, see _XmICCCallbackToXdndEvent() */
+      if (version > (unsigned long)xdnd_version)
+        version = (unsigned long)xdnd_version;
+      SetXdndState(display, &xdndTargetContext, window, version);
       return True;
     }
     /* Xdnd versions < 3 are not supported */
-    XFree(data);
   }
+  ForgetXdndState(display, &xdndTargetContext, window);
   return False;
 }
 
@@ -1452,7 +1618,7 @@ void _XmSetDragReceiverInfo(XmDisplay dd, Widget shell)
                   XA_ATOM,
                   32,
                   PropModeReplace,
-                  &xdnd_version,
+                  (const unsigned char *)&xdnd_version,
                   1);
 }
 

@@ -1365,6 +1365,14 @@ static void HandleLeave(XmDropSiteManagerObject dsm,
   }
 }
 
+/* Whether dc is the drag of an Xdnd source over this client */
+static Boolean IsXdndDrag(Widget w)
+{
+  XmDragContext dc = (XmDragContext)w;
+  return dc != NULL && dc->drag.sourceIsExternal && dc->drag.currReceiverInfo != NULL &&
+         dc->drag.currReceiverInfo->dragProtocolStyle == XmDRAG_XDND;
+}
+
 static void ProcessMotion(XmDropSiteManagerObject dsm, XtPointer clientData, XtPointer calldata)
 {
   XmDragMotionCallbackStruct *callback = (XmDragMotionCallbackStruct *)calldata;
@@ -1416,6 +1424,24 @@ static void ProcessMotion(XmDropSiteManagerObject dsm, XtPointer clientData, XtP
         HandleEnter(dsm, motionData, callback, newDSInfo, style);
       return;
     }
+  }
+  /*
+   * Xdnd has no message for a change of operation: each XdndPosition
+   * carries its action.  Another one in the same drop site is what an
+   * operation change is in the Motif protocol.
+   */
+  if (curDSInfo != NULL && callback->operations != dsm->dropManager.curOperations &&
+      IsXdndDrag(dsm->dropManager.curDragContext))
+  {
+    XmOperationChangedCallbackStruct changed;
+    changed.reason = XmCR_OPERATION_CHANGED;
+    changed.event = NULL;
+    changed.timeStamp = callback->timeStamp;
+    changed.operation = callback->operation;
+    changed.operations = callback->operations;
+    changed.dropSiteStatus = dsm->dropManager.curDropSiteStatus;
+    ChangeOperation(dsm, clientData, (XtPointer)&changed);
+    return;
   }
   HandleMotion(dsm, motionData, callback, curDSInfo, style);
 }

@@ -225,6 +225,21 @@ static void TerminateTransfer(XmDropTransferObject dt, Atom *selection)
   Atom status;
   XmDropTransferPart *dtp = (XmDropTransferPart *)&(dt->dropTransfer);
   XmDragContext dc = (XmDragContext)dtp->dragContext;
+  if (dc->drag.sourceIsExternal) {
+    /* for the XdndFinished that the drag context sends when it goes */
+    dc->drag.dragDropCompletionStatus = dtp->transfer_status == XmTRANSFER_SUCCESS ?
+                                            XmDROP_SUCCESS :
+                                            XmDROP_FAILURE;
+    /*
+     * An Xdnd source does not know the Motif targets that tell the
+     * outcome: it would refuse them, or never answer and keep the
+     * XdndFinished back for a selection timeout.
+     */
+    if (*selection == XInternAtom(XtDisplayOfObject((Widget)dt), "XdndSelection", False)) {
+      XtDestroyWidget((Widget)dt);
+      return;
+    }
+  }
   if (dtp->transfer_status == XmTRANSFER_SUCCESS)
     status = XInternAtom(XtDisplayOfObject((Widget)dt), XmSTRANSFER_SUCCESS, False);
   else /* XmTRANSFER_FAILURE */
