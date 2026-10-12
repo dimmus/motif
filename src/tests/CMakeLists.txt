@@ -58,13 +58,14 @@ set(MOTIF_TEST_SRCS
     Xm/testXmIm.c
     Xm/testCache.c
     Xm/testDraw.c
+    Xm/testXdnd.c
     i18n_util.c
 )
 
 # Suites that open a display, and suites that do not.
 set(MOTIF_TEST_X_SUITES FontListEntry FontList XmStringCT XmStringExtent Widgets Text
     Clipboard Layout XErrors List I18nLocale MsgCat Rtl Xim RoundTrips ConstApi
-    RenderTable Gadgets XmIm GadgetCache Draw)
+    RenderTable Gadgets XmIm GadgetCache Draw Xdnd)
 set(MOTIF_TEST_SUITES Svg Log LogConfig XmString I18n Traits Cache)
 set(MOTIF_TEST_DEFS "")
 
@@ -122,6 +123,16 @@ target_include_directories(motif_tests PRIVATE
 )
 # The XmIm suite interposes Xlib calls and forwards them with dlsym.
 target_link_libraries(motif_tests PRIVATE Xm PkgConfig::CHECK Threads::Threads ${CMAKE_DL_LIBS})
+
+# The Xdnd suite drags with XTest when libXtst is there (the cases with
+# Motif as the drag source); without it only the drop site is tested.
+pkg_check_modules(MOTIF_TEST_XTST IMPORTED_TARGET xtst)
+if(MOTIF_TEST_XTST_FOUND)
+    target_compile_definitions(motif_tests PRIVATE XM_WITH_XTST)
+    target_link_libraries(motif_tests PRIVATE PkgConfig::MOTIF_TEST_XTST)
+else()
+    message(STATUS "Tests: no libXtst, the Xdnd suite tests Motif as a drop site only")
+endif()
 
 # The input method server the Xim suite types through.
 add_executable(stubxim xim/stubxim.c)

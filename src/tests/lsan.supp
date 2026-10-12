@@ -13,9 +13,12 @@
 # widgets (PRIMARY through XmeNamedSource, MOTIF_DESTINATION through
 # XmeSecondarySink and df_SetDestination, the destroy callback
 # DisownCallback) and the clipboard (AssertClipboardSelection).  Not
-# known to be Motif's fault.
+# known to be Motif's fault.  XtGetSelectionValue() allocates the same
+# record for a selection the client never owned: the Xdnd suite's drops,
+# which ask for XdndSelection of another client.
 leak:XtOwnSelection
 leak:XtDisownSelection
+leak:XtGetSelectionValue
 
 # fontconfig: the configuration that FcInit loads, the first time Xft
 # opens a font, is kept until FcFini, which no X client calls.

@@ -53,6 +53,28 @@ upstream release (December 2017).  The git history has the details.
   initialised a lookup costs what it costs without them (7 ns against
   37 in `xmbench -t trait-get`), and lookups from several threads no
   longer contend (two threads: 8 ns against 240).
+- Xdnd (drag and drop with GTK, Qt and the other toolkits) works both
+  ways.  As the target, libXm turned every drag into one that allows
+  all three operations, so that a copy became a move on a drop site
+  that allows moves; it now takes the operation from the action of the
+  last `XdndPosition` (`XdndActionAsk` and `XdndActionPrivate` count as
+  a copy) and follows a change of it.  A drop no longer has an
+  uninitialised drop action, which made drop sites reject drops at
+  random.  `XdndStatus` and `XdndFinished` name the target window, go
+  to the source even after the application has made a drag of its own,
+  and report the action the drop site chose; `XdndFinished` reports the
+  outcome of the transfer (it said that every drop had failed), and is
+  no longer sent after `XdndLeave` nor followed by a stray message.
+  The data is asked for at the time of `XdndDrop`, as Qt requires.
+  `XdndAware` was written from a one-byte variable read as a long.  An
+  Xdnd drop no longer leaves the drop site manager with the drop site
+  and the destroyed drag context, which crashed when the drop site was
+  destroyed and confused the next drag.  As the source, libXm offers
+  version 5 to targets that know it, keeps asking for its own operation
+  after a target refused it, no longer cancels a drop that takes longer
+  than the selection timeout, and reads the outcome and the action of
+  `XdndFinished`.  The `Xdnd` test suite drags between a raw Xlib peer
+  and Motif both ways.
 
 ### Documentation
 

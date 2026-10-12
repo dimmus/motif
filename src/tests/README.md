@@ -17,7 +17,7 @@ build tree (`<build>/src/tests/fixtures`).
 Suites labelled `X11` (`FontList`, `FontListEntry`, `XmStringCT`,
 `XmStringExtent`, `Widgets`, `Text`, `Clipboard`, `Layout`, `XErrors`,
 `List`, `I18nLocale`, `MsgCat`, `Rtl`, `Xim`, `RoundTrips`, `ConstApi`,
-`RenderTable`, `Gadgets`, `XmIm`, `GadgetCache`, `Draw`) need an X
+`RenderTable`, `Gadgets`, `XmIm`, `GadgetCache`, `Draw`, `Xdnd`) need an X
 server, as do the `Uil.load*` tests, those in `interactive/`, `visual/`,
 `hostile/` and `threads/`, and some in `fuzz/`.  When
 `xvfb-run` is found at configure time, CTest starts each of them under
@@ -70,6 +70,11 @@ is not bound in their translations (upstream Motif has none either;
 only CDE's DtEditor, which is not part of this tree, has one).  The
 suite tests the one undo nearby, `XmClipboardUndoCopy`, with a Text's
 copies to the clipboard.
+
+The `Xdnd` suite drags between Motif and a raw Xlib peer that speaks
+Xdnd as GTK and Qt do: the peer drags onto a Motif drop site, and with
+libXtst (XTest drives the pointer) a Motif drag source drops onto the
+peer.  Without libXtst only the drop site half is built.
 
 The other directories:
 

@@ -48,5 +48,6 @@ void xmim_suite(SRunner *runner);
 void cache_suite(SRunner *runner);
 void gadget_cache_suite(SRunner *runner);
 void draw_suite(SRunner *runner);
+void xdnd_suite(SRunner *runner);
 
 #endif /* SUITES_H */
