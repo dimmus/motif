@@ -85,6 +85,17 @@ upstream release (December 2017).  The git history has the details.
   from the default font.  libXm now loads that font by its name, once,
   and frees it with the rendition.  The `FontSet` test suite runs in
   the C locale and in UTF-8 ones.
+- A font list or render table given when a widget is created is no
+  longer replaced by the resource database.  `XmNfontList` and
+  `XmNrenderTable` (and the `button`, `label` and `text` pairs of
+  BulletinBoard, MenuShell and VendorShell) are two names of one
+  field, and Xt fetches the resources the arglist does not name from
+  the database after those it names: a widget created with
+  `XmNfontList` got a `*renderTable` from the database, and one created
+  with `XmNrenderTable` a `*FontList` (an XmComboBox's text field and
+  list, for one).  The arglist value of either name now wins, in widget
+  resources, gadget caches, XmText's output resources and shell
+  extensions.  With only database values, `renderTable` still wins.
 - `XmComboBox` keeps its render table for its text field and list.
   It passed it to them only as `XmNrenderTable`, and `XmNfontList` is
   the same field, so a font list from the resource database for text

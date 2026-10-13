@@ -1329,6 +1329,18 @@ static void InitializeRootWrapper(Widget req, Widget new_w, ArgList args, Cardin
   WidgetClass wc = XtClass(new_w);
   XmBaseClassExt *wcePtr;
   wcePtr = _XmGetBaseClassExtPtr(wc, XmQmotif);
+  /* Xt has fetched the resources of new_w: an arglist font list or */
+  /* render table wins over a database value for its other name. */
+  /* The resource list is only needed the first time for each class. */
+  if (wcePtr && *wcePtr && _XmArgListNamesFontList(args, *num_args)) {
+    XtResourceList resources = NULL;
+    Cardinal num_resources = 0;
+    if (!_XmFontListAliasesKnown(wc))
+      XtGetResourceList(wc, &resources, &num_resources);
+    _XmFontListArgAliases(wc, new_w, resources, num_resources, args, *num_args);
+    _XmFontListArgAliases(wc, req, resources, num_resources, args, *num_args);
+    XtFree((char *)resources);
+  }
   if (wcePtr && *wcePtr) {
     if ((*wcePtr)->initializePrehook)
       (*((*wcePtr)->initializePrehook))(req, new_w, args, num_args);

@@ -24,11 +24,14 @@
  */
 #include <stdio.h>
 #include <string.h>
-#include <X11/Intrinsic.h>
+#include <X11/IntrinsicP.h>
 #include <X11/StringDefs.h>
 #include <X11/Xatom.h>
 #include <Xm/Xm.h>
 #include <Xm/BulletinB.h>
+#include <Xm/Text.h>
+#include <Xm/MultiList.h>
+#include <X11/Shell.h>
 #include <Xm/ComboBox.h>
 #include <Xm/Display.h>
 #include <Xm/Label.h>
@@ -1235,6 +1238,122 @@ START_TEST(any_name_names_rendition)
 }
 END_TEST
 
+/* Whether rt has a rendition tagged tag. */
+static int rendition_tagged(XmRenderTable rt, const char *tag)
+{
+	XmRendition r = rt ? XmRenderTableGetRendition(rt, (char *)tag) : NULL;
+
+	if (r == NULL)
+		return 0;
+	XmRenditionFree(r);
+	return 1;
+}
+
+/* A table of one core font rendition: tag, font. */
+static XmRenderTable font_table(const char *tag, const char *font)
+{
+	XmRendition r;
+	XmRenderTable rt;
+	Arg a[2];
+
+	XtSetArg(a[0], XmNfontName, font);
+	XtSetArg(a[1], XmNfontType, XmFONT_IS_FONT);
+	r = XmRenditionCreate(shell, (char *)tag, a, 2);
+	rt = XmRenderTableAddRenditions(NULL, &r, 1, XmMERGE_REPLACE);
+	XmRenditionFree(r);
+	return rt;
+}
+
+/* rt is the one rendition tag, in font. */
+static void check_only(Display *dpy, XmRenderTable rt, const char *tag, const char *font,
+		       const char *what)
+{
+	char d[1024];
+
+	describe(rt, d, sizeof d);
+	ck_assert_msg(tag_count(rt) == 1, "%s: %s", what, d);
+	ck_assert_msg(rendition_tagged(rt, tag), "%s: %s", what, d);
+	ck_assert_msg(same_font(dpy, font_of(rt, tag), font), "%s: %s", what, d);
+}
+
+/*
+ * XmNfontList and XmNrenderTable are two names of one field (as are the
+ * button, label and text pairs).  A value in the creation arglist for
+ * either name wins over a database value for the other, in a widget's
+ * resources, in a gadget's cache, in XmText's output resources and in
+ * a shell's extension.
+ */
+START_TEST(arglist_font_beats_database_alias)
+{
+	Display *dpy = XtDisplay(shell);
+	XmRenderTable rt = font_table("arg", "fixed"), got;
+	Widget w, bb, sh;
+
+	put("*FontList: 9x15");
+	put("*renderTable: db");
+	put_font("*renderTable.db", "9x15");
+	put("*buttonRenderTable: db");
+	put_font("*buttonRenderTable.db", "9x15");
+	put("*labelRenderTable: db");
+	put_font("*labelRenderTable.db", "9x15");
+
+	w = XtVaCreateWidget("l1", xmLabelWidgetClass, shell, XmNfontList, rt, NULL);
+	check_only(dpy, table_of(w), "arg", "fixed", "label, XmNfontList");
+	XtDestroyWidget(w);
+	w = XtVaCreateWidget("l2", xmLabelWidgetClass, shell, XmNrenderTable, rt, NULL);
+	check_only(dpy, table_of(w), "arg", "fixed", "label, XmNrenderTable");
+	XtDestroyWidget(w);
+	bb = XtVaCreateWidget("bb", xmBulletinBoardWidgetClass, shell, NULL);
+	w = XtVaCreateWidget("g", xmLabelGadgetClass, bb, XmNfontList, rt, NULL);
+	check_only(dpy, table_of(w), "arg", "fixed", "gadget, XmNfontList");
+	w = XtVaCreateWidget("t", xmTextWidgetClass, bb, XmNfontList, rt, NULL);
+	check_only(dpy, table_of(w), "arg", "fixed", "text, XmNfontList");
+	XtDestroyWidget(bb);
+	bb = XtVaCreateWidget("bb", xmBulletinBoardWidgetClass, shell, XmNbuttonFontList, rt, NULL);
+	got = NULL;
+	XtVaGetValues(bb, XmNbuttonRenderTable, &got, NULL);
+	check_only(dpy, got, "arg", "fixed", "bulletin board, XmNbuttonFontList");
+	XtDestroyWidget(bb);
+	sh = XtVaCreatePopupShell("sh", topLevelShellWidgetClass, shell, XmNlabelFontList, rt, NULL);
+	got = NULL;
+	XtVaGetValues(sh, XmNlabelRenderTable, &got, NULL);
+	check_only(dpy, got, "arg", "fixed", "shell, XmNlabelFontList");
+	XtDestroyWidget(sh);
+	/* XmMultiList only passes them on, from entries at offset 0: */
+	/* nothing is written there (core.self). */
+	w = XtVaCreateWidget("ml", xmMultiListWidgetClass, shell, XmNfontList, rt, NULL);
+	ck_assert_ptr_eq(w->core.self, w);
+	XtDestroyWidget(w);
+	XmRenderTableFree(rt);
+}
+END_TEST
+
+/*
+ * A typed argument reaches the widget converted: the field gets the
+ * font list, not the string.  Without an argument the database decides
+ * as before: XmNrenderTable, which follows XmNfontList, wins.
+ */
+START_TEST(typed_and_database_font_aliases)
+{
+	Display *dpy = XtDisplay(shell);
+	Widget w;
+	char d[1024];
+
+	put("*FontList: 9x15");
+	put("*renderTable: db");
+	put_font("*renderTable.db", "8x13");
+	w = XtVaCreateWidget("l1", xmLabelWidgetClass, shell,
+			     XtVaTypedArg, XmNfontList, XmRString, "fixed", 6, NULL);
+	describe(table_of(w), d, sizeof d);
+	ck_assert_msg(tag_count(table_of(w)) == 1, "%s", d);
+	ck_assert_msg(strstr(d, "name=fixed") != NULL || strstr(d, "Fixed") != NULL, "%s", d);
+	XtDestroyWidget(w);
+	w = XtVaCreateWidget("l2", xmLabelWidgetClass, shell, NULL);
+	check_only(dpy, table_of(w), "db", "8x13", "database only");
+	XtDestroyWidget(w);
+}
+END_TEST
+
 /*
  * XmComboBox gives its text field and list its own render table.  Their
  * XmNfontList is the same field as XmNrenderTable, so a font list from
@@ -1372,6 +1491,8 @@ void rendertable_suite(SRunner *runner)
 	tcase_add_test(t, named_default_rendition);
 	tcase_add_test(t, named_entry_outranked_by_loose);
 	tcase_add_test(t, any_name_names_rendition);
+	tcase_add_test(t, arglist_font_beats_database_alias);
+	tcase_add_test(t, typed_and_database_font_aliases);
 	tcase_add_test(t, combo_box_children_keep_its_table);
 #if USE_XFT
 	tcase_add_test(t, xft_rendition_ignores_database_font);

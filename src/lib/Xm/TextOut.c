@@ -4897,6 +4897,7 @@ void _XmTextOutputCreate(Widget wid, ArgList args, Cardinal num_args)
   Dimension width, height;
   XmScrollFrameTrait scrollFrameTrait;
   Boolean is_default;
+  Cardinal i;
   tw->text.output = output = (Output)XtMalloc((unsigned)sizeof(OutputRec));
   output->data = data = (OutputData)XtMalloc((unsigned)sizeof(OutputDataRec));
   _XmGetSubresources(wid,
@@ -4946,8 +4947,18 @@ void _XmTextOutputCreate(Widget wid, ArgList args, Cardinal num_args)
   /* copy over the fontlist/rendertable */
   /* Final result stored in fontlist since that's what the rest of the
    * code is expecting, but rendertable takes precedence since that's the
-   * model for 2.0.
+   * model for 2.0.  They are two names of one resource, though: one
+   * given in the arglist wins over the other from the database, so
+   * an arglist XmNfontList drops a database XmNrenderTable.
    */
+  for (i = num_args; i-- > 0;) {
+    if (strcmp(args[i].name, XmNrenderTable) == 0)
+      break;
+    if (strcmp(args[i].name, XmNfontList) == 0) {
+      data->rendertable = NULL;
+      break;
+    }
+  }
   is_default = (data->fontlist == NULL) && (data->rendertable == NULL);
   if (is_default) {
     data->fontlist = XmRenderTableCopy(XmeGetDefaultRenderTable(wid, XmTEXT_FONTLIST), NULL, 0);
