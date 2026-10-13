@@ -96,6 +96,12 @@ upstream release (December 2017).  The git history has the details.
   list, for one).  The arglist value of either name now wins, in widget
   resources, gadget caches, XmText's output resources and shell
   extensions.  With only database values, `renderTable` still wins.
+- `XmComboBox` keeps its render table for its text field and list.
+  It passed it to them only as `XmNrenderTable`, and `XmNfontList` is
+  the same field, so a font list from the resource database for text
+  fields or lists (CDE writes `*XmTextField*FontList`) replaced it: the
+  combo box drew its text and list in another font than its own.  It
+  now passes both.
 - A loosely bound `*Font` resource, which CDE's session resources and
   dtstyle set for core font programs, no longer breaks render tables
   converted from resource strings.  The `font` resource of every

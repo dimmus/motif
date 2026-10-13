@@ -32,6 +32,7 @@
 #include <Xm/Text.h>
 #include <Xm/MultiList.h>
 #include <X11/Shell.h>
+#include <Xm/ComboBox.h>
 #include <Xm/Display.h>
 #include <Xm/Label.h>
 #include <Xm/LabelG.h>
@@ -1353,6 +1354,42 @@ START_TEST(typed_and_database_font_aliases)
 }
 END_TEST
 
+/*
+ * XmComboBox gives its text field and list its own render table.  Their
+ * XmNfontList is the same field as XmNrenderTable, so a font list from
+ * the database for text fields or lists must not replace it.
+ */
+START_TEST(combo_box_children_keep_its_table)
+{
+	Display *dpy = XtDisplay(shell);
+	XmRendition r;
+	XmRenderTable rt;
+	Widget combo, text = NULL, list = NULL;
+	Arg a[2];
+	char d[1024];
+
+	put("*XmTextField*FontList: 9x15");
+	put("*XmList*FontList: 9x15");
+	XtSetArg(a[0], XmNfontName, "fixed");
+	XtSetArg(a[1], XmNfontType, XmFONT_IS_FONT);
+	r = XmRenditionCreate(shell, "t", a, 2);
+	rt = XmRenderTableAddRenditions(NULL, &r, 1, XmMERGE_REPLACE);
+	XmRenditionFree(r);
+	combo = XtVaCreateWidget("combo", xmComboBoxWidgetClass, shell, XmNrenderTable, rt, NULL);
+	XmRenderTableFree(rt);
+	XtVaGetValues(combo, XmNtextField, &text, XmNlist, &list, NULL);
+	ck_assert_ptr_nonnull(text);
+	ck_assert_ptr_nonnull(list);
+	describe(table_of(text), d, sizeof d);
+	ck_assert_msg(tag_count(table_of(text)) == 1, "text: %s", d);
+	ck_assert(same_font(dpy, font_of(table_of(text), "t"), "fixed"));
+	describe(table_of(list), d, sizeof d);
+	ck_assert_msg(tag_count(table_of(list)) == 1, "list: %s", d);
+	ck_assert(same_font(dpy, font_of(table_of(list), "t"), "fixed"));
+	XtDestroyWidget(combo);
+}
+END_TEST
+
 #if USE_XFT
 /* The font name, type and fonts of the rendition tagged tag of rt. */
 static void xft_rendition(XmRenderTable rt, const char *tag, String *name, XmFontType *type,
@@ -1456,6 +1493,7 @@ void rendertable_suite(SRunner *runner)
 	tcase_add_test(t, any_name_names_rendition);
 	tcase_add_test(t, arglist_font_beats_database_alias);
 	tcase_add_test(t, typed_and_database_font_aliases);
+	tcase_add_test(t, combo_box_children_keep_its_table);
 #if USE_XFT
 	tcase_add_test(t, xft_rendition_ignores_database_font);
 #endif

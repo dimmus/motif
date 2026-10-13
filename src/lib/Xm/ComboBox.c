@@ -2451,7 +2451,7 @@ static Widget CreateEditBox(
 {
   XmComboBoxWidget cb = (XmComboBoxWidget)w;
   Widget text_widget;
-  Arg loc_args[15];
+  Arg loc_args[16];
   Cardinal nloc;
   ArgList merged_args;
   char *item = NULL;
@@ -2470,7 +2470,10 @@ static Widget CreateEditBox(
     if (item)
       XtSetArg(loc_args[nloc], XmNvalue, item), nloc++;
   }
+  /* XmNfontList is the same field: without it in the arglist a */
+  /* "*XmTextField*FontList" from the database would replace ours. */
   XtSetArg(loc_args[nloc], XmNrenderTable, CB_RenderTable(cb)), nloc++;
+  XtSetArg(loc_args[nloc], XmNfontList, CB_RenderTable(cb)), nloc++;
   XtSetArg(loc_args[nloc], XmNnavigationType, XmNONE), nloc++;
   XtSetArg(loc_args[nloc], XmNhighlightThickness, 0), nloc++;
   XtSetArg(loc_args[nloc], XmNborderWidth, 0), nloc++;
@@ -2533,7 +2536,7 @@ static Widget CreateScrolledList(
     Widget parent, String name, Widget w, ArgList arglist, Cardinal *num_args)
 {
   Cardinal n;
-  Arg loc_args[16];
+  Arg loc_args[17];
   Widget list;
   XmComboBoxWidget cb = (XmComboBoxWidget)w;
   ArgList merged_args;
@@ -2565,7 +2568,9 @@ static Widget CreateScrolledList(
     XtSetArg(loc_args[n], XmNselectedPositionCount, 1), n++;
     setpos = TRUE;
   }
+  /* As for the edit box: XmNfontList is the same field. */
   XtSetArg(loc_args[n], XmNrenderTable, CB_RenderTable(cb)), n++;
+  XtSetArg(loc_args[n], XmNfontList, CB_RenderTable(cb)), n++;
   if (CB_Type(cb) == XmCOMBO_BOX)
     XtSetArg(loc_args[n], XmNtraversalOn, FALSE), n++;
   XtSetArg(loc_args[n], XmNhighlightThickness, ((CB_Type(cb) == XmDROP_DOWN_LIST) ? 2 : 0)), n++;
