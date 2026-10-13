@@ -468,72 +468,74 @@ static void RenditionSearchList(XrmDatabase db,
 }
 
 /*
- * Whether the database entry that the lookups of a rendition found for
- * a resource names the rendition.
+ * Which resources of a rendition have a database entry that names the
+ * rendition: a bit for each resource of the table, as in found below.
  *
- * The names of a rendition end in the render table resource, for the
- * default rendition, or in its tag.  An entry bound loosely before the
- * resource, like "*Font" or "*rc*fontName", is found whatever that last
- * name is: it gives its value to the renditions that exist, but it does
- * not say that the table has a default rendition, nor that a word of
- * the string is a tag rather than a font (XmRenderTable(3) asks for
+ * The names of a rendition, names and classes up to NULLQUARK, end in
+ * the render table resource, for the default rendition, or in its tag.
+ * An entry bound loosely before the resource, like "*Font" or
+ * "*rc*fontName", is found whatever that last name is: it gives its
+ * value to the renditions that exist, but it does not say that the
+ * table has a default rendition, nor that a word of the string is a tag
+ * rather than a font (XmRenderTable(3) asks for
  * "resource_spec.resource_name", without a loose binding, for a default
- * rendition).  Such an entry is found again when that last name and
- * class are replaced by a quark that no entry can name, while an entry
- * that names the render table resource or the tag, by name or class,
- * is not.  The search list of those lookups is made on first use.
+ * rendition).  An entry names the rendition when it binds the resource
+ * tightly to the level before, whose component then matched the last
+ * name ("*renderTable.fontName", "*renderTable.?.fontName"), or when
+ * that component is the last name or class ("*renderTable*tabList").
+ *
+ * All the entries that match one level below the names are looked at,
+ * not only the one that wins the lookup: an explicit
+ * "*renderTable.font" names the default rendition even when a loose
+ * entry that binds more of the widget names, like "*rc.l*Font", gives
+ * the value.
  */
 typedef struct {
-  XrmHashTable stack[SEARCH_LIST_SIZE];
-  XrmHashTable *list; /* NULL until made */
-} XmRendLooseRec;
+  XrmName name;          /* the last of the names */
+  XrmClass class;        /* the last of the classes */
+  unsigned long named;   /* the result */
+} XmRendNamedRec;
 
-static Boolean EntryNamesRendition(XmRendLooseRec *loose,
-                                   XrmDatabase db,
-                                   XrmName *names,
-                                   XrmClass *classes,
-                                   Cardinal length,
-                                   const char *tag,
-                                   XrmResource *res,
-                                   XrmRepresentation type,
-                                   XrmValue *value)
+static Bool NoteNamingEntry(XrmDatabase *db,
+                            XrmBindingList bindings,
+                            XrmQuarkList quarks,
+                            XrmRepresentation *type,
+                            XrmValue *value,
+                            XPointer closure)
 {
-  static XrmQuark QUnnamed = NULLQUARK;
-  XrmRepresentation loose_type;
-  XrmValue loose_value;
-  if (loose->list == NULL) {
-    unsigned int searchListSize = SEARCH_LIST_SIZE;
-    XrmName name = names[length - 1];
-    XrmClass class = classes[length - 1];
-    if (QUnnamed == NULLQUARK)
-      QUnnamed = XrmUniqueQuark();
-    /* RenditionNames leaves room for a tag and NULLQUARK. */
-    if (tag == NULL)
-      length--;
-    names[length] = classes[length] = QUnnamed;
-    names[length + 1] = classes[length + 1] = NULLQUARK;
-    loose->list = loose->stack;
-    while (!XrmQGetSearchList(db, names, classes, loose->list, searchListSize)) {
-      if (loose->list == loose->stack)
-        loose->list = NULL;
-      loose->list = (XrmHashTable *)_XmReallocArray(
-          (char *)loose->list, searchListSize *= 2, sizeof(XrmHashTable));
-    }
-    if (tag == NULL) {
-      names[length] = name;
-      classes[length] = class;
-    }
-  }
-  /* Each entry holds its own value: the same address is the same entry. */
-  return (!XrmQGetSearchResource(
-              loose->list, res->xrm_name, res->xrm_class, &loose_type, &loose_value) ||
-          (loose_type != type) || (loose_value.addr != value->addr));
+  static XrmQuark QAny = NULLQUARK;
+  XmRendNamedRec *rec = (XmRendNamedRec *)closure;
+  XrmResourceList res = RenditionResourceTable();
+  Cardinal n, j;
+  if (QAny == NULLQUARK)
+    QAny = XrmPermStringToQuark("?");
+  for (n = 0; quarks[n] != NULLQUARK; n++)
+    ;
+  if (n == 0)
+    return False;
+  if ((bindings[n - 1] != XrmBindTightly) &&
+      ((n < 2) || ((quarks[n - 2] != rec->name) && (quarks[n - 2] != rec->class))))
+    return False;
+  for (j = 0; j < _XmNumRenditionResources; j++, res++)
+    if ((quarks[n - 1] == QAny) || (quarks[n - 1] == res->xrm_name) ||
+        (quarks[n - 1] == res->xrm_class))
+      rec->named |= 1UL << j;
+  return False; /* go on */
 }
 
-static void FreeLooseSearchList(XmRendLooseRec *loose)
+static unsigned long NamedResources(XrmDatabase db, XrmName *names, XrmClass *classes)
 {
-  if ((loose->list != NULL) && (loose->list != loose->stack))
-    XtFree((char *)loose->list);
+  XmRendNamedRec rec;
+  Cardinal n;
+  for (n = 0; names[n] != NULLQUARK; n++)
+    ;
+  if (n == 0)
+    return 0;
+  rec.name = names[n - 1];
+  rec.class = classes[n - 1];
+  rec.named = 0;
+  XrmEnumerateDatabase(db, names, classes, XrmEnumOneLevel, NoteNamingEntry, (XPointer)&rec);
+  return rec.named;
 }
 
 /*
@@ -558,8 +560,8 @@ static Boolean ConvertResource(
 }
 
 /* Does resource database lookup for arglist, filling in defaults from */
-/* resource list as necessary.  Returns whether an entry that names the */
-/* rendition (see EntryNamesRendition) gave it a value. */
+/* resource list as necessary.  Returns whether a resource that an entry */
+/* names the rendition for (see NamedResources) got a value. */
 static Boolean GetResources(XmRendition rend,
                             Display *dsp,
                             Widget wid,
@@ -581,7 +583,7 @@ static Boolean GetResources(XmRendition rend,
   XrmResource *res;
   XmRendNamesRec rn;
   Cardinal length = 0;
-  XmRendLooseRec loose;
+  unsigned long named = 0;
   XrmDatabase db;
   XrmHashTable stackSearchList[SEARCH_LIST_SIZE];
   XrmHashTable *searchList = stackSearchList;
@@ -632,10 +634,10 @@ static Boolean GetResources(XmRendition rend,
     }
   }
   /* DB query */
-  loose.list = NULL;
   if ((db = RenditionDatabase(dsp, wid)) != NULL) {
     length = RenditionNames(wid, resname, resclass, &rn);
     RenditionSearchList(db, rn.names, rn.classes, length, tag, stackSearchList, &searchList);
+    named = NamedResources(db, rn.names, rn.classes);
   }
   /* Loop over table */
   for (j = 0, res = table; (Cardinal)j < _XmNumRenditionResources; j++, res++) {
@@ -689,9 +691,8 @@ static Boolean GetResources(XmRendition rend,
           }
         }
       }
-      if (!got_one && (have_value || ignored))
-        got_one = EntryNamesRendition(
-            &loose, db, rn.names, rn.classes, length, tag, res, rawType, &value);
+      if ((have_value || ignored) && (named & (1UL << j)))
+        got_one = True;
       /* Set defaults */
       if (!have_value) {
         CopyFromArg((XtArgVal)(res->xrm_default_addr),
@@ -715,7 +716,6 @@ static Boolean GetResources(XmRendition rend,
   }
   if (searchList != stackSearchList)
     XtFree((char *)searchList);
-  FreeLooseSearchList(&loose);
   if (db != NULL)
     FreeRenditionNames(&rn);
   _XmProcessUnlock();
@@ -2335,7 +2335,6 @@ static void KeyAddRendition(XmRTKey key,
   XrmResourceList res = RenditionResourceTable();
   XrmRepresentation type;
   XrmValue value;
-  XmRendLooseRec loose;
   unsigned long found = 0; /* a bit for each of the 17 resources */
   Cardinal j, found_at;
   /* As in _XmRenditionCreate. */
@@ -2346,24 +2345,21 @@ static void KeyAddRendition(XmRTKey key,
   if (db == NULL)
     return;
   RenditionSearchList(db, names, classes, length, tag, stackSearchList, &searchList);
-  loose.list = NULL;
   for (j = 0; j < _XmNumRenditionResources; j++, res++)
     if (XrmQGetSearchResource(searchList, res->xrm_name, res->xrm_class, &type, &value)) {
       found |= 1UL << j;
-      /* Whether the string has a default rendition, and whether its */
-      /* first word is a tag or a font, depend on it. */
-      if (!(found & FOUND_NAMED) &&
-          EntryNamesRendition(&loose, db, names, classes, length, tag, res, type, &value))
-        found |= FOUND_NAMED;
       KeyAdd(key, &type, sizeof(type));
       KeyAdd(key, &value.size, sizeof(value.size));
       if (value.addr != NULL)
         KeyAdd(key, value.addr, value.size);
     }
+  /* Whether the string has a default rendition, and whether its first */
+  /* word is a tag or a font, depend on it. */
+  if (found & NamedResources(db, names, classes))
+    found |= FOUND_NAMED;
   memcpy(key->data + found_at, &found, sizeof(found));
   if (searchList != stackSearchList)
     XtFree((char *)searchList);
-  FreeLooseSearchList(&loose);
 }
 
 /* Add to check what XmFontListEntryLoad finds for each of the */

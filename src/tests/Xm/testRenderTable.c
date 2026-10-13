@@ -1186,6 +1186,54 @@ START_TEST(named_default_rendition)
 }
 END_TEST
 
+/*
+ * An entry that names the default rendition makes it also when a loose
+ * entry that binds more of the widget names wins the lookup and gives
+ * the value: "*rc*Font" beats "*renderTable.font" for the labels of rc.
+ */
+START_TEST(named_entry_outranked_by_loose)
+{
+	Display *dpy = XtDisplay(shell);
+	Widget rc, w;
+	char d[1024];
+
+	put("*rc*Font: 9x15");
+	put("*renderTable.font: fixed");
+	put_font("*renderTable.t", "fixed");
+	rc = XmCreateRowColumn(shell, "rc", NULL, 0);
+	w = label(rc, "l", "t");
+	describe(table_of(w), d, sizeof d);
+	ck_assert_msg(tag_count(table_of(w)) == 2, "%s", d);
+	ck_assert(same_font(dpy, font_of(table_of(w), _MOTIF_DEFAULT_LOCALE), "9x15"));
+}
+END_TEST
+
+/*
+ * '?' stands for exactly one name: "*renderTable.?.fontName" names a
+ * tag, whatever it is, so the first word of the string is a tag; and
+ * "*w.?.fontName" names the render table resource of w, which gets a
+ * default rendition.
+ */
+START_TEST(any_name_names_rendition)
+{
+	Display *dpy = XtDisplay(shell);
+	Widget rc, w;
+	char d[1024];
+
+	put_font("*renderTable.?", "9x15");
+	put_font("*w.?", "fixed");
+	rc = XmCreateRowColumn(shell, "rc", NULL, 0);
+	w = label(rc, "l", "t");
+	describe(table_of(w), d, sizeof d);
+	ck_assert_msg(tag_count(table_of(w)) == 1, "%s", d);
+	ck_assert(same_font(dpy, font_of(table_of(w), "t"), "9x15"));
+	w = label(rc, "w", "t");
+	describe(table_of(w), d, sizeof d);
+	ck_assert_msg(tag_count(table_of(w)) == 2, "%s", d);
+	ck_assert(same_font(dpy, font_of(table_of(w), _MOTIF_DEFAULT_LOCALE), "fixed"));
+}
+END_TEST
+
 #if USE_XFT
 /* The font name, type and fonts of the rendition tagged tag of rt. */
 static void xft_rendition(XmRenderTable rt, const char *tag, String *name, XmFontType *type,
@@ -1285,6 +1333,8 @@ void rendertable_suite(SRunner *runner)
 	tcase_add_test(t, deeply_nested_widget);
 	tcase_add_test(t, loose_font);
 	tcase_add_test(t, named_default_rendition);
+	tcase_add_test(t, named_entry_outranked_by_loose);
+	tcase_add_test(t, any_name_names_rendition);
 #if USE_XFT
 	tcase_add_test(t, xft_rendition_ignores_database_font);
 #endif
