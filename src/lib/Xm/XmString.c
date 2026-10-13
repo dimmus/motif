@@ -4480,13 +4480,13 @@ static void _render(Display *d,
   }
   if (restore_clip) {
 #if USE_XFT
+    /* _calc_align_and_clip clipped the XftDraw and the GC */
     if (_XmRendFontType((_XmStrOptimized(string)) ? rend2 : rend1) == XmFONT_IS_XFT) {
       XftDraw *draw = _XmXftDrawCreate(d, w);
       XftDrawSetClip(draw, NULL);
     }
-    else
 #endif
-      XSetClipMask(d, gc, None);
+    XSetClipMask(d, gc, None);
   }
   if (_XmRendTags(rend1) != NULL)
     XtFree((char *)_XmRendTags(rend1));

@@ -85,6 +85,12 @@ upstream release (December 2017).  The git history has the details.
   from the default font.  libXm now loads that font by its name, once,
   and frees it with the rendition.  The `FontSet` test suite runs in
   the C locale and in UTF-8 ones.
+- `XmStringDraw` and `XmStringDrawImage` with a clip rectangle give the
+  GC its clip back after drawing Xft text.  For an Xft rendition they
+  clipped both the XftDraw and the GC, but reset only the XftDraw, so
+  whatever was drawn next with that GC stayed clipped to the text: dtwm's
+  icon images, drawn with the GC of the icon labels, disappeared with
+  scalable fonts.
 - A font list or render table given when a widget is created is no
   longer replaced by the resource database.  `XmNfontList` and
   `XmNrenderTable` (and the `button`, `label` and `text` pairs of
