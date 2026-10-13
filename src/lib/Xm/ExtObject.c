@@ -261,6 +261,8 @@ static void InitializePrehook(Widget req, /* unused */
                       (*wcePtr)->num_ext_resources,
                       args,
                       *num_args);
+    _XmFontListArgAliases(new_w, (*wcePtr)->ext_resources, (*wcePtr)->num_ext_resources, args,
+                          *num_args);
     _XmProcessUnlock();
   }
 }

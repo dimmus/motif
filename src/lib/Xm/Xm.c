@@ -468,8 +468,104 @@ void _XmGetSubresources(Widget w,
   _XmAppLock(app);
   _XmProcessLock();
   XtGetSubresources(w, base, name, class_name, resources, num_resources, args, num_args);
+  _XmFontListArgAliases(base, resources, num_resources, args, num_args);
   _XmProcessUnlock();
   _XmAppUnlock(app);
+}
+
+/************************************************************************
+ *
+ *  _XmFontListArgAliases
+ *	XmNfontList and XmNrenderTable, and the button, label and text
+ *	pairs, are two names of one field.  Xt fetches the resources that
+ *	the arglist names first and then the others from the database, so
+ *	a database value for one name replaced an arglist value for the
+ *	other (a widget created with XmNrenderTable got a "*FontList" from
+ *	the database).  Put the last arglist value for either name back
+ *	into the field, as if the arglist had named both, after Xt has
+ *	fetched resources into base.  resources may be compiled: Xt
+ *	compiles a list in place, the names to quarks and each offset to
+ *	-offset - 1.
+ *
+ ************************************************************************/
+
+static XrmQuark fontAliasQuarks[9];
+
+static Boolean IsFontAlias(XrmQuark q)
+{
+  Cardinal i;
+  for (i = 0; i < XtNumber(fontAliasQuarks); i++)
+    if (q == fontAliasQuarks[i])
+      return True;
+  return False;
+}
+
+/* Whether args names one of the font list and render table resources. */
+Boolean _XmArgListNamesFontList(ArgList args, Cardinal num_args)
+{
+  static const char *const names[XtNumber(fontAliasQuarks)] = {
+      XmNfontList,       XmNrenderTable,       XmNbuttonFontList,
+      XmNbuttonRenderTable, XmNlabelFontList,  XmNlabelRenderTable,
+      XmNtextFontList,   XmNtextRenderTable,   XmNdefaultFontList};
+  Cardinal i, k;
+  _XmProcessLock();
+  /* The first quark says the table is made, so it is set last. */
+  if (fontAliasQuarks[0] == NULLQUARK)
+    for (i = XtNumber(names); i-- > 0;)
+      fontAliasQuarks[i] = XrmPermStringToQuark(names[i]);
+  _XmProcessUnlock();
+  for (k = 0; k < num_args; k++)
+    if (IsFontAlias(XrmStringToQuark(args[k].name)))
+      return True;
+  return False;
+}
+
+void _XmFontListArgAliases(
+    XtPointer base, XtResourceList resources, Cardinal num_resources, ArgList args, Cardinal num_args)
+{
+  Cardinal i, j, k;
+  /* Most arglists name no font: then there is nothing to do. */
+  if ((base == NULL) || !_XmArgListNamesFontList(args, num_args))
+    return;
+  for (i = 0; i < num_resources; i++) {
+    XrmQuark name_i;
+    int offset_i = (int)resources[i].resource_offset;
+    Boolean shared = False;
+    int last = -1;
+    if (offset_i < 0) {
+      name_i = (XrmQuark)(long)resources[i].resource_name;
+      offset_i = -offset_i - 1;
+    }
+    else
+      name_i = XrmStringToQuark(resources[i].resource_name);
+    /* An entry without a default type only passes its value on to */
+    /* other widgets (XmMultiList's, at offset 0): it has no field. */
+    if (!IsFontAlias(name_i) || (resources[i].resource_size != sizeof(XmFontList)) ||
+        (resources[i].default_type == NULL))
+      continue;
+    /* The other names of the field, and the last argument for any. */
+    for (j = 0; j < num_resources; j++) {
+      int offset_j = (int)resources[j].resource_offset;
+      XrmQuark name_j;
+      if (offset_j < 0) {
+        name_j = (XrmQuark)(long)resources[j].resource_name;
+        offset_j = -offset_j - 1;
+      }
+      else
+        name_j = XrmStringToQuark(resources[j].resource_name);
+      if ((offset_j != offset_i) || !IsFontAlias(name_j) || (resources[j].default_type == NULL))
+        continue;
+      if (j != i)
+        shared = True;
+      for (k = 0; k < num_args; k++)
+        if ((XrmStringToQuark(args[k].name) == name_j) && ((int)k > last))
+          last = (int)k;
+    }
+    if (shared && (last >= 0)) {
+      XmFontList value = (XmFontList)args[last].value;
+      memcpy((char *)base + offset_i, &value, sizeof(value));
+    }
+  }
 }
 
 /************************************************************************
