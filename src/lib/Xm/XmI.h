@@ -179,6 +179,14 @@ extern void _XmGetSubresources(Widget w,
                                Cardinal num_resources,
                                ArgList args,
                                Cardinal num_args);
+extern Boolean _XmArgListNamesFontList(ArgList args, Cardinal num_args);
+extern Boolean _XmFontListAliasesKnown(const void *key);
+extern void _XmFontListArgAliases(const void *key,
+                                  XtPointer base,
+                                  XtResourceList resources,
+                                  Cardinal num_resources,
+                                  ArgList args,
+                                  Cardinal num_args);
 /* A trap for X errors, see _XmStartErrorTrap; it lives on the stack. */
 typedef struct _XmErrorTrapRec {
   Display *display;
