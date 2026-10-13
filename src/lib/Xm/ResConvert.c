@@ -2219,7 +2219,8 @@ static XmRenderTable ParseRenderTable(Display *dpy,
   s = XtNewString((char *)from->addr);
   rt = NULL;
   *font_list = FALSE;
-  /* Try for default rendition */
+  /* Try for default rendition.  There is one when the database has an */
+  /* entry that names the resource, not just a loose one like "*Font". */
   rend[0] = _XmRenditionCreate(NULL, widget, resname, resclass, NULL, NULL, 0, NULL);
   if (rend[0] != NULL) {
     rt = XmRenderTableAddRenditions(NULL, rend, 1, XmMERGE_REPLACE);
@@ -2229,6 +2230,7 @@ static XmRenderTable ParseRenderTable(Display *dpy,
   if ((tag = strtok_r(s, _XmRENDITION_TAG_DELIMITERS, &strtok_buf)) != NULL) {
     XmRenditionFree(rend[0]);
     rend[0] = _XmRenditionCreate(NULL, widget, resname, resclass, tag, NULL, 0, &in_db);
+    /* Likewise, a word is a tag when an entry names it. */
     if (!has_default && !in_db) {
       /* Call the fontlist converter */
       XmRenditionFree(rend[0]);

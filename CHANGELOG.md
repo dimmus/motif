@@ -85,6 +85,24 @@ upstream release (December 2017).  The git history has the details.
   from the default font.  libXm now loads that font by its name, once,
   and frees it with the rendition.  The `FontSet` test suite runs in
   the C locale and in UTF-8 ones.
+- A loosely bound `*Font` resource, which CDE's session resources and
+  dtstyle set for core font programs, no longer breaks render tables
+  converted from resource strings.  The `font` resource of every
+  rendition matched it: an `XmFONT_IS_XFT` rendition loaded that core
+  font instead of opening its Xft font, and every `renderTable` got an
+  extra default rendition (`_MOTIF_DEFAULT_LOCALE`) with it, so all
+  text was drawn in that one font.  An Xft rendition now takes no
+  `font` from the resource database (one given in an arglist still
+  counts).  A default rendition, and the decision that the first word
+  of the string is a tag rather than the font of a font list, now need
+  an entry that names the render table resource or the tag, by name or
+  class (`*renderTable.fontName`, `*RenderTable.underlineType`,
+  `*renderTable*tabList`), as `XmRenderTable(3)` describes; an entry
+  that is found whatever that name is, like `*Font` or `*rc*fontName`,
+  only gives its value to the renditions that exist.  Core font and
+  font set renditions still take their font from `*Font`.  The
+  `RenderTable` test suite checks both cases and that the converted
+  table cache keeps the tables apart.
 
 ### Documentation
 

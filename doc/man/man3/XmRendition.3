@@ -132,7 +132,10 @@ this resource will force \fBXmNloadModel\fP to be
 it will be set subsequently by the rendition whenever the font or
 fontset specified by \fBXmNfontName\fP is loaded\&. If both
 \fBXmNfontName\fP and \fBXmNfont\fP are specified in a resource file,
-the \fBXmNfont\fP specification will take precedence\&.
+the \fBXmNfont\fP specification will take precedence\&. A rendition
+whose \fBXmNfontType\fP is \fBXmFONT_IS_XFT\fP takes no \fBXmNfont\fP
+from a resource file, such as a \fB*Font\fP line meant for core font
+programs; it opens the Xft font that its other font resources describe\&.
 .IP "\fBXmNfontName\fP" 10
 Specifies an X Logical Font Description (XLFD) string, which is
 interpreted either as a font name or as a base font name list\&. A base

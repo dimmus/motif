@@ -158,6 +158,11 @@ tagged with \fBXmFONTLIST_DEFAULT_TAG\fP:
 \fIresource_spec\fP\&.\fIresource_name\fP: \fIvalue\fP
 .fi
 .PP
+A resource line bound loosely before the resource name, without the
+render table or a tag, such as \fB*Font\fP, gives its value to the
+renditions of the table, but it creates no default rendition, and it
+does not make the first word of a font list string a tag\&.
+.PP
 For example, the following would set the \fBXmNrenderTable\fP resource
 of \fBlabel1\fP to a render
 table consisting of three renditions tagged with

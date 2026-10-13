@@ -26,6 +26,7 @@
 #include <string.h>
 #include <X11/Intrinsic.h>
 #include <X11/StringDefs.h>
+#include <X11/Xatom.h>
 #include <Xm/Xm.h>
 #include <Xm/BulletinB.h>
 #include <Xm/Display.h>
@@ -118,13 +119,14 @@ static int lookup(Display *dpy, XrmValue *from, const char *type,
 static Boolean cvt_font_type(Display *dpy, XrmValue *args, Cardinal *num_args,
 			     XrmValue *from, XrmValue *to, XtPointer *data)
 {
-	static const char *const names[] = { "FONT_IS_FONT", "FONT_IS_FONTSET" };
+	static const char *const names[] = { "FONT_IS_FONT", "FONT_IS_FONTSET", "FONT_IS_XFT" };
+	static const int values[] = { XmFONT_IS_FONT, XmFONT_IS_FONTSET, XmFONT_IS_XFT };
 	static int value;
 	int i = lookup(dpy, from, XmRFontType, names, XtNumber(names));
 
 	if (i < 0)
 		return False;
-	value = i == 0 ? XmFONT_IS_FONT : XmFONT_IS_FONTSET;
+	value = values[i];
 	return store(to, &value, sizeof value);
 }
 
@@ -1089,6 +1091,174 @@ START_TEST(deeply_nested_widget)
 }
 END_TEST
 
+/*
+ * A loosely bound font, like the "*Font" of CDE's session resources,
+ * matches the font resource of every rendition.
+ */
+
+/* The rendition tagged tag of rt, which is there. */
+static XmRendition rendition_of(XmRenderTable rt, const char *tag)
+{
+	XmRendition r = XmRenderTableGetRendition(rt, (XmStringTag)tag);
+
+	ck_assert_msg(r != NULL, "no rendition %s", tag);
+	return r;
+}
+
+/* Whether font is the font that the server has for name: Xt loads */
+/* one font for each of its converter caches. */
+static int same_font(Display *dpy, XFontStruct *font, const char *name)
+{
+	XFontStruct *loaded = loaded_font(dpy, name);
+	unsigned long a, b;
+
+	if (font == NULL || font == loaded)
+		return font == loaded;
+	return XGetFontProperty(font, XA_FONT, &a) && XGetFontProperty(loaded, XA_FONT, &b) &&
+	       a == b;
+}
+
+/* It gives its font to the core font renditions of a table, as XmNfont */
+/* takes precedence over XmNfontName (XmRendition(3)).  But it does not */
+/* make a default rendition, nor a tag of the font name of a font list. */
+START_TEST(loose_font)
+{
+	Display *dpy = XtDisplay(shell);
+	Widget rc, a, b;
+	char d[1024];
+
+	put("*Font: 9x15");
+	put_font("*renderTable.t", "fixed");
+	rc = XmCreateRowColumn(shell, "rc", NULL, 0);
+	a = label(rc, "l", "t");
+	describe(table_of(a), d, sizeof d);
+	ck_assert_msg(tag_count(table_of(a)) == 1, "%s", d);
+	ck_assert_str_eq(font_name_of(table_of(a), "t"), "9x15");
+	ck_assert(same_font(dpy, font_of(table_of(a), "t"), "9x15"));
+	b = label(rc, "l", "fixed");
+	describe(table_of(b), d, sizeof d);
+	ck_assert_msg(tag_count(table_of(b)) == 1, "%s", d);
+	ck_assert(same_font(dpy, font_of(table_of(b), XmFONTLIST_DEFAULT_TAG), "fixed"));
+}
+END_TEST
+
+/*
+ * A default rendition is one whose resources name the render table
+ * resource, by name or class, as "*renderTable.fontName" or
+ * "*renderTable*tabList" do; a loosely bound font gives it its font.
+ * "*loose*underlineType" is found for any rendition, under any widget
+ * whose names include loose, and does not make one.  The widgets named
+ * classed and loose find the same values for their renditions, and do
+ * not share a table.
+ */
+START_TEST(named_default_rendition)
+{
+	static const char *const named[] = { "named", "classed", "tabbed" };
+	Display *dpy = XtDisplay(shell);
+	Widget rc, w, loose;
+	XmRendition r;
+	char d[1024];
+	unsigned int i;
+
+	put("*Font: 9x15");
+	put_font("*renderTable.t", "fixed");
+	put_font("*named.renderTable", "8x13");
+	put("*classed.RenderTable.underlineType: SINGLE_LINE");
+	put("*classed.renderTable.t.underlineType: SINGLE_LINE");
+	put("*tabbed.renderTable*tabList: 1in");
+	put("*loose*underlineType: SINGLE_LINE");
+	rc = XmCreateRowColumn(shell, "rc", NULL, 0);
+	for (i = 0; i < XtNumber(named); i++) {
+		w = label(rc, named[i], "t");
+		describe(table_of(w), d, sizeof d);
+		ck_assert_msg(tag_count(table_of(w)) == 2, "%s: %s", named[i], d);
+		r = rendition_of(table_of(w), _MOTIF_DEFAULT_LOCALE);
+		XmRenditionFree(r);
+		ck_assert(same_font(dpy, font_of(table_of(w), _MOTIF_DEFAULT_LOCALE), "9x15"));
+	}
+	converted();
+	loose = label(rc, "loose", "t");
+	ck_assert_msg(converted() > 0, "loose got the table of named");
+	describe(table_of(loose), d, sizeof d);
+	ck_assert_msg(tag_count(table_of(loose)) == 1, "%s", d);
+	ck_assert_msg(strstr(d, "tag=t name=9x15") != NULL, "%s", d);
+	ck_assert_msg(strstr(d, "ul=1") != NULL, "%s", d);
+}
+END_TEST
+
+#if USE_XFT
+/* The font name, type and fonts of the rendition tagged tag of rt. */
+static void xft_rendition(XmRenderTable rt, const char *tag, String *name, XmFontType *type,
+			  XtPointer *font, XtPointer *xft_font)
+{
+	XmRendition r = rendition_of(rt, tag);
+	Arg a[4];
+
+	XtSetArg(a[0], XmNfontName, name);
+	XtSetArg(a[1], XmNfontType, type);
+	XtSetArg(a[2], XmNfont, font);
+	XtSetArg(a[3], XmNxftFont, xft_font);
+	XmRenditionRetrieve(r, a, 4);
+	XmRenditionFree(r);
+}
+
+/*
+ * An Xft rendition takes no font from the database: it opens the Xft
+ * font of its font name, as one made without the database does, and
+ * has no core font.  Fontconfig may have no font to open, then neither
+ * has one.
+ */
+START_TEST(xft_rendition_ignores_database_font)
+{
+	XmRendition made, r;
+	XmRenderTable rt;
+	XtPointer font, xft_font, made_xft_font = NULL;
+	XmFontType type;
+	String name;
+	Widget rc, l;
+	Arg a[2];
+	char d[1024];
+
+	XtSetArg(a[0], XmNfontType, XmFONT_IS_XFT);
+	XtSetArg(a[1], XmNfontName, "sans");
+	made = XmRenditionCreate(shell, "x", a, 2);
+	rt = table_with(made);
+	xft_rendition(rt, "x", &name, &type, &font, &made_xft_font);
+	XmRenderTableFree(rt);
+	XmRenditionFree(made);
+
+	put("*Font: 9x15");
+	put("*renderTable.x.fontType: FONT_IS_XFT");
+	put("*renderTable.x.fontName: sans");
+	put("*renderTable.y.fontType: FONT_IS_XFT");
+	put("*renderTable.y.fontName: sans");
+	put("*renderTable.y.font: fixed");
+	rc = XmCreateRowColumn(shell, "rc", NULL, 0);
+	l = label(rc, "l", "x y");
+	describe(table_of(l), d, sizeof d);
+	ck_assert_msg(tag_count(table_of(l)) == 2, "%s", d);
+	xft_rendition(table_of(l), "x", &name, &type, &font, &xft_font);
+	ck_assert_int_eq(type, XmFONT_IS_XFT);
+	ck_assert_str_eq(name, "sans");
+	ck_assert(font == NULL || font == (XtPointer)XmAS_IS);
+	ck_assert(made_xft_font == NULL || xft_font != NULL);
+	xft_rendition(table_of(l), "y", &name, &type, &font, &xft_font);
+	ck_assert_str_eq(name, "sans");
+	ck_assert(font == NULL || font == (XtPointer)XmAS_IS);
+	ck_assert(made_xft_font == NULL || xft_font != NULL);
+
+	/* One made by the program looks up the database too. */
+	r = XmRenditionCreate(l, "x", a, 2);
+	rt = table_with(r);
+	xft_rendition(rt, "x", &name, &type, &font, &xft_font);
+	ck_assert(font == NULL || font == (XtPointer)XmAS_IS);
+	ck_assert(made_xft_font == NULL || xft_font != NULL);
+	XmRenderTableFree(rt);
+	XmRenditionFree(r);
+}
+END_TEST
+#endif
+
 void rendertable_suite(SRunner *runner)
 {
 	Suite *s = suite_create("RenderTable");
@@ -1113,6 +1283,11 @@ void rendertable_suite(SRunner *runner)
 	tcase_add_test(t, display_close);
 	tcase_add_test(t, default_render_table_display_close);
 	tcase_add_test(t, deeply_nested_widget);
+	tcase_add_test(t, loose_font);
+	tcase_add_test(t, named_default_rendition);
+#if USE_XFT
+	tcase_add_test(t, xft_rendition_ignores_database_font);
+#endif
 	tcase_add_checked_fixture(t, _init_xt, uninit_xt);
 	tcase_set_timeout(t, 30);
 	suite_add_tcase(s, t);
