@@ -180,7 +180,9 @@ extern void _XmGetSubresources(Widget w,
                                ArgList args,
                                Cardinal num_args);
 extern Boolean _XmArgListNamesFontList(ArgList args, Cardinal num_args);
-extern void _XmFontListArgAliases(XtPointer base,
+extern Boolean _XmFontListAliasesKnown(const void *key);
+extern void _XmFontListArgAliases(const void *key,
+                                  XtPointer base,
                                   XtResourceList resources,
                                   Cardinal num_resources,
                                   ArgList args,
