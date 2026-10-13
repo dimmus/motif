@@ -85,6 +85,12 @@ upstream release (December 2017).  The git history has the details.
   from the default font.  libXm now loads that font by its name, once,
   and frees it with the rendition.  The `FontSet` test suite runs in
   the C locale and in UTF-8 ones.
+- `XmComboBox` keeps its render table for its text field and list.
+  It passed it to them only as `XmNrenderTable`, and `XmNfontList` is
+  the same field, so a font list from the resource database for text
+  fields or lists (CDE writes `*XmTextField*FontList`) replaced it: the
+  combo box drew its text and list in another font than its own.  It
+  now passes both.
 - A loosely bound `*Font` resource, which CDE's session resources and
   dtstyle set for core font programs, no longer breaks render tables
   converted from resource strings.  The `font` resource of every
