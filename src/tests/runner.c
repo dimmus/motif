@@ -58,6 +58,7 @@ static const struct suite_entry {
 	{ "GadgetCache",   gadget_cache_suite,    1 },
 	{ "Draw",          draw_suite,            1 },
 	{ "Xdnd",          xdnd_suite,            1 },
+	{ "FontSet",       fontset_suite,         1 },
 };
 
 #define N_SUITES (sizeof suite_table / sizeof suite_table[0])

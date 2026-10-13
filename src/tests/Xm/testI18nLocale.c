@@ -11,7 +11,7 @@
  * CTest runs the suite as Xm.I18nLocale in the default locale and, as
  * Xm.I18nLocale.<locale>, in the locales generated at build time (see
  * i18n.cmake): ja_JP.UTF-8, ja_JP.EUC-JP, de_DE.UTF-8,
- * de_DE.ISO-8859-1 and he_IL.UTF-8.
+ * de_DE.ISO-8859-1, he_IL.UTF-8 and en_US.UTF-8.
  */
 #include <locale.h>
 #include <stdlib.h>

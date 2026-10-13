@@ -1,9 +1,9 @@
 # Locales and message catalogs for the i18n suites, included by
 # CMakeLists.txt.
 #
-# The I18nLocale, Xim and MsgCat suites also run in locales that are
-# rarely installed: they are generated at build time with glibc's
-# localedef into <build>/src/tests/locale, without root, and the tests
+# The I18nLocale, Xim, MsgCat and FontSet suites also run in locales
+# that are rarely installed: they are generated at build time with
+# glibc's localedef into <build>/src/tests/locale, without root, and the tests
 # run with LOCPATH pointing there and MOTIF_TEST_LOCALE naming the
 # locale.  Where localedef or the glibc locale sources are missing (musl,
 # the BSDs, Debian without the "locales" package) these tests are not
@@ -16,6 +16,7 @@ set(MOTIF_TEST_LOCALE_SPECS
     "de_DE|UTF-8|de_DE.UTF-8"
     "de_DE|ISO-8859-1|de_DE.ISO-8859-1"
     "he_IL|UTF-8|he_IL.UTF-8"
+    "en_US|UTF-8|en_US.UTF-8"
 )
 
 find_program(LOCALEDEF_EXECUTABLE localedef)
@@ -73,10 +74,16 @@ endfunction()
 
 foreach(_locale IN LISTS MOTIF_TEST_LOCALES)
     motif_locale_test(I18nLocale ${_locale})
+    motif_locale_test(FontSet ${_locale})
     if(_locale MATCHES "^ja_JP")
         motif_locale_test(Xim ${_locale})
     endif()
 endforeach()
+
+# Xm.FontSet runs in a UTF-8 locale when there is one; Xm.FontSet.C in
+# the C locale, where Xlib loads the fonts of a font set when it creates it.
+motif_x_test(Xm.FontSet.C $<TARGET_FILE:motif_tests> FontSet)
+set_property(TEST Xm.FontSet.C APPEND PROPERTY ENVIRONMENT "MOTIF_TEST_LOCALE=C")
 
 # Message catalogs: Xm.MsgCat checks that a warning comes from the
 # catalog that NLSPATH finds.  Xm.MsgCat.C uses a copy of the C catalog

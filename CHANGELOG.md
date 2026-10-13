@@ -75,6 +75,16 @@ upstream release (December 2017).  The git history has the details.
   than the selection timeout, and reads the outcome and the action of
   `XdndFinished`.  The `Xdnd` test suite drags between a raw Xlib peer
   and Motif both ways.
+- `XmeRenderTableGetDefaultFont`, `XmFontListGetNextFont` and
+  `_XmGetFirstFont` work for font set font lists (a `fontList` value
+  ending in `:`) in UTF-8 locales.  Xlib's generic XOM loads the fonts
+  of a font set only when it draws or measures text with them, and they
+  failed while it had not, since the first font's ID was 0: mwm exited
+  with a font set `fontList`, and Label, PushButton, ToggleButton,
+  CascadeButton, List and Scale lost the font or the metrics they take
+  from the default font.  libXm now loads that font by its name, once,
+  and frees it with the rendition.  The `FontSet` test suite runs in
+  the C locale and in UTF-8 ones.
 
 ### Documentation
 
