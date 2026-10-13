@@ -128,6 +128,7 @@ static XmRendition CloneRendition(XmRendition rend);
 static XmRendition CopyRendition(XmRendition rend);
 static XmRendition RenewRendition(XmRendition rend);
 static Boolean FreeRendition(XmRendition rend);
+static void FreeFirstFont(XmRendition rend);
 static void ReleaseTable(XmRenderTable table);
 static void TakeRenditions(XmRenderTable to, XmRenderTable from);
 static void RenditionWarning(char *tag, char *type, char *message, Display *dpy);
@@ -1131,6 +1132,10 @@ static XmRendition RenewRendition(XmRendition rend)
   SetPtr(rend, copy);
   _XmRendFontOnly(rend) = FALSE;
   _XmRendRefcount(rend) = 1;
+  /* The old record, still in use, keeps its first font. */
+  _XmRendFirstFont(rend) = NULL;
+  _XmRendFirstFontOf(rend) = NULL;
+  _XmRendFirstFontDisplay(rend) = NULL;
   return (rend);
 }
 
@@ -1995,6 +2000,7 @@ static Boolean FreeRendition(XmRendition rendition)
       XmTabListFree(_XmRendTabs(rendition));
     if (_XmRendTagCount(rendition) != 0)
       XtFree((char *)_XmRendTags(rendition));
+    FreeFirstFont(rendition);
 #if USE_XFT
     if (_XmRendXftFont(rendition)) {
       XftFontClose(_XmRendDisplay(rendition), _XmRendXftFont(rendition));
@@ -2009,6 +2015,49 @@ static Boolean FreeRendition(XmRendition rendition)
     return (TRUE);
   }
   return (FALSE);
+}
+
+/* Free the font that _XmRenditionFontSetFont loaded for rend. */
+static void FreeFirstFont(XmRendition rend)
+{
+  if (_XmRendFirstFont(rend) != NULL)
+    XFreeFont(_XmRendFirstFontDisplay(rend), _XmRendFirstFont(rend));
+  _XmRendFirstFont(rend) = NULL;
+  _XmRendFirstFontOf(rend) = NULL;
+  _XmRendFirstFontDisplay(rend) = NULL;
+}
+
+/*
+ * The first font of font_set, the font of rend, with a font ID.  Xlib
+ * can leave the fonts of a font set unloaded until it draws with them
+ * (the generic XOM of the UTF-8 locales does): their XFontStructs then
+ * have the metrics but fid 0.  Such a font is loaded here by its name,
+ * once, and freed with the rendition.  NULL if it cannot be loaded.
+ */
+XFontStruct *_XmRenditionFontSetFont(XmRendition rend, XFontSet font_set)
+{
+  XFontStruct **fonts, *font = NULL;
+  char **names;
+  Display *display;
+  if (XFontsOfFontSet(font_set, &fonts, &names) <= 0)
+    return NULL;
+  if (fonts[0]->fid != 0)
+    return fonts[0];
+  _XmProcessLock();
+  if (_XmRendFirstFontOf(rend) != (XtPointer)font_set) {
+    /* Not loaded yet, or for the font set that rend had before. */
+    FreeFirstFont(rend);
+    display = XDisplayOfOM(XOMOfOC((XOC)font_set));
+    if (names[0] != NULL) {
+      _XmRendFirstFont(rend) = XLoadQueryFont(display, names[0]);
+      _XmRendFirstFontDisplay(rend) = display;
+    }
+    /* Also when it failed: do not ask the server again. */
+    _XmRendFirstFontOf(rend) = (XtPointer)font_set;
+  }
+  font = _XmRendFirstFont(rend);
+  _XmProcessUnlock();
+  return font;
 }
 
 /* Give up the reference of table to its rendertable record and the */
@@ -2315,6 +2364,9 @@ static XmRendition CopyConvertedRendition(XmRendition rend)
   _XmRendTags(copy) = NULL;
   _XmRendTagCount(copy) = 0;
   _XmRendHadEnds(copy) = FALSE;
+  _XmRendFirstFont(copy) = NULL;
+  _XmRendFirstFontOf(copy) = NULL;
+  _XmRendFirstFontDisplay(copy) = NULL;
 #if USE_XFT
   /* FreeRendition closes the font: take a reference.  The pattern is */
   /* only kept by the rendition that opened the font. */
@@ -2671,6 +2723,8 @@ void XmRenditionUpdate(XmRendition rendition, ArgList arglist, Cardinal argcount
     XmTabListFree(oldtabs);
   ValidateTag(rendition, oldtag);
   ValidateAndLoadFont(rendition, display);
+  if (_XmRendFont(rendition) != oldfont)
+    FreeFirstFont(rendition);
   /* A rendition changed in place may be in a table */
   _XmRenderTableChanged();
   if (app) {

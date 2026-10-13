@@ -78,6 +78,9 @@ extern "C" {
 #  define _XmRendTags(r) ((_XmRendition) * (r))->tags
 #  define _XmRendTagCount(r) ((_XmRendition) * (r))->count
 #  define _XmRendHadEnds(r) ((_XmRendition) * (r))->hadEnds
+#  define _XmRendFirstFont(r) ((_XmRendition) * (r))->firstFont
+#  define _XmRendFirstFontOf(r) ((_XmRendition) * (r))->firstFontOf
+#  define _XmRendFirstFontDisplay(r) ((_XmRendition) * (r))->firstFontDisplay
 #  define _XmRendRefcountInc(r) ++(((_XmRendition) * (r))->refcount)
 #  define _XmRendRefcountDec(r) --(((_XmRendition) * (r))->refcount)
 
@@ -102,6 +105,14 @@ typedef struct __XmRenditionRec {
   unsigned char strikethruType;
   unsigned char backgroundState;
   unsigned char foregroundState;
+  /*
+   * The first font of the font set firstFontOf, loaded on firstFontDisplay
+   * by _XmRenditionFontSetFont when the font set has not loaded it, and
+   * freed with the rendition.  Never copied with the rendition.
+   */
+  XFontStruct *firstFont;
+  XtPointer firstFontOf;
+  Display *firstFontDisplay;
 #  if USE_XFT
   char *fontStyle,
       /*			*family,	Use font_name instead. */
@@ -196,6 +207,7 @@ extern Boolean _XmRenderTableFindFallback(
 extern Boolean _XmRenderTableFindFirstFont(XmRenderTable rendertable,
                                            short *indx,
                                            XmRendition *rend_ptr);
+extern XFontStruct *_XmRenditionFontSetFont(XmRendition rend, XFontSet font_set);
 /* What separates the tags of the renditions in a render table string. */
 #  define _XmRENDITION_TAG_DELIMITERS " \t\r\n\v\f,"
 extern XmRenderTable _XmRenderTableCvtCacheGet(

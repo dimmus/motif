@@ -492,15 +492,8 @@ XFontStruct *_XmGetFirstFont(XmFontListEntry entry)
   if (font == (XtPointer)XmAS_IS) {
     font_struct = NULL;
   }
-  else if (type == XmFONT_IS_FONTSET) {
-    XFontStruct **font_struct_list;
-    char **font_name_list;
-    if (XFontsOfFontSet((XFontSet)font, &font_struct_list, &font_name_list) &&
-        font_struct_list[0]->fid != 0)
-      font_struct = font_struct_list[0];
-    else
-      font_struct = NULL;
-  }
+  else if (type == XmFONT_IS_FONTSET)
+    font_struct = _XmRenditionFontSetFont(entry, (XFontSet)font);
   else
     font_struct = (XFontStruct *)font;
   return (font_struct);
