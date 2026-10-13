@@ -2001,6 +2001,55 @@ START_TEST(extent_cache_hits)
 END_TEST
 
 /*
+ * XmStringDraw with a clip rectangle gives the GC its clip back, for each
+ * font type: with Xft it clipped the XftDraw and the GC but reset only
+ * the XftDraw, so whatever was drawn next with that GC stayed clipped
+ * (dtwm draws icon images with the GC of their labels: they vanished).
+ */
+START_TEST(draw_restores_gc_clip)
+{
+	static const XmFontType types[] = {
+		XmFONT_IS_FONT, XmFONT_IS_FONTSET,
+#if USE_XFT
+		XmFONT_IS_XFT
+#endif
+	};
+	Display *dpy = XtDisplay(ext_shell);
+	int scr = DefaultScreen(dpy);
+	unsigned int i;
+
+	for (i = 0; i < XtNumber(types); i++) {
+		XmRenderTable rt = make_rt(XmFONTLIST_DEFAULT_TAG,
+					   types[i] == XmFONT_IS_XFT ?
+						   "Sans-10" : "fixed",
+					   types[i]);
+		Pixmap pm = XCreatePixmap(dpy, RootWindow(dpy, scr), 100, 40,
+					  DefaultDepth(dpy, scr));
+		GC gc = XCreateGC(dpy, pm, 0, NULL);
+		XRectangle clip = { 0, 0, 20, 20 };
+		XmString s = XmStringCreateLocalized("Hello");
+		XImage *im;
+
+		XSetForeground(dpy, gc, BlackPixel(dpy, scr));
+		XFillRectangle(dpy, pm, gc, 0, 0, 100, 40);
+		XSetForeground(dpy, gc, WhitePixel(dpy, scr));
+		XmStringDraw(dpy, pm, rt, s, gc, 0, 0, 100, XmALIGNMENT_BEGINNING,
+			     XmSTRING_DIRECTION_L_TO_R, &clip);
+		XFillRectangle(dpy, pm, gc, 0, 0, 100, 40);
+		im = XGetImage(dpy, pm, 90, 30, 1, 1, AllPlanes, ZPixmap);
+		ck_assert_ptr_nonnull(im);
+		ck_assert_msg(XGetPixel(im, 0, 0) == WhitePixel(dpy, scr),
+			      "font type %d: the GC is still clipped", (int)types[i]);
+		XDestroyImage(im);
+		XmStringFree(s);
+		XFreeGC(dpy, gc);
+		XFreePixmap(dpy, pm);
+		XmRenderTableFree(rt);
+	}
+}
+END_TEST
+
+/*
  * A cached extent must not survive a change of the render table: one
  * replaced in place, one added, a table removed and another one
  * allocated (likely at the same address), and a copy.
@@ -2187,6 +2236,7 @@ void xmstring_extent_suite(SRunner *runner)
 	t = tcase_create("Extents");
 	tcase_add_test(t, baseline_without_font);
 	tcase_add_test(t, extent_cache_hits);
+	tcase_add_test(t, draw_restores_gc_clip);
 	tcase_add_test(t, extent_cache_follows_table);
 	tcase_add_test(t, extent_cache_string_changed);
 	tcase_add_test(t, extent_cache_skips_tab_units);
