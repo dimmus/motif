@@ -468,6 +468,75 @@ static void RenditionSearchList(XrmDatabase db,
 }
 
 /*
+ * Whether the database entry that the lookups of a rendition found for
+ * a resource names the rendition.
+ *
+ * The names of a rendition end in the render table resource, for the
+ * default rendition, or in its tag.  An entry bound loosely before the
+ * resource, like "*Font" or "*rc*fontName", is found whatever that last
+ * name is: it gives its value to the renditions that exist, but it does
+ * not say that the table has a default rendition, nor that a word of
+ * the string is a tag rather than a font (XmRenderTable(3) asks for
+ * "resource_spec.resource_name", without a loose binding, for a default
+ * rendition).  Such an entry is found again when that last name and
+ * class are replaced by a quark that no entry can name, while an entry
+ * that names the render table resource or the tag, by name or class,
+ * is not.  The search list of those lookups is made on first use.
+ */
+typedef struct {
+  XrmHashTable stack[SEARCH_LIST_SIZE];
+  XrmHashTable *list; /* NULL until made */
+} XmRendLooseRec;
+
+static Boolean EntryNamesRendition(XmRendLooseRec *loose,
+                                   XrmDatabase db,
+                                   XrmName *names,
+                                   XrmClass *classes,
+                                   Cardinal length,
+                                   const char *tag,
+                                   XrmResource *res,
+                                   XrmRepresentation type,
+                                   XrmValue *value)
+{
+  static XrmQuark QUnnamed = NULLQUARK;
+  XrmRepresentation loose_type;
+  XrmValue loose_value;
+  if (loose->list == NULL) {
+    unsigned int searchListSize = SEARCH_LIST_SIZE;
+    XrmName name = names[length - 1];
+    XrmClass class = classes[length - 1];
+    if (QUnnamed == NULLQUARK)
+      QUnnamed = XrmUniqueQuark();
+    /* RenditionNames leaves room for a tag and NULLQUARK. */
+    if (tag == NULL)
+      length--;
+    names[length] = classes[length] = QUnnamed;
+    names[length + 1] = classes[length + 1] = NULLQUARK;
+    loose->list = loose->stack;
+    while (!XrmQGetSearchList(db, names, classes, loose->list, searchListSize)) {
+      if (loose->list == loose->stack)
+        loose->list = NULL;
+      loose->list = (XrmHashTable *)_XmReallocArray(
+          (char *)loose->list, searchListSize *= 2, sizeof(XrmHashTable));
+    }
+    if (tag == NULL) {
+      names[length] = name;
+      classes[length] = class;
+    }
+  }
+  /* Each entry holds its own value: the same address is the same entry. */
+  return (!XrmQGetSearchResource(
+              loose->list, res->xrm_name, res->xrm_class, &loose_type, &loose_value) ||
+          (loose_type != type) || (loose_value.addr != value->addr));
+}
+
+static void FreeLooseSearchList(XmRendLooseRec *loose)
+{
+  if ((loose->list != NULL) && (loose->list != loose->stack))
+    XtFree((char *)loose->list);
+}
+
+/*
  * Convert value, of type from_type, to to_type for a rendition of wid,
  * like XtConvertAndStore.  But XtConvertAndStore holds a reference to a
  * value whose converter counts them (that of XmRTabList) until wid is
@@ -489,7 +558,8 @@ static Boolean ConvertResource(
 }
 
 /* Does resource database lookup for arglist, filling in defaults from */
-/* resource list as necessary. */
+/* resource list as necessary.  Returns whether an entry that names the */
+/* rendition (see EntryNamesRendition) gave it a value. */
 static Boolean GetResources(XmRendition rend,
                             Display *dsp,
                             Widget wid,
@@ -510,6 +580,8 @@ static Boolean GetResources(XmRendition rend,
   XrmName argName;
   XrmResource *res;
   XmRendNamesRec rn;
+  Cardinal length = 0;
+  XmRendLooseRec loose;
   XrmDatabase db;
   XrmHashTable stackSearchList[SEARCH_LIST_SIZE];
   XrmHashTable *searchList = stackSearchList;
@@ -517,7 +589,7 @@ static Boolean GetResources(XmRendition rend,
   XrmValue value;
   XrmQuark rawType;
   XrmValue convValue;
-  Boolean have_value, copied;
+  Boolean have_value, copied, ignored;
   XtAppContext app = NULL;
   if (wid)
     app = XtWidgetToApplicationContext(wid);
@@ -560,8 +632,9 @@ static Boolean GetResources(XmRendition rend,
     }
   }
   /* DB query */
+  loose.list = NULL;
   if ((db = RenditionDatabase(dsp, wid)) != NULL) {
-    Cardinal length = RenditionNames(wid, resname, resclass, &rn);
+    length = RenditionNames(wid, resname, resclass, &rn);
     RenditionSearchList(db, rn.names, rn.classes, length, tag, stackSearchList, &searchList);
   }
   /* Loop over table */
@@ -569,11 +642,24 @@ static Boolean GetResources(XmRendition rend,
     if (!found[j]) {
       copied = False;
       have_value = False;
+      ignored = False;
       if ((db != NULL) &&
           (XrmQGetSearchResource(searchList, res->xrm_name, res->xrm_class, &rawType, &value)))
       {
+#if USE_XFT
+        /*
+         * An Xft rendition has no core font, and a font from the
+         * database would keep it from opening its Xft font: databases
+         * often have one for everything, like "*Font".  The table
+         * lists fontType before font, so the type is known here.
+         */
+        if ((res->xrm_name == Qfont) && (_XmRendFontType(rend) == XmFONT_IS_XFT))
+          ignored = True;
+#endif
         /* convert if necessary */
-        if (rawType != res->xrm_type) {
+        if (ignored)
+          have_value = False;
+        else if (rawType != res->xrm_type) {
           if (wid != NULL) {
             convValue.size = res->xrm_size;
             convValue.addr = (char *)GetPtr(rend) + res->xrm_offset;
@@ -603,8 +689,9 @@ static Boolean GetResources(XmRendition rend,
           }
         }
       }
-      if (!got_one && have_value)
-        got_one = True;
+      if (!got_one && (have_value || ignored))
+        got_one = EntryNamesRendition(
+            &loose, db, rn.names, rn.classes, length, tag, res, rawType, &value);
       /* Set defaults */
       if (!have_value) {
         CopyFromArg((XtArgVal)(res->xrm_default_addr),
@@ -628,6 +715,7 @@ static Boolean GetResources(XmRendition rend,
   }
   if (searchList != stackSearchList)
     XtFree((char *)searchList);
+  FreeLooseSearchList(&loose);
   if (db != NULL)
     FreeRenditionNames(&rn);
   _XmProcessUnlock();
@@ -2230,8 +2318,11 @@ static void KeyKeep(XmRTKey to, XmRTKey key)
 
 /* Add to key what GetResources finds in db for rendition tag (NULL */
 /* for the default rendition) under the length names and classes from */
-/* RenditionNames: which resources are found, and the type and value */
-/* of each. */
+/* RenditionNames: which resources are found, whether one of them */
+/* names the rendition (FOUND_NAMED, above the bits of the resources), */
+/* and the type and value of each. */
+#define FOUND_NAMED (1UL << (sizeof(unsigned long) * CHAR_BIT - 1))
+
 static void KeyAddRendition(XmRTKey key,
                             XrmDatabase db,
                             XrmName *names,
@@ -2244,6 +2335,7 @@ static void KeyAddRendition(XmRTKey key,
   XrmResourceList res = RenditionResourceTable();
   XrmRepresentation type;
   XrmValue value;
+  XmRendLooseRec loose;
   unsigned long found = 0; /* a bit for each of the 17 resources */
   Cardinal j, found_at;
   /* As in _XmRenditionCreate. */
@@ -2254,9 +2346,15 @@ static void KeyAddRendition(XmRTKey key,
   if (db == NULL)
     return;
   RenditionSearchList(db, names, classes, length, tag, stackSearchList, &searchList);
+  loose.list = NULL;
   for (j = 0; j < _XmNumRenditionResources; j++, res++)
     if (XrmQGetSearchResource(searchList, res->xrm_name, res->xrm_class, &type, &value)) {
       found |= 1UL << j;
+      /* Whether the string has a default rendition, and whether its */
+      /* first word is a tag or a font, depend on it. */
+      if (!(found & FOUND_NAMED) &&
+          EntryNamesRendition(&loose, db, names, classes, length, tag, res, type, &value))
+        found |= FOUND_NAMED;
       KeyAdd(key, &type, sizeof(type));
       KeyAdd(key, &value.size, sizeof(value.size));
       if (value.addr != NULL)
@@ -2265,6 +2363,7 @@ static void KeyAddRendition(XmRTKey key,
   memcpy(key->data + found_at, &found, sizeof(found));
   if (searchList != stackSearchList)
     XtFree((char *)searchList);
+  FreeLooseSearchList(&loose);
 }
 
 /* Add to check what XmFontListEntryLoad finds for each of the */
